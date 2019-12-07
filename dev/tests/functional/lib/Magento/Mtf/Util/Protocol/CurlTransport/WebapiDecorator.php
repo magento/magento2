@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,8 @@ use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * Curl transport on webapi.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class WebapiDecorator implements CurlInterface
 {
@@ -69,6 +71,13 @@ class WebapiDecorator implements CurlInterface
     protected $response;
 
     /**
+     * Webapi token.
+     *
+     * @var string
+     */
+    protected $webapiToken;
+
+    /**
      * @construct
      * @param ObjectManager $objectManager
      * @param CurlTransport $transport
@@ -102,12 +111,15 @@ class WebapiDecorator implements CurlInterface
             $this->disableSecretKey();
             /** @var \Magento\Integration\Test\Fixture\Integration $integration */
             $integration = $this->fixtureFactory->create(
-                'Magento\Integration\Test\Fixture\Integration',
+                \Magento\Integration\Test\Fixture\Integration::class,
                 ['dataset' => 'default_active']
             );
             $integration->persist();
 
             $this->setConfiguration($integration);
+            $this->webapiToken = $integration->getToken();
+        } else {
+            $this->webapiToken = $integrationToken;
         }
     }
 
@@ -119,7 +131,7 @@ class WebapiDecorator implements CurlInterface
     protected function disableSecretKey()
     {
         $config = $this->fixtureFactory->create(
-            'Magento\Config\Test\Fixture\ConfigData',
+            \Magento\Config\Test\Fixture\ConfigData::class,
             ['dataset' => 'secret_key_disable']
         );
         $config->persist();
@@ -149,7 +161,7 @@ class WebapiDecorator implements CurlInterface
         }
 
         $dom->save($fileConfig);
-        $this->configuration = $this->objectManager->create('Magento\Mtf\Config\DataInterface');
+        $this->configuration = $this->objectManager->create(\Magento\Mtf\Config\DataInterface::class);
     }
 
     /**
@@ -159,10 +171,16 @@ class WebapiDecorator implements CurlInterface
      */
     protected function isValidIntegration()
     {
-        $this->write($_ENV['app_frontend_url'] . 'rest/V1/modules', [], CurlInterface::GET);
+        $url = rtrim($_ENV['app_frontend_url'], '/');
+        if (strpos($url, 'index.php') === false) {
+            $url .=  '/index.php/rest/V1/modules';
+        } else {
+            $url .= '/rest/V1/modules';
+        }
+        $this->write($url, [], CurlInterface::GET);
         $response = json_decode($this->read(), true);
 
-        return !isset($response['message']);
+        return (null !== $response) && !isset($response['message']);
     }
 
     /**
@@ -216,5 +234,19 @@ class WebapiDecorator implements CurlInterface
     public function close()
     {
         $this->transport->close();
+    }
+
+    /**
+     * Return webapiToken.
+     *
+     * @return string
+     */
+    public function getWebapiToken()
+    {
+        // Request token if integration is no longer valid
+        if (!$this->isValidIntegration()) {
+            $this->init();
+        }
+        return $this->webapiToken;
     }
 }

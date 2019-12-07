@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component;
 
 use Magento\Customer\Ui\Component\FilterFactory;
 
-class FilterFactoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test FilterFactory Class
+ */
+class FilterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeOption;
@@ -30,32 +33,29 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->context = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false
         );
-        $this->componentFactory = $this->getMock(
-            'Magento\Framework\View\Element\UiComponentFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->componentFactory = $this->createPartialMock(
+            \Magento\Framework\View\Element\UiComponentFactory::class,
+            ['create']
         );
         $this->attributeMetadata = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AttributeMetadataInterface',
+            \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
             [],
             '',
             false
         );
         $this->filter = $this->getMockForAbstractClass(
-            'Magento\Ui\Component\Listing\Columns\ColumnInterface',
+            \Magento\Ui\Component\Listing\Columns\ColumnInterface::class,
             [],
             '',
             false
         );
         $this->attributeOption = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\OptionInterface',
+            \Magento\Customer\Api\Data\OptionInterface::class,
             [],
             '',
             false
@@ -72,6 +72,7 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
                 'config' => [
                     'dataScope' => $filterName,
                     'label' => __('Label'),
+                    '__disableTmpl' => 'true',
                     'options' => [['value' => 'Value', 'label' => 'Label']],
                     'caption' => __('Select...'),
                 ],

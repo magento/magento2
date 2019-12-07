@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,7 +56,7 @@ class Products extends WidgetInstanceForm
 
         /** @var Grid $productGrid */
         $productGrid = $this->blockFactory->create(
-            'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\Product\Grid',
+            \Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\Product\Grid::class,
             [
                 'element' => $this->_rootElement
                     ->find($this->productGrid, Locator::SELECTOR_XPATH)
@@ -64,6 +64,8 @@ class Products extends WidgetInstanceForm
         );
         $productGrid->searchAndSelect(['name' => $product->getName()]);
         $this->getTemplateBlock()->waitLoader();
-        $this->_rootElement->find($this->apply, Locator::SELECTOR_XPATH)->click();
+        if (!$this->clickOnElement($this->header, $this->apply, Locator::SELECTOR_CSS, Locator::SELECTOR_XPATH)) {
+            $this->clickOnElement($this->footer, $this->apply, Locator::SELECTOR_CSS, Locator::SELECTOR_XPATH);
+        }
     }
 }

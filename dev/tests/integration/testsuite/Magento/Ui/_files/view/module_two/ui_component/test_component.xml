@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">test_component.test_component_data_source</item>
+        </item>
+    </argument>
+    <columns name="columns" component="Magento_Test/js/grid/listing" template="Magento_Test/grid/listing">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="link" xsi:type="url" path="bulk/index"/>
+                <item name="linkText" xsi:type="string" translate="true">Bulk Actions Log</item>
+                <item name="dismissAllText" xsi:type="string" translate="true">Dismiss All Completed Tasks</item>
+                <item name="dismissUrl" xsi:type="url" path="bulk/notification/dismiss"/>
+            </item>
+        </argument>
+        <actionsColumn name="dismiss" class="Some_Actions_Class" sortOrder="10">
+            <settings>
+                <indexField>identity</indexField>
+                <bodyTmpl>Magento_Test/grid/cells/actions</bodyTmpl>
+            </settings>
+        </actionsColumn>
+        <column name="created_at" component="Magento_Test2/js/grid/columns/message" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">date</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Some Label</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+    </columns>
+    <container name="modalContainer">
+        <modal name="modal">
+            <insertForm name="insertBulk" component="Magento_Test/js/insert-form">
+                <settings>
+                    <formSubmitType>ajax</formSubmitType>
+                    <columnsProvider>ns = test_component, index = columns</columnsProvider>
+                    <renderUrl path="mui/index/render_handle">
+                        <param name="handle">bulk_bulk_details_modal</param>
+                        <param name="buttons">1</param>
+                    </renderUrl>
+                    <loading>false</loading>
+                    <toolbarContainer>${ $.parentName }</toolbarContainer>
+                    <externalProvider>${ $.ns }.bulk_details_form_modal_data_source</externalProvider>
+                    <ns>bulk_details_form_modal</ns>
+                </settings>
+            </insertForm>
+        </modal>
+    </container>
+</listing>

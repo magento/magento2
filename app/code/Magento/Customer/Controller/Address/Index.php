@@ -1,17 +1,18 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Address;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Index extends \Magento\Customer\Controller\Address
+class Index extends \Magento\Customer\Controller\Address implements HttpGetActionInterface
 {
     /**
      * @var CustomerRepositoryInterface
@@ -28,9 +29,9 @@ class Index extends \Magento\Customer\Controller\Address
      * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

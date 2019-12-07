@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,9 +10,12 @@
         <observer name="customer_address_before_save_viv_observer" instance="Magento\Customer\Observer\BeforeAddressSaveObserver" />
     </event>
     <event name="customer_address_save_after">
-        <observer name="customer_addres_after_save_viv_observer" instance="Magento\Customer\Observer\AfterAddressSaveObserver" />
+        <observer name="customer_address_after_save_viv_observer" instance="Magento\Customer\Observer\AfterAddressSaveObserver" />
     </event>
     <event name="sales_quote_save_after">
         <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\BindQuoteCreateObserver" />
+    </event>
+    <event name="customer_save_after_data_object">
+        <observer name="upgrade_quote_customer_email" instance="Magento\Customer\Observer\UpgradeQuoteCustomerEmailObserver"/>
     </event>
 </config>

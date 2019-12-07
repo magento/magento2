@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,11 +14,11 @@ use Magento\Mtf\Client\Locator;
 class MultisuggestElement extends SuggestElement
 {
     /**
-     * Selector list choice
+     * Selector category choice
      *
      * @var string
      */
-    protected $listChoice = './/ul[contains(@class,"mage-suggest-choices")]';
+    protected $categoryChoice = '//div[contains(@data-index, "category_ids")]';
 
     /**
      * Selector choice item
@@ -32,14 +32,14 @@ class MultisuggestElement extends SuggestElement
      *
      * @var string
      */
-    protected $choiceValue = './/li[contains(@class,"mage-suggest-choice")]/div';
+    protected $choiceValue = './/span[contains(@class,"admin__action-multiselect-crumb")]/span';
 
     /**
      * Selector remove choice item
      *
      * @var string
      */
-    protected $choiceClose = '.mage-suggest-choice-close';
+    protected $choiceClose = '[data-action="remove-selected-item"]';
 
     /**
      * Set value
@@ -68,8 +68,8 @@ class MultisuggestElement extends SuggestElement
     {
         $this->eventManager->dispatchEvent(['get_value'], [(string) $this->getAbsoluteSelector()]);
 
-        $listChoice = $this->find($this->listChoice, Locator::SELECTOR_XPATH);
-        $choices = $listChoice->getElements($this->choiceValue, Locator::SELECTOR_XPATH);
+        $categoryChoice = $this->find($this->categoryChoice, Locator::SELECTOR_XPATH);
+        $choices = $categoryChoice->getElements($this->choiceValue, Locator::SELECTOR_XPATH);
         $values = [];
 
         foreach ($choices as $choice) {

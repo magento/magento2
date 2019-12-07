@@ -1,33 +1,34 @@
 <?php
 /**
- * Http application
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Event;
-use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\Registry;
 
 /**
+ * HTTP web application. Called from webroot index.php to serve web requests.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Http implements \Magento\Framework\AppInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Event\Manager
+     * @var Manager
      */
     protected $_eventManager;
 
@@ -52,41 +53,41 @@ class Http implements \Magento\Framework\AppInterface
     protected $_state;
 
     /**
-     * @var Filesystem
-     */
-    protected $_filesystem;
-
-    /**
      * @var ResponseHttp
      */
     protected $_response;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param Event\Manager $eventManager
+     * @var ExceptionHandlerInterface
+     */
+    private $exceptionHandler;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param Manager $eventManager
      * @param AreaList $areaList
      * @param RequestHttp $request
      * @param ResponseHttp $response
      * @param ConfigLoaderInterface $configLoader
      * @param State $state
-     * @param Filesystem $filesystem,
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
+     * @param ExceptionHandlerInterface $exceptionHandler
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        Event\Manager $eventManager,
+        ObjectManagerInterface $objectManager,
+        Manager $eventManager,
         AreaList $areaList,
         RequestHttp $request,
         ResponseHttp $response,
         ConfigLoaderInterface $configLoader,
         State $state,
-        Filesystem $filesystem,
-        \Magento\Framework\Registry $registry
+        Registry $registry,
+        ExceptionHandlerInterface $exceptionHandler = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -95,15 +96,15 @@ class Http implements \Magento\Framework\AppInterface
         $this->_response = $response;
         $this->_configLoader = $configLoader;
         $this->_state = $state;
-        $this->_filesystem = $filesystem;
         $this->registry = $registry;
+        $this->exceptionHandler = $exceptionHandler ?: $this->_objectManager->get(ExceptionHandlerInterface::class);
     }
 
     /**
      * Run application
      *
-     * @throws \InvalidArgumentException
      * @return ResponseInterface
+     * @throws LocalizedException|\InvalidArgumentException
      */
     public function launch()
     {
@@ -111,7 +112,7 @@ class Http implements \Magento\Framework\AppInterface
         $this->_state->setAreaCode($areaCode);
         $this->_objectManager->configure($this->_configLoader->load($areaCode));
         /** @var \Magento\Framework\App\FrontControllerInterface $frontController */
-        $frontController = $this->_objectManager->get('Magento\Framework\App\FrontControllerInterface');
+        $frontController = $this->_objectManager->get(\Magento\Framework\App\FrontControllerInterface::class);
         $result = $frontController->dispatch($this->_request);
         // TODO: Temporary solution until all controllers return ResultInterface (MAGETWO-28359)
         if ($result instanceof ResultInterface) {
@@ -122,6 +123,9 @@ class Http implements \Magento\Framework\AppInterface
         } else {
             throw new \InvalidArgumentException('Invalid return type');
         }
+        if ($this->_request->isHead() && $this->_response->getHttpResponseCode() == 200) {
+            $this->handleHeadRequest();
+        }
         // This event gives possibility to launch something before sending output (allow cookie setting)
         $eventParams = ['request' => $this->_request, 'response' => $this->_response];
         $this->_eventManager->dispatch('controller_front_send_response_before', $eventParams);
@@ -129,145 +133,26 @@ class Http implements \Magento\Framework\AppInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function catchException(Bootstrap $bootstrap, \Exception $exception)
-    {
-        $result = $this->handleDeveloperMode($bootstrap, $exception)
-            || $this->handleBootstrapErrors($bootstrap, $exception)
-            || $this->handleSessionException($exception)
-            || $this->handleInitException($exception)
-            || $this->handleGenericReport($bootstrap, $exception);
-        return $result;
-    }
-
-    /**
-     * Error handler for developer mode
+     * Handle HEAD requests by adding the Content-Length header and removing the body from the response.
      *
-     * @param Bootstrap $bootstrap
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleDeveloperMode(Bootstrap $bootstrap, \Exception $exception)
-    {
-        if ($bootstrap->isDeveloperMode()) {
-            if (Bootstrap::ERR_IS_INSTALLED == $bootstrap->getErrorCode()) {
-                try {
-                    $this->redirectToSetup($bootstrap, $exception);
-                    return true;
-                } catch (\Exception $e) {
-                    $exception = $e;
-                }
-            }
-            $this->_response->setHttpResponseCode(500);
-            $this->_response->setHeader('Content-Type', 'text/plain');
-            $this->_response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
-            $this->_response->sendResponse();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * If not installed, try to redirect to installation wizard
-     *
-     * @param Bootstrap $bootstrap
-     * @param \Exception $exception
      * @return void
-     * @throws \Exception
      */
-    private function redirectToSetup(Bootstrap $bootstrap, \Exception $exception)
+    private function handleHeadRequest()
     {
-        $setupInfo = new SetupInfo($bootstrap->getParams());
-        $projectRoot = $this->_filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
-        if ($setupInfo->isAvailable()) {
-            $this->_response->setRedirect($setupInfo->getUrl());
-            $this->_response->sendHeaders();
-        } else {
-            $newMessage = $exception->getMessage() . "\nNOTE: You cannot install Magento using the Setup Wizard "
-                . "because the Magento setup directory cannot be accessed. \n"
-                . 'You can install Magento using either the command line or you must restore access '
-                . 'to the following directory: ' . $setupInfo->getDir($projectRoot) . "\n";
-            $newMessage .= 'If you are using the sample nginx configuration, please go to '
-                . $this->_request->getScheme(). '://' . $this->_request->getHttpHost() . $setupInfo->getUrl();
-            throw new \Exception($newMessage, 0, $exception);
-        }
+        // It is possible that some PHP installations have overloaded strlen to use mb_strlen instead.
+        // This means strlen might return the actual number of characters in a non-ascii string instead
+        // of the number of bytes. Use mb_strlen explicitly with a single byte character encoding to ensure
+        // that the content length is calculated in bytes.
+        $contentLength = mb_strlen($this->_response->getContent(), '8bit');
+        $this->_response->clearBody();
+        $this->_response->setHeader('Content-Length', $contentLength);
     }
 
     /**
-     * Handler for bootstrap errors
-     *
-     * @param Bootstrap $bootstrap
-     * @param \Exception &$exception
-     * @return bool
+     * @inheritdoc
      */
-    private function handleBootstrapErrors(Bootstrap $bootstrap, \Exception &$exception)
+    public function catchException(Bootstrap $bootstrap, \Exception $exception): bool
     {
-        $bootstrapCode = $bootstrap->getErrorCode();
-        if (Bootstrap::ERR_MAINTENANCE == $bootstrapCode) {
-            require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/503.php');
-            return true;
-        }
-        if (Bootstrap::ERR_IS_INSTALLED == $bootstrapCode) {
-            try {
-                $this->redirectToSetup($bootstrap, $exception);
-                return true;
-            } catch (\Exception $e) {
-                $exception = $e;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Handler for session errors
-     *
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleSessionException(\Exception $exception)
-    {
-        if ($exception instanceof \Magento\Framework\Exception\SessionException) {
-            $this->_response->setRedirect($this->_request->getDistroBaseUrl());
-            $this->_response->sendHeaders();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Handler for application initialization errors
-     *
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleInitException(\Exception $exception)
-    {
-        if ($exception instanceof \Magento\Framework\Exception\State\InitException) {
-            require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Handle for any other errors
-     *
-     * @param Bootstrap $bootstrap
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleGenericReport(Bootstrap $bootstrap, \Exception $exception)
-    {
-        $reportData = [$exception->getMessage(), $exception->getTraceAsString()];
-        $params = $bootstrap->getParams();
-        if (isset($params['REQUEST_URI'])) {
-            $reportData['url'] = $params['REQUEST_URI'];
-        }
-        if (isset($params['SCRIPT_NAME'])) {
-            $reportData['script_name'] = $params['SCRIPT_NAME'];
-        }
-        require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/report.php');
-        return true;
+        return $this->exceptionHandler->handle($bootstrap, $exception, $this->_response, $this->_request);
     }
 }

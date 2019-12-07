@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -8,14 +8,20 @@ namespace Magento\Framework\App\Config;
 /**
  * Config data model
  *
- * @method \Magento\Framework\Model\ResourceModel\Db\AbstractDb getResource()
+ * This model is temporarily marked as API since {@see \Magento\Framework\App\Config\ValueInterface} doesn't fit
+ * developers' needs of extensibility. In 2.4 we are going to introduce a new interface which should cover all needs
+ * and deprecate the mentioned together with the model
+ *
  * @method string getScope()
  * @method \Magento\Framework\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()
  * @method \Magento\Framework\App\Config\ValueInterface setScopeId(int $value)
  * @method string getPath()
  * @method \Magento\Framework\App\Config\ValueInterface setPath(string $value)
+ * @method string getValue()
  * @method \Magento\Framework\App\Config\ValueInterface setValue(string $value)
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -71,16 +77,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * Add availability call after load as public
-     *
-     * @return void
-     */
-    public function afterLoad()
-    {
-        $this->_afterLoad();
-    }
-
-    /**
      * Check if config data value was changed
      *
      * @return bool
@@ -117,7 +113,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * {@inheritdoc}
+     * Processing object after save data
      *
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
@@ -130,5 +126,19 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         }
 
         return parent::afterSave();
+    }
+
+    /**
+     * Processing object after delete data
+     *
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
+     *
+     * @return $this
+     */
+    public function afterDelete()
+    {
+        $this->cacheTypeList->invalidate(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+
+        return parent::afterDelete();
     }
 }

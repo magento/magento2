@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,13 +7,20 @@
 //  Color variables
 //  _____________________________________________
 
+@color-blue-dodger: #008bdb;
+@color-black_dark: #333333;
+
 @color-white: #fff;
 @color-black: #000;
 
+@color-darkie-gray: #8a837f;
 @color-gray19: #303030;
 @color-gray20: #333;
 @color-gray34: #575757;
+@color-gray37: #5e5e5e;
 @color-gray40: #666;
+@color-gray43: #6d6d6d;
+@color-gray46: #757575;
 @color-gray52: #858585;
 @color-gray55: #8c8c8c;
 @color-gray56: #8f8f8f;
@@ -26,12 +33,16 @@
 @color-gray79: #c9c9c9;
 @color-gray80: #ccc;
 @color-gray82: #d1d1d1;
+@color-gray83: #d4d4d4;
 @color-gray89: #e3e3e3;
 @color-gray90: #e5e5e5;
 @color-gray91: #e8e8e8;
 @color-gray92: #ebebeb;
 @color-gray94: #f0f0f0;
 @color-gray95: #f2f2f2;
+@color-gray_light: #cccccc;
+@color-lighter-grayish: #cacaca;
+@color-very-dark-gray: #666;
 @color-white-smoke: #f5f5f5;
 @color-white-dark-smoke: #efefef;
 @color-white-fog: #f8f8f8;
@@ -48,6 +59,8 @@
 @color-gray-middle1: #e4e4e4;
 @color-gray-middle2: #c6c6c6;
 @color-gray-middle3: #7e807e;
+@color-gray-middle4: #6e716e;
+@color-gray-middle5: #707070;
 
 @color-gray-darken0: #eee;
 @color-gray-darken1: #e2e2e2;
@@ -61,29 +74,37 @@
 @color-red12: #d10029;
 
 @color-orange-red1: #ff5501;
-@color-orange-red2: #ff5601;
-@color-orange-red3: #ff5700;
-@color-orange-red4: #fc5e10;
+@color-orange-red2: #ff5601; // Legacy orange
+@color-orange-red3: #ff5700; // Legacy orange
+@color-orange-red4: #fc5e10; // Legacy orange
 
 @color-dark-green1: #006400;
 
 @color-blue1: #1979c3;
 @color-blue2: #006bb4;
+@color-blue3: #00699D;
 @color-sky-blue1: #68a8e0;
 
 @color-pink1: #fae5e5;
-@color-dark-pink1: #800080;
+@color-dark-pink1: #800080; // Legacy pink
 
+@color-brownie: #514943;
+@color-brownie-vanilla: #736963;
 @color-brownie1: #6f4400;
 @color-brownie-light1: #c07600;
 
 @color-yellow-light1: #fdf0d5;
 @color-yellow-light2: #ffee9c;
 @color-yellow-light3: #d6ca8e;
+@color-yellow1: #ff0;
 
 //
 //  Color nesting
 //  ---------------------------------------------
+
+@theme__color__primary: @color-blue1;
+@theme__color__primary-alt: @color-blue2;
+@theme__color__secondary: @color-orange-red1;
 
 @primary__color: @color-gray20;
 @primary__color__dark: darken(@primary__color, 35%); // #000
@@ -97,5 +118,5 @@
 @page__background-color: @color-white;
 @panel__background-color: darken(@page__background-color, 6%);
 
-@active__color: @color-orange-red1;
+@active__color: @theme__color__secondary;
 @error__color: @color-red10;

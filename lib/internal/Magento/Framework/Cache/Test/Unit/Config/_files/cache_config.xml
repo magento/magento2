@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,6 +12,6 @@
     </type>
     <type name="layout" translate="label,description" instance="Magento\Framework\App\Cache\Type\Layout">
         <label>Layouts</label>
-        <description>Layout building instructions.</description>
+        <description>Layout building instructions</description>
     </type>
 </config>

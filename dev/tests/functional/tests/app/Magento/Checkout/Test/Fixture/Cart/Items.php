@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,13 +34,6 @@ class Items extends DataSource
     {
         $this->params = $params;
         $this->products = isset($data['products']) ? $data['products'] : [];
-
-        foreach ($this->products as $product) {
-            $classItem = 'Magento\\' . $this->getModuleName($product) . '\Test\Fixture\Cart\Item';
-            $item = ObjectManager::getInstance()->create($classItem, ['product' => $product]);
-
-            $this->data[] = $item;
-        }
     }
 
     /**
@@ -53,6 +46,24 @@ class Items extends DataSource
     {
         preg_match('/^Magento\\\\([^\\\\]+)\\\\Test/', get_class($product), $match);
         return isset($match[1]) ? $match[1] : '';
+    }
+
+    /**
+     * Return prepared dataset.
+     *
+     * @param null|string $key
+     * @return array
+     */
+    public function getData($key = null)
+    {
+        foreach ($this->products as $product) {
+            $classItem = 'Magento\\' . $this->getModuleName($product) . '\Test\Fixture\Cart\Item';
+            $item = ObjectManager::getInstance()->create($classItem, ['product' => $product]);
+            $item->getData();
+            $this->data[] = $item;
+        }
+
+        return parent::getData($key);
     }
 
     /**

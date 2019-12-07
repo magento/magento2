@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Observer;
 
-class CheckForgotpasswordObserverTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CheckForgotpasswordObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Captcha\Observer\CheckForgotpasswordObserver
@@ -50,31 +53,13 @@ class CheckForgotpasswordObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
-        $this->_actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
-        $this->_messageManager = $this->getMock(
-            '\Magento\Framework\Message\ManagerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->redirect = $this->getMock(
-            '\Magento\Framework\App\Response\RedirectInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->captchaStringResolver = $this->getMock(
-            '\Magento\Captcha\Observer\CaptchaStringResolver',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_helper = $this->createMock(\Magento\Captcha\Helper\Data::class);
+        $this->_actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $this->_messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->captchaStringResolver = $this->createMock(\Magento\Captcha\Observer\CaptchaStringResolver::class);
         $this->checkForgotpasswordObserver = $this->_objectManager->getObject(
-            'Magento\Captcha\Observer\CheckForgotpasswordObserver',
+            \Magento\Captcha\Observer\CheckForgotpasswordObserver::class,
             [
                 'helper' => $this->_helper,
                 'actionFlag' => $this->_actionFlag,
@@ -83,7 +68,7 @@ class CheckForgotpasswordObserverTest extends \PHPUnit_Framework_TestCase
                 'captchaStringResolver' => $this->captchaStringResolver
             ]
         );
-        $this->_captcha = $this->getMock('Magento\Captcha\Model\DefaultModel', [], [], '', false);
+        $this->_captcha = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
     }
 
     public function testCheckForgotpasswordRedirects()
@@ -94,8 +79,8 @@ class CheckForgotpasswordObserverTest extends \PHPUnit_Framework_TestCase
         $redirectRoutePath = '*/*/forgotpassword';
         $redirectUrl = 'http://magento.com/customer/account/forgotpassword/';
 
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $request->expects(
             $this->any()
         )->method(
@@ -119,7 +104,7 @@ class CheckForgotpasswordObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($redirectUrl)
         );
 
-        $controller = $this->getMock('Magento\Framework\App\Action\Action', [], [], '', false);
+        $controller = $this->createMock(\Magento\Framework\App\Action\Action::class);
         $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
         $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
         $this->_captcha->expects($this->any())->method('isRequired')->will($this->returnValue(true));
@@ -153,7 +138,7 @@ class CheckForgotpasswordObserverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_captcha)
         );
-        $this->_messageManager->expects($this->once())->method('addError')->with($warningMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($warningMessage);
         $this->_actionFlag->expects(
             $this->once()
         )->method(

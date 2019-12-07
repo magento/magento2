@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Sales Quote Item Model
  *
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
+ * @api
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
@@ -95,6 +95,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {
@@ -172,8 +173,16 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @deprecated 100.2.0
      */
     protected $stockRegistry;
+
+    /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -191,6 +200,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      *
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -207,13 +217,16 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_errorInfos = $statusListFactory->create();
         $this->_localeFormat = $localeFormat;
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->quoteItemCompare = $quoteItemCompare;
         $this->stockRegistry = $stockRegistry;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct(
             $context,
             $registry,
@@ -234,7 +247,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Item');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
     }
 
     /**
@@ -259,7 +272,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getAddress()
     {
-        if ($this->getQuote()->getItemsQty() == $this->getQuote()->getVirtualItemsQty()) {
+        if ($this->getQuote()->isVirtual()) {
             $address = $this->getQuote()->getBillingAddress();
         } else {
             $address = $this->getQuote()->getShippingAddress();
@@ -271,7 +284,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Declare quote model object
      *
-     * @param   \Magento\Quote\Model\Quote $quote
+     * @param  \Magento\Quote\Model\Quote $quote
      * @return $this
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
@@ -423,8 +436,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             ->setTaxClassId($product->getTaxClassId())
             ->setBaseCost($product->getCost());
 
-        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
-        $this->setIsQtyDecimal($stockItem->getIsQtyDecimal());
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->setIsQtyDecimal($stockItem ? $stockItem->getIsQtyDecimal() : false);
 
         $this->_eventManager->dispatch(
             'sales_quote_item_set_product',
@@ -561,8 +574,10 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setOptions($options)
     {
-        foreach ($options as $option) {
-            $this->addOption($option);
+        if (is_array($options)) {
+            foreach ($options as $option) {
+                $this->addOption($option);
+            }
         }
         return $this;
     }
@@ -602,8 +617,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         if (is_array($option)) {
             $option = $this->_itemOptionFactory->create()->setData($option)->setItem($this);
-        } elseif (
-            $option instanceof \Magento\Framework\DataObject &&
+        } elseif ($option instanceof \Magento\Framework\DataObject &&
             !$option instanceof \Magento\Quote\Model\Quote\Item\Option
         ) {
             $option = $this->_itemOptionFactory->create()->setData(
@@ -658,7 +672,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     *Remove option from item options
+     * Remove option from item options
      *
      * @param string $code
      * @return $this
@@ -707,6 +721,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Checks that item model has data changes.
+     *
      * Call save item options if model isn't need to save in DB
      *
      * @return boolean
@@ -733,6 +748,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
                 unset($this->_options[$index]);
                 unset($this->_optionsByCode[$option->getCode()]);
             } else {
+                if (!$option->getItem() || !$option->getItem()->getId()) {
+                    $option->setItem($this);
+                }
                 $option->save();
             }
         }
@@ -798,15 +816,17 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * Returns formatted buy request - object, holding request received from
-     * product view page with keys and options for configured product
+     * Get formatted buy request.
+     *
+     * Returns object, holding request received from product view page with keys and options for configured product.
      *
      * @return \Magento\Framework\DataObject
      */
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $buyRequest = new \Magento\Framework\DataObject($option ? unserialize($option->getValue()) : []);
+        $data = $option ? $this->serializer->unserialize($option->getValue()) : [];
+        $buyRequest = new \Magento\Framework\DataObject($data);
 
         // Overwrite standard buy request qty, because item qty could have changed since adding to quote
         $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);
@@ -847,6 +867,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Clears list of errors, associated with this quote item.
+     *
      * Also automatically removes error-flag from oneself.
      *
      * @return $this
@@ -860,6 +881,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Adds error information to the quote item.
+     *
      * Automatically sets error flag.
      *
      * @param string|null $origin Usually a name of module, that embeds error
@@ -914,9 +936,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
+     * @inheritdoc
      * @codeCoverageIgnoreStart
-     *
-     * {@inheritdoc}
      */
     public function getItemId()
     {
@@ -924,7 +945,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setItemId($itemID)
     {
@@ -932,7 +953,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -940,7 +961,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -948,7 +969,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQty()
     {
@@ -956,7 +977,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -964,7 +985,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -972,7 +993,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrice()
     {
@@ -980,7 +1001,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrice($price)
     {
@@ -988,7 +1009,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductType($productType)
     {
@@ -996,7 +1017,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQuoteId()
     {
@@ -1004,7 +1025,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQuoteId($quoteId)
     {
@@ -1031,10 +1052,11 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         return $this->setData(self::KEY_PRODUCT_OPTION, $productOption);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Quote\Api\Data\CartItemExtensionInterface|null
      */
@@ -1044,7 +1066,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes
      * @return $this

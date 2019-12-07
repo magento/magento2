@@ -1,35 +1,30 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jslint browser: true*/
-(function () {
+define([
+    'rjsResolver'
+], function (resolver) {
     'use strict';
 
-    var checkInterval;
+    /**
+     * Removes provided loader element from DOM.
+     *
+     * @param {HTMLElement} $loader - Loader DOM element.
+     */
+    function hideLoader($loader) {
+        $loader.parentNode.removeChild($loader);
+    }
 
-    checkInterval = setInterval(function () {
-        var checkoutContainer = document.getElementById('checkoutSteps'),
-            steps,
-            loaderContainer;
+    /**
+     * Initializes assets loading process listener.
+     *
+     * @param {Object} config - Optional configuration
+     * @param {HTMLElement} $loader - Loader DOM element.
+     */
+    function init(config, $loader) {
+        resolver(hideLoader.bind(null, $loader));
+    }
 
-        //Return if checkout steps container not loaded
-        if (!checkoutContainer) {
-            return;
-        }
-
-        //Checkout steps
-        steps = checkoutContainer.getElementsByTagName('li');
-
-        //Remove loader and clear update interval if content loaded
-        if (steps && steps.length > 0) {
-            clearInterval(checkInterval);
-            loaderContainer = document.getElementById('checkout-loader');
-
-            if (loaderContainer && loaderContainer.parentNode) {
-                loaderContainer.parentNode.removeChild(loaderContainer);
-            }
-        }
-
-    }, 100);
-})();
+    return init;
+});

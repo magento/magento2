@@ -4,12 +4,12 @@
  *
  * Format: array('Block_Class_Name', ...)
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
     // Fails because of dependence on registry
-    'Magento\Reminder\Block\Adminhtml\Reminder\Edit\Tab\Customers',
-    'Magento\LayeredNavigation\Block\Navigation',
-    'Magento\LayeredNavigation\Block\Navigation\State',
+    \Magento\Reminder\Block\Adminhtml\Reminder\Edit\Tab\Customers::class,
+    \Magento\LayeredNavigation\Block\Navigation::class,
+    \Magento\LayeredNavigation\Block\Navigation\State::class,
 ];

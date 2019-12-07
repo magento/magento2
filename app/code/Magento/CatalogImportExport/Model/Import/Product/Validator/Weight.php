@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 class Weight extends AbstractImportValidator implements RowValidatorInterface
@@ -13,18 +12,12 @@ class Weight extends AbstractImportValidator implements RowValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function init($context)
-    {
-        return parent::init($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)) {
+        if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)
+            && $value['weight'] !== $this->context->getEmptyAttributeValueConstant()
+        ) {
             $this->_addMessages(
                 [
                     sprintf(

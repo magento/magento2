@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,7 +15,7 @@
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
-        <form class="form form-discount" id="discount-form" data-bind="blockLoader: isLoading">
+        <form class="form form-discount" id="discount-form">
             <div class="payment-option-inner">
                 <div class="field">
                     <label class="label" for="discount-code">
@@ -27,7 +27,7 @@
                                id="discount-code"
                                name="discount_code"
                                data-validate="{'required-entry':true}"
-                               data-bind="value: couponCode, attr:{placeholder: $t('Enter discount code')} " />
+                               data-bind="value: couponCode, attr:{disabled:isApplied() , placeholder: $t('Enter discount code')} " />
                     </div>
                 </div>
             </div>
@@ -45,6 +45,9 @@
                     <!-- /ko -->
                 </div>
             </div>
+            <!-- ko foreach: getRegion('captcha') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
         </form>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
     <route url="/V1/store/storeViews" method="GET">
         <service class="Magento\Store\Api\StoreRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Backend::store"/>
         </resources>
     </route>
 
@@ -19,7 +19,7 @@
     <route url="/V1/store/storeGroups" method="GET">
         <service class="Magento\Store\Api\GroupRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Backend::store"/>
         </resources>
     </route>
 
@@ -27,7 +27,7 @@
     <route url="/V1/store/websites" method="GET">
         <service class="Magento\Store\Api\WebsiteRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Backend::store"/>
         </resources>
     </route>
 
@@ -35,7 +35,7 @@
     <route url="/V1/store/storeConfigs" method="GET">
         <service class="Magento\Store\Api\StoreConfigManagerInterface" method="getStoreConfigs"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Backend::store"/>
         </resources>
     </route>
 </routes>

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -31,9 +31,11 @@
 
         .items-qty {
             &:extend(.abs-reset-list all);
+
             .item {
                 white-space: nowrap;
             }
+
             .title {
                 &:after {
                     content: ': ';
@@ -59,6 +61,7 @@
                     content: ': ';
                 }
             }
+
             dd {
                 margin: 0;
             }
@@ -69,9 +72,11 @@
     .paypal-review-discount {
         border-bottom: @border-width__base solid @border-color__base;
         margin: @indent__base 0;
+
         .block {
             &:extend(.abs-discount-block all);
             margin-bottom: 0;
+
             .fieldset {
                 padding: @indent__s 0 @indent__base;
             }
@@ -88,6 +93,7 @@
         .paypal-review-title {
             border-bottom: @border-width__base solid @border-color__base;
         }
+
         .block-content {
             &:extend(.abs-add-clearfix-desktop all);
             .box-order-shipping-address,
@@ -97,6 +103,7 @@
                 float: left;
                 width: 33%;
             }
+
             .box-order-shipping-address {
                 padding: 0 5%;
                 width: 34%;

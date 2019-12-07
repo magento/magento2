@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -42,6 +42,9 @@ class SelectTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueDataProvider()
     {
         return [
@@ -74,6 +77,9 @@ class SelectTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateValueRequiredDataProvider()
     {
         return [
@@ -94,7 +100,7 @@ class SelectTest extends AbstractFormTestCase
      */
     public function testOutputValue($value, $expected)
     {
-        $option1 = $this->getMockBuilder('Magento\Customer\Api\Data\OptionInterface')
+        $option1 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
@@ -105,7 +111,7 @@ class SelectTest extends AbstractFormTestCase
             ->method('getValue')
             ->will($this->returnValue('14'));
 
-        $option2 = $this->getMockBuilder('Magento\Customer\Api\Data\OptionInterface')
+        $option2 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
@@ -116,7 +122,7 @@ class SelectTest extends AbstractFormTestCase
             ->method('getValue')
             ->will($this->returnValue('some key'));
 
-        $option3 = $this->getMockBuilder('Magento\Customer\Api\Data\OptionInterface')
+        $option3 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
@@ -145,6 +151,9 @@ class SelectTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function outputValueDataProvider()
     {
         return [

@@ -1,14 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget;
+
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Backend form widget
  *
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget
 {
@@ -24,13 +30,23 @@ class Form extends \Magento\Backend\Block\Widget
      */
     protected $_template = 'Magento_Backend::widget/form.phtml';
 
+    /** @var Form\Element\ElementCreator */
+    private $creator;
+
     /**
+     * Constructs form
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
+     * @param Form\Element\ElementCreator|null $creator
      */
-    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
-    {
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        array $data = [],
+        Form\Element\ElementCreator $creator = null
+    ) {
         parent::__construct($context, $data);
+        $this->creator = $creator ?: ObjectManager::getInstance()->get(Form\Element\ElementCreator::class);
     }
 
     /**
@@ -43,7 +59,6 @@ class Form extends \Magento\Backend\Block\Widget
         parent::_construct();
 
         $this->setDestElementId('edit_form');
-        $this->setShowGlobalIcon(false);
     }
 
     /**
@@ -57,19 +72,19 @@ class Form extends \Magento\Backend\Block\Widget
     {
         \Magento\Framework\Data\Form::setElementRenderer(
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Renderer\Element',
+                \Magento\Backend\Block\Widget\Form\Renderer\Element::class,
                 $this->getNameInLayout() . '_element'
             )
         );
         \Magento\Framework\Data\Form::setFieldsetRenderer(
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Renderer\Fieldset',
+                \Magento\Backend\Block\Widget\Form\Renderer\Fieldset::class,
                 $this->getNameInLayout() . '_fieldset'
             )
         );
         \Magento\Framework\Data\Form::setFieldsetElementRenderer(
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element',
+                \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element::class,
                 $this->getNameInLayout() . '_fieldset_element'
             )
         );
@@ -145,6 +160,7 @@ class Form extends \Magento\Backend\Block\Widget
 
     /**
      * Initialize form fields values
+     *
      * Method will be called after prepareForm and can be used for field values initialization
      *
      * @return $this
@@ -170,32 +186,11 @@ class Form extends \Magento\Backend\Block\Widget
             if (!$this->_isAttributeVisible($attribute)) {
                 continue;
             }
-            if (($inputType = $attribute->getFrontend()->getInputType()) && !in_array(
-                $attribute->getAttributeCode(),
-                $exclude
-            ) && ('media_image' != $inputType || $attribute->getAttributeCode() == 'image')
+            if (($inputType = $attribute->getFrontend()->getInputType())
+                && !in_array($attribute->getAttributeCode(), $exclude)
+                && ('media_image' !== $inputType || $attribute->getAttributeCode() == 'image')
             ) {
-                $fieldType = $inputType;
-                $rendererClass = $attribute->getFrontend()->getInputRendererClass();
-                if (!empty($rendererClass)) {
-                    $fieldType = $inputType . '_' . $attribute->getAttributeCode();
-                    $fieldset->addType($fieldType, $rendererClass);
-                }
-
-                $element = $fieldset->addField(
-                    $attribute->getAttributeCode(),
-                    $fieldType,
-                    [
-                        'name' => $attribute->getAttributeCode(),
-                        'label' => $attribute->getFrontend()->getLocalizedLabel(),
-                        'class' => $attribute->getFrontend()->getClass(),
-                        'required' => $attribute->getIsRequired(),
-                        'note' => $attribute->getNote()
-                    ]
-                )->setEntityAttribute(
-                    $attribute
-                );
-
+                $element = $this->creator->create($fieldset, $attribute);
                 $element->setAfterElementHtml($this->_getAdditionalElementHtml($element));
 
                 $this->_applyTypeSpecificConfig($inputType, $element, $attribute);

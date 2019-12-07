@@ -1,14 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Search\Request;
 
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * Search request builder.
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Builder
 {
     /**
@@ -33,6 +41,7 @@ class Builder
         'dimensions' => [],
         'placeholder' => [],
     ];
+
     /**
      * @var Cleaner
      */
@@ -91,6 +100,18 @@ class Builder
     }
 
     /**
+     * Set sort.
+     *
+     * @param \Magento\Framework\Api\SortOrder[] $sort
+     * @return $this
+     */
+    public function setSort($sort)
+    {
+        $this->data['sort'] = $sort;
+        return $this;
+    }
+
+    /**
      * Bind dimension data by name
      *
      * @param string $name
@@ -130,15 +151,43 @@ class Builder
         /** @var array $data */
         $data = $this->config->get($requestName);
         if ($data === null) {
-            throw new \InvalidArgumentException("Request name '{$requestName}' doesn't exist.");
+            throw new NonExistingRequestNameException(new Phrase("Request name '%1' doesn't exist.", [$requestName]));
         }
 
         $data = $this->binder->bind($data, $this->data);
+        if (isset($this->data['sort'])) {
+            $data['sort'] = $this->prepareSorts($this->data['sort']);
+        }
         $data = $this->cleaner->clean($data);
 
         $this->clear();
 
         return $this->convert($data);
+    }
+
+    /**
+     * Prepare sort data for request.
+     *
+     * @param array $sorts
+     * @return array
+     */
+    private function prepareSorts(array $sorts)
+    {
+        $sortData = [];
+        foreach ($sorts as $sortField => $sort) {
+            if ($sort instanceof SortOrder) {
+                $sortField = $sort->getField();
+                $direction = $sort->getDirection();
+            } else {
+                $direction = $sort;
+            }
+            $sortData[] = [
+                'field' => $sortField,
+                'direction' => $direction,
+            ];
+        }
+
+        return $sortData;
     }
 
     /**
@@ -164,7 +213,7 @@ class Builder
     {
         /** @var Mapper $mapper */
         $mapper = $this->objectManager->create(
-            'Magento\Framework\Search\Request\Mapper',
+            \Magento\Framework\Search\Request\Mapper::class,
             [
                 'objectManager' => $this->objectManager,
                 'rootQueryName' => $data['query'],
@@ -173,21 +222,27 @@ class Builder
                 'filters' => $data['filters']
             ]
         );
+        $requestData = [
+            'name' => $data['query'],
+            'indexName' => $data['index'],
+            'from' => $data['from'],
+            'size' => $data['size'],
+            'query' => $mapper->getRootQuery(),
+            'dimensions' => $this->buildDimensions(isset($data['dimensions']) ? $data['dimensions'] : []),
+            'buckets' => $mapper->getBuckets()
+        ];
+        if (isset($data['sort'])) {
+            $requestData['sort'] = $data['sort'];
+        }
         return $this->objectManager->create(
-            'Magento\Framework\Search\Request',
-            [
-                'name' => $data['query'],
-                'indexName' => $data['index'],
-                'from' => $data['from'],
-                'size' => $data['size'],
-                'query' => $mapper->getRootQuery(),
-                'dimensions' => $this->buildDimensions(isset($data['dimensions']) ? $data['dimensions'] : []),
-                'buckets' => $mapper->getBuckets()
-            ]
+            \Magento\Framework\Search\Request::class,
+            $requestData
         );
     }
 
     /**
+     * Build dimensions.
+     *
      * @param array $dimensionsData
      * @return array
      */
@@ -196,7 +251,7 @@ class Builder
         $dimensions = [];
         foreach ($dimensionsData as $dimensionData) {
             $dimensions[$dimensionData['name']] = $this->objectManager->create(
-                'Magento\Framework\Search\Request\Dimension',
+                \Magento\Framework\Search\Request\Dimension::class,
                 $dimensionData
             );
         }

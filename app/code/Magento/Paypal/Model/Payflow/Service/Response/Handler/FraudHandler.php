@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Handler;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Xml\Security;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflowpro;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Xml\Security;
 
 /**
  * Class FraudHandler
@@ -56,8 +56,7 @@ class FraudHandler implements HandlerInterface
      */
     public function handle(InfoInterface $payment, DataObject $response)
     {
-        if (
-        !in_array(
+        if (!in_array(
             $response->getData('result'),
             [
                 Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER,
@@ -77,8 +76,7 @@ class FraudHandler implements HandlerInterface
 
         $this->paypalInfoManager->importToPayment(
             [
-                Info::FRAUD_FILTERS =>
-                array_merge(
+                Info::FRAUD_FILTERS => array_merge(
                     $fraudMessages,
                     (array)$payment->getAdditionalInformation(Info::FRAUD_FILTERS)
                 )
@@ -108,7 +106,6 @@ class FraudHandler implements HandlerInterface
                 $rules[(string)$rule->{'ruleDescription'}] = (string)$rule->{'triggeredMessage'};
             }
         } catch (\Exception $e) {
-
         } finally {
             libxml_use_internal_errors(false);
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Review\Test\Constraint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
 
 /**
@@ -70,7 +70,7 @@ class AssertSetApprovedProductReview extends AbstractConstraint
         $this->cachePage->open();
         $this->cachePage->getActionsBlock()->flushCacheStorage();
         $this->cachePage->getModalBlock()->acceptAlert();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $this->cachePage->getActionsBlock()->isStorageCacheFlushed(),
             'Cache is not flushed.'
         );

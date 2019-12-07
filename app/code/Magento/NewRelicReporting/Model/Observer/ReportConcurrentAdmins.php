@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Observer;
@@ -66,8 +66,8 @@ class ReportConcurrentAdmins implements ObserverInterface
                 $user = $this->backendAuthSession->getUser();
                 $jsonData = [
                     'id' => $user->getId(),
-                    'username' => $user->getUsername(),
-                    'name' => $user->getFirstname() . ' ' . $user->getLastname(),
+                    'username' => $user->getUserName(),
+                    'name' => $user->getFirstName() . ' ' . $user->getLastName(),
                 ];
 
                 $modelData = [

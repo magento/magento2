@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,13 @@
 namespace Magento\Setup\Fixtures;
 
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
+use Magento\Setup\Exception;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Xml\Parser;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FixtureModel
 {
     /**
@@ -46,9 +49,17 @@ class FixtureModel
     protected $fixtures = [];
 
     /**
+     * List of fixtures indexed by class names
+     *
+     * @var \Magento\Setup\Fixtures\Fixture[]
+     */
+    private $fixturesByNames = [];
+
+    /**
      * Parameters labels
      *
      * @var array
+     * @deprecated 2.2.0
      */
     protected $paramLabels = [];
 
@@ -58,31 +69,20 @@ class FixtureModel
     protected $initArguments;
 
     /**
-     * Configuration array
-     *
-     * @var array
+     * @var FixtureConfig
      */
-    protected $config = [];
-
-    /**
-     * XML file parser
-     *
-     * @var Parser
-     */
-    protected $fileParser;
+    private $config;
 
     /**
      * Constructor
      *
      * @param IndexerReindexCommand $reindexCommand
-     * @param Parser $fileParser
      * @param array $initArguments
      */
-    public function __construct(IndexerReindexCommand $reindexCommand, Parser $fileParser, $initArguments = [])
+    public function __construct(IndexerReindexCommand $reindexCommand, $initArguments = [])
     {
         $this->initArguments = $initArguments;
         $this->reindexCommand = $reindexCommand;
-        $this->fileParser = $fileParser;
     }
 
     /**
@@ -105,24 +105,33 @@ class FixtureModel
      */
     public function loadFixtures()
     {
-        $files = glob(__DIR__ . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN);
+        $files = glob(__DIR__ . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN, GLOB_NOSORT);
 
         foreach ($files as $file) {
             $file = basename($file, '.php');
             /** @var \Magento\Setup\Fixtures\Fixture $fixture */
-            $fixture = $this->objectManager->create(
-                'Magento\Setup\Fixtures' . '\\' . $file,
+            $type = 'Magento\Setup\Fixtures' . '\\' . $file;
+            $fixture = $this->getObjectManager()->create(
+                $type,
                 [
-                    'fixtureModel' => $this
+                    'fixtureModel' => $this,
                 ]
             );
-            $this->fixtures[$fixture->getPriority()] = $fixture;
+
+            if (isset($this->fixtures[$fixture->getPriority()])) {
+                throw new \InvalidArgumentException(
+                    sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $type)
+                );
+            }
+
+            if ($fixture->getPriority() >= 0) {
+                $this->fixtures[$fixture->getPriority()] = $fixture;
+            }
+
+            $this->fixturesByNames[get_class($fixture)] = $fixture;
         }
 
         ksort($this->fixtures);
-        foreach ($this->fixtures as $fixture) {
-            $this->paramLabels = array_merge($this->paramLabels, $fixture->introduceParamLabels());
-        }
         return $this;
     }
 
@@ -130,6 +139,7 @@ class FixtureModel
      * Get param labels
      *
      * @return array
+     * @deprecated 2.2.0
      */
     public function getParamLabels()
     {
@@ -147,6 +157,21 @@ class FixtureModel
     }
 
     /**
+     * Returns fixture by name
+     * @param $name string
+     * @return \Magento\Setup\Fixtures\Fixture
+     * @throws \Magento\Setup\Exception
+     */
+    public function getFixtureByName($name)
+    {
+        if (!array_key_exists($name, $this->fixturesByNames)) {
+            throw new Exception('Wrong fixture name');
+        }
+
+        return $this->fixturesByNames[$name];
+    }
+
+    /**
      * Get object manager
      *
      * @return \Magento\Framework\ObjectManagerInterface
@@ -159,25 +184,40 @@ class FixtureModel
                 $this->initArguments
             );
             $this->objectManager = $objectManagerFactory->create($this->initArguments);
-            $this->objectManager->get('Magento\Framework\App\State')->setAreaCode(self::AREA_CODE);
+            $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode(self::AREA_CODE);
         }
+
         return $this->objectManager;
     }
 
     /**
-     * Init Object Manager
+     *  Init Object Manager
      *
+     * @param string $area
      * @return FixtureModel
      */
-    public function initObjectManager()
+    public function initObjectManager($area = self::AREA_CODE)
     {
-        $this->getObjectManager()
-            ->configure(
-                $this->getObjectManager()
-                    ->get('Magento\Framework\ObjectManager\ConfigLoaderInterface')
-                    ->load(self::AREA_CODE)
+        $objectManger = $this->getObjectManager();
+        $configuration = $objectManger
+            ->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class)
+            ->load($area);
+        $objectManger->configure($configuration);
+
+        $diConfiguration = $this->getValue('di');
+        if (file_exists($diConfiguration)) {
+            $dom = new \DOMDocument();
+            $dom->load($diConfiguration);
+
+            $objectManger->configure(
+                $objectManger
+                    ->get(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class)
+                    ->convert($dom)
             );
-        $this->getObjectManager()->get('Magento\Framework\Config\ScopeInterface')->setCurrentScope(self::AREA_CODE);
+        }
+
+        $objectManger->get(\Magento\Framework\Config\ScopeInterface::class)
+            ->setCurrentScope($area);
         return $this;
     }
 
@@ -185,12 +225,23 @@ class FixtureModel
      * Reset object manager
      *
      * @return \Magento\Framework\ObjectManagerInterface
+     * @deprecated 2.2.0
      */
     public function resetObjectManager()
     {
-        $this->objectManager = null;
-        $this->initObjectManager();
         return $this;
+    }
+
+    /**
+     * @return FixtureConfig
+     */
+    private function getConfig()
+    {
+        if (null === $this->config) {
+            $this->config = $this->getObjectManager()->get(FixtureConfig::class);
+        }
+
+        return $this->config;
     }
 
     /**
@@ -203,10 +254,7 @@ class FixtureModel
      */
     public function loadConfig($filename)
     {
-        if (!is_readable($filename)) {
-            throw new \Exception("Profile configuration file `{$filename}` is not readable or does not exists.");
-        }
-        $this->config = $this->fileParser->load($filename)->xmlToArray();
+        return $this->getConfig()->loadConfig($filename);
     }
 
     /**
@@ -219,6 +267,6 @@ class FixtureModel
      */
     public function getValue($key, $default = null)
     {
-        return isset($this->config['config']['profile'][$key]) ? $this->config['config']['profile'][$key] : $default;
+        return $this->getConfig()->getValue($key, $default);
     }
 }

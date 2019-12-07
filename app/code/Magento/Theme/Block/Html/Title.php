@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
@@ -14,8 +14,10 @@ use Magento\Framework\View\Element\Template;
  * @method $this setTitleClass($titleClass)
  * @method string getTitleId()
  * @method string getTitleClass()
+ * @api
+ * @since 100.0.2
  */
-class Title extends \Magento\Framework\View\Element\Template
+class Title extends Template
 {
     /**
      * Own page title to display on the page
@@ -34,7 +36,7 @@ class Title extends \Magento\Framework\View\Element\Template
         if (!empty($this->pageTitle)) {
             return $this->pageTitle;
         }
-        return $this->pageConfig->getTitle()->getShort();
+        return __($this->pageConfig->getTitle()->getShort());
     }
 
     /**
@@ -45,9 +47,9 @@ class Title extends \Magento\Framework\View\Element\Template
     public function getPageHeading()
     {
         if (!empty($this->pageTitle)) {
-            return $this->pageTitle;
+            return __($this->pageTitle);
         }
-        return $this->pageConfig->getTitle()->getShortHeading();
+        return __($this->pageConfig->getTitle()->getShortHeading());
     }
 
     /**

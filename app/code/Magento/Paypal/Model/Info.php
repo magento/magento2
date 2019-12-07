@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Paypal\Model;
 
@@ -456,13 +454,15 @@ class Info
                 return __('The payment is pending while it is being reviewed by PayPal for risk.');
             case 'unilateral':
                 return __(
-                    'The payment is pending because it was made to an email address that is not yet registered or confirmed.'
+                    'The payment is pending because it was made to an email address that '
+                    . 'is not yet registered or confirmed.'
                 );
             case 'verify':
                 return __('The merchant account is not yet verified.');
             case 'upgrade':
                 return __(
-                    'The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.'
+                    'The payment was made via credit card.'
+                    . ' In order to receive funds merchant must upgrade account to Business or Premier status.'
                 );
             case 'none':
                 // break is intentionally omitted
@@ -489,10 +489,12 @@ class Info
                 'A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.'
             ),
             'buyer-complaint' => __(
-                'A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'
+                'A reversal has occurred on this transaction due to a'
+                . ' complaint about the transaction from your customer.'
             ),
             'buyer_complaint' => __(
-                'A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'
+                'A reversal has occurred on this transaction due to a'
+                . ' complaint about the transaction from your customer.'
             ),
             'refund' => __(
                 'A reversal has occurred on this transaction because you have given the customer a refund.'
@@ -503,11 +505,13 @@ class Info
             'chargeback_reimbursement' => __('Reimbursement for a chargeback.'),
             'chargeback_settlement' => __('Settlement of a chargeback.'),
             'unauthorized_spoof' => __(
-                'A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.'
+                'A reversal has occurred on this transaction because of a'
+                . ' customer dispute suspecting unauthorized spoof.'
             ),
             'non_receipt' => __('Buyer claims that he did not receive goods or service.'),
             'not_as_described' => __(
-                'Buyer claims that the goods or service received differ from merchant’s description of the goods or service.'
+                'Buyer claims that the goods or service received differ from'
+                . ' merchant’s description of the goods or service.'
             ),
             'unauthorized' => __('Buyer claims that he/she did not authorize transaction.'),
             'adjustment_reimburse' => __('A case that has been resolved and close requires a reimbursement.'),
@@ -677,31 +681,24 @@ class Info
     {
         if (!isset($this->_labelCodesCache[self::PAYPAL_AVS_CODE])) {
             $this->_labelCodesCache[self::PAYPAL_AVS_CODE] = [
-                // Visa, MasterCard, Discover and American Express
-                'A' => __('Matched Address only (no ZIP)'),
-                // international "A"
-                'B' => __('Matched Address only (no ZIP) International'),
+                'A' => __('Matched Address only (no ZIP)'), // Visa, MasterCard, Discover and American Express
+                'B' => __('Matched Address only (no ZIP) International'), // international "A"
                 'N' => __('No Details matched'),
-                // international "N"
-                'C' => __('No Details matched. International'),
+                'C' => __('No Details matched. International'), // international "N"
                 'X' => __('Exact Match.'),
-                // international "X"
-                'D' => __('Exact Match. Address and Postal Code. International'),
-                // UK-specific "X"
-                'F' => __('Exact Match. Address and Postal Code. UK-specific'),
+                'D' => __('Exact Match. Address and Postal Code. International'), // international "X"
+                'F' => __('Exact Match. Address and Postal Code. UK-specific'), // UK-specific "X"
                 'E' => __('N/A. Not allowed for MOTO (Internet/Phone) transactions'),
                 'G' => __('N/A. Global Unavailable'),
                 'I' => __('N/A. International Unavailable'),
                 'Z' => __('Matched five-digit ZIP only (no Address)'),
-                // international "Z"
-                'P' => __('Matched Postal Code only (no Address)'),
+                'P' => __('Matched Postal Code only (no Address)'), // international "Z"
                 'R' => __('N/A. Retry'),
                 'S' => __('N/A. Service not Supported'),
                 'U' => __('N/A. Unavailable'),
-                'W' => __('Matched whole nine-didgit ZIP (no Address)'),
-                'Y' => __('Yes. Matched Address and five-didgit ZIP'),
-                // Maestro and Solo
-                '0' => __('All the address information matched'),
+                'W' => __('Matched whole nine-digit ZIP (no Address)'),
+                'Y' => __('Yes. Matched Address and five-digit ZIP'),
+                '0' => __('All the address information matched'), // Maestro and Solo
                 '1' => __('None of the address information matched'),
                 '2' => __('Part of the address information matched'),
                 '3' => __('N/A. The merchant did not provide AVS information'),

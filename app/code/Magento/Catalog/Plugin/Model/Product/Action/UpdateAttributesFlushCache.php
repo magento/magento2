@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Plugin\Model\Product\Action;
 
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Action;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Event\ManagerInterface as EventManager;
@@ -36,26 +35,28 @@ class UpdateAttributesFlushCache
 
     /**
      * @param Action $subject
-     * @param \Closure $proceed
-     * @param array $productIds
-     * @param array $attrData
-     * @param int $storeId
+     * @param Action $result
      * @return Action
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundUpdateAttributes(
-        Action $subject,
-        \Closure $proceed,
-        $productIds,
-        $attrData,
-        $storeId
+    public function afterUpdateAttributes(
+        \Magento\Catalog\Model\Product\Action $subject,
+        \Magento\Catalog\Model\Product\Action $result
     ) {
-        $returnValue = $proceed($productIds, $attrData, $storeId);
-
-        $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+        return $result;
+    }
 
-        return $returnValue;
+    /**
+     * @param Action $subject
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterUpdateWebsites(
+        \Magento\Catalog\Model\Product\Action $subject
+    ) {
+        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
     }
 }

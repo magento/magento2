@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class InvoiceServiceTest
  */
-class InvoiceServiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Repository
@@ -60,41 +60,32 @@ class InvoiceServiceTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->repositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\InvoiceRepositoryInterface',
+            \Magento\Sales\Api\InvoiceRepositoryInterface::class,
             ['get'],
             '',
             false
         );
         $this->commentRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\InvoiceCommentRepositoryInterface',
+            \Magento\Sales\Api\InvoiceCommentRepositoryInterface::class,
             ['getList'],
             '',
             false
         );
-        $this->searchCriteriaBuilderMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
-            ['create', 'addFilters'],
-            [],
-            '',
-            false
+        $this->searchCriteriaBuilderMock = $this->createPartialMock(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
+            ['create', 'addFilters']
         );
-        $this->filterBuilderMock = $this->getMock(
-            'Magento\Framework\Api\FilterBuilder',
-            ['setField', 'setValue', 'setConditionType', 'create'],
-            [],
-            '',
-            false
+        $this->filterBuilderMock = $this->createPartialMock(
+            \Magento\Framework\Api\FilterBuilder::class,
+            ['setField', 'setValue', 'setConditionType', 'create']
         );
-        $this->invoiceNotifierMock = $this->getMock(
-            'Magento\Sales\Model\Order\InvoiceNotifier',
-            ['notify'],
-            [],
-            '',
-            false
+        $this->invoiceNotifierMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\InvoiceNotifier::class,
+            ['notify']
         );
 
         $this->invoiceService = $objectManager->getObject(
-            'Magento\Sales\Model\Service\InvoiceService',
+            \Magento\Sales\Model\Service\InvoiceService::class,
             [
                 'repository' => $this->repositoryMock,
                 'commentRepository' => $this->commentRepositoryMock,
@@ -113,13 +104,7 @@ class InvoiceServiceTest extends \PHPUnit_Framework_TestCase
         $id = 145;
         $returnValue = true;
 
-        $invoiceMock = $this->getMock(
-            'Magento\Sales\Model\Order\Invoice',
-            ['capture'],
-            [],
-            '',
-            false
-        );
+        $invoiceMock = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice::class, ['capture']);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
@@ -140,20 +125,8 @@ class InvoiceServiceTest extends \PHPUnit_Framework_TestCase
         $id = 25;
         $returnValue = 'return-value';
 
-        $filterMock = $this->getMock(
-            'Magento\Framework\Api\Filter',
-            [],
-            [],
-            '',
-            false
-        );
-        $searchCriteriaMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
-            [],
-            [],
-            '',
-            false
-        );
+        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
@@ -193,7 +166,7 @@ class InvoiceServiceTest extends \PHPUnit_Framework_TestCase
         $returnValue = 'return-value';
 
         $modelMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\AbstractModel',
+            \Magento\Sales\Model\AbstractModel::class,
             [],
             '',
             false
@@ -219,13 +192,7 @@ class InvoiceServiceTest extends \PHPUnit_Framework_TestCase
         $id = 145;
         $returnValue = true;
 
-        $invoiceMock = $this->getMock(
-            'Magento\Sales\Model\Order\Invoice',
-            ['void'],
-            [],
-            '',
-            false
-        );
+        $invoiceMock = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice::class, ['void']);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')

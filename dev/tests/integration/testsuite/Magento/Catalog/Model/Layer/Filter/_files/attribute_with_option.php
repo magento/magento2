@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Setup\CategorySetup::class
+);
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $attribute->setData(
     [
@@ -18,6 +20,7 @@ $attribute->setData(
         'is_global' => 1,
         'frontend_input' => 'select',
         'is_filterable' => 1,
+        'is_user_defined' => 1,
         'option' => ['value' => ['option_0' => [0 => 'Option Label']]],
         'backend_type' => 'int',
     ]
@@ -30,13 +33,15 @@ $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attrib
 /* Create simple products per each option */
 /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
+    \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
 );
 $options->setAttributeFilter($attribute->getId());
 
 foreach ($options as $option) {
     /** @var $product \Magento\Catalog\Model\Product */
-    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        \Magento\Catalog\Model\Product::class
+    );
     $product->setTypeId(
         \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
     )->setAttributeSetId(
@@ -60,7 +65,7 @@ foreach ($options as $option) {
     )->save();
 
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Catalog\Model\Product\Action'
+        \Magento\Catalog\Model\Product\Action::class
     )->updateAttributes(
         [$product->getId()],
         [$attribute->getAttributeCode() => $option->getId()],

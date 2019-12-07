@@ -1,13 +1,14 @@
 <?php
 /**
- * Application file system directories dictionary
+ * Application file system directories dictionary.
  *
- * Provides information about what directories are available in the application
- * Serves as customizaiton point to specify different directories or add own
+ * Provides information about what directories are available in the application.
+ * Serves as a customization point to specify different directories or add your own.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem;
 
 /**
@@ -94,9 +95,10 @@ class DirectoryList
     public function __construct($root, array $config = [])
     {
         static::validate($config);
-        $this->root = $this->filterPath($root);
+        $this->root = $this->normalizePath($root);
         $this->directories = static::getDefaultConfig();
-        $this->directories[self::SYS_TMP] = [self::PATH => realpath(sys_get_temp_dir())];
+        $sysTmpPath = get_cfg_var('upload_tmp_dir') ?: sys_get_temp_dir();
+        $this->directories[self::SYS_TMP] = [self::PATH => realpath($sysTmpPath)];
 
         // inject custom values from constructor
         foreach ($this->directories as $code => $dir) {
@@ -109,7 +111,7 @@ class DirectoryList
 
         // filter/validate values
         foreach ($this->directories as $code => $dir) {
-            $path = $this->filterPath($dir[self::PATH]);
+            $path = $this->normalizePath($dir[self::PATH]);
             if (!$this->isAbsolute($path)) {
                 $path = $this->prependRoot($path);
             }
@@ -127,7 +129,7 @@ class DirectoryList
      * @param string $path
      * @return string
      */
-    private function filterPath($path)
+    private function normalizePath($path)
     {
         return str_replace('\\', '/', $path);
     }
@@ -202,6 +204,7 @@ class DirectoryList
      *
      * @param string $code
      * @return string
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function getPath($code)
     {

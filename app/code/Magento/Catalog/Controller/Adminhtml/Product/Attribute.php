@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,13 @@ use Magento\Framework\View\Result\PageFactory;
 
 abstract class Attribute extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::attributes_attributes';
+
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
      */
@@ -65,7 +72,7 @@ abstract class Attribute extends \Magento\Backend\App\Action
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
         $this->_entityTypeId = $this->_objectManager->create(
-            'Magento\Eav\Model\Entity'
+            \Magento\Eav\Model\Entity::class
         )->setType(
             \Magento\Catalog\Model\Product::ENTITY
         )->getTypeId();
@@ -81,7 +88,7 @@ abstract class Attribute extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         if ($this->getRequest()->getParam('popup')) {
-            if ($this->getRequest()->getParam('product_tab') == 'variations') {
+            if ($this->getRequest()->getParam('product_tab') === 'variations') {
                 $resultPage->addHandle(['popup', 'catalog_product_attribute_edit_product_tab_variations_popup']);
             } else {
                 $resultPage->addHandle(['popup', 'catalog_product_attribute_edit_popup']);
@@ -112,7 +119,7 @@ abstract class Attribute extends \Magento\Backend\App\Action
             preg_replace(
                 '/[^a-z_0-9]/',
                 '_',
-                $this->_objectManager->create('Magento\Catalog\Model\Product\Url')->formatUrlKey($label)
+                $this->_objectManager->create(\Magento\Catalog\Model\Product\Url::class)->formatUrlKey($label)
             ),
             0,
             30
@@ -122,15 +129,5 @@ abstract class Attribute extends \Magento\Backend\App\Action
             $code = 'attr_' . ($code ?: substr(md5(time()), 0, 8));
         }
         return $code;
-    }
-
-    /**
-     * ACL check
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::attributes_attributes');
     }
 }

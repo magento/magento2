@@ -1,20 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Service;
 
-use Magento\SalesRule\Model\Coupon;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\SalesRule\Api\CouponRepositoryInterface;
 
 /**
  * Coupon management service class
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CouponManagementService implements \Magento\SalesRule\Api\CouponManagementInterface
 {
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
+     * @deprecated
      */
     protected $couponFactory;
 
@@ -25,6 +30,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
+     * @deprecated
      */
     protected $collectionFactory;
 
@@ -35,6 +41,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
     /**
      * @var \Magento\SalesRule\Model\Spi\CouponResourceInterface
+     * @deprecated
      */
     protected $resourceModel;
 
@@ -44,12 +51,24 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
     protected $couponMassDeleteResultFactory;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $criteriaBuilder;
+
+    /**
+     * @var CouponRepositoryInterface
+     */
+    private $repository;
+
+    /**
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory
      * @param \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator
      * @param \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel
      * @param \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory $couponMassDeleteResultFactory
+     * @param SearchCriteriaBuilder|null $criteriaBuilder
+     * @param CouponRepositoryInterface|null $repository
      */
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
@@ -57,7 +76,9 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory,
         \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator,
         \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel,
-        \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory $couponMassDeleteResultFactory
+        \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory $couponMassDeleteResultFactory,
+        ?SearchCriteriaBuilder $criteriaBuilder = null,
+        ?CouponRepositoryInterface $repository = null
     ) {
         $this->couponFactory = $couponFactory;
         $this->ruleFactory = $ruleFactory;
@@ -65,6 +86,8 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         $this->couponGenerator = $couponGenerator;
         $this->resourceModel = $resourceModel;
         $this->couponMassDeleteResultFactory = $couponMassDeleteResultFactory;
+        $this->criteriaBuilder = $criteriaBuilder ?? ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
+        $this->repository = $repository ?? ObjectManager::getInstance()->get(CouponRepositoryInterface::class);
     }
 
     /**
@@ -85,12 +108,14 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         try {
             $rule = $this->ruleFactory->create()->load($couponSpec->getRuleId());
             if (!$rule->getRuleId()) {
-                throw \Magento\Framework\Exception\NoSuchEntityException::singleField(
+                throw NoSuchEntityException::singleField(
                     \Magento\SalesRule\Model\Coupon::KEY_RULE_ID,
                     $couponSpec->getRuleId()
                 );
             }
-            if (!$rule->getUseAutoGeneration()) {
+            if (!$rule->getUseAutoGeneration()
+                && $rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO
+            ) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Specified rule does not allow automatic coupon generation')
                 );
@@ -155,7 +180,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
     /**
      * Delete coupon by coupon codes.
      *
-     * @param string[] codes
+     * @param string[] $codes
      * @param bool $ignoreInvalidCoupons
      * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -169,21 +194,18 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
      * Delete coupons by filter
      *
      * @param string $fieldName
-     * @param string[] fieldValues
+     * @param string[] $fieldValues
      * @param bool $ignoreInvalid
      * @return \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function massDelete($fieldName, array $fieldValues, $ignoreInvalid)
     {
-        $couponsCollection = $this->collectionFactory->create()
-            ->addFieldToFilter(
-                $fieldName,
-                ['in' => $fieldValues]
-            );
+        $this->criteriaBuilder->addFilter($fieldName, $fieldValues, 'in');
+        $couponsCollection = $this->repository->getList($this->criteriaBuilder->create());
 
         if (!$ignoreInvalid) {
-            if ($couponsCollection->getSize() != count($fieldValues)) {
+            if ($couponsCollection->getTotalCount() != count($fieldValues)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Some coupons are invalid.'));
             }
         }
@@ -191,11 +213,10 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
         $results = $this->couponMassDeleteResultFactory->create();
         $failedItems = [];
         $fieldValues = array_flip($fieldValues);
-        /** @var \Magento\SalesRule\Model\Coupon $coupon */
         foreach ($couponsCollection->getItems() as $coupon) {
             $couponValue = ($fieldName == 'code') ? $coupon->getCode() : $coupon->getCouponId();
             try {
-                $coupon->delete();
+                $this->repository->deleteById($coupon->getCouponId());
             } catch (\Exception $e) {
                 $failedItems[] = $couponValue;
             }

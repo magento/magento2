@@ -1,10 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml\Locks;
 
+/**
+ * Locked users page test.
+ *
+ * @magentoAppArea adminhtml
+ */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
@@ -20,11 +26,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $body = $this->getResponse()->getBody();
         $this->assertContains('<h1 class="page-title">Locked Users</h1>', $body);
         $this->assertRegExp(
-            '/<td data-column\="username"\s*class\="\s*col-name\s*col-username\s*"\s*>\s*adminUser1\s*<\/td>/',
+            '/<td data-column\="username"\s*class\="[^"]*col-name[^"]*col-username[^"]*"\s*>\s*adminUser1\s*<\/td>/',
             $body
         );
         $this->assertRegExp(
-            '/<td data-column\="username"\s*class\="\s*col-name\s*col-username\s*"\s*>\s*adminUser2\s*<\/td>/',
+            '/<td data-column\="username"\s*class\="[^"]*col-name[^"]*col-username\s*"[^"]*>\s*adminUser2\s*<\/td>/',
             $body
         );
     }

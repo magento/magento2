@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
 
 /**
  * Tests for \Magento\Webapi\Model\Rest\Swagger\Generator
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const OPERATION_NAME = 'operationName';
 
@@ -21,14 +24,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**  @var \Magento\Webapi\Model\Rest\SwaggerFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $swaggerFactoryMock;
 
-    /** @var \Magento\Framework\App\Cache\Type\Webapi|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Webapi\Model\Cache\Type\Webapi|\PHPUnit_Framework_MockObject_MockObject */
     protected $cacheMock;
 
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $typeProcessorMock;
-
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeManagerMock;
 
     /**
      * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -40,29 +40,34 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->serviceMetadataMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\ServiceMetadata'
+            \Magento\Webapi\Model\ServiceMetadata::class
         )->disableOriginalConstructor()->getMock();
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $swagger = $this->objectManager->getObject('Magento\Webapi\Model\Rest\Swagger');
+        $swagger = $this->objectManager->getObject(\Magento\Webapi\Model\Rest\Swagger::class);
         $this->swaggerFactoryMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Rest\SwaggerFactory'
+            \Magento\Webapi\Model\Rest\SwaggerFactory::class
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
         $this->swaggerFactoryMock->expects($this->any())->method('create')->will($this->returnValue($swagger));
 
-        $this->cacheMock = $this->getMockBuilder(
-            'Magento\Framework\App\Cache\Type\Webapi'
-        )->disableOriginalConstructor()->getMock();
+        $this->cacheMock = $this->getMockBuilder(\Magento\Webapi\Model\Cache\Type\Webapi::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
         $this->cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
 
-        $this->typeProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\TypeProcessor')
+        $this->typeProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\TypeProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeProcessorMock->expects($this->any())
@@ -70,43 +75,54 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::OPERATION_NAME));
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
-            'Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface'
-        )->disableOriginalConstructor()
-            ->getMock();
+            \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::class
+        )->disableOriginalConstructor()->setMethods(['getDataTypes'])
+            ->getMockForAbstractClass();
         $this->customAttributeTypeLocatorMock->expects($this->any())
-            ->method('getAllServiceDataInterfaces')
-            ->willReturn(['$customAttributeClass']);
-
-        $this->storeManagerMock = $this->getMockBuilder(
-            'Magento\Store\Model\StoreManagerInterface'
-        )->setMethods(['getStore'])->disableOriginalConstructor()->getMockForAbstractClass();
+            ->method('getDataTypes')
+            ->willReturn(['customAttributeClass']);
 
         $storeMock = $this->getMockBuilder(
-            'Magento\Store\Model\Store'
+            \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->getMock();
-
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
 
         $storeMock->expects($this->any())
             ->method('getCode')
             ->will($this->returnValue('store_code'));
 
+        /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
+        $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
+
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
         $this->generator = $this->objectManager->getObject(
-            'Magento\Webapi\Model\Rest\Swagger\Generator',
+            \Magento\Webapi\Model\Rest\Swagger\Generator::class,
             [
                 'swaggerFactory' => $this->swaggerFactoryMock,
                 'cache' => $this->cacheMock,
                 'typeProcessor' => $this->typeProcessorMock,
-                'storeManager' => $this->storeManagerMock,
                 'serviceMetadata' => $this->serviceMetadataMock,
-                'customAttributeTypeLocator' => $this->customAttributeTypeLocatorMock,
+                'serviceTypeList' => $this->customAttributeTypeLocatorMock,
+                'authorization' => $authorizationMock,
+                'serializer' => $this->serializer
             ]
         );
     }
 
     /**
+     * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
      * @param string[] $serviceMetadata
      * @param string[] $typeData
      * @param string $schema
@@ -122,11 +138,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($serviceMetadata);
         $this->typeProcessorMock->expects($this->any())
             ->method('getTypeData')
-            ->willReturnMap(
-                [
-                    ['TestModule5V2EntityAllSoapAndRest', $typeData],
-                ]
-            );
+            ->willReturnMap($typeData);
 
         $this->typeProcessorMock->expects($this->any())
             ->method('isTypeSimple')
@@ -157,6 +169,96 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'methods' => [
+                        'execute' => [
+                            'method' => 'execute',
+                            'inputRequired' => false,
+                            'isSecure' => false,
+                            'resources' => [
+                                "anonymous"
+                            ],
+                            'methodAlias' => 'execute',
+                            'parameters' => [],
+                            'documentation' => 'Do Magic!',
+                            'interface' => [
+                                'in' => [
+                                    'parameters' => [
+                                        'searchRequest' => [
+                                            'type' => 'DreamVendorDreamModuleApiDataSearchRequestInterface',
+                                            'required' => true,
+                                            'documentation' => ""
+                                        ]
+                                    ]
+                                ],
+                                'out' => [
+                                    'parameters' => [
+                                        'result' => [
+                                            'type' => 'DreamVendorDreamModuleApiDataSearchResultInterface',
+                                            'documentation' => null,
+                                            'required' => true
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'class' => 'DreamVendor\DreamModule\Api\ExecuteStuff',
+                    'description' => '',
+                    'routes' => [
+                        '/V1/dream-vendor/dream-module/execute-stuff' => [
+                            'GET' => [
+                                'method' => 'execute',
+                                'parameters' => []
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    [
+                        'DreamVendorDreamModuleApiDataSearchRequestInterface',
+                        [
+                            'documentation' => '',
+                            'parameters' => [
+                                'stuff' => [
+                                    'type' => 'DreamVendorDreamModuleApiDataStuffInterface',
+                                    'required' => true,
+                                    'documentation' => 'Empty Extension Point'
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        'DreamVendorDreamModuleApiDataSearchResultInterface',
+                        [
+                            'documentation' => '',
+                            'parameters' => [
+                                'totalCount' => [
+                                    'type' => 'int',
+                                    'required' => true,
+                                    'documentation' => 'Processed count.'
+                                ],
+                                'stuff' => [
+                                    'type' => 'DreamVendorDreamModuleApiDataStuffInterface',
+                                    'required' => true,
+                                    'documentation' => 'Empty Extension Point'
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        'DreamVendorDreamModuleApiDataStuffInterface',
+                        [
+                            'documentation' => '',
+                            'parameters' => []
+                        ]
+                    ]
+                ],
+                // @codingStandardsIgnoreStart
+                '{"swagger":"2.0","info":{"version":"","title":""},"host":"magento.host","basePath":"/rest/default","schemes":["http://"],"tags":[{"name":"testModule5AllSoapAndRestV2","description":""}],"paths":{"/V1/dream-vendor/dream-module/execute-stuff":{"get":{"tags":["testModule5AllSoapAndRestV2"],"description":"Do Magic!","operationId":"operationNameGet","consumes":["application/json","application/xml"],"produces":["application/json","application/xml"],"responses":{"200":{"description":"200 Success.","schema":{"$ref":"#/definitions/dream-vendor-dream-module-api-data-search-result-interface"}},"default":{"description":"Unexpected error","schema":{"$ref":"#/definitions/error-response"}}}}}},"definitions":{"error-response":{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"errors":{"$ref":"#/definitions/error-errors"},"code":{"type":"integer","description":"Error code"},"parameters":{"$ref":"#/definitions/error-parameters"},"trace":{"type":"string","description":"Stack trace"}},"required":["message"]},"error-errors":{"type":"array","description":"Errors list","items":{"$ref":"#/definitions/error-errors-item"}},"error-errors-item":{"type":"object","description":"Error details","properties":{"message":{"type":"string","description":"Error message"},"parameters":{"$ref":"#/definitions/error-parameters"}}},"error-parameters":{"type":"array","description":"Error parameters list","items":{"$ref":"#/definitions/error-parameters-item"}},"error-parameters-item":{"type":"object","description":"Error parameters item","properties":{"resources":{"type":"string","description":"ACL resource"},"fieldName":{"type":"string","description":"Missing or invalid field name"},"fieldValue":{"type":"string","description":"Incorrect field value"}}},"dream-vendor-dream-module-api-data-search-result-interface":{"type":"object","description":"","properties":{"total_count":{"type":"integer","description":"Processed count."},"stuff":{"$ref":"#/definitions/dream-vendor-dream-module-api-data-stuff-interface"}},"required":["total_count","stuff"]},"dream-vendor-dream-module-api-data-stuff-interface":{"type":"object","description":""}}}'
+                // @codingStandardsIgnoreEnd
+            ],
+            [
+                [
+                    'methods' => [
                         'create' => [
                             'method' => 'create',
                             'inputRequired' => false,
@@ -181,12 +283,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                                             'required' => true,
                                         ],
                                     ],
-                                    'throws' => ['\Magento\Framework\Exception\LocalizedException'],
+                                    'throws' => [\Magento\Framework\Exception\LocalizedException::class],
                                 ],
                             ],
                         ],
                     ],
-                    'class' => 'Magento\TestModule5\Service\V2\AllSoapAndRestInterface',
+                    'class' => \Magento\TestModule5\Service\V2\AllSoapAndRestInterface::class,
                     'description' => 'AllSoapAndRestInterface',
                     'routes' => [
                         '/V1/testModule5' => [
@@ -198,17 +300,22 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 [
-                    'documentation' => 'Some Data Object',
-                    'parameters' => [
-                        'price' => [
-                            'type' => 'int',
-                            'required' => true,
-                            'documentation' => ""
+                    [
+                        'TestModule5V2EntityAllSoapAndRest',
+                        [
+                            'documentation' => 'Some Data Object',
+                            'parameters' => [
+                                'price' => [
+                                    'type' => 'int',
+                                    'required' => true,
+                                    'documentation' => ""
+                                ]
+                            ]
                         ]
                     ]
                 ],
                 // @codingStandardsIgnoreStart
-                '{"swagger":"2.0","info":{"version":"","title":""},"host":"magento.host","basePath":"/rest/default","schemes":["http://"],"tags":[{"name":"testModule5AllSoapAndRestV2","description":"AllSoapAndRestInterface"}],"paths":{"/V1/testModule5":{"post":{"tags":["testModule5AllSoapAndRestV2"],"description":"Add new item.","operationId":"' . self::OPERATION_NAME . 'Post","parameters":[{"name":"$body","in":"body","schema":{"required":["item"],"properties":{"item":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"type":"object"}}],"responses":{"200":{"description":"200 Success.","schema":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"401":{"description":"401 Unauthorized","schema":{"$ref":"#/definitions/error-response"}},"500":{"description":"Internal Server error","schema":{"$ref":"#/definitions/error-response"}},"default":{"description":"Unexpected error","schema":{"$ref":"#/definitions/error-response"}}}}}},"definitions":{"error-response":{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"errors":{"$ref":"#/definitions/error-errors"},"code":{"type":"integer","description":"Error code"},"parameters":{"$ref":"#/definitions/error-parameters"},"trace":{"type":"string","description":"Stack trace"}},"required":["message"]},"error-errors":{"type":"array","description":"Errors list","items":{"$ref":"#/definitions/error-errors-item"}},"error-errors-item":{"type":"object","description":"Error details","properties":{"message":{"type":"string","description":"Error message"},"parameters":{"$ref":"#/definitions/error-parameters"}}},"error-parameters":{"type":"array","description":"Error parameters list","items":{"$ref":"#/definitions/error-parameters-item"}},"error-parameters-item":{"type":"object","description":"Error parameters item","properties":{"resources":{"type":"string","description":"ACL resource"},"fieldName":{"type":"string","description":"Missing or invalid field name"},"fieldValue":{"type":"string","description":"Incorrect field value"}}},"test-module5-v2-entity-all-soap-and-rest":{"type":"object","description":"Some Data Object","properties":{"price":{"type":"integer"}},"required":["price"]}}}'
+                '{"swagger":"2.0","info":{"version":"","title":""},"host":"magento.host","basePath":"/rest/default","schemes":["http://"],"tags":[{"name":"testModule5AllSoapAndRestV2","description":"AllSoapAndRestInterface"}],"paths":{"/V1/testModule5":{"post":{"tags":["testModule5AllSoapAndRestV2"],"description":"Add new item.","operationId":"operationNamePost","consumes":["application/json","application/xml"],"produces":["application/json","application/xml"],"parameters":[{"name":"operationNamePostBody","in":"body","schema":{"required":["item"],"properties":{"item":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"type":"object","xml":{"name":"request"}}}],"responses":{"200":{"description":"200 Success.","schema":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"401":{"description":"401 Unauthorized","schema":{"$ref":"#/definitions/error-response"}},"500":{"description":"Internal Server error","schema":{"$ref":"#/definitions/error-response"}},"default":{"description":"Unexpected error","schema":{"$ref":"#/definitions/error-response"}}}}}},"definitions":{"error-response":{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"errors":{"$ref":"#/definitions/error-errors"},"code":{"type":"integer","description":"Error code"},"parameters":{"$ref":"#/definitions/error-parameters"},"trace":{"type":"string","description":"Stack trace"}},"required":["message"]},"error-errors":{"type":"array","description":"Errors list","items":{"$ref":"#/definitions/error-errors-item"}},"error-errors-item":{"type":"object","description":"Error details","properties":{"message":{"type":"string","description":"Error message"},"parameters":{"$ref":"#/definitions/error-parameters"}}},"error-parameters":{"type":"array","description":"Error parameters list","items":{"$ref":"#/definitions/error-parameters-item"}},"error-parameters-item":{"type":"object","description":"Error parameters item","properties":{"resources":{"type":"string","description":"ACL resource"},"fieldName":{"type":"string","description":"Missing or invalid field name"},"fieldValue":{"type":"string","description":"Incorrect field value"}}},"test-module5-v2-entity-all-soap-and-rest":{"type":"object","description":"Some Data Object","properties":{"price":{"type":"integer"}},"required":["price"]}}}'
                 // @codingStandardsIgnoreEnd
             ],
             [
@@ -229,12 +336,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                                             'required' => true,
                                         ],
                                     ],
-                                    'throws' => ['\Magento\Framework\Exception\LocalizedException'],
+                                    'throws' => [\Magento\Framework\Exception\LocalizedException::class],
                                 ],
                             ],
                         ],
                     ],
-                    'class' => 'Magento\TestModule5\Service\V2\AllSoapAndRestInterface',
+                    'class' => \Magento\TestModule5\Service\V2\AllSoapAndRestInterface::class,
                     'description' => 'AllSoapAndRestInterface',
                     'routes' => [
                         '/V1/testModule5' => [
@@ -246,17 +353,22 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 [
-                    'documentation' => 'Some Data Object',
-                    'parameters' => [
-                        'price' => [
-                            'type' => 'int',
-                            'required' => true,
-                            'documentation' => ""
+                    [
+                        'TestModule5V2EntityAllSoapAndRest',
+                        [
+                            'documentation' => 'Some Data Object',
+                            'parameters' => [
+                                'price' => [
+                                    'type' => 'int',
+                                    'required' => true,
+                                    'documentation' => ""
+                                ]
+                            ]
                         ]
                     ]
                 ],
                 // @codingStandardsIgnoreStart
-                '{"swagger":"2.0","info":{"version":"","title":""},"host":"magento.host","basePath":"/rest/default","schemes":["http://"],"tags":[{"name":"testModule5AllSoapAndRestV2","description":"AllSoapAndRestInterface"}],"paths":{"/V1/testModule5":{"get":{"tags":["testModule5AllSoapAndRestV2"],"description":"Retrieve existing item.","operationId":"' . self::OPERATION_NAME . 'Get","responses":{"200":{"description":"200 Success.","schema":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"401":{"description":"401 Unauthorized","schema":{"$ref":"#/definitions/error-response"}},"500":{"description":"Internal Server error","schema":{"$ref":"#/definitions/error-response"}},"default":{"description":"Unexpected error","schema":{"$ref":"#/definitions/error-response"}}}}}},"definitions":{"error-response":{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"errors":{"$ref":"#/definitions/error-errors"},"code":{"type":"integer","description":"Error code"},"parameters":{"$ref":"#/definitions/error-parameters"},"trace":{"type":"string","description":"Stack trace"}},"required":["message"]},"error-errors":{"type":"array","description":"Errors list","items":{"$ref":"#/definitions/error-errors-item"}},"error-errors-item":{"type":"object","description":"Error details","properties":{"message":{"type":"string","description":"Error message"},"parameters":{"$ref":"#/definitions/error-parameters"}}},"error-parameters":{"type":"array","description":"Error parameters list","items":{"$ref":"#/definitions/error-parameters-item"}},"error-parameters-item":{"type":"object","description":"Error parameters item","properties":{"resources":{"type":"string","description":"ACL resource"},"fieldName":{"type":"string","description":"Missing or invalid field name"},"fieldValue":{"type":"string","description":"Incorrect field value"}}},"test-module5-v2-entity-all-soap-and-rest":{"type":"object","description":"Some Data Object","properties":{"price":{"type":"integer"}},"required":["price"]}}}'
+                '{"swagger":"2.0","info":{"version":"","title":""},"host":"magento.host","basePath":"/rest/default","schemes":["http://"],"tags":[{"name":"testModule5AllSoapAndRestV2","description":"AllSoapAndRestInterface"}],"paths":{"/V1/testModule5":{"get":{"tags":["testModule5AllSoapAndRestV2"],"description":"Retrieve existing item.","operationId":"operationNameGet","consumes":["application/json","application/xml"],"produces":["application/json","application/xml"],"responses":{"200":{"description":"200 Success.","schema":{"$ref":"#/definitions/test-module5-v2-entity-all-soap-and-rest"}},"401":{"description":"401 Unauthorized","schema":{"$ref":"#/definitions/error-response"}},"500":{"description":"Internal Server error","schema":{"$ref":"#/definitions/error-response"}},"default":{"description":"Unexpected error","schema":{"$ref":"#/definitions/error-response"}}}}}},"definitions":{"error-response":{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"errors":{"$ref":"#/definitions/error-errors"},"code":{"type":"integer","description":"Error code"},"parameters":{"$ref":"#/definitions/error-parameters"},"trace":{"type":"string","description":"Stack trace"}},"required":["message"]},"error-errors":{"type":"array","description":"Errors list","items":{"$ref":"#/definitions/error-errors-item"}},"error-errors-item":{"type":"object","description":"Error details","properties":{"message":{"type":"string","description":"Error message"},"parameters":{"$ref":"#/definitions/error-parameters"}}},"error-parameters":{"type":"array","description":"Error parameters list","items":{"$ref":"#/definitions/error-parameters-item"}},"error-parameters-item":{"type":"object","description":"Error parameters item","properties":{"resources":{"type":"string","description":"ACL resource"},"fieldName":{"type":"string","description":"Missing or invalid field name"},"fieldValue":{"type":"string","description":"Incorrect field value"}}},"test-module5-v2-entity-all-soap-and-rest":{"type":"object","description":"Some Data Object","properties":{"price":{"type":"integer"}},"required":["price"]}}}'
                 // @codingStandardsIgnoreEnd
             ],
         ];
@@ -265,7 +377,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $typeName
      * @param array $result
-     * @dataProvider testGetObjectSchemaDataProvider
+     * @dataProvider getObjectSchemaDataProvider
      */
     public function testGetObjectSchema($typeName, $description, $result)
     {
@@ -280,7 +392,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(json_encode($result), json_encode($actual));
     }
 
-    public function testGetObjectSchemaDataProvider()
+    /**
+     * @return array
+     */
+    public function getObjectSchemaDataProvider()
     {
         return [
             [
@@ -317,7 +432,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $typeData
      * @param array $expected
-     * @dataProvider testGenerateDefinitionDataProvider
+     * @dataProvider generateDefinitionDataProvider
      */
     public function testGenerateDefinition($typeData, $expected)
     {
@@ -339,7 +454,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(json_encode($expected), json_encode($actual));
     }
 
-    public function testGenerateDefinitionDataProvider()
+    /**
+     * @return array
+     */
+    public function generateDefinitionDataProvider()
     {
         return [
             [

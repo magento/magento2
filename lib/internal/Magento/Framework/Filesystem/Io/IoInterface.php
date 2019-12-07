@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Io;
 
-use Magento\Framework\Filesystem\DriverInterface;
-
 /**
  * Input/output client interface
+ * @api
  */
 interface IoInterface
 {
@@ -35,7 +34,7 @@ interface IoInterface
      * @param bool $recursive
      * @return bool
      */
-    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true);
+    public function mkdir($dir, $mode = 0777, $recursive = true);
 
     /**
      * Delete a directory

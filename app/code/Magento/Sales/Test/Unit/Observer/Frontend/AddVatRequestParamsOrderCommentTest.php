@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Observer\Frontend;
 
-use \Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment;
+use Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment;
 
 /**
  * Tests Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment
  */
-class AddVatRequestParamsOrderCommentTest extends \PHPUnit_Framework_TestCase
+class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerAddressHelperMock = $this->getMockBuilder('Magento\Customer\Helper\Address')
+        $this->customerAddressHelperMock = $this->getMockBuilder(\Magento\Customer\Helper\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -50,12 +50,9 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit_Framework_TestCase
             ->method('getTaxCalculationAddressType')
             ->will($this->returnValue($configAddressType));
 
-        $orderAddressMock = $this->getMock(
-            'Magento\Sales\Model\Order\Address',
-            ['getVatRequestId', 'getVatRequestDate', '__wakeup'],
-            [],
-            '',
-            false
+        $orderAddressMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Address::class,
+            ['getVatRequestId', 'getVatRequestDate', '__wakeup']
         );
         $orderAddressMock->expects($this->any())
             ->method('getVatRequestId')
@@ -64,7 +61,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit_Framework_TestCase
             ->method('getVatRequestDate')
             ->will($this->returnValue($vatRequestDate));
 
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->setMethods(['getShippingAddress', '__wakeup', 'addStatusHistoryComment', 'getBillingAddress'])
             ->getMock();
@@ -79,7 +76,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit_Framework_TestCase
                 ->method('addStatusHistoryComment')
                 ->with($orderHistoryComment, false);
         }
-        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getOrder'], [], '', false);
+        $observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getOrder']);
         $observer->expects($this->once())
             ->method('getOrder')
             ->will($this->returnValue($orderMock));
@@ -87,6 +84,9 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->observer->execute($observer));
     }
 
+    /**
+     * @return array
+     */
     public function addVatRequestParamsOrderCommentDataProvider()
     {
         return [

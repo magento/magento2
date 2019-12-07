@@ -1,8 +1,11 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     './abstract'
 ], function (Abstract) {
@@ -12,7 +15,7 @@ define([
         defaults: {
             cols: 15,
             rows: 2,
-            template: 'ui/form/element/textarea'
+            elementTmpl: 'ui/form/element/textarea'
         }
     });
 });

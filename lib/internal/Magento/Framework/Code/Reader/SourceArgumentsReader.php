@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Reader;
@@ -9,8 +9,23 @@ class SourceArgumentsReader
 {
     /**
      * Namespace separator
+     * @deprecated
+     * @see \Magento\Framework\Code\Reader\NamespaceResolver::NS_SEPARATOR
      */
     const NS_SEPARATOR = '\\';
+
+    /**
+     * @var NamespaceResolver
+     */
+    private $namespaceResolver;
+
+    /**
+     * @param NamespaceResolver|null $namespaceResolver
+     */
+    public function __construct(NamespaceResolver $namespaceResolver = null)
+    {
+        $this->namespaceResolver = $namespaceResolver ?: new NamespaceResolver();
+    }
 
     /**
      * Read constructor argument types from source code and perform namespace resolution if required.
@@ -22,8 +37,10 @@ class SourceArgumentsReader
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function getConstructorArgumentTypes(\ReflectionClass $class, $inherited = false)
-    {
+    public function getConstructorArgumentTypes(
+        \ReflectionClass $class,
+        $inherited = false
+    ) {
         $output = [null];
         if (!$class->getFileName() || false == $class->hasMethod(
             '__construct'
@@ -31,45 +48,37 @@ class SourceArgumentsReader
         ) {
             return $output;
         }
-        $reflectionConstructor = $class->getConstructor();
-        $fileContent = file($class->getFileName());
-        $availableNamespaces = $this->getImportedNamespaces($fileContent);
-        $availableNamespaces[0] = $class->getNamespaceName();
-        $constructorStartLine = $reflectionConstructor->getStartLine() - 1;
-        $constructorEndLine = $reflectionConstructor->getEndLine();
-        $fileContent = array_slice($fileContent, $constructorStartLine, $constructorEndLine - $constructorStartLine);
-        $source = '<?php ' . trim(implode('', $fileContent));
-        $methodTokenized = token_get_all($source);
-        $argumentsStart = array_search('(', $methodTokenized) + 1;
-        $argumentsEnd = array_search(')', $methodTokenized);
-        $arguments = array_slice($methodTokenized, $argumentsStart, $argumentsEnd - $argumentsStart);
-        foreach ($arguments as &$argument) {
-            is_array($argument) ?: $argument = [1 => $argument];
-        }
-        unset($argument);
-        $arguments = array_filter($arguments, function ($token) {
-            $blacklist = [T_VARIABLE, T_WHITESPACE];
-            if (isset($token[0]) && in_array($token[0], $blacklist)) {
-                return false;
+
+        //Reading parameters' types.
+        $params = $class->getConstructor()->getParameters();
+        /** @var string[] $types */
+        $types = [];
+        foreach ($params as $param) {
+            //For the sake of backward compatibility.
+            $typeName = '';
+            if ($param->isArray()) {
+                //For the sake of backward compatibility.
+                $typeName = 'array';
+            } else {
+                try {
+                    $paramClass = $param->getClass();
+                    if ($paramClass) {
+                        $typeName = '\\' .$paramClass->getName();
+                    }
+                } catch (\ReflectionException $exception) {
+                    //If there's a problem loading a class then ignore it and
+                    //just return it's name.
+                    $typeName = '\\' .$param->getType()->getName();
+                }
             }
-            return true;
-        });
-        $arguments = array_map(function ($element) {
-            return $element[1];
-        }, $arguments);
-        $arguments = array_values($arguments);
-        $arguments = implode('', $arguments);
-        if (empty($arguments)) {
-            return $output;
+            $types[] = $typeName;
         }
-        $arguments = explode(',', $arguments);
-        foreach ($arguments as $key => &$argument) {
-            $argument = $this->removeToken($argument, '=');
-            $argument = $this->removeToken($argument, '&');
-            $argument = $this->resolveNamespaces($argument, $availableNamespaces);
+        if (!$types) {
+            //For the sake of backward compatibility.
+            $types = [null];
         }
-        unset($argument);
-        return $arguments;
+
+        return $types;
     }
 
     /**
@@ -78,25 +87,12 @@ class SourceArgumentsReader
      * @param string $argument
      * @param array $availableNamespaces
      * @return string
+     * @deprecated 100.2.0
+     * @see getConstructorArgumentTypes
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
     {
-        if (substr($argument, 0, 1) !== self::NS_SEPARATOR && $argument !== 'array' && !empty($argument)) {
-            $name = explode(self::NS_SEPARATOR, $argument);
-            $unqualifiedName = $name[0];
-            $isQualifiedName = count($name) > 1 ? true : false;
-            if (isset($availableNamespaces[$unqualifiedName])) {
-                $namespace = $availableNamespaces[$unqualifiedName];
-                if ($isQualifiedName) {
-                    array_shift($name);
-                    return $namespace . self::NS_SEPARATOR . implode(self::NS_SEPARATOR, $name);
-                }
-                return $namespace;
-            } else {
-                return self::NS_SEPARATOR . $availableNamespaces[0] . self::NS_SEPARATOR . $argument;
-            }
-        }
-        return $argument;
+        return $this->namespaceResolver->resolveNamespace($argument, $availableNamespaces);
     }
 
     /**
@@ -105,6 +101,8 @@ class SourceArgumentsReader
      * @param string $argument
      * @param string $token
      * @return string
+     *
+     * @deprecated Not used anymore.
      */
     protected function removeToken($argument, $token)
     {
@@ -120,60 +118,11 @@ class SourceArgumentsReader
      *
      * @param array $file
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated 100.2.0
+     * @see getConstructorArgumentTypes
      */
     protected function getImportedNamespaces(array $file)
     {
-        $file = implode('', $file);
-        $file = token_get_all($file);
-        $classStart = array_search('{', $file);
-        $file = array_slice($file, 0, $classStart);
-        $output = [];
-        foreach ($file as $position => $token) {
-            if (is_array($token) && $token[0] === T_USE) {
-                $import = array_slice($file, $position);
-                $importEnd = array_search(';', $import);
-                $import = array_slice($import, 0, $importEnd);
-                $imports = [];
-                $importsCount = 0;
-                foreach ($import as $item) {
-                    if ($item === ',') {
-                        $importsCount++;
-                        continue;
-                    }
-                    $imports[$importsCount][] = $item;
-                }
-                foreach ($imports as $import) {
-                    $import = array_filter($import, function ($token) {
-                        $whitelist = [T_NS_SEPARATOR, T_STRING, T_AS];
-                        if (isset($token[0]) && in_array($token[0], $whitelist)) {
-                            return true;
-                        }
-                        return false;
-                    });
-                    $import = array_map(function ($element) {
-                        return $element[1];
-                    }, $import);
-                    $import = array_values($import);
-                    if ($import[0] === self::NS_SEPARATOR) {
-                        array_shift($import);
-                    }
-                    $importName = null;
-                    if (in_array('as', $import)) {
-                        $importName = array_splice($import, -1)[0];
-                        array_pop($import);
-                    }
-                    $useStatement = implode('', $import);
-                    if ($importName) {
-                        $output[$importName] = self::NS_SEPARATOR . $useStatement;
-                    } else {
-                        $key = explode(self::NS_SEPARATOR, $useStatement);
-                        $key = end($key);
-                        $output[$key] = self::NS_SEPARATOR . $useStatement;
-                    }
-                }
-            }
-        }
-        return $output;
+        return $this->namespaceResolver->getImportedNamespaces($file);
     }
 }

@@ -1,26 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */
-$registry = $objectManager->get('Magento\Framework\Registry');
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load(101);
-if ($product->getId()) {
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+
+$product = $product->loadByAttribute('sku', 'simple-with-ftp');
+if ($product && $product->getId()) {
     $product->delete();
 }
 
-/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
+    ->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
 $attribute->load('fpt_for_all', 'attribute_code');
 if ($attribute->getId()) {
     $attribute->delete();

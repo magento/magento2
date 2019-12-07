@@ -1,45 +1,55 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use \Magento\Framework\App\Request\Http;
-use Magento\Framework\App\ScopeInterface;
-use Zend\Stdlib\Parameters;
+use Magento\Framework\App\Request\Http;
 
-class HttpTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
+class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var \Magento\Framework\App\Route\ConfigInterface\Proxy | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_routerListMock;
+    private $routerListMock;
 
     /**
      * @var \Magento\Framework\App\Request\PathInfoProcessorInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_infoProcessorMock;
+    private $infoProcessorMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\PathInfo
      */
-    protected $objectManager;
+    private $pathInfo;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils  | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $converterMock;
+    private $objectManagerMock;
+
+    /**
+     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $converterMock;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
 
     /**
      * @var array
@@ -48,18 +58,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
-        $this->_routerListMock = $this->getMock(
-            'Magento\Framework\App\Route\ConfigInterface\Proxy',
-            ['getRouteFrontName', 'getRouteByFrontName', '__wakeup'],
-            [],
-            '',
-            false
+        $this->routerListMock = $this->createPartialMock(
+            \Magento\Framework\App\Route\ConfigInterface\Proxy::class,
+            ['getRouteFrontName', 'getRouteByFrontName', '__wakeup']
         );
-        $this->_infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
-        $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->converterMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
+        $this->infoProcessorMock = $this->createMock(\Magento\Framework\App\Request\PathInfoProcessorInterface::class);
+        $this->infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
@@ -67,6 +73,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
+
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->pathInfo =  $this->objectManager->getObject(\Magento\Framework\App\Request\PathInfo::class);
     }
 
     public function tearDown()
@@ -77,110 +86,116 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Framework\App\Request\Http
      */
-    private function getModel($uri = null)
+    private function getModel($uri = null, $appConfigMock = true)
     {
-        $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
-        return $testFrameworkObjectManager->getObject(
-            'Magento\Framework\App\Request\Http',
+        $model = $this->objectManager->getObject(
+            \Magento\Framework\App\Request\Http::class,
             [
-                'routeConfig' => $this->_routerListMock,
-                'pathInfoProcessor' => $this->_infoProcessorMock,
-                'objectManager' => $this->objectManager,
+                'routeConfig' => $this->routerListMock,
+                'pathInfoProcessor' => $this->infoProcessorMock,
+                'pathInfoService' => $this->pathInfo,
+                'objectManager' => $this->objectManagerMock,
                 'converter' => $this->converterMock,
                 'uri' => $uri,
             ]
         );
+
+        if ($appConfigMock) {
+            $configMock = $this->createMock(\Magento\Framework\App\Config::class);
+            $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
+        }
+
+        return $model;
     }
 
     public function testGetOriginalPathInfoWithTestUri()
     {
         $uri = 'http://test.com/value?key=value';
-        $this->_model = $this->getModel($uri);
-        $this->assertEquals('/value', $this->_model->getOriginalPathInfo());
+        $this->model = $this->getModel($uri);
+        $this->assertEquals('/value', $this->model->getOriginalPathInfo());
     }
 
     public function testGetOriginalPathInfoWithEmptyUri()
     {
-        $this->_model = $this->getModel();
-        $this->assertEmpty($this->_model->getOriginalPathInfo());
+        $this->model = $this->getModel();
+        $this->assertEmpty($this->model->getOriginalPathInfo());
     }
 
     public function testGetBasePathWithPath()
     {
-        $this->_model = $this->getModel();
-        $this->_model->setBasePath('http:\/test.com\one/two');
-        $this->assertEquals('http://test.com/one/two', $this->_model->getBasePath());
+        $this->model = $this->getModel();
+        $this->model->setBasePath('http:\/test.com\one/two');
+        $this->assertEquals('http://test.com/one/two', $this->model->getBasePath());
     }
 
     public function testGetBasePathWithoutPath()
     {
-        $this->_model = $this->getModel();
-        $this->_model->setBasePath(null);
-        $this->assertEquals('/', $this->_model->getBasePath());
+        $this->model = $this->getModel();
+        $this->model->setBasePath(null);
+        $this->assertEquals('/', $this->model->getBasePath());
     }
 
     public function testSetRouteNameWithRouter()
     {
-        $router = $this->getMock('Magento\Framework\App\Router\AbstractRouter', [], [], '', false);
-        $this->_routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
-        $this->_model = $this->getModel();
-        $this->_model->setRouteName('RouterName');
-        $this->assertEquals('RouterName', $this->_model->getRouteName());
+        $router = $this->createMock(\Magento\Framework\App\Route\ConfigInterface::class);
+        $this->routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
+        $this->model = $this->getModel();
+        $this->model->setRouteName('RouterName');
+        $this->assertEquals('RouterName', $this->model->getRouteName());
     }
 
     public function testSetRouteNameWithNullRouterValue()
     {
-        $this->_model = $this->getModel();
-        $this->_routerListMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue(null));
-        $this->_model->setRouteName('RouterName');
+        $this->model = $this->getModel();
+        $this->routerListMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue(null));
+        $this->model->setRouteName('RouterName');
     }
 
     public function testGetFrontName()
     {
-
         $uri = 'http://test.com/one/two';
-        $this->_model = $this->getModel($uri);
-        $this->assertEquals('one', $this->_model->getFrontName());
+        $this->model = $this->getModel($uri);
+        $this->assertEquals('one', $this->model->getFrontName());
     }
 
     public function testGetRouteNameWithNullValueRouteName()
     {
-        $this->_model = $this->getModel();
-        $this->_model->setRouteName('RouteName');
-        $this->assertEquals('RouteName', $this->_model->getRouteName());
+        $this->model = $this->getModel();
+        $this->model->setRouteName('RouteName');
+        $this->assertEquals('RouteName', $this->model->getRouteName());
     }
 
     public function testGetRouteName()
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         $expected = 'RouteName';
-        $this->_model->setRouteName($expected);
-        $this->assertEquals($expected, $this->_model->getRouteName());
+        $this->model->setRouteName($expected);
+        $this->assertEquals($expected, $this->model->getRouteName());
     }
 
     public function testGetFullActionName()
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         /* empty request */
-        $this->assertEquals('__', $this->_model->getFullActionName());
-        $this->_model->setRouteName('test')->setControllerName('controller')->setActionName('action');
-        $this->assertEquals('test/controller/action', $this->_model->getFullActionName('/'));
+        $this->assertEquals('__', $this->model->getFullActionName());
+        $this->model->setRouteName('test')->setControllerName('controller')->setActionName('action');
+        $this->assertEquals('test/controller/action', $this->model->getFullActionName('/'));
     }
 
     public function testInitForward()
     {
-        $expected = $this->_initForward();
-        $this->assertEquals($expected, $this->_model->getBeforeForwardInfo());
+        $expected = $this->initForward();
+        $this->assertEquals($expected, $this->model->getBeforeForwardInfo());
     }
 
     public function testGetBeforeForwardInfo()
     {
-        $beforeForwardInfo = $this->_initForward();
-        $this->assertNull($this->_model->getBeforeForwardInfo('not_existing_forward_info_key'));
+        $beforeForwardInfo = $this->initForward();
+        $this->assertNull($this->model->getBeforeForwardInfo('not_existing_forward_info_key'));
         foreach (array_keys($beforeForwardInfo) as $key) {
-            $this->assertEquals($beforeForwardInfo[$key], $this->_model->getBeforeForwardInfo($key));
+            $this->assertEquals($beforeForwardInfo[$key], $this->model->getBeforeForwardInfo($key));
         }
-        $this->assertEquals($beforeForwardInfo, $this->_model->getBeforeForwardInfo());
+        $this->assertEquals($beforeForwardInfo, $this->model->getBeforeForwardInfo());
     }
 
     /**
@@ -188,9 +203,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      *
      * @return array Contents of $_beforeForwardInfo
      */
-    protected function _initForward()
+    private function initForward()
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         $beforeForwardInfo = [
             'params' => ['one' => '111', 'two' => '222'],
             'action_name' => 'ActionName',
@@ -198,49 +213,49 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'module_name' => 'ModuleName',
             'route_name' => 'RouteName'
         ];
-        $this->_model->setParams($beforeForwardInfo['params']);
-        $this->_model->setActionName($beforeForwardInfo['action_name']);
-        $this->_model->setControllerName($beforeForwardInfo['controller_name']);
-        $this->_model->setModuleName($beforeForwardInfo['module_name']);
-        $this->_model->setRouteName($beforeForwardInfo['route_name']);
-        $this->_model->initForward();
+        $this->model->setParams($beforeForwardInfo['params']);
+        $this->model->setActionName($beforeForwardInfo['action_name']);
+        $this->model->setControllerName($beforeForwardInfo['controller_name']);
+        $this->model->setModuleName($beforeForwardInfo['module_name']);
+        $this->model->setRouteName($beforeForwardInfo['route_name']);
+        $this->model->initForward();
         return $beforeForwardInfo;
     }
 
     public function testIsAjax()
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
 
-        $this->assertFalse($this->_model->isAjax());
+        $this->assertFalse($this->model->isAjax());
 
-        $this->_model->clearParams();
-        $this->_model->setParam('ajax', 1);
-        $this->assertTrue($this->_model->isAjax());
+        $this->model->clearParams();
+        $this->model->setParam('ajax', 1);
+        $this->assertTrue($this->model->isAjax());
 
-        $this->_model->clearParams();
-        $this->_model->setParam('isAjax', 1);
-        $this->assertTrue($this->_model->isAjax());
+        $this->model->clearParams();
+        $this->model->setParam('isAjax', 1);
+        $this->assertTrue($this->model->isAjax());
 
-        $this->_model->clearParams();
-        $this->_model->getHeaders()->addHeaderLine('X-Requested-With', 'XMLHttpRequest');
-        $this->assertTrue($this->_model->isAjax());
+        $this->model->clearParams();
+        $this->model->getHeaders()->addHeaderLine('X-Requested-With', 'XMLHttpRequest');
+        $this->assertTrue($this->model->isAjax());
 
-        $this->_model->getHeaders()->clearHeaders();
-        $this->_model->getHeaders()->addHeaderLine('X-Requested-With', 'NotXMLHttpRequest');
-        $this->assertFalse($this->_model->isAjax());
+        $this->model->getHeaders()->clearHeaders();
+        $this->model->getHeaders()->addHeaderLine('X-Requested-With', 'NotXMLHttpRequest');
+        $this->assertFalse($this->model->isAjax());
     }
 
     /**
-     * @param $serverVariables array
-     * @param $expectedResult string
+     * @param array $serverVariables
+     * @param string $expectedResult
      * @dataProvider serverVariablesProvider
      */
     public function testGetDistroBaseUrl($serverVariables, $expectedResult)
     {
         $originalServerValue = $_SERVER;
         $_SERVER = $serverVariables;
-        $this->_model = $this->getModel();
-        $this->assertEquals($expectedResult, $this->_model->getDistroBaseUrl());
+        $this->model = $this->getModel();
+        $this->assertEquals($expectedResult, $this->model->getDistroBaseUrl());
 
         $_SERVER = $originalServerValue;
     }
@@ -255,6 +270,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, Http::getDistroBaseUrlPath(['SCRIPT_NAME' => $scriptName]));
     }
 
+    /**
+     * @return array
+     */
     public function getDistroBaseUrlPathDataProvider()
     {
         return [
@@ -269,7 +287,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
+    /**
+     * @return array
+     */
     public function serverVariablesProvider()
     {
         $returnValue = [];
@@ -329,51 +349,55 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSecure($isSecure, $serverHttps, $headerOffloadKey, $headerOffloadValue, $configCall)
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel(null, false);
         $configOffloadHeader = 'Header-From-Proxy';
-        $configMock = $this->getMockBuilder('Magento\Framework\App\Config')
+        $configMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
-            ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
-            ->willReturn($configOffloadHeader);
-        $this->objectManager->expects($this->exactly($configCall))
-            ->method('get')
-            ->with('Magento\Framework\App\Config')
-            ->will($this->returnValue($configMock));
+            ->with(
+                \Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            )->willReturn($configOffloadHeader);
 
-        $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
-        $this->_model->getServer()->set('HTTPS', $serverHttps);
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'appConfig', $configMock);
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'sslOffloadHeader', null);
 
-        $this->assertSame($isSecure, $this->_model->isSecure());
+        $this->model->getServer()->set($headerOffloadKey, $headerOffloadValue);
+        $this->model->getServer()->set('HTTPS', $serverHttps);
+
+        $this->assertSame($isSecure, $this->model->isSecure());
     }
 
     /**
      * @dataProvider httpSafeMethodProvider
      * @backupGlobals enabled
-     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     * @param string $httpMethod value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodTrue($httpMethod)
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(true, $this->_model->IsSafeMethod());
+        $this->assertEquals(true, $this->model->isSafeMethod());
     }
 
     /**
      * @dataProvider httpNotSafeMethodProvider
      * @backupGlobals enabled
-     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     * @param string $httpMethod value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodFalse($httpMethod)
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(false, $this->_model->IsSafeMethod());
+        $this->assertEquals(false, $this->model->isSafeMethod());
     }
 
+    /**
+     * @return array
+     */
     public function httpSafeMethodProvider()
     {
         return [
@@ -384,6 +408,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function httpNotSafeMethodProvider()
     {
         return [
@@ -396,6 +423,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function isSecureDataProvider()
     {
         /**
@@ -409,18 +439,71 @@ class HttpTest extends \PHPUnit_Framework_TestCase
          *  ]
          */
         return [
-            'Test 1' => [true, 'on', 'Header-From-Proxy', 'https', 0],
-            'Test 2' => [true, 'off', 'Header-From-Proxy', 'https', 1],
-            'Test 3' => [true, 'any-string', 'Header-From-Proxy', 'https', 0],
-            'Test 4' => [true, 'on', 'Header-From-Proxy', 'http', 0],
-            'Test 5' => [false, 'off', 'Header-From-Proxy', 'http', 1],
-            'Test 6' => [true, 'any-string', 'Header-From-Proxy', 'http', 0],
-            'Test 7' => [true, 'on', 'Header-From-Proxy', 'any-string', 0],
-            'Test 8' => [false, 'off', 'Header-From-Proxy', 'any-string', 1],
-            'Test 9' => [true, 'any-string', 'Header-From-Proxy', 'any-string', 0],
-            'blank HTTPS with proxy set https' => [true, '', 'Header-From-Proxy', 'https', 1],
-            'blank HTTPS with proxy set http' => [false, '', 'Header-From-Proxy', 'http', 1],
-            'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_Header-From-Proxy', 'https', 1],
+            'Test 1' => [true, 'on', 'HEADER_FROM_PROXY', 'https', 0],
+            'Test 2' => [true, 'off', 'HEADER_FROM_PROXY', 'https', 1],
+            'Test 3' => [true, 'any-string', 'HEADER_FROM_PROXY', 'https', 0],
+            'Test 4' => [true, 'on', 'HEADER_FROM_PROXY', 'http', 0],
+            'Test 5' => [false, 'off', 'HEADER_FROM_PROXY', 'http', 1],
+            'Test 6' => [true, 'any-string', 'HEADER_FROM_PROXY', 'http', 0],
+            'Test 7' => [true, 'on', 'HEADER_FROM_PROXY', 'any-string', 0],
+            'Test 8' => [false, 'off', 'HEADER_FROM_PROXY', 'any-string', 1],
+            'Test 9' => [true, 'any-string', 'HEADER_FROM_PROXY', 'any-string', 0],
+            'blank HTTPS with proxy set https' => [true, '', 'HEADER_FROM_PROXY', 'https', 1],
+            'blank HTTPS with proxy set http' => [false, '', 'HEADER_FROM_PROXY', 'http', 1],
+            'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_HEADER_FROM_PROXY', 'https', 1],
+        ];
+    }
+    
+    /**
+     * @dataProvider setPathInfoDataProvider
+     * @param string $requestUri
+     * @param string $basePath$
+     * @param string $expected
+     */
+    public function testGetPathInfo($requestUri, $basePath, $expected)
+    {
+        $this->model = $this->getModel($requestUri);
+        $this->model->setBaseUrl($basePath);
+        $this->assertEquals($expected, $this->model->getPathInfo());
+        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
+    }
+
+    public function testSetPathInfo()
+    {
+        $requestUri = 'http://svr.com//module/route/mypage/myproduct?param1=1';
+        $basePath = '/module/route/';
+        $this->model = $this->getModel($requestUri);
+        $this->model->setBaseUrl($basePath);
+        $expected = '/mypage/myproduct';
+        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
+        $this->model->setPathInfo('http://svr.com/something/route?param1=1');
+        $this->assertEquals('http://svr.com/something/route?param1=1', $this->model->getPathInfo());
+        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
+    }
+
+    /**
+     * @return array
+     */
+    public function setPathInfoDataProvider()
+    {
+        return [
+            ['http://svr.com/', '', ''],
+            ['http://svr.com', '', ''],
+            ['http://svr.com?param1=1', '', ''],
+            ['http://svr.com/?param1=1', '', '/'],
+            ['http://svr.com?param1=1&param2=2', '', ''],
+            ['http://svr.com/?param1=1&param2=2', '', '/'],
+            ['http://svr.com/module', '', '/module'],
+            ['http://svr.com/module/', '', '/module/'],
+            ['http://svr.com/module/route', '', '/module/route'],
+            ['http://svr.com/module/route/', '', '/module/route/'],
+            ['http://svr.com/index.php', '/index.php', ''],
+            ['http://svr.com/index.php/', '/index.php', '/'],
+            ['http://svr.com/index.phpmodule', '/index.php', 'noroute'],
+            ['http://svr.com/index.phpmodule/contact', '/index.php/', 'noroute'],
+            ['http://svr.com//index.phpmodule/contact', 'index.php', 'noroute'],
+            ['http://svr.com/index.phpmodule/contact/', '/index.php/', 'noroute'],
+            ['http://svr.com//index.phpmodule/contact/', 'index.php', 'noroute'],
         ];
     }
 }

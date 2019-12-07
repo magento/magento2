@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Collection;
 
 /**
@@ -48,12 +48,19 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * CouponRepository constructor.
      * @param CouponFactory $couponFactory
      * @param RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory $searchResultFactory
-     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory
+     * @param ResourceModel\Coupon\CollectionFactory $collectionFactory
      * @param Spi\CouponResourceInterface $resourceModel
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
@@ -61,7 +68,8 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory $searchResultFactory,
         \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory,
         \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->couponFactory = $couponFactory;
         $this->ruleFactory = $ruleFactory;
@@ -69,6 +77,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         $this->collectionFactory = $collectionFactory;
         $this->resourceModel = $resourceModel;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -109,7 +118,6 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
                     __('Specified rule does not allow auto generated coupons')
                 );
             }
-            $coupon->setExpirationDate($rule->getToDate());
             $coupon->setUsageLimit($rule->getUsesPerCoupon());
             $coupon->setUsagePerCustomer($rule->getUsesPerCustomer());
         } catch (\Exception $e) {
@@ -151,39 +159,13 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     {
         /** @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $couponInterfaceName = 'Magento\SalesRule\Api\Data\CouponInterface';
+        $couponInterfaceName = \Magento\SalesRule\Api\Data\CouponInterface::class;
         $this->extensionAttributesJoinProcessor->process($collection, $couponInterfaceName);
 
-        //Add filters from root filter group to the collection
-        /** @var FilterGroup $group */
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            $this->addFilterGroupToCollection($group, $collection);
-        }
-
-        $sortOrders = $searchCriteria->getSortOrders();
-        if ($sortOrders === null) {
-            $sortOrders = [];
-        }
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
-        foreach ($sortOrders as $sortOrder) {
-            $field = $sortOrder->getField();
-            $collection->addOrder(
-                $field,
-                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-            );
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
-
-        $coupons = [];
-        /** @var \Magento\SalesRule\Model\Coupon $couponModel */
-        foreach ($collection->getItems() as $couponModel) {
-            $coupons[] = $couponModel->getData();
-        }
-
+        $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults = $this->searchResultFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
-        $searchResults->setItems($coupons);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
@@ -213,12 +195,13 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param FilterGroup $filterGroup
      * @param Collection $collection
+     * @deprecated 100.2.0
      * @return void
      */
     protected function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        FilterGroup $filterGroup,
         Collection $collection
     ) {
         $fields = [];
@@ -231,5 +214,21 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
         }
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated 100.2.0
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

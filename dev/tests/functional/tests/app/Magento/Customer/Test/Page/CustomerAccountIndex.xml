@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -14,5 +14,6 @@
     <block name="infoBlock" class="Magento\Customer\Test\Block\Account\Dashboard\Info" locator=".column.main" strategy="css selector"/>
     <block name="compareProductsBlock" class="Magento\Catalog\Test\Block\Product\Compare\Sidebar" locator=".block-compare" strategy="css selector"/>
     <block name="additionalAddressBlock" class="Magento\Customer\Test\Block\Account\AddressesAdditional" locator=".block-addresses-list" strategy="css selector"/>
+    <block name="defaultAddressBlock" class="Magento\Customer\Test\Block\Account\AddressesDefault" locator=".block-addresses-default" strategy="css selector"/>
   </page>
 </config>

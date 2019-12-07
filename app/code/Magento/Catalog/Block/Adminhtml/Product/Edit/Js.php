@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,7 @@ class Js extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Get store object of curently edited product
+     * Get store object of currently edited product
      *
      * @return \Magento\Store\Model\Store
      */

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Address
@@ -21,10 +21,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->addressModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Address'
+            \Magento\Customer\Model\Address::class
         );
         $this->addressFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\AddressInterfaceFactory'
+            \Magento\Customer\Api\Data\AddressInterfaceFactory::class
         );
     }
 
@@ -66,5 +66,29 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('CityZ', $updatedAddressData->getCity());
         $this->assertEquals('CompanyZ', $updatedAddressData->getCompany());
         $this->assertEquals('99999', $updatedAddressData->getPostcode());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     */
+    public function testUpdateDataForExistingCustomer()
+    {
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(CustomerRegistry::class);
+        /** @var \Magento\Customer\Model\Data\Address $addressData */
+        $updatedAddressData = $this->addressFactory->create()
+            ->setId(1)
+            ->setCustomerId($customerRegistry->retrieveByEmail('customer@example.com')->getId())
+            ->setCity('CityZ')
+            ->setCompany('CompanyZ')
+            ->setPostcode('99999');
+        $updatedAddressData = $this->addressModel->updateData($updatedAddressData)->getDataModel();
+
+        $this->assertEquals(1, $updatedAddressData->getId());
+        $this->assertEquals('CityZ', $updatedAddressData->getCity());
+        $this->assertEquals('CompanyZ', $updatedAddressData->getCompany());
+        $this->assertEquals('99999', $updatedAddressData->getPostcode());
+        $this->assertEquals(true, $updatedAddressData->isDefaultBilling());
+        $this->assertEquals(true, $updatedAddressData->isDefaultShipping());
     }
 }

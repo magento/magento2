@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard\Orders;
@@ -43,6 +43,8 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -52,6 +54,8 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Prepare collection.
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -92,7 +96,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     protected function _afterLoadCollection()
     {
         foreach ($this->getCollection() as $item) {
-            $item->getCustomer() ?: $item->setCustomer('Guest');
+            $item->getCustomer() ?: $item->setCustomer($item->getBillingAddress()->getName());
         }
         return $this;
     }
@@ -110,6 +114,8 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Prepare columns.
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -129,7 +135,9 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
             ]
         );
 
-        $baseCurrencyCode = $this->_storeManager->getStore((int)$this->getParam('store'))->getBaseCurrencyCode();
+        $baseCurrencyCode = $this->_storeManager->getStore(
+            (int)$this->getParam('store')
+        )->getBaseCurrencyCode();
 
         $this->addColumn(
             'total',
@@ -149,7 +157,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

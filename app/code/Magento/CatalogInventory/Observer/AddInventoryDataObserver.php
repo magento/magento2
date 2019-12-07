@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,10 +34,7 @@ class AddInventoryDataObserver implements ObserverInterface
     {
         $product = $observer->getEvent()->getProduct();
         if ($product instanceof \Magento\Catalog\Model\Product) {
-            $this->stockHelper->assignStatusToProduct(
-                $product,
-                $product->getStockStatus()
-            );
+            $this->stockHelper->assignStatusToProduct($product);
         }
     }
 }

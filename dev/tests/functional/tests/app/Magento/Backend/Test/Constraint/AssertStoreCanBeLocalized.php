@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfig;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 
 /**
  * Assert that store can be localized.
@@ -39,9 +39,8 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
         $systemConfig->open();
         $systemConfig->getPageActions()->selectStore($store->getGroupId() . "/" . $store->getName());
         $systemConfig->getModalBlock()->acceptAlert();
-        $configGroup = $systemConfig->getForm()->getGroup('Locale Options');
-        $configGroup->open();
-        $configGroup->setValue('select-groups-locale-fields-code-value', $locale);
+        $configGroup = $systemConfig->getForm()->getGroup('general', 'locale', 'code');
+        $configGroup->setValue('general', 'locale', 'code', $locale);
         $systemConfig->getPageActions()->save();
         $systemConfig->getMessagesBlock()->waitSuccessMessage();
 
@@ -60,7 +59,7 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
 
         $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getSearchBlock()->isPlaceholderContains($welcomeText),
             "Locale not applied."
         );

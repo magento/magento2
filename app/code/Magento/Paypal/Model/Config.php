@@ -1,21 +1,31 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
+
+use Magento\Payment\Helper\Formatter;
 
 /**
  * Config model that is aware of all \Magento\Paypal payment methods
+ *
  * Works with PayPal-specific system configuration
- * @SuppressWarnings(PHPMD.ExcesivePublicCount)
+
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Config extends AbstractConfig
 {
+
+    use Formatter;
+
+    /**
+     * PayPal Express
+     */
+    const METHOD_EXPRESS = 'paypal_express';
+
     /**
      * PayPal Standard - alias METHOD_WPP_EXPRESS
      */
@@ -215,6 +225,7 @@ class Config extends AbstractConfig
         'TWD',
         'THB',
         'USD',
+        'INR',
     ];
 
     /**
@@ -622,6 +633,7 @@ class Config extends AbstractConfig
 
     /**
      * Check whether method available for checkout or not
+     *
      * Logic based on merchant country, methods dependence
      *
      * @param string|null $methodCode
@@ -667,7 +679,7 @@ class Config extends AbstractConfig
                 }
                 break;
             case self::METHOD_BILLING_AGREEMENT:
-                $result = $this->isWppApiAvailabe();
+                $result = $this->isWppApiAvailable();
                 break;
         }
         return $result;
@@ -713,6 +725,7 @@ class Config extends AbstractConfig
 
     /**
      * Check whether method supported for specified country or not
+     *
      * Use $_methodCode and merchant country by default
      *
      * @param string|null $method
@@ -855,7 +868,11 @@ class Config extends AbstractConfig
      */
     public function getExpressCheckoutStartUrl($token)
     {
-        return $this->getPaypalUrl(['cmd' => '_express-checkout', 'token' => $token]);
+        return sprintf(
+            'https://www.%spaypal.com/checkoutnow%s',
+            $this->getValue('sandboxFlag') ? 'sandbox.' : '',
+            '?token=' . urlencode($token)
+        );
     }
 
     /**
@@ -882,6 +899,7 @@ class Config extends AbstractConfig
 
     /**
      * Get url for additional actions that PayPal may require customer to do after placing the order.
+     *
      * For instance, redirecting customer to bank for payment confirmation.
      *
      * @param string $token
@@ -919,6 +937,19 @@ class Config extends AbstractConfig
     }
 
     /**
+     * PayPal web URL for IPN
+     *
+     * @return string
+     */
+    public function getPayPalIpnUrl()
+    {
+        return sprintf(
+            'https://ipnpb.%spaypal.com/cgi-bin/webscr',
+            $this->getValue('sandboxFlag') ? 'sandbox.' : ''
+        );
+    }
+
+    /**
      * Whether Express Checkout button should be rendered dynamically
      *
      * @return bool
@@ -930,6 +961,7 @@ class Config extends AbstractConfig
 
     /**
      * Express checkout shortcut pic URL getter
+     *
      * PayPal will ignore "pal", if there is no total amount specified
      *
      * @param string $localeCode
@@ -947,18 +979,29 @@ class Config extends AbstractConfig
             return $this->getPaymentMarkImageUrl($localeCode);
         }
 
-        if ($this->_getSupportedLocaleCode($localeCode) == 'en_US') {
+        return $this->getExpressCheckoutInContextImageUrl($localeCode);
+    }
+
+    /**
+     * Express in context checkout shortcut pic URL getter
+     *
+     * @param string $localeCode
+     * @return string
+     */
+    public function getExpressCheckoutInContextImageUrl($localeCode)
+    {
+        $localeCode = $this->_getSupportedLocaleCode($localeCode);
+
+        if ($localeCode === 'en_US') {
             return 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-medium.png';
         }
 
-        return sprintf(
-            'https://www.paypal.com/%s/i/btn/btn_xpressCheckout.gif',
-            $this->_getSupportedLocaleCode($localeCode)
-        );
+        return sprintf('https://www.paypal.com/%s/i/btn/btn_xpressCheckout.gif', $localeCode);
     }
 
     /**
      * Get PayPal "mark" image URL
+     *
      * Supposed to be used on payment methods selection
      * $staticSize is applicable for static images only
      *
@@ -995,6 +1038,7 @@ class Config extends AbstractConfig
 
     /**
      * Get "What Is PayPal" localized URL
+     *
      * Supposed to be used with "mark" as popup window
      *
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -1159,7 +1203,7 @@ class Config extends AbstractConfig
             self::PAYMENT_ACTION_AUTH => __('Authorization'),
             self::PAYMENT_ACTION_SALE => __('Sale'),
         ];
-        if (!is_null($this->_methodCode) && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
+        if ($this->_methodCode !== null && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = __('Order');
         }
         return $paymentActions;
@@ -1225,6 +1269,7 @@ class Config extends AbstractConfig
 
     /**
      * Whether to ask customer to create billing agreements
+     *
      * Unilateral payments are incompatible with the billing agreements
      *
      * @return bool
@@ -1265,7 +1310,7 @@ class Config extends AbstractConfig
     public function getWppPeCcTypesAsOptionArray()
     {
         return $this->_cctypeFactory->create()->setAllowedTypes(
-            ['VI', 'MC', 'SM', 'SO', 'OT', 'AE']
+            ['VI', 'MC', 'SM', 'SO', 'AE']
         )->toOptionArray();
     }
 
@@ -1276,7 +1321,7 @@ class Config extends AbstractConfig
      */
     public function getPayflowproCcTypesAsOptionArray()
     {
-        return $this->_cctypeFactory->create()->setAllowedTypes(['AE', 'VI', 'MC', 'JCB', 'DI'])->toOptionArray();
+        return $this->_cctypeFactory->create()->setAllowedTypes(['AE', 'VI', 'MC', 'JCB', 'DI', 'DN'])->toOptionArray();
     }
 
     /**
@@ -1339,6 +1384,7 @@ class Config extends AbstractConfig
 
     /**
      * Dynamic PayPal image URL getter
+     *
      * Also can render dynamic Acceptance Mark
      *
      * @param string $type
@@ -1355,7 +1401,7 @@ class Config extends AbstractConfig
             'locale' => $this->_getSupportedLocaleCode($localeCode),
         ];
         if ($orderTotal) {
-            $params['ordertotal'] = sprintf('%.2F', $orderTotal);
+            $params['ordertotal'] = $this->formatPrice($orderTotal);
             if ($pal) {
                 $params['pal'] = $pal;
             }
@@ -1410,6 +1456,7 @@ class Config extends AbstractConfig
                 break;
             case self::METHOD_WPP_EXPRESS:
             case self::METHOD_WPP_PE_EXPRESS:
+            case self::METHOD_EXPRESS:
                 $path = $this->_mapExpressFieldset($fieldName);
                 break;
             case self::METHOD_BILLING_AGREEMENT:
@@ -1462,6 +1509,9 @@ class Config extends AbstractConfig
             case 'order_valid_period':
             case 'child_authorization_number':
             case 'allow_ba_signup':
+            case 'in_context':
+            case 'merchant_id':
+            case 'supported_locales':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:
                 return $this->_mapMethodFieldset($fieldName);
@@ -1586,6 +1636,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _mapGenericStyleFieldset($fieldName)
     {
@@ -1596,9 +1647,10 @@ class Config extends AbstractConfig
             case 'paypal_hdrbackcolor':
             case 'paypal_hdrbordercolor':
             case 'paypal_payflowcolor':
+            case 'disable_funding_options':
                 return "paypal/style/{$fieldName}";
             default:
-                return null;
+                return $this->mapButtonStyles($fieldName);
         }
     }
 
@@ -1649,6 +1701,36 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Map PayPal button style config fields
+     *
+     * @param string $fieldName
+     * @return null|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function mapButtonStyles(string $fieldName)
+    {
+        $page = substr($fieldName, 0, (int)strpos($fieldName, '_page_button_'));
+
+        if (!$page) {
+            return null;
+        }
+
+        switch ($fieldName) {
+            case "{$page}_page_button_customize":
+            case "{$page}_page_button_layout":
+            case "{$page}_page_button_size":
+            case "{$page}_page_button_color":
+            case "{$page}_page_button_shape":
+            case "{$page}_page_button_label":
+            case "{$page}_page_button_mx_installment_period":
+            case "{$page}_page_button_br_installment_period":
+                return "paypal/style/{$fieldName}";
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Payment API authentication methods source getter
      *
      * @return array
@@ -1685,6 +1767,7 @@ class Config extends AbstractConfig
 
     /**
      * Get Display option from stored config
+     *
      * @param string $section
      *
      * @return mixed
@@ -1712,6 +1795,7 @@ class Config extends AbstractConfig
 
     /**
      * Get Position option from stored config
+     *
      * @param string $section
      *
      * @return mixed
@@ -1727,6 +1811,7 @@ class Config extends AbstractConfig
 
     /**
      * Get Size option from stored config
+     *
      * @param string $section
      *
      * @return mixed

@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
 /**
  * Adminhtml creditmemo create form
+ *
+ * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -23,7 +26,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve source
      *
-     * @return \Magento\Sales\Model\Order\Invoice
+     * @return \Magento\Sales\Model\Order\Creditmemo
      */
     public function getSource()
     {

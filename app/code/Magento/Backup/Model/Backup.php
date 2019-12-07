@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Model;
@@ -14,7 +14,10 @@ use Magento\Framework\Filesystem\DriverPool;
  * @method string getPath()
  * @method string getName()
  * @method string getTime()
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Backup extends \Magento\Framework\DataObject implements \Magento\Framework\Backup\Db\BackupInterface
 {
@@ -78,6 +81,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Backup\Helper\Data $helper,
@@ -240,7 +244,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
     /**
      * Return content of backup file
      *
-     * @return string
+     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function &getFile()
@@ -273,8 +277,9 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param bool $write
      * @return $this
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Backup\Exception\NotEnoughPermissions
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function open($write = false)
     {
@@ -328,6 +333,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param int $length
      * @return string
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function read($length)
     {
@@ -338,6 +344,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Check end of file.
      *
      * @return bool
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function eof()
     {
@@ -368,6 +375,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Close open backup file
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function close()
     {
@@ -381,6 +389,8 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      * Print output
      *
      * @return string
+     * @return \Magento\Framework\Filesystem\Directory\ReadInterface|string|void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function output()
     {
@@ -396,6 +406,8 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
     }
 
     /**
+     * Get Size
+     *
      * @return int|mixed
      */
     public function getSize()
@@ -417,6 +429,7 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
      *
      * @param string $password
      * @return bool
+     * @throws \Exception
      */
     public function validateUserPassword($password)
     {

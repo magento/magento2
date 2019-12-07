@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Sales\Test\TestCase;
 
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Scenario;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Preconditions:
@@ -25,14 +26,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Click on the "Print Order" button.
  * 6. Perform appropriate assertions.v
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-30253
  */
 class PrintOrderFrontendGuestTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -43,13 +43,24 @@ class PrintOrderFrontendGuestTest extends Scenario
     protected $browser;
 
     /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    private $envWhitelist;
+
+    /**
      * Prepare data.
      *
      * @param BrowserInterface $browser
+     * @param EnvWhitelist $envWhitelist
      */
-    public function __prepare(BrowserInterface $browser)
-    {
+    public function __prepare(
+        BrowserInterface $browser,
+        EnvWhitelist $envWhitelist
+    ) {
         $this->browser = $browser;
+        $this->envWhitelist = $envWhitelist;
     }
 
     /**
@@ -59,6 +70,7 @@ class PrintOrderFrontendGuestTest extends Scenario
      */
     public function test()
     {
+        $this->envWhitelist->addHost('example.com');
         $this->executeScenario();
     }
 
@@ -69,6 +81,7 @@ class PrintOrderFrontendGuestTest extends Scenario
      */
     public function tearDown()
     {
+        $this->envWhitelist->removeHost('example.com');
         $this->browser->closeWindow();
     }
 }

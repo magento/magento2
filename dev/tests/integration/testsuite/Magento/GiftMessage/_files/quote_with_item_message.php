@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 require __DIR__ . '/../../Checkout/_files/quote_with_address.php';
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
     'simple'
 )->setAttributeSetId(
@@ -38,7 +38,7 @@ $quote->setReservedOrderId('test_order_item_with_message')
 $quote->collectTotals()->save();
 
 /** @var \Magento\GiftMessage\Model\Message $message */
-$message = $objectManager->create('Magento\GiftMessage\Model\Message');
+$message = $objectManager->create(\Magento\GiftMessage\Model\Message::class);
 $message->setSender('John Doe');
 $message->setRecipient('Jane Roe');
 $message->setMessage('Gift Message Text');
@@ -47,7 +47,7 @@ $quote->getItemByProduct($quoteProduct)->setGiftMessageId($message->getId())->sa
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+    ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
     ->create();
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);

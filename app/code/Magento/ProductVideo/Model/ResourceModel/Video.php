@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Model\ResourceModel;
@@ -14,7 +14,7 @@ class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function _construct()
     {
-        $this->_init(\Magento\ProductVideo\Setup\InstallSchema::GALLERY_VALUE_VIDEO_TABLE, 'value_id');
+        $this->_init('catalog_product_entity_media_gallery_value_video', 'value_id');
     }
 
     /**

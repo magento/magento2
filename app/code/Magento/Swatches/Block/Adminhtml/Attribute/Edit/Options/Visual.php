@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
 
 /**
  * Block Class for Visual Swatch
+ *
+ * @api
+ * @since 100.0.2
  */
 class Visual extends AbstractSwatch
 {
@@ -18,7 +21,9 @@ class Visual extends AbstractSwatch
     /**
      * Create store values
      *
-     * @codeCoverageIgnore
+     * Method not intended to escape HTML entities
+     * Escaping will be applied in template files
+     *
      * @param integer $storeId
      * @param integer $optionId
      * @return array
@@ -37,34 +42,57 @@ class Visual extends AbstractSwatch
         }
 
         if (isset($storeValues[$optionId])) {
-            $value['store' . $storeId] = $this->escapeHtml($storeValues[$optionId]);
+            $value['store' . $storeId] = $storeValues[$optionId];
         }
 
         if (isset($swatchStoreValue[$optionId])) {
-            $value['defaultswatch' . $storeId] = $this->escapeHtml($swatchStoreValue[$optionId]);
+            $value['defaultswatch' . $storeId] = $swatchStoreValue[$optionId];
         }
 
         $swatchStoreValue = $this->reformatSwatchLabels($swatchStoreValue);
         if (isset($swatchStoreValue[$optionId])) {
-            $value['swatch' . $storeId] = $this->escapeHtml($swatchStoreValue[$optionId]);
+            $value['swatch' . $storeId] = $swatchStoreValue[$optionId];
         }
 
         return $value;
     }
 
     /**
+     * Return json config for visual option JS initialization
+     *
+     * @return array
+     * @since 100.1.0
+     */
+    public function getJsonConfig()
+    {
+        $values = [];
+        foreach ($this->getOptionValues() as $value) {
+            $values[] = $value->getData();
+        }
+
+        $data = [
+            'attributesData' => $values,
+            'uploadActionUrl' => $this->getUrl('swatches/iframe/show'),
+            'isSortable' => (int)(!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()),
+            'isReadOnly' => (int)$this->getReadOnly()
+        ];
+
+        return json_encode($data);
+    }
+
+    /**
      * Parse swatch labels for template
      *
      * @codeCoverageIgnore
-     * @param null $swatchStoreValue
-     * @return string
+     * @param null|array $swatchStoreValue
+     * @return null|array
      */
     protected function reformatSwatchLabels($swatchStoreValue = null)
     {
         if ($swatchStoreValue === null) {
             return;
         }
-        $newSwatch = '';
+        $newSwatch = [];
         foreach ($swatchStoreValue as $key => $value) {
             if ($value[0] == '#') {
                 $newSwatch[$key] = 'background: '.$value;

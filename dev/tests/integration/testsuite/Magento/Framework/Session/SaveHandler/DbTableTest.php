@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\SaveHandler;
 
 use Magento\Framework\App\ResourceConnection;
 
-class DbTableTest extends \PHPUnit_Framework_TestCase
+class DbTableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test session ID
@@ -83,10 +83,10 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->_objectManager->get('Magento\Framework\Session\SaveHandler\DbTable');
+        $this->_model = $this->_objectManager->get(\Magento\Framework\Session\SaveHandler\DbTable::class);
 
         /** @var $resource \Magento\Framework\App\ResourceConnection */
-        $resource = $this->_objectManager->get('Magento\Framework\App\ResourceConnection');
+        $resource = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $this->_connection = $resource->getConnection();
         $this->_sessionTable = $resource->getTableName('session');
 
@@ -102,7 +102,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckConnection()
     {
-        $method = new \ReflectionMethod('Magento\Framework\Session\SaveHandler\DbTable', 'checkConnection');
+        $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
         $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }

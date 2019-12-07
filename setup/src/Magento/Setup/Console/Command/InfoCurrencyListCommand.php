@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Console\Command;
 
+use Symfony\Component\Console\Helper\TableFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\Setup\Lists;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Command prints list of available currencies
@@ -24,11 +26,18 @@ class InfoCurrencyListCommand extends Command
     private $lists;
 
     /**
-     * @param Lists $lists
+     * @var TableFactory
      */
-    public function __construct(Lists $lists)
+    private $tableHelperFactory;
+
+    /**
+     * @param Lists $lists
+     * @param TableFactory $tableHelperFactory
+     */
+    public function __construct(Lists $lists, TableFactory $tableHelperFactory = null)
     {
         $this->lists = $lists;
+        $this->tableHelperFactory = $tableHelperFactory ?: ObjectManager::getInstance()->create(TableFactory::class);
         parent::__construct();
     }
 
@@ -48,13 +57,14 @@ class InfoCurrencyListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(['Currency', 'Code']);
+        $tableHelper = $this->tableHelperFactory->create(['output' => $output]);
+        $tableHelper->setHeaders(['Currency', 'Code']);
 
         foreach ($this->lists->getCurrencyList() as $key => $currency) {
-            $table->addRow([$currency, $key]);
+            $tableHelper->addRow([$currency, $key]);
         }
 
-        $table->render($output);
+        $tableHelper->render();
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

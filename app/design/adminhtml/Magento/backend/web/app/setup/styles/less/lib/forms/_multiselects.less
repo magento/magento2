@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -17,21 +17,25 @@
 //  _____________________________________________
 
 .multiselect-custom {
-    position: relative;
-    height: @multiselect__height;
     border: 1px solid @multiselect__border-color;
-    overflow: auto;
+    height: @multiselect__height;
     margin: 0 0 1.5rem;
+    overflow: auto;
+    position: relative;
+
     ul {
         .lib-list-reset-styles();
         min-width: 29rem;
     }
+
     .item {
         padding: @multiselect-items__padding;
     }
+
     .selected {
         background-color: @multiselect-items__selected__background-color;
     }
+
     .form-label {
         margin-bottom: 0;
     }

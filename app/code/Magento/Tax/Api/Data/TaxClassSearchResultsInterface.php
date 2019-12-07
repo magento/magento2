@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Tax\Api\Data;
 /**
  * Interface for tax class search results.
  * @api
+ * @since 100.0.2
  */
 interface TaxClassSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

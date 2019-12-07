@@ -1,13 +1,23 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 
-class Chooser extends \Magento\Backend\App\Action
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Controller to build Chooser container.
+ */
+class Chooser extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
@@ -19,22 +29,30 @@ class Chooser extends \Magento\Backend\App\Action
     protected $layoutFactory;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
     }
 
     /**
-     * Chooser Source action
+     * Chooser Source action.
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
@@ -46,15 +64,15 @@ class Chooser extends \Magento\Backend\App\Action
 
         $layout = $this->layoutFactory->create();
         $productsGrid = $layout->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',
+            \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser::class,
             '',
             [
                 'data' => [
-                    'id' => $uniqId,
+                    'id' => $this->escaper->escapeHtml($uniqId),
                     'use_massaction' => $massAction,
                     'product_type_id' => $productTypeId,
-                    'category_id' => $this->getRequest()->getParam('category_id'),
-                ]
+                    'category_id' => (int)$this->getRequest()->getParam('category_id'),
+                ],
             ]
         );
 
@@ -62,18 +80,18 @@ class Chooser extends \Magento\Backend\App\Action
 
         if (!$this->getRequest()->getParam('products_grid')) {
             $categoriesTree = $layout->createBlock(
-                'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser',
+                \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class,
                 '',
                 [
                     'data' => [
-                        'id' => $uniqId . 'Tree',
+                        'id' => $this->escaper->escapeHtml($uniqId) . 'Tree',
                         'node_click_listener' => $productsGrid->getCategoryClickListenerJs(),
                         'with_empty_node' => true,
-                    ]
+                    ],
                 ]
             );
 
-            $html = $layout->createBlock('Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container')
+            $html = $layout->createBlock(\Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container::class)
                 ->setTreeHtml($categoriesTree->toHtml())
                 ->setGridHtml($html)
                 ->toHtml();
@@ -81,6 +99,7 @@ class Chooser extends \Magento\Backend\App\Action
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
+
         return $resultRaw->setContents($html);
     }
 }

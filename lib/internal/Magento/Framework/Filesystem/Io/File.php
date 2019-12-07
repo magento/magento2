@@ -1,12 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Io;
-
-use Magento\Framework\Filesystem\DriverInterface;
-use Symfony\Component\Finder\Tests\Iterator\DateRangeFilterIteratorTest;
 
 /**
  * Filesystem client
@@ -78,6 +75,11 @@ class File extends AbstractIo
      * @var bool
      */
     protected $_streamLocked = false;
+
+    /**
+     * @var \Exception
+     */
+    private $_streamException;
 
     /**
      * Destruct
@@ -231,7 +233,7 @@ class File extends AbstractIo
         }
         $stat = @fstat($this->_streamHandler);
         if ($part !== null) {
-            return isset($stat[$part]) ? $stat[$part] : $default;
+            return $stat[$part] ?? $default;
         }
         return $stat;
     }
@@ -301,7 +303,7 @@ class File extends AbstractIo
      * @param bool $recursive
      * @return bool
      */
-    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true)
+    public function mkdir($dir, $mode = 0777, $recursive = true)
     {
         $this->_cwd();
         $result = @mkdir($dir, $mode, $recursive);
@@ -364,7 +366,7 @@ class File extends AbstractIo
             $dirCallback = $fileCallback;
         }
         if (is_dir($dir)) {
-            foreach (scandir($dir) as $item) {
+            foreach (scandir($dir, SCANDIR_SORT_NONE) as $item) {
                 if (!strcmp($item, '.') || !strcmp($item, '..')) {
                     continue;
                 }
@@ -553,7 +555,7 @@ class File extends AbstractIo
      * @return true
      * @throws \Exception
      */
-    public function checkAndCreateFolder($folder, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE)
+    public function checkAndCreateFolder($folder, $mode = 0777)
     {
         if (is_dir($folder)) {
             return true;

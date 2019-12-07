@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel\Rating;
@@ -8,7 +8,10 @@ namespace Magento\Review\Model\ResourceModel\Rating;
 /**
  * Rating collection resource model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -65,7 +68,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Rating', 'Magento\Review\Model\ResourceModel\Rating');
+        $this->_init(\Magento\Review\Model\Rating::class, \Magento\Review\Model\ResourceModel\Rating::class);
     }
 
     /**
@@ -138,7 +141,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 'main_table.rating_id = store.rating_id',
                 []
             );
-            //        ->group('main_table.rating_id')
             $this->_isStoreJoined = true;
         }
         $inCondition = $connection->prepareSqlCondition('store.store_id', ['in' => $storeId]);

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-class AgreementTest extends \PHPUnit_Framework_TestCase
+class AgreementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CheckoutAgreements\Model\Agreement
@@ -15,7 +15,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\CheckoutAgreements\Model\Agreement');
+        $this->model = $objectManager->getObject(\Magento\CheckoutAgreements\Model\Agreement::class);
     }
 
     /**

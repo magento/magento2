@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product\Attribute\Source\Price;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Model\Product\Attribute\Source\Price\View
@@ -29,24 +29,21 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $attribute;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->option = $this->getMock('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option', [], [], '', false);
-        $this->optionFactory = $this->getMock(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->option = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option::class);
+        $this->optionFactory = $this->createPartialMock(
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class,
+            ['create']
         );
         $this->optionFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->option));
-        $this->attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
+        $this->attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
 
         $this->model = (new ObjectManager($this))
             ->getObject(
-                'Magento\Bundle\Model\Product\Attribute\Source\Price\View',
+                \Magento\Bundle\Model\Product\Attribute\Source\Price\View::class,
                 [
                     'optionFactory' => $this->optionFactory,
                 ]
@@ -74,7 +71,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $existValue = 1;
 
-        $this->assertInstanceOf('Magento\Framework\Phrase', $this->model->getOptionText($existValue));
+        $this->assertInstanceOf(\Magento\Framework\Phrase::class, $this->model->getOptionText($existValue));
     }
 
     /**

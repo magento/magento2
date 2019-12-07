@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
-class SectionTest extends \PHPUnit_Framework_TestCase
+class SectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Section
@@ -24,18 +25,31 @@ class SectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_authorizationMock;
 
+    /**
+     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementVisibilityMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->_authorizationMock = $this->getMock('Magento\Framework\AuthorizationInterface');
+        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
+            ->getMockForAbstractClass();
+        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->_authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
 
         $this->_model = $objectManager->getObject(
-            'Magento\Config\Model\Config\Structure\Element\Section',
+            \Magento\Config\Model\Config\Structure\Element\Section::class,
             [
                 'storeManager' => $this->_storeManagerMock,
                 'authorization' => $this->_authorizationMock,
             ]
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->_model,
+            'elementVisibility',
+            $this->elementVisibilityMock,
+            \Magento\Config\Model\Config\Structure\AbstractElement::class
         );
     }
 

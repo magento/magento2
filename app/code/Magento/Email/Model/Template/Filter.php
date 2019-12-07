@@ -1,19 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filter\VariableResolverInterface;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
 /**
  * Core Email Template Filter Model
  *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Filter extends \Magento\Framework\Filter\Template
 {
@@ -45,6 +51,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Modifier Callbacks
      *
      * @var array
+     * @deprecated Use the new Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -145,13 +152,34 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * @var \Pelago\Emogrifier
+     * @deprecated 100.2.0
      */
     protected $emogrifier;
 
     /**
-     * @var \Magento\Email\Model\Source\Variables
+     * @var \Magento\Framework\Css\PreProcessor\Adapter\CssInliner
+     */
+    private $cssInliner;
+
+    /**
+     * @var \Magento\Variable\Model\Source\Variables
      */
     protected $configVariables;
+
+    /**
+     * @var Css\Processor
+     */
+    private $cssProcessor;
+
+    /**
+     * @var Filesystem
+     */
+    private $pubDirectory;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\Read
+     */
+    private $pubDirectoryRead;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -166,9 +194,13 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
-     * @param \Magento\Email\Model\Source\Variables $configVariables
+     * @param \Magento\Variable\Model\Source\Variables $configVariables
      * @param array $variables
-     *
+     * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
+     * @param array $directiveProcessors
+     * @param VariableResolverInterface|null $variableResolver
+     * @param Css\Processor|null $cssProcessor
+     * @param Filesystem|null $pubDirectory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -184,8 +216,13 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
-        \Magento\Email\Model\Source\Variables $configVariables,
-        $variables = []
+        \Magento\Variable\Model\Source\Variables $configVariables,
+        $variables = [],
+        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null,
+        array $directiveProcessors = [],
+        VariableResolverInterface $variableResolver = null,
+        Css\Processor $cssProcessor = null,
+        Filesystem $pubDirectory = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -199,8 +236,14 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
         $this->emogrifier = $emogrifier;
+        $this->cssInliner = $cssInliner ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class);
+        $this->cssProcessor = $cssProcessor ?: ObjectManager::getInstance()
+            ->get(Css\Processor::class);
+        $this->pubDirectory = $pubDirectory ?: ObjectManager::getInstance()
+            ->get(Filesystem::class);
         $this->configVariables = $configVariables;
-        parent::__construct($string, $variables);
+        parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
 
     /**
@@ -296,6 +339,17 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Sets pub directory
+     *
+     * @param string $dirType
+     * @return void
+     */
+    private function setPubDirectory($dirType)
+    {
+        $this->pubDirectoryRead = $this->pubDirectory->getDirectoryRead($dirType);
+    }
+
+    /**
      * Get design parameters
      *
      * @return array
@@ -335,7 +389,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($blockParameters['class'])) {
             $block = $this->_layout->createBlock($blockParameters['class'], null, ['data' => $blockParameters]);
         } elseif (isset($blockParameters['id'])) {
-            $block = $this->_layout->createBlock('Magento\Cms\Block\Block');
+            $block = $this->_layout->createBlock(\Magento\Cms\Block\Block::class);
             if ($block) {
                 $block->setBlockId($blockParameters['id']);
             }
@@ -466,13 +520,15 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->getParameters($construction[2]);
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
+        $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
     /**
      * Retrieve store URL directive
+     *
      * Support url and direct_url properties
      *
      * @param string[] $construction
@@ -557,7 +613,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
-
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $text = stripslashes($matches[2]);
 
         $params = [];
@@ -583,7 +639,10 @@ class Filter extends \Magento\Framework\Filter\Template
             return $construction[0];
         }
 
-        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
+        list($directive, $modifiers) = $this->explodeModifiers(
+            $construction[2] . ($construction['filters'] ?? ''),
+            'escape'
+        );
         return $this->applyModifiers($this->getVariable($directive, ''), $modifiers);
     }
 
@@ -600,6 +659,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $default assumed modifier if none present
      * @return array
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -618,6 +678,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $modifiers
      * @return string
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -633,7 +694,7 @@ class Filter extends \Magento\Framework\Filter\Template
                     $callback = $modifier;
                 }
                 array_unshift($params, $value);
-                $value = call_user_func_array($callback, $params);
+                $value = $callback(...$params);
             }
         }
         return $value;
@@ -645,12 +706,13 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $type
      * @return string
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     public function modifierEscape($value, $type = 'html')
     {
         switch ($type) {
             case 'html':
-                return htmlspecialchars($value, ENT_QUOTES);
+                return $this->_escaper->escapeHtml($value);
 
             case 'htmlentities':
                 return htmlentities($value, ENT_QUOTES);
@@ -788,7 +850,9 @@ class Filter extends \Magento\Framework\Filter\Template
             return '/* ' . __('"file" parameter must be specified') . ' */';
         }
 
-        $css = $this->getCssFilesContent([$params['file']]);
+        $css = $this->cssProcessor->process(
+            $this->getCssFilesContent([$params['file']])
+        );
 
         if (strpos($css, ContentProcessorInterface::ERROR_MESSAGE_PREFIX) !== false) {
             // Return compilation error wrapped in CSS comment
@@ -797,7 +861,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return $css;
         } else {
             // Return CSS comment for debugging purposes
-            return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
+            return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
     }
 
@@ -889,16 +953,25 @@ class Filter extends \Magento\Framework\Filter\Template
         try {
             foreach ($files as $file) {
                 $asset = $this->_assetRepo->createAsset($file, $designParams);
-                $css .= $asset->getContent();
+                $this->setPubDirectory($asset->getContext()->getBaseDirType());
+                if ($this->pubDirectoryRead->isExist($asset->getPath())) {
+                    $css .= $this->pubDirectoryRead->readFile($asset->getPath());
+                } else {
+                    $css .= $asset->getContent();
+                }
             }
         } catch (ContentProcessorException $exception) {
             $css = $exception->getMessage();
+        } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
+            $css = '';
         }
 
         return $css;
     }
 
     /**
+     * Apply Inline CSS
+     *
      * Merge HTML and CSS and return HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
      * in order to support all email clients.
      *
@@ -912,6 +985,8 @@ class Filter extends \Magento\Framework\Filter\Template
         $cssToInline = $this->getCssFilesContent(
             $this->getInlineCssFiles()
         );
+        $cssToInline = $this->cssProcessor->process($cssToInline);
+
         // Only run Emogrify if HTML and CSS contain content
         if ($html && $cssToInline) {
             try {
@@ -920,18 +995,18 @@ class Filter extends \Magento\Framework\Filter\Template
                     !== false
                 ) {
                     throw new \Magento\Framework\Exception\MailException(
-                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                        __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
 
-                $emogrifier = $this->emogrifier;
-                $emogrifier->setHtml($html);
-                $emogrifier->setCss($cssToInline);
+                $this->cssInliner->setHtml($html);
+
+                $this->cssInliner->setCss($cssToInline);
 
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $emogrifier->disableStyleBlocksParsing();
+                $this->cssInliner->disableStyleBlocksParsing();
 
-                $processedHtml = $emogrifier->emogrify();
+                $processedHtml = $this->cssInliner->process();
             } catch (\Exception $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                     $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
@@ -969,7 +1044,7 @@ class Filter extends \Magento\Framework\Filter\Template
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = __("We're sorry, an error has occurred while generating this email.");
+                $value = __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
         }

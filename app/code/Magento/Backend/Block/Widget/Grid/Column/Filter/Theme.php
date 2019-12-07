@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+/**
+ * Theme grid filter
+ */
 class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
@@ -54,7 +57,8 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     }
 
     /**
-     * Retrieve options setted in column.
+     * Retrieve options set in column.
+     *
      * Or load if options was not set.
      *
      * @return array

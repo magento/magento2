@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin;
 
@@ -18,8 +16,9 @@ class Import
     /**
      * @param \Magento\Catalog\Model\Indexer\Category\Product\Processor $indexerCategoryProductProcessor
      */
-    public function __construct(\Magento\Catalog\Model\Indexer\Category\Product\Processor $indexerCategoryProductProcessor)
-    {
+    public function __construct(
+        \Magento\Catalog\Model\Indexer\Category\Product\Processor $indexerCategoryProductProcessor
+    ) {
         $this->_indexerCategoryProductProcessor = $indexerCategoryProductProcessor;
     }
 

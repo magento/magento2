@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,10 +45,34 @@ class ExtensibleDataObjectConverter
         }
         $dataObjectArray = $this->dataObjectProcessor->buildOutputDataArray($dataObject, $dataObjectType);
         //process custom attributes if present
+        $dataObjectArray = $this->processCustomAttributes($dataObjectArray, $skipAttributes);
+
+        if (!empty($dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
+            /** @var array $extensionAttributes */
+            $extensionAttributes = $dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY];
+            unset($dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+            foreach ($extensionAttributes as $attributeKey => $attributeValue) {
+                if (!in_array($attributeKey, $skipAttributes)) {
+                    $dataObjectArray[$attributeKey] = $attributeValue;
+                }
+            }
+        }
+        return $dataObjectArray;
+    }
+
+    /**
+     * Recursive process array to process customer attributes
+     *
+     * @param array $dataObjectArray
+     * @param array $skipAttributes
+     * @return array
+     */
+    private function processCustomAttributes(array $dataObjectArray, array $skipAttributes): array
+    {
         if (!empty($dataObjectArray[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY])) {
             /** @var AttributeValue[] $customAttributes */
             $customAttributes = $dataObjectArray[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY];
-            unset ($dataObjectArray[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY]);
+            unset($dataObjectArray[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY]);
             foreach ($customAttributes as $attributeValue) {
                 if (!in_array($attributeValue[AttributeValue::ATTRIBUTE_CODE], $skipAttributes)) {
                     $dataObjectArray[$attributeValue[AttributeValue::ATTRIBUTE_CODE]]
@@ -56,14 +80,9 @@ class ExtensibleDataObjectConverter
                 }
             }
         }
-        if (!empty($dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
-            /** @var array $extensionAttributes */
-            $extensionAttributes = $dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY];
-            unset ($dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
-            foreach ($extensionAttributes as $attributeKey => $attributeValue) {
-                if (!in_array($attributeKey, $skipAttributes)) {
-                    $dataObjectArray[$attributeKey] = $attributeValue;
-                }
+        foreach ($dataObjectArray as $key => $value) {
+            if (is_array($value)) {
+                $dataObjectArray[$key] = $this->processCustomAttributes($value, $skipAttributes);
             }
         }
         return $dataObjectArray;

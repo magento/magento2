@@ -1,11 +1,9 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-
 define([
     'Magento_Ui/js/grid/tree-massactions'
 ], function (TreeMassaction) {
@@ -39,7 +37,9 @@ define([
                 expect(model.actions()[0].visible).toBeUndefined();
             });
             it('check nested level actions', function () {
-                model.actions()[0].actions[0].actions = [{type: 'delete'}];
+                model.actions()[0].actions[0].actions = [{
+                    type: 'delete'
+                }];
                 model.initObservable();
                 expect(model.actions()[0].actions[0].visible).toBeDefined();
                 expect(model.actions()[0].actions[0].visible()).toBeFalsy();
@@ -98,7 +98,7 @@ define([
         });
         it('check getAction', function () {
             expect(model.getAction('availability')).toBe(model.actions()[0]);
-            expect(model.getAction('enable')).toBe(model.actions()[0].actions[0]);
+            expect(model.getAction('availability.enable')).toBe(model.actions()[0].actions[0]);
             expect(model.getAction('absent')).toBeFalsy();
         });
         describe('check hideSubmenus', function () {

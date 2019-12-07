@@ -1,36 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="left">
-            <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tabs" name="promo_catalog_edit_tabs">
-                <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main" name="promo_catalog_edit_tab_main"/>
-                <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions" name="promo_catalog_edit_tab_conditions"/>
-                <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Actions" name="promo_catalog_edit_tab_actions"/>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">main_section</argument>
-                    <argument name="block" xsi:type="string">promo_catalog_edit_tab_main</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">conditions_section</argument>
-                    <argument name="block" xsi:type="string">promo_catalog_edit_tab_conditions</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">actions_section</argument>
-                    <argument name="block" xsi:type="string">promo_catalog_edit_tab_actions</argument>
-                </action>
-            </block>
-        </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit" name="promo_catalog_edit"/>
-        </referenceContainer>
-        <referenceContainer name="js">
-            <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js" template="promo/js.phtml"/>
+            <uiComponent name="catalog_rule_form"/>
         </referenceContainer>
     </body>
 </page>

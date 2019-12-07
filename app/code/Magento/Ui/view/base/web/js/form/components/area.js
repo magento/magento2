@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -40,7 +44,7 @@ define([
 
         /**
          * Calls parent's initElement method.
-         * Assignes callbacks on various events of incoming element.
+         * Assigns callbacks on various events of incoming element.
          * @param  {Object} elem
          * @return {Object} - reference to instance
          */

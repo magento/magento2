@@ -1,0 +1,97 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="timeline">
+    <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        style="position: absolute; width: 0; height: 0;"
+        width="0"
+        height="0">
+        <defs>
+            <symbol id="svg-ending" viewBox="0 0 28 36">
+                <path
+                    class="g__timeline-ending"
+                    d="
+                        M2.864,0.456
+                        h1.189 l14.625,17.55
+                        L4.054,35.557
+                        H2.681"/>
+                <path
+                    class="g__timeline-arrow"
+                    fill="currentColor"
+                    d="
+                        M9.175,0.04
+                        h4.002l15.006,18.007
+                        L13.177,36.055
+                        H9.175 l15.006-18.008
+                        L9.175,0.04z"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <div class="timeline-content"
+         css="'_from-now': hasToday(),
+              '_no-records': !hasData()">
+        <div class="timeline-past" if="hasToday()">
+            <time class="timeline-date" translate="'Past'"/>
+        </div>
+        <ul class="timeline-units">
+            <li class="timeline-unit" repeat="foreach: updateRange().days, item: '$date'">
+                <div tooltip="
+                    trigger: '[data-tooltip-trigger=' + $index + ']',
+                    action: 'hover',
+                    delay: 300,
+                    track: true,
+                    position: 'top',
+                    closeButton: false
+                ">
+                    <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"/>
+                </div>
+                <time attr="'data-tooltip-trigger': $index" class="timeline-date">
+
+                    <!-- NOTE: needs to be replaced by the date binding -->
+                    <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"/>
+                </time>
+            </li>
+        </ul>
+        <ul class="timeline-items">
+            <if args="hasData()">
+                <li class="timeline-item"
+                    repeat="foreach: rows, item: '$row'"
+                    attr="'data-tooltip-search-scope': 'search-scope-' + $index"
+                    css="
+                        _active: isActive($row()),
+                        _permanent: isPermanent($row())
+                    "
+                    render="recordTmpl"/>
+            </if>
+
+            <ifnot args="hasData()">
+                <li class="timeline-item" data-role="no-data-msg">
+                    <div class="timeline-event">
+                        <span class="timeline-event-title"
+                                translate="'We couldn\'t find any records.'"/>
+                        <div class="timeline-event-info"/>
+                    </div>
+                </li>
+            </ifnot>
+        </ul>
+    </div>
+    <div class="timeline-scale">
+        <div class="data-slider"
+            range="
+                value: ko.getObservable($data, 'scale'),
+                min: minScale,
+                max: maxScale,
+                step: scaleStep
+            ">
+            <span class="data-slider-from" text="daysToWeeks(minScale) + 'w'"/>
+            <span class="data-slider-to" text="daysToWeeks(maxScale) + 'w'"/>
+        </div>
+    </div>
+</div>

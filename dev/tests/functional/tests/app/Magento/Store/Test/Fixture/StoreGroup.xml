@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -17,6 +17,7 @@
         <field name="group_id" is_required="1" />
         <field name="website_id" source="Magento\Store\Test\Fixture\StoreGroup\WebsiteId" />
         <field name="name" is_required="" />
+        <field name="code" is_required="" />
         <field name="root_category_id" source="Magento\Store\Test\Fixture\StoreGroup\CategoryId" />
         <field name="default_store_id" is_required="" />
     </fixture>

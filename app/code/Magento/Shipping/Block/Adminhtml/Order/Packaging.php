@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
 /**
  * Adminhtml shipment packaging
+ *
+ * @api
+ * @since 100.0.2
  */
 class Packaging extends \Magento\Backend\Block\Template
 {
@@ -71,6 +74,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Configuration for popup window for packaging
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getConfigDataJson()
     {
@@ -83,7 +87,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $itemsName = [];
         $itemsWeight = [];
         $itemsProductId = [];
-
+        $itemsOrderItemId = [];
         if ($shipmentId) {
             $urlParams['shipment_id'] = $shipmentId;
             $createLabelUrl = $this->getUrl('adminhtml/order_shipment/createLabel', $urlParams);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Product;
@@ -103,7 +103,7 @@ class View extends \Magento\Catalog\Block\Product\View
         $displayIfNoReviews = false
     ) {
         return $this->getLayout()->createBlock(
-            'Magento\Review\Block\Rating\Entity\Detailed'
+            \Magento\Review\Block\Rating\Entity\Detailed::class
         )->setEntityId(
             $this->getProduct()->getId()
         )->toHtml() . $this->getLayout()->getBlock(

@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Option;
 
 /**
- * @todo Remove in favor of the ancestor interface
+ * Array marker interface
+ *
+ * @deprecated please use \Magento\Framework\Data\OptionSourceInterface instead.
+ * @see \Magento\Framework\Data\OptionSourceInterface
  */
 interface ArrayInterface extends \Magento\Framework\Data\OptionSourceInterface
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Checks;
@@ -8,6 +8,12 @@ namespace Magento\Payment\Model\Checks;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Checks possibility of payment method to be used in admin area
+ *
+ * @api
+ * @since 100.0.2
+ */
 class CanUseInternal implements SpecificationInterface
 {
     /**

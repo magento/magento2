@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Fixture\Category;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Prepare parent category.
@@ -37,6 +37,9 @@ class ParentId extends DataSource
                 $this->parentCategory->persist();
             }
             $this->data = $this->parentCategory->getId();
+        } elseif (isset($data['source']) && $data['source'] instanceof Category) {
+            $this->parentCategory = $data['source'];
+            $this->data = $data['source']->getId();
         } else {
             $this->data = $data;
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Composer;
@@ -13,7 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ComposerJsonFinder
 {
     /**
-     * @var DirectoryList $directoryList
+     * @var DirectoryList
      */
     private $directoryList;
 
@@ -35,11 +35,7 @@ class ComposerJsonFinder
      */
     public function findComposerJson()
     {
-        // composer.json is in same directory as vendor
-        $vendorPath = $this->directoryList->getPath(DirectoryList::CONFIG) . '/vendor_path.php';
-        $vendorDir = require "{$vendorPath}";
-
-        $composerJson = $this->directoryList->getPath(DirectoryList::ROOT) . "/{$vendorDir}/../composer.json";
+        $composerJson = $this->directoryList->getPath(DirectoryList::ROOT) . '/composer.json';
 
         $composerJson = realpath($composerJson);
 

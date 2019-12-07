@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Store manager interface
  *
  * @api
+ * @since 100.0.2
  */
 interface StoreManagerInterface
 {
@@ -17,6 +20,11 @@ interface StoreManagerInterface
      * Store cache context
      */
     const CONTEXT_STORE = 'store';
+
+    /**
+     * The store GET Param name
+     */
+    const PARAM_NAME = '___store';
 
     /**
      * Allow or disallow single store mode
@@ -45,6 +53,7 @@ interface StoreManagerInterface
      *
      * @param null|string|bool|int|\Magento\Store\Api\Data\StoreInterface $storeId
      * @return \Magento\Store\Api\Data\StoreInterface
+     * @throws NoSuchEntityException If given store doesn't exist.
      */
     public function getStore($storeId = null);
 
@@ -108,7 +117,7 @@ interface StoreManagerInterface
     /**
      * Set current default store
      *
-     * @param string $store
+     * @param string|int|\Magento\Store\Api\Data\StoreInterface $store
      * @return void
      */
     public function setCurrentStore($store);

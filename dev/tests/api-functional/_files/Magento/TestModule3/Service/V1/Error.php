@@ -2,9 +2,10 @@
 /**
  * Implementation of a test service for error handling testing
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\TestModule3\Service\V1;
 
 use Magento\Framework\Exception\AuthorizationException;
@@ -63,7 +64,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function authorizationException()
     {
-        throw new AuthorizationException(__('Consumer is not authorized to access %1', 'resourceN'));
+        throw new AuthorizationException(__("The consumer isn't authorized to access %1.", 'resourceN'));
     }
 
     /**
@@ -104,7 +105,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
             foreach ($wrappedErrorParameters as $error) {
                 $exception->addError(
                     __(
-                        InputException::INVALID_FIELD_VALUE,
+                        'Invalid value of "%value" provided for the %fieldName field.',
                         ['fieldName' => $error->getFieldName(), 'value' => $error->getValue()]
                     )
                 );

@@ -1,12 +1,19 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-class Index extends \Magento\Newsletter\Controller\Adminhtml\Queue
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Newsletter\Controller\Adminhtml\Queue as QueueAction;
+
+/**
+ * Show newsletter queue. Needs to be accessible by POST because of filtering.
+ */
+class Index extends QueueAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Queue list action

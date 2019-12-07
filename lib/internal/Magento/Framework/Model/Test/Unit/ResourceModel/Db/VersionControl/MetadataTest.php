@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\VersionControl;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class Version Control MetadataTest
  */
-class MetadataTest extends \PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
@@ -38,15 +38,9 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->model = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $this->resource = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             "",
             false,
@@ -55,7 +49,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
             ['getConnection', 'getMainTable']
         );
         $this->connection = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             "",
             false,
@@ -64,7 +58,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         $this->model->expects($this->any())->method('getResource')->willReturn($this->resource);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->entityMetadata = $objectManager->getObject(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata'
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class
         );
     }
 

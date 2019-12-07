@@ -1,16 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Catalog Layer Decimal Attribute Filter Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Layer\Filter;
 
+/**
+ * Catalog Layer Decimal Attribute Filter Model
+ */
 class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
     /**
@@ -35,8 +32,8 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
-     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory $filterDecimalFactory
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory $dataProviderFactory
      * @param array $data
      */
     public function __construct(

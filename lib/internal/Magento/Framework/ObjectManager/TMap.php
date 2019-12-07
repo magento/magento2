@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager;
 
-use Magento\Framework\Code\Reader\ClassReaderInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -45,16 +44,23 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     private $configInterface;
 
     /**
+     * @var \Closure
+     */
+    private $objectCreationStrategy;
+
+    /**
      * @param string $type
      * @param ObjectManagerInterface $objectManager
      * @param ConfigInterface $configInterface
      * @param array $array
+     * @param \Closure $objectCreationStrategy
      */
     public function __construct(
         $type,
         ObjectManagerInterface $objectManager,
         ConfigInterface $configInterface,
-        array $array = []
+        array $array = [],
+        \Closure $objectCreationStrategy = null
     ) {
         if (!class_exists($this->type) && !interface_exists($type)) {
             throw new \InvalidArgumentException(sprintf('Unknown type %s', $type));
@@ -74,6 +80,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
 
         $this->array = $array;
         $this->counter = count($array);
+        $this->objectCreationStrategy = $objectCreationStrategy;
     }
 
     /**
@@ -90,8 +97,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
             $this->configInterface->getPreference($instanceName)
         );
 
-        if (
-        !in_array(
+        if (!in_array(
             $this->type,
             array_unique(array_merge(class_parents($realType), class_implements($realType))),
             true
@@ -129,7 +135,10 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
             return $this->objectsArray[$index];
         }
 
-        return $this->objectsArray[$index] = $this->objectManager->create($this->array[$index]);
+        $objectCreationStrategy = $this->objectCreationStrategy;
+        return $this->objectsArray[$index] = $objectCreationStrategy === null
+            ? $this->objectManager->create($this->array[$index])
+            : $objectCreationStrategy($this->objectManager, $this->array[$index]);
     }
 
     /**

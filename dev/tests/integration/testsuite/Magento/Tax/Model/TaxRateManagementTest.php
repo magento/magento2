@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class TaxRateManagementTest extends \PHPUnit_Framework_TestCase
+class TaxRateManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Api\TaxRuleRepositoryInterface
@@ -59,9 +59,9 @@ class TaxRateManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->taxRuleRepository = $objectManager->get('Magento\Tax\Api\TaxRuleRepositoryInterface');
-        $this->taxRateManagement = $objectManager->get('Magento\Tax\Api\TaxRateManagementInterface');
-        $this->taxRateRepository = $objectManager->get('Magento\Tax\Api\TaxRateRepositoryInterface');
+        $this->taxRuleRepository = $objectManager->get(\Magento\Tax\Api\TaxRuleRepositoryInterface::class);
+        $this->taxRateManagement = $objectManager->get(\Magento\Tax\Api\TaxRateManagementInterface::class);
+        $this->taxRateRepository = $objectManager->get(\Magento\Tax\Api\TaxRateRepositoryInterface::class);
         $this->taxRuleFixtureFactory = new TaxRuleFixtureFactory();
     }
 

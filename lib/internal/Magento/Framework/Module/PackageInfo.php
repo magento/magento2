@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
@@ -8,8 +8,9 @@ namespace Magento\Framework\Module;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**
- * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
- * and mapping of module name to package version
+ * Provide information of dependencies and conflicts in composer.json files.
+ *
+ * Mapping of package name to module name, and mapping of module name to package version.
  */
 class PackageInfo
 {
@@ -59,21 +60,33 @@ class PackageInfo
     protected $nonExistingDependencies = [];
 
     /**
-     * Constructor
-     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param Dir\Reader $reader
      * @param ComponentRegistrar $componentRegistrar
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
-    public function __construct(Dir\Reader $reader, ComponentRegistrar $componentRegistrar)
-    {
+    public function __construct(
+        Dir\Reader $reader,
+        ComponentRegistrar $componentRegistrar,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
         $this->reader = $reader;
         $this->componentRegistrar = $componentRegistrar;
+        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
      * Load the packages information
      *
      * @return void
+     * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function load()
     {
@@ -82,7 +95,18 @@ class PackageInfo
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
                 $key = $moduleDir . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
-                    $packageData = \Zend_Json::decode($jsonData[$key]);
+                    try {
+                        $packageData = $this->serializer->unserialize($jsonData[$key]);
+                    } catch (\InvalidArgumentException $e) {
+                        throw new \InvalidArgumentException(
+                            sprintf(
+                                "%s composer.json error: %s",
+                                $moduleName,
+                                $e->getMessage()
+                            )
+                        );
+                    }
+
                     if (isset($packageData['name'])) {
                         $this->packageModuleMap[$packageData['name']] = $moduleName;
                     }
@@ -153,8 +177,7 @@ class PackageInfo
     protected function convertPackageNameToModuleName($packageName)
     {
         $moduleName = str_replace('magento/module-', '', $packageName);
-        $moduleName = str_replace('-', ' ', $moduleName);
-        $moduleName = str_replace(' ', '', ucwords($moduleName));
+        $moduleName = str_replace('-', '', ucwords($moduleName, '-'));
 
         return 'Magento_' . $moduleName;
     }
@@ -214,6 +237,25 @@ class PackageInfo
     }
 
     /**
+     * Get all module names a module required by
+     *
+     * @param string $requiredModuleName
+     * @return array
+     */
+    public function getRequiredBy($requiredModuleName)
+    {
+        $this->load();
+        $requiredBy = [];
+        foreach ($this->requireMap as $moduleName => $moduleRequireList) {
+            if (in_array($requiredModuleName, $moduleRequireList)) {
+                $requiredBy[] = $moduleName;
+            }
+        }
+
+        return $requiredBy;
+    }
+
+    /**
      * Get all module names a module conflicts
      *
      * @param string $moduleName
@@ -241,6 +283,6 @@ class PackageInfo
     public function getVersion($moduleName)
     {
         $this->load();
-        return isset($this->modulePackageVersionMap[$moduleName]) ? $this->modulePackageVersionMap[$moduleName] : '';
+        return $this->modulePackageVersionMap[$moduleName] ?? '';
     }
 }

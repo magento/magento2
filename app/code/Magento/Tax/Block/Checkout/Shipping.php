@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Checkout;
+
+use Magento\Sales\Model\ConfigInterface;
 
 /**
  * Subtotal Total Row Renderer
@@ -15,7 +17,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      *
      * @var string
      */
-    protected $_template = 'checkout/shipping.phtml';
+    protected $_template = 'Magento_Tax::checkout/shipping.phtml';
 
     /**
      * @var \Magento\Tax\Model\Config
@@ -26,7 +28,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param ConfigInterface $salesConfig
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $layoutProcessors
      * @param array $data
@@ -35,7 +37,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\Config $salesConfig,
+        ConfigInterface $salesConfig,
         \Magento\Tax\Model\Config $taxConfig,
         array $layoutProcessors = [],
         array $data = []

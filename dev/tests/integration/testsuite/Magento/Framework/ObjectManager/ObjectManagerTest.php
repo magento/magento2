@@ -1,29 +1,34 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager;
 
-class ObjectManagerTest extends \PHPUnit_Framework_TestCase
+class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
+    /**#@+
+     * Test class with type error
+     */
+    const TEST_CLASS_WITH_TYPE_ERROR = \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
+
     /**#@+
      * Test classes for basic instantiation
      */
-    const TEST_CLASS = 'Magento\Framework\ObjectManager\TestAsset\Basic';
+    const TEST_CLASS = \Magento\Framework\ObjectManager\TestAsset\Basic::class;
 
-    const TEST_CLASS_INJECTION = 'Magento\Framework\ObjectManager\TestAsset\BasicInjection';
+    const TEST_CLASS_INJECTION = \Magento\Framework\ObjectManager\TestAsset\BasicInjection::class;
 
     /**#@-*/
 
     /**#@+
      * Test classes and interface to test preferences
      */
-    const TEST_INTERFACE = 'Magento\Framework\ObjectManager\TestAsset\TestAssetInterface';
+    const TEST_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\TestAssetInterface::class;
 
-    const TEST_INTERFACE_IMPLEMENTATION = 'Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation';
+    const TEST_INTERFACE_IMPLEMENTATION = \Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation::class;
 
-    const TEST_CLASS_WITH_INTERFACE = 'Magento\Framework\ObjectManager\TestAsset\InterfaceInjection';
+    const TEST_CLASS_WITH_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\InterfaceInjection::class;
 
     /**#@-*/
 
@@ -38,17 +43,17 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_numerableClasses = [
-        0 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorNoArguments',
-        1 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorOneArgument',
-        2 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorTwoArguments',
-        3 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorThreeArguments',
-        4 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorFourArguments',
-        5 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorFiveArguments',
-        6 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorSixArguments',
-        7 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorSevenArguments',
-        8 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorEightArguments',
-        9 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorNineArguments',
-        10 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorTenArguments',
+        0 => \Magento\Framework\ObjectManager\TestAsset\ConstructorNoArguments::class,
+        1 => \Magento\Framework\ObjectManager\TestAsset\ConstructorOneArgument::class,
+        2 => \Magento\Framework\ObjectManager\TestAsset\ConstructorTwoArguments::class,
+        3 => \Magento\Framework\ObjectManager\TestAsset\ConstructorThreeArguments::class,
+        4 => \Magento\Framework\ObjectManager\TestAsset\ConstructorFourArguments::class,
+        5 => \Magento\Framework\ObjectManager\TestAsset\ConstructorFiveArguments::class,
+        6 => \Magento\Framework\ObjectManager\TestAsset\ConstructorSixArguments::class,
+        7 => \Magento\Framework\ObjectManager\TestAsset\ConstructorSevenArguments::class,
+        8 => \Magento\Framework\ObjectManager\TestAsset\ConstructorEightArguments::class,
+        9 => \Magento\Framework\ObjectManager\TestAsset\ConstructorNineArguments::class,
+        10 => \Magento\Framework\ObjectManager\TestAsset\ConstructorTenArguments::class,
     ];
 
     /**
@@ -137,5 +142,18 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 $this->assertAttributeInstanceOf($propertyClass, $propertyName, $testObject);
             }
         }
+    }
+
+    /**
+     * Test creating an object and passing incorrect type of arguments to the constructor.
+     *
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Error occurred when creating object
+     */
+    public function testNewInstanceWithTypeError()
+    {
+        self::$_objectManager->create(self::TEST_CLASS_WITH_TYPE_ERROR, [
+            'testArgument' => new \stdClass()
+        ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,11 @@ namespace Magento\Setup\Model;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Module\ResourceFactory;
 use Magento\Framework\App\ErrorHandler;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Setup\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InstallerFactory
 {
     /**
@@ -32,8 +34,10 @@ class InstallerFactory
      * @param ServiceLocatorInterface $serviceLocator
      * @param ResourceFactory $resourceFactory
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, ResourceFactory $resourceFactory)
-    {
+    public function __construct(
+        ServiceLocatorInterface $serviceLocator,
+        ResourceFactory $resourceFactory
+    ) {
         $this->serviceLocator = $serviceLocator;
         $this->resourceFactory = $resourceFactory;
         // For Setup Wizard we are using our customized error handler
@@ -50,30 +54,31 @@ class InstallerFactory
     public function create(LoggerInterface $log)
     {
         return new Installer(
-            $this->serviceLocator->get('Magento\Setup\Model\FilePermissions'),
-            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Writer'),
-            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
-            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig'),
-            $this->serviceLocator->get('Magento\Framework\Module\ModuleList'),
-            $this->serviceLocator->get('Magento\Framework\Module\ModuleList\Loader'),
-            $this->serviceLocator->get('Magento\Setup\Model\AdminAccountFactory'),
+            $this->serviceLocator->get(\Magento\Framework\Setup\FilePermissions::class),
+            $this->serviceLocator->get(\Magento\Framework\App\DeploymentConfig\Writer::class),
+            $this->serviceLocator->get(\Magento\Framework\App\DeploymentConfig\Reader::class),
+            $this->serviceLocator->get(\Magento\Framework\App\DeploymentConfig::class),
+            $this->serviceLocator->get(\Magento\Framework\Module\ModuleList::class),
+            $this->serviceLocator->get(\Magento\Framework\Module\ModuleList\Loader::class),
+            $this->serviceLocator->get(\Magento\Setup\Model\AdminAccountFactory::class),
             $log,
-            $this->serviceLocator->get('Magento\Setup\Module\ConnectionFactory'),
-            $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
-            $this->serviceLocator->get('Magento\Framework\Filesystem'),
-            $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider'),
+            $this->serviceLocator->get(\Magento\Setup\Module\ConnectionFactory::class),
+            $this->serviceLocator->get(\Magento\Framework\App\MaintenanceMode::class),
+            $this->serviceLocator->get(\Magento\Framework\Filesystem::class),
+            $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class),
             new \Magento\Framework\Model\ResourceModel\Db\Context(
                 $this->getResource(),
-                $this->serviceLocator->get('Magento\Framework\Model\ResourceModel\Db\TransactionManager'),
-                $this->serviceLocator->get('Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor')
+                $this->serviceLocator->get(\Magento\Framework\Model\ResourceModel\Db\TransactionManager::class),
+                $this->serviceLocator->get(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class)
             ),
-            $this->serviceLocator->get('Magento\Setup\Model\ConfigModel'),
-            $this->serviceLocator->get('Magento\Framework\App\State\CleanupFiles'),
-            $this->serviceLocator->get('Magento\Setup\Validator\DbValidator'),
-            $this->serviceLocator->get('Magento\Setup\Module\SetupFactory'),
-            $this->serviceLocator->get('Magento\Setup\Module\DataSetupFactory'),
-            $this->serviceLocator->get('Magento\Framework\Setup\SampleData\State'),
-            new \Magento\Framework\Component\ComponentRegistrar()
+            $this->serviceLocator->get(\Magento\Setup\Model\ConfigModel::class),
+            $this->serviceLocator->get(\Magento\Framework\App\State\CleanupFiles::class),
+            $this->serviceLocator->get(\Magento\Setup\Validator\DbValidator::class),
+            $this->serviceLocator->get(\Magento\Setup\Module\SetupFactory::class),
+            $this->serviceLocator->get(\Magento\Setup\Module\DataSetupFactory::class),
+            $this->serviceLocator->get(\Magento\Framework\Setup\SampleData\State::class),
+            new \Magento\Framework\Component\ComponentRegistrar(),
+            $this->serviceLocator->get(\Magento\Setup\Model\PhpReadinessCheck::class)
         );
     }
 
@@ -84,7 +89,7 @@ class InstallerFactory
      */
     private function getResource()
     {
-        $deploymentConfig = $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig');
+        $deploymentConfig = $this->serviceLocator->get(\Magento\Framework\App\DeploymentConfig::class);
         return $this->resourceFactory->create($deploymentConfig);
     }
 }

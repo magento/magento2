@@ -1,13 +1,17 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Response\Http;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class FileFactory serves to declare file content in response for download.
+ */
 class FileFactory
 {
     /**
@@ -47,7 +51,6 @@ class FileFactory
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function create(
         $fileName,
@@ -59,6 +62,7 @@ class FileFactory
         $dir = $this->_filesystem->getDirectoryWrite($baseDir);
         $isFile = false;
         $file = null;
+        $fileContent = $this->getFileContent($content);
         if (is_array($content)) {
             if (!isset($content['type']) || !isset($content['value'])) {
                 throw new \InvalidArgumentException("Invalid arguments. Keys 'type' and 'value' are required.");
@@ -67,6 +71,7 @@ class FileFactory
                 $isFile = true;
                 $file = $content['value'];
                 if (!$dir->isFile($file)) {
+                    // phpcs:ignore Magento2.Exceptions.DirectThrow
                     throw new \Exception((string)new \Magento\Framework\Phrase('File not found'));
                 }
                 $contentLength = $dir->stat($file)['size'];
@@ -76,7 +81,7 @@ class FileFactory
             ->setHeader('Pragma', 'public', true)
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
             ->setHeader('Content-type', $contentType, true)
-            ->setHeader('Content-Length', $contentLength === null ? strlen($content) : $contentLength, true)
+            ->setHeader('Content-Length', $contentLength === null ? strlen($fileContent) : $contentLength, true)
             ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"', true)
             ->setHeader('Last-Modified', date('r'), true);
 
@@ -85,12 +90,15 @@ class FileFactory
             if ($isFile) {
                 $stream = $dir->openFile($file, 'r');
                 while (!$stream->eof()) {
+                    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
                     echo $stream->read(1024);
                 }
             } else {
-                $dir->writeFile($fileName, $content);
+                $dir->writeFile($fileName, $fileContent);
+                $file = $fileName;
                 $stream = $dir->openFile($fileName, 'r');
                 while (!$stream->eof()) {
+                    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
                     echo $stream->read(1024);
                 }
             }
@@ -99,19 +107,22 @@ class FileFactory
             if (!empty($content['rm'])) {
                 $dir->delete($file);
             }
-            $this->callExit();
         }
         return $this->_response;
     }
 
     /**
-     * Call exit
+     * Returns file content for writing.
      *
-     * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     * @param string|array $content
+     * @return string|array
      */
-    protected function callExit()
+    private function getFileContent($content)
     {
-        exit(0);
+        if (isset($content['type']) && $content['type'] === 'string') {
+            return $content['value'];
+        }
+
+        return $content;
     }
 }

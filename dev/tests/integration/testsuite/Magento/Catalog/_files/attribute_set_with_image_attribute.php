@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,10 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
-$attributeSet = $objectManager->create('Magento\Eav\Model\Entity\Attribute\Set');
+$attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
 
-$entityType = $objectManager->create('Magento\Eav\Model\Entity\Type')->loadByCode('catalog_product');
-$defaultSetId = $objectManager->create('Magento\Catalog\Model\Product')->getDefaultAttributeSetid();
+$entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)->loadByCode('catalog_product');
+$defaultSetId = $objectManager->create(\Magento\Catalog\Model\Product::class)->getDefaultAttributeSetid();
 
 $data = [
     'attribute_set_name' => 'attribute_set_with_media_attribute',
@@ -38,6 +38,6 @@ $attributeData = [
 ];
 
 /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
-$attribute = $objectManager->create('Magento\Catalog\Model\Entity\Attribute');
+$attribute = $objectManager->create(\Magento\Catalog\Model\Entity\Attribute::class);
 $attribute->setData($attributeData);
 $attribute->save();

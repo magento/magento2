@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $item;
@@ -14,6 +14,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item */
     protected $itemBlock;
 
+    /**
+     * @param $amountOption
+     * @param bool $withoutOptions
+     */
     public function configure($amountOption, $withoutOptions = false)
     {
         $options = [];
@@ -24,7 +28,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ];
         }
 
-        $product = $this->getMock('Magento\Catalog\Model\Product', ['getTypeId', 'getName'], [], '', false);
+        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getName']);
         $product
             ->expects($this->once())
             ->method('getTypeId')
@@ -34,47 +38,33 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue('testProductName'));
 
-        $this->item = $this->getMock('Magento\Wishlist\Model\Item', ['getProduct'], [], '', false);
+        $this->item = $this->createPartialMock(\Magento\Wishlist\Model\Item::class, ['getProduct']);
         $this->item
             ->expects($this->atLeastOnce())
             ->method('getProduct')
             ->will($this->returnValue($product));
 
-        $productConfig = $this->getMock('Magento\Catalog\Helper\Product\Configuration', null, [], '', false);
-        $productConfigPool = $this->getMock('Magento\Catalog\Helper\Product\ConfigurationPool', ['get'], [], '', false);
-
-        $helper = $this->getMock('Magento\Bundle\Helper\Catalog\Product\Configuration', ['getOptions'], [], '', false);
-        $escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
+        $productConfigPool = $this->createPartialMock(
+            \Magento\Catalog\Helper\Product\ConfigurationPool::class,
+            ['get']
+        );
+        $helper = $this->createPartialMock(\Magento\Bundle\Helper\Catalog\Product\Configuration::class, ['getOptions']);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $productConfig = $objectManager->getObject(\Magento\Catalog\Helper\Product\Configuration::class);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
         if ($withoutOptions) {
             $helper
                 ->expects($this->once())
                 ->method('getOptions')
                 ->will($this->returnValue(null));
-            $escaper
-                ->expects($this->once())
-                ->method('escapeHtml')
-                ->with('testProductName')
-                ->will($this->returnValue('testProductName'));
         } else {
             $helper
                 ->expects($this->once())
                 ->method('getOptions')
                 ->will($this->returnValue($options));
-
-            $escaper
-                ->expects($this->at(0))
-                ->method('escapeHtml')
-                ->with('testProductName')
-                ->will($this->returnValue('testProductName'));
-            for ($i = 1; $i <= count($options); $i++) {
-                $escaper
-                    ->expects($this->at($i))
-                    ->method('escapeHtml')
-                    ->will($this->returnValue("testLabel{$i}"));
-            }
         }
 
-        $context = $this->getMock('Magento\Backend\Block\Context', ['getEscaper'], [], '', false);
+        $context = $this->createPartialMock(\Magento\Backend\Block\Context::class, ['getEscaper']);
         $context
             ->expects($this->once())
             ->method('getEscaper')
@@ -83,7 +73,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $productConfigPool
             ->expects($this->once())
             ->method('get')
-            ->with('Magento\Catalog\Helper\Product\Configuration')
+            ->with(\Magento\Catalog\Helper\Product\Configuration::class)
             ->will($this->returnValue($helper));
 
         $this->itemBlock = new \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item(
@@ -109,6 +99,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($expectedHtml, $realHtml);
     }
 
+    /**
+     * @return array
+     */
     public function optionHtmlProvider()
     {
         return [

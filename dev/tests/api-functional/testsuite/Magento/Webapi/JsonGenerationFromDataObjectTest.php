@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Webapi;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Test REST schema generation mechanisms.
@@ -34,10 +33,10 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     {
         $this->_markTestAsRestOnly("JSON generation tests are intended to be executed for REST adapter only.");
 
-        $this->storeCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
+        $this->storeCode = Bootstrap::getObjectManager()->get(StoreManagerInterface::class)
             ->getStore()->getCode();
 
-        $this->productMetadata =  Bootstrap::getObjectManager()->get('Magento\Framework\App\ProductMetadataInterface');
+        $this->productMetadata =  Bootstrap::getObjectManager()->get(ProductMetadataInterface::class);
 
         parent::setUp();
     }
@@ -79,7 +78,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Request does not match any route.
+     * @expectedExceptionMessage Specified request cannot be processed.
      */
     public function testInvalidRestUrlNoServices()
     {
@@ -197,7 +196,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                                 'required' => true
                             ],
                             [
-                                'name' => '$body',
+                                'name' => 'testModule5AllSoapAndRestV1NestedUpdatePutBody',
                                 'in' => 'body',
                                 'schema' => [
                                     'required' => [
@@ -240,7 +239,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                     'type' => 'object',
                     'description' => 'Interface for custom attribute value.',
                     'properties' => [
-                        'attributeCode' => [
+                        'attribute_code' => [
                             'type' => 'string',
                             'description' => 'Attribute code',
                         ],
@@ -250,7 +249,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                         ],
                     ],
                     'required' => [
-                        'attributeCode',
+                        'attribute_code',
                         'value',
                     ],
                 ],
@@ -258,7 +257,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                     'type' => 'object',
                     'description' => 'Some Data Object short description. Data Object long multi line description.',
                     'properties' => [
-                        'entityId' => [
+                        'entity_id' => [
                             'type' => 'integer',
                                 'description' => 'Item ID',
                             ],
@@ -274,16 +273,16 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                                 'type' => 'boolean',
                                 'description' => 'If current entity has a property defined',
                             ],
-                            'customAttributes' =>        [
-                            'type' => 'array',
-                            'description' => 'Custom attributes values.',
-                            'items' => [
-                                '$ref' => '#/definitions/framework-attribute-interface',
+                            'custom_attributes' => [
+                                'type' => 'array',
+                                'description' => 'Custom attributes values.',
+                                'items' => [
+                                    '$ref' => '#/definitions/framework-attribute-interface',
+                                ],
                             ],
-                        ],
                     ],
                     'required' => [
-                        'entityId',
+                        'entity_id',
                         'enabled',
                         'orders',
                     ],

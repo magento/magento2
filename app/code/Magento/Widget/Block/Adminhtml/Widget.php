@@ -1,22 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+namespace Magento\Widget\Block\Adminhtml;
 
 /**
  * WYSIWYG widget plugin main block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Widget\Block\Adminhtml;
-
 class Widget extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -27,21 +26,30 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
         $this->_mode = 'widget';
         $this->_headerText = __('Widget Insertion');
 
-        $this->removeButton('reset');
+        $saveButtonClass = 'action-primary add-widget';
         $this->removeButton('back');
-        $this->buttonList->update('save', 'label', __('Insert Widget'));
-        $this->buttonList->update('save', 'class', 'action-primary add-widget');
+        if ($this->getRequest()->getParam('mode') === 'new') {
+            $this->buttonList->update('save', 'label', __('Insert Widget'));
+            $saveButtonClass .= ' disabled';
+        }
+        $this->buttonList->update('save', 'class', $saveButtonClass);
         $this->buttonList->update('save', 'id', 'insert_button');
         $this->buttonList->update('save', 'onclick', 'wWidget.insertWidget()');
-        $this->buttonList->update('save', 'region', 'footer');
+        $this->buttonList->update('save', 'region', 'toolbar');
         $this->buttonList->update('save', 'data_attribute', []);
+        $this->buttonList->update('reset', 'label', __('Cancel'));
+        $this->buttonList->update('reset', 'onclick', 'wWidget.closeModal()');
 
-        $this->_formScripts[] = 'require(["mage/adminhtml/wysiwyg/widget"], function(){wWidget = new WysiwygWidget.Widget(' .
-            '"widget_options_form", "select_widget_type", "widget_options", "' .
-            $this->getUrl(
-                'adminhtml/*/loadOptions'
-            ) . '", "' . $this->getRequest()->getParam(
-                'widget_target_id'
-            ) . '");});';
+        $this->_formScripts[] = <<<EOJS
+require(['mage/adminhtml/wysiwyg/widget'], function() {
+    wWidget = new WysiwygWidget.Widget(
+        'widget_options_form',
+        'select_widget_type',
+        'widget_options',
+        '{$this->getUrl('adminhtml/*/loadOptions')}',
+        '{$this->escapeJs($this->getRequest()->getParam('widget_target_id'))}'
+    );
+});
+EOJS;
     }
 }

@@ -1,11 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Noroute;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**
@@ -34,9 +37,19 @@ class Index extends \Magento\Backend\App\Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setStatusHeader(404, '1.1', 'Forbidden');
+        $resultPage->setStatusHeader(404, '1.1', 'Not Found');
         $resultPage->setHeader('Status', '404 File not found');
         $resultPage->addHandle('adminhtml_noroute');
         return $resultPage;
+    }
+
+    /**
+     * Error page should be public accessible. Do not check keys to avoid redirect loop
+     *
+     * @return bool
+     */
+    protected function _validateSecretKey()
+    {
+        return true;
     }
 }

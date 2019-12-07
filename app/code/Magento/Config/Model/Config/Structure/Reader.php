@@ -3,9 +3,10 @@
  * Backend System Configuration reader.
  * Retrieves system configuration form layout from system.xml files. Merges configuration and caches it.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Model\Config\Structure;
 
 use Magento\Framework\DataObject;
@@ -14,6 +15,8 @@ use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
  * Class Reader
+ * @api
+ * @since 100.0.2
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -57,7 +60,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         CompilerInterface $compiler,
         $fileName = 'system.xml',
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'
     ) {
         $this->compiler = $compiler;
@@ -95,7 +98,10 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
                 }
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
+                    new \Magento\Framework\Phrase(
+                        'The XML in file "%1" is invalid:' . "\n%2\nVerify the XML and try again.",
+                        [$key, $e->getMessage()]
+                    )
                 );
             }
         }
@@ -122,14 +128,18 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * Processing nodes of the document before merging
      *
      * @param string $content
+     * @throws \Magento\Framework\Config\Dom\ValidationException
      * @return string
      */
     protected function processingDocument($content)
     {
         $object = new DataObject();
         $document = new \DOMDocument();
-
-        $document->loadXML($content);
+        try {
+            $document->loadXML($content);
+        } catch (\Exception $e) {
+            throw new \Magento\Framework\Config\Dom\ValidationException($e->getMessage());
+        }
         $this->compiler->compile($document->documentElement, $object, $object);
 
         return $document->saveXML();

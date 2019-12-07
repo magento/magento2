@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductCompare;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
@@ -58,7 +58,7 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
      * @param Widget $widget
      * @param CatalogProductSimple $productSimple1
      * @param CatalogProductSimple $productSimple2
-     * @param AdminCache $adminCache
+     * @param Cache $cache
      * @var string
      * @return void
      */
@@ -70,12 +70,10 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
         Widget $widget,
         CatalogProductSimple $productSimple1,
         CatalogProductSimple $productSimple2,
-        AdminCache $adminCache
+        Cache $cache
     ) {
         // Flush cache
-        $adminCache->open();
-        $adminCache->getActionsBlock()->flushMagentoCache();
-        $adminCache->getMessagesBlock()->waitSuccessMessage();
+        $cache->flush();
 
         $this->catalogProductCompare = $catalogProductCompare;
         $this->catalogProductView = $catalogProductView;
@@ -91,8 +89,27 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
         $this->addProducts($products);
         $this->removeCompareProducts();
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $this->catalogProductCompare->getWidgetView()->isWidgetVisible($widget, 'Recently Compared'),
+        $cmsIndex->open();
+        //Widgets data is cache via LocalStorage so it might take couple of refreshes before cache is invalidated.
+        $refreshCount = 3;
+        $refreshNo = 1;
+        $isVisible = false;
+        while (!$isVisible && $refreshNo <= $refreshCount) {
+            $browser->refresh();
+            try {
+                $isVisible = $browser->waitUntil(
+                    function () use ($widget) {
+                        return $this->catalogProductCompare->getWidgetView()
+                            ->isWidgetVisible($widget, 'Recently Compared') ? true : null;
+                    }
+                );
+            } catch (\Throwable $exception) {
+                $isVisible = false;
+            }
+            $refreshNo++;
+        }
+        \PHPUnit\Framework\Assert::assertTrue(
+            $isVisible,
             'Widget is absent on Product Compare page.'
         );
     }
@@ -120,6 +137,7 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
     protected function removeCompareProducts()
     {
         $this->cmsIndex->open();
+        $this->cmsIndex->getCompareLinkBlock()->waitForCompareProductsLinks();
         $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
         $this->catalogProductCompare->getCompareProductsBlock()->removeAllProducts();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,14 +20,14 @@ class Options extends SimpleElement
      *
      * @var string
      */
-    protected $addOption = '#add_new_option_button';
+    protected $addOption = 'button[data-action="add_new_row"]';
 
     /**
      * Option form selector.
      *
      * @var string
      */
-    protected $option = '.ui-sortable tr';
+    protected $option = '[data-index="attribute_options_select"] tbody tr';
 
     /**
      * Set value.
@@ -68,7 +68,7 @@ class Options extends SimpleElement
     protected function getFormInstance(SimpleElement $element = null)
     {
         return ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options\Option',
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options\Option::class,
             ['element' => $element === null ? $this->find($this->option . ':last-child') : $element]
         );
     }

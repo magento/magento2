@@ -2,7 +2,7 @@
 /**
  * Scan source code for incorrect or undeclared modules dependencies
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -10,7 +10,7 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Module\Dependency\Circular;
 
-class CircularDependencyTest extends \PHPUnit_Framework_TestCase
+class CircularDependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Modules dependencies map
@@ -44,9 +44,9 @@ class CircularDependencyTest extends \PHPUnit_Framework_TestCase
             $moduleName = str_replace('/', '_', $moduleName[1]);
             $config = simplexml_load_file($configFile);
             $result = $config->xpath("/config/module/depends/module") ?: [];
-            while (list(, $node) = each($result)) {
+            foreach ($result as $node) {
                 /** @var \SimpleXMLElement $node */
-                $this->moduleDependencies[$moduleName][] = (string)$node['name'];
+                $this->moduleDependencies[$moduleName][] = (string) $node['name'];
             }
         }
     }

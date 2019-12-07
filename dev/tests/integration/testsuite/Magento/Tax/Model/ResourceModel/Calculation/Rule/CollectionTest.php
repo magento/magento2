@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rule;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -28,7 +28,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetClassTypeFilter($classType, $elementId, $expected)
     {
-        $collection = $this->_objectManager->create('Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection');
+        $collection = $this->_objectManager->create(
+            \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class
+        );
         $collection->setClassTypeFilter($classType, $elementId);
         $this->assertRegExp($expected, (string)$collection->getSelect());
     }
@@ -56,7 +58,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetClassTypeFilterWithWrongType()
     {
-        $collection = $this->_objectManager->create('Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection');
+        $collection = $this->_objectManager->create(
+            \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class
+        );
         $collection->setClassTypeFilter('WrongType', 1);
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,11 +17,12 @@
                         <item name="price" xsi:type="string">2</item>
                         <item name="is_shareable" xsi:type="string">Use config</item>
                         <item name="number_of_downloads" xsi:type="string">2</item>
+                        <item name="sort_order" xsi:type="number">1</item>
                         <item name="sample" xsi:type="array">
-                            <item name="sample_type_url" xsi:type="string">Yes</item>
+                            <item name="sample_type" xsi:type="string">URL</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
                         </item>
-                        <item name="file_type_url" xsi:type="string">Yes</item>
+                        <item name="file_type" xsi:type="string">URL</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                     </item>
                 </item>
@@ -38,11 +39,12 @@
                         <item name="price" xsi:type="string">2</item>
                         <item name="is_shareable" xsi:type="string">Use config</item>
                         <item name="number_of_downloads" xsi:type="string">2</item>
+                        <item name="sort_order" xsi:type="number">1</item>
                         <item name="sample" xsi:type="array">
-                            <item name="sample_type_url" xsi:type="string">Yes</item>
+                            <item name="sample_type" xsi:type="string">URL</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
                         </item>
-                        <item name="file_type_url" xsi:type="string">Yes</item>
+                        <item name="file_type" xsi:type="string">URL</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                     </item>
                 </item>
@@ -59,24 +61,26 @@
                         <item name="price" xsi:type="string">2.43</item>
                         <item name="number_of_downloads" xsi:type="string">2</item>
                         <item name="sample" xsi:type="array">
-                            <item name="sample_type_url" xsi:type="string">Yes</item>
+                            <item name="sample_type" xsi:type="string">URL</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
                         </item>
-                        <item name="file_type_url" xsi:type="string">Yes</item>
+                        <item name="file_type" xsi:type="string">URL</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">No</item>
+                        <item name="sort_order" xsi:type="number">1</item>
                     </item>
                     <item name="1" xsi:type="array">
                         <item name="title" xsi:type="string">link-2-%isolation%</item>
                         <item name="price" xsi:type="string">3</item>
                         <item name="number_of_downloads" xsi:type="string">3</item>
                         <item name="sample" xsi:type="array">
-                            <item name="sample_type_url" xsi:type="string">Yes</item>
+                            <item name="sample_type" xsi:type="string">URL</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
                         </item>
-                        <item name="file_type_url" xsi:type="string">Yes</item>
+                        <item name="file_type" xsi:type="string">URL</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">Yes</item>
+                        <item name="sort_order" xsi:type="number">2</item>
                     </item>
                 </item>
             </field>
@@ -92,36 +96,39 @@
                         <item name="price" xsi:type="string">2.43</item>
                         <item name="number_of_downloads" xsi:type="string">2</item>
                         <item name="sample" xsi:type="array">
-                            <item name="sample_type_url" xsi:type="string">Yes</item>
+                            <item name="sample_type" xsi:type="string">URL</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
                         </item>
-                        <item name="file_type_url" xsi:type="string">Yes</item>
+                        <item name="file_type" xsi:type="string">URL</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">No</item>
+                        <item name="sort_order" xsi:type="number">1</item>
                     </item>
                     <item name="1" xsi:type="array">
                         <item name="title" xsi:type="string">link-2-%isolation%</item>
                         <item name="price" xsi:type="string">3</item>
                         <item name="number_of_downloads" xsi:type="string">3</item>
                         <item name="sample" xsi:type="array">
-                            <item name="sample_type_url" xsi:type="string">Yes</item>
+                            <item name="sample_type" xsi:type="string">URL</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
                         </item>
-                        <item name="file_type_url" xsi:type="string">Yes</item>
+                        <item name="file_type" xsi:type="string">URL</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">Yes</item>
+                        <item name="sort_order" xsi:type="number">3</item>
                     </item>
                     <item name="2" xsi:type="array">
                         <item name="title" xsi:type="string">link-3-%isolation%</item>
                         <item name="price" xsi:type="string">5.43</item>
                         <item name="number_of_downloads" xsi:type="string">5</item>
                         <item name="sample" xsi:type="array">
-                            <item name="sample_type_url" xsi:type="string">Yes</item>
+                            <item name="sample_type" xsi:type="string">URL</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
                         </item>
-                        <item name="file_type_url" xsi:type="string">Yes</item>
+                        <item name="file_type" xsi:type="string">URL</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">Yes</item>
+                        <item name="sort_order" xsi:type="number">2</item>
                     </item>
                 </item>
             </field>

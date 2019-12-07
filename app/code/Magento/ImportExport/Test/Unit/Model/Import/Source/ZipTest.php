@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
 
-class ZipTest extends \PHPUnit_Framework_TestCase
+class ZipTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
@@ -18,9 +18,9 @@ class ZipTest extends \PHPUnit_Framework_TestCase
      */
     protected $zip;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->directory = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\Write')
+        $this->directory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Write::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRelativePath'])
             ->getMock();
@@ -39,6 +39,9 @@ class ZipTest extends \PHPUnit_Framework_TestCase
         $this->_invokeConstructor($fileName);
     }
 
+    /**
+     * @return array
+     */
     public function constructorFileDestinationMatchDataProvider()
     {
         return [
@@ -66,7 +69,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->zip = $this->getMockBuilder(
-                '\Magento\ImportExport\Model\Import\Source\Zip'
+                \Magento\ImportExport\Model\Import\Source\Zip::class
             )
                 ->setConstructorArgs(
                     [
@@ -78,7 +81,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
                 ->getMock();
 
             $reflectedClass = new \ReflectionClass(
-                '\Magento\ImportExport\Model\Import\Source\Zip'
+                \Magento\ImportExport\Model\Import\Source\Zip::class
             );
             $constructor = $reflectedClass->getConstructor();
             $constructor->invoke(
@@ -89,7 +92,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
                 [],
                 ]
             );
-        } catch (\PHPUnit_Framework_Error $e) {
+        } catch (\PHPUnit\Framework\Error $e) {
             // Suppress any errors due to no control of Zip object dependency instantiation.
         }
     }

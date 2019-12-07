@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View;
@@ -13,5 +13,5 @@ class Form extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'billing/agreement/view/form.phtml';
+    protected $_template = 'Magento_Paypal::billing/agreement/view/form.phtml';
 }

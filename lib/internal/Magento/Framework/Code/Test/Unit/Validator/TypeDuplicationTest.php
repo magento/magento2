@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
 require_once '_files/ClassesForTypeDuplication.php';
-class TypeDuplicationTest extends \PHPUnit_Framework_TestCase
+class TypeDuplicationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Code\Validator\TypeDuplication
@@ -34,6 +34,9 @@ class TypeDuplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_validator->validate($className));
     }
 
+    /**
+     * @return array
+     */
     public function validClassesDataProvider()
     {
         return [
@@ -49,7 +52,8 @@ class TypeDuplicationTest extends \PHPUnit_Framework_TestCase
             $this->_fixturePath .
             PHP_EOL .
             'Multiple type injection [\TypeDuplication\ArgumentBaseClass]';
-        $this->setExpectedException('Magento\Framework\Exception\ValidatorException', $message);
+        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectExceptionMessage($message);
         $this->_validator->validate('\TypeDuplication\InvalidClassWithDuplicatedTypes');
     }
 }

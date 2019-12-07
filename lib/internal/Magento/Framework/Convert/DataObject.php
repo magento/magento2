@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * Default converter for \Magento\Framework\DataObjects to arrays
  *
- * @author     Magento Extensibility Team <DL-X-Extensibility-Team@corp.ebay.com>
+ * @api
  */
 namespace Magento\Framework\Convert;
 

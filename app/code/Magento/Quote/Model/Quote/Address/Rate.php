@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address;
@@ -8,8 +8,7 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Rate _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Rate getResource()
+ * @api
  * @method int getAddressId()
  * @method \Magento\Quote\Model\Quote\Address\Rate setAddressId(int $value)
  * @method string getCreatedAt()
@@ -34,6 +33,7 @@ use Magento\Framework\Model\AbstractModel;
  * @method \Magento\Quote\Model\Quote\Address\Rate setMethodTitle(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Rate extends AbstractModel
 {
@@ -47,7 +47,7 @@ class Rate extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Address\Rate');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Address\Rate::class);
     }
 
     /**

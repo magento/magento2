@@ -1,11 +1,78 @@
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
 
-.fotorama-video-container {
-    &:after {
-        background: url(../Magento_ProductVideo/img/gallery-sprite.png) bottom right;
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .fotorama-video-container {
+        &:after {
+            background: url(../Magento_ProductVideo/img/gallery-sprite.png) bottom right;
+            bottom: 0;
+            content: '';
+            height: 100px;
+            left: 0;
+            margin: auto;
+            position: absolute;
+            right: 0;
+            top: 12px;
+            width: 100px;
+        }
+
+        .magnify-lens {
+            display: none !important;
+        }
+
+        &.video-unplayed {
+            &:hover {
+                img {
+                    opacity: .6;
+                }
+
+                &:after {
+                    transform: scale(1.25);
+                }
+            }
+        }
+    }
+
+    .video-thumb-icon:after {
+        background: url(../Magento_ProductVideo/img/gallery-sprite.png) bottom left;
+        bottom: 0;
+        content: '';
+        height: 40px;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 10px;
+        width: 49px;
+    }
+
+    .product-video {
+        bottom: 0;
+        height: 75%;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100%;
+
+        iframe {
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+    }
+
+    .fotorama__stage__shaft:focus .fotorama__stage__frame.fotorama__active:after {
         bottom: 0;
         content: '';
         height: 100px;
@@ -16,80 +83,25 @@
         top: 12px;
         width: 100px;
     }
-    .magnify-lens {
-        display: none !important;
-    }
-    &.video-unplayed {
-        &:hover {
-            img {
-                opacity: 0.6;
-            }
-            &:after {
-                transform: scale(1.25);
-            }
+
+    .fotorama__product-video--loading {
+        &:after {
+            visibility: hidden;
         }
     }
 }
 
-.video-thumb-icon:after {
-    background: url(../Magento_ProductVideo/img/gallery-sprite.png) bottom left;
-    bottom: 0;
-    content: '';
-    height: 40px;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 10px;
-    width: 49px;
-}
+//
+//  Mobile
+//  _____________________________________________
 
-.product-video {
-    height: 75%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    iframe {
-        height: 100%;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        z-index: 9999;
-    }
-}
-
+//  @TODO UI: check possibility to use .media-width() mixin
 @media only screen
-and (min-device-width : 320px)
-and (max-device-width : 780px)
-and (orientation : landscape) {
+and (min-device-width: 320px)
+and (max-device-width: 780px)
+and (orientation: landscape) {
     .product-video {
         height: 100%;
         width: 81%;
     }
-}
-
-.fotorama__arr.hidden-video {
-    z-index: -1 !important;
-}
-
-.fotorama__video-close {
-    bottom: 89%;
-    top: auto;
-}
-
-.fotorama__stage__shaft:focus .fotorama__stage__frame.fotorama__active:after {
-    bottom: 0;
-    content: '';
-    height: 100px;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 12px;
-    width: 100px;
 }

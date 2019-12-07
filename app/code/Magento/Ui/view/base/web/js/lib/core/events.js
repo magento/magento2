@@ -1,7 +1,9 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/* global WeakMap, Map*/
 define([
     'ko',
     'underscore',
@@ -34,7 +36,7 @@ define([
      *
      * @param {Object} obj - Key in the events weakmap.
      * @param {String} ns - Callback namespace.
-     * @param {Fucntion} callback - Event callback.
+     * @param {Function} callback - Event callback.
      * @param {String} name - Name of the event.
      */
     function addHandler(obj, ns, callback, name) {
@@ -96,6 +98,7 @@ define([
          * Calls callback when name event is triggered.
          * @param  {String}   events
          * @param  {Function} callback
+         * @param  {Function} ns
          * @return {Object} reference to this
          */
         on: function (events, callback, ns) {

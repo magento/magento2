@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -17,22 +17,26 @@
     position: relative;
     width: @control-checkbox-radio__size * 2 - .1rem;
     z-index: @action-multicheck__z-index;
+
     &:hover {
         .admin__control-checkbox + label:before,
         .action-multicheck-toggle {
             border-color: @field-control__hover__border-color;
         }
     }
+
     &._active {
         .admin__control-checkbox + label:before,
         .action-multicheck-toggle {
             border-color: @action__active__border-color;
         }
+
         .action-menu {
             .appearing__on();
             display: block;
         }
     }
+
     &._disabled {
         .admin__control-checkbox {
             + label {
@@ -41,17 +45,20 @@
                 }
             }
         }
+
         .admin__control-checkbox + label:before,
         .action-multicheck-toggle {
             border-color: @field-control__border-color;
             opacity: 1;
         }
     }
+
     .admin__control-checkbox,
     .admin__control-checkbox + label,
     .action-multicheck-toggle {
         float: left;
     }
+
     .action-multicheck-toggle {
         .action-toggle-triangle(
         @_triangle__height: @button-marker-triangle__height;
@@ -64,22 +71,27 @@
         position: relative;
         transition: @smooth__border-color;
         width: @control-checkbox-radio__size;
+
         &:focus {
             border-color: @action__active__border-color;
         }
+
         &:after {
             right: .3rem;
         }
+
         > span {
-            .lib-visually-hidden();
+            &:extend(.abs-visually-hidden all);
         }
     }
+
     .action-menu {
         left: -(@data-grid-cell__padding-horizontal + @data-grid-cell__border-width);
         margin-top: 1px;
         right: auto;
         text-align: left;
     }
+
     .action-menu-item {
         white-space: nowrap;
     }

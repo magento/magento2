@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Framework\Event\Observer;
 
+/**
+ * Event cron observer object
+ */
 class Cron extends \Magento\Framework\Event\Observer
 {
     /**
@@ -25,7 +28,7 @@ class Cron extends \Magento\Framework\Event\Observer
     public function isValidFor(\Magento\Framework\Event $event)
     {
         $e = preg_split('#\s+#', $this->getCronExpr(), null, PREG_SPLIT_NO_EMPTY);
-        if (sizeof($e) !== 5) {
+        if (count($e) !== 5) {
             return false;
         }
 
@@ -50,6 +53,8 @@ class Cron extends \Magento\Framework\Event\Observer
     }
 
     /**
+     * Return current time
+     *
      * @return int
      */
     public function getNow()
@@ -61,6 +66,8 @@ class Cron extends \Magento\Framework\Event\Observer
     }
 
     /**
+     * Match cron expression with current time (minutes, hours, day of the month, month, day of the week)
+     *
      * @param string $expr
      * @param int $num
      * @return bool
@@ -87,7 +94,7 @@ class Cron extends \Magento\Framework\Event\Observer
         // handle modulus
         if (strpos($expr, '/') !== false) {
             $e = explode('/', $expr);
-            if (sizeof($e) !== 2) {
+            if (count($e) !== 2) {
                 return false;
             }
             $expr = $e[0];
@@ -102,7 +109,7 @@ class Cron extends \Magento\Framework\Event\Observer
         // handle range
         if (strpos($expr, '-') !== false) {
             $e = explode('-', $expr);
-            if (sizeof($e) !== 2) {
+            if (count($e) !== 2) {
                 return false;
             }
 
@@ -118,6 +125,8 @@ class Cron extends \Magento\Framework\Event\Observer
     }
 
     /**
+     * Return month number
+     *
      * @param int|string $value
      * @return bool|string
      */

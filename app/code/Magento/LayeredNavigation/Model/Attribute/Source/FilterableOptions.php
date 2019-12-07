@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\LayeredNavigation\Model\Attribute\Source;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class FilterableOptions implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
@@ -14,16 +18,16 @@ class FilterableOptions implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             [
+                'value' => 0,
+                'label' => __('No'),
+            ],
+            [
                 'value' => 1,
                 'label' => __('Filterable (with results)'),
             ],
             [
                 'value' => 2,
                 'label' => __('Filterable (no results)'),
-            ],
-            [
-                'value' => 0,
-                'label' => __('No'),
             ],
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Tax\Pricing\Adjustment;
 
 use Magento\Framework\Pricing\SaleableInterface;
 
-class AdjustmentTest extends \PHPUnit_Framework_TestCase
+class AdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Adjustment
@@ -32,10 +32,10 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     protected $sortOrder = 5;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->taxHelper = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
-        $this->catalogHelper = $this->getMock('Magento\Catalog\Helper\Data', [], [], '', false);
+        $this->taxHelper = $this->createMock(\Magento\Tax\Helper\Data::class);
+        $this->catalogHelper = $this->createMock(\Magento\Catalog\Helper\Data::class);
         $this->adjustment = new Adjustment($this->taxHelper, $this->catalogHelper, $this->sortOrder);
     }
 
@@ -56,6 +56,9 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->adjustment->isIncludedInBasePrice());
     }
 
+    /**
+     * @return array
+     */
     public function isIncludedInBasePriceDataProvider()
     {
         return [[true], [false]];
@@ -100,7 +103,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractAdjustment($isPriceIncludesTax, $amount, $price, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
+        $object = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
 
         $this->taxHelper->expects($this->any())
             ->method('priceIncludesTax')
@@ -113,6 +116,9 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->adjustment->extractAdjustment($amount, $object));
     }
 
+    /**
+     * @return array
+     */
     public function extractAdjustmentDataProvider()
     {
         return [
@@ -132,7 +138,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyAdjustment($amount, $price, $expectedResult)
     {
-        $object = $this->getMockBuilder('Magento\Framework\Pricing\SaleableInterface')->getMock();
+        $object = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)->getMock();
 
         $this->catalogHelper->expects($this->any())
             ->method('getTaxPrice')
@@ -164,6 +170,9 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->adjustment->isExcludedWith($adjustmentCode));
     }
 
+    /**
+     * @return array
+     */
     public function isExcludedWithDataProvider()
     {
         return [

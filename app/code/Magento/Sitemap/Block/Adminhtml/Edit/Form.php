@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Block\Adminhtml\Edit;
@@ -48,6 +48,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Configure form for sitemap.
+     *
      * @return $this
      */
     protected function _prepareForm()
@@ -73,7 +75,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'sitemap_filename',
                 'required' => true,
                 'note' => __('example: sitemap.xml'),
-                'value' => $model->getSitemapFilename()
+                'value' => $model->getSitemapFilename(),
+                'class' => 'validate-length maximum-length-32'
             ]
         );
 
@@ -103,7 +106,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
         } else {

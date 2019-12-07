@@ -1,30 +1,36 @@
 {
     "name": "magento/module-sales-rule",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
-        "magento/module-config": "100.0.*",
-        "magento/module-store": "100.0.*",
-        "magento/module-rule": "100.0.*",
-        "magento/module-catalog": "100.0.*",
-        "magento/module-sales": "100.0.*",
-        "magento/module-eav": "100.0.*",
-        "magento/module-backend": "100.0.*",
-        "magento/module-customer": "100.0.*",
-        "magento/module-directory": "100.0.*",
-        "magento/module-shipping": "100.0.*",
-        "magento/module-payment": "100.0.*",
-        "magento/module-reports": "100.0.*",
-        "magento/module-catalog-rule": "100.0.*",
-        "magento/module-widget": "100.0.*",
-        "magento/module-quote": "100.0.*",
-        "magento/framework": "100.0.*"
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-rule": "*",
+        "magento/module-config": "*",
+        "magento/module-customer": "*",
+        "magento/module-directory": "*",
+        "magento/module-eav": "*",
+        "magento/module-payment": "*",
+        "magento/module-quote": "*",
+        "magento/module-reports": "*",
+        "magento/module-rule": "*",
+        "magento/module-sales": "*",
+        "magento/module-shipping": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*",
+        "magento/module-widget": "*",
+        "magento/module-captcha": "*",
+        "magento/module-checkout": "*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
-        "magento/module-sales-rule-sample-data": "Sample Data version:100.0.*"
+        "magento/module-sales-rule-sample-data": "*"
     },
     "type": "magento2-module",
-    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

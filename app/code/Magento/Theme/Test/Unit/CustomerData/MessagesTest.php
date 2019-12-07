@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\CustomerData;
@@ -8,7 +8,7 @@ namespace Magento\Theme\Test\Unit\CustomerData;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\CustomerData\Messages;
 
-class MessagesTest extends \PHPUnit_Framework_TestCase
+class MessagesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -25,11 +25,11 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')->getMock();
-        $this->messageInterpretationStrategy = $this->getMock(
-            'Magento\Framework\View\Element\Message\InterpretationStrategyInterface'
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)->getMock();
+        $this->messageInterpretationStrategy = $this->createMock(
+            \Magento\Framework\View\Element\Message\InterpretationStrategyInterface::class
         );
         $this->object = new Messages($this->messageManager, $this->messageInterpretationStrategy);
     }
@@ -38,9 +38,9 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
     {
         $msgType = 'error';
         $msgText = 'All is lost';
-        $msg = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')->getMock();
+        $msg = $this->getMockBuilder(\Magento\Framework\Message\MessageInterface::class)->getMock();
         $messages = [$msg];
-        $msgCollection = $this->getMockBuilder('Magento\Framework\Message\Collection')
+        $msgCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
             ->getMock();
 
         $msg->expects($this->once())

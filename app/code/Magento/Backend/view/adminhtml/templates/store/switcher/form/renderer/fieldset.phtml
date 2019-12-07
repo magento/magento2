@@ -1,45 +1,42 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_element = $block->getElement() ?>
-<?php if ($_element->getFieldsetContainerId()): ?>
-    <div id="<?php /* @escapeNotVerified */ echo $_element->getFieldsetContainerId(); ?>">789
+<?php if ($_element->getFieldsetContainerId()) : ?>
+    <div id="<?= $block->escapeHtmlAttr($_element->getFieldsetContainerId()) ?>">789
 <?php endif; ?>
 
-<?php if (!$_element->getNoContainer()): ?>
-    <fieldset class="admin__fieldset fieldset <?php /* @escapeNotVerified */ echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
+<?php if (!$_element->getNoContainer()) : ?>
+    <fieldset class="admin__fieldset fieldset <?= $block->escapeHtmlAttr($_element->getClass()) ?>" id="<?= $_element->getHtmlId() ?>">
 <?php endif; ?>
 
-    <?php if ($_element->getLegend()): ?>
+    <?php if ($_element->getLegend()) : ?>
         <legend class="admin__legend legend">
-            <span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span>
-            <?php echo $block->getHintHtml() ?>
+            <span><?= $block->escapeHtml($_element->getLegend()) ?></span>
+            <?= $block->getHintHtml() ?>
         </legend><br/>
-        <?php /* @escapeNotVerified */ echo $_element->getHeaderBar() ?>
-    <?php else: ?>
-        <?php echo $block->getHintHtml() ?>
+        <?= /* @noEscape */ $_element->getHeaderBar() ?>
+    <?php else : ?>
+        <?= $block->getHintHtml() ?>
     <?php endif; ?>
-        <div class="tree-store-scope">
-            <?php if ($_element->getComment()): ?>
-            <p class="comment"><?php echo $block->escapeHtml($_element->getComment()) ?></p>
+        <div class="admin__fieldset tree-store-scope">
+            <?php if ($_element->getComment()) : ?>
+            <p class="comment"><?= $block->escapeHtml($_element->getComment()) ?></p>
             <?php endif; ?>
-            <?php if ($_element->hasHtmlContent()): ?>
-               <?php echo $_element->getHtmlContent(); ?>
-            <?php else: ?>
-                <?php echo $_element->getChildrenHtml(); ?>
+            <?php if ($_element->hasHtmlContent()) : ?>
+                <?= $_element->getHtmlContent() ?>
+            <?php else : ?>
+                <?= $_element->getChildrenHtml() ?>
             <?php endif; ?>
         </div>
-<?php echo $_element->getSubFieldsetHtml() ?>
+<?= $_element->getSubFieldsetHtml() ?>
 
-<?php if (!$_element->getNoContainer()): ?>
+<?php if (!$_element->getNoContainer()) : ?>
     </fieldset>
 <?php endif; ?>
-<?php if ($_element->getFieldsetContainerId()): ?>
+<?php if ($_element->getFieldsetContainerId()) : ?>
     </div>
 <?php endif; ?>

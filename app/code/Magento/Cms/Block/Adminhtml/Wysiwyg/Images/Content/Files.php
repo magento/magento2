@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
@@ -8,7 +8,8 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 /**
  * Directory contents block for Wysiwyg Images
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Files extends \Magento\Backend\Block\Template
 {
@@ -74,7 +75,7 @@ class Files extends \Magento\Backend\Block\Template
     }
 
     /**
-     * File idetifier getter
+     * File identifier getter
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string

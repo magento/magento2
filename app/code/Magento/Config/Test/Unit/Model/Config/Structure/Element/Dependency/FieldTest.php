@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Dependency;
 
-class FieldTest extends \PHPUnit_Framework_TestCase
+class FieldTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * SUT values
@@ -88,6 +88,9 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isNegative, $this->_getFieldObject($data, $isNegative)->isNegative());
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [
@@ -110,6 +113,9 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_getFieldObject($data, $isNegative)->isValueSatisfy($value));
     }
 
+    /**
+     * @return array
+     */
     public function isValueSatisfyDataProvider()
     {
         return [
@@ -135,6 +141,9 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_getFieldObject($data, $isNegative)->getValues());
     }
 
+    /**
+     * @return array
+     */
     public function getValuesDataProvider()
     {
         $complexDataValues = [self::COMPLEX_VALUE1, self::COMPLEX_VALUE2, self::COMPLEX_VALUE3];

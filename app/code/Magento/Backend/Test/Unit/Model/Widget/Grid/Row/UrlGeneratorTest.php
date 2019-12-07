@@ -1,27 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid\Row;
 
-class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
+class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetUrl()
     {
         $itemId = 3;
         $urlPath = 'mng/item/edit';
 
-        $itemMock = $this->getMock('Magento\Framework\DataObject', ['getItemId'], [], '', false);
+        $itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getItemId']);
         $itemMock->expects($this->once())->method('getItemId')->will($this->returnValue($itemId));
 
-        $urlModelMock = $this->getMock(
-            'Magento\Backend\Model\Url',
-            [],
-            [],
-            '',
-            false
-        );
+        $urlModelMock = $this->createMock(\Magento\Backend\Model\Url::class);
         $urlModelMock->expects(
             $this->once()
         )->method(

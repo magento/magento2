@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification implements HttpGetActionInterface
 {
     /**
      * @return void

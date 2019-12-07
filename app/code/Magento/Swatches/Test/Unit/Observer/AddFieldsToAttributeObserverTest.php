@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Observer;
@@ -8,7 +8,7 @@ namespace Magento\Swatches\Test\Unit\Observer;
 /**
  * Observer test
  */
-class AddFieldsToAttributeObserverTest extends \PHPUnit_Framework_TestCase
+class AddFieldsToAttributeObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject */
     protected $moduleManagerMock;
@@ -25,35 +25,25 @@ class AddFieldsToAttributeObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Swatches\Observer\AddFieldsToAttributeObserver|\PHPUnit_Framework_MockObject_MockObject */
     protected $observerMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->moduleManagerMock = $this->getMock(
-            '\Magento\Framework\Module\Manager',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
 
-        $this->yesNoMock = $this->getMock('\Magento\Config\Model\Config\Source\Yesno', [], [], '', false);
-        $this->eventObserverMock = $this->getMock(
-            '\Magento\Framework\Event\Observer',
-            ['getForm', 'getEvent', 'getAttribute'],
-            [],
-            '',
-            false
+        $this->yesNoMock = $this->createMock(\Magento\Config\Model\Config\Source\Yesno::class);
+        $this->eventObserverMock = $this->createPartialMock(
+            \Magento\Framework\Event\Observer::class,
+            ['getForm', 'getEvent', 'getAttribute']
         );
-        $this->formMock = $this->getMock('\Magento\Framework\Data\Form', ['getElement'], [], '', false);
+        $this->formMock = $this->createPartialMock(\Magento\Framework\Data\Form::class, ['getElement']);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->observerMock = $objectManager->getObject(
-            'Magento\Swatches\Observer\AddFieldsToAttributeObserver',
+            \Magento\Swatches\Observer\AddFieldsToAttributeObserver::class,
             [
                 'moduleManager' => $this->moduleManagerMock,
                 'yesNo' => $this->yesNoMock,
             ]
         );
-
     }
 
     /**
@@ -71,7 +61,7 @@ class AddFieldsToAttributeObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getForm')
             ->willReturn($this->formMock);
 
-        $element = $this->getMock('Magento\Framework\Data\Form\Element\AbstractElement', [], [], '', false);
+        $element = $this->createMock(\Magento\Framework\Data\Form\Element\AbstractElement::class);
         $this->formMock
             ->expects($this->exactly($expected['methods_count']))
             ->method('getElement')
@@ -83,7 +73,9 @@ class AddFieldsToAttributeObserverTest extends \PHPUnit_Framework_TestCase
         $this->observerMock->execute($this->eventObserverMock);
     }
 
-
+    /**
+     * @return array
+     */
     public function dataAddFields()
     {
         return [

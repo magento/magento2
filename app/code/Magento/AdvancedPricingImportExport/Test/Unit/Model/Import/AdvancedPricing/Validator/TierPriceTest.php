@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
-use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class TierPriceTest extends \PHPUnit_Framework_TestCase
+class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -33,47 +33,32 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $tierPrice;
 
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->groupRepository = $this->getMockBuilder('\Magento\Customer\Api\GroupRepositoryInterface')
+        $this->groupRepository = $this->getMockBuilder(\Magento\Customer\Api\GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList'])
             ->getMockForAbstractClass();
 
-        $this->searchCriteriaBuilder = $this->getMock(
-            '\Magento\Framework\Api\SearchCriteriaBuilder',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->storeResolver = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product\StoreResolver',
-            [],
-            [],
-            '',
-            false
+        $this->searchCriteriaBuilder = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->storeResolver = $this->createMock(
+            \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class
         );
 
-        $this->tierPrice = $this->getMock(
-            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice',
-            ['isValidValueAndLength', 'hasEmptyColumns', '_addMessages'],
-            [
-                $this->groupRepository,
-                $this->searchCriteriaBuilder,
-                $this->storeResolver,
-            ],
-            ''
-        );
+        $this->tierPrice = $this->getMockBuilder(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice::class
+        )
+            ->setMethods(['isValidValueAndLength', 'hasEmptyColumns', '_addMessages'])
+            ->setConstructorArgs([$this->groupRepository, $this->searchCriteriaBuilder, $this->storeResolver])
+            ->getMock();
     }
 
     public function testInitInternalCalls()
     {
-        $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $this->searchCriteriaBuilder->expects($this->any())->method('create')->willReturn($searchCriteria);
         $groupSearchResult = $this->getMockForAbstractClass(
-            '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
             [],
             '',
             false
@@ -84,7 +69,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->with($searchCriteria)
             ->willReturn($groupSearchResult);
 
-        $groupTest = $this->getMockBuilder('\Magento\Customer\Api\Data\GroupInterface')
+        $groupTest = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
@@ -98,10 +83,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
 
     public function testInitAddToCustomerGroups()
     {
-        $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $this->searchCriteriaBuilder->expects($this->any())->method('create')->willReturn($searchCriteria);
         $groupSearchResult = $this->getMockForAbstractClass(
-            '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
             [],
             '',
             false
@@ -112,7 +97,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->with($searchCriteria)
             ->willReturn($groupSearchResult);
 
-        $groupTest = $this->getMockBuilder('\Magento\Customer\Api\Data\GroupInterface')
+        $groupTest = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
@@ -151,31 +136,28 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidAddMessagesCall($value, $hasEmptyColumns, $customerGroups, $expectedMessages)
     {
-        $priceContextMock = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product',
-            [],
-            [
-                '\Magento\Framework\Json\Helper\Data',
-                '\Magento\ImportExport\Helper\Data',
-                '\Magento\ImportExport\Model\ResourceModel\Import\Data',
-                '\Magento\Eav\Model\Config',
-                '\Magento\Framework\App\ResourceConnection',
-                '\Magento\ImportExport\Model\ResourceModel\Helper',
-                '\Magento\Framework\Stdlib\StringUtils',
-                'ProcessingErrorAggregatorInterface',
-            ],
-            '',
-            false
-        );
+        $priceContextMock = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product::class)
+            ->setConstructorArgs(
+                [
+                    \Magento\Framework\Json\Helper\Data::class,
+                    \Magento\ImportExport\Helper\Data::class,
+                    \Magento\ImportExport\Model\ResourceModel\Import\Data::class,
+                    \Magento\Eav\Model\Config::class,
+                    \Magento\Framework\App\ResourceConnection::class,
+                    \Magento\ImportExport\Model\ResourceModel\Helper::class,
+                    \Magento\Framework\Stdlib\StringUtils::class,
+                    'ProcessingErrorAggregatorInterface'
+                ]
+            );
 
         $this->tierPrice->expects($this->once())->method('isValidValueAndLength')->willReturn(true);
         $this->tierPrice->expects($this->any())->method('hasEmptyColumns')->willReturn($hasEmptyColumns);
         $this->setPropertyValue($this->tierPrice, 'customerGroups', $customerGroups);
 
-        $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $this->searchCriteriaBuilder->expects($this->any())->method('create')->willReturn($searchCriteria);
         $groupSearchResult = $this->getMockForAbstractClass(
-            '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
             [],
             '',
             false
@@ -186,7 +168,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->with($searchCriteria)
             ->willReturn($groupSearchResult);
 
-        $groupTest = $this->getMockBuilder('\Magento\Customer\Api\Data\GroupInterface')
+        $groupTest = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
@@ -199,6 +181,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         $this->tierPrice->isValid($value);
     }
 
+    /**
+     * @return array
+     */
     public function isValidResultFalseDataProvider()
     {
         return [
@@ -304,6 +289,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function isValidAddMessagesCallDataProvider()
     {
         return [
@@ -358,6 +346,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      * @param object $object
      * @param string $property
      * @return mixed
+     * @throws \ReflectionException
      */
     protected function getPropertyValue($object, $property)
     {
@@ -375,6 +364,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      * @param string $property
      * @param mixed $value
      * @return object
+     * @throws \ReflectionException
      */
     protected function setPropertyValue(&$object, $property, $value)
     {

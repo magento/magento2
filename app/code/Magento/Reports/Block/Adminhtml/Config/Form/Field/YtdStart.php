@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Config\Form\Field;
@@ -23,9 +23,8 @@ class YtdStart extends \Magento\Config\Block\System\Config\Form\Field
     {
         $_months = [];
         for ($i = 1; $i <= 12; $i++) {
-            $_months[$i] = $this->_localeDate->date(mktime(null, null, null, $i))->format('m');
+            $_months[$i] = $this->_localeDate->date(mktime(null, null, null, $i, 1))->format('m');
         }
-
         $_days = [];
         for ($i = 1; $i <= 31; $i++) {
             $_days[$i] = $i < 10 ? '0' . $i : $i;

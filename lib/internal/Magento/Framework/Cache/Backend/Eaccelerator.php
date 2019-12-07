@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Cache\Backend;
 
@@ -13,9 +11,11 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
     /**
      * Log message
      */
-    const TAGS_UNSUPPORTED_BY_CLEAN_OF_EACCELERATOR_BACKEND = 'Magento\Framework\Cache\Backend\Eaccelerator::clean() : tags are unsupported by the Eaccelerator backend';
+    const TAGS_UNSUPPORTED_BY_CLEAN_OF_EACCELERATOR_BACKEND =
+        'Magento\Framework\Cache\Backend\Eaccelerator::clean() : tags are unsupported by the Eaccelerator backend';
 
-    const TAGS_UNSUPPORTED_BY_SAVE_OF_EACCELERATOR_BACKEND = 'Magento\Framework\Cache\Backend\Eaccelerator::save() : tags are unsupported by the Eaccelerator backend';
+    const TAGS_UNSUPPORTED_BY_SAVE_OF_EACCELERATOR_BACKEND =
+        'Magento\Framework\Cache\Backend\Eaccelerator::save() : tags are unsupported by the Eaccelerator backend';
 
     /**
      * Constructor
@@ -74,7 +74,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string $data datas to cache
      * @param string $id cache id
      * @param string[] $tags array of strings, the cache record will be tagged by each string entry
-     * @param int|bool $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
+     * @param int|bool $specificLifetime Integer to set a specific lifetime or null for infinite lifetime
      * @return bool true if no problem
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
@@ -122,7 +122,8 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
                 break;
             case \Zend_Cache::CLEANING_MODE_OLD:
                 $this->_log(
-                    "Magento\Framework\Cache\Backend\Eaccelerator::clean() : CLEANING_MODE_OLD is unsupported by the Eaccelerator backend"
+                    "Magento\Framework\Cache\Backend\Eaccelerator::clean() : ".
+                    "CLEANING_MODE_OLD is unsupported by the Eaccelerator backend"
                 );
                 break;
             case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:

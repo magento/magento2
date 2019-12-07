@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'ko',
@@ -402,7 +406,7 @@ define([
          *
          * @param {Number} x - X coordinate of a grabbed point.
          * @param {Number} y - Y coordinate of a grabbed point.
-         * @param {HTMLElement} elem - Grabbed elemenet.
+         * @param {HTMLElement} elem - Grabbed element.
          */
         grab: function (x, y, elem) {
             this.initDrag = true;

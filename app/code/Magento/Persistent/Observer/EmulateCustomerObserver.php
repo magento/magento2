@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Observer;
@@ -113,7 +113,8 @@ class EmulateCustomerObserver implements ObserverInterface
             }
             $this->_customerSession
                 ->setCustomerId($customer->getId())
-                ->setCustomerGroupId($customer->getGroupId());
+                ->setCustomerGroupId($customer->getGroupId())
+                ->setIsCustomerEmulated(true);
         }
         return $this;
     }

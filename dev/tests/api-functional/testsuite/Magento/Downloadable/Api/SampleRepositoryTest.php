@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Model\Product;
@@ -10,6 +11,9 @@ use Magento\Downloadable\Model\Sample;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * API tests for Magento\Downloadable\Model\SampleRepository.
+ */
 class SampleRepositoryTest extends WebapiAbstract
 {
     /**
@@ -80,10 +84,12 @@ class SampleRepositoryTest extends WebapiAbstract
     protected function getTargetProduct($isScopeGlobal = false)
     {
         if ($isScopeGlobal) {
-            $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')
+            $product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\ProductFactory::class)
                 ->create()->setStoreId(0)->load(1);
         } else {
-            $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
+            $product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\ProductFactory::class)
+                ->create()
+                ->load(1);
         }
 
         return $product;
@@ -98,13 +104,14 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     protected function getTargetSample(Product $product, $sampleId = null)
     {
-        /** @var $samples \Magento\Downloadable\Model\ResourceModel\Sample\Collection */
-        $samples = $product->getTypeInstance()->getSamples($product);
-        if ($sampleId !== null) {
+        $samples = $product->getExtensionAttributes()->getDownloadableProductSamples();
+        if ($sampleId) {
             /* @var $sample \Magento\Downloadable\Model\Sample */
-            foreach ($samples as $sample) {
-                if ($sample->getId() == $sampleId) {
-                    return $sample;
+            if ($samples) {
+                foreach ($samples as $sample) {
+                    if ($sample->getId() == $sampleId) {
+                        return $sample;
+                    }
                 }
             }
 
@@ -112,7 +119,7 @@ class SampleRepositoryTest extends WebapiAbstract
         }
 
         // return first sample
-        return $samples->getFirstItem();
+        return $samples[0];
     }
 
     /**
@@ -127,6 +134,7 @@ class SampleRepositoryTest extends WebapiAbstract
                 'title' => 'Title',
                 'sort_order' => 1,
                 'sample_file_content' => [
+                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'image.jpg',
                 ],
@@ -202,7 +210,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Invalid sample type.
+     * @expectedExceptionMessage The sample type is invalid. Verify the sample type and try again.
      */
     public function testCreateThrowsExceptionIfSampleTypeIsInvalid()
     {
@@ -213,6 +221,30 @@ class SampleRepositoryTest extends WebapiAbstract
                 'title' => 'Sample with URL resource',
                 'sort_order' => 1,
                 'sample_type' => 'invalid',
+            ],
+        ];
+
+        $this->_webApiCall($this->createServiceInfo, $requestData);
+    }
+
+    /**
+     * Check that error appears when sample file not existing in filesystem.
+     *
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Sample file not found. Please try again.
+     * @return void
+     */
+    public function testCreateSampleWithMissingFileThrowsException(): void
+    {
+        $requestData = [
+            'isGlobalScopeContent' => false,
+            'sku' => 'downloadable-product',
+            'sample' => [
+                'title' => 'Link Title',
+                'sort_order' => 1,
+                'sample_type' => 'file',
+                'sample_file' => '/n/o/nexistfile.png',
             ],
         ];
 
@@ -258,6 +290,7 @@ class SampleRepositoryTest extends WebapiAbstract
                 'sort_order' => 15,
                 'sample_type' => 'file',
                 'sample_file_content' => [
+                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'name/with|forbidden{characters',
                 ],
@@ -322,7 +355,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Product type of the product must be 'downloadable'.
+     * @expectedExceptionMessage The product needs to be the downloadable type. Verify the product and try again.
      */
     public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
     {
@@ -342,7 +375,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -376,6 +409,7 @@ class SampleRepositoryTest extends WebapiAbstract
                 'title' => 'Updated Title',
                 'sort_order' => 2,
                 'sample_type' => 'url',
+                'sample_url' => 'http://google.com',
             ],
         ];
 
@@ -404,6 +438,7 @@ class SampleRepositoryTest extends WebapiAbstract
                 'title' => 'Updated Title',
                 'sort_order' => 2,
                 'sample_type' => 'url',
+                'sample_url' => 'http://google.com',
             ],
         ];
 
@@ -419,7 +454,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -440,7 +475,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @expectedException \Exception
-     * @expectedExceptionMessage There is no downloadable sample with provided ID.
+     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
      */
     public function testUpdateThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {
@@ -503,7 +538,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage There is no downloadable sample with provided ID.
+     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {
@@ -546,6 +581,7 @@ class SampleRepositoryTest extends WebapiAbstract
         foreach ($expectations['fields'] as $index => $value) {
             $this->assertEquals($value, $link[$index]);
         }
+        $this->assertNotEmpty($link['sample_file']);
     }
 
     public function getListForAbsentProductProvider()
@@ -554,7 +590,6 @@ class SampleRepositoryTest extends WebapiAbstract
             'fields' => [
                 'title' => 'Downloadable Product Sample Title',
                 'sort_order' => 0,
-                'sample_file' => '/f/u/jellyfish_1_4.jpg',
                 'sample_type' => 'file'
             ]
         ];

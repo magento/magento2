@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Backend grid item renderer currency
+ *
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -56,7 +60,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
                 return $data;
             }
 
-            $data = floatval($data) * $this->_getRate($row);
+            $data = (float)$data * $this->_getRate($row);
             $data = sprintf("%f", $data);
             $data = $this->_localeCurrency->getCurrency($currencyCode)->toCurrency($data);
             return $data;
@@ -90,10 +94,10 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     protected function _getRate($row)
     {
         if ($rate = $this->getColumn()->getRate()) {
-            return floatval($rate);
+            return (float)$rate;
         }
         if ($rate = $row->getData($this->getColumn()->getRateField())) {
-            return floatval($rate);
+            return (float)$rate;
         }
         return 1;
     }

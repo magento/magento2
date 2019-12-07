@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Translation\Model\Js\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -26,12 +26,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Translation\Model\Js\Config',
+            \Magento\Translation\Model\Js\Config::class,
             [
                 'scopeConfig' => $this->scopeMock,
                 'patterns' => $this->patterns
@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->dictionaryEnabled());
     }
 
-    public function testgetPatterns()
+    public function testGetPatterns()
     {
         $this->assertEquals($this->patterns, $this->model->getPatterns());
     }

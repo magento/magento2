@@ -1,13 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote\Address\Total;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address\FreeShippingInterface;
 
+/**
+ * Collect totals for shipping.
+ */
 class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
@@ -40,7 +47,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -54,15 +60,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $address = $shippingAssignment->getShipping()->getAddress();
         $method = $shippingAssignment->getShipping()->getMethod();
 
-        $address->setWeight(0);
-        $address->setFreeMethodWeight(0);
-
-        $addressWeight = $address->getWeight();
-        $freeMethodWeight = $address->getFreeMethodWeight();
-
-        $address->setFreeShipping(
-            $this->freeShipping->isFreeShipping($quote, $shippingAssignment->getItems())
-        );
         $total->setTotalAmount($this->getCode(), 0);
         $total->setBaseTotalAmount($this->getCode(), 0);
 
@@ -70,93 +67,20 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             return $this;
         }
 
-        $addressQty = 0;
-        foreach ($shippingAssignment->getItems() as $item) {
-            /**
-             * Skip if this item is virtual
-             */
-            if ($item->getProduct()->isVirtual()) {
-                continue;
-            }
-
-            /**
-             * Children weight we calculate for parent
-             */
-            if ($item->getParentItem()) {
-                continue;
-            }
-
-            if ($item->getHasChildren() && $item->isShipSeparately()) {
-                foreach ($item->getChildren() as $child) {
-                    if ($child->getProduct()->isVirtual()) {
-                        continue;
-                    }
-                    $addressQty += $child->getTotalQty();
-
-                    if (!$item->getProduct()->getWeightType()) {
-                        $itemWeight = $child->getWeight();
-                        $itemQty = $child->getTotalQty();
-                        $rowWeight = $itemWeight * $itemQty;
-                        $addressWeight += $rowWeight;
-                        if ($address->getFreeShipping() || $child->getFreeShipping() === true) {
-                            $rowWeight = 0;
-                        } elseif (is_numeric($child->getFreeShipping())) {
-                            $freeQty = $child->getFreeShipping();
-                            if ($itemQty > $freeQty) {
-                                $rowWeight = $itemWeight * ($itemQty - $freeQty);
-                            } else {
-                                $rowWeight = 0;
-                            }
-                        }
-                        $freeMethodWeight += $rowWeight;
-                        $item->setRowWeight($rowWeight);
-                    }
-                }
-                if ($item->getProduct()->getWeightType()) {
-                    $itemWeight = $item->getWeight();
-                    $rowWeight = $itemWeight * $item->getQty();
-                    $addressWeight += $rowWeight;
-                    if ($address->getFreeShipping() || $item->getFreeShipping() === true) {
-                        $rowWeight = 0;
-                    } elseif (is_numeric($item->getFreeShipping())) {
-                        $freeQty = $item->getFreeShipping();
-                        if ($item->getQty() > $freeQty) {
-                            $rowWeight = $itemWeight * ($item->getQty() - $freeQty);
-                        } else {
-                            $rowWeight = 0;
-                        }
-                    }
-                    $freeMethodWeight += $rowWeight;
-                    $item->setRowWeight($rowWeight);
-                }
-            } else {
-                if (!$item->getProduct()->isVirtual()) {
-                    $addressQty += $item->getQty();
-                }
-                $itemWeight = $item->getWeight();
-                $rowWeight = $itemWeight * $item->getQty();
-                $addressWeight += $rowWeight;
-                if ($address->getFreeShipping() || $item->getFreeShipping() === true) {
-                    $rowWeight = 0;
-                } elseif (is_numeric($item->getFreeShipping())) {
-                    $freeQty = $item->getFreeShipping();
-                    if ($item->getQty() > $freeQty) {
-                        $rowWeight = $itemWeight * ($item->getQty() - $freeQty);
-                    } else {
-                        $rowWeight = 0;
-                    }
-                }
-                $freeMethodWeight += $rowWeight;
-                $item->setRowWeight($rowWeight);
-            }
+        $data = $this->getAssignmentWeightData($address, $shippingAssignment->getItems());
+        $address->setItemQty($data['addressQty']);
+        $address->setWeight($data['addressWeight']);
+        $address->setFreeMethodWeight($data['freeMethodWeight']);
+        $addressFreeShipping = (bool)$address->getFreeShipping();
+        $isFreeShipping = $this->freeShipping->isFreeShipping($quote, $shippingAssignment->getItems());
+        $address->setFreeShipping($isFreeShipping);
+        if (!$addressFreeShipping && $isFreeShipping) {
+            $data = $this->getAssignmentWeightData($address, $shippingAssignment->getItems());
+            $address->setItemQty($data['addressQty']);
+            $address->setWeight($data['addressWeight']);
+            $address->setFreeMethodWeight($data['freeMethodWeight']);
         }
 
-        if (isset($addressQty)) {
-            $address->setItemQty($addressQty);
-        }
-
-        $address->setWeight($addressWeight);
-        $address->setFreeMethodWeight($freeMethodWeight);
         $address->collectShippingRates();
 
         if ($method) {
@@ -191,17 +115,21 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $amount = $total->getShippingAmount();
-        $shippingDescription = $total->getShippingDescription();
-        $title = ($amount != 0 && $shippingDescription)
-            ? __('Shipping & Handling (%1)', $shippingDescription)
-            : __('Shipping & Handling');
+        if (!$quote->getIsVirtual()) {
+            $amount = $total->getShippingAmount();
+            $shippingDescription = $total->getShippingDescription();
+            $title = ($shippingDescription)
+                ? __('Shipping & Handling (%1)', $shippingDescription)
+                : __('Shipping & Handling');
 
-        return [
-            'code' => $this->getCode(),
-            'title' => $title,
-            'value' => $amount
-        ];
+            return [
+                'code' => $this->getCode(),
+                'title' => $title,
+                'value' => $amount
+            ];
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -212,5 +140,123 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     public function getLabel()
     {
         return __('Shipping');
+    }
+
+    /**
+     * Gets shipping assignments data like items weight, address weight, items quantity.
+     *
+     * @param AddressInterface $address
+     * @param array $items
+     * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getAssignmentWeightData(AddressInterface $address, array $items): array
+    {
+        $address->setWeight(0);
+        $address->setFreeMethodWeight(0);
+        $addressWeight = $address->getWeight();
+        $freeMethodWeight = $address->getFreeMethodWeight();
+        $addressFreeShipping = (bool)$address->getFreeShipping();
+        $addressQty = 0;
+        foreach ($items as $item) {
+            /**
+             * Skip if this item is virtual
+             */
+            if ($item->getProduct()->isVirtual()) {
+                continue;
+            }
+
+            /**
+             * Children weight we calculate for parent
+             */
+            if ($item->getParentItem()) {
+                continue;
+            }
+
+            $itemQty = (float)$item->getQty();
+            $itemWeight = (float)$item->getWeight();
+
+            if ($item->getHasChildren() && $item->isShipSeparately()) {
+                foreach ($item->getChildren() as $child) {
+                    if ($child->getProduct()->isVirtual()) {
+                        continue;
+                    }
+                    $addressQty += $child->getTotalQty();
+
+                    if (!$item->getProduct()->getWeightType()) {
+                        $itemWeight = (float)$child->getWeight();
+                        $itemQty = (float)$child->getTotalQty();
+                        $addressWeight += ($itemWeight * $itemQty);
+                        $rowWeight = $this->getItemRowWeight(
+                            $addressFreeShipping,
+                            $itemWeight,
+                            $itemQty,
+                            $child->getFreeShipping()
+                        );
+                        $freeMethodWeight += $rowWeight;
+                        $item->setRowWeight($rowWeight);
+                    }
+                }
+                if ($item->getProduct()->getWeightType()) {
+                    $addressWeight += ($itemWeight * $itemQty);
+                    $rowWeight = $this->getItemRowWeight(
+                        $addressFreeShipping,
+                        $itemWeight,
+                        $itemQty,
+                        $item->getFreeShipping()
+                    );
+                    $freeMethodWeight += $rowWeight;
+                    $item->setRowWeight($rowWeight);
+                }
+            } else {
+                if (!$item->getProduct()->isVirtual()) {
+                    $addressQty += $itemQty;
+                }
+                $addressWeight += ($itemWeight * $itemQty);
+                $rowWeight = $this->getItemRowWeight(
+                    $addressFreeShipping,
+                    $itemWeight,
+                    $itemQty,
+                    $item->getFreeShipping()
+                );
+                $freeMethodWeight += $rowWeight;
+                $item->setRowWeight($rowWeight);
+            }
+        }
+
+        return [
+            'addressQty' => $addressQty,
+            'addressWeight' => $addressWeight,
+            'freeMethodWeight' => $freeMethodWeight
+        ];
+    }
+
+    /**
+     * Calculates item row weight.
+     *
+     * @param bool $addressFreeShipping
+     * @param float $itemWeight
+     * @param float $itemQty
+     * @param bool $freeShipping
+     * @return float
+     */
+    private function getItemRowWeight(
+        bool $addressFreeShipping,
+        float $itemWeight,
+        float $itemQty,
+        $freeShipping
+    ): float {
+        $rowWeight = $itemWeight * $itemQty;
+        if ($addressFreeShipping || $freeShipping === true) {
+            $rowWeight = 0;
+        } elseif (is_numeric($freeShipping)) {
+            $freeQty = $freeShipping;
+            if ($itemQty > $freeQty) {
+                $rowWeight = $itemWeight * ($itemQty - $freeQty);
+            } else {
+                $rowWeight = 0;
+            }
+        }
+        return (float)$rowWeight;
     }
 }

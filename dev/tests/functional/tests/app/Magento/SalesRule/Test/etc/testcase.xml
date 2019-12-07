@@ -1,29 +1,85 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="OnePageCheckoutPaymentMethodDataPersistenceWithDiscountTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createSalesRule" />
+        <step name="createSalesRule" module="Magento_SalesRule" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="applySalesRuleOnCheckout" />
+        <step name="applySalesRuleOnCheckout" module="Magento_SalesRule"/>
+    </scenario>
+    <scenario name="OnePageCheckoutWithDiscountTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createSalesRule" />
+        <step name="createSalesRule" module="Magento_SalesRule" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="applySalesRuleOnCheckout" />
+        <step name="applySalesRuleOnCheckout" module="Magento_SalesRule" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" />
+    </scenario>
+    <scenario name="OnePageCheckoutPaymentMethodPersistenceWithDiscountTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createSalesRule" />
+        <step name="createSalesRule" module="Magento_SalesRule" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="applySalesRuleOnCheckout" />
+        <step name="applySalesRuleOnCheckout" module="Magento_SalesRule" />
+    </scenario>
     <scenario name="OnePageCheckoutTest">
-        <step name="createSalesRule" module="Magento_SalesRule" prev="estimateShippingAndTax" next="applySalesRuleOnFrontend"/>
-        <step name="applySalesRuleOnFrontend" module="Magento_SalesRule" prev="createSalesRule" next="clickProceedToCheckout"/>
+        <step name="createSalesRule" module="Magento_SalesRule" prev="estimateShippingAndTax" next="applySalesRuleOnFrontend" />
+        <step name="applySalesRuleOnFrontend" module="Magento_SalesRule" prev="createSalesRule" next="clickProceedToCheckout" />
+    </scenario>
+    <scenario name="OnePageCheckoutOfflinePaymentMethodsTest">
+        <step name="createSalesRule" module="Magento_SalesRule" prev="estimateShippingAndTax" next="applySalesRuleOnFrontend" />
+        <step name="applySalesRuleOnFrontend" module="Magento_SalesRule" prev="createSalesRule" next="clickProceedToCheckout" />
     </scenario>
     <scenario name="ReorderOrderEntityTest">
-        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend"/>
-        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress"/>
+        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend" />
+        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress" />
     </scenario>
     <scenario name="CreateOrderBackendTest">
-        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend"/>
-        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress"/>
+        <step name="createSalesRule" module="Magento_SalesRule" prev="fillShippingAddress" next="applySalesRuleOnBackend" />
+        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" />
+    </scenario>
+    <scenario name="CreateOrderBackendPartOneTest">
+        <step name="createSalesRule" module="Magento_SalesRule" prev="fillShippingAddress" next="applySalesRuleOnBackend" />
+        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" />
     </scenario>
     <scenario name="CreateOrderFromCustomerPageTest">
-        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend"/>
-        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress"/>
+        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend" />
+        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress" />
     </scenario>
     <scenario name="PrintOrderFrontendGuestTest">
-        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend"/>
-        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress"/>
+        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend" />
+        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress" />
     </scenario>
 </config>

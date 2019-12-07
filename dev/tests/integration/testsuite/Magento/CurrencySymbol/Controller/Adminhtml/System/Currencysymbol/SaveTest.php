@@ -1,15 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-
     /**
-     * Test save action
+     * Test save action.
+     *
+     * @param string $currencyCode
+     * @param string $inputCurrencySymbol
+     * @param string $outputCurrencySymbol
      *
      * @magentoConfigFixture               currency/options/allow USD
      * @magentoDbIsolation enabled
@@ -20,7 +25,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var \Magento\CurrencySymbol\Model\System\Currencysymbol $currencySymbol */
         $currencySymbol = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CurrencySymbol\Model\System\Currencysymbol'
+            \Magento\CurrencySymbol\Model\System\Currencysymbol::class
         );
 
         $currencySymbolOriginal = $currencySymbol->getCurrencySymbol($currencyCode);
@@ -32,6 +37,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 $currencyCode => $inputCurrencySymbol,
             ]
         );
+        $request->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/admin/system_currencysymbol/save');
 
         $this->assertRedirect();

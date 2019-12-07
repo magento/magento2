@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Event;
 
-class TransactionTest extends \PHPUnit_Framework_TestCase
+class TransactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Event\Transaction|\PHPUnit_Framework_MockObject_MockObject
@@ -28,23 +28,18 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManager = $this->getMock(
-            'Magento\TestFramework\EventManager',
-            ['fireEvent'],
-            [[]]
-        );
-        $this->_adapter = $this->getMock(
-            '\Magento\TestFramework\Db\Adapter\Mysql',
-            ['beginTransaction', 'rollBack'],
-            [],
-            '',
-            false
-        );
-        $this->_object = $this->getMock(
-            'Magento\TestFramework\Event\Transaction',
-            ['_getConnection'],
-            [$this->_eventManager]
-        );
+        $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
+            ->setMethods(['fireEvent'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_adapter =
+            $this->createPartialMock(\Magento\TestFramework\Db\Adapter\Mysql::class, ['beginTransaction', 'rollBack']);
+        $this->_object = $this->getMockBuilder(\Magento\TestFramework\Event\Transaction::class)
+            ->setMethods(['_getConnection'])
+            ->setConstructorArgs([$this->_eventManager])
+            ->getMock();
+
         $this->_object->expects($this->any())->method('_getConnection')->will($this->returnValue($this->_adapter));
     }
 
@@ -74,9 +69,9 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup expectations for "transaction start" use case
      *
-     * @param \PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher
+     * @param \PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher
      */
-    protected function _expectTransactionStart(\PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher)
+    protected function _expectTransactionStart(\PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher)
     {
         $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('startTransaction');
         $this->_adapter->expects($this->once())->method('beginTransaction');
@@ -108,9 +103,9 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup expectations for "transaction rollback" use case
      *
-     * @param \PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher
+     * @param \PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher
      */
-    protected function _expectTransactionRollback(\PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher)
+    protected function _expectTransactionRollback(\PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher)
     {
         $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('rollbackTransaction');
         $this->_adapter->expects($this->once())->method('rollback');

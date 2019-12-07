@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
      */
     protected $mapTypePrices = [
         'regular_price' => [
-            'selector' => '.price-final_price .price'
+            'selector' => '.price-wrapper',
         ],
         'fpt_price' => [
             'selector' => '[data-price-type="weee"] .price',

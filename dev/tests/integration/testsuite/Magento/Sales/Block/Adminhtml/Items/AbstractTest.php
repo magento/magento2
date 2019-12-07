@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Items;
@@ -8,16 +8,16 @@ namespace Magento\Sales\Block\Adminhtml\Items;
 /**
  * @magentoAppArea adminhtml
  */
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetItemExtraInfoHtml()
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
-        $block = $layout->createBlock('Magento\Sales\Block\Adminhtml\Items\AbstractItems', 'block');
+        $block = $layout->createBlock(\Magento\Sales\Block\Adminhtml\Items\AbstractItems::class, 'block');
 
         $item = new \Magento\Framework\DataObject();
 
@@ -26,7 +26,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $expectedHtml = '<html><body>some data</body></html>';
         /** @var $childBlock \Magento\Framework\View\Element\Text */
         $childBlock = $layout->addBlock(
-            'Magento\Framework\View\Element\Text',
+            \Magento\Framework\View\Element\Text::class,
             'other_block',
             'block',
             'order_item_extra_info'

@@ -1,20 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-
-/**
- * Sign up for an alert when the product price changes grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts;
 
 use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Extended;
 
+/**
+ * Sign up for an alert when the product price changes grid
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Stock extends Extended
 {
     /**
@@ -49,6 +48,8 @@ class Stock extends Extended
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -64,6 +65,8 @@ class Stock extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -81,6 +84,8 @@ class Stock extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -104,6 +109,8 @@ class Stock extends Extended
     }
 
     /**
+     * Get grid url.
+     *
      * @return string
      */
     public function getGridUrl()

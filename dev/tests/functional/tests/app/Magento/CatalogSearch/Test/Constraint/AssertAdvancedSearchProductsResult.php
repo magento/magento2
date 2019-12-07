@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,17 +69,17 @@ class AssertAdvancedSearchProductsResult extends AbstractConstraint
         foreach ($searchResult as $sku => $product) {
             /** @var CatalogProductSimple $product */
             $name = $product->getName();
-            $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
-            while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage()) {
+            do {
                 $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
-            }
+            } while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage());
+
             if (!$isProductVisible) {
                 $errors[] = '- failed to find the product (SKU - "'
                     . $sku . '", name - "' . $name . '") according to the search parameters';
             }
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             empty($errors),
             "The following errors occurred:\n" . implode("\n", $errors)
         );

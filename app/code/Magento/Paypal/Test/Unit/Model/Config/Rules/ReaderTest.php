@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
@@ -12,7 +12,7 @@ use Magento\Paypal\Helper\Backend;
 use Magento\Paypal\Model\Config\Rules\Converter;
 use Magento\Paypal\Model\Config\Rules\Reader;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Reader */
     protected $reader;
@@ -40,28 +40,16 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fileResolver = $this->getMockForAbstractClass(
-            '\Magento\Framework\Config\FileResolverInterface'
+            \Magento\Framework\Config\FileResolverInterface::class
         );
-        $this->converter = $this->getMock(
-            '\Magento\Paypal\Model\Config\Rules\Converter',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->converter = $this->createMock(\Magento\Paypal\Model\Config\Rules\Converter::class);
         $this->schemaLocator = $this->getMockForAbstractClass(
-            '\Magento\Framework\Config\SchemaLocatorInterface'
+            \Magento\Framework\Config\SchemaLocatorInterface::class
         );
         $this->validationState = $this->getMockForAbstractClass(
-            '\Magento\Framework\Config\ValidationStateInterface'
+            \Magento\Framework\Config\ValidationStateInterface::class
         );
-        $this->helper = $this->getMock(
-            '\Magento\Paypal\Helper\Backend',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->helper = $this->createMock(\Magento\Paypal\Helper\Backend::class);
     }
 
     /**

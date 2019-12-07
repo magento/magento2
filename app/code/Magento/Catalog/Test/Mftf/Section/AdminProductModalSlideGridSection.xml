@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductModalSlideGridSection">
+        <element name="productGridXRowYColumnButton" type="input" selector=".modal-slide table.data-grid tr.data-row:nth-child({{row}}) td:nth-child({{column}})" parameterized="true" timeout="30"/>
+        <element name="productRowCheckboxBySku" type="input" selector="//td[count(../../..//th[./*[.='SKU']]/preceding-sibling::th) + 1][./*[.='{{sku}}']]/../td//input[@data-action='select-row']" parameterized="true" />
+    </section>
+</sections>

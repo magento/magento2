@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoComponentsDir Magento/Framework/View/_files/fallback
  * @magentoDbIsolation enabled
  */
-class RulePoolTest extends \PHPUnit_Framework_TestCase
+class RulePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RulePool
@@ -33,12 +33,12 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
         $registration = $objectManager->get(
-            'Magento\Theme\Model\Theme\Registration'
+            \Magento\Theme\Model\Theme\Registration::class
         );
         $registration->register();
-        $this->model = $objectManager->create('Magento\Framework\View\Design\Fallback\RulePool');
+        $this->model = $objectManager->create(\Magento\Framework\View\Design\Fallback\RulePool::class);
         /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $collection */
-        $collection = $objectManager->create('Magento\Theme\Model\ResourceModel\Theme\Collection');
+        $collection = $objectManager->create(\Magento\Theme\Model\ResourceModel\Theme\Collection::class);
         /** @var \Magento\Theme\Model\Theme $theme */
         $theme = $collection->getThemeByFullPath('frontend/Vendor_ViewTest/custom_theme');
 
@@ -74,7 +74,8 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPatternDirsException($type, array $overriddenParams, $expectedErrorMessage)
     {
-        $this->setExpectedException('InvalidArgumentException', $expectedErrorMessage);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage($expectedErrorMessage);
         $params = $overriddenParams + $this->defaultParams;
         $this->model->getRule($type)->getPatternDirs($params);
     }
@@ -143,11 +144,11 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar */
         $componentRegistrar = $objectManager->get(
-            '\Magento\Framework\Component\ComponentRegistrarInterface'
+            \Magento\Framework\Component\ComponentRegistrarInterface::class
         );
         $coreModulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Theme');
         /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = $objectManager->get('\Magento\Framework\Filesystem');
+        $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
         $libPath = rtrim($filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');
 
         $themeOnePath = BP . '/dev/tests/integration/testsuite/Magento/Framework/View/_files/fallback/design/frontend/'

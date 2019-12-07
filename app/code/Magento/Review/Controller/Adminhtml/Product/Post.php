@@ -1,18 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Store\Model\Store;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Review\Model\Review;
 
-class Post extends ProductController
+/**
+ * Review admin controller for POST request.
+ */
+class Post extends ProductController implements HttpPostActionInterface
 {
     /**
+     * Create a product review.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -22,7 +29,7 @@ class Post extends ProductController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($data = $this->getRequest()->getPostValue()) {
             /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-            $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+            $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
             if ($storeManager->hasSingleStore()) {
                 $data['stores'] = [
                     $storeManager->getStore(true)->getId(),
@@ -32,7 +39,7 @@ class Post extends ProductController
             }
             $review = $this->reviewFactory->create()->setData($data);
             try {
-                $review->setEntityId(1) // product
+                $review->setEntityId($review->getEntityIdByCode(Review::ENTITY_PRODUCT_CODE))
                     ->setEntityPkValue($productId)
                     ->setStoreId(Store::DEFAULT_STORE_ID)
                     ->setStatusId($data['status_id'])
@@ -49,7 +56,7 @@ class Post extends ProductController
 
                 $review->aggregate();
 
-                $this->messageManager->addSuccess(__('You saved the review.'));
+                $this->messageManager->addSuccessMessage(__('You saved the review.'));
                 if ($this->getRequest()->getParam('ret') == 'pending') {
                     $resultRedirect->setPath('review/*/pending');
                 } else {
@@ -57,9 +64,9 @@ class Post extends ProductController
                 }
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving this review.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving this review.'));
             }
         }
         $resultRedirect->setPath('review/*/');

@@ -2,11 +2,15 @@
 /**
  * Google Optimizer Page Block
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Block\Code;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Page extends \Magento\GoogleOptimizer\Block\AbstractCode
 {
     /**

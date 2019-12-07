@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
@@ -30,6 +30,6 @@ class CollectionFactory
      */
     public function create(array $data = [])
     {
-        return $this->_objectManager->create('Magento\Framework\Data\Form\Element\Collection', $data);
+        return $this->_objectManager->create(\Magento\Framework\Data\Form\Element\Collection::class, $data);
     }
 }

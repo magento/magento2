@@ -1,27 +1,35 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\CatalogInventory\Model\StockRegistryStorage;
+
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var $upSellProduct \Magento\Catalog\Model\Product */
-$upSellProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$upSellProduct->load(1);
-if ($upSellProduct->getId()) {
-    $upSellProduct->delete();
-}
-
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load(2);
-if ($product->getId()) {
-    $product->delete();
+$productSkuList = ['simple', 'simple_with_upsell'];
+foreach ($productSkuList as $sku) {
+    try {
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku, true);
+        if ($product->getId()) {
+            $productRepository->delete($product);
+        }
+    } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        //Product already removed
+    }
 }
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+
+/** @var StockRegistryStorage $stockRegistryStorage */
+$stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(StockRegistryStorage::class);
+$stockRegistryStorage->clean();

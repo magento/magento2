@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class AssertCustomVariableNotInGrid extends AbstractConstraint
         ];
 
         $systemVariableIndexNew->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $systemVariableIndexNew->getSystemVariableGrid()->isRowVisible($filter),
             'Custom System Variable with code \'' . $filter['code'] . '\' is present in System Variable grid.'
         );

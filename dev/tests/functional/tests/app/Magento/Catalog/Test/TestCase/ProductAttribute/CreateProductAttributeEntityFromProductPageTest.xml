@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityFromProductPageTest" summary="Create Product Attribute from Product Page" ticketId="MAGETWO-30528">
-        <variation name="CreateProductAttributeEntityFromProductPageTestVariation1">
+        <variation name="CreateProductAttributeEntityFromProductPageTestVariation1_Searchable_Global_Visible_Comparable_HtmlAllowed_UsedForSorting">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="attribute/data/is_required" xsi:type="string">No</data>
@@ -32,7 +33,8 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsHtmlAllowed" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend" />
         </variation>
-        <variation name="CreateProductAttributeEntityFromProductPageTestVariation2">
+        <variation name="CreateProductAttributeEntityFromProductPageTestVariation2_Filterable">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Dropdown</data>
             <data name="attribute/data/options/dataset" xsi:type="string">two_options</data>
@@ -41,6 +43,7 @@
             <data name="attribute/data/is_global" xsi:type="string">Global</data>
             <data name="attribute/data/is_filterable" xsi:type="string">Filterable (with results)</data>
             <data name="attribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
+            <data name="attributeValue" xsi:type="string">white</data>
             <data name="assertProduct/data/name" xsi:type="string">Product name</data>
             <data name="assertProduct/data/sku" xsi:type="string">product-sku</data>
             <data name="assertProduct/data/price" xsi:type="string">35</data>
@@ -48,15 +51,18 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable" />
         </variation>
-        <variation name="CreateProductAttributeEntityFromProductPageTestVariation3">
+        <variation name="CreateProductAttributeEntityFromProductPageTestVariation3_Required">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="attribute/data/is_required" xsi:type="string">Yes</data>
             <data name="attribute/data/attribute_code" xsi:type="string">attr_text_%isolation%</data>
             <data name="attribute/data/default_value_text" xsi:type="string">default_value_text%isolation%</data>
+            <data name="sectionName" xsi:type="string">attributes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
         </variation>
-        <variation name="CreateProductAttributeEntityFromProductPageTestVariation4">
+        <variation name="CreateProductAttributeEntityFromProductPageTestVariation4_Unique">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="attribute/data/is_required" xsi:type="string">No</data>

@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
 use Magento\Framework\Config\Dom;
-use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Framework\Module\Dir\Reader as DirectoryReader;
-use \Magento\Framework\Config\ValidationStateInterface;
+use Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Class DomMerger
@@ -59,6 +57,11 @@ class DomMerger implements DomMergerInterface
      * @var bool
      */
     protected $isMergeSimpleXMLElement;
+
+    /**
+     * @var string
+     */
+    private $schema;
 
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
@@ -208,7 +211,7 @@ class DomMerger implements DomMergerInterface
                             if ($this->isMergeContext($insertedXPath)) {
                                 if ($this->isTextNode($insertedItem) && $this->isTextNode($rootItem)) {
                                     $rootItem->nodeValue = $insertedItem->nodeValue;
-                                } else if (!$this->isContextXPath([$rootItemXPath, $insertedXPath])
+                                } elseif (!$this->isContextXPath([$rootItemXPath, $insertedXPath])
                                     && !$this->hasIdAttribute($rootItem)
                                     && !$this->hasIdAttribute($insertedItem)
                                 ) {
@@ -338,7 +341,7 @@ class DomMerger implements DomMergerInterface
      * Validate dom document
      *
      * @param \DOMDocument $domDocument
-     * @param string|null $schemaFilePath
+     * @param string|null $schema
      * @return array of errors
      * @throws \Exception
      */

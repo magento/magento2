@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Eav\Model\Validator\Attribute;
+
+use Magento\Eav\Model\Attribute;
 
 /**
  * EAV attribute data validator
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Validator\Attribute;
-
-use Magento\Eav\Model\Attribute;
-
 class Data extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
@@ -126,7 +126,7 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
             $dataModel = $this->_attrDataFactory->create($attribute, $entity);
             $dataModel->setExtractedData($data);
             if (!isset($data[$attributeCode])) {
-                $data[$attributeCode] = null;
+                $data[$attributeCode] = '';
             }
             $result = $dataModel->validateValue($data[$attributeCode]);
             if (true !== $result) {

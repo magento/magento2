@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use \Magento\Framework\Pricing\Price\Pool;
 /**
  * Test for class Collection
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\Price\Collection
@@ -47,7 +47,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->pool = new Pool(
             [
@@ -56,9 +56,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->saleableItemMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
-        $this->priceMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Price\PriceInterface');
-        $this->factoryMock = $this->getMock('Magento\Framework\Pricing\Price\Factory', [], [], '', false);
+        $this->saleableItemMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
+        $this->priceMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $this->factoryMock = $this->createMock(\Magento\Framework\Pricing\Price\Factory::class);
 
         $this->collection = new Collection(
             $this->saleableItemMock,

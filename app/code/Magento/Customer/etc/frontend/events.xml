@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -27,5 +27,6 @@
     </event>
     <event name="customer_customer_authenticated">
         <observer name="customer_password" instance="Magento\Customer\Observer\UpgradeCustomerPasswordObserver" />
+        <observer name="customer_unlock" instance="Magento\Customer\Observer\CustomerLoginSuccessObserver" />
     </event>
 </config>

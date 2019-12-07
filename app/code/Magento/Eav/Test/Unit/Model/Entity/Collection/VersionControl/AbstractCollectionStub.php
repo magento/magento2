@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
@@ -31,6 +31,6 @@ class AbstractCollectionStub extends \Magento\Eav\Model\Entity\Collection\Versio
      */
     protected function _construct()
     {
-        return $this->_init('Magento\Framework\DataObject', 'test_entity_model');
+        return $this->_init(\Magento\Framework\DataObject::class, 'test_entity_model');
     }
 }

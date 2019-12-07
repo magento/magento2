@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -31,10 +31,12 @@
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_dropdown</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
-            <data name="attribute/data/options/dataset" xsi:type="string">default</data>
             <data name="attribute/data/is_required" xsi:type="string">Yes</data>
             <data name="attribute/data/is_global" xsi:type="string">Global</data>
-            <data name="attribute/data/default_value_text" xsi:type="string">attribute_edited%isolation%</data>
+            <data name="attribute/data/options/dataset" xsi:type="string">default</data>
+            <data name="attribute/data/options/3/is_default" xsi:type="string">Yes</data>
+            <data name="attribute/data/options/3/admin" xsi:type="string">white_edited</data>
+            <data name="attribute/data/options/3/view" xsi:type="string">option_1_%isolation%_edited</data>
             <data name="attribute/data/is_unique" xsi:type="string">Yes</data>
             <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
@@ -51,15 +53,36 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation3">
-            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="issue" xsi:type="string">MAGETWO-46494: [FT] UpdateProductAttributeEntityTestVariation3 does not actually create an attribute to check</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttributeOriginal/dataset" xsi:type="string">tax_class_id</data>
             <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
             <data name="cacheTags" xsi:type="array">
                 <item name="0" xsi:type="string">FPC</item>
             </data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertCacheIsRefreshableAndInvalidated" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheIsRefreshableAndInvalidated" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
+        </variation>
+        <variation name="UpdateProductAttributeEntityTestVariation4" summary="Create product attribute of type Dropdown and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_dropdown</data>
+            <data name="attribute/data/frontend_input" xsi:type="string">Dropdown</data>
+            <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
+            <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
+            <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">No</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent" />
+        </variation>
+        <variation name="UpdateProductAttributeEntityTestVariation5" summary="Create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_multiple_select</data>
+            <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
+            <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
+            <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">No</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent" />
         </variation>
     </testCase>
 </config>

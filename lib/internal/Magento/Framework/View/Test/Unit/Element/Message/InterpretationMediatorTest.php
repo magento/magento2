@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message;
@@ -9,7 +9,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Message\InterpretationMediator;
 use Magento\Framework\View\Element\Message\InterpretationStrategy;
 
-class InterpretationMediatorTest extends \PHPUnit_Framework_TestCase
+class InterpretationMediatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InterpretationStrategy | \PHPUnit_Framework_MockObject_MockObject
@@ -26,15 +26,15 @@ class InterpretationMediatorTest extends \PHPUnit_Framework_TestCase
      */
     private $interpretationMediator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->interpretationStrategy = $this->getMockBuilder(
-            'Magento\Framework\View\Element\Message\InterpretationStrategy'
+            \Magento\Framework\View\Element\Message\InterpretationStrategy::class
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageMock = $this->getMock(
-            'Magento\Framework\Message\MessageInterface'
+        $this->messageMock = $this->createMock(
+            \Magento\Framework\Message\MessageInterface::class
         );
 
         $this->interpretationMediator = new InterpretationMediator(

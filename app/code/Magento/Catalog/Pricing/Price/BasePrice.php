@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class BasePrice extends AbstractPrice
             $this->value = false;
             foreach ($this->priceInfo->getPrices() as $price) {
                 if ($price instanceof BasePriceProviderInterface && $price->getValue() !== false) {
-                    $this->value = min($price->getValue(), $this->value ?: $price->getValue());
+                    $this->value = min($price->getValue(), $this->value !== false ? $this->value: $price->getValue());
                 }
             }
         }

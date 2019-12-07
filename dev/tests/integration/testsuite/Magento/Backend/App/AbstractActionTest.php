@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App;
@@ -20,14 +20,14 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
     {
         $this->markTestSkipped('Session destruction doesn\'t work');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $this->dispatch('backend');
         /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
         $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         );
         $url = $backendUrlModel->getStartupPageUrl();
         $expected = $backendUrlModel->getUrl($url);
@@ -47,7 +47,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
         $this->_auth->logout();
 
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
-        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $postLogin = [
             'login' => [
                 'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
@@ -75,7 +75,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
     {
         /** @var $noticeInbox \Magento\AdminNotification\Model\Inbox */
         $noticeInbox = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\AdminNotification\Model\Inbox'
+            \Magento\AdminNotification\Model\Inbox::class
         );
         if (!$noticeInbox->loadLatestNotice()->getId()) {
             $noticeInbox->addCritical('Test notice', 'Test description');
@@ -88,7 +88,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
 
         /** @var $acl \Magento\Framework\Acl */
         $acl = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Acl\Builder')
+            ->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl();
         if ($isLimitedAccess) {
             $acl->deny(null, $resource);
@@ -97,7 +97,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
         $this->dispatch('backend/admin/dashboard');
 
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         $actualBlocks = $layout->getAllBlocks();
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Adminhtml\Billing;
@@ -10,6 +10,13 @@ namespace Magento\Paypal\Controller\Adminhtml\Billing;
  */
 abstract class Agreement extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Paypal::billing_agreement';
+
     /**
      * Core registry
      *
@@ -35,7 +42,9 @@ abstract class Agreement extends \Magento\Backend\App\Action
     protected function _initBillingAgreement()
     {
         $agreementId = $this->getRequest()->getParam('agreement');
-        $agreementModel = $this->_objectManager->create('Magento\Paypal\Model\Billing\Agreement')->load($agreementId);
+        $agreementModel = $this->_objectManager->create(
+            \Magento\Paypal\Model\Billing\Agreement::class
+        )->load($agreementId);
 
         if (!$agreementModel->getId()) {
             $this->messageManager->addErrorMessage(
@@ -46,15 +55,5 @@ abstract class Agreement extends \Magento\Backend\App\Action
 
         $this->_coreRegistry->register('current_billing_agreement', $agreementModel);
         return $agreementModel;
-    }
-
-    /**
-     * Check currently called action by permissions for current user
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Paypal::billing_agreement');
     }
 }

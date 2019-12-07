@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\ConfigurableProduct\Test\TestCase\VerifyConfigurableProductEntityPriceTest" summary="Verify price for configurable product">
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation1" summary="Disable child product" ticketId="MAGETWO-60196">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="status" xsi:type="string">No</item>
+                </item>
+            </data>
+            <data name="productUpdate/optionNumber" xsi:type="string">1</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+        </variation>
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation2" summary="Set child product Out of stock" ticketId="MAGETWO-60206">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="quantity_and_stock_status" xsi:type="array">
+                        <item name="is_in_stock" xsi:type="string">Out of Stock</item>
+                    </item>
+                </item>
+            </data>
+            <data name="productUpdate/optionNumber" xsi:type="string">1</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+        </variation>
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation3" summary="Disable all child products" ticketId="MAGETWO-60236">
+            <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="status" xsi:type="string">No</item>
+                </item>
+            </data>
+            <data name="productUpdate/optionNumber" xsi:type="string">1,2,3</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotSearchableBySku" />
+        </variation>
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation4" summary="Add tier price to child product" ticketId="MAGETWO-60296">
+            <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="tier_price" xsi:type="array">
+                        <item name="dataset" xsi:type="string">custom_for_qty_1</item>
+                    </item>
+                </item>
+            </data>
+            <data name="productUpdate/optionNumber" xsi:type="string">2</data>
+            <data name="productUpdate/newPrice" xsi:type="string">5</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+        </variation>
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation5" summary="Add special price to child product" ticketId="MAGETWO-60297">
+            <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="special_price" xsi:type="string">5</item>
+                </item>
+            </data>
+            <data name="productUpdate/optionNumber" xsi:type="string">2</data>
+            <data name="productUpdate/newPrice" xsi:type="string">5</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+        </variation>
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation6" summary="Change price on scope level for child product" ticketId="MAGETWO-60325">
+            <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="price" xsi:type="string">0.07</item>
+                </item>
+            </data>
+            <data name="productUpdate/switchScope" xsi:type="boolean">true</data>
+            <data name="productUpdate/optionNumber" xsi:type="string">2</data>
+            <data name="productUpdate/newPrice" xsi:type="string">0.07</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+        </variation>
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation7" summary="Add special price to child product" ticketId="MAGETWO-60328">
+            <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="productUpdate/optionNumber" xsi:type="string">2</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="unassignFromWebsite" xsi:type="string">Main Website</item>
+            </data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+        </variation>
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation8" summary="Set child product Out of stock" ticketId="MAGETWO-60329">
+            <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="productUpdate/optionNumber" xsi:type="string">1,2,3</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="quantity_and_stock_status" xsi:type="array">
+                        <item name="is_in_stock" xsi:type="string">Out of Stock</item>
+                    </item>
+                </item>
+            </data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotSearchableBySku" />
+        </variation>
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation9" summary="Add tier price to child product" ticketId="MAGETWO-60330">
+            <data name="product" xsi:type="string">configurableProduct::product_with_color_and_custom_option</data>
+            <data name="productUpdate/optionNumber" xsi:type="string">2</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="tier_price" xsi:type="array">
+                        <item name="dataset" xsi:type="string">custom_for_qty_1</item>
+                    </item>
+                </item>
+            </data>
+            <data name="productUpdate/newPrice" xsi:type="string">5</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
+        </variation>
+    </testCase>
+</config>

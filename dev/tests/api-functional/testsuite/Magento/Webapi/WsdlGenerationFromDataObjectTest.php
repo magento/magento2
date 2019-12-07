@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Webapi;
 
@@ -30,14 +28,15 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     protected function setUp()
     {
         $this->_markTestAsSoapOnly("WSDL generation tests are intended to be executed for SOAP adapter only.");
-        $this->_storeCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
+        $this->_storeCode = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()->getCode();
         parent::setUp();
     }
 
     public function testMultiServiceWsdl()
     {
-        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
+        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}"
+            . "?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
         $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
         $wsdlContent = $this->_convertXmlToString($this->_getWsdlContent($wsdlUrl));
         $this->isSingleService = false;
@@ -63,6 +62,16 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->_checkServiceDeclaration($wsdlContent);
         $this->_checkMessagesDeclaration($wsdlContent);
         $this->_checkFaultsDeclaration($wsdlContent);
+    }
+
+    public function testNoAuthorizedServices()
+    {
+        $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV2';
+        $connection = curl_init($wsdlUrl);
+        curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        $responseContent = curl_exec($connection);
+        $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 401);
+        $this->assertContains("The consumer isn't authorized to access %resources.", $responseContent);
     }
 
     public function testInvalidWsdlUrlNoServices()
@@ -97,8 +106,10 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
      */
     protected function _getWsdlContent($wsdlUrl)
     {
+        $accessCredentials = \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials()['key'];
         $connection = curl_init($wsdlUrl);
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($connection, CURLOPT_HTTPHEADER, ['header' => "Authorization: Bearer " . $accessCredentials]);
         $responseContent = curl_exec($connection);
         $responseDom = new \DOMDocument();
         $this->assertTrue(
@@ -494,11 +505,11 @@ FIRST_PORT_TYPE;
             $secondPortType = <<< SECOND_PORT_TYPE
 <portType name="testModule5AllSoapAndRestV2PortType">
 SECOND_PORT_TYPE;
-        $this->assertContains(
-            $this->_convertXmlToString($secondPortType),
-            $wsdlContent,
-            'Port type declaration is missing or invalid'
-        );
+            $this->assertContains(
+                $this->_convertXmlToString($secondPortType),
+                $wsdlContent,
+                'Port type declaration is missing or invalid'
+            );
         }
 
         if ($this->isSingleService) {
@@ -847,6 +858,7 @@ PARAM_COMPLEX_TYPE;
             'Details parameter complex types declaration is invalid.'
         );
 
+        // @codingStandardsIgnoreStart
         if ($this->isSingleService) {
             $detailsWrappedErrorType = <<< WRAPPED_ERROR_COMPLEX_TYPE
 <xsd:complexType name="WrappedError">
@@ -894,6 +906,7 @@ WRAPPED_ERROR_COMPLEX_TYPE;
 </xsd:complexType>
 WRAPPED_ERROR_COMPLEX_TYPE;
         }
+        // @codingStandardsIgnoreEnd
         $this->assertContains(
             $this->_convertXmlToString($detailsWrappedErrorType),
             $wsdlContent,
@@ -924,6 +937,7 @@ PARAMETERS_COMPLEX_TYPE;
         );
 
         if ($this->isSingleService) {
+            // @codingStandardsIgnoreStart
             $detailsWrappedErrorsType = <<< WRAPPED_ERRORS_COMPLEX_TYPE
 <xsd:complexType name="ArrayOfWrappedError">
     <xsd:annotation>

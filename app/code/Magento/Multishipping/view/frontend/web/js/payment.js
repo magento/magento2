@@ -1,15 +1,13 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
-/*global alert*/
 
 define([
     'jquery',
     'mage/template',
     'Magento_Ui/js/modal/alert',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/translate'
 ], function ($, mageTemplate, alert) {
     'use strict';
@@ -18,10 +16,11 @@ define([
         options: {
             continueSelector: '#payment-continue',
             methodsContainer: '#payment-methods',
-            minBalance: 0.0001,
+            minBalance: 0,
             tmpl: '<input id="hidden-free" type="hidden" name="payment[method]" value="free">'
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.element.find('dd [name^="payment["]').prop('disabled', true).end()
                 .on('click', this.options.continueSelector, $.proxy(this._submitHandler, this))
@@ -36,8 +35,9 @@ define([
                         data.totalPrice = this.options.checkoutPrice;
                     }
 
-                    if (this.options.checkoutPrice < this.options.minBalance) {
-                        // Add free input field, hide and disable unchecked checkbox payment method and all radio button payment methods
+                    if (this.options.checkoutPrice <= this.options.minBalance) {
+                        // Add free input field, hide and disable unchecked
+                        // checkbox payment method and all radio button payment methods
                         this._disablePaymentMethods();
                     } else {
                         // Remove free input field, show all payment method
@@ -63,8 +63,12 @@ define([
                 parentsDl = element.closest('dl');
 
             parentsDl.find('dt input:radio').prop('checked', false);
-            parentsDl.find('.items').hide().find('[name^="payment["]').prop('disabled', true);
-            element.prop('checked', true).parent().nextUntil('dt').find('.items').show().find('[name^="payment["]').prop('disabled', false);
+            parentsDl.find('dd').addClass('no-display').end()
+                .find('.items').hide()
+                .find('[name^="payment["]').prop('disabled', true);
+            element.prop('checked', true).parent()
+                .next('dd').removeClass('no-display')
+                .find('.items').show().find('[name^="payment["]').prop('disabled', false);
         },
 
         /**
@@ -80,7 +84,7 @@ define([
                 alert({
                     content: $.mage.__('We can\'t complete your order because you don\'t have a payment method set up.')
                 });
-            } else if (this.options.checkoutPrice < this.options.minBalance) {
+            } else if (this.options.checkoutPrice <= this.options.minBalance) {
                 isValid = true;
             } else if (methods.filter('input:radio:checked').length) {
                 isValid = true;
@@ -116,10 +120,18 @@ define([
          */
         _enablePaymentMethods: function () {
             this.element.find('input[name="payment[method]"]').prop('disabled', false).end()
-                .find('input[name="payment[method]"][value="free"]').remove().end()
                 .find('dt input:radio:checked').trigger('click').end()
                 .find('input[id^="use"][name^="payment[use"]:not(:checked)').prop('disabled', false).parent().show();
             this.element.find(this.options.methodsContainer).show();
+        },
+
+        /**
+         * Returns checked payment method.
+         *
+         * @private
+         */
+        _getSelectedPaymentMethod: function () {
+            return this.element.find('input[name=\'payment[method]\']:checked');
         },
 
         /**
@@ -128,10 +140,20 @@ define([
          * @param {EventObject} e
          */
         _submitHandler: function (e) {
+            var currentMethod,
+                submitButton;
+
             e.preventDefault();
 
             if (this._validatePaymentMethod()) {
-                this.element.submit();
+                currentMethod = this._getSelectedPaymentMethod();
+                submitButton = currentMethod.parent().next('dd').find('button[type=submit]');
+
+                if (submitButton.length) {
+                    submitButton.first().trigger('click');
+                } else {
+                    this.element.submit();
+                }
             }
         }
     });

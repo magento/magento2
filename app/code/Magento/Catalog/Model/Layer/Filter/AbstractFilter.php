@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
  * Layer category filter abstract model
+ *
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractFilter extends \Magento\Framework\DataObject implements FilterInterface
 {
@@ -136,7 +139,7 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
     }
 
     /**
-     * Get fiter items count
+     * Get filter items count
      *
      * @return int
      */
@@ -238,7 +241,7 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
     }
 
     /**
-     * Get all product ids from from collection with applied filters
+     * Get all product ids from collection with applied filters
      *
      * @return array
      */
@@ -376,7 +379,7 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
      */
     protected function getAttributeIsFilterable($attribute)
     {
-        return $attribute->getIsFilterable();
+        return (int)$attribute->getIsFilterable();
     }
 
     /**

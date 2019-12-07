@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Export;
@@ -12,15 +12,17 @@ use Magento\ImportExport\Model\Export;
 /**
  * Export entity abstract model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Framework\Data\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Framework\Data\Collection::class;
 
     /**#@-*/
 
@@ -31,11 +33,7 @@ abstract class AbstractEntity
 
     /**#@-*/
 
-    /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
+    /**#@-*/
     protected $_storeManager;
 
     /**

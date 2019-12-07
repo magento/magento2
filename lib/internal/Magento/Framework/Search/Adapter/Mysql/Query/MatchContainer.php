@@ -1,22 +1,28 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Search\Adapter\Mysql\Query;
 
-
 use Magento\Framework\Search\Request\QueryInterface;
 
 // @codeCoverageIgnore
 
+/**
+ * MySQL search query match container.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class MatchContainer
 {
     /**
      * @var QueryInterface
      */
     private $request;
+
     /**
      * @var string
      */
@@ -34,6 +40,8 @@ class MatchContainer
     }
 
     /**
+     * Get request.
+     *
      * @return QueryInterface
      */
     public function getRequest()
@@ -42,6 +50,8 @@ class MatchContainer
     }
 
     /**
+     * Get condition type.
+     *
      * @return string
      */
     public function getConditionType()

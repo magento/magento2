@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\PageCache\Block;
 /**
  * Class JavascriptTest
  */
-class JavascriptTest extends \PHPUnit_Framework_TestCase
+class JavascriptTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\PageCache\Block\Javascript
@@ -25,10 +25,10 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $this->request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
 
         $this->javascript = $objectManager->create(
-            'Magento\PageCache\Block\Javascript'
+            \Magento\PageCache\Block\Javascript::class
         );
     }
 

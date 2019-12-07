@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,6 @@ use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Api\ExtensionAttributesInterface;
-use Magento\Framework\Reflection\MethodsMap;
 use Zend\Code\Reflection\MethodReflection;
 
 /**

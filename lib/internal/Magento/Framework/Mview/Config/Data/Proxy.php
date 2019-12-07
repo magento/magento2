@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Config\Data;
@@ -8,7 +8,8 @@ namespace Magento\Framework\Mview\Config\Data;
 /**
  * Proxy class for \Magento\Framework\Mview\Config\Data
  */
-class Proxy extends \Magento\Framework\Mview\Config\Data
+class Proxy extends \Magento\Framework\Mview\Config\Data implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -45,7 +46,7 @@ class Proxy extends \Magento\Framework\Mview\Config\Data
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Mview\Config\Data',
+        $instanceName = \Magento\Framework\Mview\Config\Data::class,
         $shared = true
     ) {
         $this->objectManager = $objectManager;
@@ -54,11 +55,13 @@ class Proxy extends \Magento\Framework\Mview\Config\Data
     }
 
     /**
+     * Remove links to objects.
+     *
      * @return array
      */
     public function __sleep()
     {
-        return ['_subject', '_isShared'];
+        return ['subject', 'isShared'];
     }
 
     /**
@@ -99,7 +102,7 @@ class Proxy extends \Magento\Framework\Mview\Config\Data
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function merge(array $config)
     {
@@ -107,7 +110,7 @@ class Proxy extends \Magento\Framework\Mview\Config\Data
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function get($path = null, $default = null)
     {

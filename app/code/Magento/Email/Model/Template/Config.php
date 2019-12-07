@@ -2,7 +2,7 @@
 /**
  * High-level interface for email templates data that hides format from the client code
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
@@ -205,8 +205,9 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
         $designParams['module'] = $module;
 
         $file = $this->_getInfo($templateId, 'file');
+        $filename = $this->getFilename($file, $designParams, $module);
 
-        return $this->viewFileSystem->getEmailTemplateFileName($file, $designParams, $module);
+        return $filename;
     }
 
     /**
@@ -229,5 +230,27 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
             );
         }
         return $data[$templateId][$fieldName];
+    }
+
+    /**
+     * Retrieve template file path.
+     *
+     * @param string $file
+     * @param array $designParams
+     * @param string $module
+     *
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     */
+    private function getFilename(string $file, array $designParams, string $module): string
+    {
+        $filename = $this->viewFileSystem->getEmailTemplateFileName($file, $designParams, $module);
+
+        if ($filename === false) {
+            throw new \UnexpectedValueException("Template file '{$file}' is not found.");
+        }
+
+        return $filename;
     }
 }

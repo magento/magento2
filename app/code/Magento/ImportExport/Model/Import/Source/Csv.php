@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import\Source;
@@ -87,7 +87,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
         } else {
             $this->_foundWrongQuoteFlag = false;
         }
-        return $parsed;
+        return is_array($parsed) ? $parsed : [];
     }
 
     /**

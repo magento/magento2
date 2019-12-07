@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Reflection;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
@@ -18,7 +19,7 @@ class MethodsMap
 {
     const SERVICE_METHOD_PARAMS_CACHE_PREFIX = 'service_method_params_';
     const SERVICE_INTERFACE_METHODS_CACHE_PREFIX = 'serviceInterfaceMethodsMap';
-    const BASE_MODEL_CLASS = 'Magento\Framework\Model\AbstractExtensibleModel';
+    const BASE_MODEL_CLASS = \Magento\Framework\Model\AbstractExtensibleModel::class;
 
     const METHOD_META_NAME = 'name';
     const METHOD_META_TYPE = 'type';
@@ -44,6 +45,11 @@ class MethodsMap
      * @var FieldNamer
      */
     private $fieldNamer;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -88,6 +94,8 @@ class MethodsMap
      *  'validatePassword' => 'boolean'
      * ]
      * </pre>
+     * @throws \InvalidArgumentException if methods don't have annotation
+     * @throws \ReflectionException for missing DocBock or invalid reflection class
      */
     public function getMethodsMap($interfaceName)
     {
@@ -95,11 +103,11 @@ class MethodsMap
         if (!isset($this->serviceInterfaceMethodsMap[$key])) {
             $methodMap = $this->cache->load($key);
             if ($methodMap) {
-                $this->serviceInterfaceMethodsMap[$key] = unserialize($methodMap);
+                $this->serviceInterfaceMethodsMap[$key] = $this->getSerializer()->unserialize($methodMap);
             } else {
                 $methodMap = $this->getMethodMapViaReflection($interfaceName);
                 $this->serviceInterfaceMethodsMap[$key] = $methodMap;
-                $this->cache->save(serialize($this->serviceInterfaceMethodsMap[$key]), $key);
+                $this->cache->save($this->getSerializer()->serialize($this->serviceInterfaceMethodsMap[$key]), $key);
             }
         }
         return $this->serviceInterfaceMethodsMap[$key];
@@ -117,7 +125,7 @@ class MethodsMap
         $cacheId = self::SERVICE_METHOD_PARAMS_CACHE_PREFIX . hash('md5', $serviceClassName . $serviceMethodName);
         $params = $this->cache->load($cacheId);
         if ($params !== false) {
-            return unserialize($params);
+            return $this->getSerializer()->unserialize($params);
         }
         $serviceClass = new ClassReflection($serviceClassName);
         /** @var MethodReflection $serviceMethod */
@@ -133,7 +141,7 @@ class MethodsMap
                 self::METHOD_META_DEFAULT_VALUE => $isDefaultValueAvailable ? $paramReflection->getDefaultValue() : null
             ];
         }
-        $this->cache->save(serialize($params), $cacheId, [ReflectionCache::CACHE_TAG]);
+        $this->cache->save($this->getSerializer()->serialize($params), $cacheId, [ReflectionCache::CACHE_TAG]);
         return $params;
     }
 
@@ -142,6 +150,8 @@ class MethodsMap
      *
      * @param string $interfaceName
      * @return array
+     * @throws \ReflectionException for missing DocBock or invalid reflection class
+     * @throws \InvalidArgumentException if methods don't have annotation
      */
     private function getMethodMapViaReflection($interfaceName)
     {
@@ -216,5 +226,20 @@ class MethodsMap
     {
         $methods = $this->getMethodsMap($type);
         return $methods[$methodName]['isRequired'];
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated 100.2.0
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

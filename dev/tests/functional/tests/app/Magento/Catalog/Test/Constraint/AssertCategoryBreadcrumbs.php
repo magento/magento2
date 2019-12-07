@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,11 +42,16 @@ class AssertCategoryBreadcrumbs extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView
     ) {
         $this->browser = $browser;
+
         $this->openCategory($category);
 
         $breadcrumbs = $this->getBreadcrumbs($category);
+        \PHPUnit\Framework\Assert::assertNotEmpty(
+            $breadcrumbs,
+            'No breadcrumbs on category \'' . $category->getName() . '\' page.'
+        );
         $pageBreadcrumbs = $catalogCategoryView->getBreadcrumbs()->getText();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $breadcrumbs,
             $pageBreadcrumbs,
             'Wrong breadcrumbs of category page.'

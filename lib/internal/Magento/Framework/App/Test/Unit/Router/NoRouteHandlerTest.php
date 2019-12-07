@@ -2,11 +2,9 @@
 /**
  * Tests Magento\Framework\App\Router\NoRouteHandler
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit\Router;
 
@@ -27,12 +25,13 @@ class NoRouteHandlerTest extends \Magento\Framework\TestFramework\Unit\BaseTestC
      */
     private $requestMock;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
-        $this->configMock = $this->basicMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->requestMock = $this->basicMock('Magento\Framework\App\Request\Http');
-        $this->model = $this->objectManager->getObject('Magento\Framework\App\Router\NoRouteHandler',
+        $this->configMock = $this->basicMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->requestMock = $this->basicMock(\Magento\Framework\App\Request\Http::class);
+        $this->model = $this->objectManager->getObject(
+            \Magento\Framework\App\Router\NoRouteHandler::class,
             [
                 'config' => $this->configMock,
             ]

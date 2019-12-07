@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\File\Collector;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
@@ -18,6 +17,26 @@ use Magento\Framework\View\File\Factory as FileFactory;
  */
 class Theme implements CollectorInterface
 {
+    /**
+     * @var FileFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @var ReadFactory
+     */
+    private $readDirFactory;
+
+    /**
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
+     * @var string
+     */
+    private $subDir;
+
     /**
      * Constructor
      *

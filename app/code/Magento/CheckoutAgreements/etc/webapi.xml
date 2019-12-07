@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,6 +9,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/carts/licence" method="GET">
         <service class="Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/licence/list" method="GET">
+        <service class="Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>

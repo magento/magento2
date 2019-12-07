@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\Unit\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use \Magento\Wishlist\Model\Item;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
@@ -68,38 +69,38 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
-        $context = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMock();
-        $this->date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
+        $this->date = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->catalogUrl = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Url')
+        $this->catalogUrl = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Url::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->optionFactory = $this->getMockBuilder('Magento\Wishlist\Model\Item\OptionFactory')
+        $this->optionFactory = $this->getMockBuilder(\Magento\Wishlist\Model\Item\OptionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->itemOptFactory =
-            $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory')
+            $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->productTypeConfig = $this->getMockBuilder('Magento\Catalog\Model\ProductTypes\ConfigInterface')
+        $this->productTypeConfig = $this->getMockBuilder(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class)
             ->getMock();
-        $this->productRepository = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item')
+        $this->productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->resource = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
+        $this->collection = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,7 +126,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testAddGetOptions($code, $option)
     {
         $this->assertEmpty($this->model->getOptions());
-        $optionMock = $this->getMockBuilder('Magento\Wishlist\Model\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData', 'getCode', '__wakeup'])
             ->getMock();
@@ -149,7 +150,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testRemoveOptionByCode($code, $option)
     {
         $this->assertEmpty($this->model->getOptions());
-        $optionMock = $this->getMockBuilder('Magento\Wishlist\Model\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData', 'getCode', '__wakeup'])
             ->getMock();
@@ -171,9 +172,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($actualOption->isDeleted());
     }
 
+    /**
+     * @return array
+     */
     public function getOptionsDataProvider()
     {
-        $optionMock = $this->getMockBuilder('Magento\Wishlist\Model\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', '__wakeup'])
             ->getMock();
@@ -181,7 +185,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->will($this->returnValue('second_key'));
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         return [
@@ -195,11 +199,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $code = 'someOption';
         $optionValue = 100;
-        $optionsOneMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $optionsOneMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', '__wakeup', 'getValue'])
             ->getMock();
-        $optionsTwoMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $optionsTwoMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getValue'])
             ->getMock();
@@ -221,11 +225,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $code = 'someOption';
         $optionOneValue = 100;
         $optionTwoValue = 200;
-        $optionsOneMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $optionsOneMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', '__wakeup', 'getValue'])
             ->getMock();
-        $optionsTwoMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $optionsTwoMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getValue'])
             ->getMock();
@@ -245,11 +249,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testCompareOptionsNegativeOptionsTwoHaveNotOption()
     {
         $code = 'someOption';
-        $optionsOneMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $optionsOneMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', '__wakeup'])
             ->getMock();
-        $optionsTwoMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $optionsTwoMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();
@@ -267,7 +271,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetAndSaveItemOptions()
     {
         $this->assertEmpty($this->model->getOptions());
-        $firstOptionMock = $this->getMockBuilder('Magento\Wishlist\Model\Item\Option')
+        $firstOptionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', 'isDeleted', 'delete', '__wakeup'])
             ->getMock();
@@ -280,7 +284,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $firstOptionMock->expects($this->once())
             ->method('delete');
 
-        $secondOptionMock = $this->getMockBuilder('Magento\Wishlist\Model\Item\Option')
+        $secondOptionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', 'save', '__wakeup'])
             ->getMock();
@@ -298,7 +302,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductWithException()
     {
-        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', __('Cannot specify product.'));
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Cannot specify product.');
         $this->model->getProduct();
     }
 
@@ -308,17 +313,19 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $storeId = 0;
         $this->model->setData('product_id', $productId);
         $this->model->setData('store_id', $storeId);
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
+            ->setMethods(['setCustomOptions', 'setFinalPrice'])
             ->getMock();
         $productMock->expects($this->any())
             ->method('setFinalPrice')
             ->with(null);
         $productMock->expects($this->any())
-            ->method('setCustomOprtions')
+            ->method('setCustomOptions')
             ->with([]);
         $this->productRepository->expects($this->once())
             ->method('getById')
+            ->with($productId, false, $storeId, true)
             ->willReturn($productMock);
         $this->assertEquals($productMock, $this->model->getProduct());
     }

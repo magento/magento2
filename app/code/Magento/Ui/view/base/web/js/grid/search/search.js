@@ -1,28 +1,42 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
     'uiLayout',
     'mage/translate',
     'mageUtils',
-    'uiElement'
-], function (_, layout, $t, utils, Element) {
+    'uiElement',
+    'jquery'
+], function (_, layout, $t, utils, Element, $) {
     'use strict';
 
     return Element.extend({
         defaults: {
             template: 'ui/grid/search/search',
-            placeholder: $t('Search by keyword'),
+            placeholder: 'Search by keyword',
             label: $t('Keyword'),
             value: '',
+            previews: [],
+            chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             statefull: {
                 value: true
             },
+            tracks: {
+                value: true,
+                previews: true,
+                inputValue: true,
+                focused: true
+            },
             imports: {
                 inputValue: 'value',
-                updatePreview: 'value'
+                updatePreview: 'value',
+                focused: false
             },
             exports: {
                 value: '${ $.provider }:params.search'
@@ -38,23 +52,19 @@ define([
          * @returns {Search} Chainable.
          */
         initialize: function () {
+            var urlParams = window.location.href.slice(window.location.href.search('[\&\?](search=)')).split('&'),
+                searchTerm = [];
+
             this._super()
                 .initChips();
 
-            return this;
-        },
+            if (urlParams[0]) {
+                searchTerm = urlParams[0].split('=');
 
-        /**
-         * Initializes observable properties.
-         *
-         * @returns {Search} Chainable.
-         */
-        initObservable: function () {
-            this._super()
-                .track('inputValue value')
-                .track({
-                    previews: []
-                });
+                if (searchTerm[1]) {
+                    this.apply(decodeURIComponent(searchTerm[1]));
+                }
+            }
 
             return this;
         },
@@ -82,6 +92,18 @@ define([
         },
 
         /**
+         * Click To ScrollTop.
+         */
+        scrollTo: function ($data) {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'slow', function () {
+                $data.focused = false;
+                $data.focused = true;
+            });
+        },
+
+        /**
          * Resets input value to the last applied state.
          *
          * @returns {Search} Chainable.
@@ -95,14 +117,14 @@ define([
         /**
          * Applies search query.
          *
-         * @param {String} [value=inputValue] - If not specfied, then
+         * @param {String} [value=inputValue] - If not specified, then
          *      value of the input field will be used.
          * @returns {Search} Chainable.
          */
         apply: function (value) {
             value = value || this.inputValue;
 
-            this.value = this.inputValue = value;
+            this.value = this.inputValue = value.trim();
 
             return this;
         },

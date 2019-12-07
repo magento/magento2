@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer\BlockRenderer;
@@ -8,20 +8,20 @@ namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer\BlockRendere
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetCacheKeyInfo()
     {
         $helper = new ObjectManager($this);
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface');
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects(static::once())
             ->method('getStore')
             ->willReturn($storeMock);
 
         /** @var Template $template */
         $template = $helper->getObject(
-            'Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template',
+            \Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template::class,
             [
                 'storeManager' => $storeManager
             ]

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block;
 
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @magentoAppArea frontend
      * @magentoDataFixture Magento/Cms/_files/block.php
      * @magentoDataFixture Magento/Variable/_files/variable.php
      * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
@@ -15,13 +16,15 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        $cmsBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Block');
+        $cmsBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Cms\Model\Block::class
+        );
         $cmsBlock->load('fixture_block', 'identifier');
         /** @var $block \Magento\Cms\Block\Block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Cms\Block\Block'
+            \Magento\Cms\Block\Block::class
         );
         $block->setBlockId($cmsBlock->getId());
         $result = $block->toHtml();

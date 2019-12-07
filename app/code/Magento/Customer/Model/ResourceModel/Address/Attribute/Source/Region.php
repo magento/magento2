@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,11 +33,9 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
-     * Retrieve all region options
-     *
-     * @return array
+     * @inheritdoc
      */
-    public function getAllOptions()
+    public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
         if (!$this->_options) {
             $this->_options = $this->_createRegionsCollection()->load()->toOptionArray();

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,9 +12,9 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Shipping::config_shipping" title="Shipping Settings Section" sortOrder="5" />
-                            <resource id="Magento_Shipping::shipping_policy" title="Shipping Policy Parameters Section" sortOrder="5" />
-                            <resource id="Magento_Shipping::carriers" title="Shipping Methods Section" sortOrder="5" />
+                            <resource id="Magento_Shipping::config_shipping" title="Shipping Settings Section" translate="title" sortOrder="5" />
+                            <resource id="Magento_Shipping::shipping_policy" title="Shipping Policy Parameters Section" translate="title" sortOrder="5" />
+                            <resource id="Magento_Shipping::carriers" title="Shipping Methods Section" translate="title" sortOrder="5" />
                         </resource>
                     </resource>
                 </resource>

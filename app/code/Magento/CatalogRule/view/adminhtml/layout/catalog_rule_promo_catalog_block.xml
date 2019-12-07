@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="promo.catalog.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">promo_catalog_grid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\CatalogRule\Model\ResourceModel\Grid\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\CatalogRule\Model\ResourceModel\Grid\Collection</argument>
                     <argument name="default_sort" xsi:type="string">name</argument>
                     <argument name="default_dir" xsi:type="string">ASC</argument>
                     <argument name="save_parameters_in_session" xsi:type="string">1</argument>
@@ -25,7 +25,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="rule_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="promo.catalog.grid.columnSet.rule_id" as="rule_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="index" xsi:type="string">rule_id</argument>
@@ -34,33 +34,35 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="promo.catalog.grid.columnSet.name" as="name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Rule</argument>
                             <argument name="index" xsi:type="string">name</argument>
                             <argument name="type" xsi:type="string">text</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="from_date">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="promo.catalog.grid.columnSet.from_date" as="from_date">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Start</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="timezone" xsi:type="boolean">false</argument>
                             <argument name="index" xsi:type="string">from_date</argument>
                             <argument name="column_css_class" xsi:type="string">col-date</argument>
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="to_date">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="promo.catalog.grid.columnSet.to_date" as="to_date">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">End</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="timezone" xsi:type="boolean">false</argument>
                             <argument name="default" xsi:type="string">--</argument>
                             <argument name="index" xsi:type="string">to_date</argument>
                             <argument name="column_css_class" xsi:type="string">col-date</argument>
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_active">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="promo.catalog.grid.columnSet.is_active" as="is_active">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>
                             <argument name="index" xsi:type="string">is_active</argument>
@@ -77,7 +79,7 @@
                             </argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="rule_website">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="promo.catalog.grid.columnSet.rule_website" as="rule_website">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Web Site</argument>
                             <argument name="index" xsi:type="string">website_ids</argument>

@@ -5,11 +5,14 @@
  * Uses OS tools to provide accurate information about factual memory consumption.
  * The PHP standard functions may return incorrect information because the process itself may have leaks.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Helper;
 
+/**
+ * Integration Test Framework memory management logic.
+ */
 class Memory
 {
     /**
@@ -38,21 +41,21 @@ class Memory
     /**
      * Retrieve the effective memory usage of the current process
      *
-     * memory_get_usage() cannot be used because of the bug
-     * @link https://bugs.php.net/bug.php?id=62467
+     * Function memory_get_usage() cannot be used because of the bug
      *
+     * @link https://bugs.php.net/bug.php?id=62467
      * @return int Memory usage in bytes
      */
     public function getRealMemoryUsage()
     {
         $pid = getmypid();
         try {
+            // fall back to the Unix command line
+            $result = $this->_getUnixProcessMemoryUsage($pid);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // try to use the Windows command line
             // some ports of Unix commands on Windows, such as MinGW, have limited capabilities and cannot be used
             $result = $this->_getWinProcessMemoryUsage($pid);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            // fall back to the Unix command line
-            $result = $this->_getUnixProcessMemoryUsage($pid);
         }
         return $result;
     }
@@ -100,9 +103,11 @@ class Memory
      * @return int
      * @throws \InvalidArgumentException
      * @throws \OutOfBoundsException
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function convertToBytes($number)
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         if (!preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
             throw new \InvalidArgumentException("Number format '{$number}' is not recognized.");
         }
@@ -132,12 +137,14 @@ class Memory
      * - but the value has only one delimiter, such as "234,56", then it is impossible to know whether it is decimal
      *   separator or not. Only knowing the right format would allow this.
      *
-     * @param $number
+     * @param string $number
      * @return string
      * @throws \InvalidArgumentException
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     protected static function _convertToNumber($number)
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         preg_match_all('/(\D+)/', $number, $matches);
         if (count(array_unique($matches[0])) > 1) {
             throw new \InvalidArgumentException(
@@ -152,9 +159,11 @@ class Memory
      *
      * @link http://php.net/manual/en/function.php-uname.php
      * @return boolean
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function isMacOs()
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         return strtoupper(PHP_OS) === 'DARWIN';
     }
 }

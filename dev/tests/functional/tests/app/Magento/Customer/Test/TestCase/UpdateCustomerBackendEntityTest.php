@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Precondition:
@@ -30,7 +31,6 @@ class UpdateCustomerBackendEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -48,6 +48,24 @@ class UpdateCustomerBackendEntityTest extends Injectable
     protected $customerIndexEditPage;
 
     /**
+     * FixtureFactory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
+     * Inject FixtureFactory.
+     *
+     * @param FixtureFactory $fixtureFactory
+     * @return void
+     */
+    public function __prepare(FixtureFactory $fixtureFactory)
+    {
+        $this->fixtureFactory = $fixtureFactory;
+    }
+
+    /**
      * Inject pages.
      *
      * @param CustomerIndex $customerIndexPage
@@ -63,26 +81,101 @@ class UpdateCustomerBackendEntityTest extends Injectable
     }
 
     /**
+     * Prepares customer returned after test.
+     *
+     * @param Customer $customer
+     * @param Customer $initialCustomer
+     * @param Address|null $address
+     * @param Address|null $addressToDelete
+     * @return Customer
+     */
+    private function prepareCustomer(
+        Customer $customer,
+        Customer $initialCustomer,
+        Address $address = null,
+        Address $addressToDelete = null
+    ) {
+        $data = $customer->hasData()
+            ? array_replace_recursive($initialCustomer->getData(), $customer->getData())
+            : $initialCustomer->getData();
+        $groupId = $customer->hasData('group_id') ? $customer : $initialCustomer;
+        $data['group_id'] = ['customerGroup' => $groupId->getDataFieldConfig('group_id')['source']->getCustomerGroup()];
+        $customerAddress = $this->prepareCustomerAddress($initialCustomer, $address, $addressToDelete);
+        if (!empty($customerAddress)) {
+            $data['address'] = $customerAddress;
+        }
+
+        return $this->fixtureFactory->createByCode(
+            'customer',
+            ['data' => $data]
+        );
+    }
+
+    /**
+     * Prepare address for customer entity.
+     *
+     * @param Customer $initialCustomer
+     * @param Address|null $address
+     * @param Address|null $addressToDelete
+     * @return array
+     */
+    private function prepareCustomerAddress(
+        Customer $initialCustomer,
+        Address $address = null,
+        Address $addressToDelete = null
+    ) {
+        $customerAddress = [];
+
+        if ($initialCustomer->hasData('address')) {
+            $addressesList = $initialCustomer->getDataFieldConfig('address')['source']->getAddresses();
+            foreach ($addressesList as $key => $addressFixture) {
+                if ($addressToDelete === null || $addressFixture != $address) {
+                    $customerAddress = ['addresses' => [$key => $addressFixture]];
+                }
+            }
+        }
+        if ($address !== null) {
+            $customerAddress['addresses'][] = $address;
+        }
+
+        return $customerAddress;
+    }
+
+    /**
      * Run update customer test.
      *
      * @param Customer $initialCustomer
      * @param Customer $customer
-     * @param Address $address [optional]
-     * @return void
+     * @param Address|null $address
+     * @param int|null $addressIndexToDelete
+     * @throws \Exception
+     * @return array
      */
     public function testUpdateCustomerBackendEntity(
         Customer $initialCustomer,
         Customer $customer,
-        Address $address = null
+        Address $address = null,
+        $addressIndexToDelete = null
     ) {
         // Precondition
         $initialCustomer->persist();
+
+        $addressToDelete = null;
+        if ($addressIndexToDelete !== null) {
+            $addressToDelete =
+                $initialCustomer->getDataFieldConfig('address')['source']->getAddresses()[$addressIndexToDelete];
+        }
 
         // Steps
         $filter = ['email' => $initialCustomer->getEmail()];
         $this->customerIndexPage->open();
         $this->customerIndexPage->getCustomerGridBlock()->searchAndOpen($filter);
-        $this->customerIndexEditPage->getCustomerForm()->updateCustomer($customer, $address);
+        $this->customerIndexEditPage->getCustomerForm()->updateCustomer($customer, $address, $addressToDelete);
         $this->customerIndexEditPage->getPageActionsBlock()->save();
+
+        return [
+            'customer' => $this->prepareCustomer($customer, $initialCustomer, $address, $addressToDelete),
+            'addressToDelete' => $addressToDelete,
+        ];
     }
 }

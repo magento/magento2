@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -74,38 +74,34 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $notification = 'setup-cron: Please check var/log/update.log for execution summary.';
+
+        if (!$this->deploymentConfig->isAvailable()) {
+            $output->writeln($notification);
+            $this->status->add('Magento is not installed.', \Psr\Log\LogLevel::INFO);
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        }
+
         if (!$this->checkRun()) {
-            return;
+            $output->writeln($notification);
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
-            $this->status->add($e->getMessage());
-            return;
+            $this->status->add($e->getMessage(), \Psr\Log\LogLevel::ERROR);
+            $output->writeln($notification);
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        try {
-            while (!empty($this->queue->peek()) && strpos($this->queue->peek()[Queue::KEY_JOB_NAME], 'setup:') === 0) {
-                $job = $this->queue->popQueuedJob();
-                $this->status->add(
-                    sprintf('Job "%s" has started' . PHP_EOL, $job)
-                );
-                try {
-                    $job->execute();
-                    $this->status->add(sprintf('Job "%s" has been successfully completed', $job));
-                } catch (\Exception $e) {
-                    $this->status->toggleUpdateError(true);
-                    $this->status->add(
-                        sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage())
-                    );
-                }
-            }
-        } catch (\Exception $e) {
-            $this->status->add($e->getMessage());
-            $this->status->toggleUpdateError(true);
-        } finally {
-            $this->status->toggleUpdateInProgress(false);
+        $returnCode = $this->executeJobsFromQueue();
+        if ($returnCode != \Magento\Framework\Console\Cli::RETURN_SUCCESS) {
+            $output->writeln($notification);
         }
+
+        return $returnCode;
     }
 
     /**
@@ -115,9 +111,48 @@ class CronRunCommand extends AbstractSetupCommand
      */
     private function checkRun()
     {
-        return $this->deploymentConfig->isAvailable()
-        && $this->readinessCheck->runReadinessCheck()
+        return $this->readinessCheck->runReadinessCheck()
         && !$this->status->isUpdateInProgress()
         && !$this->status->isUpdateError();
+    }
+
+    /**
+     * Executes setup jobs from the queue
+     *
+     * @return int
+     */
+    private function executeJobsFromQueue()
+    {
+        $returnCode = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        try {
+            while (!empty($this->queue->peek()) && strpos($this->queue->peek()[Queue::KEY_JOB_NAME], 'setup:') === 0) {
+                $job = $this->queue->popQueuedJob();
+                $this->status->add(
+                    sprintf('Job "%s" has started' . PHP_EOL, $job),
+                    \Psr\Log\LogLevel::INFO
+                );
+                try {
+                    $job->execute();
+                    $this->status->add(
+                        sprintf('Job "%s" has been successfully completed', $job),
+                        \Psr\Log\LogLevel::INFO
+                    );
+                } catch (\Exception $e) {
+                    $this->status->toggleUpdateError(true);
+                    $this->status->add(
+                        sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage()),
+                        \Psr\Log\LogLevel::ERROR
+                    );
+                    $returnCode = \Magento\Framework\Console\Cli::RETURN_FAILURE;
+                }
+            }
+        } catch (\Exception $e) {
+            $this->status->add($e->getMessage(), \Psr\Log\LogLevel::ERROR);
+            $this->status->toggleUpdateError(true);
+            $returnCode = \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        } finally {
+            $this->status->toggleUpdateInProgress(false);
+        }
+        return $returnCode;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Wishlist\Grid\Renderer;
@@ -18,6 +18,6 @@ class Description extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        return nl2br(htmlspecialchars($row->getData($this->getColumn()->getIndex())));
+        return nl2br($this->escapeHtml($row->getData($this->getColumn()->getIndex())));
     }
 }

@@ -1,21 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Report statistics admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Backend\Model\Session;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-abstract class Statistics extends \Magento\Backend\App\Action
+/**
+ * Report statistics admin controller.
+ *
+ * @api
+ * @since 100.0.2
+ */
+abstract class Statistics extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Reports::statistics';
+
     /**
      * Admin session model
      *
@@ -38,7 +47,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param [] $reportTypes
+     * @param array $reportTypes
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -90,16 +99,6 @@ abstract class Statistics extends \Magento\Backend\App\Action
     }
 
     /**
-     * Determine if action is allowed for reports module
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Reports::statistics');
-    }
-
-    /**
      * Retrieve admin session model
      *
      * @return AuthSession|Session|mixed|null
@@ -107,7 +106,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
     protected function _getSession()
     {
         if ($this->_adminSession === null) {
-            $this->_adminSession = $this->_objectManager->get('Magento\Backend\Model\Auth\Session');
+            $this->_adminSession = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class);
         }
         return $this->_adminSession;
     }

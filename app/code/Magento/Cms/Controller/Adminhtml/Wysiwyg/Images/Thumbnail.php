@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
@@ -29,7 +29,6 @@ class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
         parent::__construct($context, $coreRegistry);
     }
 
-
     /**
      * Generate image thumbnail on the fly
      *
@@ -38,13 +37,13 @@ class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     public function execute()
     {
         $file = $this->getRequest()->getParam('file');
-        $file = $this->_objectManager->get('Magento\Cms\Helper\Wysiwyg\Images')->idDecode($file);
+        $file = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->idDecode($file);
         $thumb = $this->getStorage()->resizeOnTheFly($file);
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
         if ($thumb !== false) {
             /** @var \Magento\Framework\Image\Adapter\AdapterInterface $image */
-            $image = $this->_objectManager->get('Magento\Framework\Image\AdapterFactory')->create();
+            $image = $this->_objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
             $image->open($thumb);
             $resultRaw->setHeader('Content-Type', $image->getMimeType());
             $resultRaw->setContents($image->getImage());

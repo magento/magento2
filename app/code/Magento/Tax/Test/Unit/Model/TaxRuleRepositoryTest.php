@@ -1,14 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model;
 
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use \Magento\Tax\Model\TaxRuleRepository;
 
-class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class TaxRuleRepositoryTest
+ * @package Magento\Tax\Test\Unit\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Model\TaxRuleRepository
@@ -55,61 +64,57 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |
+     * \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->taxRuleRegistry = $this->getMock('\Magento\Tax\Model\Calculation\TaxRuleRegistry', [], [], '', false);
-        $this->searchResultFactory = $this->getMock(
-            '\Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->taxRuleRegistry =
+            $this->createMock(\Magento\Tax\Model\Calculation\TaxRuleRegistry::class);
+        $this->taxRuleRegistry = $this->createMock(\Magento\Tax\Model\Calculation\TaxRuleRegistry::class);
+        $this->searchResultFactory = $this->createPartialMock(
+            \Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory::class,
+            ['create']
         );
-        $this->searchResultsMock = $this->getMock(
-            '\Magento\Tax\Api\Data\TaxRuleSearchResultsInterface',
-            [],
-            [],
-            '',
-            false
+        $this->searchResultsMock = $this->createMock(\Magento\Tax\Api\Data\TaxRuleSearchResultsInterface::class);
+        $this->ruleFactory = $this->createMock(\Magento\Tax\Model\Calculation\RuleFactory::class);
+        $this->collectionFactory = $this->createPartialMock(
+            \Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory::class,
+            ['create']
         );
-        $this->ruleFactory = $this->getMock('\Magento\Tax\Model\Calculation\RuleFactory', [], [], '', false);
-        $this->collectionFactory = $this->getMock(
-            '\Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->resource = $this->createMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class);
+        $this->extensionAttributesJoinProcessorMock = $this->createPartialMock(
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessor::class,
+            ['process']
         );
-        $this->resource = $this->getMock('\Magento\Tax\Model\ResourceModel\Calculation\Rule', [], [], '', false);
-        $this->extensionAttributesJoinProcessorMock = $this->getMock(
-            '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
-            ['process'],
-            [],
-            '',
-            false
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
-
         $this->model = new TaxRuleRepository(
             $this->taxRuleRegistry,
             $this->searchResultFactory,
             $this->ruleFactory,
             $this->collectionFactory,
             $this->resource,
-            $this->extensionAttributesJoinProcessorMock
+            $this->extensionAttributesJoinProcessorMock,
+            $this->collectionProcessor
         );
     }
 
     public function testGet()
     {
-        $rule = $this->getMock('\Magento\Tax\Model\Calculation\Rule', [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
         $this->assertEquals($rule, $this->model->get(10));
     }
 
     public function testDelete()
     {
-        $rule = $this->getMock('\Magento\Tax\Model\Calculation\Rule', [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
         $this->resource->expects($this->once())->method('delete')->with($rule);
         $this->taxRuleRegistry->expects($this->once())->method('removeTaxRule')->with(10);
@@ -118,7 +123,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteById()
     {
-        $rule = $this->getMock('\Magento\Tax\Model\Calculation\Rule', [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
 
         $rule->expects($this->once())->method('getId')->willReturn(10);
@@ -129,7 +134,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $rule = $this->getMock('\Magento\Tax\Model\Calculation\Rule', [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
 
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
@@ -144,13 +149,13 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
      * @param $exceptionName
      * @param $exceptionMessage
      * @throws \Exception
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testSaveWithExceptions($exceptionObject, $exceptionName, $exceptionMessage)
     {
-        $rule = $this->getMock('\Magento\Tax\Model\Calculation\Rule', [], [], '', false);
+        $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
 
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
@@ -158,24 +163,25 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($exceptionObject);
         $this->taxRuleRegistry->expects($this->never())->method('registerTaxRule');
 
-        $this->setExpectedException($exceptionName, $exceptionMessage);
+        $this->expectException($exceptionName);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->model->save($rule);
     }
 
+    /**
+     * @return array
+     */
     public function saveExceptionsDataProvider()
     {
         return [
             [
-                new \Magento\Framework\Exception\LocalizedException(__('Could not save')),
-                '\Magento\Framework\Exception\CouldNotSaveException',
+                new LocalizedException(__('Could not save')), CouldNotSaveException::class,
                 'Could not save'
             ], [
-                new \Magento\Framework\Exception\AlreadyExistsException(__('Entity already exists')),
-                '\Magento\Framework\Exception\AlreadyExistsException',
+                new AlreadyExistsException(__('Entity already exists')), AlreadyExistsException::class,
                 'Entity already exists'
             ], [
-                new \Magento\Framework\Exception\NoSuchEntityException(__('No such entity')),
-                '\Magento\Framework\Exception\NoSuchEntityException',
+                new NoSuchEntityException(__('No such entity')), NoSuchEntityException::class,
                 'No such entity'
             ]
         ];
@@ -183,44 +189,19 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $collectionSize = 1;
-        $currentPage = 42;
-        $pageSize = 4;
-
-        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $collectionMock =
-            $this->getMock('Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection', [], [], '', false);
-        $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
-        $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
+            $this->createMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class);
+        $this->createMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class);
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with($collectionMock);
-
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock);
         $this->searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
-        $filterGroupMock->expects($this->exactly(2))->method('getFilters')->willReturn([$filterMock]);
-        $filterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('eq');
-        $filterMock->expects($this->exactly(2))->method('getField')->willReturnOnConsecutiveCalls(
-            'rate.tax_calculation_rate_id',
-            'cd.customer_tax_class_id'
-        );
-        $filterMock->expects($this->once())->method('getValue')->willReturn('value');
-        $collectionMock->expects($this->exactly(2))->method('joinCalculationData')->withConsecutive(['rate'], ['cd']);
-        $collectionMock->expects($this->once())->method('addFieldToFilter')
-            ->with([0 => 'rate.tax_calculation_rate_id'], [0 => ['eq' => 'value']]);
-        $collectionMock->expects($this->once())->method('getSize')->willReturn($collectionSize);
-        $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
-        $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
-        $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
-        $collectionMock->expects($this->once())->method('addOrder')->with('position', 'ASC');
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
         $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);

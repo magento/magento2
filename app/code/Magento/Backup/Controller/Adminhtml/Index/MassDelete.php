@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
@@ -49,13 +49,13 @@ class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
 
             $resultData->setIsSuccess(true);
             if ($allBackupsDeleted) {
-                $this->messageManager->addSuccess(__('You deleted the selected backup(s).'));
+                $this->messageManager->addSuccessMessage(__('You deleted the selected backup(s).'));
             } else {
                 throw new \Exception($deleteFailMessage);
             }
         } catch (\Exception $e) {
             $resultData->setIsSuccess(false);
-            $this->messageManager->addError($deleteFailMessage);
+            $this->messageManager->addErrorMessage($deleteFailMessage);
         }
 
         return $this->_redirect('backup/*/index');

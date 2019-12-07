@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Controller\Checkout;
@@ -9,9 +9,12 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\PaymentException;
+use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Class OverviewPost
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OverviewPost extends \Magento\Multishipping\Controller\Checkout
 {
@@ -31,6 +34,11 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
     protected $agreementsValidator;
 
     /**
+     * @var SessionManagerInterface
+     */
+    private $session;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
@@ -38,6 +46,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+     * @param SessionManagerInterface $session
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -46,11 +55,14 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
         AccountManagementInterface $accountManagement,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
+        SessionManagerInterface $session
     ) {
         $this->formKeyValidator = $formKeyValidator;
         $this->logger = $logger;
         $this->agreementsValidator = $agreementValidator;
+        $this->session = $session;
+
         parent::__construct(
             $context,
             $customerSession,
@@ -93,11 +105,17 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
                 $paymentInstance->setCcCid($payment['cc_cid']);
             }
             $this->_getCheckout()->createOrders();
-            $this->_getState()->setActiveStep(State::STEP_SUCCESS);
             $this->_getState()->setCompleteStep(State::STEP_OVERVIEW);
-            $this->_getCheckout()->getCheckoutSession()->clearQuote();
-            $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
-            $this->_redirect('*/*/success');
+
+            if ($this->session->getAddressErrors()) {
+                $this->_getState()->setActiveStep(State::STEP_RESULTS);
+                $this->_redirect('*/*/results');
+            } else {
+                $this->_getState()->setActiveStep(State::STEP_SUCCESS);
+                $this->_getCheckout()->getCheckoutSession()->clearQuote();
+                $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
+                $this->_redirect('*/*/success');
+            }
         } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
@@ -106,7 +124,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->_redirect('*/*/billing');
         } catch (\Magento\Checkout\Exception $e) {
             $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
+                \Magento\Checkout\Helper\Data::class
             )->sendPaymentFailedEmail(
                 $this->_getCheckout()->getQuote(),
                 $e->getMessage(),
@@ -117,7 +135,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->_redirect('*/cart');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
+                \Magento\Checkout\Helper\Data::class
             )->sendPaymentFailedEmail(
                 $this->_getCheckout()->getQuote(),
                 $e->getMessage(),
@@ -129,7 +147,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->logger->critical($e);
             try {
                 $this->_objectManager->get(
-                    'Magento\Checkout\Helper\Data'
+                    \Magento\Checkout\Helper\Data::class
                 )->sendPaymentFailedEmail(
                     $this->_getCheckout()->getQuote(),
                     $e->getMessage(),

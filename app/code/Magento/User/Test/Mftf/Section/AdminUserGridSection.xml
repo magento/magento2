@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminUserGridSection">
+        <element name="usernameFilterTextField" type="input" selector="#permissionsUserGrid_filter_username"/>
+        <element name="searchButton" type="button" selector=".admin__data-grid-header button[title=Search]"/>
+        <element name="resetButton" type="button" selector="button[title='Reset Filter']"/>
+        <element name="usernameInFirstRow" type="text" selector=".col-username"/>
+        <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
+        <element name="successMessage" type="text" selector=".message-success"/>
+    </section>
+
+    <section name="AdminDeleteUserSection">
+        <element name="theUser" selector="//td[contains(text(), '{{userName}}')]" type="button" parameterized="true"/>
+        <element name="password" selector="#user_current_password" type="input"/>
+        <element name="delete" selector="//button/span[contains(text(), 'Delete User')]" type="button"/>
+        <element name="confirm" selector="//*[@class='action-primary action-accept']" type="button"/>
+        <element name="role" parameterized="true" selector="//td[contains(text(), '{{args}}')]" type="button"/>
+    </section>
+</sections>

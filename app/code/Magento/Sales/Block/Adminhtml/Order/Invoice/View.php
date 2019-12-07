@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Block\Adminhtml\Order\Invoice;
 
 /**
  * Adminhtml invoice create
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -113,8 +113,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 $orderPayment->canRefund() && !$this->getInvoice()->getIsUsedForRefund()
             ) {
                 $this->buttonList->add(
-                    'capture',
-                    [ // capture?
+                    'credit-memo',
+                    [
                         'label' => __('Credit Memo'),
                         'class' => 'credit-memo',
                         'onclick' => 'setLocation(\'' . $this->getCreditMemoUrl() . '\')'
@@ -304,7 +304,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'setLocation(\'' . $this->getInvoice()->getBackUrl() . '\')'
                 );
             }
-            return $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('sales/invoice/') . '\')');
+            return $this->buttonList->update(
+                'back',
+                'onclick',
+                'setLocation(\'' . $this->getUrl('sales/invoice/') . '\')'
+            );
         }
         return $this;
     }

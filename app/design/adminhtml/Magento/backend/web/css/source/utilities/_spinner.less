@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -8,30 +8,37 @@
         0% {
             background-color: @spinner-first-color;
         }
+
         100% {
             background-color: @spinner-second-color;
         }
     }
+
     @-webkit-keyframes @spinner-keyframe-name {
         0% {
             background-color: @spinner-first-color;
         }
+
         100% {
             background-color: @spinner-second-color;
         }
     }
+
     @-ms-keyframes @spinner-keyframe-name {
         0% {
             background-color: @spinner-first-color;
         }
+
         100% {
             background-color: @spinner-second-color;
         }
     }
+
     @keyframes @spinner-keyframe-name {
         0% {
             background-color: @spinner-first-color;
         }
+
         100% {
             background-color: @spinner-second-color;
         }
@@ -48,44 +55,45 @@
         (@_spinner-rotate - @spinner-rotate-step),
         (@_spinner-delay - @spinner-animation-step)
     );
+
     > span {
         &:nth-child(@{_spinner-spin-count}) {
             -webkit-animation-delay: @_spinner-delay;
-               -moz-animation-delay: @_spinner-delay;
-                -ms-animation-delay: @_spinner-delay;
-                    animation-delay: @_spinner-delay;
+            -moz-animation-delay: @_spinner-delay;
+            -ms-animation-delay: @_spinner-delay;
+            animation-delay: @_spinner-delay;
 
             -webkit-transform: ~'rotate(@{_spinner-rotate}deg)';
-               -moz-transform: ~'rotate(@{_spinner-rotate}deg)';
-                -ms-transform: ~'rotate(@{_spinner-rotate}deg)';
-                    transform: ~'rotate(@{_spinner-rotate}deg)';
+            -moz-transform: ~'rotate(@{_spinner-rotate}deg)';
+            -ms-transform: ~'rotate(@{_spinner-rotate}deg)';
+            transform: ~'rotate(@{_spinner-rotate}deg)';
         }
     }
 }
 
 ._spinner_transform() {
     -webkit-transform: @spinner-animation-transform;
-       -moz-transform: @spinner-animation-transform;
-        -ms-transform: @spinner-animation-transform;
-            transform: @spinner-animation-transform;
+    -moz-transform: @spinner-animation-transform;
+    -ms-transform: @spinner-animation-transform;
+    transform: @spinner-animation-transform;
 
     -webkit-animation-name: @spinner-keyframe-name;
-       -moz-animation-name: @spinner-keyframe-name;
-        -ms-animation-name: @spinner-keyframe-name;
-            animation-name: @spinner-keyframe-name;
+    -moz-animation-name: @spinner-keyframe-name;
+    -ms-animation-name: @spinner-keyframe-name;
+    animation-name: @spinner-keyframe-name;
 
     -webkit-animation-duration: @spinner-animation-duration;
-       -moz-animation-duration: @spinner-animation-duration;
-        -ms-animation-duration: @spinner-animation-duration;
-            animation-duration: @spinner-animation-duration;
+    -moz-animation-duration: @spinner-animation-duration;
+    -ms-animation-duration: @spinner-animation-duration;
+    animation-duration: @spinner-animation-duration;
 
     -webkit-animation-iteration-count: @spinner-animation-iteration-count;
-       -moz-animation-iteration-count: @spinner-animation-iteration-count;
-        -ms-animation-iteration-count: @spinner-animation-iteration-count;
-            animation-iteration-count: @spinner-animation-iteration-count;
+    -moz-animation-iteration-count: @spinner-animation-iteration-count;
+    -ms-animation-iteration-count: @spinner-animation-iteration-count;
+    animation-iteration-count: @spinner-animation-iteration-count;
 
     -webkit-animation-direction: @spinner-animation-direction;
-       -moz-animation-direction: @spinner-animation-direction;
-        -ms-animation-direction: @spinner-animation-direction;
-            animation-direction: @spinner-animation-direction;
+    -moz-animation-direction: @spinner-animation-direction;
+    -ms-animation-direction: @spinner-animation-direction;
+    animation-direction: @spinner-animation-direction;
 }

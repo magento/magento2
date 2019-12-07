@@ -1,89 +1,103 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
+    .downloadable.samples {
+        margin-bottom: @indent__base;
 
-.downloadable.samples {
-    margin-bottom: @indent__base;
-    dd {
-        margin: 0 0 @indent__s;
+        dd {
+            margin: 0 0 @indent__s;
+        }
     }
-}
-.table-downloadable-products {
-    .product-name {
-        margin-right: 15px;
+
+    .table-downloadable-products {
+        .product-name {
+            margin-right: 15px;
+        }
     }
-}
-.field.downloads {
-    .price-container {
-        display: inline;
-        white-space: nowrap;
-        &:before {
-            content: " + ";
+
+    .field.downloads {
+        .price-container {
             display: inline;
+            white-space: nowrap;
+
+            &:before {
+                content: ' + ';
+                display: inline;
+            }
+        }
+
+        .price-excluding-tax {
+            display: inline;
+
+            &:before {
+                content: ' ('attr(data-label) ': ';
+            }
+
+            &:after {
+                content: ')';
+            }
+        }
+
+        .price-including-tax {
+            .lib-font-size(14);
+            display: inline;
+            font-weight: @font-weight__semibold;
+        }
+
+        .sample.link {
+            float: right;
         }
     }
-    .price-excluding-tax {
-        display: inline;
-        &:before {
-            content: " ("attr(data-label) ": ";
+
+    .page-product-downloadable {
+        .product-add-form {
+            &:extend(.abs-add-clearfix all);
+            clear: both;
+            margin-bottom: @indent__m;
         }
-        &:after {
-            content: ")";
+
+        .product-options-bottom {
+            .field.qty {
+                display: none !important;
+            }
         }
-    }
-    .price-including-tax {
-        display: inline;
-        font-weight:  @font-weight__semibold;
-        .lib-font-size(14);
-    }
-    .sample.link {
-        float: right;
-    }
-}
-.page-product-downloadable {
-    .product-add-form {
-        clear: both;
-        margin-bottom: @indent__m;
-        &:extend(.abs-add-clearfix all);
-    }
-    .product-options-bottom {
-        .field.qty {
-            display: none!important;
-        }
-    }
-    .product-options-wrapper {
-        .fieldset {
-            .legend.links-title {
-                &:extend(.abs-visually-hidden all);
+
+        .product-options-wrapper {
+            .fieldset {
+                .legend.links-title {
+                    &:extend(.abs-visually-hidden all);
+                }
             }
         }
     }
 }
 
-}
-
 //
-// Product view Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .page-product-downloadable {
         .product-add-form {
             &:extend(.clearer all);
         }
+
         .product-options-wrapper {
             float: left;
             width: 55%;
         }
+
         .product-options-bottom {
             float: right;
             width: 40%;
+
             .field.qty {
                 & + .actions {
                     padding-top: 0;

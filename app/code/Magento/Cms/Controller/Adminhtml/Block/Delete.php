@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-class Delete extends \Magento\Cms\Controller\Adminhtml\Block
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Delete extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostActionInterface
 {
     /**
      * Delete action
@@ -22,22 +24,22 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
         if ($id) {
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('Magento\Cms\Model\Block');
+                $model = $this->_objectManager->create(\Magento\Cms\Model\Block::class);
                 $model->load($id);
                 $model->delete();
                 // display success message
-                $this->messageManager->addSuccess(__('You deleted the block.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the block.'));
                 // go to grid
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
                 // display error message
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 // go back to edit form
                 return $resultRedirect->setPath('*/*/edit', ['block_id' => $id]);
             }
         }
         // display error message
-        $this->messageManager->addError(__('We can\'t find a block to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a block to delete.'));
         // go to grid
         return $resultRedirect->setPath('*/*/');
     }

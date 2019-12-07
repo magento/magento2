@@ -5,4 +5,4 @@ Features:
  * Measures memory usage
  * Allows nesting of events and enforces its integrity, and measures aggregated stats of nested elements
  * Allows configuring filters for tags
- * Provides various output formats out of the box: direct HTML output, CSV-file, Firebug console
+ * Provides various output formats out of the box: direct HTML output and CSV-file

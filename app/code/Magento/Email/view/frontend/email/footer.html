@@ -1,12 +1,12 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Footer @-->
+<!--@subject {{trans "Footer"}} @-->
 <!--@vars {
-"var store.getFrontendName()":"Store Name"
+"var store.frontend_name":"Store Name"
 } @-->
 
                     <!-- End Content -->
@@ -14,7 +14,7 @@
                 </tr>
                 <tr>
                     <td class="footer">
-                        <p class="closing">{{trans "Thank you, %store_name" store_name=$store.getFrontendName()}}!</p>
+                        <p class="closing">{{trans "Thank you, %store_name" store_name=$store.frontend_name}}!</p>
                     </td>
                 </tr>
             </table>

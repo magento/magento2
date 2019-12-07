@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// @deprecated
+$totals = $block->getTotals();
 ?>
-<?php if (sizeof($block->getTotals()) > 0): ?>
+<?php if ($totals && count($totals) > 0) : ?>
 <table class="items-to-invoice">
     <tr>
-    <?php foreach ($block->getTotals() as $_total): ?>
-        <td <?php if ($_total['grand']): ?>class="grand-total"<?php endif; ?>>
-            <?php /* @escapeNotVerified */ echo $_total['label'] ?><br />
-            <?php /* @escapeNotVerified */ echo $_total['value'] ?>
+    <?php foreach ($totals as $total) : ?>
+        <td <?php if ($total['grand']) :
+            ?>class="grand-total"<?php
+            endif; ?>>
+            <?= $block->escapeHtml($total['label']) ?><br />
+            <?= $block->escapeHtml($total['value']) ?>
         </td>
     <?php endforeach; ?>
     </tr>

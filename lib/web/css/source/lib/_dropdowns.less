@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -55,9 +55,11 @@
     .lib-clearfix();
     display: inline-block;
     position: relative;
+
     @{_toggle-selector} {
         .lib-css(padding, @_dropdown-actions-padding);
         cursor: pointer;
+
         ._lib-dropdown-icon(
             @_dropdown-toggle-icon-content,
             @_dropdown-toggle-active-icon-content,
@@ -73,6 +75,7 @@
             @_icon-font-text-hide
         );
     }
+
     ._lib-dropdown-styles(
         @_options-selector: @_options-selector,
         @_dropdown-list-min-width,
@@ -83,7 +86,6 @@
         @_dropdown-list-border,
         @_dropdown-list-z-index,
         @_dropdown-list-shadow,
-        @_dropdown-list-background,
         @_dropdown-list-item-padding,
         @_dropdown-list-item-margin,
         @_dropdown-list-item-border,
@@ -153,15 +155,18 @@
     .lib-clearfix();
     display: inline-block;
     position: relative;
+
     ._lib-dropdown-split-toggle-position(
         @_button-selector,
         @_toggle-selector,
         @_dropdown-split-toggle-position,
         @_dropdown-split-button-border-radius-fix
     );
+
     @{_button-selector} {
         .lib-css(padding, @_dropdown-split-button-actions-padding);
     }
+
     @{_toggle-selector} {
         .lib-css(padding, @_dropdown-split-toggle-actions-padding);
         ._lib-dropdown-split-icon(
@@ -179,6 +184,7 @@
             @_icon-font-text-hide
         );
     }
+
     ._lib-dropdown-styles(
         @_options-selector: @_options-selector,
         @_dropdown-split-list-min-width,
@@ -189,7 +195,6 @@
         @_dropdown-split-list-border,
         @_dropdown-split-list-z-index,
         @_dropdown-split-list-shadow,
-        @_dropdown-split-list-background,
         @_dropdown-split-list-item-padding,
         @_dropdown-split-list-item-margin,
         @_dropdown-split-list-item-border,
@@ -220,7 +225,6 @@
     @_dropdown-list-border,
     @_dropdown-list-z-index,
     @_dropdown-list-shadow,
-    @_dropdown-list-background,
     @_dropdown-list-item-padding,
     @_dropdown-list-item-margin,
     @_dropdown-list-item-border,
@@ -236,11 +240,16 @@
     @_dropdown-list-pointer-position-left-right
 ) {
     @{_options-selector} {
+        .lib-list-reset-styles();
         .lib-css(background, @_dropdown-list-background);
         .lib-css(border, @_dropdown-list-border);
+        .lib-css(height, @_dropdown-list-height);
+        .lib-css(margin-top, @_dropdown-list-margin-top);
+        .lib-css(min-width, @_dropdown-list-min-width);
+        .lib-css(width, @_dropdown-list-width);
         .lib-css(z-index, @_dropdown-list-z-index);
-        .lib-list-reset-styles();
         box-sizing: border-box;
+        display: none;
         position: absolute;
 
         ._lib-dropdown-list-position(
@@ -251,18 +260,15 @@
         );
 
         ._lib-dropdown-list-shadow(@_dropdown-list-shadow);
-        .lib-css(height, @_dropdown-list-height);
-        .lib-css(margin-top, @_dropdown-list-margin-top);
-        .lib-css(min-width, @_dropdown-list-min-width);
-        .lib-css(width, @_dropdown-list-width);
-        display: none;
 
         li {
             .lib-css(margin, @_dropdown-list-item-margin);
             .lib-css(padding, @_dropdown-list-item-padding);
+
             ._lib-dropdown-list-item-border(
                 @_dropdown-list-item-border
             );
+
             &:hover {
                 .lib-css(background, @_dropdown-list-item-hover);
                 cursor: pointer;
@@ -277,8 +283,10 @@
             @_dropdown-list-pointer-position-left-right
         );
     }
+
     &.active {
         overflow: visible;
+
         @{_options-selector} {
             display: block;
         }
@@ -435,6 +443,7 @@
         float: right;
         margin: 0;
     }
+
     @{_toggle-selector} {
         float: left;
         margin: 0;
@@ -452,6 +461,7 @@
         float: left;
         margin: 0;
     }
+
     @{_toggle-selector} {
         float: right;
         margin: 0;
@@ -472,6 +482,7 @@
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
     }
+
     button + @{_toggle-selector} {
         border-bottom-left-radius: 0;
         border-left: 0;
@@ -493,6 +504,7 @@
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }
+
     button + @{_toggle-selector} {
         border-bottom-right-radius: 0;
         border-right: 0;
@@ -531,10 +543,12 @@
         @_dropdown-list-background,
         @_dropdown-list-pointer-border
     );
+
     &:before {
         .lib-css(left, @_dropdown-list-pointer-position-left-right);
         .lib-css(top, @_dropdown-list-pointer-position-top);
     }
+
     &:after {
         .lib-css(left, @_dropdown-list-pointer-position-left-right - 1);
         .lib-css(top, @_dropdown-list-pointer-position-top - 2);
@@ -552,10 +566,12 @@
         @_dropdown-list-background,
         @_dropdown-list-pointer-border
     );
+
     &:before {
         .lib-css(right, @_dropdown-list-pointer-position-left-right);
         .lib-css(top, @_dropdown-list-pointer-position-top);
     }
+
     &:after {
         .lib-css(right, @_dropdown-list-pointer-position-left-right - 1);
         .lib-css(top, @_dropdown-list-pointer-position-top - 2);
@@ -575,14 +591,16 @@
         position: absolute;
         width: 0;
     }
+
     &:before {
         border: 6px solid;
-        border-color: transparent transparent @_dropdown-list-background transparent;
+        .lib-css(border-color, transparent transparent @_dropdown-list-background transparent);
         z-index: 99;
     }
+
     &:after {
         border: 7px solid;
-        border-color: transparent transparent @_dropdown-list-pointer-border transparent;
+        .lib-css(border-color, transparent transparent @_dropdown-list-pointer-border transparent);
         z-index: 98;
     }
 }
@@ -592,6 +610,7 @@
     @_dropdown-list-item-border
 ) when not (@_dropdown-list-item-border = 0) and not (@_dropdown-list-item-border = false) and not (@_dropdown-list-item-border = '') {
     .lib-css(border-top, @_dropdown-list-item-border);
+
     &:first-child {
         border: none;
     }

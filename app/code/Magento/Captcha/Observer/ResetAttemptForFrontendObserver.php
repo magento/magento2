@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
@@ -9,7 +9,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 class ResetAttemptForFrontendObserver implements ObserverInterface
 {
-    /*
+    /**
      * @var \Magento\Captcha\Model\ResourceModel\LogFactory
      */
     public $resLogFactory;

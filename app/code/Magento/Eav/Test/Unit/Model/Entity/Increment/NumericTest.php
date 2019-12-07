@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Increment;
 
 use Magento\Eav\Model\Entity\Increment\NumericValue;
 
-class NumericTest extends \PHPUnit_Framework_TestCase
+class NumericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var NumericValue
@@ -32,6 +32,9 @@ class NumericTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->model->getNextId());
     }
 
+    /**
+     * @return array
+     */
     public function getLastIdDataProvider()
     {
         return [

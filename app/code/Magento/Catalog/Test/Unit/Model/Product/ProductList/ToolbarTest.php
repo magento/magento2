@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Catalog\Model\Product\ProductList\Toolbar;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ToolbarTest extends \PHPUnit_Framework_TestCase
+class ToolbarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Toolbar
@@ -25,13 +25,13 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->toolbarModel = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Model\Product\ProductList\Toolbar',
+            \Magento\Catalog\Model\Product\ProductList\Toolbar::class,
             [
                 'request' => $this->requestMock,
             ]
@@ -112,6 +112,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->toolbarModel->getCurrentPage());
     }
 
+    /**
+     * @return array
+     */
     public function stringParamProvider()
     {
         return [
@@ -119,6 +122,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function intParamProvider()
     {
         return [

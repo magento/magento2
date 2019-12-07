@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -12,8 +12,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as A
 /**
  * Catalog view layer model
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Layer extends \Magento\Framework\DataObject
 {
@@ -166,7 +168,7 @@ class Layer extends \Magento\Framework\DataObject
      * Apply layer
      * Method is colling after apply all filters, can be used
      * for prepare some index data before getting information
-     * about existing intexes
+     * about existing indexes
      *
      * @return \Magento\Catalog\Model\Layer
      */

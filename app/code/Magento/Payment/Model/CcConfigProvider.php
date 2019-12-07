@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -8,8 +8,19 @@ namespace Magento\Payment\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\View\Asset\Source;
 
+/**
+ * Class CcConfigProvider
+ *
+ * @api
+ * @since 100.0.2
+ */
 class CcConfigProvider implements ConfigProviderInterface
 {
+    /**
+     * @var array
+     */
+    private $icons = [];
+
     /**
      * @var CcConfig
      */
@@ -33,7 +44,7 @@ class CcConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
@@ -51,24 +62,29 @@ class CcConfigProvider implements ConfigProviderInterface
      *
      * @return array
      */
-    protected function getIcons()
+    public function getIcons()
     {
-        $icons = [];
+        if (!empty($this->icons)) {
+            return $this->icons;
+        }
+
         $types = $this->ccConfig->getCcAvailableTypes();
-        foreach (array_keys($types) as $code) {
-            if (!array_key_exists($code, $icons)) {
+        foreach ($types as $code => $label) {
+            if (!array_key_exists($code, $this->icons)) {
                 $asset = $this->ccConfig->createAsset('Magento_Payment::images/cc/' . strtolower($code) . '.png');
-                $placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
+                $placeholder = $this->assetSource->findSource($asset);
                 if ($placeholder) {
                     list($width, $height) = getimagesize($asset->getSourceFile());
-                    $icons[$code] = [
+                    $this->icons[$code] = [
                         'url' => $asset->getUrl(),
                         'width' => $width,
-                        'height' => $height
+                        'height' => $height,
+                        'title' => __($label),
                     ];
                 }
             }
         }
-        return $icons;
+
+        return $this->icons;
     }
 }

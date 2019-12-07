@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-class Edit extends AbstractScopeConfig
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends AbstractScopeConfig implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

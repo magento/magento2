@@ -1,24 +1,29 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
-use Magento\Framework\Exception\AbstractAggregateException;
+use Magento\Framework\Exception\AggregateExceptionInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
 /**
  * Helper for errors processing.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class ErrorProcessor
 {
@@ -39,9 +44,7 @@ class ErrorProcessor
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\Json\Encoder
-     */
+    /**#@-*/
     protected $encoder;
 
     /**
@@ -67,22 +70,32 @@ class ErrorProcessor
     protected $directoryWrite;
 
     /**
+     * Instance of serializer.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Json\Encoder $encoder
      * @param \Magento\Framework\App\State $appState
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Json\Encoder $encoder,
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        Json $serializer = null
     ) {
         $this->encoder = $encoder;
         $this->_appState = $appState;
         $this->_logger = $logger;
         $this->_filesystem = $filesystem;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->registerShutdownFunction();
     }
 
@@ -115,7 +128,7 @@ class ErrorProcessor
                 $httpCode = WebapiException::HTTP_BAD_REQUEST;
             }
 
-            if ($exception instanceof AbstractAggregateException) {
+            if ($exception instanceof AggregateExceptionInterface) {
                 $errors = $exception->getErrors();
             } else {
                 $errors = null;
@@ -161,12 +174,10 @@ class ErrorProcessor
      * @param \Exception $exception
      * @param int $httpCode
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function renderException(\Exception $exception, $httpCode = self::DEFAULT_ERROR_HTTP_CODE)
     {
-        if (
-            $this->_appState->getMode() == State::MODE_DEVELOPER ||
+        if ($this->_appState->getMode() == State::MODE_DEVELOPER ||
             $exception instanceof \Magento\Framework\Webapi\Exception
         ) {
             $this->renderErrorMessage($exception->getMessage(), $exception->getTraceAsString(), $httpCode);
@@ -178,6 +189,7 @@ class ErrorProcessor
                 $httpCode
             );
         }
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit;
     }
 
@@ -185,18 +197,15 @@ class ErrorProcessor
      * Log information about exception to exception log.
      *
      * @param \Exception $exception
-     * @return string $reportId
+     * @return string
      */
     protected function _critical(\Exception $exception)
     {
-        $exceptionClass = get_class($exception);
         $reportId = uniqid("webapi-");
-        $exceptionForLog = new $exceptionClass(
-            /** Trace is added separately by critical. */
-            "Report ID: {$reportId}; Message: {$exception->getMessage()}",
-            $exception->getCode()
-        );
-        $this->_logger->critical($exceptionForLog);
+        $message = "Report ID: {$reportId}; Message: {$exception->getMessage()}";
+        $code = $exception->getCode();
+        $exception = new \Exception($message, $code, $exception);
+        $this->_logger->critical($exception);
         return $reportId;
     }
 
@@ -225,6 +234,7 @@ class ErrorProcessor
             header('HTTP/1.1 ' . ($httpCode ? $httpCode : self::DEFAULT_ERROR_HTTP_CODE));
             header('Content-Type: ' . $mimeType . '; charset=' . self::DEFAULT_RESPONSE_CHARSET);
         }
+        // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
         echo $output;
     }
 
@@ -310,8 +320,8 @@ class ErrorProcessor
     protected function _saveFatalErrorReport($reportData)
     {
         $this->directoryWrite->create('report/api');
-        $reportId = abs(intval(microtime(true) * rand(100, 1000)));
-        $this->directoryWrite->writeFile('report/api/' . $reportId, serialize($reportData));
+        $reportId = abs((int)(microtime(true) * random_int(100, 1000)));
+        $this->directoryWrite->writeFile('report/api/' . $reportId, $this->serializer->serialize($reportData));
         return $reportId;
     }
 }

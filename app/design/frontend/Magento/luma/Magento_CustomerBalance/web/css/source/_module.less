@@ -1,53 +1,57 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
+    .block-balance {
+        .balance-price-label {
+            &:extend(.abs-visually-hidden all);
+        }
 
-.block-balance {
-    .balance-price-label {
-        &:extend(.abs-visually-hidden all);
+        .price {
+            .lib-css(margin-top, -@indent__s);
+            .lib-font-size(32);
+            display: inline-block;
+            line-height: 32px;
+        }
     }
-    .price {
-        .lib-font-size(32);
-        line-height: 32px;
-        display: inline-block;
-        .lib-css(margin-top, -@indent__s);
-    }
-}
-
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .storecredit {
         .block {
             &:extend(.abs-blocks-2columns all);
         }
+
         .block-balance-history {
             width: 100%;
         }
     }
+
     .table-balance-history {
         .col {
             width: 25%;
         }
     }
+
     .table-wrapper.balance-history {
         &:extend(.abs-account-table-margin-desktop all);
     }
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .table-wrapper.balance-history {
         &:extend(.abs-account-table-margin-mobile all);

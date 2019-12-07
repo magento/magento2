@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'ko',
@@ -8,7 +12,7 @@ define([
     'underscore',
     'uiRegistry',
     './dom-observer',
-    'Magento_Ui/js/lib/ko/extender/bound-nodes',
+    'Magento_Ui/js/lib/knockout/extender/bound-nodes',
     './bindings'
 ], function (ko, $, _, registry, domObserver, boundedNodes) {
     'use strict';

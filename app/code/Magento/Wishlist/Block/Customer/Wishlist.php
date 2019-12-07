@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
- * Wishlist block customer items
- *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Customer;
 
+/**
+ * Wishlist block customer items.
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
@@ -25,7 +29,14 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected $_helperPool;
 
-    /** @var \Magento\Customer\Helper\Session\CurrentCustomer */
+    /**
+     * @var  \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     */
+    protected $_collection;
+
+    /**
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     */
     protected $currentCustomer;
 
     /**
@@ -72,14 +83,64 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     }
 
     /**
-     * Preparing global layout
+     * Paginate Wishlist Product Items collection
      *
      * @return void
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
+     */
+    private function paginateCollection()
+    {
+        $page = $this->getRequest()->getParam("p", 1);
+        $limit = $this->getRequest()->getParam("limit", 10);
+        $this->_collection
+            ->setPageSize($limit)
+            ->setCurPage($page);
+    }
+
+    /**
+     * Retrieve Wishlist Product Items collection
+     *
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     */
+    public function getWishlistItems()
+    {
+        if ($this->_collection === null) {
+            $this->_collection = $this->_createWishlistItemCollection();
+            $this->_prepareCollection($this->_collection);
+            $this->paginateCollection();
+        }
+        return $this->_collection;
+    }
+
+    /**
+     * Preparing global layout
+     *
+     * @return $this
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
         $this->pageConfig->getTitle()->set(__('My Wish List'));
+        $this->getChildBlock('wishlist_item_pager')
+            ->setUseContainer(
+                true
+            )->setShowAmounts(
+                true
+            )->setFrameLength(
+                $this->_scopeConfig->getValue(
+                    'design/pagination/pagination_frame',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->setJump(
+                $this->_scopeConfig->getValue(
+                    'design/pagination/pagination_frame_skip',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->setLimit(
+                $this->getLimit()
+            )
+            ->setCollection($this->getWishlistItems());
+        return $this;
     }
 
     /**
@@ -192,6 +253,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * Get add all to cart params for POST request
+     *
      * @return string
      */
     public function getAddAllToCartParams()
@@ -203,7 +265,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     protected function _toHtml()
     {

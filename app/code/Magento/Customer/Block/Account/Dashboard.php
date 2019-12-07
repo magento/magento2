@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account;
@@ -10,6 +10,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer dashboard block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Dashboard extends \Magento\Framework\View\Element\Template
 {
@@ -111,10 +114,13 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * Retrieve the Url for customer orders.
      *
      * @return string
+     * @deprecated Action does not exist
      */
     public function getOrdersUrl()
     {
-        return $this->_urlBuilder->getUrl('customer/order/index', ['_secure' => true]);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+        return '';
     }
 
     /**
@@ -134,7 +140,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getWishlistUrl()
     {
-        return $this->_urlBuilder->getUrl('customer/wishlist/index', ['_secure' => true]);
+        return $this->_urlBuilder->getUrl('wishlist/index', ['_secure' => true]);
     }
 
     /**
@@ -170,10 +176,10 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     public function getSubscriptionText()
     {
         if ($this->getSubscriptionObject()->isSubscribed()) {
-            return __('You subscribe to our newsletter.');
+            return __('You are subscribed to our newsletter.');
         }
 
-        return __('You don\'t subscribe to our newsletter.');
+        return __('You aren\'t subscribed to our newsletter.');
     }
 
     /**

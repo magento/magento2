@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\System\Config;
 
-class PriceScopeTest extends \PHPUnit_Framework_TestCase
+class PriceScopeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -27,33 +27,23 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexerRegistryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_indexerMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer',
-            ['load', 'invalidate'],
-            [],
-            '',
-            false
-        );
-        $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
-            ['get'],
-            [],
-            '',
-            false
+        $this->_indexerMock = $this->createPartialMock(\Magento\Indexer\Model\Indexer::class, ['load', 'invalidate']);
+        $this->indexerRegistryMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['get']
         );
 
-        $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-
+        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->_model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope',
+            \Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope::class,
             [
                 'context' => $contextMock,
                 'registry' => $registryMock,

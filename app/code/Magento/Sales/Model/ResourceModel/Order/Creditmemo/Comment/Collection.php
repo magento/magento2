@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment;
@@ -11,7 +11,9 @@ use Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollectio
 /**
  * Flat sales order creditmemo comments collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends AbstractCollection implements CreditmemoCommentSearchResultInterface
 {
@@ -38,8 +40,8 @@ class Collection extends AbstractCollection implements CreditmemoCommentSearchRe
     {
         parent::_construct();
         $this->_init(
-            'Magento\Sales\Model\Order\Creditmemo\Comment',
-            'Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment'
+            \Magento\Sales\Model\Order\Creditmemo\Comment::class,
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment::class
         );
     }
 

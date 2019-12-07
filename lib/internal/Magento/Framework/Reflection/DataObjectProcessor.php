@@ -1,20 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Phrase;
-use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\CustomAttributesDataInterface;
-use Magento\Framework\Api\SimpleDataObjectConverter;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\MethodReflection;
+use Magento\Framework\Phrase;
 
 /**
  * Data object processor for array serialization using class reflection
+ *
+ * @api
  */
 class DataObjectProcessor
 {
@@ -44,24 +41,32 @@ class DataObjectProcessor
     private $customAttributesProcessor;
 
     /**
+     * @var array
+     */
+    private $processors;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
+     * @param array $processors
      */
     public function __construct(
         MethodsMap $methodsMapProcessor,
         TypeCaster $typeCaster,
         FieldNamer $fieldNamer,
         CustomAttributesProcessor $customAttributesProcessor,
-        ExtensionAttributesProcessor $extensionAttributesProcessor
+        ExtensionAttributesProcessor $extensionAttributesProcessor,
+        array $processors = []
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->typeCaster = $typeCaster;
         $this->fieldNamer = $fieldNamer;
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->customAttributesProcessor = $customAttributesProcessor;
+        $this->processors = $processors;
     }
 
     /**
@@ -77,7 +82,6 @@ class DataObjectProcessor
         $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
 
-        /** @var MethodReflection $method */
         foreach (array_keys($methods) as $methodName) {
             if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
@@ -102,6 +106,9 @@ class DataObjectProcessor
                 $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
             } elseif ($key === "extension_attributes") {
                 $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
+                if (empty($value)) {
+                    continue;
+                }
             } else {
                 if (is_object($value) && !($value instanceof Phrase)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
@@ -122,6 +129,27 @@ class DataObjectProcessor
 
             $outputData[$key] = $value;
         }
+
+        $outputData = $this->changeOutputArray($dataObject, $outputData);
+
+        return $outputData;
+    }
+
+    /**
+     * Change output array if needed.
+     *
+     * @param mixed $dataObject
+     * @param array $outputData
+     * @return array
+     */
+    private function changeOutputArray($dataObject, array $outputData): array
+    {
+        foreach ($this->processors as $dataObjectClassName => $processor) {
+            if ($dataObject instanceof $dataObjectClassName) {
+                $outputData = $processor->execute($dataObject, $outputData);
+            }
+        }
+
         return $outputData;
     }
 }

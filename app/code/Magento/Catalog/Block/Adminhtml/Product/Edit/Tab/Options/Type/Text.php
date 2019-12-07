@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,5 +16,5 @@ class Text extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Typ
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/options/type/text.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit/options/type/text.phtml';
 }

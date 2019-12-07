@@ -1,27 +1,41 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Directory\Test\Unit\Model\ResourceModel\Country;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+use Magento\Store\Api\Data\WebsiteInterface;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected $_model;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfigMock;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManagerMock;
+
     protected function setUp()
     {
-        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
 
-        $resource = $this->getMockForAbstractClass('Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+        $resource = $this->getMockForAbstractClass(
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -32,28 +46,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
 
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $localeListsMock = $this->getMock('Magento\Framework\Locale\ListsInterface');
+        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $localeListsMock = $this->createMock(\Magento\Framework\Locale\ListsInterface::class);
         $localeListsMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));
 
-        $fetchStrategy = $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-        $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
-        $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $countryFactory = $this->getMock(
-            'Magento\Directory\Model\ResourceModel\CountryFactory',
-            [],
-            [],
-            '',
-            false
+        $fetchStrategy = $this->getMockForAbstractClass(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
         );
-        $helperDataMock = $this->getMock(
-            'Magento\Directory\Helper\Data',
-            [],
-            [],
-            '',
-            false
-        );
+        $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $countryFactory = $this->createMock(\Magento\Directory\Model\ResourceModel\CountryFactory::class);
+        $helperDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
             'logger' => $logger,
@@ -61,12 +66,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'localeLists' => $localeListsMock,
             'fetchStrategy' => $fetchStrategy,
             'entityFactory' => $entityFactory,
-            'scopeConfig' => $scopeConfigMock,
+            'scopeConfig' => $this->scopeConfigMock,
             'countryFactory' => $countryFactory,
             'resource' => $resource,
-            'helperData' => $helperDataMock
+            'helperData' => $helperDataMock,
+            'storeManager' => $this->storeManagerMock
         ];
-        $this->_model = $objectManager->getObject('Magento\Directory\Model\ResourceModel\Country\Collection', $arguments);
+        $this->_model = $objectManager
+            ->getObject(\Magento\Directory\Model\ResourceModel\Country\Collection::class, $arguments);
     }
 
     /**
@@ -78,13 +85,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testToOptionArray($optionsArray, $emptyLabel, $foregroundCountries, $expectedResults)
     {
+        $website1 = $this->createMock(WebsiteInterface::class);
+        $website1->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(1);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn([$website1]);
+
         foreach ($optionsArray as $itemData) {
             $this->_model->addItem(new \Magento\Framework\DataObject($itemData));
         }
 
         $this->_model->setForegroundCountries($foregroundCountries);
         $result = $this->_model->toOptionArray($emptyLabel);
-        $this->assertEquals(count($optionsArray) + (int)(!empty($emptyLabel)), count($result));
+        $this->assertCount(count($optionsArray) + (int)(!empty($emptyLabel)), $result);
         foreach ($expectedResults as $index => $expectedResult) {
             $this->assertEquals($expectedResult, $result[$index]['label']);
         }
@@ -105,7 +120,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             [$optionsArray, false, [], ['AD', 'US', 'ES', 'BZ']],
             [$optionsArray, false, 'US', ['US', 'AD', 'ES', 'BZ']],
             [$optionsArray, false, ['US', 'BZ'], ['US', 'BZ', 'AD', 'ES']],
-            [$optionsArray, ' ', 'US', [' ', 'US', 'AD', 'ES', 'BZ']]
+            [$optionsArray, ' ', 'US', [' ', 'US', 'AD', 'ES', 'BZ']],
+            [$optionsArray, ' ', [], [' ', 'AD', 'US', 'ES', 'BZ']],
+            [$optionsArray, ' ', 'UA', [' ', 'AD', 'US', 'ES', 'BZ']],
+            [$optionsArray, ' ', ['AF', 'UA'], [' ', 'AD', 'US', 'ES', 'BZ']],
         ];
     }
 }

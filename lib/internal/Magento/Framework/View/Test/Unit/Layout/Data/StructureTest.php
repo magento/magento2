@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Data;
@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Layout\Data;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\State;
 
-class StructureTest extends \PHPUnit_Framework_TestCase
+class StructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -35,12 +35,12 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->dataStructure = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Layout\Data\Structure',
+            \Magento\Framework\View\Layout\Data\Structure::class,
             [
                 'logger' => $this->loggerMock,
                 'state' => $this->stateMock
@@ -49,7 +49,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $loggerExpects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $loggerExpects
      * @param string $stateMode
      * @return void
      * @dataProvider reorderChildElementLogDataProvider
@@ -64,7 +64,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->willReturn($stateMode);
         $this->loggerMock->expects($loggerExpects)
-            ->method('critical')
+            ->method('info')
             ->with(
                 "Broken reference: the '{$childName}' tries to reorder itself towards '', but " .
                 "their parents are different: '{$parentName}' and '' respectively."

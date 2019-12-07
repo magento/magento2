@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\App\TemplateTypesInterface;
 
 /** @var \Magento\Newsletter\Model\Template $template */
-$template = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Newsletter\Model\Template');
+$template = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Newsletter\Model\Template::class
+);
 
 $templateData = [
     'template_code' => 'some_unique_code',

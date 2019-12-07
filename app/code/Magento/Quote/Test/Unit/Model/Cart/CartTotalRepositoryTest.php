@@ -1,14 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -60,52 +63,35 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $totalsConverterMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->totalsFactoryMock = $this->getMock(
-            'Magento\Quote\Api\Data\TotalsInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->totalsFactoryMock = $this->createPartialMock(
+            \Magento\Quote\Api\Data\TotalsInterfaceFactory::class,
+            ['create']
         );
-        $this->quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
-            [
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
                 'isVirtual',
                 'getShippingAddress',
                 'getBillingAddress',
                 'getAllVisibleItems',
                 'getBaseCurrencyCode',
                 'getQuoteCurrencyCode',
-                'getItemsQty'
-            ],
-            [],
-            '',
-            false
+                'getItemsQty',
+                'collectTotals'
+            ]);
+        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->addressMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getData', 'getTotals']
         );
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->addressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
-            ['getData', 'getTotals'],
-            [],
-            '',
-            false
-        );
-        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+        $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->converterMock = $this->getMock(
-            'Magento\Quote\Model\Cart\Totals\ItemConverter',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->converterMock = $this->createMock(\Magento\Quote\Model\Cart\Totals\ItemConverter::class);
 
-        $this->couponServiceMock = $this->getMock('\Magento\Quote\Api\CouponManagementInterface');
-        $this->totalsConverterMock = $this->getMock('\Magento\Quote\Model\Cart\TotalsConverter', [], [], '', false);
+        $this->couponServiceMock = $this->createMock(\Magento\Quote\Api\CouponManagementInterface::class);
+        $this->totalsConverterMock = $this->createMock(\Magento\Quote\Model\Cart\TotalsConverter::class);
 
         $this->model = new \Magento\Quote\Model\Cart\CartTotalRepository(
             $this->totalsFactoryMock,
@@ -128,7 +114,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $itemsQty = 100;
         $coupon = 'coupon';
         $addressTotals = ['address' => 'totals'];
-        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $visibleItems = [
             11 => $itemMock,
         ];
@@ -151,7 +137,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->addressMock->expects($this->any())->method('getData')->willReturn($addressTotals);
         $this->addressMock->expects($this->once())->method('getTotals')->willReturn($addressTotals);
 
-        $totalsMock = $this->getMock('\Magento\Quote\Api\Data\TotalsInterface');
+        $totalsMock = $this->createMock(\Magento\Quote\Api\Data\TotalsInterface::class);
         $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totalsMock);
         $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray');
         $this->converterMock->expects($this->once())
@@ -159,7 +145,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($itemMock)
             ->willReturn($itemArray);
 
-        $totalSegmentsMock = $this->getMock('\Magento\Quote\Api\Data\TotalSegmentInterface');
+        $totalSegmentsMock = $this->createMock(\Magento\Quote\Api\Data\TotalSegmentInterface::class);
         $this->totalsConverterMock->expects($this->once())
             ->method('process')
             ->with($addressTotals)
@@ -178,6 +164,9 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($totalsMock, $this->model->get($cartId));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         return [

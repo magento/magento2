@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Category;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Adminhtml\Category;
 /**
  * @magentoAppArea adminhtml
  */
-class TreeTest extends \PHPUnit_Framework_TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Block\Adminhtml\Category\Tree */
     protected $_block;
@@ -17,13 +17,13 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Block\Adminhtml\Category\Tree'
+            \Magento\Catalog\Block\Adminhtml\Category\Tree::class
         );
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Category\Tree',
+            \Magento\Catalog\Block\Adminhtml\Category\Tree::class,
             '',
             []
         );

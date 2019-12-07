@@ -1,12 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 class Email extends \Magento\Sales\Controller\Adminhtml\Order
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::email';
+
     /**
      * Notify user
      *
@@ -18,11 +25,11 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
         if ($order) {
             try {
                 $this->orderManagement->notify($order->getEntityId());
-                $this->messageManager->addSuccess(__('You sent the order email.'));
+                $this->messageManager->addSuccessMessage(__('You sent the order email.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('We can\'t send the email order right now.'));
+                $this->messageManager->addErrorMessage(__('We can\'t send the email order right now.'));
                 $this->logger->critical($e);
             }
             return $this->resultRedirectFactory->create()->setPath(
@@ -33,13 +40,5 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
             );
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::email');
     }
 }

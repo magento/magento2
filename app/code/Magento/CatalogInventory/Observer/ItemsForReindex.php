@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ class ItemsForReindex
     /**
      * @var array
      */
-    protected $itemsForReindex;
+    protected $itemsForReindex = [];
 
     /**
      * @param array $items

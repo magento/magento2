@@ -1,20 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-/**
- * \Magento\Framework\DB\Adapter\Pdo\Mysql class test
- */
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select\SelectRenderer;
+use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Setup\SchemaListener;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MysqlTest extends \PHPUnit_Framework_TestCase
+/**
+ * \Magento\Framework\DB\Adapter\Pdo\Mysql class test
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Custom error handler message
@@ -36,61 +40,95 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     protected $_mockAdapter;
 
     /**
+     * @var \Magento\Framework\DB\SelectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $selectFactory;
+
+    /**
+     * @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $schemaListenerMock;
+
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    /**
      * Setup
      */
     protected function setUp()
     {
-        $string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
-        $dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
-        $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
-        $this->_mockAdapter = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['beginTransaction', 'getTransactionLevel'],
-            [
-                'string' => $string,
-                'dateTime' => $dateTime,
-                'logger' => $logger,
-                'config' => [
-                    'dbname' => 'dbname',
-                    'username' => 'user',
-                    'password' => 'password',
-                ],
-            ],
-            '',
-            true
-        );
+        $string = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
+        $logger = $this->getMockForAbstractClass(\Magento\Framework\DB\LoggerInterface::class);
+        $selectFactory = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_mockAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+            ->setMethods(['beginTransaction', 'getTransactionLevel', 'getSchemaListener'])
+            ->setConstructorArgs(
+                [
+                    'string' => $string,
+                    'dateTime' => $dateTime,
+                    'logger' => $logger,
+                    'selectFactory' => $selectFactory,
+                    'config' => [
+                        'dbname' => 'dbname',
+                        'username' => 'user',
+                        'password' => 'password',
+                    ],
+                    'serializer' => $this->serializerMock
+                ]
+            )
+            ->getMock();
 
         $this->_mockAdapter->expects($this->any())
-             ->method('getTransactionLevel')
-             ->will($this->returnValue(1));
+            ->method('getTransactionLevel')
+            ->will($this->returnValue(1));
 
-        $this->_adapter = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            [
-                'getCreateTable',
-                '_connect',
-                '_beginTransaction',
-                '_commit',
-                '_rollBack',
-                'query',
-                'fetchRow'
-            ],
-            [
-                'string' => $string,
-                'dateTime' => $dateTime,
-                'logger' => $logger,
-                'config' => [
-                    'dbname' => 'not_exists',
-                    'username' => 'not_valid',
-                    'password' => 'not_valid',
-                ],
-            ],
-            '',
-            true
-        );
+        $this->_adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+            ->setMethods(
+                [
+                    'getCreateTable',
+                    '_connect',
+                    '_beginTransaction',
+                    '_commit',
+                    '_rollBack',
+                    'query',
+                    'fetchRow',
+                    'getSchemaListener'
+                ]
+            )->setConstructorArgs(
+                [
+                    'string' => $string,
+                    'dateTime' => $dateTime,
+                    'logger' => $logger,
+                    'selectFactory' => $selectFactory,
+                    'config' => [
+                        'dbname' => 'not_exists',
+                        'username' => 'not_valid',
+                        'password' => 'not_valid',
+                    ],
+                    'serializer' => $this->serializerMock,
+                ]
+            )
+            ->getMock();
+        $this->_mockAdapter->expects($this->any())
+            ->method('getSchemaListener')
+            ->willReturn($this->schemaListenerMock);
+        $this->_adapter->expects($this->any())
+            ->method('getSchemaListener')
+            ->willReturn($this->schemaListenerMock);
 
-        $profiler = $this->getMock(
-            'Zend_Db_Profiler'
+        $profiler = $this->createMock(
+            \Zend_Db_Profiler::class
         );
 
         $resourceProperty = new \ReflectionProperty(
@@ -156,7 +194,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $select = new Select($this->_mockAdapter);
+        $select = new Select($this->_mockAdapter, new SelectRenderer([]));
         $select->from('user');
         try {
             $this->_mockAdapter->query($select);
@@ -182,7 +220,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot execute multiple queries
+     * @expectedExceptionMessage Multiple queries can't be executed. Run a single query and try again.
      */
     public function testMultipleQueryException()
     {
@@ -277,7 +315,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionCommitSuccess()
     {
@@ -299,7 +337,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionRollBackSuccess()
     {
@@ -321,7 +359,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionLastRollBack()
     {
@@ -426,10 +464,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             'insert' => 'insertValue',
         ];
         $fields = ['select', 'insert'];
-        $sqlQuery = "INSERT INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) "
+        $sqlQuery = "INSERT  INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) "
             . "ON DUPLICATE KEY UPDATE `select` = VALUES(`select`), `insert` = VALUES(`insert`)";
 
-        $stmtMock = $this->getMock('Zend_Db_Statement_Pdo', [], [], '', false);
+        $stmtMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
         $bind = ['indexValue', 'rowValue', 'selectValue', 'insertValue'];
         $this->_adapter->expects($this->once())
             ->method('query')
@@ -437,77 +475,6 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($stmtMock));
 
         $this->_adapter->insertOnDuplicate($table, $data, $fields);
-    }
-
-    public function testSelectsByRange()
-    {
-        $rangeField = 'test_id';
-        $tableName = 'test';
-
-        $this->_adapter->expects($this->once())
-            ->method('fetchRow')
-            ->with(
-                $this->_adapter->select()
-                    ->from(
-                        $tableName,
-                        [
-                            new \Zend_Db_Expr('MIN(' . $this->_adapter->quoteIdentifier($rangeField) . ') AS min'),
-                            new \Zend_Db_Expr('MAX(' . $this->_adapter->quoteIdentifier($rangeField) . ') AS max'),
-                        ]
-                    )
-            )
-            ->will($this->returnValue(['min' => 1, 'max' => 200]));
-        $this->_adapter->expects($this->any())
-            ->method('quote')
-            ->will(
-                $this->returnCallback(
-                    function ($values) {
-                        if (!is_array($values)) {
-                            $values = [$values];
-                        }
-                        foreach ($values as &$value) {
-                            $value = "'" . $value . "'";
-                        }
-                        return implode(',', $values);
-                    }
-                )
-            );
-
-        $expectedSelect = $this->_adapter->select()
-            ->from($tableName);
-
-        $result = $this->_adapter->selectsByRange($rangeField, $expectedSelect, 50);
-        $this->assertCount(200/50, $result);
-        $prepareField = $this->_adapter->quoteIdentifier($tableName)
-            . '.' . $this->_adapter->quoteIdentifier($rangeField);
-        $this->assertEquals(
-            $this->_adapter->select()
-                ->from($tableName)
-                ->where($prepareField . ' >= ?', 1)
-                ->where($prepareField . ' < ?', 51),
-            $result[0]
-        );
-        $this->assertEquals(
-            $this->_adapter->select()
-                ->from($tableName)
-                ->where($prepareField . ' >= ?', 51)
-                ->where($prepareField . ' < ?', 101),
-            $result[1]
-        );
-        $this->assertEquals(
-            $this->_adapter->select()
-                ->from($tableName)
-                ->where($prepareField . ' >= ?', 101)
-                ->where($prepareField . ' < ?', 151),
-            $result[2]
-        );
-        $this->assertEquals(
-            $this->_adapter->select()
-                ->from($tableName)
-                ->where($prepareField . ' >= ?', 151)
-                ->where($prepareField . ' < ?', 201),
-            $result[3]
-        );
     }
 
     /**
@@ -520,11 +487,11 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddColumn($options, $expectedQuery)
     {
-        $connectionMock = $this->getMock(
-            '\Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
+        $connectionMock = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote', 'getSchemaListener']
         );
-
+        $connectionMock->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
         $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
         $connectionMock->expects($this->any())->method('quote')->will($this->returnArgument(0));
         $connectionMock->expects($this->once())->method('rawQuery')->with($expectedQuery);
@@ -566,6 +533,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getIndexNameDataProvider()
     {
         // 65 characters long - will be compressed
@@ -576,5 +546,29 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             [$longTableName, [], AdapterInterface::INDEX_TYPE_INDEX, 'IDX_'],
             ['short_table_name', ['field1', 'field2'], '', 'SHORT_TABLE_NAME_FIELD1_FIELD2'],
         ];
+    }
+
+    public function testConfigValidation()
+    {
+        $subject = (new ObjectManager($this))->getObject(
+            Mysql::class,
+            [
+                'config' => ['host' => 'localhost'],
+            ]
+        );
+
+        $this->assertInstanceOf(Mysql::class, $subject);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Port must be configured within host (like 'localhost:33390') parameter, not within port
+     */
+    public function testConfigValidationByPortWithException()
+    {
+        (new ObjectManager($this))->getObject(
+            Mysql::class,
+            ['config' => ['host' => 'localhost', 'port' => '33390']]
+        );
     }
 }

@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
-class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
+class FilterableAttributeListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Layer\Search\FilterableAttributeList
@@ -27,31 +25,28 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory', ['create'], [], '', false);
-
-        $this->storeManagerMock = $this->getMock(
-            '\Magento\Store\Model\StoreManagerInterface', [], [], '', false
+        $this->collectionFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
+            ['create']
         );
+
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->model = new \Magento\Catalog\Model\Layer\Search\FilterableAttributeList(
             $this->collectionFactoryMock,
             $this->storeManagerMock
         );
-
     }
 
     public function testGetList()
     {
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         $storeId = 4321;
         $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
-        $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection', [], [], '', false
-        );
+        $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
         $this->collectionFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -60,7 +55,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
         $collectionMock
             ->expects($this->once())
             ->method('setItemObjectClass')
-            ->with('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+            ->with(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->will($this->returnSelf());
         $collectionMock
             ->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,7 +34,7 @@ class AssertStoreGroupSuccessDeleteAndBackupMessages extends AbstractConstraint
     public function processAssert(StoreIndex $storeIndex)
     {
         $actualMessages = $storeIndex->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             in_array(self::SUCCESS_BACKUP_MESSAGE, $actualMessages) &&
             in_array(self::SUCCESS_DELETE_MESSAGE, $actualMessages),
             'Wrong success messages are displayed.'

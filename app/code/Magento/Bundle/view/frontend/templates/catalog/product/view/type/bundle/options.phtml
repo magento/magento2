@@ -1,25 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php /** @var $block Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
 <?php
 $product = $block->getProduct();
-$helper = $this->helper('Magento\Catalog\Helper\Output');
+$helper = $this->helper(Magento\Catalog\Helper\Output::class);
+$stripSelection = $product->getConfigureMode() ? true : false;
+$options = $block->decorateArray($block->getOptions($stripSelection));
 ?>
-<?php $options = $block->decorateArray($block->getOptions()); ?>
-<?php if ($product->isSaleable()):?>
-    <?php if (count($options)): ?>
+<?php if ($product->isSaleable()) :?>
+    <?php if (count($options)) : ?>
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {
             "priceBundle": {
-                "optionConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig()?>,
+                "optionConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
                 "controlContainer": ".field.option"
             }
         }
@@ -27,17 +26,20 @@ $helper = $this->helper('Magento\Catalog\Helper\Output');
 </script>
         <fieldset class="fieldset fieldset-bundle-options">
             <legend id="customizeTitle" class="legend title">
-                <span><?php /* @escapeNotVerified */ echo __('Customize %1', $helper->productAttribute($product, $product->getName(), 'name')) ?></span>
+                <span><?= $block->escapeHtml(__('Customize %1', $helper->productAttribute($product, $product->getName(), 'name'))) ?></span>
             </legend><br />
-            <?php echo $block->getChildHtml('product_info_bundle_options_top');?>
-            <?php foreach ($options as $option): ?>
-                <?php if (!$option->getSelections()): ?>
-                    <?php continue; ?>
-                <?php endif; ?>
-                <?php echo $block->getOptionHtml($option) ?>
+            <?= $block->getChildHtml('product_info_bundle_options_top') ?>
+            <?php foreach ($options as $option) : ?>
+                <?php
+                if (!$option->getSelections()) {
+                    continue;
+                } else {
+                    echo $block->getOptionHtml($option);
+                }
+                ?>
             <?php endforeach; ?>
         </fieldset>
-    <?php else: ?>
-        <p class="empty"><?php /* @escapeNotVerified */ echo __('No options of this product are available.') ?></p>
+    <?php else : ?>
+        <p class="empty"><?= $block->escapeHtml(__('No options of this product are available.')) ?></p>
     <?php endif; ?>
 <?php endif;?>

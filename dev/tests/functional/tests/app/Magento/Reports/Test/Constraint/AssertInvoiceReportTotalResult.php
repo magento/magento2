@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class AssertInvoiceReportTotalResult extends AbstractAssertInvoiceReportResult
         $this->searchInInvoiceReportGrid($invoiceReport);
         $invoiceResult = $this->salesInvoiceReport->getGridBlock()->getTotalResult();
         $prepareInitialResult = $this->prepareExpectedResult($initialInvoiceTotalResult);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $invoiceResult,
             "Grand total Invoice result is not correct."

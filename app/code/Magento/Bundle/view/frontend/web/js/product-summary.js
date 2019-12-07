@@ -1,11 +1,15 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
     'mage/template',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'Magento_Bundle/js/price-bundle'
 ], function ($, mageTemplate) {
     'use strict';
@@ -26,6 +30,7 @@ define([
             bundleSummaryContainer: '.bundle-summary'
         },
         cache: {},
+
         /**
          * Method attaches event observer to the product form
          * @private
@@ -37,6 +42,7 @@ define([
                 .priceBundle({})
             ;
         },
+
         /**
          * Method extracts data from the event and renders Summary box
          * using jQuery template mechanism
@@ -50,8 +56,9 @@ define([
 
             // Clear Summary box
             this.element.html('');
-
-            $.each(this.cache.currentElement.selected, $.proxy(this._renderOption, this));
+            this.cache.currentElement.positions.forEach(function (optionId) {
+                this._renderOption(optionId, this.cache.currentElement.selected[optionId]);
+            }, this);
             this.element
                 .parents(this.options.bundleSummaryContainer)
                 .toggleClass('empty', !this.cache.currentElementCount); // Zero elements equal '.empty' container

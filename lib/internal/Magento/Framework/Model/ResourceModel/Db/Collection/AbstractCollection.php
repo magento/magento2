@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
-use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+
+use \Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use \Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Abstract Resource Collection
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
-    implements SourceProviderInterface
+abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
      * Model name
@@ -43,6 +45,13 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      * @var array|null
      */
     protected $_fieldsToSelect = null;
+
+    /**
+     * Expression fields to select in query.
+     *
+     * @var array
+     */
+    private $expressionFieldsToSelect = [];
 
     /**
      * Fields initial fields to select like id_field
@@ -129,7 +138,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
@@ -169,9 +178,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     }
 
     /**
-     * Init collection select
-     *
-     * @return $this
+     * @inheritdoc
      */
     protected function _initSelect()
     {
@@ -206,7 +213,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
         $columnsToSelect = [];
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
-            if ($correlationName !== 'main_table') {
+            if ($correlationName !== 'main_table' || isset($this->expressionFieldsToSelect[$alias])) {
                 // Add joined fields to select
                 if ($column instanceof \Zend_Db_Expr) {
                     $column = $column->__toString();
@@ -233,12 +240,11 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
                     $column = $field;
                 }
 
-                if ($alias !== null && in_array(
-                    $alias,
-                    $columnsToSelect
-                ) ||
+                if ($alias !== null &&
+                    in_array($alias, $columnsToSelect) ||
                     // If field already joined from another table
-                    $alias === null && isset($alias, $columnsToSelect)
+                    $alias === null &&
+                    isset($alias, $columnsToSelect)
                 ) {
                     continue;
                 }
@@ -349,6 +355,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
         }
 
         $this->getSelect()->columns([$alias => $fullExpression]);
+        $this->expressionFieldsToSelect[$alias] = $fullExpression;
 
         return $this;
     }
@@ -460,7 +467,9 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     public function getResource()
     {
         if (empty($this->_resource)) {
-            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create($this->getResourceModelName());
+            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create(
+                $this->getResourceModelName()
+            );
         }
         return $this->_resource;
     }
@@ -496,9 +505,9 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     /**
      * Join table to collection select
      *
-     * @param string $table
+     * @param string|array $table
      * @param string $cond
-     * @param string $cols
+     * @param string|array $cols
      * @return $this
      */
     public function join($table, $cond, $cols = '*')
@@ -593,5 +602,28 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
             $item->save();
         }
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.0.11
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_resource', '_eventManager']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.0.11
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
     }
 }

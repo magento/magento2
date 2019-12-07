@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper\Dashboard;
@@ -10,6 +10,9 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Data helper for dashboard
+ *
+ * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -65,7 +68,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function countStores()
     {
-        return sizeof($this->_stores->getItems());
+        return count($this->_stores->getItems());
     }
 
     /**
@@ -85,8 +88,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Create data hash to ensure that we got valid
-     * data and it is not changed by some one else.
+     * Create data hash to ensure that we got valid data and it is not changed by some one else.
      *
      * @param string $data
      * @return string
@@ -94,6 +96,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getChartDataHash($data)
     {
         $secret = $this->_installDate;
+        // phpcs:disable Magento2.Security.InsecureFunction.FoundWithAlternative
         return md5($data . $secret);
     }
 }

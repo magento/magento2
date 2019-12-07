@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ class ConfigsApplyFixture extends Fixture
     /**
      * @var int
      */
-    protected $priority = 150;
+    protected $priority = -1;
 
     /**
      * {@inheritdoc}
@@ -30,7 +30,7 @@ class ConfigsApplyFixture extends Fixture
         foreach ($configs['config'] as $config) {
             $backendModel = isset($config['backend_model'])
                 ?
-                $config['backend_model'] : 'Magento\Framework\App\Config\Value';
+                $config['backend_model'] : \Magento\Framework\App\Config\Value::class;
             /**
              * @var \Magento\Framework\App\Config\ValueInterface $configData
              */
@@ -41,8 +41,13 @@ class ConfigsApplyFixture extends Fixture
                 ->setValue($config['value'])
                 ->save();
         }
-        $this->fixtureModel->getObjectManager()->get('Magento\Framework\App\CacheInterface')
+        $this->fixtureModel->getObjectManager()
+            ->get(\Magento\Framework\App\CacheInterface::class)
             ->clean([\Magento\Framework\App\Config::CACHE_TAG]);
+
+        $this->fixtureModel->getObjectManager()
+            ->get(\Magento\Config\App\Config\Type\System::class)
+            ->clean();
     }
 
     /**

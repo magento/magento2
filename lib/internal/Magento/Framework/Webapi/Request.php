@@ -2,7 +2,7 @@
 /**
  * Web API request.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
@@ -34,7 +34,7 @@ class Request extends HttpRequest implements RequestInterface
      * @param StringUtils $converter
      * @param AreaList $areaList
      * @param ScopeInterface $configScope
-     * @param null|string|\Zend_Uri $uri
+     * @param null|string $uri
      */
     public function __construct(
         CookieReaderInterface $cookieReader,

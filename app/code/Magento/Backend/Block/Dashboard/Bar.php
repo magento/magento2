@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
+
+use Magento\Store\Model\Store;
 
 /**
  * Adminhtml dashboard bar block
@@ -23,6 +25,8 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected $_currentCurrencyCode = null;
 
     /**
+     * Get totals
+     *
      * @return array
      */
     public function getTotals()
@@ -31,6 +35,8 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     }
 
     /**
+     * Add total
+     *
      * @param string $label
      * @param float $value
      * @param bool $isQuantity
@@ -38,14 +44,6 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      */
     public function addTotal($label, $value, $isQuantity = false)
     {
-        /*if (!$isQuantity) {
-          $value = $this->format($value);
-          $decimals = substr($value, -2);
-          $value = substr($value, 0, -2);
-          } else {
-          $value = ($value != '')?$value:0;
-          $decimals = '';
-          }*/
         if (!$isQuantity) {
             $value = $this->format($value);
         }
@@ -81,6 +79,7 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Retrieve currency model if not set then return currency model for current store
      *
      * @return \Magento\Directory\Model\Currency
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getCurrency()
     {
@@ -98,7 +97,8 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                     $this->getRequest()->getParam('group')
                 )->getWebsite()->getBaseCurrency();
             } else {
-                $this->_currentCurrencyCode = $this->_storeManager->getStore()->getBaseCurrency();
+                $this->_currentCurrencyCode = $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)
+                    ->getBaseCurrency();
             }
         }
 

@@ -1,13 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class ApplyPersistentDataObserverTest extends \PHPUnit_Framework_TestCase
+class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\ApplyPersistentDataObserver
@@ -38,6 +38,7 @@ class ApplyPersistentDataObserverTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $observerMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -45,13 +46,13 @@ class ApplyPersistentDataObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sessionMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->persistentHelperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->persistentConfigMock = $this->getMock('\Magento\Persistent\Model\Persistent\Config', [], [], '', false);
+        $this->sessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->persistentHelperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->persistentConfigMock = $this->createMock(\Magento\Persistent\Model\Persistent\Config::class);
         $this->configMock =
-            $this->getMock('\Magento\Persistent\Model\Persistent\ConfigFactory', ['create'], [], '', false);
+            $this->createPartialMock(\Magento\Persistent\Model\Persistent\ConfigFactory::class, ['create']);
         $this->model = new \Magento\Persistent\Observer\ApplyPersistentDataObserver(
             $this->sessionMock,
             $this->persistentHelperMock,

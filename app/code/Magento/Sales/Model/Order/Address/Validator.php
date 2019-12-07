@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order\Address;
 
-use Magento\Sales\Model\Order\Address;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\CountryFactory;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\Order\Address;
 
 /**
  * Class Validator
@@ -24,7 +27,6 @@ class Validator
         'street' => 'Street',
         'city' => 'City',
         'email' => 'Email',
-        'telephone' => 'Phone Number',
         'country_id' => 'Country',
         'firstname' => 'First Name',
         'address_type' => 'Address Type',
@@ -41,18 +43,28 @@ class Validator
     protected $countryFactory;
 
     /**
+     * @var EavConfig
+     */
+    protected $eavConfig;
+
+    /**
      * @param DirectoryHelper $directoryHelper
      * @param CountryFactory $countryFactory
+     * @param EavConfig $eavConfig
      */
     public function __construct(
         DirectoryHelper $directoryHelper,
-        CountryFactory $countryFactory
+        CountryFactory $countryFactory,
+        EavConfig $eavConfig = null
     ) {
         $this->directoryHelper = $directoryHelper;
         $this->countryFactory = $countryFactory;
+        $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
+            ->get(EavConfig::class);
     }
 
     /**
+     * Validate address.
      *
      * @param \Magento\Sales\Model\Order\Address $address
      * @return array
@@ -60,9 +72,22 @@ class Validator
     public function validate(Address $address)
     {
         $warnings = [];
+
+        if ($this->isTelephoneRequired()) {
+            $this->required['telephone'] = 'Phone Number';
+        }
+
+        if ($this->isCompanyRequired()) {
+            $this->required['company'] = 'Company';
+        }
+
+        if ($this->isFaxRequired()) {
+            $this->required['fax'] = 'Fax';
+        }
+
         foreach ($this->required as $code => $label) {
             if (!$address->hasData($code)) {
-                $warnings[] = sprintf('%s is a required field', $label);
+                $warnings[] = sprintf('"%s" is required. Enter and try again.', $label);
             }
         }
         if (!filter_var($address->getEmail(), FILTER_VALIDATE_EMAIL)) {
@@ -103,8 +128,23 @@ class Validator
         if ($this->isEmpty($address->getCity())) {
             $errors[] = __('Please enter the city.');
         }
-        if ($this->isEmpty($address->getTelephone())) {
-            $errors[] = __('Please enter the phone number.');
+
+        if ($this->isTelephoneRequired()) {
+            if ($this->isEmpty($address->getTelephone())) {
+                $errors[] = __('Please enter the phone number.');
+            }
+        }
+
+        if ($this->isCompanyRequired()) {
+            if ($this->isEmpty($address->getCompany())) {
+                $errors[] = __('Please enter the company.');
+            }
+        }
+
+        if ($this->isFaxRequired()) {
+            if ($this->isEmpty($address->getFax())) {
+                $errors[] = __('Please enter the fax number.');
+            }
         }
 
         $countryId = $address->getCountryId();
@@ -154,5 +194,38 @@ class Validator
     {
         $country = $this->countryFactory->create()->load($countryId);
         return $this->directoryHelper->isRegionRequired($countryId) && $country->getRegionCollection()->getSize();
+    }
+
+    /**
+     * Check whether telephone is required for address.
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function isTelephoneRequired()
+    {
+        return ($this->eavConfig->getAttribute('customer_address', 'telephone')->getIsRequired());
+    }
+
+    /**
+     * Check whether company is required for address.
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function isCompanyRequired()
+    {
+        return ($this->eavConfig->getAttribute('customer_address', 'company')->getIsRequired());
+    }
+
+    /**
+     * Check whether telephone is required for address.
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function isFaxRequired()
+    {
+        return ($this->eavConfig->getAttribute('customer_address', 'fax')->getIsRequired());
     }
 }

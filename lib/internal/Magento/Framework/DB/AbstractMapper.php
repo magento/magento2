@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
@@ -10,7 +10,6 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\ObjectFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\DataObject;
 
 /**
  * Class AbstractMapper
@@ -124,7 +123,7 @@ abstract class AbstractMapper implements MapperInterface
             $mapperMethod = 'map' . $camelCaseKey;
             if (method_exists($this, $mapperMethod)) {
                 if (!is_array($value)) {
-                    $value = [$value];
+                    throw new \InvalidArgumentException('Wrong type of argument, expecting array for '. $mapperMethod);
                 }
                 call_user_func_array([$this, $mapperMethod], $value);
             }

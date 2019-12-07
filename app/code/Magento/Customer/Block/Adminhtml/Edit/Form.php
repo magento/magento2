@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit;
@@ -75,7 +75,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 $this->_extensibleDataObjectConverter->toFlatArray(
                     $customer,
                     [],
-                    '\Magento\Customer\Api\Data\CustomerInterface'
+                    \Magento\Customer\Api\Data\CustomerInterface::class
                 )
             )->addValues(
                 ['customer_id' => $customerId]

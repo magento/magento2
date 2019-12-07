@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\Backend\Block\Page;
 
 /**
  * Require Js block
+ *
+ * @api
+ * @since 100.0.2
  */
 class RequireJs extends \Magento\Framework\View\Element\Template
 {
@@ -26,7 +29,6 @@ class RequireJs extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Data\Form\FormKey $formKey,
         array $data = []
     ) {
-        $this->formKey = $formKey;
         parent::__construct(
             $context,
             $data

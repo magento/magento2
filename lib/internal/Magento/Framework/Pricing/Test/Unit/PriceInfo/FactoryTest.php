@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\PriceInfo;
@@ -10,7 +10,7 @@ use Magento\Framework\Pricing\PriceInfo\Factory;
 /**
  * Test class for \Magento\Framework\Pricing\PriceInfo\Factory
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
@@ -45,24 +45,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * SetUp test
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->pricesMock = $this->getMock(
-            'Magento\Framework\Pricing\Price\Collection',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
+        $this->pricesMock = $this->createMock(\Magento\Framework\Pricing\Price\Collection::class);
         $this->saleableItemMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\SaleableInterface',
+            \Magento\Framework\Pricing\SaleableInterface::class,
             [],
             '',
             false,
@@ -71,7 +59,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ['getQty']
         );
         $this->priceInfoMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\PriceInfoInterface',
+            \Magento\Framework\Pricing\PriceInfoInterface::class,
             [],
             '',
             false,
@@ -92,6 +80,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($this->types, $this->objectManagerMock);
     }
 
+    /**
+     * @return array
+     */
     public function createPriceInfoDataProvider()
     {
         return [

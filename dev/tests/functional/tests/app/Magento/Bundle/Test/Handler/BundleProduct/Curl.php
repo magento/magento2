@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,13 +18,6 @@ use Magento\Mtf\System\Event\EventManagerInterface;
 class Curl extends ProductCurl implements BundleProductInterface
 {
     /**
-     * Fixture product.
-     *
-     * @var BundleProduct
-     */
-    protected $fixture;
-
-    /**
      * @constructor
      * @param DataInterface $configuration
      * @param EventManagerInterface $eventManager
@@ -39,16 +32,16 @@ class Curl extends ProductCurl implements BundleProductInterface
                 'No' => 0,
             ],
             'sku_type' => [
-                'Dynamic' => 0,
-                'Fixed' => 1,
+                'Yes' => 0,
+                'No' => 1,
             ],
             'price_type' => [
-                'Dynamic' => 0,
-                'Fixed' => 1,
+                'Yes' => 0,
+                'No' => 1,
             ],
             'weight_type' => [
-                'Dynamic' => 0,
-                'Fixed' => 1,
+                'Yes' => 0,
+                'No' => 1,
             ],
             'shipment_type' => [
                 'Together' => 0,
@@ -63,39 +56,84 @@ class Curl extends ProductCurl implements BundleProductInterface
             'selection_price_type' => [
                 'Fixed' => 0,
                 'Percent' => 1,
+            ],
+            'price_view' => [
+                'Price Range' => 0,
+                'As Low as' => 1,
+            ],
+            'use_config_gift_message_available' => [
+                'Yes' => 1,
+                'No' => 0
+            ],
+            'gift_message_available' => [
+                'Yes' => 1,
+                'No' => 0
+            ],
+            'user_defined' => [
+                'Yes' => 1,
+                'No' => 0
             ]
         ];
-    }
-
-    /**
-     * Post request for creating bundle product product.
-     *
-     * @param FixtureInterface|null $fixture [optional]
-     * @return array
-     */
-    public function persist(FixtureInterface $fixture = null)
-    {
-        $this->fixture = $fixture;
-        return parent::persist($fixture);
     }
 
     /**
      * Prepare POST data for creating product request.
      *
      * @param FixtureInterface $fixture
-     * @param string|null $prefix [optional]
      * @return array
      */
-    protected function prepareData(FixtureInterface $fixture, $prefix = null)
+    public function prepareData(FixtureInterface $fixture)
     {
-        $data = parent::prepareData($fixture, null);
+        $this->fields = parent::prepareData($fixture);
 
+        $this->prepareBundleItems();
+        $this->fields = $this->replaceMappingData($this->fields);
+
+        return $this->fields;
+    }
+
+    /**
+     * Preparation of "Product Details" tab data.
+     *
+     * @return void
+     */
+    protected function prepareProductDetails()
+    {
+        parent::prepareProductDetails();
+
+        if (!isset($this->fields['product']['price_type'])) {
+            $this->fields['product']['price_type'] = 'Yes';
+        }
+    }
+
+    /**
+     * Preparation of "Advanced Pricing" tab data.
+     *
+     * @return void
+     */
+    protected function prepareAdvancedPricing()
+    {
+        parent::prepareAdvancedPricing();
+
+        if (!isset($this->fields['product']['price_view'])) {
+            $this->fields['product']['price_view'] = 'Price Range';
+        }
+    }
+
+    /**
+     * Preparation of selections data.
+     *
+     * @return void
+     */
+    protected function prepareBundleItems()
+    {
         $selections = [];
         $bundleSelections = [];
-        if (!empty($data['bundle_selections'])) {
-            $selections = $data['bundle_selections'];
+
+        if (!empty($this->fields['product']['bundle_selections'])) {
+            $selections = $this->fields['product']['bundle_selections'];
             $products = $selections['products'];
-            unset($data['selections'], $selections['products']);
+            unset($this->fields['product']['selections'], $selections['products']);
 
             foreach ($selections['bundle_options'] as $key => &$option) {
                 $option['delete'] = '';
@@ -111,11 +149,9 @@ class Curl extends ProductCurl implements BundleProductInterface
                 unset($option['assigned_products']);
             }
         }
-        $data = $prefix ? [$prefix => $data] : $data;
-        $data = array_merge($data, $selections);
-        $data['bundle_selections'] = $bundleSelections;
 
-        return $this->replaceMappingData($data);
+        $this->fields = array_merge($this->fields, $selections);
+        $this->fields['bundle_selections'] = $bundleSelections;
     }
 
     /**

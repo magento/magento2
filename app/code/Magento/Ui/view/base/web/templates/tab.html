@@ -1,36 +1,30 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <div class="admin__page-nav">
-    <div class="admin__page-nav-title" data-bind="css: { '_collapsible': collapsible, '_opened': opened && collapsible }, click: toggleOpened, keyboard: { 13: toggleOpened }">
-        <strong tabindex="1" data-bind="text: label, keyboard: { 13: toggleOpened }"></strong>
+    <div class="admin__page-nav-title" css="_collapsible: collapsible, _opened: opened && collapsible" click="toggleOpened" keyboard="13: toggleOpened">
+        <strong tabindex="1" text="label" keyboard="13: toggleOpened"/>
     </div>
-    <ul class="admin__page-nav-items items" data-bind="visible: opened">
-        <!-- ko foreach: elems -->
-            <li class="admin__page-nav-item" tabindex="2" data-bind="css: { '_active': active, '_loading': loading }, click: activate, keyboard: { 13: activate }">
-                <a class="admin__page-nav-link" href="#" data-bind="css: { '_changed': changed }, attr: { id: 'tab_' + index }">
-                    <span data-bind="text: label"></span>
-
-                    <span class="admin__page-nav-item-messages">
-                       <span class="admin__page-nav-item-message _changed">
-                           <span class="admin__page-nav-item-message-icon"></span>
-                           <span class="admin__page-nav-item-message-tooltip"
-                                   data-bind="i18n: 'Changes have been made to this section that have not been saved.'">
-                           </span>
-                       </span>
-                        <span class="admin__page-nav-item-message-loader">
-                           <span class="spinner">
-                               <span></span><span></span><span></span><span></span>
-                               <span></span><span></span><span></span><span></span>
-                           </span>
-                       </span>
+    <ul class="admin__page-nav-items items" each="elems" visible="opened">
+        <li class="admin__page-nav-item" tabindex="2" css="_active: active, _loading: loading" click="activate" keyboard="13: activate">
+            <a class="admin__page-nav-link" href="#" css="_changed: changed" attr="id: 'tab_' + index">
+                <span text="label"/>
+                <span class="admin__page-nav-item-messages">
+                    <span class="admin__page-nav-item-message _changed">
+                        <span class="admin__page-nav-item-message-icon"/>
+                        <span class="admin__page-nav-item-message-tooltip"
+                               translate="'Changes have been made to this section that have not been saved.'"/>
                     </span>
-
-                </a>
-            </li>
-        <!-- /ko -->
+                    <span class="admin__page-nav-item-message-loader">
+                        <span class="spinner">
+                           <span repeat="8"/>
+                        </span>
+                   </span>
+                </span>
+            </a>
+        </li>
     </ul>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,37 +10,67 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * One page checkout status shipping method block
+ * One page checkout status shipping method block.
  */
 class Method extends Block
 {
     /**
-     * Shipping method selector
+     * Shipping method selector.
      *
      * @var string
      */
     protected $shippingMethod = './/tbody//tr[td[contains(., "%s")] and td[contains(., "%s")]]//input';
 
     /**
-     * Continue checkout button
+     * Shipping method amount selector.
+     *
+     * @var string
+     */
+    private $shippingMethodAmount = './/tr[td[contains(., "%s")] and td[contains(., "%s")]]//span[@class="price"]';
+
+    /**
+     * Continue checkout button.
      *
      * @var string
      */
     protected $continue = '#shipping-method-buttons-container button';
 
     /**
-     * Wait element
+     * Wait element.
      *
      * @var string
      */
     protected $waitElement = '.loading-mask';
 
     /**
-     * Block wait element
+     * Block wait element.
      *
      * @var string
      */
     protected $blockWaitElement = '._block-content-loading';
+
+    /**
+     * Wait until shipping rates will appear.
+     *
+     * @return void
+     */
+    private function waitForShippingRates()
+    {
+        // Code under test uses JavaScript setTimeout at this point as well.
+        sleep(3);
+        $this->waitForElementNotVisible($this->blockWaitElement);
+    }
+
+    /**
+     * Retrieve if the shipping methods loader appears.
+     *
+     * @return bool|null
+     */
+    public function isLoaderAppeared()
+    {
+        $this->_rootElement->click();
+        return $this->waitForElementVisible($this->waitElement);
+    }
 
     /**
      * Select shipping method.
@@ -50,15 +80,26 @@ class Method extends Block
      */
     public function selectShippingMethod(array $method)
     {
-        // Code under test uses JavaScript setTimeout at this point as well.
-        sleep(3);
+        $this->waitForShippingRates();
         $selector = sprintf($this->shippingMethod, $method['shipping_method'], $method['shipping_service']);
-        $this->waitForElementNotVisible($this->blockWaitElement);
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
     }
 
     /**
-     * Click continue button
+     * Check whether shipping method is available in the shipping rates.
+     *
+     * @param array $method
+     * @return bool
+     */
+    public function isShippingMethodAvailable(array $method)
+    {
+        $this->waitForShippingRates();
+        $selector = sprintf($this->shippingMethod, $method['shipping_method'], $method['shipping_service']);
+        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Click continue button.
      *
      * @return void
      */
@@ -73,5 +114,17 @@ class Method extends Block
                 return $element->isVisible() == false ? true : null;
             }
         );
+    }
+
+    /**
+     * Get shipping method amount.
+     *
+     * @param array $method
+     * @return string
+     */
+    public function getShippingMethodAmount(array $method)
+    {
+        $selector = sprintf($this->shippingMethodAmount, $method['shipping_method'], $method['shipping_service']);
+        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
     }
 }

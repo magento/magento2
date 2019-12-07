@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Response\Http;
 
-class FileFactoryTest extends \PHPUnit_Framework_TestCase
+class FileFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -30,15 +30,10 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->fileSystemMock = $this->getMock(
-            'Magento\Framework\Filesystem',
-            ['getDirectoryWrite'],
-            [],
-            '',
-            false
-        );
+        $this->fileSystemMock =
+            $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite', 'isFile']);
         $this->dirMock = $this->getMockBuilder(
-            '\Magento\Framework\Filesystem\Directory\Write'
+            \Magento\Framework\Filesystem\Directory\Write::class
         )->disableOriginalConstructor()->getMock();
 
         $this->fileSystemMock->expects(
@@ -56,12 +51,9 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         )->withAnyParameters()->will(
             $this->returnValue(0)
         );
-        $this->responseMock = $this->getMock(
-            'Magento\Framework\App\Response\Http',
-            ['setHeader', 'sendHeaders', 'setHttpResponseCode', 'clearBody', 'setBody', '__wakeup'],
-            [],
-            '',
-            false
+        $this->responseMock = $this->createPartialMock(
+            \Magento\Framework\App\Response\Http::class,
+            ['setHeader', 'sendHeaders', 'setHttpResponseCode', 'clearBody', 'setBody', '__wakeup']
         );
     }
 
@@ -75,7 +67,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @exceptedExceptionMessage File not found
+     * @expectedExceptionMessage File not found
      */
     public function testCreateIfFileNotExist()
     {
@@ -121,7 +113,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('sendHeaders')
             ->will($this->returnSelf());
 
-        $streamMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\WriteInterface')
+        $streamMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\WriteInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
@@ -164,7 +156,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('sendHeaders')
             ->will($this->returnSelf());
 
-        $streamMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\WriteInterface')
+        $streamMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\WriteInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
@@ -206,7 +198,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         $this->dirMock->expects($this->once())
             ->method('writeFile')
             ->with('fileName', 'content', 'w+');
-        $streamMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\WriteInterface')
+        $streamMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\WriteInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
@@ -227,7 +219,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     private function getModel()
     {
         return $this->objectManager->getObject(
-            'Magento\Framework\App\Response\Http\FileFactory',
+            \Magento\Framework\App\Response\Http\FileFactory::class,
             [
                 'response' => $this->responseMock,
                 'filesystem' => $this->fileSystemMock,
@@ -238,18 +230,19 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Get model mock
      *
-     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit_Framework_MockObject_MockBuilder
+     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     private function getModelMock()
     {
-        $modelMock = $this->getMock(
-            'Magento\Framework\App\Response\Http\FileFactory',
-            ['callExit'],
-            [
-                'response' => $this->responseMock,
-                'filesystem' => $this->fileSystemMock,
-            ]
-        );
+        $modelMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
+            ->setMethods(null)
+            ->setConstructorArgs(
+                [
+                    'response' => $this->responseMock,
+                    'filesystem' => $this->fileSystemMock,
+                ]
+            )
+            ->getMock();
         return $modelMock;
     }
 }

@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Test\Unit;
 
-class IndexerRegistryTest extends \PHPUnit_Framework_TestCase
+class IndexerRegistryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetCreatesIndexerInstancesAndReusesExistingOnes()
     {
-        $firstIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
+        $firstIndexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $firstIndexer->expects($this->once())->method('load')->with('first-indexer')->willReturnSelf();
 
-        $secondIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
+        $secondIndexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $secondIndexer->expects($this->once())->method('load')->with('second-indexer')->willReturnSelf();
 
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->at(0))->method('create')->willReturn($firstIndexer);
         $objectManager->expects($this->at(1))->method('create')->willReturn($secondIndexer);
 

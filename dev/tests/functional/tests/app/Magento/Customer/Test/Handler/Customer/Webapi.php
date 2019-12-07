@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,13 +33,44 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         ],
         'country_id' => [
             'United States' => 'US',
-            'United Kingdom' => 'GB'
+            'United Kingdom' => 'GB',
+            'Germany' => 'DE'
         ],
         'region_id' => [
             'California' => 12,
             'New York' => 43,
             'Texas' => 57,
         ],
+    ];
+
+    /**
+     * Attributes that has a setter while creating customer using web api.
+     *
+     * @var array
+     */
+    protected $basicAttributes = [
+        'id',
+        'confirmation',
+        'created_at',
+        'updated_at',
+        'created_in',
+        'dob',
+        'email',
+        'firstname',
+        'gender',
+        'group_id',
+        'lastname',
+        'middlename',
+        'prefix',
+        'store_id',
+        'suffix',
+        'taxvat',
+        'website_id',
+        'default_billing',
+        'default_shipping',
+        'addresses',
+        'disable_auto_group_change',
+        'custom_attribute',
     ];
 
     /**
@@ -78,9 +109,35 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         $data['customer'] = $this->replaceMappingData($customer->getData());
         $data['customer']['group_id'] = $this->getCustomerGroup($customer);
         $data['password'] = $data['customer']['password'];
+        if ($customer->hasData('website_id')) {
+            $data['customer']['website_id'] = $this->getCustomerWebsite($customer);
+        }
         unset($data['customer']['password']);
         unset($data['customer']['password_confirmation']);
         $data = $this->prepareAddressData($data);
+        $data = $this->prepareExtensionAttributes($data);
+        $data = $this->prepareCustomAttributes($data);
+        return $data;
+    }
+
+    /**
+     * Prepare Custom Attributes.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareCustomAttributes(array $data)
+    {
+        if (isset($data['customer']['custom_attribute'])) {
+            $data['customer']['custom_attribute']['attribute_code'] = $data['customer']['custom_attribute']['code'];
+            unset($data['customer']['custom_attribute']['code']);
+            if (is_array($data['customer']['custom_attribute']['value'])) {
+                $data['customer']['custom_attribute']['value'] =
+                    implode(',', $data['customer']['custom_attribute']['value']);
+            }
+            $data['customer']['custom_attributes'][0] = $data['customer']['custom_attribute'];
+            unset($data['customer']['custom_attribute']);
+        }
 
         return $data;
     }
@@ -93,9 +150,14 @@ class Webapi extends AbstractWebapi implements CustomerInterface
      */
     protected function getCustomerGroup(Customer $customer)
     {
-        return $customer->hasData('group_id')
-            ? $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()->getCustomerGroupId()
-            : self::GENERAL_GROUP;
+        if ($customer->hasData('group_id')) {
+            if ($customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()) {
+                return $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()->getCustomerGroupId();
+            }
+            return $customer->getData('group_id');
+        } else {
+            return self::GENERAL_GROUP;
+        }
     }
 
     /**
@@ -180,5 +242,34 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         }
 
         return $addressData;
+    }
+
+    /**
+     * Prepare customer website data.
+     *
+     * @param Customer $customer
+     * @return int
+     */
+    private function getCustomerWebsite(Customer $customer)
+    {
+        return $customer->getDataFieldConfig('website_id')['source']->getWebsite()->getWebsiteId();
+    }
+
+    /**
+     * Prepare extension attributes for the customer.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareExtensionAttributes($data)
+    {
+        foreach ($data['customer'] as $fieldName => $fieldValue) {
+            if (!in_array($fieldName, $this->basicAttributes)) {
+                $data['customer']['extension_attributes'][$fieldName] = $fieldValue;
+                unset($data['customer'][$fieldName]);
+            }
+        }
+
+        return $data;
     }
 }

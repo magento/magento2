@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\Template;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FilterEmulateTest extends \PHPUnit_Framework_TestCase
+class FilterEmulateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -30,10 +30,10 @@ class FilterEmulateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $this->filterEmulate = $this->objectManagerHelper->getObject(
-            'Magento\Widget\Model\Template\FilterEmulate',
+            \Magento\Widget\Model\Template\FilterEmulate::class,
             ['appState' => $this->appStateMock]
         );
     }

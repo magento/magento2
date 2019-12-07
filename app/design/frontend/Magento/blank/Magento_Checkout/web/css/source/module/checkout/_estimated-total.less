@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -15,7 +15,6 @@
 
     .opc-estimated-wrapper {
         &:extend(.abs-add-clearfix all);
-        &:extend(.abs-no-display-desktop all);
         .lib-css(border-bottom, @border-width__base solid @color-gray80);
         margin: 0 0 15px;
         padding: 18px 15px;
@@ -26,8 +25,8 @@
             float: left;
 
             .estimated-label {
-                margin: 0 0 @indent__xs;
                 display: block;
+                margin: 0 0 @indent__xs;
             }
         }
 
@@ -35,7 +34,11 @@
             .action {
                 &.showcart {
                     &:before {
-                        .lib-css(color, @primary__color);
+                        .lib-css(color, @button__color);
+                    }
+
+                    &:hover:before {
+                        .lib-css(color, @button__hover__color);
                     }
                 }
             }
@@ -49,6 +52,6 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-estimated-wrapper {
-        display: none;
+        &:extend(.abs-no-display-desktop all);
     }
 }

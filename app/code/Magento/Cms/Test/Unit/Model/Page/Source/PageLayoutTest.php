@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\Page\Source;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
 use Magento\Framework\View\PageLayout\Config;
 
-class PageLayoutTest extends \PHPUnit_Framework_TestCase
+class PageLayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BuilderInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -38,11 +38,12 @@ class PageLayoutTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->builderMock = $this->getMockBuilder('Magento\Framework\View\Model\PageLayout\Config\BuilderInterface')
-            ->disableOriginalConstructor()
+        $this->builderMock = $this->getMockBuilder(
+            \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface::class
+        )->disableOriginalConstructor()
             ->setMethods(['getPageLayoutsConfig'])
             ->getMock();
-        $this->pageLayoutConfigMock = $this->getMockBuilder('Magento\Framework\View\PageLayout\Config')
+        $this->pageLayoutConfigMock = $this->getMockBuilder(\Magento\Framework\View\PageLayout\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOptions'])
             ->getMock();
@@ -61,7 +62,7 @@ class PageLayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSourceClassName()
     {
-        return 'Magento\Cms\Model\Page\Source\PageLayout';
+        return \Magento\Cms\Model\Page\Source\PageLayout::class;
     }
 
     /**

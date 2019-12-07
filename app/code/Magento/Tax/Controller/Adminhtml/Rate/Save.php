@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
@@ -38,7 +38,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rate
                 $this->messageManager->addSuccess(__('You saved the tax rate.'));
                 return $resultRedirect->setPath('*/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($ratePost);
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($ratePost);
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());

@@ -1,23 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Admin product tax class add form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Controller\RegistryConstants;
 
 /**
+ * Tax rate form.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -31,7 +35,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var string
      */
-    protected $_template = 'rate/form.phtml';
+    protected $_template = 'Magento_Tax::rate/form.phtml';
 
     /**
      * Tax data
@@ -108,7 +112,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -117,6 +121,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Prepare form before rendering HTML.
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -130,12 +136,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             if ($taxRateId) {
                 $taxRateDataObject = $this->_taxRateRepository->get($taxRateId);
             }
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (NoSuchEntityException $e) {
-            /* tax rate not found */
+            //tax rate not found//
         }
 
         $sessionFormValues = (array)$this->_coreRegistry->registry(RegistryConstants::CURRENT_TAX_RATE_FORM_DATA);
-        $formData = isset($taxRateDataObject) ? $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject) : [];
+        $formData = isset($taxRateDataObject)
+            ? $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject)
+            : [];
         $formData = array_merge($formData, $sessionFormValues);
 
         if (isset($formData['zip_is_range']) && $formData['zip_is_range'] && !isset($formData['tax_postcode'])) {
@@ -174,7 +183,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         $legend = $this->getShowLegend() ? __('Tax Rate Information') : '';
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => $legend, 'class' => 'form-inline']);
+        $fieldset = $form->addFieldset(
+            'base_fieldset',
+            ['legend' => $legend, 'class' => 'admin__scope-old form-inline']
+        );
 
         if (isset($formData['tax_calculation_rate_id']) && $formData['tax_calculation_rate_id'] > 0) {
             $fieldset->addField(
@@ -218,7 +230,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'note' => __(
                     "'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and are not longer than %1.",
                     $this->_taxData->getPostCodeSubStringLength()
-                )
+                ),
+                'class' => 'validate-length maximum-length-' . $this->_taxData->getPostCodeSubStringLength()
             ]
         );
 
@@ -289,7 +302,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock('Magento\Framework\View\Element\Template')->setTemplate('Magento_Tax::rate/js.phtml')
+            $this->getLayout()->createBlock(
+                \Magento\Framework\View\Element\Template::class
+            )->setTemplate('Magento_Tax::rate/js.phtml')
         );
 
         return parent::_prepareForm();

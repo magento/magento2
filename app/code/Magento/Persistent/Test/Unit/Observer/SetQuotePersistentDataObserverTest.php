@@ -1,13 +1,16 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class SetQuotePersistentDataObserverTest extends \PHPUnit_Framework_TestCase
+/**
+ * Observer test for setting "is_persistent" value to quote
+ */
+class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\SetQuotePersistentDataObserver
@@ -53,13 +56,13 @@ class SetQuotePersistentDataObserverTest extends \PHPUnit_Framework_TestCase
     {
         $quoteMethods = ['setIsActive', 'setIsPersistent', '__wakeUp'];
         $eventMethods = ['getQuote', '__wakeUp'];
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', $quoteMethods, [], '', false);
-        $this->helperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->eventManagerMock = $this->getMock('\Magento\Framework\Event', $eventMethods, [], '', false);
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->quoteManagerMock = $this->getMock('Magento\Persistent\Model\QuoteManager', [], [], '', false);
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, $quoteMethods);
+        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->eventManagerMock = $this->createPartialMock(\Magento\Framework\Event::class, $eventMethods);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->quoteManagerMock = $this->createMock(\Magento\Persistent\Model\QuoteManager::class);
         $this->model = new \Magento\Persistent\Observer\SetQuotePersistentDataObserver(
             $this->sessionHelperMock,
             $this->helperMock,
@@ -83,7 +86,6 @@ class SetQuotePersistentDataObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->will($this->returnValue($this->eventManagerMock));
         $this->eventManagerMock->expects($this->once())->method('getQuote');
-        $this->customerSessionMock->expects($this->never())->method('isLoggedIn');
         $this->model->execute($this->observerMock);
     }
 
@@ -98,10 +100,8 @@ class SetQuotePersistentDataObserverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getQuote')
             ->will($this->returnValue($this->quoteMock));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(false));
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(true));
         $this->quoteManagerMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->quoteMock->expects($this->once())->method('setIsActive')->with(false)->will($this->returnSelf());
         $this->quoteMock->expects($this->once())->method('setIsPersistent')->with(true);
         $this->model->execute($this->observerMock);
     }

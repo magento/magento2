@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework;
-
 
 /**
  * Provides access to the application for the tests
@@ -27,13 +26,17 @@ class WebApiApplication extends Application
     /**
      * {@inheritdoc}
      */
-    public function install()
+    public function install($cleanup)
     {
+        if ($cleanup) {
+            $this->cleanup();
+        }
+
         $installOptions = $this->getInstallConfig();
 
         /* Install application */
         if ($installOptions) {
-            $installCmd = 'php -f ' . BP . '/bin/magento setup:install';
+            $installCmd = 'php -f ' . BP . '/bin/magento setup:install -vvv';
             $installArgs = [];
             foreach ($installOptions as $optionName => $optionValue) {
                 if (is_bool($optionValue)) {

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option
@@ -79,25 +79,13 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'setBackorders',
             '__wakeup',
         ];
-        $this->optionMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item\Option',
-            $optionMethods,
-            [],
-            '',
-            false
-        );
+        $this->optionMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item\Option::class, $optionMethods);
 
-        $store = $this->getMock(
-            '\Magento\Store\Model\Store',
-            ['getWebsiteId', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn($this->websiteId);
 
         $methods = ['getQtyToAdd', '__wakeup', 'getId', 'updateQtyOption', 'setData', 'getQuoteId', 'getStore'];
-        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', $methods, [], '', false);
+        $this->quoteItemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, $methods);
         $this->quoteItemMock->expects($this->any())->method('getStore')->willReturn($store);
 
         $stockItemMethods = [
@@ -106,33 +94,20 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             '__wakeup',
             'unsIsChildItem',
             'getItemId',
+            'setProductName'
         ];
 
-        $this->stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Api\Data\StockItem',
-            $stockItemMethods,
-            [],
-            '',
-            false
-        );
+        $this->stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+            ->setMethods($stockItemMethods)
+            ->getMockForAbstractClass();
         $productMethods = ['getId', '__wakeup', 'getStore'];
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $productMethods, [], '', false);
-        $store = $this->getMock(
-            '\Magento\Store\Model\Store',
-            ['getWebsiteId', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $productMethods, []);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn($this->websiteId);
         $this->productMock->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->qtyItemListMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList',
-            [],
-            [],
-            '',
-            false
+        $this->qtyItemListMock = $this->createMock(
+            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList::class
         );
         $resultMethods = [
             'getItemIsQtyDecimal',
@@ -142,21 +117,21 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'getItemBackorders',
             '__wakeup',
         ];
-        $this->resultMock = $this->getMock('Magento\Framework\DataObject', $resultMethods, [], '', false);
+        $this->resultMock = $this->createPartialMock(\Magento\Framework\DataObject::class, $resultMethods);
 
         $this->stockRegistry = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockRegistryInterface',
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class,
             ['getStockItem']
         );
 
         $this->stockState = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockStateInterface',
+            \Magento\CatalogInventory\Api\StockStateInterface::class,
             ['checkQuoteItemQty']
         );
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->validator = $this->objectManager->getObject(
-            'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option',
+            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class,
             [
                 'quoteItemQtyList' => $this->qtyItemListMock,
                 'stockRegistry' => $this->stockRegistry,
@@ -176,7 +151,6 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
-        $this->stockItemMock->expects($this->once())->method('setSuppressCheckQtyIncrements')->with(true);
         $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
 
         $this->stockRegistry
@@ -247,7 +221,6 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
-        $this->stockItemMock->expects($this->once())->method('setSuppressCheckQtyIncrements')->with(true);
         $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
 
         $this->stockRegistry

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -23,22 +23,22 @@
 //  ---------------------------------------------
 
 //  WebKit
-
 @-webkit-keyframes progress-bar-stripes {
     from {
         background-position: 4rem 0;
     }
+
     to {
         background-position: 0 0;
     }
 }
 
-//  Spec and IE10+
-
+//  Spec and IE10 +
 @keyframes progress-bar-stripes {
     from {
         background-position: 4rem 0;
     }
+
     to {
         background-position: 0 0;
     }
@@ -49,7 +49,6 @@
 //  ---------------------------------------------
 
 //  Outer container
-
 .progress {
     background-color: @progress__color;
     border: 1px solid @progress__border-color;
@@ -60,7 +59,6 @@
 }
 
 //  Bar of progress
-
 .progress-bar {
     background-color: @progress-bar__background-color;
     color: @progress-bar__color;
@@ -74,7 +72,6 @@
 }
 
 //  Call animation for the active one
-
 .progress-bar {
     &.active {
         .animation(progress-bar-stripes 2s linear infinite);

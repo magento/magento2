@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Rule\Model\Condition\AbstractCondition;
 
 class Conditions extends Generic implements TabInterface
 {
@@ -65,7 +66,7 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Returns status flag about this tab can be shown or not
      *
      * @return bool
      * @codeCoverageIgnore
@@ -87,6 +88,39 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
+     * Tab class getter
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getTabClass()
+    {
+        return null;
+    }
+
+    /**
+     * Return URL link to Tab content
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getTabUrl()
+    {
+        return null;
+    }
+
+    /**
+     * Tab should be loaded trough Ajax call
+     *
+     * @return bool
+     * @codeCoverageIgnore
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
+    }
+
+    /**
      * @return Form
      */
     protected function _prepareForm()
@@ -94,35 +128,75 @@ class Conditions extends Generic implements TabInterface
         $model = $this->_coreRegistry->registry('current_promo_catalog_rule');
 
         /** @var \Magento\Framework\Data\Form $form */
+        $form = $this->addTabToForm($model);
+        $this->setForm($form);
+
+        return parent::_prepareForm();
+    }
+
+    /**
+     * @param \Magento\CatalogRule\Api\Data\RuleInterface $model
+     * @param string $fieldsetId
+     * @param string $formName
+     * @return \Magento\Framework\Data\Form
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset', $formName = 'catalog_rule_form')
+    {
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
-        $renderer = $this->_rendererFieldset->setTemplate(
-            'Magento_CatalogRule::promo/fieldset.phtml'
-        )->setNewChildUrl(
-            $this->getUrl('catalog_rule/promo_catalog/newConditionHtml/form/rule_conditions_fieldset')
+        $conditionsFieldSetId = $model->getConditionsFieldSetId($formName);
+
+        $newChildUrl = $this->getUrl(
+            'catalog_rule/promo_catalog/newConditionHtml/form/' . $conditionsFieldSetId,
+            ['form_namespace' => $formName]
         );
 
+        $renderer = $this->_rendererFieldset->setTemplate('Magento_CatalogRule::promo/fieldset.phtml')
+            ->setNewChildUrl($newChildUrl)
+            ->setFieldSetId($conditionsFieldSetId);
+
         $fieldset = $form->addFieldset(
-            'conditions_fieldset',
+            $fieldsetId,
             ['legend' => __('Conditions (don\'t add conditions if rule is applied to all products)')]
-        )->setRenderer(
-            $renderer
-        );
+        )->setRenderer($renderer);
 
         $fieldset->addField(
             'conditions',
             'text',
-            ['name' => 'conditions', 'label' => __('Conditions'), 'title' => __('Conditions'), 'required' => true]
-        )->setRule(
-            $model
-        )->setRenderer(
-            $this->_conditions
-        );
+            [
+                'name' => 'conditions',
+                'label' => __('Conditions'),
+                'title' => __('Conditions'),
+                'required' => true,
+                'data-form-part' => $formName
+            ]
+        )
+            ->setRule($model)
+            ->setRenderer($this->_conditions);
 
         $form->setValues($model->getData());
-        $this->setForm($form);
+        $this->setConditionFormName($model->getConditions(), $formName, $conditionsFieldSetId);
+        return $form;
+    }
 
-        return parent::_prepareForm();
+    /**
+     * @param AbstractCondition $conditions
+     * @param string $formName
+     * @param string $jsFormName
+     * @return void
+     */
+    private function setConditionFormName(AbstractCondition $conditions, $formName, $jsFormName)
+    {
+        $conditions->setFormName($formName);
+        $conditions->setJsFormObject($jsFormName);
+
+        if ($conditions->getConditions() && is_array($conditions->getConditions())) {
+            foreach ($conditions->getConditions() as $condition) {
+                $this->setConditionFormName($condition, $formName, $jsFormName);
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class AssertGridFiltering extends AbstractConstraint
     {
         foreach ($filterResults as $itemId => $filters) {
             foreach ($filters as $filterName => $ids) {
-                \PHPUnit_Framework_Assert::assertCount(
+                \PHPUnit\Framework\Assert::assertCount(
                     1,
                     $ids,
                     sprintf(
@@ -33,7 +33,7 @@ class AssertGridFiltering extends AbstractConstraint
                     )
                 );
                 $actualItemId = $ids[0];
-                \PHPUnit_Framework_Assert::assertEquals(
+                \PHPUnit\Framework\Assert::assertEquals(
                     $itemId,
                     $actualItemId,
                     sprintf(

@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
 /**
  * Class UpdateCustomerCookiesTest
  */
-class UpdateCustomerCookiesObserverTest extends \PHPUnit_Framework_TestCase
+class UpdateCustomerCookiesObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\UpdateCustomerCookiesObserver
@@ -52,25 +50,25 @@ class UpdateCustomerCookiesObserverTest extends \PHPUnit_Framework_TestCase
     {
         $eventMethods = ['getCustomerCookies', '__wakeUp'];
         $sessionMethods = ['getId', 'getGroupId', 'getCustomerId', '__wakeUp'];
-        $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
+        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $this->customerRepository = $this->getMockForAbstractClass(
-            '\Magento\Customer\Api\CustomerRepositoryInterface',
+            \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
             '',
             false
         );
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->eventManagerMock = $this->getMock('\Magento\Framework\Event', $eventMethods, [], '', false);
-        $this->sessionMock = $this->getMock('Magento\Persistent\Model\Session', $sessionMethods, [], '', false);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->eventManagerMock = $this->createPartialMock(\Magento\Framework\Event::class, $eventMethods);
+        $this->sessionMock = $this->createPartialMock(\Magento\Persistent\Model\Session::class, $sessionMethods);
         $this->customerMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\CustomerInterface',
+            \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             '',
             false
         );
         $this->model = new \Magento\Persistent\Observer\UpdateCustomerCookiesObserver(
-          $this->sessionHelperMock,
-          $this->customerRepository
+            $this->sessionHelperMock,
+            $this->customerRepository
         );
     }
 
@@ -85,10 +83,10 @@ class UpdateCustomerCookiesObserverTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
         $customerGroupId = 2;
-        $cookieMock =
-            $this->getMock('Magento\Framework\DataObject',
-                ['setCustomerId', 'setCustomerGroupId', '__wakeUp'],
-                [], '', false);
+        $cookieMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['setCustomerId', 'setCustomerGroupId', '__wakeUp']
+        );
         $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
         $this->observerMock
             ->expects($this->once())

@@ -2,16 +2,18 @@
 /**
  * Phrase (for replacing Data Value with Object)
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
 use Magento\Framework\Phrase\Renderer\Placeholder as RendererPlaceholder;
 use Magento\Framework\Phrase\RendererInterface;
-use Zend\Stdlib\JsonSerializable;
 
-class Phrase implements JsonSerializable
+/**
+ * @api
+ */
+class Phrase implements \JsonSerializable
 {
     /**
      * Default phrase renderer. Allows stacking renderers that "don't know about each other"

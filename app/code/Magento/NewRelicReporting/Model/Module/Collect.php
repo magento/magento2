@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Module;
 
 use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleListInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Module;
 
+/**
+ * Class for collecting data for the report
+ */
 class Collect
 {
     /**
@@ -92,7 +95,6 @@ class Collect
      * @param string $active
      * @param string $setupVersion
      * @param string $state
-     *
      * @return array
      */
     protected function getNewModuleChanges($moduleName, $active, $setupVersion, $state)
@@ -137,7 +139,7 @@ class Collect
         $disabledCount = $enabledCount = $uninstalledCount = 0;
 
         foreach ($stateValues as $state) {
-            switch($state){
+            switch ($state) {
                 case Config::ENABLED:
                     $enabledCount++;
                     break;
@@ -277,9 +279,7 @@ class Collect
                 $changes = array_diff($module, $changeTest);
                 $changesCleanArray = $this->getCleanChangesArray($changes);
 
-                if (count($changesCleanArray) > 0 ||
-                    ($this->moduleManager->isOutputEnabled($changeTest['name']) &&
-                        $module['setup_version'] != null)) {
+                if (!empty($changesCleanArray)) {
                     $data = [
                         'entity_id' => $changeTest['entity_id'],
                         'name' => $changeTest['name'],

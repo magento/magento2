@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Form textarea element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Form textarea element.
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 class Textarea extends AbstractElement
 {
     /**
@@ -64,6 +64,7 @@ class Textarea extends AbstractElement
             'rows',
             'cols',
             'readonly',
+            'maxlength',
             'disabled',
             'onkeyup',
             'tabindex',

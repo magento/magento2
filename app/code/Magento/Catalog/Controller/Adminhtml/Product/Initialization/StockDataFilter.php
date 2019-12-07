@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
@@ -16,7 +16,7 @@ class StockDataFilter
     /**
      * The greatest value which could be stored in CatalogInventory Qty field
      */
-    const MAX_QTY_VALUE = 99999999.9999;
+    const MAX_QTY_VALUE = 99999999;
 
     /**
      * @var ScopeConfigInterface

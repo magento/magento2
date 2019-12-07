@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Wishlist\Test\TestCase;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Preconditions:
@@ -26,25 +27,35 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
  * 7. Click Ok
  * 8. Perform assertions
  *
- * @group Wishlist_(CS)
+ * @group Wishlist
  * @ZephyrId MAGETWO-29257
  */
 class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
+
+    /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    private $envWhitelist;
 
     /**
      * Create customer.
      *
      * @param Customer $customer
+     * @param EnvWhitelist $envWhitelist
      * @return array
      */
-    public function __prepare(Customer $customer)
-    {
+    public function __prepare(
+        Customer $customer,
+        EnvWhitelist $envWhitelist
+    ) {
         $customer->persist();
+        $this->envWhitelist = $envWhitelist;
 
         return ['customer' => $customer];
     }
@@ -65,6 +76,7 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
         CustomerIndexEdit $customerIndexEdit
     ) {
         // Preconditions
+        $this->envWhitelist->addHost('example.com');
         $product = $this->createProducts($product)[0];
         $this->loginCustomer($customer);
         $this->addToWishlist([$product]);
@@ -80,5 +92,15 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
         $customerIndexEdit->getConfigureProductBlock()->configProduct($product);
 
         return['product' => $product];
+    }
+
+    /**
+     * Clean data after running test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        $this->envWhitelist->removeHost('example.com');
     }
 }

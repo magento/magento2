@@ -1,15 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue implements HttpPostActionInterface
 {
     /**
      * Save Newsletter queue
@@ -22,15 +22,17 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
     {
         try {
             /* @var $queue \Magento\Newsletter\Model\Queue */
-            $queue = $this->_objectManager->create('Magento\Newsletter\Model\Queue');
+            $queue = $this->_objectManager->create(\Magento\Newsletter\Model\Queue::class);
 
             $templateId = $this->getRequest()->getParam('template_id');
             if ($templateId) {
                 /* @var $template \Magento\Newsletter\Model\Template */
-                $template = $this->_objectManager->create('Magento\Newsletter\Model\Template')->load($templateId);
+                $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class)->load($templateId);
 
                 if (!$template->getId() || $template->getIsSystem()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the newsletter template and try again.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Please correct the newsletter template and try again.')
+                    );
                 }
 
                 $queue->setTemplateId(
@@ -82,6 +84,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 
             $this->messageManager->addSuccess(__('You saved the newsletter queue.'));
             $this->_getSession()->setFormData(false);
+            $this->_getSession()->unsPreviewData();
 
             $this->_redirect('*/*');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

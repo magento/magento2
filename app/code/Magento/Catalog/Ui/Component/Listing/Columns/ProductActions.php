@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -12,6 +12,9 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Class ProductActions
+ *
+ * @api
+ * @since 100.0.2
  */
 class ProductActions extends Column
 {
@@ -57,6 +60,7 @@ class ProductActions extends Column
                     ),
                     'label' => __('Edit'),
                     'hidden' => false,
+                    '__disableTmpl' => true
                 ];
             }
         }

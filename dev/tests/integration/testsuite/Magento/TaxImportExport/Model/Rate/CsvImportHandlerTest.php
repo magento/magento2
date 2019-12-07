@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TaxImportExport\Model\Rate;
 
-class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
+class CsvImportHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TaxImportExport\Model\Rate\CsvImportHandler
@@ -15,7 +15,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_importHandler = $objectManager->create('Magento\TaxImportExport\Model\Rate\CsvImportHandler');
+        $this->_importHandler = $objectManager->create(\Magento\TaxImportExport\Model\Rate\CsvImportHandler::class);
     }
 
     protected function tearDown()
@@ -34,7 +34,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         // assert that both tax rates, specified in import file, have been imported correctly
         $importedRuleCA = $objectManager->create(
-            'Magento\Tax\Model\Calculation\Rate'
+            \Magento\Tax\Model\Calculation\Rate::class
         )->loadByCode(
             'US-CA-*-Rate Import Test'
         );
@@ -44,7 +44,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('*', $importedRuleCA->getTaxPostcode());
 
         $importedRuleFL = $objectManager->create(
-            'Magento\Tax\Model\Calculation\Rate'
+            \Magento\Tax\Model\Calculation\Rate::class
         )->loadByCode(
             'US-FL-*-Rate Import Test'
         );
@@ -57,7 +57,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage One of the countries has invalid code.
+     * @expectedExceptionMessage Country code is invalid: ZZ
      */
     public function testImportFromCsvFileThrowsExceptionWhenCountryCodeIsInvalid()
     {

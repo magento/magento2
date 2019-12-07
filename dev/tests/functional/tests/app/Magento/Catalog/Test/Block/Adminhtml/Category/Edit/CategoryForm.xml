@@ -1,73 +1,150 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <general_information>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#category_info_tabs_group_4</selector>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="general"]</selector>
         <strategy>css selector</strategy>
-        <wrapper>general</wrapper>
         <fields>
             <is_active>
-                <input>select</input>
+                <input>switcher</input>
+                <selector>input[name='is_active']</selector>
             </is_active>
-            <description />
             <include_in_menu>
-                <input>select</input>
+                <input>switcher</input>
+                <selector>input[name='include_in_menu']</selector>
             </include_in_menu>
+            <name>
+                <input>text</input>
+                <selector>input[name='name']</selector>
+            </name>
+            <use_default_name>
+                <selector>[name="use_default[name]"]</selector>
+                <input>checkbox</input>
+            </use_default_name>
         </fields>
     </general_information>
-    <display_setting>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#category_info_tabs_group_5</selector>
+    <content>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="content"]</selector>
         <strategy>css selector</strategy>
-        <wrapper>general</wrapper>
         <fields>
-            <is_active>
-                <input>select</input>
-            </is_active>
-            <include_in_menu>
-                <input>checkbox</input>
-            </include_in_menu>
-            <available_product_listing_config>
-                <selector>#use_config_group_5available_sort_by</selector>
-                <input>checkbox</input>
-            </available_product_listing_config>
-            <available_sort_by>
-                <selector>#group_5available_sort_by</selector>
-                <input>multiselect</input>
-            </available_sort_by>
-            <default_product_listing_config>
-                <selector>#use_config_group_5default_sort_by</selector>
-                <input>checkbox</input>
-            </default_product_listing_config>
-            <default_sort_by>
-                <input>select</input>
-            </default_sort_by>
-            <display_mode>
-                <input>select</input>
-            </display_mode>
+            <description>
+                <input>textarea</input>
+                <selector>textarea[name='description']</selector>
+            </description>
             <landing_page>
                 <input>select</input>
             </landing_page>
-            <is_anchor>
+        </fields>
+    </content>
+    <display_setting>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="display_settings"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <display_mode>
                 <input>select</input>
+            </display_mode>
+            <is_anchor>
+                <input>switcher</input>
+                <selector>input[name='is_anchor']</selector>
             </is_anchor>
+            <available_product_listing_config>
+                <input>checkbox</input>
+                <selector>input[name='use_config[available_sort_by]']</selector>
+            </available_product_listing_config>
+            <available_sort_by>
+                <input>multiselect</input>
+                <selector>select[name='available_sort_by']</selector>
+            </available_sort_by>
+            <default_product_listing_config>
+                <input>checkbox</input>
+                <selector>input[name='use_config[default_sort_by]']</selector>
+            </default_product_listing_config>
+            <default_sort_by>
+                <input>select</input>
+                <selector>select[name='default_sort_by']</selector>
+            </default_sort_by>
+            <use_config_price_range>
+                <input>checkbox</input>
+                <selector>input[name='use_config[filter_price_range]']</selector>
+            </use_config_price_range>
+            <layered_navigation_price_step>
+                <input>input</input>
+                <selector>input[name='filter_price_range']</selector>
+            </layered_navigation_price_step>
         </fields>
     </display_setting>
-    <custom_design>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#category_info_tabs_group_6</selector>
+    <seo>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="search_engine_optimization"]</selector>
         <strategy>css selector</strategy>
-        <wrapper>general</wrapper>
-    </custom_design>
+        <fields>
+            <url_key>
+                <input>input</input>
+                <selector>input[name='url_key']</selector>
+            </url_key>
+            <use_default_url_key>
+                <input>checkbox</input>
+                <selector>input[name='use_default[url_key]']</selector>
+            </use_default_url_key>
+            <meta_title>
+                <input>input</input>
+                <selector>input[name='meta_title']</selector>
+            </meta_title>
+        </fields>
+    </seo>
     <category_products>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Tab\Product</class>
-        <selector>#category_info_tabs_products</selector>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section\Products</class>
+        <selector>[data-index="assign_products"]</selector>
         <strategy>css selector</strategy>
     </category_products>
-</tabs>
+    <design>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="design"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <use_parent_category_settings>
+                <input>switcher</input>
+                <selector>input[name='custom_use_parent_settings']</selector>
+            </use_parent_category_settings>
+            <theme>
+                <input>select</input>
+                <selector>select[name='custom_design']</selector>
+            </theme>
+            <layout>
+                <input>select</input>
+                <selector>select[name='page_layout']</selector>
+            </layout>
+            <layout_update_xml>
+                <input>textarea</input>
+                <selector>textarea[name='custom_layout_update']</selector>
+            </layout_update_xml>
+            <apply_design_to_products>
+                <input>switcher</input>
+                <selector>input[name='custom_apply_to_products']</selector>
+            </apply_design_to_products>
+        </fields>
+    </design>
+    <schedule_design_update>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="schedule_design_update"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <schedule_update_from>
+                <input>datepicker</input>
+                <selector>input[name='custom_design_from']</selector>
+            </schedule_update_from>
+            <schedule_update_to>
+                <input>datepicker</input>
+                <selector>input[name='custom_design_to']</selector>
+            </schedule_update_to>
+        </fields>
+    </schedule_design_update>
+</sections>

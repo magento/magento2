@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Reflection\Test\Unit;
 
 use \Magento\Framework\Reflection\AttributeTypeResolver;
 
-class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
+class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeTypeResolver
@@ -30,8 +30,8 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->typeProcessor = $this->getMock('Magento\Framework\Reflection\TypeProcessor', [], [], '', false);
-        $this->configMock = $this->getMock('Magento\Framework\Api\ExtensionAttribute\Config', [], [], '', false);
+        $this->typeProcessor = $this->createMock(\Magento\Framework\Reflection\TypeProcessor::class);
+        $this->configMock = $this->createMock(\Magento\Framework\Api\ExtensionAttribute\Config::class);
         $this->model = new AttributeTypeResolver($this->typeProcessor, $this->configMock);
     }
 
@@ -65,23 +65,25 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
         $config = [
             'Some\Class' => [
                 'some_code' => [
-                    'type' => '\Magento\Framework\DataObject',
+                    'type' => \Magento\Framework\DataObject::class,
                 ],
             ]
         ];
 
         $this->typeProcessor->expects($this->once())
             ->method('getArrayItemType')
-            ->with('\Magento\Framework\DataObject')
-            ->willReturn('\Magento\Framework\DataObject');
+            ->with(\Magento\Framework\DataObject::class)
+            ->willReturn(\Magento\Framework\DataObject::class);
 
         $this->configMock->expects($this->once())->method('get')->willReturn($config);
-        $this->assertEquals('\Magento\Framework\DataObject', $this->model->resolveObjectType($code, $value, $context));
+        $this->assertEquals(
+            \Magento\Framework\DataObject::class,
+            $this->model->resolveObjectType($code, $value, $context)
+        );
     }
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Class "\Some\Class" does not exist. Please note that namespace must be specified.
      */
     public function testResolveObjectTypeWithConfiguredAttributeAndNonExistedClass()
     {
@@ -103,5 +105,9 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->configMock->expects($this->once())->method('get')->willReturn($config);
         $this->model->resolveObjectType($code, $value, $context);
+
+        $this->expectExceptionMessage(
+            'The "\Some\Class" class doesn\'t exist and the namespace must be specified. Verify and try again.'
+        );
     }
 }

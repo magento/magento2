@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,6 +12,7 @@
                 <input_types>
                     <text>text</text>
                     <textarea>textarea</textarea>
+                    <texteditor>texteditor</texteditor>
                     <date>date</date>
                     <boolean>boolean</boolean>
                     <multiselect>multiselect</multiselect>
@@ -19,5 +20,10 @@
                 </input_types>
             </validator_data>
         </general>
+        <dev>
+            <caching>
+                <cache_user_defined_attributes>0</cache_user_defined_attributes>
+            </caching>
+        </dev>
     </default>
 </config>

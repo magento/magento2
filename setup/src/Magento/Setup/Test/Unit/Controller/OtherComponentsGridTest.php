@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Setup\Controller\OtherComponentsGrid;
 use \Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Composer\InfoCommand;
 
-class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
+class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
@@ -31,21 +31,10 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerInformation = $this->getMock(
-            'Magento\Framework\Composer\ComposerInformation',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->infoCommand = $this->getMock('Magento\Composer\InfoCommand', [], [], '', false);
-        $magentoComposerApplicationFactory = $this->getMock(
-            'Magento\Framework\Composer\MagentoComposerApplicationFactory',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->composerInformation = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
+        $this->infoCommand = $this->createMock(\Magento\Composer\InfoCommand::class);
+        $magentoComposerApplicationFactory =
+            $this->createMock(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $magentoComposerApplicationFactory->expects($this->once())
             ->method('createInfoCommand')
             ->willReturn($this->infoCommand);
@@ -80,7 +69,7 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
                 ]
             ]);
         $jsonModel = $this->controller->componentsAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -120,9 +109,15 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
             ->method('getInstalledMagentoPackages')
             ->will($this->throwException(new \Exception("Test error message")));
         $jsonModel = $this->controller->componentsAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+    }
+
+    public function testIndexAction()
+    {
+        $model = $this->controller->indexAction();
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $model);
     }
 }

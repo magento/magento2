@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
          colors="true"
+         columns="max"
+         beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
+         stderr="true"
 >
     <!-- Test suites definition -->
     <testsuites>
@@ -18,8 +21,7 @@
         </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
-            <directory suffix="Test.php">../../../update/dev/tests/integration/testsuite</directory>
-            <exclude>testsuite/Magento/Test/Integrity</exclude>
+            <directory suffix="Test.php">../../../app/code/*/*/Test/Integration</directory>
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
         </testsuite>
     </testsuites>
@@ -28,13 +30,11 @@
         <whitelist addUncoveredFilesFromWhiteList="true">
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
-            <directory suffix=".php">../../../update/app/code</directory>
             <exclude>
                 <directory>../../../app/code/*/*/Test</directory>
                 <directory>../../../lib/internal/*/*/Test</directory>
                 <directory>../../../lib/internal/*/*/*/Test</directory>
                 <directory>../../../setup/src/*/*/Test</directory>
-                <directory>../../../update/app/code/*/*/Test</directory>
             </exclude>
         </whitelist>
     </filter>
@@ -55,8 +55,6 @@
         <!-- Memory usage and estimated leaks thresholds -->
         <!--<const name="TESTS_MEM_USAGE_LIMIT" value="1024M"/>-->
         <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
-        <!-- Whether to output all CLI commands executed by the bootstrap and tests -->
-        <!--<const name="TESTS_EXTRA_VERBOSE_LOG" value="1"/>-->
         <!-- Path to Percona Toolkit bin directory -->
         <!--<const name="PERCONA_TOOLKIT_BIN_DIR" value=""/>-->
         <!-- CSV Profiler Output file -->
@@ -65,6 +63,8 @@
         <!--<const name="TESTS_BAMBOO_PROFILER_FILE" value="profiler.csv"/>-->
         <!-- Metrics for Bamboo Profiler Output in PHP file that returns array -->
         <!--<const name="TESTS_BAMBOO_PROFILER_METRICS_FILE" value="../../build/profiler_metrics.php"/>-->
+        <!-- Whether to output all CLI commands executed by the bootstrap and tests -->
+        <const name="TESTS_EXTRA_VERBOSE_LOG" value="1"/>
         <!-- Magento mode for tests execution. Possible values are "default", "developer" and "production". -->
         <const name="TESTS_MAGENTO_MODE" value="developer"/>
         <!-- Minimum error log level to listen for. Possible values: -1 ignore all errors, and level constants form http://tools.ietf.org/html/rfc5424 standard -->
@@ -72,10 +72,60 @@
         <!-- Connection parameters for MongoDB library tests -->
         <!--<const name="MONGODB_CONNECTION_STRING" value="mongodb://localhost:27017"/>-->
         <!--<const name="MONGODB_DATABASE_NAME" value="magento_integration_tests"/>-->
+        <!-- Connection parameters for RabbitMQ tests -->
+        <!--<const name="RABBITMQ_MANAGEMENT_PORT" value="15672"/>-->
+        <!--<const name="TESTS_PARALLEL_RUN" value="1"/>-->
     </php>
     <!-- Test listeners -->
     <listeners>
         <listener class="Magento\TestFramework\Event\PhpUnit"/>
         <listener class="Magento\TestFramework\ErrorLog\Listener"/>
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+            <arguments>
+                <string>var/allure-results</string> <!-- XML files output directory -->
+                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+                <array> <!-- A list of custom annotations to ignore (optional) -->
+                    <element key="codingStandardsIgnoreStart">
+                        <string>codingStandardsIgnoreStart</string>
+                    </element>
+                    <element key="codingStandardsIgnoreEnd">
+                        <string>codingStandardsIgnoreEnd</string>
+                    </element>
+                    <element key="expectedExceptionMessageRegExp">
+                        <string>expectedExceptionMessageRegExp</string>
+                    </element>
+                    <element key="magentoAdminConfigFixture">
+                        <string>magentoAdminConfigFixture</string>
+                    </element>
+                    <element key="magentoAppArea">
+                        <string>magentoAppArea</string>
+                    </element>
+                    <element key="magentoAppIsolation">
+                        <string>magentoAppIsolation</string>
+                    </element>
+                    <element key="magentoCache">
+                        <string>magentoCache</string>
+                    </element>
+                    <element key="magentoComponentsDir">
+                        <string>magentoComponentsDir</string>
+                    </element>
+                    <element key="magentoConfigFixture">
+                        <string>magentoConfigFixture</string>
+                    </element>
+                    <element key="magentoDataFixture">
+                        <string>magentoDataFixture</string>
+                    </element>
+                    <element key="magentoDataFixtureBeforeTransaction">
+                        <string>magentoDataFixtureBeforeTransaction</string>
+                    </element>
+                    <element key="magentoDbIsolation">
+                        <string>magentoDbIsolation</string>
+                    </element>
+                    <element key="magentoIndexerDimensionMode">
+                        <string>magentoIndexerDimensionMode</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 </phpunit>

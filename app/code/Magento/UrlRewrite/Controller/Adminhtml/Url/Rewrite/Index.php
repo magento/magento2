@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-class Index extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpGetActionInterface
 {
     /**
      * Show URL rewrites index page

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,6 @@
         <label translate="true">Admin 1column</label>
     </layout>
     <layout id="admin-2columns-left">
-        <label translate="true">Admin 1column</label>
+        <label translate="true">Admin 2 columns with left bar</label>
     </layout>
 </page_layouts>

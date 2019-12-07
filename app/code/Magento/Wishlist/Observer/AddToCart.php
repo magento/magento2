@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,20 +15,29 @@ use Magento\Wishlist\Model\WishlistFactory;
 
 /**
  * Class AddToCart
+ * @deprecated 100.2.0
  * @package Magento\Wishlist\Observer
  */
 class AddToCart implements ObserverInterface
 {
-    /** @var CheckoutSession */
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
     protected $checkoutSession;
 
-    /** @var CustomerSession */
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
     protected $customerSession;
 
-    /** @var WishlistFactory */
+    /**
+     * @var \Magento\Wishlist\Model\WishlistFactory
+     */
     protected $wishlistFactory;
 
-    /** @var ManagerInterface */
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
     protected $messageManager;
 
     /**
@@ -67,7 +76,7 @@ class AddToCart implements ObserverInterface
             $wishlistIds = [$singleWishlistId];
         }
 
-        if (count($wishlistIds) && $request->getParam('wishlist_next')) {
+        if (is_array($wishlistIds) && count($wishlistIds) && $request->getParam('wishlist_next')) {
             $wishlistId = array_shift($wishlistIds);
 
             if ($this->customerSession->isLoggedIn()) {

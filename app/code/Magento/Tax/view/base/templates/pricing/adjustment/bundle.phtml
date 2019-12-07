@@ -1,21 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
-<?php if ($block->displayPriceIncludingTax()): ?>
-    <?php /* @escapeNotVerified */ echo $block->getDisplayAmount() ?>
-<?php elseif ($block->displayPriceExcludingTax()): ?>
-    <?php /* @escapeNotVerified */ echo $block->getDisplayAmountExclTax() ?>
-<?php elseif ($block->displayBothPrices()): ?>
-    <?php /* @escapeNotVerified */ echo $block->getDisplayAmount() ?>
-    <?php if ($block->getDisplayAmountExclTax() !== $block->getDisplayAmount()): ?>
-        (+<?php /* @escapeNotVerified */ echo $block->getDisplayAmountExclTax() ?> Excl. Tax)
+<?php if ($block->displayPriceIncludingTax()) : ?>
+    <?= /* @noEscape */ $block->getDisplayAmount() ?>
+<?php elseif ($block->displayPriceExcludingTax()) : ?>
+    <?= /* @noEscape */ $block->getDisplayAmountExclTax() ?>
+<?php elseif ($block->displayBothPrices()) : ?>
+    <?= /* @noEscape */ $block->getDisplayAmount() ?>
+    <?php if ($block->getDisplayAmountExclTax() !== $block->getDisplayAmount()) : ?>
+        (+<?= /* @noEscape */ $block->getDisplayAmountExclTax() ?> <?= $block->escapeHtml(__('Excl. Tax')) ?>)
     <?php endif; ?>
 <?php endif; ?>

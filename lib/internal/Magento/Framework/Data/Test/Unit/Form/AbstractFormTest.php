@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Data\Test\Unit\Form;
 
 use \Magento\Framework\Data\Form\AbstractForm;
 
-class AbstractFormTest extends \PHPUnit_Framework_TestCase
+class AbstractFormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -29,9 +29,6 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $allElementsMock;
-    /**
-     * @var \Magento\Framework\Data\Form
-     */
 
     /**
      * @var \Magento\Framework\Data\Form\AbstractForm
@@ -40,24 +37,14 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factoryElementMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Factory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->factoryCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->factoryElementMock =
+            $this->createPartialMock(\Magento\Framework\Data\Form\Element\Factory::class, ['create']);
+        $this->factoryCollectionMock =
+            $this->createPartialMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class, ['create']);
         $this->allElementsMock =
-            $this->getMock('Magento\Framework\Data\Form\Element\Collection', [], [], '', false);
+            $this->createMock(\Magento\Framework\Data\Form\Element\Collection::class);
         $this->elementMock =
-            $this->getMock('Magento\Framework\Data\Form\Element\AbstractElement', [], [], '', false);
+            $this->createMock(\Magento\Framework\Data\Form\Element\AbstractElement::class);
 
         $this->abstractForm = new AbstractForm($this->factoryElementMock, $this->factoryCollectionMock, []);
     }

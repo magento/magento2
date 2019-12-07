@@ -3,7 +3,7 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 /**
  * Proxy class for @see \Magento\Framework\ObjectManager\Code\Generator\Sample
  */
-class Sample_Proxy extends \Magento\Framework\ObjectManager\Code\Generator\Sample
+class Sample_Proxy extends Sample implements \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -52,7 +52,7 @@ class Sample_Proxy extends \Magento\Framework\ObjectManager\Code\Generator\Sampl
      */
     public function __sleep()
     {
-        return array('_subject', '_isShared');
+        return ['_subject', '_isShared', '_instanceName'];
     }
 
     /**
@@ -100,5 +100,21 @@ class Sample_Proxy extends \Magento\Framework\ObjectManager\Code\Generator\Sampl
     public function getMessages()
     {
         return $this->_getSubject()->getMessages();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setConfig(array $config)
+    {
+        return $this->_getSubject()->setConfig($config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfig() : array
+    {
+        return $this->_getSubject()->getConfig();
     }
 }

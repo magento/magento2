@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="ExpressReview" area="Sandbox" mca="https://www.sandbox.paypal.com/cgi-bin/webscr" module="Magento_Paypal">
-        <block name="expressLoginBlock" class="Magento\Paypal\Test\Block\Sandbox\ExpressLogin" locator="[name=login]" strategy="css selector" />
-        <block name="expressReviewBlock" class="Magento\Paypal\Test\Block\Sandbox\ExpressReview" locator="#memberReview" strategy="css selector" />
-        <block name="expressOldLoginBlock" class="Magento\Paypal\Test\Block\Sandbox\ExpressOldLogin" locator="#loginBox" strategy="css selector" />
-        <block name="expressOldReviewBlock" class="Magento\Paypal\Test\Block\Sandbox\ExpressOldReview" locator="#stdpage" strategy="css selector" />
         <block name="expressMainReviewBlock" class="Magento\Paypal\Test\Block\Sandbox\ExpressMainReview" locator="#main" strategy="css selector" />
         <block name="expressMainLoginBlock" class="Magento\Paypal\Test\Block\Sandbox\ExpressMainLogin" locator="//body[//*[contains(@name,'password')]]" strategy="xpath" />
     </page>

@@ -1,29 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
 
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerComposite;
 
-class HandlerCompositeTest extends \PHPUnit_Framework_TestCase
+class HandlerCompositeTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorSuccess()
     {
         $handler = $this->getMockBuilder(
-            'Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface'
+            \Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface::class
         )->getMock();
 
-        new HandlerComposite(
+        $result = new HandlerComposite(
             ['some_handler' => $handler]
         );
+        $this->assertNotNull($result);
     }
 
     public function testConstructorException()
     {
-        $this->setExpectedException(
-            'LogicException',
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage(
             'Type mismatch. Expected type: HandlerInterface. Actual: string, Code: weird_handler'
         );
 
@@ -34,14 +35,14 @@ class HandlerCompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testHandle()
     {
-        $paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
+        $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\InfoInterface::class)
             ->getMock();
-        $responseMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $responseMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $handler = $this->getMockBuilder(
-            'Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface'
+            \Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface::class
         )->getMock();
         $handler->expects($this->once())
             ->method('handle')

@@ -1,30 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 return [
     'empty_required_field' => [
-        'title' => '',
+        'title' => null,
         'type' => 'field',
         'sort_order' => 1,
         'is_require' => 1,
-        'price' => 10,
+        'price' => 10.0,
         'price_type' => 'fixed',
         'sku' => 'sku1',
         'max_characters' => 10,
-    ],
-    'negative_price' => [
-        'title' => 'area option',
-        'type' => 'area',
-        'sort_order' => 2,
-        'is_require' => 0,
-        'price' => -20,
-        'price_type' => 'percent',
-        'sku' => 'sku2',
-        'max_characters' => 20,
-
     ],
     'negative_value_of_image_size' => [
         'title' => 'file option',
@@ -51,10 +40,10 @@ return [
         'is_require' => 1,
         'values' => [
             [
-                'price' => 10,
+                'price' => 10.0,
                 'price_type' => 'fixed',
                 'sku' => 'radio option 1 sku',
-                'title' => '',
+                'title' => null,
                 'sort_order' => 1,
             ],
         ],
@@ -66,7 +55,7 @@ return [
         'is_require' => 1,
         'values' => [
             [
-                'price' => 10,
+                'price' => 10.0,
                 'price_type' => 'fixed_one',
                 'sku' => 'checkbox option 1 sku',
                 'title' => 'checkbox option 1',
@@ -81,7 +70,7 @@ return [
         'is_require' => 1,
         'values' => [
             [
-                'price' => 10,
+                'price' => 10.0,
                 'price_type' => 'fixed',
                 'sku' => 'multiple option 1 sku',
                 'title' => 'multiple option 1',

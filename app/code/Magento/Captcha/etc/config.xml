@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,10 +17,10 @@
         <admin>
             <captcha>
                 <type>default</type>
-                <enable>0</enable>
+                <enable>1</enable>
                 <font>linlibertine</font>
                 <mode>after_fail</mode>
-                <forms>backend_forgotpassword</forms>
+                <forms>backend_forgotpassword,backend_login</forms>
                 <failed_attempts_login>3</failed_attempts_login>
                 <failed_attempts_ip>1000</failed_attempts_ip>
                 <timeout>7</timeout>
@@ -36,10 +36,10 @@
         <customer>
             <captcha>
                 <type>default</type>
-                <enable>0</enable>
+                <enable>1</enable>
                 <font>linlibertine</font>
                 <mode>after_fail</mode>
-                <forms>user_forgotpassword</forms>
+                <forms>user_forgotpassword,user_login</forms>
                 <failed_attempts_login>3</failed_attempts_login>
                 <failed_attempts_ip>1000</failed_attempts_ip>
                 <timeout>7</timeout>
@@ -48,12 +48,11 @@
                 <case_sensitive>0</case_sensitive>
                 <shown_to_logged_in_user>
                     <contact_us>1</contact_us>
+                    <user_edit>1</user_edit>
                 </shown_to_logged_in_user>
                 <always_for>
                     <user_create>1</user_create>
                     <user_forgotpassword>1</user_forgotpassword>
-                    <guest_checkout>1</guest_checkout>
-                    <register_during_checkout>1</register_during_checkout>
                     <contact_us>1</contact_us>
                 </always_for>
             </captcha>
@@ -76,15 +75,12 @@
                     <user_forgotpassword>
                         <label>Forgot password</label>
                     </user_forgotpassword>
-                    <guest_checkout>
-                        <label>Check Out as Guest</label>
-                    </guest_checkout>
-                    <register_during_checkout>
-                        <label>Register during Checkout</label>
-                    </register_during_checkout>
                     <contact_us>
                         <label>Contact Us</label>
                     </contact_us>
+                    <user_edit>
+                        <label>Change password</label>
+                    </user_edit>
                 </areas>
             </frontend>
             <backend>

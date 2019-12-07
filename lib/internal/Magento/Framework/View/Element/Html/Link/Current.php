@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Html\Link;
+
+use Magento\Framework\App\DefaultPathInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Block representing link with two possible states.
  * "Current" state means link leads to URL equivalent to URL of currently displayed page.
  *
+ * @api
  * @method string                          getLabel()
  * @method string                          getPath()
  * @method string                          getTitle()
@@ -16,25 +21,30 @@ namespace Magento\Framework\View\Element\Html\Link;
  * @method null|bool                       getCurrent()
  * @method \Magento\Framework\View\Element\Html\Link\Current setCurrent(bool $value)
  */
-class Current extends \Magento\Framework\View\Element\Template
+class Current extends Template
 {
+    /**
+     * Search redundant /index and / in url
+     */
+    private const REGEX_INDEX_URL_PATTERN = '/(\/index|(\/))+($|\/$)/';
+
     /**
      * Default path
      *
-     * @var \Magento\Framework\App\DefaultPathInterface
+     * @var DefaultPathInterface
      */
     protected $_defaultPath;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
+     * @param Context $context
+     * @param DefaultPathInterface $defaultPath
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\App\DefaultPathInterface $defaultPath,
+        Context $context,
+        DefaultPathInterface $defaultPath,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -55,18 +65,20 @@ class Current extends \Magento\Framework\View\Element\Template
      * Get current mca
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     private function getMca()
     {
         $routeParts = [
-            'module' => $this->_request->getModuleName(),
-            'controller' => $this->_request->getControllerName(),
-            'action' => $this->_request->getActionName(),
+            (string)$this->_request->getModuleName(),
+            (string)$this->_request->getControllerName(),
+            (string)$this->_request->getActionName(),
         ];
 
         $parts = [];
+        $pathParts = explode('/', trim($this->_request->getPathInfo(), '/'));
         foreach ($routeParts as $key => $value) {
-            if (!empty($value) && $value != $this->_defaultPath->getPart($key)) {
+            if (isset($pathParts[$key]) && $pathParts[$key] === $value) {
                 $parts[] = $value;
             }
         }
@@ -80,7 +92,9 @@ class Current extends \Magento\Framework\View\Element\Template
      */
     public function isCurrent()
     {
-        return $this->getCurrent() || $this->getUrl($this->getPath()) == $this->getUrl($this->getMca());
+        return $this->getCurrent() ||
+            preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()))
+            == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()));
     }
 
     /**
@@ -103,13 +117,13 @@ class Current extends \Magento\Framework\View\Element\Template
         if ($this->isCurrent()) {
             $html = '<li class="nav item current">';
             $html .= '<strong>'
-                . $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getLabel()))
+                . $this->escapeHtml(__($this->getLabel()))
                 . '</strong>';
             $html .= '</li>';
         } else {
             $html = '<li class="nav item' . $highlight . '"><a href="' . $this->escapeHtml($this->getHref()) . '"';
             $html .= $this->getTitle()
-                ? ' title="' . $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getTitle())) . '"'
+                ? ' title="' . $this->escapeHtml(__($this->getTitle())) . '"'
                 : '';
             $html .= $this->getAttributesHtml() . '>';
 
@@ -117,7 +131,7 @@ class Current extends \Magento\Framework\View\Element\Template
                 $html .= '<strong>';
             }
 
-            $html .= $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getLabel()));
+            $html .= $this->escapeHtml(__($this->getLabel()));
 
             if ($this->getIsHighlighted()) {
                 $html .= '</strong>';

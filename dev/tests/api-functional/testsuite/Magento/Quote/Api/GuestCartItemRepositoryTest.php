@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -30,13 +30,13 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -77,21 +77,21 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
      */
     public function testAddItem()
     {
         /** @var  \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load(2);
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load(2);
         $productSku = $product->getSku();
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -127,19 +127,19 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     public function testRemoveItem()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $productId = $product->getIdBySku('simple_one');
         $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
@@ -160,7 +160,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             "itemId" => $itemId,
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertFalse($quote->hasProductId($productId));
     }
@@ -171,19 +171,19 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     public function testUpdateItem()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $productId = $product->getIdBySku('simple_one');
         $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
@@ -216,7 +216,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             ];
         }
         $this->_webApiCall($serviceInfo, $requestData);
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertTrue($quote->hasProductId(1));
         $item = $quote->getItemByProduct($product);

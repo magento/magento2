@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
@@ -11,27 +11,38 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Generate url rewrites for categories
+ */
 class CategoriesUrlRewriteGenerator
 {
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
     /**
      * @param ProductUrlPathGenerator $productUrlPathGenerator
      * @param UrlRewriteFactory $urlRewriteFactory
      */
-    public function __construct(ProductUrlPathGenerator $productUrlPathGenerator, UrlRewriteFactory $urlRewriteFactory)
-    {
+    public function __construct(
+        ProductUrlPathGenerator $productUrlPathGenerator,
+        UrlRewriteFactory $urlRewriteFactory
+    ) {
         $this->productUrlPathGenerator = $productUrlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
     }
 
     /**
-     * Generate list based on categories
+     * Generate product rewrites with categories
      *
      * @param int $storeId
      * @param Product $product

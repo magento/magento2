@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Observer;
@@ -8,8 +8,8 @@ namespace Magento\Customer\Test\Unit\Observer;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address\AbstractAddress;
-use Magento\Customer\Observer\AfterAddressSaveObserver;
 use Magento\Customer\Model\Vat;
+use Magento\Customer\Observer\AfterAddressSaveObserver;
 use Magento\Customer\Observer\BeforeAddressSaveObserver;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -22,7 +22,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
+class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AfterAddressSaveObserver
@@ -74,37 +74,51 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerMock;
 
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSessionMock;
+
     protected function setUp()
     {
-        $this->vat = $this->getMockBuilder('Magento\Customer\Model\Vat')
+        $this->vat = $this->getMockBuilder(\Magento\Customer\Model\Vat::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helperAddress = $this->getMockBuilder('Magento\Customer\Helper\Address')
+        $this->helperAddress = $this->getMockBuilder(\Magento\Customer\Helper\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
+        $this->group = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
+        $this->group->expects($this->any())->method('getId')->willReturn(1);
+        $this->groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
+            ->setMethods(['getDefaultGroup'])
+            ->getMockForAbstractClass();
+        $this->groupManagement->expects($this->any())->method('getDefaultGroup')->willReturn($this->group);
+
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
-            ->getMockForAbstractClass();
-
-        $this->escaper = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->appState = $this->getMockBuilder('Magento\Framework\App\State')
+        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new AfterAddressSaveObserver(
             $this->vat,
@@ -114,7 +128,8 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             $this->scopeConfig,
             $this->messageManager,
             $this->escaper,
-            $this->appState
+            $this->appState,
+            $this->customerSessionMock
         );
     }
 
@@ -135,12 +150,13 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
         $registeredAddressId,
         $configAddressType
     ) {
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getDefaultBilling', 'getStore', 'getDefaultShipping', 'getGroupId'])
             ->getMock();
         $customer->expects($this->any())
             ->method('getStore')
@@ -151,9 +167,24 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
         $customer->expects($this->any())
             ->method('getDefaultShipping')
             ->willReturn(null);
+        $customer->expects($this->any())
+            ->method('getGroupID')
+            ->willReturn(1);
 
-        $address = $this->getMockBuilder('Magento\Customer\Model\Address')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getId',
+                    'getIsDefaultBilling',
+                    'getIsDefaultShipping',
+                    'setForceProcess',
+                    'getIsPrimaryBilling',
+                    'getIsPrimaryShipping',
+                    'getCustomer',
+                    'getForceProcess'
+                ]
+            )
             ->getMock();
         $address->expects($this->any())
             ->method('getId')
@@ -177,7 +208,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getIsDefaultShipping')
             ->willReturn($addressId);
 
-        $observer = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomerAddress',
@@ -222,18 +253,18 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterAddressSaveException()
     {
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customer->expects($this->any())
             ->method('getStore')
             ->willReturn($store);
 
-        $address = $this->getMockBuilder('Magento\Customer\Model\Address')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomer',
@@ -251,7 +282,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getVatId')
             ->willThrowException(new \Exception('Exception'));
 
-        $observer = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomerAddress',
@@ -293,17 +324,17 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
         $isCountryInEU,
         $defaultGroupId
     ) {
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $dataGroup = $this->getMockBuilder('Magento\Customer\Api\Data\GroupInterface')
+        $dataGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->getMockForAbstractClass();
         $dataGroup->expects($this->any())
             ->method('getId')
             ->willReturn($defaultGroupId);
 
-        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getStore',
@@ -330,7 +361,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $address = $this->getMockBuilder('Magento\Customer\Model\Address')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomer',
@@ -352,7 +383,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getCountry')
             ->willReturn($countryId);
 
-        $observer = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomerAddress',
@@ -380,6 +411,9 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->model->execute($observer);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderAfterAddressSaveDefaultGroup()
     {
         return [
@@ -417,11 +451,11 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
         $resultInvalidMessage,
         $resultErrorMessage
     ) {
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $validationResult = $this->getMockBuilder('Magento\Framework\DataObject')
+        $validationResult = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIsValid',
@@ -435,7 +469,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getRequestSuccess')
             ->willReturn($resultRequestSuccess);
 
-        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getStore',
@@ -462,7 +496,12 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $address = $this->getMockBuilder('Magento\Customer\Model\Address')
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with($newGroupId)
+            ->willReturnSelf();
+
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomer',
@@ -493,7 +532,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             ->with($validationResult)
             ->willReturnSelf();
 
-        $observer = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomerAddress',
@@ -564,6 +603,9 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->model->execute($observer);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderAfterAddressSaveNewGroup()
     {
         return [
@@ -573,7 +615,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
                 'country_id' => 1,
                 'country_code' => 'US',
                 'group_id' => 1,
-                'area_code' => Area::AREA_ADMIN,
+                'area_code' => Area::AREA_ADMINHTML,
                 'is_vat_valid' => false,
                 'request_sucess' => false,
                 'valid_message' => '',

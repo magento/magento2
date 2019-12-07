@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * Class \Magento\Catalog\Api\CartItemRepositoryTest
+ */
 class CartItemRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'quoteCartItemRepositoryV1';
@@ -31,12 +36,12 @@ class CartItemRepositoryTest extends WebapiAbstract
      */
     public function testAddProductToCartWithCustomOptions()
     {
-        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -62,7 +67,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'sku' => $item->getSku(),
                 'qty' => $item->getQty(),
                 'name' => $item->getName(),
-                
+                'price' => $item->getPrice(),
                 'product_type' => $item->getProductType(),
                 'quote_id' => $item->getQuoteId(),
                 'product_option' => [
@@ -81,7 +86,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -119,7 +124,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     protected function getOptions()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
         $options = [];
         /** @var ProductCustomOptionInterface $option */

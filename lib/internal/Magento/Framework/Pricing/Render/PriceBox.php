@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Pricing\Render;
 
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
@@ -17,8 +18,11 @@ use Magento\Framework\View\Element\Template;
  * @method bool hasListClass()
  * @method string getListClass()
  */
-class PriceBox extends Template implements PriceBoxRenderInterface
+class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInterface
 {
+    /** Default block lifetime */
+    const DEFAULT_LIFETIME = 86400;
+
     /**
      * @var SaleableInterface
      */
@@ -35,11 +39,11 @@ class PriceBox extends Template implements PriceBoxRenderInterface
     protected $rendererPool;
 
     /**
-     * @param Template\Context  $context
+     * @param Template\Context $context
      * @param SaleableInterface $saleableItem
-     * @param PriceInterface    $price
-     * @param RendererPool      $rendererPool
-     * @param array             $data
+     * @param PriceInterface $price
+     * @param RendererPool $rendererPool
+     * @param array $data
      */
     public function __construct(
         Template\Context $context,
@@ -55,7 +59,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     protected function _toHtml()
     {
@@ -66,7 +70,23 @@ class PriceBox extends Template implements PriceBoxRenderInterface
     }
 
     /**
-     * @return SaleableInterface
+     * @inheritdoc
+     */
+    public function getCacheKey()
+    {
+        return parent::getCacheKey() . '-' . $this->getPriceId() . '-' . $this->getPrice()->getPriceCode();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getCacheLifetime()
+    {
+        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : self::DEFAULT_LIFETIME;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getSaleableItem()
     {
@@ -74,7 +94,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface
     }
 
     /**
-     * @return PriceInterface
+     * @inheritdoc
      */
     public function getPrice()
     {
@@ -112,9 +132,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface
     }
 
     /**
-     * @param AmountInterface $amount
-     * @param array $arguments
-     * @return string
+     * @inheritdoc
      */
     public function renderAmount(AmountInterface $amount, array $arguments = [])
     {
@@ -125,6 +143,8 @@ class PriceBox extends Template implements PriceBoxRenderInterface
     }
 
     /**
+     * Get amount render.
+     *
      * @param AmountInterface $amount
      * @param array $arguments
      * @return AmountRenderInterface
@@ -140,10 +160,25 @@ class PriceBox extends Template implements PriceBoxRenderInterface
     }
 
     /**
+     * Get renderer pool.
+     *
      * @return RendererPool
      */
     public function getRendererPool()
     {
         return $this->rendererPool;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentities()
+    {
+        $item = $this->getSaleableItem();
+        if ($item instanceof IdentityInterface) {
+            return $item->getIdentities();
+        } else {
+            return [];
+        }
     }
 }

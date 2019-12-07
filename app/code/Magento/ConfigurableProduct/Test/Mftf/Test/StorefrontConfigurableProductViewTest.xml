@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductGridViewTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product in a category in storefront"/>
+            <title value="customer should see the configurable product in the category grid"/>
+            <description value="customer should see the configurable product in the category grid"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-94"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+            <!-- TODO: REMOVE AFTER FIX MC-21717 -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush eav" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup stepKey="deleteProduct" ref="deleteProductBySku">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify the storefront category grid view -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="amOnCategoryPage1"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="seePhoto"/>
+        <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{_defaultProduct.name}}" stepKey="seeName"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref(_defaultProduct.urlKey)}}" stepKey="seeNameLink"/>
+        <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="{{colorProductAttribute1.price}}" stepKey="seePrice"/>
+    </test>
+
+    <test name="StorefrontConfigurableProductListViewTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product in a category in storefront"/>
+            <title value="customer should see the configurable product in the category list"/>
+            <description value="customer should see the configurable product in the category list"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-61"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify storefront category list view -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="amOnCategoryPage1"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="clickListView"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="seePhoto"/>
+        <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{_defaultProduct.name}}" stepKey="seeName"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref(_defaultProduct.urlKey)}}" stepKey="seeNameLink"/>
+        <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="{{colorProductAttribute1.price}}" stepKey="seePrice"/>
+    </test>
+
+    <test name="StorefrontConfigurableProductAddToCartTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product in a category in storefront"/>
+            <title value="customer should be taken to the product details page when clicking add to cart"/>
+            <description value="customer should be taken to the product details page when clicking add to cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-89"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Should be taken to product details page when adding to cart because an option needs to be selected -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="amOnCategoryPage1"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="clickListView"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="clickAddToCart"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <grabFromCurrentUrl stepKey="grabUrl"/>
+        <assertContains stepKey="assertUrl">
+            <expectedResult type="string">{{_defaultProduct.urlKey}}</expectedResult>
+            <actualResult type="string">{$grabUrl}</actualResult>
+        </assertContains>
+    </test>
+</tests>

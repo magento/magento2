@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 //Create customer
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Customer\Model\Customer::class
+);
 $customer->setWebsiteId(
     1
 )->setEntityId(
@@ -28,12 +30,12 @@ $customer->setWebsiteId(
 )->setLastname(
     'Alston'
 )->setGender(
-    2
+    '2'
 );
 $customer->isObjectNew(true);
 
 // Create address
-$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Address');
+$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Address::class);
 //  default_billing and default_shipping information would not be saved, it is needed only for simple check
 $address->addData(
     [
@@ -61,5 +63,5 @@ $customer->save();
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get('Magento\Framework\Registry')->unregister('_fixture/Magento_ImportExport_Customer');
-$objectManager->get('Magento\Framework\Registry')->register('_fixture/Magento_ImportExport_Customer', $customer);
+$objectManager->get(\Magento\Framework\Registry::class)->unregister('_fixture/Magento_ImportExport_Customer');
+$objectManager->get(\Magento\Framework\Registry::class)->register('_fixture/Magento_ImportExport_Customer', $customer);

@@ -1,42 +1,73 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Unserialize\Test\Unit;
 
-/**
- * @package Magento\Framework
- */
-class UnserializeTest extends \PHPUnit_Framework_TestCase
-{
-    /** @var \Magento\Framework\Unserialize\Unserialize */
-    protected $unserialize;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Unserialize\Unserialize;
 
-    public function setUp()
+/**
+ * Test unserializer that does not unserialize objects.
+ */
+class UnserializeTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    /**
+     * @var Unserialize
+     */
+    private $unserialize;
+
+    protected function setUp()
     {
-        $this->unserialize = new \Magento\Framework\Unserialize\Unserialize();
+        $this->serializerMock = $this->getMockBuilder(Serialize::class)
+            ->setMethods(
+                ['serialize', 'unserialize']
+            )
+            ->getMock();
+        $this->unserialize = new Unserialize($this->serializerMock);
     }
 
     public function testUnserializeArray()
     {
-        $array = ['foo' => 'bar', 1, 4];
-        $this->assertEquals($array, $this->unserialize->unserialize(serialize($array)));
+        $data = ['foo' => 'bar', 1, 4];
+        $serializedData = 'serialzied data';
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->with($serializedData)
+            ->willReturn($data);
+        $this->assertEquals(
+            $data,
+            $this->unserialize->unserialize($serializedData)
+        );
     }
 
     /**
      * @param string $serialized The string containing serialized object
-     *
      * @expectedException \Exception
      * @expectedExceptionMessage String contains serialized object
-     * @dataProvider serializedObjectDataProvider
+     * @dataProvider unserializeObjectDataProvider
      */
     public function testUnserializeObject($serialized)
     {
+        $this->expectException(\PHPUnit\Framework\Exception::class);
+        $this->expectExceptionMessage(
+            'String contains serialized object'
+        );
         $this->assertFalse($this->unserialize->unserialize($serialized));
     }
 
-    public function serializedObjectDataProvider()
+    /**
+     * @return array
+     */
+    public function unserializeObjectDataProvider()
     {
         return [
             // Upper and lower case serialized object indicators, nested in array

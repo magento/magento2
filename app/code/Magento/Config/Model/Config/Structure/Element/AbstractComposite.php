@@ -1,10 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure\Element;
 
+/**
+ * Abstract Composite.
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\AbstractElement
 {
     /**

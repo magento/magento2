@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,6 @@
     <type name="Magento\Framework\Notification\MessageList">
         <arguments>
             <argument name="messages" xsi:type="array">
-                <item name="baseurl" xsi:type="string">Magento\AdminNotification\Model\System\Message\Baseurl</item>
                 <item name="security" xsi:type="string">Magento\AdminNotification\Model\System\Message\Security</item>
                 <item name="cacheOutdated" xsi:type="string">Magento\AdminNotification\Model\System\Message\CacheOutdated</item>
                 <item name="media_synchronization_error" xsi:type="string">Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error</item>

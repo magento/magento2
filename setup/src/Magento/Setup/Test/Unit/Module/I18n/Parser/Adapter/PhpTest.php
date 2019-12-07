@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 
-class PhpTest extends \PHPUnit_Framework_TestCase
+class PhpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|
@@ -20,17 +20,12 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_phraseCollectorMock = $this->getMock(
-            'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_phraseCollectorMock =
+            $this->createMock(\Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_adapter = $objectManagerHelper->getObject(
-            'Magento\Setup\Module\I18n\Parser\Adapter\Php',
+            \Magento\Setup\Module\I18n\Parser\Adapter\Php::class,
             ['phraseCollector' => $this->_phraseCollectorMock]
         );
     }

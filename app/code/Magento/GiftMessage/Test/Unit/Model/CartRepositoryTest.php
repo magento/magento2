@@ -1,16 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GiftMessage\Test\Unit\Model;
 
-// @codingStandardsIgnoreFile
+namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\GiftMessage\Model\CartRepository;
 
-class CartRepositoryTest extends \PHPUnit_Framework_TestCase
+class CartRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CartRepository
@@ -69,46 +68,37 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->messageFactoryMock = $this->getMock(
-            'Magento\GiftMessage\Model\MessageFactory',
+        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->messageFactoryMock = $this->createPartialMock(
+            \Magento\GiftMessage\Model\MessageFactory::class,
             [
                 'create',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->messageMock = $this->getMock('Magento\GiftMessage\Model\Message', [], [], '', false);
-        $this->quoteItemMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+        $this->messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
+        $this->quoteItemMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Item::class,
             [
                 'getGiftMessageId',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->quoteMock = $this->getMock(
-            '\Magento\Quote\Model\Quote',
+        $this->quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
             [
                 'getGiftMessageId',
                 'getItemById',
                 'getItemsCount',
                 'isVirtual',
                 '__wakeup',
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->giftMessageManagerMock =
-            $this->getMock('Magento\GiftMessage\Model\GiftMessageManager', [], [], '', false);
-        $this->helperMock = $this->getMock('Magento\GiftMessage\Helper\Message', [], [], '', false);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+            $this->createMock(\Magento\GiftMessage\Model\GiftMessageManager::class);
+        $this->helperMock = $this->createMock(\Magento\GiftMessage\Helper\Message::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->cartRepository = new \Magento\GiftMessage\Model\CartRepository(
             $this->quoteRepositoryMock,
             $this->storeManagerMock,
@@ -126,9 +116,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetWithOutMessageId()
     {
         $messageId = 0;
-
         $this->quoteMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
-
         $this->assertNull($this->cartRepository->get($this->cartId));
     }
 
@@ -147,18 +135,17 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Gift Messages is not applicable for empty cart
+     * @expectedExceptionMessage Gift messages can't be used for an empty cart. Add an item and try again.
      */
     public function testSaveWithInputException()
     {
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
-
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift Messages is not applicable for virtual products
+     * @expectedExceptionMessage Gift messages can't be used for virtual products.
      */
     public function testSaveWithInvalidTransitionException()
     {

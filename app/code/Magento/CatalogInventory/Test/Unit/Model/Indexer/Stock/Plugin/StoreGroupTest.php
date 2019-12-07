@@ -3,13 +3,13 @@
  * @category    Magento
  * @package     Magento_CatalogInventory
  * @subpackage  unit_tests
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Plugin;
 
-class StoreGroupTest extends \PHPUnit_Framework_TestCase
+class StoreGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup
@@ -21,15 +21,9 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     protected $_indexerMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_indexerMock = $this->getMock(
-            '\Magento\CatalogInventory\Model\Indexer\Stock\Processor',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_indexerMock = $this->createMock(\Magento\CatalogInventory\Model\Indexer\Stock\Processor::class);
         $this->_model = new \Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup($this->_indexerMock);
     }
 
@@ -39,13 +33,10 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave(array $data)
     {
-        $subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Group', [], [], '', false);
-        $objectMock = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
-            ['getId', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
+        $subjectMock = $this->createMock(\Magento\Store\Model\ResourceModel\Group::class);
+        $objectMock = $this->createPartialMock(
+            \Magento\Framework\Model\AbstractModel::class,
+            ['getId', 'dataHasChangedFor', '__wakeup']
         );
         $objectMock->expects($this->once())
             ->method('getId')

@@ -1,17 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Tax\Model\Config;
 
 /**
  * Tax Config Notification
  */
 class Notification extends \Magento\Framework\App\Config\Value
 {
+    /**
+     * @var string
+     */
+    protected $_eventPrefix = 'tax_config_notification';
+
     /**
      * @var \Magento\Config\Model\ResourceModel\Config
      */
@@ -49,8 +55,9 @@ class Notification extends \Magento\Framework\App\Config\Value
     public function afterSave()
     {
         if ($this->isValueChanged()) {
-            $this->_resetNotificationFlag(\Magento\Tax\Model\Config::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT);
-            $this->_resetNotificationFlag(\Magento\Tax\Model\Config::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY);
+            $this->_resetNotificationFlag(Config::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT);
+            $this->_resetNotificationFlag(Config::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY);
+            $this->_resetNotificationFlag(Config::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT);
         }
         return parent::afterSave();
     }

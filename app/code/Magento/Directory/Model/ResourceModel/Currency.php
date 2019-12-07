@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Directory Currency Resource Model
- */
 namespace Magento\Directory\Model\ResourceModel;
 
+/**
+ * Currency Resource Model
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -135,7 +138,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function saveRates($rates)
     {
-        if (is_array($rates) && sizeof($rates) > 0) {
+        if (is_array($rates) && count($rates) > 0) {
             $connection = $this->getConnection();
             $data = [];
             foreach ($rates as $currencyCode => $rate) {
@@ -162,6 +165,8 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $path
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated because doesn't take into consideration scopes and system config values.
+     * @see \Magento\Directory\Model\CurrencyConfig::getConfigCurrencies()
      */
     public function getConfigCurrencies($model, $path)
     {
@@ -171,7 +176,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $result = [];
         $rowSet = $connection->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
-            $result = array_merge($result, explode(',', $row['value']));
+            $result[] = explode(',', $row['value']);
         }
         sort($result);
 
@@ -211,7 +216,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
         $bind = [':currency_from' => $code];
         $select = $connection->select()->from(
-            $this->getTable('directory_currency_rate'),
+            $this->_currencyRateTable,
             ['currency_to', 'rate']
         )->where(
             'currency_from = :currency_from'

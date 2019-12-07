@@ -1,0 +1,19 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="action-select-wrap" >
+    <div each="getRegion('button')" render=""/>
+    <button type="button" class="action-select" click="$data.toggleOpened"></button>
+    <ul class="action-menu" css="_active: $data.opened" >
+        <!-- ko foreach: $data.elems() -->
+            <li>
+                <!--ko template: getTemplate()-->
+                <!-- /ko -->
+            </li>
+        <!-- /ko -->
+    </ul>
+</div>

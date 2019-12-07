@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -42,8 +42,9 @@
     </type>
     <type name="Magento\Paypal\Model\Payflow\Transparent">
         <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
             <argument name="data" xsi:type="array">
-                <item name="formBlockType" xsi:type="string">Magento\Payment\Block\Adminhtml\Transparent\Form</item>
+                <item name="formBlockType" xsi:type="string">Magento\Paypal\Block\Adminhtml\Payflowpro\CcForm</item>
             </argument>
         </arguments>
     </type>
@@ -58,6 +59,14 @@
         <arguments>
             <argument xsi:type="object" name="fileResolver">Magento\Paypal\Model\Config\Rules\FileResolver</argument>
             <argument xsi:type="object" name="schemaLocator">Magento\Paypal\Model\Config\Rules\SchemaLocator</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="payflowpro" xsi:type="object">\Magento\Paypal\Model\Payflow\Ui\Adminhtml\TokenUiComponentProvider</item>
+            </argument>
         </arguments>
     </type>
 </config>

@@ -1,16 +1,46 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Security\Model\SecurityCookie;
+use Magento\User\Model\Spi\NotificationExceptionInterface;
 
-class Save extends \Magento\User\Controller\Adminhtml\User
+/**
+ * Save admin user.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostActionInterface
 {
     /**
-     * @return void
+     * @var SecurityCookie
+     */
+    private $securityCookie;
+
+    /**
+     * Get security cookie
+     *
+     * @return SecurityCookie
+     * @deprecated 100.1.0
+     */
+    private function getSecurityCookie()
+    {
+        if (!($this->securityCookie instanceof SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
+        } else {
+            return $this->securityCookie;
+        }
+    }
+
+    /**
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -18,10 +48,14 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     {
         $userId = (int)$this->getRequest()->getParam('user_id');
         $data = $this->getRequest()->getPostValue();
+        if (array_key_exists('form_key', $data)) {
+            unset($data['form_key']);
+        }
         if (!$data) {
             $this->_redirect('adminhtml/*/');
             return;
         }
+
         /** @var $model \Magento\User\Model\User */
         $model = $this->_userFactory->create()->load($userId);
         if ($userId && $model->isObjectNew()) {
@@ -30,21 +64,19 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             return;
         }
         $model->setData($this->_getAdminUserData($data));
-        $uRoles = $this->getRequest()->getParam('roles', []);
-        if (count($uRoles)) {
-            $model->setRoleId($uRoles[0]);
+        $userRoles = $this->getRequest()->getParam('roles', []);
+        if (count($userRoles)) {
+            $model->setRoleId($userRoles[0]);
         }
 
         /** @var $currentUser \Magento\User\Model\User */
-        $currentUser = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
-        if ($userId == $currentUser->getId() && $this->_objectManager->get(
-            'Magento\Framework\Validator\Locale'
-        )->isValid(
-            $data['interface_locale']
-        )
+        $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
+        if ($userId == $currentUser->getId()
+            && $this->_objectManager->get(\Magento\Framework\Validator\Locale::class)
+                ->isValid($data['interface_locale'])
         ) {
             $this->_objectManager->get(
-                'Magento\Backend\Model\Locale\Manager'
+                \Magento\Backend\Model\Locale\Manager::class
             )->switchBackendInterfaceLocale(
                 $data['interface_locale']
             );
@@ -55,13 +87,32 @@ class Save extends \Magento\User\Controller\Adminhtml\User
         $isCurrentUserPasswordValid = isset($data[$currentUserPasswordField])
             && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
-            if (!($isCurrentUserPasswordValid && $currentUser->verifyIdentity($data[$currentUserPasswordField]))) {
-                throw new AuthenticationException(__('You have entered an invalid password for current user.'));
+            if (!($isCurrentUserPasswordValid)) {
+                throw new AuthenticationException(
+                    __('The password entered for the current user is invalid. Verify the password and try again.')
+                );
             }
+            $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
+
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
+
+            $model->sendNotificationEmailsIfRequired();
+        } catch (UserLockedException $e) {
+            $this->_auth->logout();
+            $this->getSecurityCookie()->setLogoutReasonCookie(
+                \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+            );
+            $this->_redirect('adminhtml/*/');
+        } catch (NotificationExceptionInterface $exception) {
+            $this->messageManager->addErrorMessage($exception->getMessage());
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $this->messageManager->addError(
+                __('The password entered for the current user is invalid. Verify the password and try again.')
+            );
+            $this->redirectToEdit($model, $data);
         } catch (\Magento\Framework\Validator\Exception $e) {
             $messages = $e->getMessages();
             $this->messageManager->addMessages($messages);
@@ -75,6 +126,8 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     }
 
     /**
+     * Redirect to Edit form.
+     *
      * @param \Magento\User\Model\User $model
      * @param array $data
      * @return void

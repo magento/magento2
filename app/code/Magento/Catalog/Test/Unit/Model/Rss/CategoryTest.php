@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Rss;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @package Magento\Catalog\Model\Rss
  */
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Rss\Category
@@ -41,33 +41,21 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->categoryLayer = $this->getMock(
-            'Magento\Catalog\Model\Layer\Category',
-            ['setStore', '__wakeup'],
-            [],
-            '',
-            false
+        $this->categoryLayer = $this->createPartialMock(
+            \Magento\Catalog\Model\Layer\Category::class,
+            ['setStore', '__wakeup']
         );
-        $this->collectionFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->collectionFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+            ['create']
         );
-        $this->visibility = $this->getMock(
-            'Magento\Catalog\Model\Product\Visibility',
-            [
+        $this->visibility = $this->createPartialMock(\Magento\Catalog\Model\Product\Visibility::class, [
                 'getVisibleInCatalogIds',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();
@@ -78,7 +66,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         /** @var \Magento\Catalog\Model\Rss\Category model */
         $this->model = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Rss\Category',
+            \Magento\Catalog\Model\Rss\Category::class,
             [
                 'layerResolver' => $layerResolver,
                 'collectionFactory' => $this->collectionFactory,
@@ -100,31 +88,22 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getVisibleInCatalogIds')
             ->will($this->returnValue($visibleInCatalogIds));
-        $products = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Collection',
-            [
+        $products = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, [
                 'setStoreId',
                 'addAttributeToSort',
                 'setVisibility',
                 'setCurPage',
                 'setPageSize',
                 'addCountToCategories',
-            ],
-            [],
-            '',
-            false
-        );
-        $resourceCollection = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection',
+            ]);
+        $resourceCollection = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection::class,
             [
                 'addAttributeToSelect',
                 'addAttributeToFilter',
                 'addIdFilter',
                 'load'
-            ],
-            [],
-            '',
-            false
+            ]
         );
         $resourceCollection->expects($this->exactly(3))
             ->method('addAttributeToSelect')
@@ -164,18 +143,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($products));
-        $category = $this->getMock(
-            'Magento\Catalog\Model\Category',
-            [
+        $category = $this->createPartialMock(\Magento\Catalog\Model\Category::class, [
                 'getResourceCollection',
                 'getChildren',
                 'getProductCollection',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $category->expects($this->once())
             ->method('getResourceCollection')
             ->will($this->returnValue($resourceCollection));
@@ -185,18 +158,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $category->expects($this->once())
             ->method('getProductCollection')
             ->will($this->returnValue($products));
-        $layer = $this->getMock(
-            'Magento\Catalog\Model\Layer',
-            [
+        $layer = $this->createPartialMock(\Magento\Catalog\Model\Layer::class, [
                 'setCurrentCategory',
                 'prepareProductCollection',
                 'getProductCollection',
                 '__wakeup',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $layer->expects($this->once())
             ->method('setCurrentCategory')
             ->with($category)
@@ -206,7 +173,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($products));
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();

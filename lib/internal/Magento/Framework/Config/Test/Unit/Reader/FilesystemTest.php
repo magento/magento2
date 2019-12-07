@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit\Reader;
 
-use \Magento\Framework\Config\Reader\Filesystem;
+use Magento\Framework\Config\Reader\Filesystem;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for
+ *
+ * @see Filesystem
+ */
+class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -45,16 +50,10 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $this->_file = file_get_contents(__DIR__ . '/../_files/reader/config.xml');
-        $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
-        $this->_converterMock = $this->getMock(
-            'Magento\Framework\Config\ConverterInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_schemaLocatorMock = $this->getMock('Magento\Framework\Config\SchemaLocatorInterface');
-        $this->_validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
+        $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $this->_converterMock = $this->createMock(\Magento\Framework\Config\ConverterInterface::class);
+        $this->_schemaLocatorMock = $this->createMock(\Magento\Framework\Config\SchemaLocatorInterface::class);
+        $this->_validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }
 
@@ -70,7 +69,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         );
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
 
-        $dom = new \DomDocument();
+        $dom = new \DOMDocument();
         $dom->loadXML($this->_file);
         $this->_converterMock->expects($this->once())->method('convert')->with($dom);
         $model->read('scope');
@@ -125,7 +124,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid XML in file
+     * @expectedExceptionMessage The XML in file "0" is invalid:
      */
     public function testReadWithInvalidXml()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Config;
@@ -44,7 +44,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     case 'parameters':
                         /** @var $parameter \DOMNode */
                         foreach ($widgetSubNode->childNodes as $parameter) {
-                            if ($parameter->nodeName === '#text') {
+                            if ($parameter->nodeName === '#text' || $parameter->nodeName === '#comment') {
                                 continue;
                             }
                             $subNodeAttributes = $parameter->attributes;
@@ -57,7 +57,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                             $widgetArray['supported_containers'] = [];
                         }
                         foreach ($widgetSubNode->childNodes as $container) {
-                            if ($container->nodeName === '#text') {
+                            if ($container->nodeName === '#text' || $container->nodeName === '#comment') {
                                 continue;
                             }
                             $widgetArray['supported_containers'] = array_merge(
@@ -222,7 +222,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $depends = [];
         foreach ($source->childNodes as $childNode) {
-            if ($childNode->nodeName == '#text') {
+            if ($childNode->nodeName === '#text') {
                 continue;
             }
             if ($childNode->nodeName !== 'parameter') {
@@ -231,12 +231,23 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 );
             }
             $parameterAttributes = $childNode->attributes;
-            $depends[$parameterAttributes->getNamedItem(
-                'name'
-            )->nodeValue] = [
-                'value' => $parameterAttributes->getNamedItem('value')->nodeValue,
-            ];
+            $dependencyName = $parameterAttributes->getNamedItem('name')->nodeValue;
+            $dependencyValue = $parameterAttributes->getNamedItem('value')->nodeValue;
+
+            if (!isset($depends[$dependencyName])) {
+                $depends[$dependencyName] = [
+                    'value' => $dependencyValue,
+                ];
+
+                continue;
+            } else if (!isset($depends[$dependencyName]['values'])) {
+                $depends[$dependencyName]['values'] = [$depends[$dependencyName]['value']];
+                unset($depends[$dependencyName]['value']);
+            }
+
+            $depends[$dependencyName]['values'][] = $dependencyValue;
         }
+
         return $depends;
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Product\Viewed;
@@ -25,7 +25,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      *
      * @var string
      */
-    protected $_resourceCollectionName = 'Magento\Reports\Model\ResourceModel\Report\Product\Viewed\Collection';
+    protected $_resourceCollectionName = \Magento\Reports\Model\ResourceModel\Report\Product\Viewed\Collection::class;
 
     /**
      * Init grid parameters
@@ -53,7 +53,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'width' => 100,
                 'sortable' => false,
                 'period_type' => $this->getPeriodType(),
-                'renderer' => 'Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date',
+                'renderer' => \Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date::class,
                 'totals_label' => __('Total'),
                 'html_decorators' => ['nobr'],
                 'header_css_class' => 'col-period',

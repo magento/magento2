@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,11 +48,11 @@ class AssertCustomVariableForm extends AbstractAssertForm
             ? $customVariable->getData()
             : array_merge($customVariableOrigin->getData(), $customVariable->getData());
         if ($customVariableOrigin !== null) {
-            $dataOrigin = $data;
+            $dataOrigin = $this->arrayCopy($data);
             $dataOrigin['html_value'] = $customVariableOrigin->getHtmlValue();
             $dataOrigin['plain_value'] = $customVariableOrigin->getPlainValue();
         } else {
-            $dataOrigin = $data;
+            $dataOrigin = $this->arrayCopy($data);
         }
         if ($data['html_value'] == '') {
             $data['html_value'] = $customVariableOrigin->getHtmlValue();
@@ -67,13 +67,13 @@ class AssertCustomVariableForm extends AbstractAssertForm
 
         $formData = $systemVariableNew->getSystemVariableForm()->getData();
         $errors = $this->verifyData($dataOrigin, $formData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
 
         if ($storeOrigin !== null) {
             $systemVariableNew->getFormPageActions()->selectStoreView($storeOrigin->getName());
             $formData = $systemVariableNew->getSystemVariableForm()->getData();
             $errors = $this->verifyData($data, $formData);
-            \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+            \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
         }
     }
 
@@ -85,5 +85,21 @@ class AssertCustomVariableForm extends AbstractAssertForm
     public function toString()
     {
         return 'Displayed Custom Variable data on edit page(backend) equals to passed from fixture.';
+    }
+
+    /**
+     * Return a copy of the source array.
+     * To workaround an issue that an array assignment is handled by reference in PHP 7.0.5 in certain situation.
+     *
+     * @param array $sourceArray
+     * @return array
+     */
+    private function arrayCopy($sourceArray)
+    {
+        $copyArray = [];
+        foreach ($sourceArray as $key => $value) {
+            $copyArray[$key] = $value;
+        }
+        return $copyArray;
     }
 }

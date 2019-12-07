@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -59,11 +59,12 @@ class Gender extends AbstractWidget
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('widget/gender.phtml');
+        $this->setTemplate('Magento_Customer::widget/gender.phtml');
     }
 
     /**
      * Check if gender attribute enabled in system
+     *
      * @return bool
      */
     public function isEnabled()
@@ -73,11 +74,25 @@ class Gender extends AbstractWidget
 
     /**
      * Check if gender attribute marked as required
+     *
      * @return bool
      */
     public function isRequired()
     {
         return $this->_getAttribute('gender') ? (bool)$this->_getAttribute('gender')->isRequired() : false;
+    }
+
+    /**
+     * Retrieve store attribute label
+     *
+     * @param string $attributeCode
+     *
+     * @return string
+     */
+    public function getStoreLabel($attributeCode)
+    {
+        $attribute = $this->_getAttribute($attributeCode);
+        return $attribute ? __($attribute->getStoreLabel()) : '';
     }
 
     /**
@@ -92,6 +107,7 @@ class Gender extends AbstractWidget
 
     /**
      * Returns options from gender attribute
+     *
      * @return OptionInterface[]
      */
     public function getGenderOptions()

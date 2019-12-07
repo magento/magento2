@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,14 +28,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Save Attribute' button
  * 6. Perform all assertions
  *
- * @group Product_Attributes_(MX)
- * @ZephyrId MAGETWO-23459
+ * @group Product_Attributes
+ * @ZephyrId MAGETWO-23459, MAGETWO-12941
  */
 class UpdateProductAttributeEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -64,7 +63,6 @@ class UpdateProductAttributeEntityTest extends Injectable
      * @param CatalogAttributeSet $attributeSet
      * @param CatalogProductAttributeIndex $attributeIndex
      * @param CatalogProductAttributeNew $attributeNew
-     * @param CatalogProductSimple $productSimple
      * @return array
      */
     public function testUpdateProductAttribute(
@@ -72,8 +70,7 @@ class UpdateProductAttributeEntityTest extends Injectable
         CatalogProductAttribute $attribute,
         CatalogAttributeSet $attributeSet,
         CatalogProductAttributeIndex $attributeIndex,
-        CatalogProductAttributeNew $attributeNew,
-        CatalogProductSimple $productSimple
+        CatalogProductAttributeNew $attributeNew
     ) {
         //Precondition
         $attributeSet->persist();
@@ -83,15 +80,32 @@ class UpdateProductAttributeEntityTest extends Injectable
             'attribute_code' => $productAttributeOriginal->getAttributeCode(),
         ];
 
+        /** @var CatalogProductSimple $product */
+        $product = $this->fixtureFactory->createByCode(
+            'catalogProductSimple',
+            [
+                'dataset' => 'default',
+                'data' => ['attribute_set_id' => ['attribute_set' => $attributeSet]]
+            ]
+        );
+        $product->persist();
+
+        $this->objectManager->create(
+            \Magento\Catalog\Test\TestStep\AddAttributeToAttributeSetStep::class,
+            [
+                'attribute' => $productAttributeOriginal,
+                'attributeSet' => $attributeSet
+            ]
+        )->run();
+
         //Steps
         $attributeIndex->open();
         $attributeIndex->getGrid()->searchAndOpen($filter);
         $attributeNew->getAttributeForm()->fill($attribute);
         $attributeNew->getPageActions()->save();
         $attribute = $this->prepareAttribute($attribute, $productAttributeOriginal);
-        $productSimple->persist();
 
-        return ['product' => $this->prepareProduct($productSimple, $attribute, $attributeSet)];
+        return ['product' => $this->prepareProduct($product, $attribute, $attributeSet)];
     }
 
     /**

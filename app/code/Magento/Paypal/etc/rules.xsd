@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -31,6 +31,7 @@
         </xs:sequence>
         <xs:attribute type="xs:string" name="value" use="required"/>
         <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:boolean" name="include" use="optional"/>
     </xs:complexType>
     <xs:complexType name="predicate">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,7 @@ use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Util\ModuleResolver\SequenceSorterInterface;
 
 /**
  * Class GiftOptions
@@ -60,6 +61,7 @@ class GiftOptions extends Form
      * @param BlockFactory $blockFactory
      * @param Mapper $mapper
      * @param BrowserInterface $browser
+     * @param SequenceSorterInterface $sequenceSorter
      * @param FixtureFactory $fixtureFactory
      * @param array $config [optional]
      */
@@ -68,11 +70,12 @@ class GiftOptions extends Form
         BlockFactory $blockFactory,
         Mapper $mapper,
         BrowserInterface $browser,
+        SequenceSorterInterface $sequenceSorter,
         FixtureFactory $fixtureFactory,
         array $config = []
     ) {
+        parent::__construct($element, $blockFactory, $mapper, $browser, $sequenceSorter, $config);
         $this->fixtureFactory = $fixtureFactory;
-        parent::__construct($element, $blockFactory, $mapper, $browser, $config);
     }
 
     /**
@@ -87,7 +90,7 @@ class GiftOptions extends Form
         if ($giftMessage->getAllowGiftMessagesForOrder() === 'Yes') {
             $this->_rootElement->find($this->allowGiftOptions)->click();
             $giftMessageForm = $this->blockFactory->create(
-                'Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm',
+                \Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm::class,
                 ['element' => $this->_rootElement->find($this->giftMessageOrderForm)]
             );
             $formData = [

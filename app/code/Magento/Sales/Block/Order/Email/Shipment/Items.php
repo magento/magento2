@@ -1,23 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Sales\Block\Order\Email\Shipment;
 
 /**
  * Sales Order Email Shipment items
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Sales\Block\Order\Email\Shipment;
-
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
      * Prepare item before output
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $renderer
-     * @return \Magento\Sales\Block\Items\AbstractItems
+     * @return void
      */
     protected function _prepareItem(\Magento\Framework\View\Element\AbstractBlock $renderer)
     {

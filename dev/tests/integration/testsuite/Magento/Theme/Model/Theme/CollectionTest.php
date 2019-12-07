@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @magentoComponentsDir Magento/Theme/Model/_files/design
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Theme\Collection
@@ -25,17 +25,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Filesystem\DirectoryList',
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
             [
                 'root' => DirectoryList::ROOT,
             ]
         );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['directoryList' => $directoryList]
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Theme\Model\Theme\Collection',
+            \Magento\Theme\Model\Theme\Collection::class,
             ['filesystem' => $filesystem]
         );
     }
@@ -100,7 +100,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
         $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Design\ThemeInterface'
+            \Magento\Framework\View\Design\ThemeInterface::class
         );
         $themeModel->setData(
             [

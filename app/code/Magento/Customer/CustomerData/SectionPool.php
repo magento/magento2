@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\CustomerData;
@@ -10,6 +10,9 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Section pool
+ *
+ * @api
+ * @since 100.0.2
  */
 class SectionPool implements SectionPoolInterface
 {
@@ -50,13 +53,23 @@ class SectionPool implements SectionPoolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getSectionsData(array $sectionNames = null, $updateIds = false)
+    public function getSectionsData(array $sectionNames = null, $forceNewTimestamp = false)
     {
         $sectionsData = $sectionNames ? $this->getSectionDataByNames($sectionNames) : $this->getAllSectionData();
-        $sectionsData = $this->identifier->markSections($sectionsData, $sectionNames, $updateIds);
+        $sectionsData = $this->identifier->markSections($sectionsData, $sectionNames, $forceNewTimestamp);
         return $sectionsData;
+    }
+
+    /**
+     * Return array of section names.
+     *
+     * @return array
+     */
+    public function getSectionNames()
+    {
+        return array_keys($this->sectionSourceMap);
     }
 
     /**
@@ -71,7 +84,7 @@ class SectionPool implements SectionPoolInterface
         $data = [];
         foreach ($sectionNames as $sectionName) {
             if (!isset($this->sectionSourceMap[$sectionName])) {
-                throw new LocalizedException(__('"%1" section source is not supported', $sectionName));
+                throw new LocalizedException(__('The "%1" section source isn\'t supported.', $sectionName));
             }
             $data[$sectionName] = $this->get($this->sectionSourceMap[$sectionName])->getSectionData();
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Report\Shipping\Collection;
@@ -28,7 +28,7 @@ class Shipment extends Order
         \Magento\Sales\Model\ResourceModel\Report $resource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
-        $resource->init('sales_shipping_aggregated');
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
+        $resource->init('sales_shipping_aggregated');
     }
 }

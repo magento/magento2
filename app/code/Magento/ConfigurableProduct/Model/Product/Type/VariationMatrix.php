@@ -1,10 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
+/**
+ * Variation matrix.
+ *
+ * @api
+ * @since 100.0.2
+ */
 class VariationMatrix
 {
     /**
@@ -36,7 +43,9 @@ class VariationMatrix
             for ($attributeIndex = $attributesCount; $attributeIndex--;) {
                 $currentAttribute = $variationalAttributes[$attributeIndex];
                 $currentVariationValue = $currentVariation[$attributeIndex];
-                $filledVariation[$currentAttribute['id']] = $currentAttribute['values'][$currentVariationValue];
+                if (!empty($currentAttribute['id'])) {
+                    $filledVariation[$currentAttribute['id']] = $currentAttribute['values'][$currentVariationValue];
+                }
             }
 
             $variations[] = $filledVariation;

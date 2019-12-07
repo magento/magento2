@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,8 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Preconditions:
@@ -25,14 +27,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click Update.
  * 5. Perform all assertions.
  *
- * @group Mini_Shopping_Cart_(CS)
+ * @group Mini_Shopping_Cart
  * @ZephyrId MAGETWO-29812
  */
 class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
+    const TEST_TYPE = 'extended_acceptance_test';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**
@@ -57,66 +60,101 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     protected $fixtureFactory;
 
     /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    private $envWhitelist;
+
+    /**
      * Inject data.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $catalogProductView
      * @param FixtureFactory $fixtureFactory
+     * @param EnvWhitelist $envWhitelist
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
         CatalogProductView $catalogProductView,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        EnvWhitelist $envWhitelist
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->catalogProductView = $catalogProductView;
         $this->fixtureFactory = $fixtureFactory;
+        $this->envWhitelist = $envWhitelist;
     }
 
     /**
      * Update product from mini shopping cart.
-     *
-     * @param string $originalProduct
+     * @param array $originalProduct
      * @param array $checkoutData
+     * @param boolean $useMiniCartToEditQty
+     * @param array $shippingAddress
+     * @param array $shipping
+     * @param array $payment
+     * @param Customer $customer
      * @return array
      */
-    public function test($originalProduct, $checkoutData)
-    {
+    public function test(
+        array $originalProduct,
+        array $checkoutData,
+        $useMiniCartToEditQty = false,
+        $shippingAddress = null,
+        $shipping = null,
+        $payment = null,
+        Customer $customer = null
+    ) {
         // Preconditions:
+        $this->envWhitelist->addHost('example.com');
+        if ($customer !== null) {
+            $customer->persist();
+        }
         $product = $this->createProduct($originalProduct);
         $this->addToCart($product);
 
         // Steps:
         $productData = $product->getData();
         $productData['checkout_data'] = $checkoutData;
-        $newProduct = $this->createProduct(explode('::', $originalProduct)[0], [$productData]);
+        $newProduct = $this->createProduct([explode('::', $originalProduct[0])[0]], [$productData]);
         $miniShoppingCart = $this->cmsIndex->getCartSidebarBlock();
         $miniShoppingCart->openMiniCart();
-        $miniShoppingCart->getCartItem($newProduct)->clickEditItem();
-        $this->catalogProductView->getViewBlock()->addToCart($newProduct);
 
+        if ($useMiniCartToEditQty) {
+            $miniShoppingCart->getCartItem($newProduct)->editQty($newProduct->getCheckoutData());
+        } else {
+            $miniShoppingCart->getCartItem($newProduct)->clickEditItem();
+            $this->catalogProductView->getViewBlock()->addToCart($newProduct);
+            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        }
         // Prepare data for asserts:
         $cart['data']['items'] = ['products' => [$newProduct]];
         $deletedCart['data']['items'] = ['products' => [$product]];
 
         return [
             'deletedCart' => $this->fixtureFactory->createByCode('cart', $deletedCart),
-            'cart' => $this->fixtureFactory->createByCode('cart', $cart)
+            'cart' => $this->fixtureFactory->createByCode('cart', $cart),
+            'checkoutData' => [
+                'shippingAddress' => $shippingAddress,
+                'shipping' => $shipping,
+                'payment' => $payment
+            ]
         ];
     }
 
     /**
      * Create product.
      *
-     * @param string $product
+     * @param array $product
      * @param array $data [optional]
      * @return FixtureInterface
      */
-    protected function createProduct($product, array $data = [])
+    protected function createProduct(array $product, array $data = [])
     {
         $createProductsStep = $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $product, 'data' => $data]
         );
         return $createProductsStep->run()['products'][0];
@@ -131,9 +169,19 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     protected function addToCart(FixtureInterface $product)
     {
         $addToCartStep = $this->objectManager->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => [$product]]
         );
         $addToCartStep->run();
+    }
+
+    /**
+     * Clean data after running test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        $this->envWhitelist->removeHost('example.com');
     }
 }

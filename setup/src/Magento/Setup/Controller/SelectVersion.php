@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,6 +59,24 @@ class SelectVersion extends AbstractActionController
         }
         $data['responseType'] = $responseType;
 
+        return new JsonModel($data);
+    }
+
+    /**
+     * Gets installed system package
+     *
+     * @return JsonModel
+     */
+    public function installedSystemPackageAction()
+    {
+        $data = [];
+        try {
+            $data['packages'] = $this->systemPackage->getInstalledSystemPackages();
+            $data['responseType'] = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        } catch (\Exception $e) {
+            $data['error'] = $e->getMessage();
+            $data['responseType'] = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+        }
         return new JsonModel($data);
     }
 }

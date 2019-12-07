@@ -1,13 +1,16 @@
 <?php
 /**
- * Application area list
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\AreaList;
 
-class Proxy extends \Magento\Framework\App\AreaList
+/**
+ * Proxy for area list.
+ */
+class Proxy extends \Magento\Framework\App\AreaList implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -46,7 +49,7 @@ class Proxy extends \Magento\Framework\App\AreaList
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\App\AreaList',
+        $instanceName = \Magento\Framework\App\AreaList::class,
         $shared = true
     ) {
         $this->_objectManager = $objectManager;
@@ -55,6 +58,8 @@ class Proxy extends \Magento\Framework\App\AreaList
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return array
      */
     public function __sleep()

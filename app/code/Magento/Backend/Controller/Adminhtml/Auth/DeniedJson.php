@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
-class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

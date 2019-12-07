@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Model\Export;
@@ -8,7 +8,7 @@ namespace Magento\ConfigurableImportExport\Model\Export;
 /**
  * @magentoAppArea adminhtml
  */
-class RowCustomizerTest extends \PHPUnit_Framework_TestCase
+class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
@@ -24,7 +24,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(
-            'Magento\ConfigurableImportExport\Model\Export\RowCustomizer'
+            \Magento\ConfigurableImportExport\Model\Export\RowCustomizer::class
         );
     }
 
@@ -33,7 +33,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareData()
     {
-        $collection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
+        $collection = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $select = (string)$collection->getSelect();
         $this->model->prepareData($collection, [1, 2, 3, 4]);
         $this->assertEquals($select, (string)$collection->getSelect());
@@ -43,6 +43,10 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'sku=simple_10,test_configurable=Option 1|sku=simple_20,test_configurable=Option 2',
             $result['configurable_variations']
+        );
+        $this->assertEquals(
+            'test_configurable=Test Configurable',
+            $result['configurable_variation_labels']
         );
     }
 }

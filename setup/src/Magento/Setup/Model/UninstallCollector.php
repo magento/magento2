@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
@@ -55,15 +55,15 @@ class UninstallCollector
         /** @var \Magento\Setup\Module\DataSetup $setup */
         $setup = $this->dataSetupFactory->create();
         $result = $setup->getConnection()->select()->from($setup->getTable('setup_module'), ['module']);
-        if (isset($filterModules) && sizeof($filterModules) > 0) {
-            $result->where('module in( ? )', implode(',', $filterModules));
+        if (isset($filterModules) && count($filterModules) > 0) {
+            $result->where('module in( ? )', $filterModules);
         }
         // go through modules
         foreach ($setup->getConnection()->fetchAll($result) as $row) {
             $uninstallClassName = str_replace('_', '\\', $row['module']) . '\Setup\Uninstall';
             if (class_exists($uninstallClassName)) {
                 $uninstallClass = $this->objectManager->create($uninstallClassName);
-                if (is_subclass_of($uninstallClass, 'Magento\Framework\Setup\UninstallInterface')) {
+                if (is_subclass_of($uninstallClass, \Magento\Framework\Setup\UninstallInterface::class)) {
                     $uninstallList[$row['module']] = $uninstallClass;
                 }
             }

@@ -1,0 +1,26 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Your %store_name email has been changed" store_name=$store.frontend_name}} @-->
+<!--@vars {
+"var store.frontend_name":"Store Name",
+"var store_email":"Store Email",
+"var store_phone":"Store Phone"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<p class="greeting">{{trans "Hello,"}}</p>
+<br>
+
+<p>
+    {{trans "We have received a request to change the following information associated with your account at %store_name: email." store_name=$store.frontend_name}}
+    {{trans 'If you have not authorized this action, please contact us immediately at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
+</p>
+<br>
+
+<p>{{trans "Thanks,<br>%store_name" store_name=$store.frontend_name |raw}}</p>
+
+{{template config_path="design/email/footer_template"}}

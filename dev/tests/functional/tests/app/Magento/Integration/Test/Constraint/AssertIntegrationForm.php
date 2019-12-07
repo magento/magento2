@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,8 +67,10 @@ class AssertIntegrationForm extends AbstractAssertForm
         $integrationIndexPage->open();
         $integrationIndexPage->getIntegrationGrid()->searchAndOpen($filter);
         $formData = $integrationNewPage->getIntegrationForm()->getData();
+        unset($formData['current_password']);
+        unset($data['current_password']);
         $dataDiff = $this->verifyForm($formData, $data);
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $dataDiff,
             'Integration form was filled incorrectly.'
             . "\nLog:\n" . implode(";\n", $dataDiff)

@@ -1,19 +1,19 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Console;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Console\Response
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->model = new \Magento\Framework\App\Console\Response();
         $this->model->terminateOnSend(false);
@@ -34,6 +34,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCode, $result);
     }
 
+    /**
+     * @return array
+     */
     public static function setCodeProvider()
     {
         $largeCode = 256;

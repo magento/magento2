@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,6 +95,18 @@ class StoreGrid extends Grid
     public function searchAndOpenWebsite(Website $website)
     {
         $websiteName = $website->getName();
+        $this->search(['website_title' => $websiteName]);
+        $this->_rootElement->find(sprintf($this->storeName, $websiteName), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Search and open appropriate Website by name.
+     *
+     * @param string $websiteName
+     * @return void
+     */
+    public function searchAndOpenWebsiteByName($websiteName)
+    {
         $this->search(['website_title' => $websiteName]);
         $this->_rootElement->find(sprintf($this->storeName, $websiteName), Locator::SELECTOR_XPATH)->click();
     }

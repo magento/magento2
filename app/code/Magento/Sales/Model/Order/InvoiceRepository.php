@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -34,17 +35,24 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     protected $searchResultFactory;
 
     /**
-     * Repository constructor
-     *
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * InvoiceRepository constructor.
      * @param Metadata $invoiceMetadata
      * @param SearchResultFactory $searchResultFactory
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         Metadata $invoiceMetadata,
-        SearchResultFactory $searchResultFactory
+        SearchResultFactory $searchResultFactory,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->metadata = $invoiceMetadata;
         $this->searchResultFactory = $searchResultFactory;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -58,13 +66,15 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\InputException(__('ID required'));
+            throw new \Magento\Framework\Exception\InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\InvoiceInterface $entity */
             $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
             $this->registry[$id] = $entity;
         }
@@ -82,21 +92,15 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Sales\Api\Data\InvoiceInterface[]
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Collection $collection */
         $collection = $this->searchResultFactory->create();
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
+        $this->collectionProcessor->process($searchCriteria, $collection);
+        $collection->setSearchCriteria($searchCriteria);
         return $collection;
     }
 
@@ -136,5 +140,21 @@ class InvoiceRepository implements InvoiceRepositoryInterface
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
         return $this->registry[$entity->getEntityId()];
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated 100.2.0
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesSequence\Test\Unit\Model;
 
 use Magento\SalesSequence\Model\Sequence;
@@ -10,12 +11,13 @@ use Magento\SalesSequence\Model\Sequence;
 /**
  * Class SequenceTest
  */
-class SequenceTest extends \PHPUnit_Framework_TestCase
+class SequenceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $connectionMock;
+
     /**
      * @var \Magento\Framework\App\ResourceConnection | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -38,29 +40,17 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Meta',
-            ['getSequenceTable', 'getActiveProfile'],
-            [],
-            '',
-            false
+        $this->meta = $this->createPartialMock(
+            \Magento\SalesSequence\Model\Meta::class,
+            ['getSequenceTable', 'getActiveProfile']
         );
-        $this->profile = $this->getMock(
-            'Magento\SalesSequence\Model\Profile',
-            ['getSuffix', 'getPrefix', 'getStep', 'getStartValue'],
-            [],
-            '',
-            false
+        $this->profile = $this->createPartialMock(
+            \Magento\SalesSequence\Model\Profile::class,
+            ['getSuffix', 'getPrefix', 'getStep', 'getStartValue']
         );
-        $this->resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            ['getConnection'],
-            [],
-            '',
-            false
-        );
+        $this->resource = $this->createPartialMock(\Magento\Framework\App\ResourceConnection::class, ['getConnection']);
         $this->connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -70,10 +60,13 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
         );
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->sequence = $helper->getObject('Magento\SalesSequence\Model\Sequence', [
-            'meta' => $this->meta,
-            'resource' => $this->resource,
-        ]);
+        $this->sequence = $helper->getObject(
+            \Magento\SalesSequence\Model\Sequence::class,
+            [
+                'meta' => $this->meta,
+                'resource' => $this->resource,
+            ]
+        );
     }
 
     public function testSequenceInitialNull()

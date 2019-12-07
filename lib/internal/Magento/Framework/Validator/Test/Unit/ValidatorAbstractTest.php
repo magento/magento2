@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 /**
  * Test case for \Magento\Framework\Validator\AbstractValidator
  */
-class ValidatorAbstractTest extends \PHPUnit_Framework_TestCase
+class ValidatorAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var null|\Magento\Framework\Translate\AdapterInterface
@@ -33,7 +33,7 @@ class ValidatorAbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getTranslator()
     {
-        return $this->getMockBuilder('Magento\Framework\Translate\AdapterInterface')->getMockForAbstractClass();
+        return $this->getMockBuilder(\Magento\Framework\Translate\AdapterInterface::class)->getMockForAbstractClass();
     }
 
     /**
@@ -52,7 +52,9 @@ class ValidatorAbstractTest extends \PHPUnit_Framework_TestCase
     public function testTranslatorGetSetHas()
     {
         /** @var \Magento\Framework\Validator\AbstractValidator $validator */
-        $validator = $this->getMockBuilder('Magento\Framework\Validator\AbstractValidator')->getMockForAbstractClass();
+        $validator = $this->getMockBuilder(
+            \Magento\Framework\Validator\AbstractValidator::class
+        )->getMockForAbstractClass();
         $translator = $this->_getTranslator();
         $validator->setTranslator($translator);
         $this->assertEquals($translator, $validator->getTranslator());
@@ -65,7 +67,9 @@ class ValidatorAbstractTest extends \PHPUnit_Framework_TestCase
     public function testGetTranslatorDefault()
     {
         /** @var \Magento\Framework\Validator\AbstractValidator $validator */
-        $validator = $this->getMockBuilder('Magento\Framework\Validator\AbstractValidator')->getMockForAbstractClass();
+        $validator = $this->getMockBuilder(
+            \Magento\Framework\Validator\AbstractValidator::class
+        )->getMockForAbstractClass();
         $translator = $this->_getTranslator();
         \Magento\Framework\Validator\AbstractValidator::setDefaultTranslator($translator);
         $this->assertEquals($translator, $validator->getTranslator());

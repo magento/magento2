@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
-* Helper class that simplifies gz files stream reading and writing
-*/
+ * Helper class that simplifies gz files stream reading and writing
+ */
 namespace Magento\Framework\Archive\Helper\File;
 
 class Gz extends \Magento\Framework\Archive\Helper\File
@@ -26,7 +24,7 @@ class Gz extends \Magento\Framework\Archive\Helper\File
 
         if (false === $this->_fileHandler) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath])
+                new \Magento\Framework\Phrase('The "%1" file failed to open.', [$this->_filePath])
             );
         }
     }
@@ -40,7 +38,7 @@ class Gz extends \Magento\Framework\Archive\Helper\File
 
         if (empty($result) && !empty($data)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath])
+                new \Magento\Framework\Phrase('The data failed to write to "%1".', [$this->_filePath])
             );
         }
     }

@@ -2,7 +2,7 @@
 /**
  * Backend container block
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,10 @@ namespace Magento\Backend\Block\Widget;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Container extends \Magento\Backend\Block\Template implements ContainerInterface
 {
     /**#@+
@@ -21,11 +25,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
 
     /**#@-*/
 
-    /**
-     * So called "container controller" to specify group of blocks participating in some action
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_controller = 'empty';
 
     /**

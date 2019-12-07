@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\GroupedProduct\Test\Unit\Model;
 
@@ -19,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -159,64 +157,37 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->categoryIndexerMock = $this->getMockForAbstractClass('\Magento\Framework\Indexer\IndexerInterface');
+        $this->categoryIndexerMock = $this->getMockForAbstractClass(\Magento\Framework\Indexer\IndexerInterface::class);
 
-        $this->moduleManager = $this->getMock(
-            'Magento\Framework\Module\Manager',
-            ['isEnabled'],
-            [],
-            '',
-            false
+        $this->moduleManager = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isEnabled']);
+        $this->stockItemFactoryMock = $this->createPartialMock(
+            \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory::class,
+            ['create']
         );
-        $this->stockItemFactoryMock = $this->getMock(
-            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+        $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productFlatProcessor = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->productFlatProcessor = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);
 
-        $this->_priceInfoMock = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
-        $this->productTypeInstanceMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
-        $this->productPriceProcessor = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Price\Processor',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $this->productTypeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
+        $this->productPriceProcessor = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class);
 
-        $stateMock = $this->getMock('Magento\FrameworkApp\State', ['getAreaCode'], [], '', false);
+        $stateMock = $this->createPartialMock(\Magento\Framework\App\State::class, ['getAreaCode']);
         $stateMock->expects($this->any())
             ->method('getAreaCode')
             ->will($this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE));
 
-        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $actionValidatorMock = $this->getMock(
-            '\Magento\Framework\Model\ActionValidator\RemoveAction',
-            [],
-            [],
-            '',
-            false
-        );
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $cacheInterfaceMock = $this->getMock('Magento\Framework\App\CacheInterface');
+        $cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
 
-        $contextMock = $this->getMock(
-            '\Magento\Framework\Model\Context',
-            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
+        $contextMock = $this->createPartialMock(
+            \Magento\Framework\Model\Context::class,
+            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator']
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
         $contextMock->expects($this->any())->method('getEventDispatcher')->will($this->returnValue($eventManagerMock));
@@ -227,31 +198,31 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('getActionValidator')
             ->will($this->returnValue($actionValidatorMock));
 
-        $this->optionInstanceMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+        $this->optionInstanceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()->getMock();
 
-        $this->resource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
+        $this->resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->category = $this->getMockBuilder('Magento\Catalog\Model\Category')
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->website = $this->getMockBuilder('\Magento\Store\Model\Website')
+        $this->website = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $storeManager->expects($this->any())
@@ -260,47 +231,51 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())
             ->method('getWebsite')
             ->will($this->returnValue($this->website));
-        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
-        $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $this->indexerRegistryMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['get']
+        );
+        $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
 
-        $this->_catalogProduct = $this->getMock(
-            'Magento\Catalog\Helper\Product',
-            ['isDataForProductCategoryIndexerWasChanged'],
-            [],
-            '',
-            false
+        $this->_catalogProduct = $this->createPartialMock(
+            \Magento\Catalog\Helper\Product::class,
+            ['isDataForProductCategoryIndexerWasChanged']
         );
 
-        $this->imageCache = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\Cache')
+        $this->imageCache = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\Cache::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->imageCacheFactory = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\CacheFactory')
+        $this->imageCacheFactory = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\CacheFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->productLinkFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory')
+        $this->productLinkFactory = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->mediaGalleryEntryFactoryMock =
-            $this->getMockBuilder('Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory')
+            $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->metadataServiceMock = $this->getMock('\Magento\Catalog\Api\ProductAttributeRepositoryInterface');
-        $this->attributeValueFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+        $this->metadataServiceMock = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
+        $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()->getMock();
-        $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
-            ['getLinkTypes'], [], '', false);
-        $this->entityCollectionProviderMock = $this->getMock('Magento\Catalog\Model\ProductLink\CollectionProvider',
-            ['getCollection'], [], '', false);
+        $this->linkTypeProviderMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\LinkTypeProvider::class,
+            ['getLinkTypes']
+        );
+        $this->entityCollectionProviderMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ProductLink\CollectionProvider::class,
+            ['getCollection']
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 'context' => $contextMock,
                 'catalogProductType' => $this->productTypeInstanceMock,
@@ -326,7 +301,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'data' => ['id' => 1]
             ]
         );
-
     }
 
     /**
@@ -336,11 +310,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('Skipped due to https://jira.corp.x.com/browse/MAGETWO-36926');
         $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
-        $this->linkTypeProviderMock->expects($this->once())
-            ->method('getLinkTypes')
-            ->willReturn($linkTypes);
+        $this->linkTypeProviderMock->expects($this->once())->method('getLinkTypes')->willReturn($linkTypes);
 
-        $inputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku("Simple Product 1");
         $inputRelatedLink->setLinkType("related");
         $inputRelatedLink->setData("sku", "Simple Product 2");
@@ -348,7 +320,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $inputRelatedLink->setPosition(0);
 
         $customData = ["attribute_code" => "qty", "value" => 1];
-        $inputGroupLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputGroupLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputGroupLink->setProductSku("Simple Product 1");
         $inputGroupLink->setLinkType("associated");
         $inputGroupLink->setData("sku", "Simple Product 2");
@@ -356,20 +328,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $inputGroupLink->setPosition(0);
         $inputGroupLink["custom_attributes"] = [$customData];
 
-        $outputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $outputRelatedLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $outputRelatedLink->setProductSku("Simple Product 1");
         $outputRelatedLink->setLinkType("related");
         $outputRelatedLink->setLinkedProductSku("Simple Product 2");
         $outputRelatedLink->setLinkedProductType("simple");
         $outputRelatedLink->setPosition(0);
 
-        $groupExtension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
-        $reflectionOfExtension = new \ReflectionClass('Magento\Catalog\Api\Data\ProductLinkExtension');
+        $groupExtension = $this->objectManagerHelper->getObject(\Magento\Catalog\Api\Data\ProductLinkExtension::class);
+        $reflectionOfExtension = new \ReflectionClass(\Magento\Catalog\Api\Data\ProductLinkExtension::class);
         $method = $reflectionOfExtension->getMethod('setData');
         $method->setAccessible(true);
-        $method->invokeArgs($groupExtension, array('qty', 1));
+        $method->invokeArgs($groupExtension, ['qty', 1]);
 
-        $outputGroupLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $outputGroupLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $outputGroupLink->setProductSku("Simple Product 1");
         $outputGroupLink->setLinkType("associated");
         $outputGroupLink->setLinkedProductSku("Simple Product 2");
@@ -395,16 +367,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$inputGroupLink]);
 
         $expectedOutput = [$outputRelatedLink, $outputGroupLink];
-        $typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Simple', ["getSku"], [], '', false);
-        $typeInstanceMock
-            ->expects($this->atLeastOnce())
-            ->method('getSku')
-            ->willReturn("Simple Product 1");
+        $typeInstanceMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Simple::class)
+            ->setMethods(["getSku"])
+            ->getMock();
+        $typeInstanceMock->expects($this->atLeastOnce())->method('getSku')->willReturn("Simple Product 1");
         $this->model->setTypeInstance($typeInstanceMock);
 
-        $productLink1 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $productLink2 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $productLink1 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
+        $productLink2 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $this->productLinkFactory->expects($this->at(0))
             ->method('create')
             ->willReturn($productLink1);
@@ -412,7 +382,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($productLink2);
 
-        $extension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
+        $extension = $this->objectManagerHelper->getObject(\Magento\Catalog\Api\Data\ProductLinkExtension::class);
         $productLink2->setExtensionAttributes($extension);
 
         $links = $this->model->getProductLinks();

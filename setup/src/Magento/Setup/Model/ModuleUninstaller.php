@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
 
+use Magento\Framework\Setup\Patch\PatchApplier;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -31,6 +32,10 @@ class ModuleUninstaller
      * @var \Magento\Setup\Module\SetupFactory
      */
     private $setupFactory;
+    /**
+     * @var PatchApplier
+     */
+    private $patchApplier;
 
     /**
      * Constructor
@@ -39,6 +44,7 @@ class ModuleUninstaller
      * @param \Magento\Framework\Composer\Remove $remove
      * @param UninstallCollector $collector
      * @param \Magento\Setup\Module\SetupFactory $setupFactory
+     * @param PatchApplier $patchApplier
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
@@ -53,6 +59,18 @@ class ModuleUninstaller
     }
 
     /**
+     * @return PatchApplier
+     */
+    private function getPatchApplier()
+    {
+        if (!$this->patchApplier) {
+            $this->patchApplier = $this->objectManager->get(PatchApplier::class);
+        }
+
+        return $this->patchApplier;
+    }
+
+    /**
      * Invoke remove data routine in each specified module
      *
      * @param OutputInterface $output
@@ -63,7 +81,7 @@ class ModuleUninstaller
     {
         $uninstalls = $this->collector->collectUninstall($modules);
         $setupModel = $this->setupFactory->create();
-        $resource = $this->objectManager->get('Magento\Framework\Module\ModuleResource');
+        $resource = $this->objectManager->get(\Magento\Framework\Module\ModuleResource::class);
         foreach ($modules as $module) {
             if (isset($uninstalls[$module])) {
                 $output->writeln("<info>Removing data of $module</info>");
@@ -71,9 +89,9 @@ class ModuleUninstaller
                     $setupModel,
                     new ModuleContext($resource->getDbVersion($module) ?: '')
                 );
-            } else {
-                $output->writeln("<info>No data to clear in $module</info>");
             }
+
+            $this->getPatchApplier()->revertDataPatches($module);
         }
     }
 
@@ -89,7 +107,7 @@ class ModuleUninstaller
         $output->writeln('<info>Removing code from Magento codebase:</info>');
         $packages = [];
         /** @var \Magento\Framework\Module\PackageInfo $packageInfo */
-        $packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $packageInfo = $this->objectManager->get(\Magento\Framework\Module\PackageInfoFactory::class)->create();
         foreach ($modules as $module) {
             $packages[] = $packageInfo->getPackageName($module);
         }

@@ -1,22 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Model\Config;
 
 /**
  * Catalog data helper
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -28,6 +33,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const CONFIG_USE_STATIC_URLS = 'cms/wysiwyg/use_static_urls_in_catalog';
 
+    /**
+     * @deprecated
+     * @see \Magento\Catalog\Helper\Output::isDirectivesExists
+     */
     const CONFIG_PARSE_URL_DIRECTIVES = 'catalog/frontend/parse_url_directives';
 
     const XML_PATH_DISPLAY_PRODUCT_COUNT = 'catalog/layered_navigation/display_product_count';
@@ -46,7 +55,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Breadcrumb Path cache
      *
-     * @var string
+     * @var array
      */
     protected $_categoryPath;
 
@@ -265,14 +274,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Return current category path or get it from current category
-     * and creating array of categories|product paths for breadcrumbs
      *
-     * @return string
+     * Creating array of categories|product paths for breadcrumbs
+     *
+     * @return array
      */
     public function getBreadcrumbPath()
     {
         if (!$this->_categoryPath) {
-
             $path = [];
             $category = $this->getCategory();
             if ($category) {
@@ -375,6 +384,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Split SKU of an item by dashes and spaces
+     *
      * Words will not be broken, unless this length is greater than $length
      *
      * @param string $sku
@@ -403,14 +413,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve Catalog Price Scope
      *
-     * @return int
+     * @return int|null
      */
-    public function getPriceScope()
+    public function getPriceScope(): ?int
     {
-        return $this->scopeConfig->getValue(
+        $priceScope = $this->scopeConfig->getValue(
             self::XML_PATH_PRICE_SCOPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
+        return isset($priceScope) ? (int)$priceScope : null;
     }
 
     /**
@@ -432,8 +443,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::CONFIG_USE_STATIC_URLS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->_storeId
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -441,12 +451,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if the parsing of URL directives is allowed for the catalog
      *
      * @return bool
+     * @deprecated
+     * @see \Magento\Catalog\Helper\Output::isDirectivesExists
      */
     public function isUrlDirectivesParsingAllowed()
     {
         return $this->scopeConfig->isSetFlag(
             self::CONFIG_PARSE_URL_DIRECTIVES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
     }
@@ -455,6 +467,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve template processor for catalog content
      *
      * @return \Magento\Framework\Filter\Template
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getPageTemplateProcessor()
     {
@@ -463,6 +476,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Whether to display items count for each filter option
+     *
      * @param int $storeId Store view ID
      * @return bool
      */
@@ -470,12 +484,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DISPLAY_PRODUCT_COUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
 
     /**
+     * Convert tax address array to address data object with country id and postcode
+     *
      * @param array $taxAddress
      * @return \Magento\Customer\Api\Data\AddressInterface|null
      */

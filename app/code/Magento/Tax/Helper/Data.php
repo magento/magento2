@@ -1,29 +1,29 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Helper;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
 use Magento\Tax\Model\Config;
-use Magento\Tax\Api\TaxCalculationInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
 use Magento\Sales\Model\EntityInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Catalog data helper
+ * Tax helper
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -79,9 +79,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_localeResolver;
 
     /**
-     * \Magento\Catalog\Helper\Data
-     *
-     * @var CatalogHelper
+     * @var \Magento\Catalog\Helper\Data
      */
     protected $catalogHelper;
 
@@ -96,16 +94,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $priceCurrency;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context                         $context
-     * @param \Magento\Framework\Json\Helper\Data                           $jsonHelper
-     * @param Config                                                        $taxConfig
-     * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
-     * @param \Magento\Framework\Locale\FormatInterface                     $localeFormat
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param Config $taxConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
-     * @param \Magento\Framework\Locale\ResolverInterface                   $localeResolver
-     * @param \Magento\Catalog\Helper\Data                                  $catalogHelper
-     * @param OrderTaxManagementInterface                                   $orderTaxManagement
-     * @param PriceCurrencyInterface                                        $priceCurrency
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Catalog\Helper\Data $catalogHelper
+     * @param OrderTaxManagementInterface $orderTaxManagement
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -118,7 +124,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Catalog\Helper\Data $catalogHelper,
         OrderTaxManagementInterface $orderTaxManagement,
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        Json $serializer = null
     ) {
         parent::__construct($context);
         $this->priceCurrency = $priceCurrency;
@@ -130,6 +137,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_localeResolver = $localeResolver;
         $this->catalogHelper = $catalogHelper;
         $this->orderTaxManagement = $orderTaxManagement;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -566,7 +574,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *  )
      * )
      *
-     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Invoice|\Magento\Sales\Model\Order\Creditmemo $source
+     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Invoice
+     * |\Magento\Sales\Model\Order\Creditmemo $source
      * @return array
      */
     public function getCalculatedTaxes($source)
@@ -724,7 +733,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $orderItemId = $orderItem->getId();
             $orderItemTax = $orderItem->getTaxAmount();
             $itemTax = $item->getTaxAmount();
-            if (!$itemTax || !floatval($orderItemTax)) {
+            if (!$itemTax || !(float)$orderItemTax) {
                 continue;
             }
             //An invoiced item or credit memo item can have a different qty than its order item qty
@@ -738,7 +747,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $taxableItemType = $itemTaxDetail->getType();
                     $ratio = $itemRatio;
                     if ($item->getTaxRatio()) {
-                        $taxRatio = unserialize($item->getTaxRatio());
+                        $taxRatio = $this->serializer->unserialize($item->getTaxRatio());
                         if (isset($taxRatio[$taxableItemType])) {
                             $ratio = $taxRatio[$taxableItemType];
                         }
@@ -752,7 +761,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $shippingTaxAmount = $salesItem->getShippingTaxAmount();
         $originalShippingTaxAmount = $order->getShippingTaxAmount();
         if ($shippingTaxAmount && $originalShippingTaxAmount &&
-            $shippingTaxAmount != 0 && floatval($originalShippingTaxAmount)
+            $shippingTaxAmount != 0 && (float)$originalShippingTaxAmount
         ) {
             //An invoice or credit memo can have a different qty than its order
             $shippingRatio = $shippingTaxAmount / $originalShippingTaxAmount;

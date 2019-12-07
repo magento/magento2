@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Observer;
@@ -58,10 +58,10 @@ class ReportConcurrentAdminsToNewRelic implements ObserverInterface
             if ($this->backendAuthSession->isLoggedIn()) {
                 $user = $this->backendAuthSession->getUser();
                 $this->newRelicWrapper->addCustomParameter(Config::ADMIN_USER_ID, $user->getId());
-                $this->newRelicWrapper->addCustomParameter(Config::ADMIN_USER, $user->getUsername());
+                $this->newRelicWrapper->addCustomParameter(Config::ADMIN_USER, $user->getUserName());
                 $this->newRelicWrapper->addCustomParameter(
                     Config::ADMIN_NAME,
-                    $user->getFirstname() . ' ' . $user->getLastname()
+                    $user->getFirstName() . ' ' . $user->getLastName()
                 );
             }
         }

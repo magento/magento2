@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,8 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * Bundle model
+ * @deprecated 100.2.0
+ * @see \Magento\Deploy\Package\Bundle
  */
 class Bundle
 {
@@ -26,7 +28,9 @@ class Bundle
      */
     protected $assetsContent = [];
 
-    /** @var  Bundle\Config */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface
+     */
     protected $bundleConfig;
 
     /**
@@ -208,7 +212,11 @@ class Bundle
         $assetContentType = $asset->getContentType();
         $assetKey = $this->getAssetKey($asset);
         if (!isset($this->assetsContent[$assetContextCode][$assetContentType][$assetKey])) {
-            $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = utf8_encode($asset->getContent());
+            $content = $asset->getContent();
+            if (mb_detect_encoding($content) !== "UTF-8") {
+                $content = mb_convert_encoding($content, "UTF-8");
+            }
+            $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = $content;
         }
 
         return $this->assetsContent[$assetContextCode][$assetContentType][$assetKey];
@@ -261,6 +269,7 @@ class Bundle
             $assetsParts = reset($parts);
             $context = reset($assetsParts['assets'])->getContext();
             $bundlePath = empty($bundlePath) ? $context->getPath() . Manager::BUNDLE_PATH : $bundlePath;
+            $dir->delete($context->getPath() . DIRECTORY_SEPARATOR . Manager::BUNDLE_JS_DIR);
             $this->fillContent($parts, $context);
         }
 

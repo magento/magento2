@@ -1,15 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
 
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Customer\Model\Session;
+use Magento\Sales\Model\Order\Config;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Sales order history block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Recent extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * Limit of orders
+     */
+    const ORDER_LIMIT = 5;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
@@ -26,37 +41,57 @@ class Recent extends \Magento\Framework\View\Element\Template
     protected $_orderConfig;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Sales\Model\Order\Config $orderConfig,
-        array $data = []
+        Context $context,
+        CollectionFactory $orderCollectionFactory,
+        Session $customerSession,
+        Config $orderConfig,
+        array $data = [],
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
-        parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
+        parent::__construct($context, $data);
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function _construct()
     {
         parent::_construct();
+        $this->getRecentOrders();
+    }
+
+    /**
+     * Get recently placed orders. By default they will be limited by 5.
+     */
+    private function getRecentOrders()
+    {
         $orders = $this->_orderCollectionFactory->create()->addAttributeToSelect(
             '*'
         )->addAttributeToFilter(
             'customer_id',
             $this->_customerSession->getCustomerId()
+        )->addAttributeToFilter(
+            'store_id',
+            $this->storeManager->getStore()->getId()
         )->addAttributeToFilter(
             'status',
             ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
@@ -64,12 +99,14 @@ class Recent extends \Magento\Framework\View\Element\Template
             'created_at',
             'desc'
         )->setPageSize(
-            '5'
+            self::ORDER_LIMIT
         )->load();
         $this->setOrders($orders);
     }
 
     /**
+     * Get order view URL
+     *
      * @param object $order
      * @return string
      */
@@ -79,16 +116,22 @@ class Recent extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order track URL
+     *
      * @param object $order
      * @return string
+     * @deprecated Action does not exist
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)
     {
-        return $this->getUrl('sales/order/track', ['order_id' => $order->getId()]);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+        return '';
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     protected function _toHtml()
     {
@@ -99,6 +142,8 @@ class Recent extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get reorder URL
+     *
      * @param object $order
      * @return string
      */

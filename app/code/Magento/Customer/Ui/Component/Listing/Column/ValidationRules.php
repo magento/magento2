@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 
+/**
+ * Provides validation classes according to corresponding rules.
+ */
 class ValidationRules
 {
     /**
@@ -16,6 +19,7 @@ class ValidationRules
         'alpha' => 'validate-alpha',
         'numeric' => 'validate-number',
         'alphanumeric' => 'validate-alphanum',
+        'alphanum-with-spaces' => 'validate-alphanum-with-spaces',
         'url' => 'validate-url',
         'email' => 'validate-email',
     ];

@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Problem;
 
-class Index extends \Magento\Newsletter\Controller\Adminhtml\Problem
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Newsletter\Controller\Adminhtml\Problem implements HttpGetActionInterface
 {
     /**
      * Newsletter problems report page

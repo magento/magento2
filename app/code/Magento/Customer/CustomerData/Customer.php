@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,11 @@ class Customer implements SectionSourceInterface
      * @var CurrentCustomer
      */
     protected $currentCustomer;
+
+    /**
+     * @var View
+     */
+    private $customerViewHelper;
 
     /**
      * @param CurrentCustomer $currentCustomer
@@ -39,10 +44,12 @@ class Customer implements SectionSourceInterface
         if (!$this->currentCustomer->getCustomerId()) {
             return [];
         }
+
         $customer = $this->currentCustomer->getCustomer();
         return [
             'fullname' => $this->customerViewHelper->getCustomerName($customer),
             'firstname' => $customer->getFirstname(),
+            'websiteId' => $customer->getWebsiteId(),
         ];
     }
 }

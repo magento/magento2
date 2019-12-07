@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler;
 
-class CreditCardValidationHandlerTest extends \PHPUnit_Framework_TestCase
+class CreditCardValidationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleCreditCardValidationFields()
     {
@@ -20,13 +20,12 @@ class CreditCardValidationHandlerTest extends \PHPUnit_Framework_TestCase
             Info::PAYPAL_IAVS => 'X'
         ];
 
-
-        $paypalInfoManager = $this->getMockBuilder('Magento\Paypal\Model\Info')
+        $paypalInfoManager = $this->getMockBuilder(\Magento\Paypal\Model\Info::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
+        $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\InfoInterface::class)
             ->getMock();
-        $responseMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $responseMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 

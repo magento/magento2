@@ -6,14 +6,14 @@
  * Given current name generation logic both are going to be translated to BarSomeBazV1. This test checks such things
  * are not going to happen.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi;
 
 use Magento\Webapi\Model\Config\Converter;
 
-class ServiceNameCollisionTest extends \PHPUnit_Framework_TestCase
+class ServiceNameCollisionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test there are no collisions between service names.
@@ -25,9 +25,9 @@ class ServiceNameCollisionTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Webapi\Model\ServiceMetadata $serviceMetadata */
-        $serviceMetadata = $objectManager->get('Magento\Webapi\Model\ServiceMetadata');
+        $serviceMetadata = $objectManager->get(\Magento\Webapi\Model\ServiceMetadata::class);
         /** @var \Magento\Webapi\Model\Config $webapiConfig */
-        $webapiConfig = $objectManager->get('Magento\Webapi\Model\Config');
+        $webapiConfig = $objectManager->get(\Magento\Webapi\Model\Config::class);
         $serviceNames = [];
 
         foreach ($webapiConfig->getServices()[Converter::KEY_SERVICES] as $serviceClassName => $serviceVersionData) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface CategoryLinkRepositoryInterface
 {
@@ -31,18 +32,20 @@ interface CategoryLinkRepositoryInterface
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink);
 
     /**
      * Remove the product assignment from the category by category id and sku
      *
-     * @param string $sku
+     * @param int $categoryId
      * @param string $sku
      * @return bool will returned True if products successfully deleted
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function deleteByIds($categoryId, $sku);
 }

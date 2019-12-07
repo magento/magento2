@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,6 +43,13 @@ class Install extends Block
     protected $launchAdmin = '.btn-large.btn-prime';
 
     /**
+     * Text for installation is completed.
+     *
+     * @var string
+     */
+    private $successInstallText = "//p[contains(., 'Installing... 100%')]";
+
+    /**
      * Click on 'Install Now' button.
      *
      * @return void
@@ -50,7 +57,7 @@ class Install extends Block
     public function clickInstallNow()
     {
         $this->_rootElement->find($this->installNow, Locator::SELECTOR_XPATH)->click();
-        $this->waitForElementVisible($this->launchAdmin, Locator::SELECTOR_CSS);
+        $this->waitSuccessInstall();
     }
 
     /**
@@ -107,5 +114,35 @@ class Install extends Block
     public function clickLaunchAdmin()
     {
         $this->_rootElement->find($this->launchAdmin, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Check that success install text is visible.
+     *
+     * @return bool
+     */
+    public function isInstallationCompleted()
+    {
+        return $this->_rootElement->find($this->successInstallText, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Waiting for success install text.
+     *
+     * @return void
+     */
+    private function waitSuccessInstall()
+    {
+        $root = $this->_rootElement;
+        $successInstallText = $this->successInstallText;
+        $launchAdmin = $this->launchAdmin;
+
+        $root->waitUntil(
+            function () use ($root, $successInstallText, $launchAdmin) {
+                $isInstallText = $root->find($successInstallText, Locator::SELECTOR_XPATH)->isVisible();
+                $isLaunchAdmin = $root->find($launchAdmin, Locator::SELECTOR_CSS)->isVisible();
+                return $isInstallText == true || $isLaunchAdmin == true ? true : null;
+            }
+        );
     }
 }

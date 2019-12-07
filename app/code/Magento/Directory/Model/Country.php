@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+namespace Magento\Directory\Model;
 
 /**
  * Country model
  *
- * @method \Magento\Directory\Model\ResourceModel\Country _getResource()
- * @method \Magento\Directory\Model\ResourceModel\Country getResource()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Country setCountryId(string $value)
+ *
+ * @api
+ * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-namespace Magento\Directory\Model;
-
 class Country extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -69,7 +69,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\ResourceModel\Country');
+        $this->_init(\Magento\Directory\Model\ResourceModel\Country::class);
     }
 
     /**

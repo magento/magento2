@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\SalesSequence\Test\Unit\Model;
 /**
  * Class BuilderTest
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesSequence\Model\Builder
@@ -58,7 +58,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -66,55 +66,25 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             true,
             ['query']
         );
-        $this->resourceSequenceMeta = $this->getMock(
-            'Magento\SalesSequence\Model\ResourceModel\Meta',
-            ['loadByEntityTypeAndStore', 'save', 'createSequence'],
-            [],
-            '',
-            false
+        $this->resourceSequenceMeta = $this->createPartialMock(
+            \Magento\SalesSequence\Model\ResourceModel\Meta::class,
+            ['loadByEntityTypeAndStore', 'save', 'createSequence']
         );
-        $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Meta',
-            ['getId', 'setData', 'save', 'getSequenceTable'],
-            [],
-            '',
-            false
+        $this->meta = $this->createPartialMock(
+            \Magento\SalesSequence\Model\Meta::class,
+            ['getId', 'setData', 'save', 'getSequenceTable']
         );
-        $this->sequence = $this->getMock(
-            'Magento\Framework\DB\Ddl\Sequence',
-            [],
-            [],
-            '',
-            false
+        $this->sequence = $this->createMock(\Magento\Framework\DB\Ddl\Sequence::class);
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->profile = $this->createPartialMock(
+            \Magento\SalesSequence\Model\Profile::class,
+            ['getId', 'setData', 'getStartValue']
         );
-        $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->profile = $this->getMock(
-            'Magento\SalesSequence\Model\Profile',
-            ['getId', 'setData', 'getStartValue'],
-            [],
-            '',
-            false
-        );
-        $this->metaFactory = $this->getMock(
-            'Magento\SalesSequence\Model\MetaFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->metaFactory = $this->createPartialMock(\Magento\SalesSequence\Model\MetaFactory::class, ['create']);
         $this->metaFactory->expects($this->any())->method('create')->willReturn($this->meta);
-        $this->profileFactory = $this->getMock(
-            'Magento\SalesSequence\Model\ProfileFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->profileFactory = $this->createPartialMock(
+            \Magento\SalesSequence\Model\ProfileFactory::class,
+            ['create']
         );
         $this->profileFactory->expects($this->any())->method('create')->willReturn($this->profile);
         $this->resourceMock->expects($this->atLeastOnce())
@@ -123,7 +93,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sequenceBuilder = $helper->getObject(
-            'Magento\SalesSequence\Model\Builder',
+            \Magento\SalesSequence\Model\Builder::class,
             [
                 'resourceMetadata' => $this->resourceSequenceMeta,
                 'metaFactory' => $this->metaFactory,

@@ -1,22 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Swatches\Test\Unit\Controller\Adminhtml\Product\Attribute\Plugin;
 
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider dataRequest
      */
     public function testBeforeDispatch($dataRequest, $runTimes)
     {
-        $subject = $this->getMock('\Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save', [], [], '', false);
-        $request = $this->getMock(
-            '\Magento\Framework\App\RequestInterface',
-            [
+        $subject = $this->createMock(\Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save::class);
+        $request = $this->createPartialMock(\Magento\Framework\App\RequestInterface::class, [
                 'getPostValue',
                 'setPostValue',
                 'getModuleName',
@@ -28,14 +26,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'getParams',
                 'getCookie',
                 'isSecure'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $controller = $objectManager->getObject('\Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin\Save');
+        $controller = $objectManager->getObject(
+            \Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin\Save::class
+        );
 
         $request->expects($this->once())->method('getPostValue')->willReturn($dataRequest);
         $request->expects($this->exactly($runTimes))->method('setPostValue')->willReturn($this->returnSelf());
@@ -43,6 +39,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $controller->beforeDispatch($subject, $request);
     }
 
+    /**
+     * @return array
+     */
     public function dataRequest()
     {
         return [

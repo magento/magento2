@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -11,8 +11,10 @@
             <data name="customer/data/firstname" xsi:type="string">john</data>
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
-            <data name="customer/data/password" xsi:type="string">123123q</data>
-            <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
+            <data name="customer/data/password" xsi:type="string">123123q#</data>
+            <data name="customer/data/password_confirmation" xsi:type="string">123123q#</data>
+            <data name="customer/data/website_id/dataset" xsi:type="string">default</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerFailRegisterMessage" />
         </variation>
     </testCase>

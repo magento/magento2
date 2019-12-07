@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminImportProductsActionGroup">
+        <annotations>
+            <description>Goes to the Admin Import page. Imports the provided File. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="behavior" type="string"/>
+            <argument name="validationStrategy" type="string" defaultValue="Stop on Error"/>
+            <argument name="allowedErrorsCount" type="string" defaultValue="10"/>
+            <argument name="importFile" type="string"/>
+            <argument name="importNoticeMessage" type="string" defaultValue=""/>
+            <argument name="importMessageType" type="string" defaultValue="success"/>
+            <argument name="importMessage" type="string" defaultValue="Import successfully done"/>
+        </arguments>
+
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
+        <waitForPageLoad stepKey="adminImportMainSectionLoad"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="{{behavior}}" stepKey="selectImportBehaviorOption"/>
+        <selectOption selector="{{AdminImportMainSection.validationStrategy}}" userInput="{{validationStrategy}}" stepKey="selectValidationStrategyOption"/>
+        <fillField selector="{{AdminImportMainSection.allowedErrorsCount}}" userInput="{{allowedErrorsCount}}" stepKey="fillAllowedErrorsCountField"/>
+        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="{{importFile}}" stepKey="attachFileForImport"/>
+        <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
+        <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
+        <waitForElementVisible selector="{{AdminImportValidationMessagesSection.notice}}" stepKey="waitForNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{importNoticeMessage}}" stepKey="seeNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.messageByType(importMessageType)}}" userInput="{{importMessage}}" stepKey="seeImportMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminImportProductsWithCheckValidationResultActionGroup" extends="AdminImportProductsActionGroup">
+        <arguments>
+            <argument name="validationNoticeMessage" type="string"/>
+            <argument name="validationMessage" type="string" defaultValue="File is valid! To start import process press &quot;Import&quot; button"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminImportValidationMessagesSection.notice}}" after="clickCheckDataButton" stepKey="waitForValidationNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{validationNoticeMessage}}" after="waitForValidationNoticeMessage" stepKey="seeValidationNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{validationMessage}}" after="seeValidationNoticeMessage" stepKey="seeValidationMessage"/>
+    </actionGroup>
+    <actionGroup name="AdminCheckDataForImportProductActionGroup">
+        <arguments>
+            <argument name="behavior" type="string" defaultValue="Add/Update"/>
+            <argument name="importFile" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
+        <waitForPageLoad stepKey="adminImportMainSectionLoad"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="{{behavior}}" stepKey="selectImportBehaviorOption"/>
+        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="{{importFile}}" stepKey="attachFileForImport"/>
+        <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+</actionGroups>

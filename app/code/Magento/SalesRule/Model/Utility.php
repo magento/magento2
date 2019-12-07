@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -182,15 +182,15 @@ class Utility
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deltaRoundingFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
         \Magento\Quote\Model\Quote\Item\AbstractItem $item
     ) {
-        $store = $item->getQuote()->getStore();
         $discountAmount = $discountData->getAmount();
         $baseDiscountAmount = $discountData->getBaseAmount();
+        $rowTotalInclTax = $item->getRowTotalInclTax();
+        $baseRowTotalInclTax = $item->getBaseRowTotalInclTax();
 
         //TODO Seems \Magento\Quote\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
         //that can not be used as array index
@@ -205,6 +205,23 @@ class Utility
             $this->_roundingDeltas[$percentKey] = $discountAmount - $this->priceCurrency->round($discountAmount);
             $this->_baseRoundingDeltas[$percentKey] = $baseDiscountAmount
                 - $this->priceCurrency->round($baseDiscountAmount);
+        }
+
+        /**
+         * When we have 100% discount check if totals will not be negative
+         */
+
+        if ($percentKey == 100) {
+            $discountDelta = $rowTotalInclTax - $discountAmount;
+            $baseDiscountDelta = $baseRowTotalInclTax - $baseDiscountAmount;
+
+            if ($discountDelta < 0) {
+                $discountAmount += $discountDelta;
+            }
+
+            if ($baseDiscountDelta < 0) {
+                $baseDiscountAmount += $baseDiscountDelta;
+            }
         }
 
         $discountData->setAmount($this->priceCurrency->round($discountAmount));

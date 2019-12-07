@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -42,6 +42,9 @@ class MultilineTest extends TextTest
         parent::testValidateValueRequired($value, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueRequiredDataProvider()
     {
         return array_merge(
@@ -66,6 +69,9 @@ class MultilineTest extends TextTest
         parent::testValidateValueLength($value, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueLengthDataProvider()
     {
         return array_merge(

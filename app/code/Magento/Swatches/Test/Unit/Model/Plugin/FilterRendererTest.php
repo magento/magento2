@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
 use Magento\Swatches\Model\Plugin\FilterRenderer;
 
-class FilterRendererTest extends \PHPUnit_Framework_TestCase
+class FilterRendererTest extends \PHPUnit\Framework\TestCase
 {
     /** @var FilterRenderer|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $plugin;
@@ -31,46 +31,24 @@ class FilterRendererTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $closureMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->layoutMock = $this->getMock(
-            '\Magento\Framework\View\Layout',
-            ['createBlock'],
-            [],
-            '',
-            false
+        $this->layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['createBlock']);
+
+        $this->swatchHelperMock = $this->createPartialMock(\Magento\Swatches\Helper\Data::class, ['isSwatchAttribute']);
+
+        $this->blockMock = $this->createPartialMock(
+            \Magento\Swatches\Block\LayeredNavigation\RenderLayered::class,
+            ['setSwatchFilter', 'toHtml']
         );
 
-        $this->swatchHelperMock = $this->getMock(
-            '\Magento\Swatches\Helper\Data',
-            ['isSwatchAttribute'],
-            [],
-            '',
-            false
+        $this->filterMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class,
+            ['getAttributeModel', 'hasAttributeModel']
         );
 
-        $this->blockMock = $this->getMock(
-            '\Magento\Swatches\Block\LayeredNavigation\RenderLayered',
-            ['setSwatchFilter', 'toHtml'],
-            [],
-            '',
-            false
-        );
-
-        $this->filterMock = $this->getMock(
-            '\Magento\Catalog\Model\Layer\Filter\AbstractFilter',
-            ['getAttributeModel', 'hasAttributeModel'],
-            [],
-            '',
-            false
-        );
-
-        $this->filterRendererMock = $this->getMock(
-            '\Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-            [],
-            [],
-            '',
-            false
+        $this->filterRendererMock = $this->createMock(
+            \Magento\LayeredNavigation\Block\Navigation\FilterRenderer::class
         );
 
         $this->closureMock = function () {
@@ -79,7 +57,7 @@ class FilterRendererTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->plugin = $objectManager->getObject(
-            'Magento\Swatches\Model\Plugin\FilterRenderer',
+            \Magento\Swatches\Model\Plugin\FilterRenderer::class,
             [
                 'layout' => $this->layoutMock,
                 'swatchHelper' => $this->swatchHelperMock
@@ -89,7 +67,7 @@ class FilterRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundRenderTrue()
     {
-        $attributeMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
+        $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $this->filterMock->expects($this->atLeastOnce())->method('getAttributeModel')->willReturn($attributeMock);
         $this->filterMock->expects($this->once())->method('hasAttributeModel')->willReturn(true);
         $this->swatchHelperMock
@@ -106,7 +84,7 @@ class FilterRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundRenderFalse()
     {
-        $attributeMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
+        $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $this->filterMock->expects($this->atLeastOnce())->method('getAttributeModel')->willReturn($attributeMock);
         $this->filterMock->expects($this->once())->method('hasAttributeModel')->willReturn(true);
         $this->swatchHelperMock

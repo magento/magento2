@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Translate\Test\Unit;
 
 use \Magento\Framework\Translate\Inline;
 
-class InlineTest extends \PHPUnit_Framework_TestCase
+class InlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -42,30 +42,12 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->scopeResolverMock =
-            $this->getMock('Magento\Framework\App\ScopeResolverInterface', [], [], '', false);
-        $this->urlMock = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
-        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
-        $this->configMock = $this->getMock(
-            'Magento\Framework\Translate\Inline\ConfigInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->parserMock = $this->getMock(
-            'Magento\Framework\Translate\Inline\ParserInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->stateMock = $this->getMock(
-            'Magento\Framework\Translate\Inline\StateInterface',
-            [],
-            [],
-            '',
-            false
-        );
+            $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);
+        $this->urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->configMock = $this->createMock(\Magento\Framework\Translate\Inline\ConfigInterface::class);
+        $this->parserMock = $this->createMock(\Magento\Framework\Translate\Inline\ParserInterface::class);
+        $this->stateMock = $this->createMock(\Magento\Framework\Translate\Inline\StateInterface::class);
     }
 
     /**
@@ -92,6 +74,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $model->isAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isAllowedDataProvider()
     {
         return [
@@ -144,6 +129,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($body, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function processResponseBodyStripInlineDataProvider()
     {
         return [
@@ -210,6 +198,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($body, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function processResponseBodyDataProvider()
     {
         return [
@@ -272,6 +263,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($body, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function processResponseBodyGetInlineScriptDataProvider()
     {
         return [
@@ -288,7 +282,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareIsAllowed($isEnabled, $isActive, $isDevAllowed, $scope = null)
     {
-        $scopeMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
+        $scopeMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->stateMock->expects($this->any())->method('isEnabled')->will($this->returnValue($isEnabled));
         $this->scopeResolverMock->expects(
             $this->once()

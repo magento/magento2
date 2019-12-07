@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -110,7 +110,7 @@ class Country extends \Magento\Config\Block\System\Config\Form\Field
             'store' => $this->getRequest()->getParam('store'),
             StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__',
         ];
-        $urlString = $this->_escaper->escapeJsQuote($this->_url->getUrl('*/*/*', $urlParams));
+        $urlString = $this->_escaper->escapeUrl($this->_url->getUrl('*/*/*', $urlParams));
         $jsString = '
             $("' . $element->getHtmlId() . '").observe("change", function () {
                 location.href = \'' . $urlString . '\'.replace("__country__", this.value);
@@ -119,8 +119,8 @@ class Country extends \Magento\Config\Block\System\Config\Form\Field
 
         if ($this->_defaultCountry) {
             $urlParams[self::REQUEST_PARAM_DEFAULT_COUNTRY] = '__default__';
-            $urlString = $this->_escaper->escapeJsQuote($this->_url->getUrl('*/*/*', $urlParams));
-            $jsParentCountry = $this->_escaper->escapeJsQuote($this->_defaultCountry);
+            $urlString = $this->_escaper->escapeUrl($this->_url->getUrl('*/*/*', $urlParams));
+            $jsParentCountry = $this->_escaper->escapeJs($this->_defaultCountry);
             $jsString .= '
                 $("' . $element->getHtmlId() . '_inherit").observe("click", function () {
                     if (this.checked) {

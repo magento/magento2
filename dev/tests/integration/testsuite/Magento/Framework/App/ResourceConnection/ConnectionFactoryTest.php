@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\ResourceConnection;
 
-class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection\ConnectionFactory
@@ -33,7 +33,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             'active' => true,
         ];
         $connection = $this->model->create($dbConfig);
-        $this->assertInstanceOf('\Magento\Framework\DB\Adapter\AdapterInterface', $connection);
-        $this->assertAttributeInstanceOf('\Magento\Framework\Db\LoggerInterface', 'logger', $connection);
+        $this->assertInstanceOf(\Magento\Framework\DB\Adapter\AdapterInterface::class, $connection);
+        $this->assertAttributeInstanceOf(\Magento\Framework\DB\LoggerInterface::class, 'logger', $connection);
     }
 }

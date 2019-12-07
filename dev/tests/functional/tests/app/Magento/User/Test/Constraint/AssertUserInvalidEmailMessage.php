@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class AssertUserInvalidEmailMessage extends AbstractConstraint
     {
         $expectedMessage = sprintf(self::ERROR_MESSAGE, $user->getEmail());
         $actualMessage = $userEdit->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong error message is displayed.'

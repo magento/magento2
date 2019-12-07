@@ -1,15 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/** @var \Magento\TestFramework\ObjectManager $objectManager */
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$objectManager->removeSharedInstance(\Magento\Catalog\Model\ProductRepository::class);
+$objectManager->removeSharedInstance(\Magento\Catalog\Model\Product\Option\Repository::class);
+$objectManager->removeSharedInstance(\Magento\Catalog\Model\Product\Option\SaveHandler::class);
+
+$productRepository = $objectManager->get(\Magento\Catalog\Model\ProductRepository::class);
+
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
+
 $product->setTypeId(
     'simple'
-)->setId(
-    1
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
@@ -32,29 +40,61 @@ $product->setTypeId(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setCanSaveCustomOptions(
     true
-)->setProductOptions(
+)->setStockData(
     [
-        [
-            'title' => 'drop_down option',
-            'type' => 'drop_down',
-            'is_require' => true,
-            'sort_order' => 4,
-            'values' => [
-                [
-                    'title' => 'drop_down option 1',
-                    'price' => 10,
-                    'price_type' => 'fixed',
-                    'sku' => 'drop_down option 1 sku',
-                    'sort_order' => 1,
-                ],
-                [
-                    'title' => 'drop_down option 2',
-                    'price' => 20,
-                    'price_type' => 'percent',
-                    'sku' => 'drop_down option 2 sku',
-                    'sort_order' => 2,
-                ],
-            ],
-        ]
+        'qty' => 0,
+        'is_in_stock' => 0,
+        'manage_stock' => 1,
     ]
-)->save();
+);
+
+$options = [
+    [
+        'title' => 'drop_down option',
+        'type' => 'drop_down',
+        'is_require' => true,
+        'sort_order' => 4,
+        'values' => [
+            [
+                'title' => 'drop_down option 1',
+                'price' => 10,
+                'price_type' => 'fixed',
+                'sku' => 'drop_down option 1 sku',
+                'sort_order' => 1,
+            ],
+            [
+                'title' => 'drop_down option 2',
+                'price' => 20,
+                'price_type' => 'percent',
+                'sku' => 'drop_down option 2 sku',
+                'sort_order' => 2,
+            ],
+        ],
+    ]
+];
+
+$customOptions = [];
+
+/** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
+$customOptionFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
+$optionValueFactory = $objectManager->create(
+    \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory::class
+);
+
+foreach ($options as $option) {
+    /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $customOption */
+    $customOption = $customOptionFactory->create(['data' => $option]);
+    $customOption->setProductSku($product->getSku());
+    if (isset($option['values'])) {
+        $values = [];
+        foreach ($option['values'] as $value) {
+            $value = $optionValueFactory->create(['data' => $value]);
+            $values[] = $value;
+        }
+        $customOption->setValues($values);
+    }
+    $customOptions[] = $customOption;
+}
+
+$product->setOptions($customOptions);
+$product->save();

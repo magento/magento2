@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,32 +15,49 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * BundleService model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 100.2.0
+ * @see \Magento\Deploy\Service\Bundle
  */
 class Manager
 {
+    const BUNDLE_JS_DIR = 'js/bundle';
+
     const BUNDLE_PATH = '/js/bundle/bundle';
 
     const ASSET_TYPE_JS = 'js';
 
     const ASSET_TYPE_HTML = 'html';
 
-    /** @var Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
     protected $filesystem;
 
-    /** @var  Bundle */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle
+     */
     protected $bundle;
 
-    /** @var Bundle\ConfigInterface  */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface
+     */
     protected $bundleConfig;
 
-    /** @var Asset\ConfigInterface  */
+    /**
+     * @var \Magento\Framework\View\Asset\ConfigInterface
+     */
     protected $assetConfig;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $excluded = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
+
     /**
      * @var Asset\Minification
      */
@@ -127,7 +144,7 @@ class Manager
         /** @var $asset LocalInterface */
         $filePathInfo = $this->splitPath($filePath);
         if ($filePathInfo && $this->compareModules($filePathInfo, $asset)) {
-            return $asset->getSourceFile() == $filePathInfo['excludedPath'];
+            return $asset->getFilePath() == $filePathInfo['excludedPath'];
         }
         return false;
     }
@@ -158,7 +175,7 @@ class Manager
      */
     protected function splitPath($path)
     {
-        if (strpos($path, '::') > 0) {
+        if (strpos($path, '::') !== false) {
             list($excludedModule, $excludedPath) = explode('::', $path);
             return [
                 'excludedModule' => $excludedModule,
@@ -176,7 +193,7 @@ class Manager
      */
     public function addAsset(LocalInterface $asset)
     {
-        if (!($this->isValidAsset($asset))) {
+        if (!$this->isValidAsset($asset)) {
             return false;
         }
 
@@ -237,13 +254,8 @@ class Manager
             return false;
         }
 
-        if ($type == self::ASSET_TYPE_HTML) {
-            return $asset->getModule() !== '';
-        }
-
         return true;
     }
-
 
     /**
      * Flush bundle

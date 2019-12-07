@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper;
 
-class ExtendsTest extends \PHPUnit_Framework_TestCase
+class ExtendsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Mapper\ExtendsMapper
@@ -20,7 +20,7 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testMapDataProvider
+     * @dataProvider mapDataProvider
      * @param array $sourceData
      * @param array $resultData
      */
@@ -31,10 +31,8 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
 
     public function testMapWithBadPath()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            'Invalid path in extends attribute of config/system/sections/section1 node'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid path in extends attribute of config/system/sections/section1 node');
         $sourceData = [
             'config' => [
                 'system' => ['sections' => ['section1' => ['extends' => 'nonExistentSection2']]],
@@ -44,7 +42,10 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
         $this->_sut->map($sourceData);
     }
 
-    public function testMapDataProvider()
+    /**
+     * @return array
+     */
+    public function mapDataProvider()
     {
         return [
             [[], []],
@@ -55,6 +56,9 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     protected function _emptySectionsNodeData()
     {
         $data = ['config' => ['system' => ['sections' => 'some_non_array']]];
@@ -62,6 +66,9 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
         return [$data, $data];
     }
 
+    /**
+     * @return array
+     */
     protected function _extendFromASiblingData()
     {
         $source = $result = [
@@ -81,6 +88,9 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
         return [$source, $result];
     }
 
+    /**
+     * @return array
+     */
     protected function _extendFromNodeOnHigherLevelData()
     {
         $source = $result = [
@@ -114,6 +124,9 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
         return [$source, $result];
     }
 
+    /**
+     * @return array
+     */
     protected function _extendWithMerge()
     {
         $source = $result = [

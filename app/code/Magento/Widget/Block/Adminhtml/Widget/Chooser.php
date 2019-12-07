@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
+/**
+ * Chooser widget block.
+ */
 class Chooser extends \Magento\Backend\Block\Template
 {
     /**
@@ -158,7 +161,7 @@ class Chooser extends \Magento\Backend\Block\Template
 
         $buttons = $config->getButtons();
         $chooseButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setType(
             'button'
         )->setId(
@@ -180,7 +183,7 @@ class Chooser extends \Magento\Backend\Block\Template
             <label class="widget-option-label" id="' .
             $chooserId .
             'label">' .
-            ($this->getLabel() ? $this->getLabel() : __(
+            ($this->getLabel() ? $this->escapeHtml($this->getLabel()) : __(
                 'Not Selected'
             )) .
             '</label>
@@ -216,11 +219,7 @@ class Chooser extends \Magento\Backend\Block\Template
                         }
                     }
 
-                    if (document.loaded) { //allow load over ajax
-                        instantiateChooser();
-                    } else {
-                        document.observe("dom:loaded", instantiateChooser);
-                    }
+                    jQuery(instantiateChooser);
                 })();
             //]]>
             });

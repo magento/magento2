@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\View\Asset\File;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\Source|\PHPUnit_Framework_MockObject_MockObject
@@ -30,11 +30,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->source = $this->getMock('Magento\Framework\View\Asset\Source', [], [], '', false);
-        $this->context = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\ContextInterface');
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+        $this->source = $this->createMock(\Magento\Framework\View\Asset\Source::class);
+        $this->context = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\ContextInterface::class);
+        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -134,6 +134,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($content, $this->object->getContent()); // no in-memory caching for content
     }
 
+    /**
+     * @return array
+     */
     public function getContentDataProvider()
     {
         return [

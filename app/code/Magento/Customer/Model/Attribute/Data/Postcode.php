@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model\Attribute\Data;
 
 use Magento\Directory\Helper\Data as DirectoryHelper;
@@ -13,7 +14,8 @@ use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
 
 /**
- * Customer Address Postal/Zip Code Attribute Data Model
+ * Customer Address Postal/Zip Code Attribute Data Model.
+ *
  * This Data Model Has to Be Set Up in additional EAV attribute table
  */
 class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
@@ -40,7 +42,8 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
     }
 
     /**
-     * Validate postal/zip code
+     * Validate postal/zip code.
+     *
      * Return true and skip validation if country zip code is optional
      *
      * @param array|string $value
@@ -49,7 +52,6 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
     public function validateValue($value)
     {
         $attribute = $this->getAttribute();
-        $label = __($attribute->getStoreLabel());
 
         $countryId = $this->getExtractedData('country_id');
         if ($this->directoryHelper->isZipCodeOptional($countryId)) {
@@ -58,6 +60,7 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
         $errors = [];
         if (empty($value) && $value !== '0') {
+            $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
         if (count($errors) == 0) {
@@ -104,7 +107,7 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
     }
 
     /**
-     * Return formated attribute value from entity model
+     * Return formatted attribute value from entity model
      *
      * @param string $format
      * @return string|array

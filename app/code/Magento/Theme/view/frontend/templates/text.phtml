@@ -1,15 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-$attributes = $block->getCssClass() ? ' class="' . $block->getCssClass() . '"' : '';
+$attributes = $block->getCssClass() ? ' class="' . $block->escapeHtmlAttr($block->getCssClass()) . '"' : '';
 $attr = $block->getAttributes();
 if (!empty($attr)) {
     foreach ($block->getAttributes() as $attribute => $value) {
-        $attributes .= ' ' . $attribute . '="' . $value . '"';
+        $attributes .= ' ' . $block->escapeHtml($attribute) . '="' . $block->escapeHtmlAttr($value) . '"';
     }
-};
-echo
-    '<' . $block->getTag() . $attributes . '>' . $block->getText() . '</' . $block->getTag() . '>';
+}
+/* @noEscape */ echo '<'
+    . $block->escapeHtml($block->getTag())
+    . $attributes
+    . '>'
+    . $block->escapeHtml($block->getText())
+    . '</'
+    . $block->escapeHtml($block->getTag())
+    . '>';

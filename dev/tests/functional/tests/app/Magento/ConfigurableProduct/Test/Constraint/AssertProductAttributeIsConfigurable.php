@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config as TabVariation;
+use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config as SectionVariation;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -36,12 +36,12 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         $productGrid->getGridPageActionBlock()->addProduct('configurable');
         $productBlockForm = $newProductPage->getProductForm();
         $productBlockForm->fill($assertProduct);
-        $productBlockForm->openTab('variations');
-        /** @var \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config  $variationsTab */
-        $variationsTab = $productBlockForm->getTab('variations');
-        $variationsTab->createConfigurations();
-        $attributesGrid = $variationsTab->getAttributeBlock()->getAttributesGrid();
-        \PHPUnit_Framework_Assert::assertTrue(
+        $productBlockForm->openSection('variations');
+        /** @var SectionVariation  $variationsSection */
+        $variationsSection = $productBlockForm->getSection('variations');
+        $variationsSection->createConfigurations();
+        $attributesGrid = $variationsSection->getAttributeBlock()->getAttributesGrid();
+        \PHPUnit\Framework\Assert::assertTrue(
             $attributesGrid->isRowVisible(['frontend_label' => $attribute->getFrontendLabel()]),
             "Product attribute is absent on the product page."
         );

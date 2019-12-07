@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Test\Integrity\App\Language;
 use Magento\Framework\App\Language\Config;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class CircularDependencyTest extends \PHPUnit_Framework_TestCase
+class CircularDependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config[][]
@@ -24,10 +24,10 @@ class CircularDependencyTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $componentRegistrar = new ComponentRegistrar();
         $declaredLanguages = $componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
-        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
-        $domFactoryMock = $this->getMock('Magento\Framework\Config\DomFactory', [], [], '', false);
+        $domFactoryMock = $this->createMock(\Magento\Framework\Config\DomFactory::class);
         $domFactoryMock->expects($this->any())
             ->method('createDom')
             ->willReturnCallback(
@@ -45,7 +45,7 @@ class CircularDependencyTest extends \PHPUnit_Framework_TestCase
         $packs = [];
         foreach ($declaredLanguages as $language) {
             $languageConfig = $objectManager->getObject(
-                'Magento\Framework\App\Language\Config',
+                \Magento\Framework\App\Language\Config::class,
                 [
                     'source' => file_get_contents($language . '/language.xml'),
                     'domFactory' => $domFactoryMock

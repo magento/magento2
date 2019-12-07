@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateWishlistTest">
+        <annotations>
+            <title value="Displaying of message after Wish List update"/>
+            <stories value="MAGETWO-91666: Wishlist update does not return a success message"/>
+            <description value="Displaying of message after Wish List update"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94296"/>
+            <group value="Wishlist"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" stepKey="checkProductInWishlist">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerEditProductInWishlist" stepKey="updateProductInWishlist">
+            <argument name="product" value="$$product$$"/>
+            <argument name="description" value="some text"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+    </test>
+</tests>

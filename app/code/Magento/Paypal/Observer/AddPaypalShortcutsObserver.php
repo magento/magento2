@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Observer;
 
+use Magento\Paypal\Helper\Shortcut\Factory;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Paypal\Model\Config as PaypalConfig;
+use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton as MinicartSmartButton;
+use Magento\Paypal\Block\Express\InContext\SmartButton as SmartButton;
 
 /**
  * PayPal module observer
@@ -15,7 +18,7 @@ use Magento\Paypal\Model\Config as PaypalConfig;
 class AddPaypalShortcutsObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Paypal\Helper\Shortcut\Factory
+     * @var Factory
      */
     protected $shortcutFactory;
 
@@ -27,11 +30,11 @@ class AddPaypalShortcutsObserver implements ObserverInterface
     /**
      * Constructor
      *
-     * @param \Magento\Paypal\Helper\Shortcut\Factory $shortcutFactory
+     * @param Factory $shortcutFactory
      * @param PaypalConfig $paypalConfig
      */
     public function __construct(
-        \Magento\Paypal\Helper\Shortcut\Factory $shortcutFactory,
+        Factory $shortcutFactory,
         PaypalConfig $paypalConfig
     ) {
         $this->shortcutFactory = $shortcutFactory;
@@ -49,12 +52,15 @@ class AddPaypalShortcutsObserver implements ObserverInterface
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
         $blocks = [
-            'Magento\Paypal\Block\Express\Shortcut' => PaypalConfig::METHOD_WPP_EXPRESS,
-            'Magento\Paypal\Block\WpsExpress\Shortcut' => PaypalConfig::METHOD_WPS_EXPRESS,
-            'Magento\Paypal\Block\PayflowExpress\Shortcut' => PaypalConfig::METHOD_WPP_PE_EXPRESS,
-            'Magento\Paypal\Block\Bml\Shortcut' => PaypalConfig::METHOD_WPP_EXPRESS,
-            'Magento\Paypal\Block\WpsBml\Shortcut' => PaypalConfig::METHOD_WPS_EXPRESS,
-            'Magento\Paypal\Block\Payflow\Bml\Shortcut' => PaypalConfig::METHOD_WPP_PE_EXPRESS
+            MinicartSmartButton::class =>
+                PaypalConfig::METHOD_WPS_EXPRESS,
+            SmartButton::class => PaypalConfig::METHOD_WPS_EXPRESS,
+            \Magento\Paypal\Block\Express\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
+            \Magento\Paypal\Block\Bml\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
+            \Magento\Paypal\Block\WpsExpress\Shortcut::class => PaypalConfig::METHOD_WPS_EXPRESS,
+            \Magento\Paypal\Block\WpsBml\Shortcut::class => PaypalConfig::METHOD_WPS_EXPRESS,
+            \Magento\Paypal\Block\PayflowExpress\Shortcut::class => PaypalConfig::METHOD_WPP_PE_EXPRESS,
+            \Magento\Paypal\Block\Payflow\Bml\Shortcut::class => PaypalConfig::METHOD_WPP_PE_EXPRESS
         ];
         foreach ($blocks as $blockInstanceName => $paymentMethodCode) {
             if (!$this->paypalConfig->isMethodAvailable($paymentMethodCode)) {
@@ -74,11 +80,9 @@ class AddPaypalShortcutsObserver implements ObserverInterface
                 '',
                 $params
             );
-            $shortcut->setIsInCatalogProduct(
-                $observer->getEvent()->getIsCatalogProduct()
-            )->setShowOrPosition(
-                $observer->getEvent()->getOrPosition()
-            );
+            $shortcut->setIsInCatalogProduct($observer->getEvent()->getIsCatalogProduct())
+                ->setShowOrPosition($observer->getEvent()->getOrPosition())
+                ->setIsShoppingCart((bool) $observer->getEvent()->getIsShoppingCart());
             $shortcutButtons->addShortcut($shortcut);
         }
     }

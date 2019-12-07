@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\MediaStorage\Model\File;
 
@@ -14,7 +12,10 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class Storage
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Storage extends AbstractModel
 {
@@ -168,7 +169,7 @@ class Storage extends AbstractModel
      */
     public function getStorageModel($storage = null, $params = [])
     {
-        if (is_null($storage)) {
+        if ($storage === null) {
             $storage = $this->_coreFileStorage->getCurrentStorageCode();
         }
 
@@ -292,7 +293,10 @@ class Storage extends AbstractModel
             $config['allowed_resources'][] = $allowedResource;
         }
 
-        $config['update_time'] = $this->_scopeConfig->getValue(self::XML_PATH_MEDIA_UPDATE_TIME, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $config['update_time'] = $this->_scopeConfig->getValue(
+            self::XML_PATH_MEDIA_UPDATE_TIME,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
 
         return $config;
     }

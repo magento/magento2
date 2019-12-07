@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Block\Adminhtml\Dashboard;
 
 /**
  *  Dashboard last search keywords block
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Top extends \Magento\Backend\Block\Dashboard\Grid
 {
@@ -26,7 +28,9 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected $_moduleManager;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
     /**
@@ -49,6 +53,8 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -58,7 +64,7 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareCollection()
     {
@@ -82,7 +88,7 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -91,8 +97,10 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
             [
                 'header' => __('Search Term'),
                 'sortable' => false,
-                'index' => 'name',
-                'renderer' => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery'
+                'index' => 'query_text',
+                'renderer' => \Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery::class,
+                'header_css_class' => 'col-search-query',
+                'column_css_class' => 'col-search-query'
             ]
         );
 
@@ -113,7 +121,7 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

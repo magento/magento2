@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 $target = $block->getTarget();
 $label = $block->getLabel();
 ?>
-<a class="action skip <?php /* @escapeNotVerified */ echo $target?>" href="#<?php /* @escapeNotVerified */ echo $target?>"><span><?php /* @escapeNotVerified */ echo $label ?></span></a>
+<a class="action skip <?= $block->escapeHtmlAttr($target) ?>"
+   href="#<?= $block->escapeHtmlAttr($target) ?>">
+    <span>
+        <?= $block->escapeHtml($label) ?>
+    </span>
+</a>

@@ -1,20 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Label
  */
-namespace Magento\Framework\Data\Test\Unit\Form\Element;
-
-class LabelTest extends \PHPUnit_Framework_TestCase
+class LabelTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_objectManagerMock;
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
 
     /**
      * @var \Magento\Framework\Data\Form\Element\Label
@@ -23,19 +20,16 @@ class LabelTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $collectionFactoryMock = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\CollectionFactory',
-            [],
-            [],
-            '',
-            false
+        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $escaper = $this->objectManager->getObject(
+            \Magento\Framework\Escaper::class
         );
-        $escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
         $this->_label = new \Magento\Framework\Data\Form\Element\Label(
             $factoryMock,
             $collectionFactoryMock,
-            $escaperMock
+            $escaper
         );
     }
 

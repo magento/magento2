@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">search_synonyms_form.synonyms_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">General Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save_and_continue" class="Magento\Search\Block\Adminhtml\Synonyms\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Magento\Search\Block\Adminhtml\Synonyms\Edit\SaveButton"/>
+            <button name="reset" class="Magento\Search\Block\Adminhtml\Synonyms\Edit\ResetButton"/>
+            <button name="delete" class="Magento\Search\Block\Adminhtml\Synonyms\Edit\DeleteButton"/>
+            <button name="back" class="Magento\Search\Block\Adminhtml\Synonyms\Edit\BackButton"/>
+        </buttons>
+        <namespace>search_synonyms_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>search_synonyms_form.synonyms_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="synonyms_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="search/synonyms/save"/>
+        </settings>
+        <dataProvider class="Magento\Search\Model\Synonym\DataProvider" name="synonyms_form_data_source">
+            <settings>
+                <requestFieldName>group_id</requestFieldName>
+                <primaryFieldName>group_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">General Information</label>
+        </settings>
+        <field name="group_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">block</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>group_id</dataScope>
+            </settings>
+        </field>
+        <field name="scope" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">block</item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>int</dataType>
+                <tooltip>
+                    <link>https://docs.magento.com/m2/ce/user_guide/stores/websites-stores-views.html</link>
+                    <description translate="true">You can adjust the scope of this synonym group by selecting an option from the list.</description>
+                </tooltip>
+                <label translate="true">Scope</label>
+                <dataScope>scope_id</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Search\Ui\Component\Listing\Column\Scope\Options"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="synonyms" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">block</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <tooltip>
+                    <description translate="true">Comma-separated list of synonyms. The terms entered (separated by commas) will be used as an “OR” search query to search your entire store. For example, if you enter “shoes,footwear”, and user were to search for "shoes", the search results will include any product or content with term “shoes" or "footwear.”</description>
+                </tooltip>
+                <label translate="true">Synonyms</label>
+                <dataScope>synonyms</dataScope>
+            </settings>
+        </field>
+        <field name="mergeOnConflict" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">block</item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <additionalClasses>
+                    <class name="admin__field-no-label">true</class>
+                </additionalClasses>
+                <tooltip>
+                    <description translate="true">Automatically merges synonyms in groups that share the same scope. If you check this box and you add one or more of the same terms to different synonym groups in the same scope, automatically merges all the terms to one group. If this isn't what you want, uncheck the box and an error displays if you try to add the same terms.</description>
+                </tooltip>
+                <dataScope>mergeOnConflict</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="boolean">false</map>
+                            <map name="true" xsi:type="boolean">true</map>
+                        </valueMap>
+                        <description translate="true">Merge existing synonyms</description>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

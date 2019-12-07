@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="OrderReportMainSection">
+        <element name="showReport" type="button" selector="#filter_form_submit" timeout="60"/>
+        <element name="here" type="text" selector="//a[contains(text(), 'here')]" timeout="60"/>
+    </section>
+
+    <section name="OrderReportFilterSection">
+        <element name="dateFrom" type="input" selector="#sales_report_from"/>
+        <element name="dateTo" type="input" selector="#sales_report_to"/>
+        <element name="orderStatus" type="select" selector="#sales_report_show_order_statuses"/>
+        <element name="optionAny" type="select" selector="//select[@id='sales_report_show_order_statuses']/option[contains(text(), 'Any')]"/>
+        <element name="optionSpecified" type="select" selector="//select[@id='sales_report_show_order_statuses']/option[contains(text(), 'Specified')]"/>
+        <element name="orderStatusSpecified" type="select" selector="#sales_report_order_statuses"/>
+    </section>
+
+    <section name="GeneratedReportSection">
+        <element name="ordersCount" type="text" selector="//tr[@class='totals']/th[@class=' col-orders col-orders_count col-number']"/>
+        <element name="canceledOrders" type="text" selector="//tr[@class='totals']/th[@class=' col-canceled col-total_canceled_amount a-right']"/>
+    </section>
+</sections>

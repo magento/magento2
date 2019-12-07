@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * PHP Copy Paste Detector v1.4.0 tool wrapper
@@ -48,7 +46,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
     }
 
     /**
-     * Whether the tool can be ran on the current environment
+     * Whether the tool can be run in the current environment
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      *
@@ -56,7 +54,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
      */
     public function canRun()
     {
-        exec('phpcpd --version', $output, $exitCode);
+        exec($this->getCommand() . ' --version', $output, $exitCode);
         return $exitCode === 0;
     }
 
@@ -70,21 +68,37 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
      */
     public function run(array $whiteList)
     {
-        $blackListStr = ' ';
+        $blacklistedDirs = [];
+        $blacklistedFileNames = [];
         foreach ($this->blacklist as $file) {
             $file = escapeshellarg(trim($file));
             if (!$file) {
                 continue;
             }
-            $blackListStr .= '--exclude ' . $file . ' ';
+            $ext = pathinfo($file, PATHINFO_EXTENSION);
+            if ($ext != '') {
+                $blacklistedFileNames[] = $file;
+            } else {
+                $blacklistedDirs[] = '--exclude ' . $file . ' ';
+            }
         }
 
-        $command = 'phpcpd' . ' --log-pmd ' . escapeshellarg(
-                $this->reportFile
-            ) . ' --min-lines 13' . $blackListStr . ' ' . implode(' ', $whiteList);
-
+        $command = $this->getCommand() . ' --log-pmd ' . escapeshellarg($this->reportFile)
+            . ' --names-exclude ' . join(',', $blacklistedFileNames) . ' --min-lines 13 ' . join(' ', $blacklistedDirs)
+            . ' ' . implode(' ', $whiteList);
         exec($command, $output, $exitCode);
 
         return !(bool)$exitCode;
+    }
+
+    /**
+     * Get PHPCPD command
+     *
+     * @return string
+     */
+    private function getCommand()
+    {
+        $vendorDir = require BP . '/app/etc/vendor_path.php';
+        return 'php ' . BP . '/' . $vendorDir . '/bin/phpcpd';
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Checks\CanUseForCountry;
@@ -8,6 +8,14 @@ namespace Magento\Payment\Model\Checks\CanUseForCountry;
 use Magento\Quote\Model\Quote;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 
+/**
+ * Select country which will be used for payment.
+ *
+ * This class may be extended if logic fo country selection should be modified.
+ *
+ * @api
+ * @since 100.0.2
+ */
 class CountryProvider
 {
     /**
@@ -31,8 +39,8 @@ class CountryProvider
      */
     public function getCountry(Quote $quote)
     {
-        $address = $quote->isVirtual() ? $quote->getBillingAddress() : $quote->getShippingAddress();
-        return $address
+        $address = $quote->getBillingAddress() ? : $quote->getShippingAddress();
+        return (!empty($address) && !empty($address->getCountry()))
             ? $address->getCountry()
             : $this->directoryHelper->getDefaultCountry();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-class ElementTest extends \PHPUnit_Framework_TestCase
+class ElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider elementNameDataProvider
@@ -20,6 +20,9 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($name, $model->getElementName());
     }
 
+    /**
+     * @return array
+     */
     public function elementNameDataProvider()
     {
         return [
@@ -31,6 +34,9 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function cacheableDataProvider()
     {
         return [

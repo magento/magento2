@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Observer\Backend;
@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
+class CustomerQuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Ensure that customer group is updated in customer quote, when it is changed for the customer.
@@ -26,13 +26,13 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CustomerInterface $customer */
         /** @var CustomerRepositoryInterface $repository */
-        $repository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $repository = Bootstrap::getObjectManager()->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var CustomerRegistry $registry */
-        $registry = Bootstrap::getObjectManager()->create('Magento\Customer\Model\CustomerRegistry');
+        $registry = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\CustomerRegistry::class);
         $customer = $repository->getById($registry->retrieveByEmail('customer@example.com')->getId());
 
         /** @var Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+        $quote = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test01', 'reserved_order_id');
         $quote->setCustomerIsGuest(false)->setCustomerId($customer->getId())
             ->setCustomerGroupId($customer->getGroupId())

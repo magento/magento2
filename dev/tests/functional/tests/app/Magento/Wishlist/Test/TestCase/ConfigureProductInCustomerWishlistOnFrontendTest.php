@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,14 +22,14 @@ use Magento\Customer\Test\Fixture\Customer;
  * 4. Click 'Ok'
  * 5. Perform assertions
  *
- * @group Wishlist_(CS)
+ * @group Wishlist
  * @ZephyrId MAGETWO-29507
  */
 class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
+    const STABLE = 'no';
     /* end tags */
 
     /**

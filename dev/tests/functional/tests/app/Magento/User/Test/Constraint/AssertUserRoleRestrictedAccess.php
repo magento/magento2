@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,13 +10,16 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\User\Test\Fixture\User;
+use Magento\User\Test\TestStep\LoginUserOnBackendWithErrorStep;
 
 /**
  * Asserts that user has only related permissions.
  */
 class AssertUserRoleRestrictedAccess extends AbstractConstraint
 {
-    const DENIED_ACCESS = 'Access denied';
+    const DENIED_ACCESS = 'Sorry, you need permissions to view this content.';
+
+    protected $loginStep = 'Magento\User\Test\TestStep\LoginUserOnBackendStep';
 
     /**
      * Asserts that user has only related permissions.
@@ -35,14 +38,17 @@ class AssertUserRoleRestrictedAccess extends AbstractConstraint
         array $restrictedAccess,
         $denyUrl
     ) {
-        $this->objectManager->create('Magento\User\Test\TestStep\LoginUserOnBackendStep', ['user' => $user])->run();
+        $this->objectManager->create(
+            $this->loginStep,
+            ['user' => $user]
+        )->run();
 
         $menuItems = $dashboard->getMenuBlock()->getTopMenuItems();
-        \PHPUnit_Framework_Assert::assertEquals($menuItems, $restrictedAccess, 'Wrong display menu.');
+        \PHPUnit\Framework\Assert::assertEquals($menuItems, $restrictedAccess, 'Wrong display menu.');
 
         $browser->open($_ENV['app_backend_url'] . $denyUrl);
         $deniedMessage = $dashboard->getAccessDeniedBlock()->getTextFromAccessDeniedBlock();
-        \PHPUnit_Framework_Assert::assertEquals(self::DENIED_ACCESS, $deniedMessage, 'Possible access to denied page.');
+        \PHPUnit\Framework\Assert::assertEquals(self::DENIED_ACCESS, $deniedMessage, 'Possible access to denied page.');
     }
 
     /**

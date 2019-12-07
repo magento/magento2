@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
+
 /**
  * Cookie settings initialization script
  *
@@ -17,10 +16,10 @@
         "*": {
             "mage/cookies": {
                 "expires": null,
-                "path": "<?php /* @escapeNotVerified */ echo $block->getPath()?>",
-                "domain": "<?php /* @escapeNotVerified */ echo $block->getDomain()?>",
+                "path": "<?= $block->escapeJs($block->getPath()) ?>",
+                "domain": "<?= $block->escapeJs($block->getDomain()) ?>",
                 "secure": false,
-                "lifetime": "<?php /* @escapeNotVerified */ echo $block->getLifetime()?>"
+                "lifetime": "<?= $block->escapeJs($block->getLifetime()) ?>"
             }
         }
     }

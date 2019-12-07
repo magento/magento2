@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="form.additional.info">
-            <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-">
+            <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-" cacheable="false">
                 <action method="setFormId">
                     <argument name="formId" xsi:type="string">user_create</argument>
                 </action>

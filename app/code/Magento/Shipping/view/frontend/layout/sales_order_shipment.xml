@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,14 +10,14 @@
     <body>
         <referenceContainer name="content">
             <block class="Magento\Shipping\Block\Order\Shipment" name="sales.order.shipment" cacheable="false" after="sales.order.info.links">
-                <block class="Magento\Shipping\Block\Items" name="shipment_items" template="items.phtml">
+                <block class="Magento\Shipping\Block\Items" name="shipment_items" template="Magento_Shipping::items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.shipment.renderers" as="renderer.list"/>
-                    <block class="Magento\Shipping\Block\Tracking\Link" name="track-all-link" template="tracking/link.phtml">
+                    <block class="Magento\Shipping\Block\Tracking\Link" name="track-all-link" template="Magento_Shipping::tracking/link.phtml">
                         <arguments>
-                            <argument name="label" xsi:type="string">Track All Shipments</argument>
+                            <argument name="label" xsi:type="string" translate="true">Track All Shipments</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Sales\Block\Order\Comments" name="shipment_comments" template="order/comments.phtml"/>
+                    <block class="Magento\Sales\Block\Order\Comments" name="shipment_comments" template="Magento_Sales::order/comments.phtml"/>
                 </block>
             </block>
         </referenceContainer>

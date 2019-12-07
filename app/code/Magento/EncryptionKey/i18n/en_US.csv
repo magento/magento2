@@ -1,20 +1,14 @@
-ID,ID
-No,No
-Yes,Yes
-Username,Username
-"Encryption Key","Encryption Key"
 "Change Encryption Key","Change Encryption Key"
+"Encryption Key","Encryption Key"
 "New Encryption Key","New Encryption Key"
 "The encryption key is used to protect passwords and other sensitive data.","The encryption key is used to protect passwords and other sensitive data."
 "Auto-generate a Key","Auto-generate a Key"
+No,No
+Yes,Yes
 "The generated key will be displayed after changing.","The generated key will be displayed after changing."
 "New Key","New Key"
-"To enable a key change this file must be writable: %1.","To enable a key change this file must be writable: %1."
+"Deployment configuration file is not writable.","Deployment configuration file is not writable."
 "Please enter an encryption key.","Please enter an encryption key."
 "The encryption key has been changed.","The encryption key has been changed."
-"This is your new encryption key: <span style=""font-family:monospace;"">%1</span>. Be sure to write it down and take good care of it!","This is your new encryption key: <span style=""font-family:monospace;"">%1</span>. Be sure to write it down and take good care of it!"
-"Not supported cipher version","Not supported cipher version"
-"The encryption key format is invalid.","The encryption key format is invalid."
-"File %1 is not writeable.","File %1 is not writeable."
-"Encryption Key Change","Encryption Key Change"
+"This is your new encryption key: %1. Be sure to write it down and take good care of it!","This is your new encryption key: %1. Be sure to write it down and take good care of it!"
 "Manage Encryption Key","Manage Encryption Key"

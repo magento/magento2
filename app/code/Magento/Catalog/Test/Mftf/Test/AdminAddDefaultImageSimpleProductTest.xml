@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddDefaultImageSimpleProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add default image for a Simple Product"/>
+            <description value="Admin should be able to add default images for a Simple Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-113"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateSimpleProduct">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillSimpleProductMain">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+
+        <!-- Add image to product -->
+        <actionGroup ref="addProductImage" stepKey="addImageForProductSimple">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+
+        <!-- Assert product image in admin product form -->
+        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+
+        <!-- Assert product image in storefront product page -->
+        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
+            <argument name="product" value="SimpleProduct3"/>
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
@@ -10,7 +10,7 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PrintLabelTest extends \PHPUnit_Framework_TestCase
+class PrintLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
@@ -74,56 +74,30 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->shipmentLoaderMock = $this->getMock(
-            'Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader',
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
-            [],
-            '',
-            false
+        $this->shipmentLoaderMock = $this->createPartialMock(
+            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
         );
-        $this->labelGenerator = $this->getMock(
-            'Magento\Shipping\Model\Shipping\LabelGenerator',
-            ['createPdfPageFromImageString'],
-            [],
-            '',
-            false
+        $this->labelGenerator = $this->createPartialMock(
+            \Magento\Shipping\Model\Shipping\LabelGenerator::class,
+            ['createPdfPageFromImageString']
         );
-        $this->fileFactoryMock = $this->getMock(
-            'Magento\Framework\App\Response\Http\FileFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->fileFactoryMock = $this->createPartialMock(
+            \Magento\Framework\App\Response\Http\FileFactory::class,
+            ['create']
         );
-        $this->shipmentMock = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
-            ['getIncrementId', 'getShippingLabel', '__wakeup'],
-            [],
-            '',
-            false
+        $this->shipmentMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Shipment::class,
+            ['getIncrementId', 'getShippingLabel', '__wakeup']
         );
-        $this->messageManagerMock = $this->getMock(
-            'Magento\Framework\Message\Manager',
-            ['addError'],
-            [],
-            '',
-            false
-        );
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', ['getParam'], [], '', false);
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->sessionMock = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
-        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->helperMock = $this->getMock(
-            'Magento\Backend\Helper\Data',
-            ['getUrl'],
-            [],
-            '',
-            false
-        );
-        $contextMock = $this->getMock(
-            'Magento\Backend\App\Action\Context',
-            [
+        $this->messageManagerMock = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addError']);
+        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->helperMock = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getRequest',
                 'getResponse',
                 'getMessageManager',
@@ -131,11 +105,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
                 'getActionFlag',
                 'getObjectManager',
                 'getHelper'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
@@ -259,20 +229,8 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
     public function testExecuteFromImageString()
     {
         $labelContent = 'Label-content';
-        $pdfPageMock = $this->getMock(
-            'Zend_Pdf_Page',
-            ['render', 'getPageDictionary'],
-            [],
-            '',
-            false
-        );
-        $pageDictionaryMock = $this->getMock(
-            'Zend_Pdf_Element_Dictionary',
-            ['touch', 'getObject'],
-            [],
-            '',
-            false
-        );
+        $pdfPageMock = $this->createPartialMock(\Zend_Pdf_Page::class, ['render', 'getPageDictionary']);
+        $pageDictionaryMock = $this->createPartialMock(\Zend_Pdf_Element_Dictionary::class, ['touch', 'getObject']);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -302,7 +260,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
         $labelContent = 'Label-content';
         $incrementId = '1000001';
 
-        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -327,7 +285,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Psr\Log\LoggerInterface')
+            ->with(\Psr\Log\LoggerInterface::class)
             ->will($this->returnValue($loggerMock));
         $loggerMock->expects($this->once())
             ->method('critical');

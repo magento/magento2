@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="messages">
+            <action method="addNotice">
+                <argument translate="true" name="message" xsi:type="string">The report displays the top 5 most viewed products for each interval.</argument>
+            </action>
             <action method="addNotice">
                 <argument translate="true" name="message" xsi:type="string">For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone.</argument>
             </action>
@@ -26,7 +29,7 @@
             </block>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Reports\Block\Adminhtml\Product\Viewed" template="report/grid/container.phtml" name="product.report.grid.container">
+            <block class="Magento\Reports\Block\Adminhtml\Product\Viewed" template="Magento_Reports::report/grid/container.phtml" name="product.report.grid.container">
                 <block class="Magento\Reports\Block\Adminhtml\Filter\Form" name="grid.filter.form">
                     <action method="setFieldVisibility">
                         <argument name="field" xsi:type="string">report_type</argument>

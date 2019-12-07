@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Framework\App\Action;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * Add wishlist item to shopping cart and remove from wishlist controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends \Magento\Wishlist\Controller\AbstractIndex
+class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -60,16 +63,22 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
     protected $helper;
 
     /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     */
+    protected $formKeyValidator;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
      * @param \Magento\Wishlist\Model\ItemFactory $itemFactory
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Wishlist\Model\Item\OptionFactory $
+     * @param \Magento\Wishlist\Model\Item\OptionFactory $optionFactory
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Wishlist\Helper\Data $helper
      * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -82,7 +91,8 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
         \Magento\Wishlist\Helper\Data $helper,
-        \Magento\Checkout\Helper\Cart $cartHelper
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
@@ -93,6 +103,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
         $this->escaper = $escaper;
         $this->helper = $helper;
         $this->cartHelper = $cartHelper;
+        $this->formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
 
@@ -105,12 +116,17 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
-        $itemId = (int)$this->getRequest()->getParam('item');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $resultRedirect->setPath('*/*/');
+        }
+
+        $itemId = (int)$this->getRequest()->getParam('item');
         /* @var $item \Magento\Wishlist\Model\Item */
         $item = $this->itemFactory->create()->load($itemId);
         if (!$item->getId()) {
@@ -125,6 +141,10 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
 
         // Set qty
         $qty = $this->getRequest()->getParam('qty');
+        $postQty = $this->getRequest()->getPostValue('qty');
+        if ($postQty !== null && $qty !== $postQty) {
+            $qty = $postQty;
+        }
         if (is_array($qty)) {
             if (isset($qty[$itemId])) {
                 $qty = $qty[$itemId];
@@ -166,7 +186,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
                     'You added %1 to your shopping cart.',
                     $this->escaper->escapeHtml($item->getProduct()->getName())
                 );
-                $this->messageManager->addSuccess($message);
+                $this->messageManager->addSuccessMessage($message);
             }
 
             if ($this->cartHelper->getShouldRedirectToCart()) {
@@ -178,12 +198,12 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
                 }
             }
         } catch (ProductException $e) {
-            $this->messageManager->addError(__('This product(s) is out of stock.'));
+            $this->messageManager->addErrorMessage(__('This product(s) is out of stock.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addNotice($e->getMessage());
+            $this->messageManager->addNoticeMessage($e->getMessage());
             $redirectUrl = $configureUrl;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t add the item to the cart right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
 
         $this->helper->calculate();
@@ -194,7 +214,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
             $resultJson->setData(['backUrl' => $redirectUrl]);
             return $resultJson;
         }
-        
+
         $resultRedirect->setUrl($redirectUrl);
         return $resultRedirect;
     }

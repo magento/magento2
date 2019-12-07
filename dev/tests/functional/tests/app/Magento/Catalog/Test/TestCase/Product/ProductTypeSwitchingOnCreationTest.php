@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable;
 
 /**
  * Test Creation for ProductTypeSwitchingOnCreation
@@ -22,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save
  * 6. Perform all assertions
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-29398
  */
 class ProductTypeSwitchingOnCreationTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -76,18 +76,49 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      *
      * @param string $createProduct
      * @param string $product
+     * @param string $actionName
      * @return array
      */
-    public function test($createProduct, $product)
+    public function test(string $createProduct, string $product, string $actionName = null): array
     {
         // Steps
         list($fixture, $dataset) = explode('::', $product);
         $product = $this->fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct($createProduct);
+        if ($actionName) {
+            $this->performAction($actionName);
+        }
         $this->catalogProductNew->getProductForm()->fill($product);
         $this->catalogProductNew->getFormPageActions()->save($product);
 
         return ['product' => $product];
+    }
+
+    /**
+     * Perform action.
+     *
+     * @param string $actionName
+     * @return void
+     */
+    private function performAction(string $actionName): void
+    {
+        if (method_exists(__CLASS__, $actionName)) {
+            $this->$actionName();
+        }
+    }
+
+    /**
+     * Clear downloadable product data.
+     *
+     * @return void
+     */
+    private function clearDownloadableData(): void
+    {
+        $this->catalogProductNew->getProductForm()->openSection('downloadable_information');
+        /** @var Downloadable $downloadableInfoTab */
+        $downloadableInfoTab = $this->catalogProductNew->getProductForm()->getSection('downloadable_information');
+        $downloadableInfoTab->getDownloadableBlock('Links')->clearDownloadableData();
+        $downloadableInfoTab->setIsDownloadable('No');
     }
 }

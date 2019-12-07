@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@ namespace Magento\Framework\Simplexml;
 
 /**
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
+ *
+ * @api
  */
 class Element extends \SimpleXMLElement
 {
@@ -28,11 +30,12 @@ class Element extends \SimpleXMLElement
      * @param \Magento\Framework\Simplexml\Element $element
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function setParent($element)
     {
-        //$this->_parent = $element;
     }
+    // phpcs:enable
 
     /**
      * Returns parent node for the element
@@ -177,7 +180,8 @@ class Element extends \SimpleXMLElement
     }
 
     /**
-     * asArray() analog, but without attributes
+     * The asArray() analog, but without attributes
+     *
      * @return array|string
      */
     public function asCanonicalArray()
@@ -243,7 +247,7 @@ class Element extends \SimpleXMLElement
         $attributes = $this->attributes();
         if ($attributes) {
             foreach ($attributes as $key => $value) {
-                $out .= ' ' . $key . '="' . str_replace('"', '\"', (string)$value) . '"';
+                $out .= ' ' . $key . '="' . str_replace('"', '\"', $this->xmlentities($value)) . '"';
             }
         }
 
@@ -304,7 +308,7 @@ class Element extends \SimpleXMLElement
      */
     public function xmlentities($value = null)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             $value = $this;
         }
         $value = (string)$value;
@@ -413,7 +417,7 @@ class Element extends \SimpleXMLElement
             $targetChild = $this->{$sourceName};
         }
 
-        if (is_null($targetChild)) {
+        if ($targetChild === null) {
             // if child target is not found create new and descend
             $targetChild = $this->addChild($sourceName);
             $targetChild->setParent($this);
@@ -447,7 +451,7 @@ class Element extends \SimpleXMLElement
                 $arr[] = $v;
             }
         }
-        $last = sizeof($arr) - 1;
+        $last = count($arr) - 1;
         $node = $this;
         foreach ($arr as $i => $nodeName) {
             if ($last === $i) {
@@ -469,6 +473,7 @@ class Element extends \SimpleXMLElement
      * Unset self from the XML-node tree
      *
      * Note: trying to refer this object as a variable after "unsetting" like this will result in E_WARNING
+     *
      * @return void
      */
     public function unsetSelf()

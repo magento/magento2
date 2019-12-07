@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogSearch\Test\TestCase\DeleteSearchTermEntityTest" summary="Delete Search Term" ticketId="MAGETWO-26491">
         <variation name="DeleteSearchTermEntityTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="searchTerm/dataset" xsi:type="string">default</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessDeleteMessage" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotInGrid" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotOnFrontend" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymNotOnFrontend" />
         </variation>
     </testCase>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Helper;
@@ -28,8 +28,8 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_wishlistHelper = $this->objectManager->get('Magento\Wishlist\Helper\Data');
-        $this->_customerSession = $this->objectManager->get('Magento\Customer\Model\Session');
+        $this->_wishlistHelper = $this->objectManager->get(\Magento\Wishlist\Helper\Data::class);
+        $this->_customerSession = $this->objectManager->get(\Magento\Customer\Model\Session::class);
     }
 
     /**
@@ -45,7 +45,7 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function testGetAddParams()
     {
-        $product = $this->objectManager->get('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->get(\Magento\Catalog\Model\Product::class);
         $product->setId(11);
         $json = $this->_wishlistHelper->getAddParams($product);
         $params = (array)json_decode($json);
@@ -67,7 +67,7 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function testGetUpdateParams()
     {
-        $product = $this->objectManager->get('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->get(\Magento\Catalog\Model\Product::class);
         $product->setId(11);
         $product->setWishlistItemId(15);
         $json = $this->_wishlistHelper->getUpdateParams($product);
@@ -86,7 +86,7 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->create(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
         $customer = $customerRepository->getById(1);
 
@@ -95,13 +95,13 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->_wishlistHelper = null;
         /** @var \Magento\Wishlist\Helper\Data wishlistHelper */
-        $this->_wishlistHelper = $this->objectManager->get('Magento\Wishlist\Helper\Data');
+        $this->_wishlistHelper = $this->objectManager->get(\Magento\Wishlist\Helper\Data::class);
 
         $this->_customerSession->loginById(1);
         $this->assertEquals($customer, $this->_wishlistHelper->getCustomer());
 
         /** @var \Magento\Customer\Helper\View $customerViewHelper */
-        $customerViewHelper = $this->objectManager->create('Magento\Customer\Helper\View');
+        $customerViewHelper = $this->objectManager->create(\Magento\Customer\Helper\View::class);
         $this->assertEquals($customerViewHelper->getCustomerName($customer), $this->_wishlistHelper->getCustomerName());
     }
 }

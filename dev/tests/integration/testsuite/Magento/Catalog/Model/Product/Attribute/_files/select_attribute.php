@@ -2,17 +2,19 @@
 /**
  * "dropdown" fixture of product EAV attribute.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var \Magento\Eav\Model\Entity\Type $entityType */
-$entityType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Eav\Model\Entity\Type');
+$entityType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Eav\Model\Entity\Type::class
+);
 $entityType->loadByCode('catalog_product');
 $defaultSetId = $entityType->getDefaultAttributeSetId();
 /** @var \Magento\Eav\Model\Entity\Attribute\Set $defaultSet */
 $defaultSet = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Entity\Attribute\Set'
+    \Magento\Eav\Model\Entity\Attribute\Set::class
 );
 $defaultSet->load($defaultSetId);
 $defaultGroupId = $defaultSet->getDefaultGroupId();
@@ -20,7 +22,7 @@ $optionData = ['value' => ['option_1' => [0 => 'Fixture Option']], 'order' => ['
 
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $attribute->setAttributeCode(
     'select_attribute'

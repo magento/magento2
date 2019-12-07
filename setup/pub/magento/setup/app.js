@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,8 +18,10 @@ var app = angular.module(
         'create-admin-account',
         'install',
         'success',
-        'component-grid',
+        'module-grid',
+        'extension-grid',
         'install-extension-grid',
+        'update-extension-grid',
         'create-backup',
         'complete-backup',
         'data-option',
@@ -28,7 +30,9 @@ var app = angular.module(
         'updater-success',
         'home',
         'auth-dialog',
-        'system-config'
+        'system-config',
+        'marketplace-credentials',
+        'ngSanitize'
     ]);
 
 app.config(['$httpProvider', '$stateProvider', function ($httpProvider, $stateProvider) {
@@ -52,6 +56,9 @@ app.config(['$httpProvider', '$stateProvider', function ($httpProvider, $statePr
             return $delegate;
         });
     })
+    .config(['$locationProvider', function($locationProvider) {
+        $locationProvider.hashPrefix('');
+    }])
     .run(function ($rootScope, $state) {
         $rootScope.$state = $state;
     });

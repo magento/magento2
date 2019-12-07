@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute;
@@ -62,6 +62,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
+        $this->searchCriteriaBuilder->setFilterGroups((array)$searchCriteria->getFilterGroups());
         $this->searchCriteriaBuilder->addFilters(
             [
                 $this->filterBuilder
@@ -71,9 +72,15 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
                     ->create(),
             ]
         );
+
+        $this->searchCriteriaBuilder->setSortOrders((array)$searchCriteria->getSortOrders());
         $this->searchCriteriaBuilder->setCurrentPage($searchCriteria->getCurrentPage());
         $this->searchCriteriaBuilder->setPageSize($searchCriteria->getPageSize());
-        return $this->attributeSetRepository->getList($this->searchCriteriaBuilder->create());
+
+        $searchResult = $this->attributeSetRepository->getList($this->searchCriteriaBuilder->create());
+        $searchResult->setSearchCriteria($searchCriteria);
+
+        return $searchResult;
     }
 
     /**

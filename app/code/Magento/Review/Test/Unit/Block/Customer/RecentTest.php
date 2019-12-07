@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Block\Customer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class RecentTest extends \PHPUnit_Framework_TestCase
+class RecentTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Review\Block\Customer\Recent */
     protected $object;
@@ -32,8 +32,8 @@ class RecentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->context->expects(
             $this->any()
         )->method(
@@ -41,19 +41,10 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->storeManager)
         );
-        $this->collection = $this->getMock(
-            'Magento\Review\Model\ResourceModel\Review\Product\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->collectionFactory = $this->getMock(
-            'Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->collection = $this->createMock(\Magento\Review\Model\ResourceModel\Review\Product\Collection::class);
+        $this->collectionFactory = $this->createPartialMock(
+            \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory::class,
+            ['create']
         );
         $this->collectionFactory->expects(
             $this->once()
@@ -62,17 +53,11 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->collection)
         );
-        $this->currentCustomer = $this->getMock(
-            'Magento\Customer\Helper\Session\CurrentCustomer',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->currentCustomer = $this->createMock(\Magento\Customer\Helper\Session\CurrentCustomer::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->object = $this->objectManagerHelper->getObject(
-            'Magento\Review\Block\Customer\Recent',
+            \Magento\Review\Block\Customer\Recent::class,
             [
                 'context' => $this->context,
                 'collectionFactory' => $this->collectionFactory,

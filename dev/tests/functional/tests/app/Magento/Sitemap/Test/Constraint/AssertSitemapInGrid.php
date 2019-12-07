@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class AssertSitemapInGrid extends AbstractConstraint
             'sitemap_filename' => $sitemap->getSitemapFilename(),
             'sitemap_path' => $sitemap->getSitemapPath(),
         ];
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $sitemapIndex->getSitemapGrid()->isRowVisible($filter),
             'Sitemap with filename \'' . $sitemap->getSitemapFilename() . '\' and path \''
             . $sitemap->getSitemapPath() . '\' is absent in Sitemap grid. \''

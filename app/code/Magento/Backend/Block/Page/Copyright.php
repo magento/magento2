@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Page;
 
 /**
  * Copyright footer block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Copyright extends \Magento\Backend\Block\Template
 {
@@ -15,5 +18,5 @@ class Copyright extends \Magento\Backend\Block\Template
      *
      * @var string
      */
-    protected $_template = 'page/copyright.phtml';
+    protected $_template = 'Magento_Backend::page/copyright.phtml';
 }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
@@ -12,6 +13,7 @@ use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
 use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set as AttributeSetResource;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -52,12 +54,18 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     protected $joinProcessor;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param AttributeSetResource $attributeSetResource
      * @param AttributeSetFactory $attributeSetFactory
      * @param CollectionFactory $collectionFactory
      * @param Config $eavConfig
      * @param \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -66,7 +74,8 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         CollectionFactory $collectionFactory,
         EavConfig $eavConfig,
         \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->attributeSetResource = $attributeSetResource;
         $this->attributeSetFactory = $attributeSetFactory;
@@ -74,6 +83,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         $this->eavConfig = $eavConfig;
         $this->searchResultsFactory = $searchResultFactory;
         $this->joinProcessor = $joinProcessor;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -84,7 +94,12 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         try {
             $this->attributeSetResource->save($attributeSet);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('There was an error saving attribute set.'));
+            throw new CouldNotSaveException(
+                __(
+                    'The attribute set couldn\'t be saved due to an error. '
+                    . 'Verify your information and try again. If the error persists, please try again later.'
+                )
+            );
         }
         return $attributeSet;
     }
@@ -98,16 +113,9 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
 
-        /** The only possible/meaningful search criteria for attribute set is entity type code */
-        $entityTypeCode = $this->getEntityTypeCode($searchCriteria);
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
-        if ($entityTypeCode !== null) {
-            $collection->setEntityTypeFilter($this->eavConfig->getEntityType($entityTypeCode)->getId());
-        }
-
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
-
+        /** @var \Magento\Eav\Api\Data\AttributeSetSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());
@@ -118,6 +126,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve entity type code from search criteria
      *
+     * @deprecated 100.2.0
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
      */
@@ -156,9 +165,14 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         try {
             $this->attributeSetResource->delete($attributeSet);
         } catch (\Magento\Framework\Exception\StateException $exception) {
-            throw new CouldNotDeleteException(__('Default attribute set can not be deleted'));
+            throw new CouldNotDeleteException(__('The default attribute set can\'t be deleted.'));
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__('There was an error deleting attribute set.'));
+            throw new CouldNotDeleteException(
+                __(
+                    'The attribute set couldn\'t be deleted due to an error. '
+                    . 'Try again — if the error persists, please try again later.'
+                )
+            );
         }
         return true;
     }
@@ -169,5 +183,21 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     public function deleteById($attributeSetId)
     {
         return $this->delete($this->get($attributeSetId));
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated 100.2.0
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Eav\Model\Api\SearchCriteria\AttributeSetCollectionProcessor'
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

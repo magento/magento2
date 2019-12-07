@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -40,15 +40,18 @@
     min-height: 30rem;
     padding: 2rem;
     text-align: center;
+
     &:hover {
         border-color: @setup-home-item__active__border-color;
         color: @setup-home-item__color;
         text-decoration: none;
         transition: border-color .1s linear;
     }
+
     &:active {
         transform: scale(.99);
     }
+
     &:before {
         &:extend(.abs-icon all);
         display: block;
@@ -58,9 +61,16 @@
     }
 }
 
-.setup-home-item-component {
+.setup-home-item-component,
+.setup-home-item-extension {
     &:before {
         content: @icon-lego__content;
+    }
+}
+
+.setup-home-item-module {
+    &:before {
+        content: @icon-module__content;
     }
 }
 

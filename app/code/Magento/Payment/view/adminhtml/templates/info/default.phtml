@@ -1,29 +1,29 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Payment\Block\Info $block
  * @see \Magento\Payment\Block\Info
  */
 $specificInfo = $block->getSpecificInformation();
+$paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
-<?php echo $block->escapeHtml($block->getMethod()->getTitle()); ?>
+<?= $block->escapeHtml($paymentTitle) ?>
 
-<?php if ($specificInfo): ?>
+<?php if ($specificInfo) : ?>
     <table class="data-table admin__table-secondary">
-    <?php foreach ($specificInfo as $label => $value):?>
+    <?php foreach ($specificInfo as $label => $value) : ?>
         <tr>
-            <th><?php echo $block->escapeHtml($label)?>:</th>
+            <th><?= $block->escapeHtml($label) ?>:</th>
             <td>
-                <?php /* @noEscape */ echo nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true))));?>
+                <?= /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true)))) ?>
             </td>
         </tr>
     <?php endforeach; ?>
     </table>
 <?php endif;?>
 
-<?php echo $block->getChildHtml()?>
+<?= $block->getChildHtml() ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -72,7 +72,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->assertRedirect();
         $this->assertSessionMessages(
-            $this->contains('The encryption key format is invalid.'),
+            $this->contains('Encryption key must be 32 character string without any white space.'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

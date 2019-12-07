@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Block\Form;
@@ -15,5 +15,5 @@ class Cashondelivery extends \Magento\OfflinePayments\Block\Form\AbstractInstruc
      *
      * @var string
      */
-    protected $_template = 'form/cashondelivery.phtml';
+    protected $_template = 'Magento_OfflinePayments::form/cashondelivery.phtml';
 }

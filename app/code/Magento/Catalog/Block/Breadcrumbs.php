@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Catalog breadcrumbs
@@ -43,7 +41,11 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      */
     public function getTitleSeparator($store = null)
     {
-        $separator = (string)$this->_scopeConfig->getValue('catalog/seo/title_separator', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        $separator = (string)$this->_scopeConfig->getValue(
+            'catalog/seo/title_separator',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
         return ' ' . $separator . ' ';
     }
 

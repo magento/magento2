@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
-class Drop extends \Magento\Newsletter\Controller\Adminhtml\Template
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Drop extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpPostActionInterface
 {
     /**
      * Drop Newsletter Template

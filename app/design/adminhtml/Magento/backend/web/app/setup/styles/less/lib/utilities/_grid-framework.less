@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -10,7 +10,6 @@
 .make-grid-columns() {
 
     //  Common styles for all sizes of grid columns, widths 1-12
-
     .col(@index) {
         //  Initial
         @item: ~'.col-xs-@{index}, .col-m-@{index}, .col-l-@{index}, .col-xl-@{index}';
@@ -35,7 +34,7 @@
         }
     }
 
-    .col(1); //  Kickstart it
+    .col(1); // Start it
 }
 
 .float-grid-columns(@class) {
@@ -59,7 +58,7 @@
         }
     }
 
-    .col(1); //  Kickstart it
+    .col(1); // Start it
 }
 
 .calc-grid-column(@index, @class, @type) when (@type = width) and (@index > 0) {
@@ -99,7 +98,6 @@
 }
 
 //  Basic looping in LESS
-
 .loop-grid-columns(@index, @class, @type) when (@index >= 0) {
     .calc-grid-column(@index, @class, @type);
     //  Next iteration
@@ -107,7 +105,6 @@
 }
 
 //  Create grid for specific class
-
 .make-grid(@class) {
     .float-grid-columns(@class);
     .loop-grid-columns(@grid-columns, @class, width);

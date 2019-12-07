@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -47,6 +47,9 @@
 @button__active__gradient-color-end: false;
 
 //  Primary button
+@button-primary__font-family: @button__font-family;
+@button-primary__font-size: @button__font-size;
+@button-primary__font-weight: @button__font-weight;
 @button-primary__line-height: false;
 @button-primary__width: false;
 @button-primary__margin: false;
@@ -54,14 +57,14 @@
 @button-primary__gradient: false;
 @button-primary__gradient-direction: false;
 
-@button-primary__background: @color-blue1;
-@button-primary__border: 1px solid @color-blue1;
+@button-primary__background: @theme__color__primary;
+@button-primary__border: 1px solid @theme__color__primary;
 @button-primary__color: @color-white;
 @button-primary__gradient-color-start: false;
 @button-primary__gradient-color-end: false;
 
-@button-primary__hover__background: @color-blue2;
-@button-primary__hover__border: 1px solid @color-blue2;
+@button-primary__hover__background: @theme__color__primary-alt;
+@button-primary__hover__border: 1px solid @theme__color__primary-alt;
 @button-primary__hover__color: @button-primary__color;
 @button-primary__hover__gradient-color-start: false;
 @button-primary__hover__gradient-color-end: false;

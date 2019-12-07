@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Template\Tokenizer;
@@ -94,7 +94,7 @@ abstract class AbstractTokenizer
      */
     public function setString($value)
     {
-        $this->_string = urldecode($value);
+        $this->_string = rawurldecode($value);
         $this->reset();
     }
 

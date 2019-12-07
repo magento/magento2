@@ -1,11 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -14,8 +11,8 @@
  * @var $block \Magento\Catalog\Block\Category\View
  */
 ?>
-<?php if ($block->isContentMode() || $block->isMixedMode()): ?>
+<?php if ($block->isContentMode() || $block->isMixedMode()) :?>
     <div class="category-cms">
-        <?php echo $block->getCmsBlockHtml(); ?>
+        <?= $block->getCmsBlockHtml() ?>
     </div>
 <?php endif; ?>

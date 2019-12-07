@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division as MathDivision;
-use Magento\Framework\DataObject\Factory as ObjectFactory;
 
 /**
  * Interface StockStateProvider
@@ -67,6 +65,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Validate stock
+     *
      * @param StockItemInterface $stockItem
      * @return bool
      */
@@ -84,6 +84,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Verify notification
+     *
      * @param StockItemInterface $stockItem
      * @return bool
      */
@@ -93,6 +95,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Validate quote qty
+     *
      * @param StockItemInterface $stockItem
      * @param int|float $qty
      * @param int|float $summaryQty
@@ -115,14 +119,12 @@ class StockStateProvider implements StockStateProviderInterface
         $result->setItemIsQtyDecimal($stockItem->getIsQtyDecimal());
         if (!$stockItem->getIsQtyDecimal()) {
             $result->setHasQtyOptionUpdate(true);
-            $qty = intval($qty);
+            $qty = (int) $qty ?: 1;
             /**
              * Adding stock data to quote item
              */
             $result->setItemQty($qty);
-            $qty = $this->getNumber($qty);
-            $origQty = intval($origQty);
-            $result->setOrigQty($origQty);
+            $result->setOrigQty((int)$this->getNumber($origQty) ?: 1);
         }
 
         if ($stockItem->getMinSaleQty() && $qty < $stockItem->getMinSaleQty()) {
@@ -162,7 +164,7 @@ class StockStateProvider implements StockStateProviderInterface
         }
 
         if (!$this->checkQty($stockItem, $summaryQty) || !$this->checkQty($stockItem, $qty)) {
-            $message = __('We don\'t have as many "%1" as you requested.', $stockItem->getProductName());
+            $message = __('The requested qty is not available');
             $result->setHasError(true)->setMessage($message)->setQuoteMessage($message)->setQuoteMessageIndex('qty');
             return $result;
         } else {
@@ -196,7 +198,8 @@ class StockStateProvider implements StockStateProviderInterface
                         if (!$stockItem->getIsChildItem()) {
                             $result->setMessage(
                                 __(
-                                    'We don\'t have as many "%1" as you requested, but we\'ll back order the remaining %2.',
+                                    'We don\'t have as many "%1" as you requested, '
+                                    . 'but we\'ll back order the remaining %2.',
                                     $stockItem->getProductName(),
                                     $backOrderQty * 1
                                 )
@@ -204,7 +207,8 @@ class StockStateProvider implements StockStateProviderInterface
                         } else {
                             $result->setMessage(
                                 __(
-                                    'We don\'t have "%1" in the requested quantity, so we\'ll back order the remaining %2.',
+                                    'We don\'t have "%1" in the requested quantity, '
+                                    . 'so we\'ll back order the remaining %2.',
                                     $stockItem->getProductName(),
                                     $backOrderQty * 1
                                 )
@@ -212,7 +216,7 @@ class StockStateProvider implements StockStateProviderInterface
                         }
                     } elseif ($stockItem->getShowDefaultNotificationMessage()) {
                         $result->setMessage(
-                            __('We don\'t have as many "%1" as you requested.', $stockItem->getProductName())
+                            __('The requested qty is not available')
                         );
                     }
                 }
@@ -254,6 +258,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Returns suggested qty
+     *
      * Returns suggested qty that satisfies qty increments and minQty/maxQty/minSaleQty/maxSaleQty conditions
      * or original qty if such value does not exist
      *
@@ -294,6 +300,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Check Qty Increments
+     *
      * @param StockItemInterface $stockItem
      * @param float|int $qty
      * @return \Magento\Framework\DataObject
@@ -369,6 +377,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Get numeric qty
+     *
      * @param string|float|int|null $qty
      * @return float|null
      */

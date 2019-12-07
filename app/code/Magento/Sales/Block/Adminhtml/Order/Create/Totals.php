@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
@@ -10,7 +10,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Adminhtml sales order create totals block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -26,7 +28,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @var string
      */
-    protected $_defaultRenderer = 'Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals';
+    protected $_defaultRenderer = \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals::class;
 
     /**
      * Sales data
@@ -83,7 +85,6 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getTotals()
     {
-        $this->getQuote()->setTotalsCollectedFlag(false);
         $this->getQuote()->collectTotals();
         if ($this->getQuote()->isVirtual()) {
             $totals = $this->getQuote()->getBillingAddress()->getTotals();

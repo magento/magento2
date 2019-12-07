@@ -1,15 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php if ($block->getCanDisplayTotalRefunded()): ?>
+<?php if ($block->getCanDisplayTotalRefunded()) : ?>
 <tr>
-    <td class="label"><strong><?php /* @escapeNotVerified */ echo __('Total Refunded') ?></strong></td>
-    <td class="emph"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('total_refunded', true) ?></td>
+    <td class="label"><strong><?= $block->escapeHtml(__('Total Refunded')) ?></strong></td>
+    <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('total_refunded', true) ?></td>
 </tr>
 <?php endif; ?>

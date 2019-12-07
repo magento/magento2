@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ProductVideo\Test\Constraint;
-
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -22,17 +21,16 @@ class AssertNoVideoProductView extends AbstractConstraint
      *
      * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
-     * @param InjectableFixture $initialProduct
+     * @param InjectableFixture $product
      */
     public function processAssert(
         BrowserInterface $browser,
         CatalogProductView $catalogProductView,
-        InjectableFixture $initialProduct
+        InjectableFixture $product
     ) {
-        $browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
-        $catalogProductView->getViewBlock()->isGalleryVisible();
-        \PHPUnit_Framework_Assert::assertFalse(
-            $catalogProductView->getViewBlock()->isGalleryVisible(),
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+        \PHPUnit\Framework\Assert::assertFalse(
+            $catalogProductView->getViewBlock()->isVideoVisible(),
             'Product video is displayed on product view when it should not.'
         );
     }

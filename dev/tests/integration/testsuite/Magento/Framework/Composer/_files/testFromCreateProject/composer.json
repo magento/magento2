@@ -2,24 +2,30 @@
     "name": "magento/project-community-edition",
     "description": "eCommerce Platform for Growth (Community Edition)",
     "type": "project",
-    "version": "0.74.0-beta9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "magento/product-community-edition": "0.74.0-beta9"
+        "magento/product-community-edition": "*"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    ],
     "require-dev": {
-        "phpunit/phpunit": "4.1.0",
-        "squizlabs/php_codesniffer": "1.5.3",
-        "phpmd/phpmd": "@stable",
-        "pdepend/pdepend": "2.0.6",
-        "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
-        "lusitanian/oauth": "~0.3"
+        "lusitanian/oauth": "~0.3",
+        "pdepend/pdepend": "2.0.6",
+        "phpmd/phpmd": "@stable",
+        "phpunit/phpunit": "4.1.0",
+        "sjparkinson/static-review": "~4.1",
+        "squizlabs/php_codesniffer": "1.5.3"
     },
     "config": {
+        "sort-packages": true,
         "use-include-path": true
     },
     "autoload": {
@@ -39,11 +45,5 @@
         }
     },
     "minimum-stability": "alpha",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://repo.magento.com/"
-        }
-    ]
+    "prefer-stable": true
 }

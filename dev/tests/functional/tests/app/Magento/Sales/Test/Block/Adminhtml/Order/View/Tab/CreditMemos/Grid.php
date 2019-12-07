@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos;
 
+use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+
 /**
- * Class Grid
- * Credit memos grid on order view page
+ * Credit memos grid on order view page.
  */
-class Grid extends \Magento\Backend\Test\Block\Widget\Grid
+class Grid extends DataGrid
 {
     /**
      * Base part of row locator template for getRow() method.
@@ -20,14 +22,28 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected $rowPattern = './/tr[%s]';
 
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
     protected $editLink = 'tbody td[data-column="increment_id"]';
 
     /**
-     * Filters array mapping
+     * Css selector for credit memo ids.
+     *
+     * @var string
+     */
+    protected $creditMemoId = 'tbody td:nth-child(2)';
+
+    /**
+     * CreditMemos data grid loader Xpath locator.
+     *
+     * @var string
+     */
+    protected $loader = '//div[contains(@data-component, "sales_order_view_creditmemo_grid")]';
+
+    /**
+     * Filters array mapping.
      *
      * @var array
      */
@@ -48,24 +64,28 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     ];
 
     /**
-     * Get credit memo id from grid
+     * Get credit memo id from grid.
      *
      * @return array|string
      */
     public function getCreditMemoId()
     {
-        return $this->_rootElement->find($this->editLink)->getText();
+        $this->resetFilter();
+        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
+        return $this->_rootElement->find($this->creditMemoId)->getText();
     }
 
     /**
-     * Get credit memo ids
+     * Get credit memo ids.
      *
      * @return array
      */
     public function getIds()
     {
         $result = [];
-        $creditMemoIds = $this->_rootElement->getElements($this->editLink);
+        $this->resetFilter();
+        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
+        $creditMemoIds = $this->_rootElement->getElements($this->creditMemoId);
         foreach ($creditMemoIds as $creditMemoId) {
             $result[] = trim($creditMemoId->getText());
         }

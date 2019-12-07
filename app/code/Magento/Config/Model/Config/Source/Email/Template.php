@@ -1,10 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Source\Email;
 
+/**
+ * Source for template
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Template extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
     /**
@@ -58,6 +64,12 @@ class Template extends \Magento\Framework\DataObject implements \Magento\Framewo
         $templateLabel = $this->_emailConfig->getTemplateLabel($templateId);
         $templateLabel = __('%1 (Default)', $templateLabel);
         array_unshift($options, ['value' => $templateId, 'label' => $templateLabel]);
+        array_walk(
+            $options,
+            function (&$item) {
+                $item['__disableTmpl'] = true;
+            }
+        );
         return $options;
     }
 }

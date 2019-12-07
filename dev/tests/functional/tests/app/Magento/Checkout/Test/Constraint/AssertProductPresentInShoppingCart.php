@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class AssertProductPresentInShoppingCart extends AbstractConstraint
     {
         $checkoutCart->open();
         foreach ($products as $product) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $checkoutCart->getCartBlock()->getCartItem($product)->isVisible(),
                 'Product ' . $product->getName() . ' is absent in shopping cart.'
             );

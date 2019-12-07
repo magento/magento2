@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
@@ -9,7 +9,7 @@ namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
  * Class ViewTest
  * @package Magento\Paypal\Block\Billing\Agreement
  */
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -30,17 +30,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->orderCollectionFactory = $this->createPartialMock(
+            \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
+            ['create']
         );
-        $this->orderConfig = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
+        $this->orderConfig = $this->createMock(\Magento\Sales\Model\Order\Config::class);
 
         $this->block = $objectManager->getObject(
-            'Magento\Paypal\Block\Billing\Agreement\View',
+            \Magento\Paypal\Block\Billing\Agreement\View::class,
             [
                 'orderCollectionFactory' => $this->orderCollectionFactory,
                 'orderConfig' => $this->orderConfig,
@@ -52,12 +49,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $visibleStatuses = [];
 
-        $orderCollection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Collection',
-            ['addFieldToSelect', 'addFieldToFilter', 'setOrder'],
-            [],
-            '',
-            false
+        $orderCollection = $this->createPartialMock(
+            \Magento\Sales\Model\ResourceModel\Order\Collection::class,
+            ['addFieldToSelect', 'addFieldToFilter', 'setOrder']
         );
         $orderCollection->expects($this->at(0))
             ->method('addFieldToSelect')

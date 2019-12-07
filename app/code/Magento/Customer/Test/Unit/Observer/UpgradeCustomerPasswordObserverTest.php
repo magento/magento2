@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Customer\Observer\UpgradeCustomerPasswordObserver;
 
-class UpgradeCustomerPasswordObserverTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class UpgradeCustomerPasswordObserverTest for testing upgrade password observer
+ */
+class UpgradeCustomerPasswordObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpgradeCustomerPasswordObserver
@@ -29,14 +32,18 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerRegistry;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->customerRepository = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
+        $this->customerRepository = $this
+            ->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->customerRegistry = $this->getMockBuilder('Magento\Customer\Model\CustomerRegistry')
+        $this->customerRegistry = $this->getMockBuilder(\Magento\Customer\Model\CustomerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->encryptorMock = $this->getMockBuilder('\Magento\Framework\Encryption\Encryptor')
+        $this->encryptorMock = $this->getMockBuilder(\Magento\Framework\Encryption\Encryptor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -47,18 +54,23 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Unit test for verifying customers password upgrade observer
+     */
     public function testUpgradeCustomerPassword()
     {
         $customerId = '1';
         $password = 'password';
         $passwordHash = 'hash:salt:999';
-        $model = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $model = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
-        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->setMethods(['setData'])
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
+        $customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPasswordHash', 'setPasswordHash'])
             ->getMock();

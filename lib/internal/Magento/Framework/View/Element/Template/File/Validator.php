@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Template\File;
 
 use \Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
+use \Magento\Framework\Filesystem\Driver\File as FileDriver;
 
 /**
  * Class Validator
- * @package Magento\Framework\View\Element\Template\File
  */
 class Validator
 {
@@ -69,25 +69,33 @@ class Validator
     protected $_compiledDir;
 
     /**
+     * @var FileDriver
+     */
+    private $fileDriver;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
      * @param ComponentRegistrar $componentRegistrar
      * @param string|null $scope
+     * @param FileDriver|null $fileDriver
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
         ComponentRegistrar $componentRegistrar,
-        $scope = null
+        $scope = null,
+        ?FileDriver $fileDriver = null
     ) {
         $this->_filesystem = $filesystem;
         $this->_isAllowSymlinks = $scopeConfigInterface->getValue(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK, $scope);
         $this->_themesDir = $componentRegistrar->getPaths(ComponentRegistrar::THEME);
         $this->moduleDirs = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-        $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
+        $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TMP_MATERIALIZATION_DIR)
             ->getAbsolutePath();
+        $this->fileDriver = $fileDriver ?: \Magento\Framework\App\ObjectManager::getInstance()->get(FileDriver::class);
     }
 
     /**
@@ -127,8 +135,9 @@ class Validator
         if (!is_array($directories)) {
             $directories = (array)$directories;
         }
+        $realPath = $this->fileDriver->getRealPath($path);
         foreach ($directories as $directory) {
-            if (0 === strpos($path, $directory)) {
+            if (0 === strpos($realPath, $directory)) {
                 return true;
             }
         }

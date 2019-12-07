@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Paypal\Test\TestCase\ExpressCheckoutFromShoppingCartTest" summary="Guest Checkout with &quot;Checkout with PayPal&quot; button (Payflow Edition) from the Shopping Cart and Offline Shipping" ticketId="MAGETWO-12414">
         <variation name="ExpressCheckoutFromShoppingCartTestVariation1" summary="Check Out as a Guest with 'Checkout with PayPal' button (Payflow Edition) from the Shopping Cart and Offline Shipping" ticketId="MAGETWO-12414">
-            <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
+            <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
+            <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="sandboxCustomer/dataSet" xsi:type="string">sandbox_us_default</data>
+            <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping" xsi:type="array">
                 <item name="shipping_method" xsi:type="string">Fixed</item>
                 <item name="shipping_service" xsi:type="string">Flat Rate</item>
             </data>
             <data name="paypalPrices" xsi:type="array">
-                <item name="total" xsi:type="string">131.00</item>
+                <item name="total" xsi:type="string">121.00</item>
             </data>
             <data name="prices" xsi:type="array">
-                <item name="subTotal" xsi:type="string">131.00</item>
-                <item name="taxTotal" xsi:type="string">10.81</item>
+                <item name="subTotal" xsi:type="string">121.00</item>
+                <item name="taxTotal" xsi:type="string">9.98</item>
                 <item name="shippingTotal" xsi:type="string">15.00</item>
-                <item name="grandTotal" xsi:type="string">156.81</item>
+                <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="configData" xsi:type="string">payflowpro</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test_deprecated, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
     </testCase>
 </config>

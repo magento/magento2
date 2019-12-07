@@ -2,47 +2,86 @@
 /**
  * Service Input Processor
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi;
 
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
-use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Phrase;
-use Zend\Code\Reflection\ClassReflection;
-use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
+use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = '\Magento\Framework\Api\ExtensionAttributesInterface';
+    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     protected $typeProcessor;
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $objectManager;
 
-    /** @var AttributeValueFactory */
+    /**
+     * @var \Magento\Framework\Api\AttributeValueFactory
+     */
     protected $attributeValueFactory;
 
-    /** @var  CustomAttributeTypeLocatorInterface */
+    /**
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     */
     protected $customAttributeTypeLocator;
 
-    /** @var  MethodsMap */
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     */
     protected $methodsMap;
+
+    /**
+     * @var \Magento\Framework\Reflection\NameFinder
+     */
+    private $nameFinder;
+
+    /**
+     * @var array
+     */
+    private $serviceTypeToEntityTypeMap;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var PreprocessorInterface[]
+     */
+    private $customAttributePreprocessors;
+
+    /**
+     * @var array
+     */
+    private $attributesPreprocessorsMap = [];
 
     /**
      * Initialize dependencies.
@@ -52,19 +91,46 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param AttributeValueFactory $attributeValueFactory
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
+     * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
+     * @param ConfigInterface $config
+     * @param array $customAttributePreprocessors
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         ObjectManagerInterface $objectManager,
         AttributeValueFactory $attributeValueFactory,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
-        MethodsMap $methodsMap
+        MethodsMap $methodsMap,
+        ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
+        ConfigInterface $config = null,
+        array $customAttributePreprocessors = []
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->methodsMap = $methodsMap;
+        $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
+        $this->config = $config
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->customAttributePreprocessors = $customAttributePreprocessors;
+    }
+
+    /**
+     * The getter function to get the new NameFinder dependency
+     *
+     * @return \Magento\Framework\Reflection\NameFinder
+     *
+     * @deprecated 100.1.0
+     */
+    private function getNameFinder()
+    {
+        if ($this->nameFinder === null) {
+            $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Reflection\NameFinder::class);
+        }
+        return $this->nameFinder;
     }
 
     /**
@@ -80,7 +146,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
-     * @throws InputException if no value is provided for required parameters
      * @throws WebapiException
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
@@ -113,6 +178,49 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     }
 
     /**
+     * Retrieve constructor data
+     *
+     * @param string $className
+     * @param array $data
+     * @return array
+     * @throws \ReflectionException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getConstructorData(string $className, array $data): array
+    {
+        $preferenceClass = $this->config->getPreference($className);
+        $class = new ClassReflection($preferenceClass ?: $className);
+
+        try {
+            $constructor = $class->getMethod('__construct');
+        } catch (\ReflectionException $e) {
+            $constructor = null;
+        }
+
+        if ($constructor === null) {
+            return [];
+        }
+
+        $res = [];
+        $parameters = $constructor->getParameters();
+        foreach ($parameters as $parameter) {
+            if (isset($data[$parameter->getName()])) {
+                $parameterType = $this->typeProcessor->getParamType($parameter);
+
+                try {
+                    $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
+                } catch (\ReflectionException $e) {
+                    // Parameter was not correclty declared or the class is uknown.
+                    // By not returing the contructor value, we will automatically fall back to the "setters" way.
+                    continue;
+                }
+            }
+        }
+
+        return $res;
+    }
+
+    /**
      * Creates a new instance of the given class and populates it with the array of data. The data can
      * be in different forms depending on the adapter being used, REST vs. SOAP. For REST, the data is
      * in snake_case (e.g. tax_class_id) while for SOAP the data is in camelCase (e.g. taxClassId).
@@ -121,26 +229,39 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return object the newly created and populated object
      * @throws \Exception
+     * @throws SerializationException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _createFromArray($className, $data)
     {
         $data = is_array($data) ? $data : [];
+        // convert to string directly to avoid situations when $className is object
+        // which implements __toString method like \ReflectionObject
+        $className = (string) $className;
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
         }
-        $object = $this->objectManager->create($className);
 
+        // Primary method: assign to constructor parameters
+        $constructorArgs = $this->getConstructorData($className, $data);
+        $object = $this->objectManager->create($className, $constructorArgs);
+
+        // Secondary method: fallback to setter methods
         foreach ($data as $propertyName => $value) {
+            if (isset($constructorArgs[$propertyName])) {
+                continue;
+            }
+
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            $methodName = $this->typeProcessor->findGetterMethodName($class, $camelCaseProperty);
+            $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 try {
-                    $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty);
+                    $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
                 } catch (\Exception $e) {
                     if (empty($value)) {
                         continue;
@@ -148,10 +269,19 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                         throw $e;
                     }
                 }
-                if ($camelCaseProperty === 'CustomAttributes') {
-                    $setterValue = $this->convertCustomAttributeValue($value, $className);
-                } else {
-                    $setterValue = $this->convertValue($value, $returnType);
+                try {
+                    if ($camelCaseProperty === 'CustomAttributes') {
+                        $setterValue = $this->convertCustomAttributeValue($value, $className);
+                    } else {
+                        $setterValue = $this->convertValue($value, $returnType);
+                    }
+                } catch (SerializationException $e) {
+                    throw new SerializationException(
+                        new Phrase(
+                            'Error occurred during "%field_name" processing. %details',
+                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                        )
+                    );
                 }
                 $object->{$setterName}($setterValue);
             }
@@ -165,41 +295,46 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $customAttributesValueArray
      * @param string $dataObjectClassName
      * @return AttributeValue[]
+     * @throws SerializationException
      */
     protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {
         $result = [];
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
 
-        $camelCaseAttributeCodeKey = lcfirst(
-            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
-        );
         foreach ($customAttributesValueArray as $key => $customAttribute) {
+            $this->runCustomAttributePreprocessors($key, $customAttribute);
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-            if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
-                $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
-            } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
-                $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
+            list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
+            $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
+            if ($entityType) {
+                $type = $this->customAttributeTypeLocator->getType(
+                    $customAttributeCode,
+                    $entityType
+                );
             } else {
-                $customAttributeCode = null;
+                $type = TypeProcessor::ANY_TYPE;
             }
 
-            //Check if type is defined, else default to string
-            $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
-            $type = $type ? $type : TypeProcessor::ANY_TYPE;
-            $customAttributeValue = $customAttribute[AttributeValue::VALUE];
-            if (is_array($customAttributeValue)) {
-                //If type for AttributeValue's value as array is mixed, further processing is not possible
-                if ($type === TypeProcessor::ANY_TYPE) {
-                    $attributeValue = $customAttributeValue;
-                } else {
-                    $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
+            if ($this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
+                || !is_array($customAttributeValue)
+            ) {
+                try {
+                    $attributeValue = $this->convertValue($customAttributeValue, $type);
+                } catch (SerializationException $e) {
+                    throw new SerializationException(
+                        new Phrase(
+                            'Attribute "%attribute_code" has invalid value. %details',
+                            ['attribute_code' => $customAttributeCode, 'details' => $e->getMessage()]
+                        )
+                    );
                 }
             } else {
-                $attributeValue = $this->convertValue($customAttributeValue, $type);
+                $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
             }
+
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
                 ->setAttributeCode($customAttributeCode)
@@ -207,6 +342,86 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Get map of preprocessors related to the custom attributes
+     *
+     * @return array
+     */
+    private function getAttributesPreprocessorsMap(): array
+    {
+        if (!$this->attributesPreprocessorsMap) {
+            foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
+                foreach ($attributePreprocessor->getAffectedAttributes() as $attributeKey) {
+                    $this->attributesPreprocessorsMap[$attributeKey][] = $attributePreprocessor;
+                }
+            }
+        }
+
+        return $this->attributesPreprocessorsMap;
+    }
+
+    /**
+     * Prepare attribute value by loaded attribute preprocessors
+     *
+     * @param mixed $key
+     * @param mixed $customAttribute
+     */
+    private function runCustomAttributePreprocessors($key, &$customAttribute)
+    {
+        $preprocessorsMap = $this->getAttributesPreprocessorsMap();
+        if ($key && is_array($customAttribute) && array_key_exists($key, $preprocessorsMap)) {
+            $preprocessorsList = $preprocessorsMap[$key];
+            foreach ($preprocessorsList as $attributePreprocessor) {
+                if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
+                    $attributePreprocessor->process($key, $customAttribute);
+                }
+            }
+        }
+    }
+
+    /**
+     * Derive the custom attribute code and value.
+     *
+     * @param string[] $customAttribute
+     * @return string[]
+     * @throws SerializationException
+     */
+    private function processCustomAttribute($customAttribute)
+    {
+        $camelCaseAttributeCodeKey = lcfirst(
+            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
+        );
+        // attribute code key could be snake or camel case, depending on whether SOAP or REST is used.
+        if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
+            $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
+        } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
+            $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
+        } else {
+            $customAttributeCode = null;
+        }
+
+        if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
+            throw new SerializationException(
+                new Phrase('An empty custom attribute is specified. Enter the attribute and try again.')
+            );
+        } elseif (!$customAttributeCode) {
+            throw new SerializationException(
+                new Phrase(
+                    'A custom attribute is specified with a missing attribute code. Verify the code and try again.'
+                )
+            );
+        } elseif (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
+            throw new SerializationException(
+                new Phrase(
+                    'The "' . $customAttributeCode .
+                    '" attribute code doesn\'t have a value set. Enter the value and try again.'
+                )
+            );
+        }
+
+        return [$customAttributeCode, $customAttribute[AttributeValue::VALUE]];
     }
 
     /**
@@ -304,7 +519,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         if (!empty($inputError)) {
             $exception = new InputException();
             foreach ($inputError as $errorParamField) {
-                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
+                $exception->addError(
+                    new Phrase('"%fieldName" is required. Enter and try again.', ['fieldName' => $errorParamField])
+                );
             }
             if ($exception->wasErrorAdded()) {
                 throw $exception;

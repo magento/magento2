@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Address;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
@@ -129,7 +129,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $actualPrices = $this->getTotals($actualPrices);
         //Prices verification
         $message = 'Prices from dataset should be equal to prices on frontend.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
+        \PHPUnit\Framework\Assert::assertEquals($prices, $actualPrices, $message);
     }
 
     /**
@@ -143,7 +143,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $this->cmsIndex->open();
         $this->cmsIndex->getTopmenu()->selectCategoryByName($productCategory);
     }
-
 
     /**
      * Get cart prices.

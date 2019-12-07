@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Cms\Test\TestCase\UpdateCmsPageRewriteEntityTest" summary="Update Cms Page URL Rewrites " ticketId="MAGETWO-26173">
         <variation name="UpdateCmsPageRewriteEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2,mftf_migrated:yes</data>
             <data name="cmsPageRewrite/dataset" xsi:type="string">cms_default_no_redirect</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/%default%</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%</data>
@@ -17,6 +18,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
         </variation>
         <variation name="UpdateCmsPageRewriteEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S2,mftf_migrated:yes</data>
             <data name="cmsPageRewrite/dataset" xsi:type="string">cms_default_temporary_redirect</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.html</data>
@@ -26,6 +28,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
         </variation>
         <variation name="UpdateCmsPageRewriteEntityTestVariation3">
+            <data name="tag" xsi:type="string">severity:S2,mftf_migrated:yes</data>
             <data name="cmsPageRewrite/dataset" xsi:type="string">cms_default_permanent_redirect</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.htm</data>

@@ -1,59 +1,33 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<div
-    class="admin__data-grid-filters-current"
-    data-bind="css: {
-        _show: hasPreviews()
-    }">
+<div class="admin__data-grid-filters-current" css="_show: hasPreviews()">
     <div class="admin__current-filters-title-wrap">
-        <span
-            class="admin__current-filters-title"
-            data-bind="i18n: 'Active filters:'"></span>
+        <span class="admin__current-filters-title" translate="'Active filters\\:'"/>
     </div>
     <div class="admin__current-filters-list-wrap">
         <ul class="admin__current-filters-list" data-role="filter-list">
-            <!-- ko foreach: elems -->
-                <!-- ko foreach: previews -->
-                <li>
-                    <span data-bind="text: label + ':'"></span>
-                    
-                    <!-- ko if: typeof preview === 'string' -->
-                    <span data-bind="text: preview"></span>
-                    <!-- /ko -->
-                    
-                    <!-- ko if: typeof preview === 'object' -->
-                    <span>
-                        <!-- ko text: preview[0] || '...' --><!-- /ko --> - <!-- ko text: preview[1] || '...' --><!-- /ko -->
+            <each args="elems">
+                <li outereach="previews">
+                    <span text="label + '\\:'"/>
+                    <span if="typeof preview === 'string'" text="preview"/>
+                    <span if="typeof preview === 'object'">
+                        <text args="preview[0] || '...'"/> - <text args="preview[1] || '...'"/>
                     </span>
-                    <!-- /ko -->
-
-                    <button
-                        class="action-remove"
+                    <button class="action-remove" type="button"
                         data-action="grid-filter-remove-chip"
-                        data-bind="click: $parent.clear.bind($parent, elem)"
-                        type="button">
-                        <span data-bind="i18n: 'Remove'"></span>
+                        click="$parent.clear.bind($parent, elem)">
+                        <span translate="'Remove'"/>
                     </button>
                 </li>
-                <!-- /ko -->
-            <!-- /ko -->
+            </each>
         </ul>
     </div>
     <div class="admin__current-filters-actions-wrap">
-        <button
-            class="action-tertiary action-clear"
-            type="button"
-            data-action="grid-filter-reset"
-            data-bind="
-                i18n: 'Clear all',
-                click: clear,
-                attr: {
-                    'data-action': hasPreviews() ? 'grid-filter-reset' : ''
-                }"
-            ></button>
+        <button class="action-tertiary action-clear" type="button" click="clear" translate="'Clear all'"
+            attr="'data-action': hasPreviews() ? 'grid-filter-reset' : ''"/>
     </div>
 </div>

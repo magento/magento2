@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Customer;
@@ -10,6 +10,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer Reviews list block
+ *
+ * @api
+ * @since 100.0.2
  */
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -83,7 +86,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     {
         if ($this->getReviews()) {
             $toolbar = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
+                \Magento\Theme\Block\Html\Pager::class,
                 'customer_review_list.toolbar'
             )->setCollection(
                 $this->getReviews()
@@ -118,6 +121,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Get review link
      *
      * @return string
+     * @deprecated 100.2.0
      */
     public function getReviewLink()
     {
@@ -125,13 +129,38 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     }
 
     /**
+     * Get review URL
+     *
+     * @param \Magento\Review\Model\Review $review
+     * @return string
+     * @since 100.2.0
+     */
+    public function getReviewUrl($review)
+    {
+        return $this->getUrl('review/customer/view', ['id' => $review->getReviewId()]);
+    }
+
+    /**
      * Get product link
      *
      * @return string
+     * @deprecated 100.2.0
      */
     public function getProductLink()
     {
         return $this->getUrl('catalog/product/view/');
+    }
+
+    /**
+     * Get product URL
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return string
+     * @since 100.2.0
+     */
+    public function getProductUrl($product)
+    {
+        return $product->getProductUrl();
     }
 
     /**

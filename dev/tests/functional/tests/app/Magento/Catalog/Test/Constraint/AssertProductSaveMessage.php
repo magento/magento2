@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,12 +15,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertProductSaveMessage extends AbstractConstraint
 {
     /**
-     * Text value to be checked
+     * Text value to be checked.
      */
     const SUCCESS_MESSAGE = 'You saved the product.';
 
     /**
-     * Assert that success message is displayed after product save
+     * Assert that success message is displayed after product save.
      *
      * @param CatalogProductEdit $productPage
      * @return void
@@ -28,7 +28,7 @@ class AssertProductSaveMessage extends AbstractConstraint
     public function processAssert(CatalogProductEdit $productPage)
     {
         $actualMessages = $productPage->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::SUCCESS_MESSAGE,
             $actualMessages,
             'Wrong success message is displayed.'

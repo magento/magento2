@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,5 +14,18 @@
                 <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\App\ResourceConnection">
+        <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
+        <plugin name="get_catalog_product_price_index_table_name" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\TableResolver"/>
+    </type>
+    <type name="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface">
+        <plugin name="updateProductCustomOptionsAttributes" type="Magento\Catalog\Plugin\Model\Product\Option\UpdateProductCustomOptionsAttributes"/>
+    </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="product_authorization" type="Magento\Catalog\Plugin\ProductAuthorization" />
+    </type>
+    <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
+        <plugin name="category_authorization" type="Magento\Catalog\Plugin\CategoryAuthorization" />
     </type>
 </config>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,11 +9,11 @@
     <acl>
         <resources>
             <resource id="Magento_Webapi::all">
-                <resource id="Magento_Customer::all" title="Manage Customers" sortOrder="20">
-                    <resource id="Magento_Customer::create" title="Create Customer" sortOrder="30" />
-                    <resource id="Magento_Customer::update" title="Edit Customer" sortOrder="10" />
-                    <resource id="Magento_Customer::get" title="Get Customer" sortOrder="20" />
-                    <resource id="Magento_Customer::delete" title="Delete Customer" />
+                <resource id="Magento_Customer::all" title="Manage Customers" translate="title" sortOrder="20">
+                    <resource id="Magento_Customer::create" title="Create Customer" translate="title" sortOrder="30" />
+                    <resource id="Magento_Customer::update" title="Edit Customer" translate="title" sortOrder="10" />
+                    <resource id="Magento_Customer::get" title="Get Customer" translate="title" sortOrder="20" />
+                    <resource id="Magento_Customer::delete" title="Delete Customer" translate="title" />
                 </resource>
             </resource>
         </resources>

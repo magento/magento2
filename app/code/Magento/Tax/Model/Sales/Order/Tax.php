@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Order;
 
 /**
- * @method \Magento\Tax\Model\ResourceModel\Sales\Order\Tax _getResource()
- * @method \Magento\Tax\Model\ResourceModel\Sales\Order\Tax getResource()
  * @method int getOrderId()
  * @method \Magento\Tax\Model\Sales\Order\Tax setOrderId(int $value)
  * @method int getPriority()
@@ -31,6 +29,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_PERCENT     = 'percent';
     const KEY_AMOUNT      = 'amount';
     const KEY_BASE_AMOUNT = 'base_amount';
+    const KEY_RATES       = 'rates';
     /**#@-*/
 
     /**
@@ -38,7 +37,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\ResourceModel\Sales\Order\Tax');
+        $this->_init(\Magento\Tax\Model\ResourceModel\Sales\Order\Tax::class);
     }
 
     /**
@@ -134,6 +133,25 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setBaseAmount($baseAmount)
     {
         return $this->setData(self::KEY_BASE_AMOUNT, $baseAmount);
+    }
+
+    /**
+     *
+     * @return \Magento\Tax\Api\Data\AppliedTaxRateInterface[]
+     */
+    public function getRates()
+    {
+        return $this->getData(self::KEY_RATES);
+    }
+
+    /**
+     *
+     * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
+     * @return $this
+     */
+    public function setRates($rates)
+    {
+        return $this->setData(self::KEY_RATES, $rates);
     }
 
     /**

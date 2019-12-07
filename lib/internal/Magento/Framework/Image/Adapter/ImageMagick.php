@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
@@ -77,7 +77,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
         try {
             $this->_imageHandler = new \Imagick($this->_fileName);
         } catch (\ImagickException $e) {
-            throw new \Exception('Unsupported image format.', $e->getCode(), $e);
+            throw new \Exception(sprintf('Unsupported image format. File: %s', $this->_fileName), $e->getCode(), $e);
         }
 
         $this->backgroundColor();
@@ -167,6 +167,13 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 $this->_options['sharpen']['deviation']
             );
         }
+
+        $newImage->compositeImage(
+            $this->_imageHandler,
+            \Imagick::COMPOSITE_COPYOPACITY,
+            $dims['dst']['x'],
+            $dims['dst']['y']
+        );
 
         $newImage->compositeImage(
             $this->_imageHandler,
@@ -262,14 +269,16 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
             );
         }
 
-        if (method_exists($watermark, 'setImageOpacity')) {
-            // available from imagick 6.3.1
-            $watermark->setImageOpacity($opacity);
-        } else {
-            // go to each pixel and make it transparent
-            $watermark->paintTransparentImage($watermark->getImagePixelColor(0, 0), 1, 65530);
-            $watermark->evaluateImage(\Imagick::EVALUATE_SUBTRACT, 1 - $opacity, \Imagick::CHANNEL_ALPHA);
+        if (method_exists($watermark, 'getImageAlphaChannel')) {
+            // available from imagick 6.4.0
+            if ($watermark->getImageAlphaChannel() == 0) {
+                $watermark->setImageAlphaChannel(\Imagick::ALPHACHANNEL_OPAQUE);
+            }
         }
+
+        $compositeChannels = \Imagick::CHANNEL_ALL;
+        $watermark->evaluateImage(\Imagick::EVALUATE_MULTIPLY, $opacity, \Imagick::CHANNEL_OPACITY);
+        $compositeChannels &= ~(\Imagick::CHANNEL_OPACITY);
 
         switch ($this->getWatermarkPosition()) {
             case self::POSITION_STRETCH:
@@ -302,14 +311,26 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 $offsetY = $positionY;
                 while ($offsetY <= $this->_imageSrcHeight + $watermark->getImageHeight()) {
                     while ($offsetX <= $this->_imageSrcWidth + $watermark->getImageWidth()) {
-                        $this->_imageHandler->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $offsetX, $offsetY);
+                        $this->_imageHandler->compositeImage(
+                            $watermark,
+                            \Imagick::COMPOSITE_OVER,
+                            $offsetX,
+                            $offsetY,
+                            $compositeChannels
+                        );
                         $offsetX += $watermark->getImageWidth();
                     }
                     $offsetX = $positionX;
                     $offsetY += $watermark->getImageHeight();
                 }
             } else {
-                $this->_imageHandler->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $positionX, $positionY);
+                $this->_imageHandler->compositeImage(
+                    $watermark,
+                    \Imagick::COMPOSITE_OVER,
+                    $positionX,
+                    $positionY,
+                    $compositeChannels
+                );
             }
         } catch (\ImagickException $e) {
             throw new \Exception('Unable to create watermark.', $e->getCode(), $e);
@@ -427,7 +448,8 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
             }
         }
 
-        $draw->setFontSize($this->_fontSize);
+        // Font size for ImageMagick is set in pixels, while the for GD2 it is in points. 3/4 is ratio between them
+        $draw->setFontSize($this->_fontSize * 4 / 3);
         $draw->setFillColor($color);
         $draw->setStrokeAntialias(true);
         $draw->setTextAntialias(true);

@@ -1,15 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\Request\ValidatorInterface;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Phrase;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea frontend
  */
-class FrontControllerTest extends \PHPUnit_Framework_TestCase
+class FrontControllerTest extends TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -17,26 +27,95 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\FrontController
+     * @var FrontController
      */
     protected $_model;
 
-    protected function setUp()
+    /**
+     * @var ValidatorInterface
+     */
+    private $fakeRequestValidator;
+
+    /**
+     * @return ValidatorInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function createRequestValidator(): ValidatorInterface
     {
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->_objectManager->create('Magento\Framework\App\FrontController');
+        if (!$this->fakeRequestValidator) {
+            $this->fakeRequestValidator = new class implements ValidatorInterface {
+                /**
+                 * @var bool
+                 */
+                public $valid;
+
+                /**
+                 * @inheritDoc
+                 */
+                public function validate(
+                    RequestInterface $request,
+                    ActionInterface $action
+                ): void {
+                    if (!$this->valid) {
+                        throw new InvalidRequestException(new NotFoundException(new Phrase('Not found')));
+                    }
+                }
+            };
+        }
+
+        return $this->fakeRequestValidator;
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        $this->_objectManager = Bootstrap::getObjectManager();
+        $this->_model = $this->_objectManager->create(
+            FrontController::class,
+            ['requestValidator' => $this->createRequestValidator()]
+        );
+    }
+
+    /**
+     * Test dispatching an empty action.
+     */
     public function testDispatch()
     {
-        if (!\Magento\TestFramework\Helper\Bootstrap::canTestHeaders()) {
+        if (!Bootstrap::canTestHeaders()) {
             $this->markTestSkipped('Can\'t test dispatch process without sending headers');
         }
+        $this->fakeRequestValidator->valid = true;
         $_SERVER['HTTP_HOST'] = 'localhost';
-        $this->_objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-        $request = $this->_objectManager->get('Magento\Framework\App\Request\Http');
+        $this->_objectManager->get(State::class)->setAreaCode('frontend');
+        $request = $this->_objectManager->get(HttpRequest::class);
         /* empty action */
         $request->setRequestUri('core/index/index');
-        $this->assertInstanceOf('Magento\Framework\Controller\ResultInterface', $this->_model->dispatch($request));
+        $this->assertInstanceOf(
+            ResultInterface::class,
+            $this->_model->dispatch($request)
+        );
+    }
+
+    /**
+     * Test request validator invalidating given request.
+     */
+    public function testInvalidRequest()
+    {
+        if (!Bootstrap::canTestHeaders()) {
+            $this->markTestSkipped('Can\'t test dispatch process without sending headers');
+        }
+        $this->fakeRequestValidator->valid = false;
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $this->_objectManager->get(State::class)->setAreaCode('frontend');
+        $request = $this->_objectManager->get(HttpRequest::class);
+        /* empty action */
+        $request->setRequestUri('core/index/index');
+        $this->assertInstanceOf(
+            ResultInterface::class,
+            $this->_model->dispatch($request)
+        );
     }
 }

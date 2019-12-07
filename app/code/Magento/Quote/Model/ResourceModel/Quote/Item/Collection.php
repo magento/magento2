@@ -1,12 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\ResourceModel\Quote\Item;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Quote\Model\ResourceModel\Quote\Item as ResourceQuoteItem;
 
 /**
  * Quote item resource collection
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
@@ -40,6 +54,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     protected $_quoteConfig;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface|null
+     */
+    private $storeManager;
+
+    /**
+     * @var bool $recollectQuote
+     */
+    private $recollectQuote = false;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -50,6 +74,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @param \Magento\Quote\Model\Quote\Config $quoteConfig
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -62,7 +87,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Quote\Model\Quote\Config $quoteConfig,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -76,6 +102,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         $this->_itemOptionCollectionFactory = $itemOptionCollectionFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_quoteConfig = $quoteConfig;
+
+        // Backward compatibility constructor parameters
+        $this->storeManager = $storeManager ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
 
     /**
@@ -85,7 +115,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Quote\Item', 'Magento\Quote\Model\ResourceModel\Quote\Item');
+        $this->_init(QuoteItem::class, ResourceQuoteItem::class);
     }
 
     /**
@@ -93,18 +123,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @return int
      */
-    public function getStoreId()
+    public function getStoreId(): int
     {
-        return (int)$this->_quote->getStoreId();
+        // Fallback to current storeId if no quote is provided
+        // (see https://github.com/magento/magento2/commit/9d3be732a88884a66d667b443b3dc1655ddd0721)
+        return $this->_quote === null ?
+            (int) $this->storeManager->getStore()->getId() : (int) $this->_quote->getStoreId();
     }
 
     /**
-     * Set Quote object to Collection
+     * Set Quote object to Collection.
      *
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @return $this
      */
-    public function setQuote($quote)
+    public function setQuote($quote): self
     {
         $this->_quote = $quote;
         $quoteId = $quote->getId();
@@ -118,14 +151,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Reset the collection and inner join it to quotes table
+     * Reset the collection and inner join it to quotes table.
+     *
      * Optionally can select items with specified product id only
      *
      * @param string $quotesTableName
      * @param int $productId
      * @return $this
      */
-    public function resetJoinQuotes($quotesTableName, $productId = null)
+    public function resetJoinQuotes($quotesTableName, $productId = null): self
     {
         $this->getSelect()->reset()->from(
             ['qi' => $this->getResource()->getMainTable()],
@@ -142,26 +176,28 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * After load processing
+     * After load processing.
      *
      * @return $this
      */
-    protected function _afterLoad()
+    protected function _afterLoad(): self
     {
         parent::_afterLoad();
 
-        /**
-         * Assign parent items
-         */
+        $productIds = [];
         foreach ($this as $item) {
+            // Assign parent items
             if ($item->getParentItemId()) {
                 $item->setParentItem($this->getItemById($item->getParentItemId()));
             }
             if ($this->_quote) {
                 $item->setQuote($this->_quote);
             }
+            // Collect quote products ids
+            $productIds[] = (int)$item->getProductId();
         }
-
+        $this->_productIds = array_merge($this->_productIds, $productIds);
+        $this->removeItemsWithAbsentProducts();
         /**
          * Assign options and products
          */
@@ -173,11 +209,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Add options to items
+     * Add options to items.
      *
      * @return $this
      */
-    protected function _assignOptions()
+    protected function _assignOptions(): self
     {
         $itemIds = array_keys($this->_items);
         $optionCollection = $this->_itemOptionCollectionFactory->create()->addItemFilter($itemIds);
@@ -191,27 +227,23 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Add products to items and item options
+     * Add products to items and item options.
      *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _assignProducts()
+    protected function _assignProducts(): self
     {
         \Magento\Framework\Profiler::start('QUOTE:' . __METHOD__, ['group' => 'QUOTE', 'method' => __METHOD__]);
-        $productIds = [];
-        foreach ($this as $item) {
-            $productIds[] = (int)$item->getProductId();
-        }
-        $this->_productIds = array_merge($this->_productIds, $productIds);
-
         $productCollection = $this->_productCollectionFactory->create()->setStoreId(
             $this->getStoreId()
         )->addIdFilter(
             $this->_productIds
         )->addAttributeToSelect(
             $this->_quoteConfig->getProductAttributes()
-        )->addOptionsToResult()->addStoreFilter()->addUrlRewrite()->addTierPriceData();
+        );
+        $this->skipStockStatusFilter($productCollection);
+        $productCollection->addOptionsToResult()->addStoreFilter()->addUrlRewrite();
 
         $this->_eventManager->dispatch(
             'prepare_catalog_product_collection_prices',
@@ -222,50 +254,130 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             ['collection' => $productCollection]
         );
 
-        $recollectQuote = false;
         foreach ($this as $item) {
+            /** @var ProductInterface $product */
             $product = $productCollection->getItemById($item->getProductId());
-            if ($product) {
+            try {
+                /** @var QuoteItem $item */
+                $parentItem = $item->getParentItem();
+                $parentProduct = $parentItem ? $parentItem->getProduct() : null;
+            } catch (NoSuchEntityException $exception) {
+                $parentItem = null;
+                $parentProduct = null;
+                $this->_logger->error($exception);
+            }
+            $qtyOptions = [];
+            if ($this->isValidProduct($product) && (!$parentItem || $this->isValidProduct($parentProduct))) {
                 $product->setCustomOptions([]);
-                $qtyOptions = [];
-                $optionProductIds = [];
-                foreach ($item->getOptions() as $option) {
-                    /**
-                     * Call type-specific logic for product associated with quote item
-                     */
-                    $product->getTypeInstance()->assignProductToOption(
-                        $productCollection->getItemById($option->getProductId()),
-                        $option,
-                        $product
-                    );
-
-                    if (is_object($option->getProduct()) && $option->getProduct()->getId() != $product->getId()) {
-                        $optionProductIds[$option->getProduct()->getId()] = $option->getProduct()->getId();
+                $optionProductIds = $this->getOptionProductIds($item, $product, $productCollection);
+                foreach ($optionProductIds as $optionProductId) {
+                    $qtyOption = $item->getOptionByCode('product_qty_' . $optionProductId);
+                    if ($qtyOption) {
+                        $qtyOptions[$optionProductId] = $qtyOption;
                     }
                 }
-
-                if ($optionProductIds) {
-                    foreach ($optionProductIds as $optionProductId) {
-                        $qtyOption = $item->getOptionByCode('product_qty_' . $optionProductId);
-                        if ($qtyOption) {
-                            $qtyOptions[$optionProductId] = $qtyOption;
-                        }
-                    }
-                }
-
-                $item->setQtyOptions($qtyOptions)->setProduct($product);
             } else {
                 $item->isDeleted(true);
-                $recollectQuote = true;
+                $this->recollectQuote = true;
             }
-            $item->checkData();
+            if (!$item->isDeleted()) {
+                $item->setQtyOptions($qtyOptions)->setProduct($product);
+                $item->checkData();
+            }
         }
-
-        if ($recollectQuote && $this->_quote) {
-            $this->_quote->collectTotals();
+        if ($this->recollectQuote && $this->_quote) {
+            $this->_quote->setTotalsCollectedFlag(false);
         }
         \Magento\Framework\Profiler::stop('QUOTE:' . __METHOD__);
 
         return $this;
+    }
+
+    /**
+     * Get product Ids from option.
+     *
+     * @param QuoteItem $item
+     * @param ProductInterface $product
+     * @param ProductCollection $productCollection
+     * @return array
+     */
+    private function getOptionProductIds(
+        QuoteItem $item,
+        ProductInterface $product,
+        ProductCollection $productCollection
+    ): array {
+        $optionProductIds = [];
+        foreach ($item->getOptions() as $option) {
+            /**
+             * Call type-specific logic for product associated with quote item
+             */
+            $product->getTypeInstance()->assignProductToOption(
+                $productCollection->getItemById($option->getProductId()),
+                $option,
+                $product
+            );
+
+            if (is_object($option->getProduct()) && $option->getProduct()->getId() != $product->getId()) {
+                $isValidProduct = $this->isValidProduct($option->getProduct());
+                if (!$isValidProduct && !$item->isDeleted()) {
+                    $item->isDeleted(true);
+                    $this->recollectQuote = true;
+                    continue;
+                }
+                $optionProductIds[$option->getProduct()->getId()] = $option->getProduct()->getId();
+            }
+        }
+
+        return $optionProductIds;
+    }
+
+    /**
+     * Check is valid product.
+     *
+     * @param ProductInterface $product
+     * @return bool
+     */
+    private function isValidProduct(?ProductInterface $product): bool
+    {
+        $result = ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED);
+
+        return $result;
+    }
+
+    /**
+     * Prevents adding stock status filter to the collection of products.
+     *
+     * @param ProductCollection $productCollection
+     * @return void
+     *
+     * @see \Magento\CatalogInventory\Helper\Stock::addIsInStockFilterToCollection
+     */
+    private function skipStockStatusFilter(ProductCollection $productCollection): void
+    {
+        $productCollection->setFlag('has_stock_status_filter', true);
+    }
+
+    /**
+     * Find and remove quote items with non existing products
+     *
+     * @return void
+     */
+    private function removeItemsWithAbsentProducts(): void
+    {
+        if (count($this->_productIds) === 0) {
+            return;
+        }
+
+        $productCollection = $this->_productCollectionFactory->create()->addIdFilter($this->_productIds);
+        $existingProductsIds = $productCollection->getAllIds();
+        $absentProductsIds = array_diff($this->_productIds, $existingProductsIds);
+        // Remove not existing products from items collection
+        if (!empty($absentProductsIds)) {
+            foreach ($absentProductsIds as $productIdToExclude) {
+                /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
+                $quoteItem = $this->getItemByColumnValue('product_id', $productIdToExclude);
+                $this->removeItemByKey($quoteItem->getId());
+            }
+        }
     }
 }

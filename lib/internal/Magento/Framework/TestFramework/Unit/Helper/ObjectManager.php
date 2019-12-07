@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Helper class for basic object retrieving, such as blocks, models etc...
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
+/**
+ * Helper class for basic object retrieving, such as blocks, models etc...
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ObjectManager
 {
     /**
@@ -17,23 +18,23 @@ class ObjectManager
      * @var array
      */
     protected $_specialCases = [
-        'Magento\Framework\Model\ResourceModel\AbstractResource' => '_getResourceModelMock',
-        'Magento\Framework\TranslateInterface' => '_getTranslatorMock',
+        \Magento\Framework\Model\ResourceModel\AbstractResource::class => '_getResourceModelMock',
+        \Magento\Framework\TranslateInterface::class => '_getTranslatorMock',
     ];
 
     /**
      * Test object
      *
-     * @var \PHPUnit_Framework_TestCase
+     * @var \PHPUnit\Framework\TestCase
      */
     protected $_testObject;
 
     /**
-     * Class constructor
+     * Constructor
      *
-     * @param \PHPUnit_Framework_TestCase $testObject
+     * @param \PHPUnit\Framework\TestCase $testObject
      */
-    public function __construct(\PHPUnit_Framework_TestCase $testObject)
+    public function __construct(\PHPUnit\Framework\TestCase $testObject)
     {
         $this->_testObject = $testObject;
     }
@@ -68,7 +69,7 @@ class ObjectManager
     {
         $object = null;
         $interfaces = class_implements($className);
-        if (in_array('Magento\Framework\ObjectManager\ContextInterface', $interfaces)) {
+        if (in_array(\Magento\Framework\ObjectManager\ContextInterface::class, $interfaces)) {
             $object = $this->getObject($className, $arguments);
         } elseif (isset($this->_specialCases[$className])) {
             $method = $this->_specialCases[$className];
@@ -85,13 +86,13 @@ class ObjectManager
      */
     protected function _getResourceModelMock()
     {
-        $resourceMock = $this->_testObject->getMock(
-            'Magento\Framework\Module\ModuleResource',
-            ['getIdFieldName', '__sleep', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $resourceMock = $this->_testObject->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
+            ->getMock();
         $resourceMock->expects(
             $this->_testObject->any()
         )->method(
@@ -133,13 +134,12 @@ class ObjectManager
      */
     protected function _getMockWithoutConstructorCall($className)
     {
-        $class = new \ReflectionClass($className);
-        $mock = null;
-        if ($class->isAbstract()) {
-            $mock = $this->_testObject->getMockForAbstractClass($className, [], '', false, false);
-        } else {
-            $mock = $this->_testObject->getMock($className, [], [], '', false, false);
-        }
+        $mock = $this->_testObject->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
         return $mock;
     }
 
@@ -152,14 +152,28 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = [])
     {
-        if (is_subclass_of($className, '\Magento\Framework\Api\AbstractSimpleObjectBuilder')
-            || is_subclass_of($className, '\Magento\Framework\Api\Builder')
+        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)
+            || is_subclass_of($className, \Magento\Framework\Api\Builder::class)
         ) {
             return $this->getBuilder($className, $arguments);
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
         $reflectionClass = new \ReflectionClass($className);
-        return $reflectionClass->newInstanceArgs($constructArguments);
+        $newObject = $reflectionClass->newInstanceArgs($constructArguments);
+
+        foreach (array_diff_key($arguments, $constructArguments) as $key => $value) {
+            $propertyReflectionClass = $reflectionClass;
+            while ($propertyReflectionClass) {
+                if ($propertyReflectionClass->hasProperty($key)) {
+                    $reflectionProperty = $propertyReflectionClass->getProperty($key);
+                    $reflectionProperty->setAccessible(true);
+                    $reflectionProperty->setValue($newObject, $value);
+                    break;
+                }
+                $propertyReflectionClass = $propertyReflectionClass->getParentClass();
+            }
+        }
+        return $newObject;
     }
 
     /**
@@ -171,55 +185,56 @@ class ObjectManager
      */
     protected function getBuilder($className, array $arguments)
     {
-        $objectFactory = $this->_testObject->getMock('Magento\Framework\Api\ObjectFactory', [], [], '', false);
-
         if (!isset($arguments['objectFactory'])) {
+            $objectFactory = $this->_testObject->getMockBuilder(\Magento\Framework\Api\ObjectFactory::class)
+                ->disableOriginalConstructor()
+                ->disableOriginalClone()
+                ->disableArgumentCloning()
+                ->disallowMockingUnknownTypes()
+                ->setMethods(['populateWithArray', 'populate', 'create'])
+                ->getMock();
+
+            $objectFactory->expects($this->_testObject->any())
+                ->method('populateWithArray')
+                ->will($this->_testObject->returnSelf());
+            $objectFactory->expects($this->_testObject->any())
+                ->method('populate')
+                ->will($this->_testObject->returnSelf());
+            $objectFactory->expects($this->_testObject->any())
+                ->method('create')
+                ->will($this->_testObject->returnCallback(
+                    function ($className, $arguments) {
+                        $reflectionClass = new \ReflectionClass($className);
+                        $constructorMethod = $reflectionClass->getConstructor();
+                        $parameters = $constructorMethod->getParameters();
+                        $args = [];
+                        foreach ($parameters as $parameter) {
+                            $parameterName = $parameter->getName();
+                            if (isset($arguments[$parameterName])) {
+                                $args[] = $arguments[$parameterName];
+                            } else {
+                                if ($parameter->isArray()) {
+                                    $args[] = [];
+                                } elseif ($parameter->allowsNull()) {
+                                    $args[] = null;
+                                } else {
+                                    $mock = $this->_getMockWithoutConstructorCall($parameter->getClass()->getName());
+                                    $args[] = $mock;
+                                }
+                            }
+                        }
+                        return new $className(...array_values($args));
+                    }
+                ));
+
             $arguments['objectFactory'] = $objectFactory;
         }
 
-        $constructArguments = $this->getConstructArguments($className, $arguments);
-        $reflectionClass = new \ReflectionClass($className);
-        $builderObject = $reflectionClass->newInstanceArgs($constructArguments);
-
-        $objectFactory->expects($this->_testObject->any())
-            ->method('populateWithArray')
-            ->will($this->_testObject->returnSelf());
-        $objectFactory->expects($this->_testObject->any())
-            ->method('populate')
-            ->will($this->_testObject->returnSelf());
-        $objectFactory->expects($this->_testObject->any())
-            ->method('create')
-            ->will($this->_testObject->returnCallback(
-                function ($className, $arguments) {
-                    $reflectionClass = new \ReflectionClass($className);
-                    $constructorMethod = $reflectionClass->getConstructor();
-                    $parameters = $constructorMethod->getParameters();
-                    $args = [];
-                    foreach ($parameters as $parameter) {
-                        $parameterName = $parameter->getName();
-                        if (isset($arguments[$parameterName])) {
-                            $args[] = $arguments[$parameterName];
-                        } else {
-                            if ($parameter->isArray()) {
-                                $args[] = [];
-                            } elseif ($parameter->allowsNull()) {
-                                $args[] = null;
-                            } else {
-                                $mock = $this->_getMockWithoutConstructorCall($parameter->getClass()->getName());
-                                $args[] = $mock;
-                            }
-                        }
-                    }
-
-                    return $reflectionClass->newInstanceArgs($args);
-                }
-            ));
-
-        return $builderObject;
+        return new $className(...array_values($this->getConstructArguments($className, $arguments)));
     }
 
     /**
-     * Retrieve list of arguments that used for new object instance creation
+     * Retrieve associative array of arguments that used for new object instance creation
      *
      * @param string $className
      * @param array $arguments
@@ -258,7 +273,12 @@ class ObjectManager
                 if ($firstPosition !== false) {
                     $parameterString = substr($parameterString, $firstPosition + 11);
                     $parameterString = substr($parameterString, 0, strpos($parameterString, ' '));
-                    $object = $this->_testObject->getMock($parameterString, [], [], '', false);
+                    $object = $this->_testObject->getMockBuilder($parameterString)
+                        ->disableOriginalConstructor()
+                        ->disableOriginalClone()
+                        ->disableArgumentCloning()
+                        ->disallowMockingUnknownTypes()
+                        ->getMock();
                 }
             }
 
@@ -277,12 +297,17 @@ class ObjectManager
      */
     public function getCollectionMock($className, array $data)
     {
-        if (!is_subclass_of($className, '\Magento\Framework\Data\Collection')) {
+        if (!is_subclass_of($className, \Magento\Framework\Data\Collection::class)) {
             throw new \InvalidArgumentException(
                 $className . ' does not instance of \Magento\Framework\Data\Collection'
             );
         }
-        $mock = $this->_testObject->getMock($className, [], [], '', false, false);
+        $mock = $this->_testObject->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
         $iterator = new \ArrayIterator($data);
         $mock->expects(
             $this->_testObject->any()
@@ -305,12 +330,29 @@ class ObjectManager
      */
     private function _getMockObject($argClassName, array $arguments)
     {
-        if (is_subclass_of($argClassName, '\Magento\Framework\Api\ExtensibleObjectBuilder')) {
+        if (is_subclass_of($argClassName, \Magento\Framework\Api\ExtensibleObjectBuilder::class)) {
             $object = $this->getBuilder($argClassName, $arguments);
             return $object;
         } else {
             $object = $this->_createArgumentMock($argClassName, $arguments);
             return $object;
         }
+    }
+
+    /**
+     * Set mocked property
+     *
+     * @param object $object
+     * @param string $propertyName
+     * @param object $propertyValue
+     * @param string $className The namespace of parent class for injection private property into this class
+     * @return void
+     */
+    public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue, $className = '')
+    {
+        $reflection = new \ReflectionClass($className ? $className : get_class($object));
+        $reflectionProperty = $reflection->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $propertyValue);
     }
 }

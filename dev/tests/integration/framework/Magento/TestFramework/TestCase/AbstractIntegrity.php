@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-abstract class AbstractIntegrity extends \PHPUnit_Framework_TestCase
+abstract class AbstractIntegrity extends \PHPUnit\Framework\TestCase
 {
     /**
      * Cached index of enabled modules
@@ -27,7 +27,7 @@ abstract class AbstractIntegrity extends \PHPUnit_Framework_TestCase
     {
         if ($this->_enabledModules === null) {
             /** @var $helper \Magento\TestFramework\Helper\Config */
-            $helper = \Magento\TestFramework\Helper\Factory::getHelper('Magento\TestFramework\Helper\Config');
+            $helper = \Magento\TestFramework\Helper\Factory::getHelper(\Magento\TestFramework\Helper\Config::class);
             $enabledModules = $helper->getEnabledModules();
             $this->_enabledModules = array_combine($enabledModules, $enabledModules);
         }
@@ -62,7 +62,7 @@ abstract class AbstractIntegrity extends \PHPUnit_Framework_TestCase
         $themeItems = [];
         /** @var $themeCollection \Magento\Theme\Model\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Theme\Model\ResourceModel\Theme\Collection'
+            \Magento\Theme\Model\ResourceModel\Theme\Collection::class
         );
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         foreach ($themeCollection as $theme) {

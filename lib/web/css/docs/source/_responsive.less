@@ -1,10 +1,10 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //  # Responsive
-//  Magento UI library provides a strong approach for working with media queries. It`s based on recursive call of <nobr><code>.media-width()</code></nobr> mixin defined anywhere in project but invoked in one place in <nobr><code>lib/web/css/source/lib/_responsive.less</code></nobr>. That's why in the resulting <code>styles.css</code> we have every media query only once with all the rules there, not a multiple calls for the same query.
+//  Magento UI library provides a strong approach for working with media queries. It`s based on recursive call of <span style="white-space: nowrap"><code>.media-width()</code></span> mixin defined anywhere in project but invoked in one place in <span style="white-space: nowrap"><code>lib/web/css/source/lib/_responsive.less</code></span>. That's why in the resulting <code>styles.css</code> we have every media query only once with all the rules there, not a multiple calls for the same query.
 //
 //  To see the media queries work resize window to understand which breakpoint is applied.
 //  ```
@@ -43,8 +43,8 @@
 //  ```css
 // .media-width(<@extremum>, <@break>);
 //  ```
-//  <nobr><code>@extremum: max|min</code></nobr> - sets whether to use **min-width** or **max-width** in media query condition<br />
-//  <nobr><code>@break: value</code></nobr> - sets the value of breakpoint to compare with in media query condition.<br />
+//  <span style="white-space: nowrap"><code>@extremum: max|min</code></span> - sets whether to use **min-width** or **max-width** in media query condition<br />
+//  <span style="white-space: nowrap"><code>@break: value</code></span> - sets the value of breakpoint to compare with in media query condition.<br />
 //  For example
 //  ```css
 //  .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
@@ -81,7 +81,7 @@
 //
 //  ## Gathering
 //
-//  Everything that you include in collector mixins above will go in place where they declarated.
+//  Everything that you include in collector mixins above will go in place where they declared.
 //  As example all
 //  ```css
 //  .media-width(@extremum, @break) {

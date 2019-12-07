@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Helper;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -10,11 +12,13 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class DataFactory
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class DataFactory
 {
     const AREA_FRONTEND = 'frontend';
     const AREA_BACKEND = 'adminhtml';
+
     /**
      * @var ObjectManagerInterface
      */
@@ -24,8 +28,8 @@ class DataFactory
      * @var array
      */
     protected $helperMap = [
-        self::AREA_FRONTEND => 'Magento\Authorizenet\Helper\Data',
-        self::AREA_BACKEND => 'Magento\Authorizenet\Helper\Backend\Data'
+        self::AREA_FRONTEND => \Magento\Authorizenet\Helper\Data::class,
+        self::AREA_BACKEND => \Magento\Authorizenet\Helper\Backend\Data::class
     ];
 
     /**

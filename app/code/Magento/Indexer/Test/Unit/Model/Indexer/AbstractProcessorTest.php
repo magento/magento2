@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\Indexer;
 
-class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
+class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
 {
     const INDEXER_ID = 'stub_indexer_id';
-    
+
     /**
      * @var \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub
      */
@@ -21,12 +21,9 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_indexerRegistryMock = $this->getMock(
-            '\Magento\Framework\Indexer\IndexerRegistry',
-            ['isScheduled', 'get', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate'],
-            [],
-            '',
-            false
+        $this->_indexerRegistryMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['isScheduled', 'get', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate']
         );
         $this->model = new \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub(
             $this->_indexerRegistryMock

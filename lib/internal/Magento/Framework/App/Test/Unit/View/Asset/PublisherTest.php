@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use \Magento\Framework\App\View\Asset\MaterializationStrategy;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
-class PublisherTest extends \PHPUnit_Framework_TestCase
+class PublisherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -22,7 +22,7 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $rootDirWrite;
+    private $sourceDirWrite;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -44,31 +44,36 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
      */
     private $materializationStrategyFactory;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $writeFactory;
+
     protected function setUp()
     {
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->materializationStrategyFactory = $this->getMock(
-            'Magento\Framework\App\View\Asset\MaterializationStrategy\Factory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->object = new Publisher($this->filesystem, $this->materializationStrategyFactory);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->materializationStrategyFactory =
+            $this->createMock(\Magento\Framework\App\View\Asset\MaterializationStrategy\Factory::class);
+        $this->writeFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteFactory::class);
+        $this->object = new Publisher($this->filesystem, $this->materializationStrategyFactory, $this->writeFactory);
 
-        $this->rootDirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $this->staticDirRead = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
-        $this->staticDirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->sourceDirWrite = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class
+        );
+        $this->staticDirRead = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class
+        );
+        $this->staticDirWrite = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class
+        );
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->staticDirRead));
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValueMap([
-                [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirWrite],
-                [DirectoryList::STATIC_VIEW, DriverPool::FILE, $this->staticDirWrite],
-            ]));
+            ->will($this->returnValue($this->staticDirWrite));
+        $this->writeFactory->expects($this->any())->method('create')->willReturn($this->sourceDirWrite);
     }
 
     public function testPublishExistsBefore()
@@ -86,25 +91,16 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with('some/file.ext')
             ->will($this->returnValue(false));
-        $materializationStrategy = $this->getMock(
-            'Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $materializationStrategy =
+            $this->createMock(\Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface::class);
 
-        $this->rootDirWrite->expects($this->once())
-            ->method('getRelativePath')
-            ->with('/root/some/file.ext')
-            ->will($this->returnValue('some/file.ext'));
         $this->materializationStrategyFactory->expects($this->once())
             ->method('create')
             ->with($this->getAsset())
             ->will($this->returnValue($materializationStrategy));
         $materializationStrategy->expects($this->once())
             ->method('publishFile')
-            ->with($this->rootDirWrite, $this->staticDirWrite, 'some/file.ext', 'some/file.ext')
+            ->with($this->sourceDirWrite, $this->staticDirWrite, 'file.ext', 'some/file.ext')
             ->will($this->returnValue(true));
 
         $this->assertTrue($this->object->publish($this->getAsset()));
@@ -117,7 +113,7 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
      */
     protected function getAsset()
     {
-        $asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
+        $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $asset->expects($this->any())
             ->method('getPath')
             ->will($this->returnValue('some/file.ext'));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Block\Adminhtml\Product\Edit;
@@ -31,6 +31,11 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
+
+    /**
+     * @var string
+     */
+    protected $videoSelector = '#media_gallery_content';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -72,11 +77,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         ]);
         $form->setUseContainer($this->getUseContainer());
-
         $form->addField('new_video_messages', 'note', []);
-
         $fieldset = $form->addFieldset('new_video_form_fieldset', []);
-
         $fieldset->addField(
             '',
             'hidden',
@@ -85,19 +87,16 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'value' => $this->getFormKey(),
             ]
         );
-
         $fieldset->addField(
             'item_id',
             'hidden',
             []
         );
-
         $fieldset->addField(
             'file_name',
             'hidden',
             []
         );
-
         $fieldset->addField(
             'video_provider',
             'hidden',
@@ -105,7 +104,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'video_provider',
             ]
         );
-
         $fieldset->addField(
             'video_url',
             'text',
@@ -116,10 +114,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'required' => true,
                 'name' => 'video_url',
                 'note' => $this->getNoteVideoUrl(),
-
             ]
         );
-
         $fieldset->addField(
             'video_title',
             'text',
@@ -131,7 +127,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'video_title',
             ]
         );
-
         $fieldset->addField(
             'video_description',
             'textarea',
@@ -142,7 +137,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'video_description',
             ]
         );
-
         $fieldset->addField(
             'new_video_screenshot',
             'file',
@@ -152,17 +146,15 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'image',
             ]
         );
-
         $fieldset->addField(
             'new_video_screenshot_preview',
             'button',
             [
-                'class' => 'preview_hidden_image_input_button',
+                'class' => 'preview-image-hidden-input',
                 'label' => '',
                 'name' => '_preview',
             ]
         );
-
         $fieldset->addField(
             'new_video_get',
             'button',
@@ -174,9 +166,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'class' => 'action-default'
             ]
         );
-
         $this->addMediaRoleAttributes($fieldset);
-
         $fieldset->addField(
             'new_video_disabled',
             'checkbox',
@@ -187,7 +177,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'disabled',
             ]
         );
-
         $this->setForm($form);
     }
 
@@ -216,7 +205,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'saveVideoUrl' => $this->getUrl('catalog/product_gallery/upload'),
                 'saveRemoteVideoUrl' => $this->getUrl('product_video/product_gallery/retrieveImage'),
                 'htmlId' => $this->getHtmlId(),
-                'youTubeApiKey' => $this->mediaHelper->getYouTubeApiKey()
+                'youTubeApiKey' => $this->mediaHelper->getYouTubeApiKey(),
+                'videoSelector' => $this->videoSelector
             ]
         );
     }
@@ -242,7 +232,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function addMediaRoleAttributes(Fieldset $fieldset)
     {
-        $fieldset->addField('roleLabel', 'note', ['text' => __('Role')]);
+        $fieldset->addField('role-label', 'note', ['text' => __('Role')]);
         $mediaRoles = $this->getProduct()->getMediaAttributes();
         ksort($mediaRoles);
         foreach ($mediaRoles as $mediaRole) {

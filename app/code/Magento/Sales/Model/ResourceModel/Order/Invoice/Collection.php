@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Invoice;
@@ -11,7 +11,9 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 /**
  * Flat sales order invoice collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends AbstractCollection implements InvoiceSearchResultInterface
 {
@@ -50,7 +52,10 @@ class Collection extends AbstractCollection implements InvoiceSearchResultInterf
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Invoice', 'Magento\Sales\Model\ResourceModel\Order\Invoice');
+        $this->_init(
+            \Magento\Sales\Model\Order\Invoice::class,
+            \Magento\Sales\Model\ResourceModel\Order\Invoice::class
+        );
     }
 
     /**

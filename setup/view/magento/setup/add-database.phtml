@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -90,11 +90,96 @@
             Create a database for me
         </label>
     </div>
-
-</fieldset>
-
-*/
+ */
 ?>
+<div class="row form-row">
+    <div class="col-m-3">
+        <label class="form-label" for="dbDriverOptionsSslKey">
+            Driver Options - SSL Key
+        </label>
+    </div>
+    <div class="col-m-4">
+        <input
+                id="dbDriverOptionsSslKey"
+                class="form-el-input"
+                tooltip-placement="right"
+                tooltip="File that contains X509 key"
+                tooltip-trigger="focus"
+                tooltip-append-to-body="true"
+                type="text"
+                name="dbDriverOptionsSslKey"
+                ng-model="db.driverOptionsSslKey"
+                placeholder="/path/to/client-key.pem"
+        >
+    </div>
+</div>
+
+<div class="row form-row">
+    <div class="col-m-3">
+        <label class="form-label" for="dbDriverOptionsSslCert">
+            Driver Options - SSL Certificate
+        </label>
+    </div>
+    <div class="col-m-4">
+        <input
+                id="dbDriverOptionsSslCert"
+                class="form-el-input"
+                tooltip-placement="right"
+                tooltip="File that contains X509 certificate"
+                tooltip-trigger="focus"
+                tooltip-append-to-body="true"
+                type="text"
+                name="dbDriverOptionsSslCert"
+                ng-model="db.driverOptionsSslCert"
+                placeholder="/path/to/client-cert.pem"
+        >
+    </div>
+</div>
+
+<div class="row form-row">
+    <div class="col-m-3">
+        <label class="form-label" for="dbDriverOptionsSslCa">
+            Driver Options - SSL Certificate Authorities
+        </label>
+    </div>
+    <div class="col-m-4">
+        <input
+                id="dbDriverOptionsSslCa"
+                class="form-el-input"
+                tooltip-placement="right"
+                tooltip="File that contains list of trusted SSL Certificate Authorities"
+                tooltip-trigger="focus"
+                tooltip-append-to-body="true"
+                type="text"
+                name="dbDriverOptionsSslCa"
+                ng-model="db.driverOptionsSslCa"
+                placeholder="/path/to/ca.pem"
+        >
+    </div>
+</div>
+
+<div class="row form-row">
+    <div class="col-m-3">
+        <label class="form-label">
+            Driver Options - SSL Verification
+        </label>
+    </div>
+    <div class="col-m-4">
+        <div class="form-row">
+            <input
+                    id="dbDriverOptionsSslVerify"
+                    class="form-el-checkbox"
+                    type="checkbox"
+                    ng-model="db.driverOptionsSslVerify"
+                    ng-checked="db.driverOptionsSslVerify"
+            >
+            <label class="form-label" for="dbDriverOptionsSslVerify">
+                Perform verification against the server CA certificate and against the server host name in its certificate
+            </label>
+        </div>
+    </div>
+</div>
+</fieldset>
 
 <fieldset class="form-fieldset">
 
@@ -475,7 +560,6 @@
 
 */
 ?>
-
 </fieldset>
 
 </form>

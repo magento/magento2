@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Review\Helper\Action;
 
@@ -13,7 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Action pager helper for iterating over search results
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Pager extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -44,8 +43,10 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Backend\Model\Session $backendSession
      */
-    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Backend\Model\Session $backendSession)
-    {
+    public function __construct(
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Backend\Model\Session $backendSession
+    ) {
         $this->_backendSession = $backendSession;
         parent::__construct($context);
     }
@@ -82,7 +83,7 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _loadItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = (array)$this->_backendSession->getData($this->_getStorageKey());
         }
     }
@@ -140,7 +141,7 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
     protected function _getStorageKey()
     {
         if (!$this->_storageId) {
-            throw new LocalizedException(__('Storage key was not set'));
+            throw new LocalizedException(__("The storage key wasn't set. Add the storage key and try again."));
         }
 
         return self::STORAGE_PREFIX . $this->_storageId;

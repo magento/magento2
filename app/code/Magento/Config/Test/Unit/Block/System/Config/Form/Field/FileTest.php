@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Block\System\Config\Form\Field\File
@@ -39,8 +39,12 @@ class FileTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->file = $objectManager->getObject(
-            'Magento\Config\Block\System\Config\Form\Field\File',
-            ['data' => $this->testData]
+            \Magento\Config\Block\System\Config\Form\Field\File::class,
+            [
+                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class),
+                'data' => $this->testData,
+
+            ]
         );
 
         $formMock = new \Magento\Framework\DataObject();

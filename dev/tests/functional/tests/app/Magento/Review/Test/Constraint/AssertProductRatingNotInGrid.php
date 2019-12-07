@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,9 +27,9 @@ class AssertProductRatingNotInGrid extends AbstractConstraint
         $filter = ['rating_code' => $productRating->getRatingCode()];
 
         $ratingIndex->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $ratingIndex->getRatingGrid()->isRowVisible($filter),
-            "Product Rating " . $productRating->getRatingCode() . " is exist on product Rating grid."
+            "Product Rating " . $productRating->getRatingCode() . " exists on product Rating grid."
         );
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,6 +10,7 @@
         <variation name="UpdateAdminUserRoleEntityTestVariation1">
             <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
             <data name="role/data/rolename" xsi:type="string">NewAdminRole%isolation%</data>
+            <data name="role/data/current_password" xsi:type="string">123123q</data>
             <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
@@ -19,6 +20,7 @@
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="role/data/resource_access" xsi:type="string">Custom</data>
             <data name="role/data/roles_resources" xsi:type="string">Sales</data>
+            <data name="role/data/current_password" xsi:type="string">%current_password%</data>
             <data name="role/data/in_role_users/dataset" xsi:type="string">custom_admin</data>
             <data name="restrictedAccess" xsi:type="array">
                 <item name="0" xsi:type="string">sales</item>
@@ -27,8 +29,14 @@
             <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccess" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLoginWithError"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccessWithError" />
+        </variation>
+        <variation name="UpdateAdminUserRoleEntityTestVariation3">
+            <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
+            <data name="role/data/rolename" xsi:type="string">NewAdminRole%isolation%</data>
+            <data name="role/data/current_password" xsi:type="string">incorrect password</data>
+            <constraint name="Magento\User\Test\Constraint\AssertIncorrectUserPassword" />
         </variation>
     </testCase>
 </config>

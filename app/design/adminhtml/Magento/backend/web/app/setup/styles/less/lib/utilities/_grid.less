@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -18,7 +18,7 @@
     margin-right: auto;
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
-    .extend__clearer();
+    &:extend(.abs-clearer all);
 }
 
 //  Creates a wrapper for a series of columns
@@ -26,7 +26,7 @@
 .make-row(@gutter: @grid-gutter-width) {
     margin-left: (@gutter / -2);
     margin-right: (@gutter / -2);
-    .extend__clearer();
+    &:extend(.abs-clearer all);
 }
 
 //

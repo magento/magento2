@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class AssertCartPriceRuleFreeShippingIsApplied extends AssertCartPriceRuleApplyi
     {
         $shippingPrice = $this->checkoutCart->getTotalsBlock()->getShippingPrice();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $shippingPrice,
             self::FREE_SHIPPING_PRICE,
             'Current shipping price: \'' . $shippingPrice

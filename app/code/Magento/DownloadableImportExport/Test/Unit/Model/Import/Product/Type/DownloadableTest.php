@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\DownloadableImportExport\Test\Unit\Model\Import\Product\Type;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 /**
  * Class DownloadableTest
@@ -73,23 +73,20 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      * Set up
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
         //connection and sql query results
-        $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'],
-            [],
-            '',
-            false
+        $this->connectionMock = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc']
         );
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->select->expects($this->any())->method('from')->will($this->returnSelf());
         $this->select->expects($this->any())->method('where')->will($this->returnSelf());
         $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $adapter = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
         $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
         $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->select));
@@ -100,19 +97,13 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
 
         //constructor arguments:
         // 1. $attrSetColFac
-        $this->attrSetColFacMock = $this->getMock(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->attrSetColFacMock = $this->createPartialMock(
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
+            ['create']
         );
-        $this->attrSetColMock = $this->getMock(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
-            ['setEntityTypeFilter'],
-            [],
-            '',
-            false
+        $this->attrSetColMock = $this->createPartialMock(
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class,
+            ['setEntityTypeFilter']
         );
         $this->attrSetColMock
             ->expects($this->any())
@@ -120,32 +111,20 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             ->will($this->returnValue([]));
 
         // 2. $prodAttrColFac
-        $this->prodAttrColFacMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->prodAttrColFacMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
+            ['create']
         );
 
-        $attrCollection = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
-            [],
-            [],
-            '',
-            false
-        );
+        $attrCollection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
 
         $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
         $this->prodAttrColFacMock->expects($this->any())->method('create')->will($this->returnValue($attrCollection));
 
         // 3. $resource
-        $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            ['getConnection', 'getTableName'],
-            [],
-            '',
-            false
+        $this->resourceMock = $this->createPartialMock(
+            \Magento\Framework\App\ResourceConnection::class,
+            ['getConnection', 'getTableName']
         );
         $this->resourceMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($this->connectionMock)
@@ -155,9 +134,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         );
 
         // 4. $params
-        $this->entityModelMock = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product',
-            [
+        $this->entityModelMock = $this->createPartialMock(\Magento\CatalogImportExport\Model\Import\Product::class, [
                 'addMessageTemplate',
                 'getEntityTypeId',
                 'getBehavior',
@@ -166,11 +143,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'isRowAllowedToImport',
                 'getParameters',
                 'addRowError'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $this->entityModelMock->expects($this->any())->method('addMessageTemplate')->will($this->returnSelf());
         $this->entityModelMock->expects($this->any())->method('getEntityTypeId')->will($this->returnValue(5));
@@ -180,32 +153,23 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             'downloadable'
         ];
 
-        $this->uploaderMock = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Uploader',
-            ['move'],
-            [],
-            '',
-            false
+        $this->uploaderMock = $this->createPartialMock(
+            \Magento\CatalogImportExport\Model\Import\Uploader::class,
+            ['move', 'setTmpDir', 'setDestDir']
         );
 
         // 6. $filesystem
-        $this->directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
 
         // 7. $fileHelper
-        $this->uploaderHelper = $this->getMock(
-            '\Magento\DownloadableImportExport\Helper\Uploader',
-            ['getUploader'],
-            [],
-            '',
-            false
+        $this->uploaderHelper = $this->createPartialMock(
+            \Magento\DownloadableImportExport\Helper\Uploader::class,
+            ['getUploader']
         );
         $this->uploaderHelper->expects($this->any())->method('getUploader')->willReturn($this->uploaderMock);
-        $this->downloadableHelper = $this->getMock(
-            '\Magento\DownloadableImportExport\Helper\Data',
-            ['prepareDataForSave'],
-            [],
-            '',
-            false
+        $this->downloadableHelper = $this->createPartialMock(
+            \Magento\DownloadableImportExport\Helper\Data::class,
+            ['prepareDataForSave', 'fillExistOptions']
         );
         $this->downloadableHelper->expects($this->any())->method('prepareDataForSave')->willReturn([]);
     }
@@ -243,7 +207,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         ));
 
         $downloadableModelMock = $this->objectManagerHelper->getObject(
-            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable::class,
             [
                 'attrSetColFac' => $this->attrSetColFacMock,
                 'prodAttrColFac' => $this->prodAttrColFacMock,
@@ -281,10 +245,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
                         'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
-                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                            . ',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                         'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
-                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
-                            .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                            . ' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            . 'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => true,
@@ -352,10 +316,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
                         'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
-                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                            . ',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                         'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
-                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
-                            .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                            . ' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
+                            . 'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => false,
@@ -376,10 +340,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
                         'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
-                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                            . 'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                         'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
-                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
-                            .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                            . ' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => true,
@@ -400,10 +364,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
                         'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
-                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                            . 'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                         'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
-                            .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
-                            .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                            . ' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                            . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => true,
@@ -471,11 +435,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
                         'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
-                            .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                            . 'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                         'downloadable_links' => 'group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
-                            .' url=http://www.sample.com/pic.jpg,sortorder=0,sample=http://www.sample.com/pic.jpg,'
-                            .'purchased_separately=1,shareable=1|group_title=Group Title, title=Title 2, price=10, '
-                            .'downloads=unlimited, url=media/file2.mp4,sortorder=0,sample=media/file2mp4',
+                            . ' url=http://www.sample.com/pic.jpg,sortorder=0,sample=http://www.sample.com/pic.jpg,'
+                            . 'purchased_separately=1,shareable=1|group_title=Group Title, title=Title 2, price=10, '
+                            . 'downloads=unlimited, url=media/file2.mp4,sortorder=0,sample=media/file2mp4',
                     ],
                 ],
                 'allowImport' => true,
@@ -551,7 +515,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             ]
         );
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
-            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable::class,
             [
                 'attrSetColFac' => $this->attrSetColFacMock,
                 'prodAttrColFac' => $this->prodAttrColFacMock,
@@ -561,7 +525,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'downloadableHelper' => $this->downloadableHelper
             ]
         );
-        $this->downloadableModelMock->isRowValid($rowData, $rowNum, $isNewProduct);
+        $result = $this->downloadableModelMock->isRowValid($rowData, $rowNum, $isNewProduct);
+        $this->assertNotNull($result);
     }
 
     /**
@@ -579,10 +544,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 1',
                     'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
-                        .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        . 'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, '
-                        .'downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
-                        .'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        . 'downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
+                        . 'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 0,
                 true
@@ -593,10 +558,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
                     'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
-                        .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        . ',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
-                        .' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2,'
-                        .' price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        . ' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title,'
+                        . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 1,
                 true
@@ -616,10 +581,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
                     'downloadable_samples' => 'title=Title 1, file=media/file.mp4,sortorder=1|title=Title 2,'
-                        .' url=media/file2.mp4,sortorder=0',
+                        . ' url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
-                        .'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
-                        .' url=media/file2.mp4,sortorder=0',
+                        . 'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
+                        . ' url=media/file2.mp4,sortorder=0',
                 ],
                 3,
                 true
@@ -630,10 +595,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
                     'downloadable_samples' => 'file=media/file.mp4,sortorder=1|group_title=Group Title, '
-                        .'url=media/file2.mp4,sortorder=0',
+                        . 'url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
-                        .'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
-                        .' url=media/file2.mp4,sortorder=0',
+                        . 'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
+                        . ' url=media/file2.mp4,sortorder=0',
                 ],
                 4,
                 true
@@ -644,10 +609,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
                     'downloadable_samples' => 'group_title=, title=Title 1, file=media/file.mp4,sortorder=1'
-                        .'|group_title=, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        . '|group_title=, title=Title 2, url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
-                        .' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
-                        .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        . ' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
+                        . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 5,
                 true
@@ -658,10 +623,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
                     'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
-                        .'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                        . 'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'group_title=, title=Title 1, price=10, downloads=unlimited, '
-                        .'file=media/file_link.mp4,sortorder=1|group_title=, title=Title 2, price=10, '
-                        .'downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        . 'file=media/file_link.mp4,sortorder=1|group_title=, title=Title 2, price=10, '
+                        . 'downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 6,
                 true
@@ -683,31 +648,29 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     /**
      * @dataProvider dataForUploaderDir
      */
-    public function testSetUploaderDirFalse($newSku, $bunch, $allowImport)
+    public function testSetUploaderDirFalse($newSku, $bunch, $allowImport, $parsedOptions)
     {
         $this->connectionMock->expects($this->any())->method('fetchAll')->with(
             $this->select
-        )->willReturnOnConsecutiveCalls(
-            [
-                [
-                    'attribute_set_name' => '1',
-                    'attribute_id' => '1',
-                ],
-                [
-                    'attribute_set_name' => '2',
-                    'attribute_id' => '2',
-                ],
-            ]
-        );
+        )->willReturn([]);
+
+        $metadataPoolMock = $this
+            ->createPartialMock(\Magento\Framework\EntityManager\MetadataPool::class, ['getLinkField', 'getMetadata']);
+        $metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnSelf();
+        $metadataPoolMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
+        $this->downloadableHelper->expects($this->atLeastOnce())
+            ->method('fillExistOptions')->willReturn($parsedOptions['link']);
+
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
-            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable::class,
             [
                 'attrSetColFac' => $this->attrSetColFacMock,
                 'prodAttrColFac' => $this->prodAttrColFacMock,
                 'resource' => $this->resourceMock,
                 'params' => $this->paramsArray,
                 'uploaderHelper' => $this->uploaderHelper,
-                'downloadableHelper' => $this->downloadableHelper
+                'downloadableHelper' => $this->downloadableHelper,
+                'metadataPool' => $metadataPoolMock,
             ]
         );
         $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
@@ -715,10 +678,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
         $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
         $exception = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Error'));
-        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
-        $this->setExpectedException('\Exception');
         $this->uploaderMock->expects($this->any())->method('move')->will($this->throwException($exception));
-        $this->downloadableModelMock->saveData();
+        $this->entityModelMock->expects($this->exactly(2))->method('addRowError');
+        $result = $this->downloadableModelMock->saveData();
+        $this->assertNotNull($result);
     }
 
     /**
@@ -744,13 +707,41 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'product_type' => 'downloadable',
                         'name' => 'Downloadable Product 1',
                         'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
-                            .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                            . ',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                         'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads='
-                            .'unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2,'
-                            .' price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                            . 'unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2,'
+                            . ' price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                     ],
                 ],
                 'allowImport' => true,
+                'parsedOptions' => [
+                    'sample' => [
+                        'sample_id' => null,
+                        'product_id' => '25',
+                        'sample_url' => null,
+                        'sample_file' => 'media/file.mp4',
+                        'sample_type' => 'file',
+                        'sort_order' => '1',
+                        'group_title' => 'Group Title Samples',
+                        'title' => 'Title 1',
+                    ],
+                    'link' => [
+                        'link_id' => null,
+                        'product_id' => '25',
+                        'sort_order' => '1',
+                        'number_of_downloads' => 0,
+                        'is_shareable' => 2,
+                        'link_url' => null,
+                        'link_file' => '',
+                        'link_type' => 'file',
+                        'sample_url' => null,
+                        'sample_file' => null,
+                        'sample_type' => null,
+                        'group_title' => 'Group Title Links',
+                        'title' => 'Title 1',
+                        'price' => '10'
+                    ]
+                ]
             ],
         ];
     }
@@ -766,10 +757,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             'product_type' => 'downloadable',
             'name' => 'Downloadable Product 1',
             'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,sortorder=1'
-                .'|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                . '|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
             'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10, downloads=unlimited,'
-                .' file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads'
-                .'=unlimited, url=media/file2.mp4,sortorder=0',
+                . ' file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads'
+                . '=unlimited, url=media/file2.mp4,sortorder=0',
         ];
         $this->connectionMock->expects($this->any())->method('fetchAll')->with(
             $this->select
@@ -786,7 +777,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             ]
         );
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
-            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable::class,
             [
                 'attrSetColFac' => $this->attrSetColFacMock,
                 'prodAttrColFac' => $this->prodAttrColFacMock,
@@ -809,14 +800,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'is_unique' => '0',
                         'frontend_label' => 'Name',
                         'is_static' => false,
-                        'apply_to' =>
-                            [
-                            ],
+                        'apply_to' => [],
                         'type' => 'varchar',
                         'default_value' => null,
-                        'options' =>
-                            [
-                            ],
+                        'options' => [],
                     ],
                     'sku' => [
                         'id' => '70',
@@ -826,20 +813,17 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'is_unique' => '1',
                         'frontend_label' => 'SKU',
                         'is_static' => true,
-                        'apply_to' =>
-                            [
-                            ],
+                        'apply_to' => [],
                         'type' => 'varchar',
                         'default_value' => null,
-                        'options' =>
-                            [
-                            ],
+                        'options' => [],
                     ]
                 ]
             ]
         );
 
-        $this->downloadableModelMock->prepareAttributesWithDefaultValueForSave($rowData);
+        $result = $this->downloadableModelMock->prepareAttributesWithDefaultValueForSave($rowData);
+        $this->assertNotNull($result);
     }
 
     /**

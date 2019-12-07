@@ -1,21 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\MassAction;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
- * Class Filter
+ * Filter component.
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Filter
 {
@@ -42,6 +45,11 @@ class Filter
      * @var FilterBuilder
      */
     protected $filterBuilder;
+
+    /**
+     * @var DataProviderInterface
+     */
+    private $dataProvider;
 
     /**
      * @param UiComponentFactory $factory
@@ -74,23 +82,36 @@ class Filter
     }
 
     /**
+     * Adds filters to collection using DataProvider filter results
+     *
      * @param AbstractDb $collection
      * @return AbstractDb
      * @throws LocalizedException
      */
     public function getCollection(AbstractDb $collection)
     {
-        $component = $this->getComponent();
-        $this->prepareComponent($component);
-        $dataProvider = $component->getContext()->getDataProvider();
-        $dataProvider->setLimit(0, false);
-        $ids = [];
-        foreach ($dataProvider->getSearchResult()->getItems() as $document) {
-            $ids[] = $document->getId();
+        $selected = $this->request->getParam(static::SELECTED_PARAM);
+        $excluded = $this->request->getParam(static::EXCLUDED_PARAM);
+
+        $isExcludedIdsValid = (is_array($excluded) && !empty($excluded));
+        $isSelectedIdsValid = (is_array($selected) && !empty($selected));
+
+        if ('false' !== $excluded) {
+            if (!$isExcludedIdsValid && !$isSelectedIdsValid) {
+                throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
+            }
         }
 
-        $collection->addFieldToFilter($collection->getIdFieldName(), ['in' => $ids]);
-        return $this->applySelection($collection);
+        $filterIds = $this->getFilterIds();
+        if (\is_array($selected)) {
+            $filterIds = array_unique(array_merge($filterIds, $selected));
+        }
+        $collection->addFieldToFilter(
+            $collection->getIdFieldName(),
+            ['in' => $filterIds]
+        );
+
+        return $collection;
     }
 
     /**
@@ -106,9 +127,7 @@ class Filter
         if ('false' === $excluded) {
             return;
         }
-        $component = $this->getComponent();
-        $this->prepareComponent($component);
-        $dataProvider = $component->getContext()->getDataProvider();
+        $dataProvider = $this->getDataProvider();
         try {
             if (is_array($excluded) && !empty($excluded)) {
                 $this->filterBuilder->setConditionType('nin')
@@ -127,6 +146,8 @@ class Filter
     }
 
     /**
+     * Applies selection to collection from POST parameters
+     *
      * @param AbstractDb $collection
      * @return AbstractDb
      * @throws LocalizedException
@@ -146,7 +167,7 @@ class Filter
             } elseif (is_array($selected) && !empty($selected)) {
                 $collection->addFieldToFilter($collection->getIdFieldName(), ['in' => $selected]);
             } else {
-                throw new LocalizedException(__('Please select item(s).'));
+                throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()));
@@ -169,7 +190,7 @@ class Filter
     }
 
     /**
-     * Returns RefererUrl
+     * Returns Referrer Url
      *
      * @return string|null
      */
@@ -177,5 +198,45 @@ class Filter
     {
         $data = $this->getComponent()->getContext()->getDataProvider()->getConfigData();
         return (isset($data['referer_url'])) ? $data['referer_url'] : null;
+    }
+
+    /**
+     * Get data provider
+     *
+     * @return DataProviderInterface
+     */
+    private function getDataProvider()
+    {
+        if (!$this->dataProvider) {
+            $component = $this->getComponent();
+            $this->prepareComponent($component);
+            $this->dataProvider = $component->getContext()->getDataProvider();
+        }
+        return $this->dataProvider;
+    }
+
+    /**
+     * Get filter ids as array
+     *
+     * @return int[]
+     */
+    private function getFilterIds()
+    {
+        $idsArray = [];
+        $this->applySelectionOnTargetProvider();
+        if ($this->getDataProvider() instanceof \Magento\Ui\DataProvider\AbstractDataProvider) {
+            // Use collection's getAllIds for optimization purposes.
+            $idsArray = $this->getDataProvider()->getAllIds();
+        } else {
+            $dataProvider = $this->getDataProvider();
+            $dataProvider->setLimit(0, false);
+            $searchResult = $dataProvider->getSearchResult();
+            // Use compatible search api getItems when searchResult is not a collection.
+            foreach ($searchResult->getItems() as $item) {
+                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                $idsArray[] = $item->getId();
+            }
+        }
+        return  $idsArray;
     }
 }

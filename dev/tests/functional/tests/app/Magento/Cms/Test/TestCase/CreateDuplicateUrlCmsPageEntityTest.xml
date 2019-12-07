@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Cms\Test\TestCase\CreateDuplicateUrlCmsPageEntityTest" summary="Create CMS Page URL Rewrites" ticketId="MAGETWO-70306">
+        <variation name="CreateCmsPageEntityTestVariation1" summary="Create Duplicate Url CMS Content Page" >
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
+            <data name="data/is_active" xsi:type="string">Yes</data>
+            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
+            <data name="data/store_id" xsi:type="string">All Store Views</data>
+            <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDuplicateErrorMessage" />
+        </variation>
+    </testCase>
+</config>

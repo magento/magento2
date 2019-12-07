@@ -1,18 +1,23 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
-class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
+/**
+ * Updates status for a batch of products.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
@@ -32,22 +37,31 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $collectionFactory;
 
     /**
-     * @param Action\Context $context
+     * @var \Magento\Catalog\Model\Product\Action
+     */
+    private $productAction;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\Product\Action $productAction
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         Filter $filter,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\Product\Action $productAction = null
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
+        $this->productAction = $productAction ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\Product\Action::class);
         parent::__construct($context, $productBuilder);
     }
 
@@ -62,7 +76,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     public function _validateMassStatus(array $productIds, $status)
     {
         if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
-            if (!$this->_objectManager->create('Magento\Catalog\Model\Product')->isProductsHasSku($productIds)) {
+            if (!$this->_objectManager->create(\Magento\Catalog\Model\Product::class)->isProductsHasSku($productIds)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please make sure to define SKU values for all processed products.')
                 );
@@ -79,23 +93,32 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $productIds = $collection->getAllIds();
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        $requestStoreId = $storeId = $this->getRequest()->getParam('store', null);
+        $filterRequest = $this->getRequest()->getParam('filters', null);
         $status = (int) $this->getRequest()->getParam('status');
+
+        if (null === $storeId && null !== $filterRequest) {
+            $storeId = (isset($filterRequest['store_id'])) ? (int) $filterRequest['store_id'] : 0;
+        }
 
         try {
             $this->_validateMassStatus($productIds, $status);
-            $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
-                ->updateAttributes($productIds, ['status' => $status], $storeId);
-            $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
+            $this->productAction->updateAttributes($productIds, ['status' => $status], (int) $storeId);
+            $this->messageManager->addSuccessMessage(
+                __('A total of %1 record(s) have been updated.', count($productIds))
+            );
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Something went wrong while updating the product(s) status.')
+            );
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
+        return $resultRedirect->setPath('catalog/*/', ['store' => $requestStoreId]);
     }
 }

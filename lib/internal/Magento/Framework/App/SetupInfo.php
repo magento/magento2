@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
 
-use \Magento\Framework\Setup\BackendFrontnameGenerator;
+use Magento\Framework\Setup\BackendFrontnameGenerator;
 
 /**
  * A model for determining information about setup application
@@ -109,8 +109,10 @@ class SetupInfo
     public function getProjectUrl()
     {
         $isProjectInDocRoot = false !== strpos($this->projectRoot . '/', $this->docRoot . '/');
-        if (!$isProjectInDocRoot || empty($this->server['HTTP_HOST'])) {
+        if (empty($this->server['HTTP_HOST'])) {
             return '';
+        } elseif (!$isProjectInDocRoot) {
+            return 'http://' . $this->server['HTTP_HOST'] . '/';
         }
         return 'http://' . $this->server['HTTP_HOST'] . substr($this->projectRoot . '/', strlen($this->docRoot));
     }
@@ -145,6 +147,14 @@ class SetupInfo
     {
         $setupDir = $this->getDir($this->projectRoot);
         $isSubDir = false !== strpos($setupDir . '/', $this->docRoot . '/');
+        // Setup is not accessible from pub folder
+        $setupDir = rtrim($setupDir, '/');
+        $lastOccurrence = strrpos($setupDir, '/pub/setup');
+
+        if (false !== $lastOccurrence) {
+            $setupDir = substr_replace($setupDir, '/setup', $lastOccurrence, strlen('/pub/setup'));
+        }
+
         return $isSubDir && realpath($setupDir);
     }
 

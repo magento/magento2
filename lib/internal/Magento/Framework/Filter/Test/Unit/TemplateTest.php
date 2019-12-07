@@ -1,73 +1,33 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Filter\Test\Unit;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+use Magento\Store\Model\Store;
+
+/**
+ * Template Filter test.
+ */
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filter\Template
      */
     private $templateFilter;
 
+    /**
+     * @var Store
+     */
+    private $store;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
-    }
-
-    public function testFilter()
-    {
-        $this->templateFilter->setVariables(
-            [
-                'customer' => new \Magento\Framework\DataObject(['firstname' => 'Felicia', 'lastname' => 'Henry']),
-                'company' => 'A. L. Price',
-                'street1' => '687 Vernon Street',
-                'city' => 'Parker Dam',
-                'region' => 'CA',
-                'postcode' => '92267',
-                'telephone' => '760-663-5876',
-            ]
-        );
-
-        $template = <<<TEMPLATE
-{{var customer.firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var customer.getLastname()}}
-{{depend company}}{{var company}}{{/depend}}
-{{if street1}}{{var street1}}
-{{/if}}
-{{depend street2}}{{var street2}}{{/depend}}
-{{depend street3}}{{var street3}}{{/depend}}
-{{depend street4}}{{var street4}}{{/depend}}
-{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}
-{{var country}}
-T: {{var telephone}}
-{{depend fax}}F: {{var fax}}{{/depend}}
-{{depend vat_id}}VAT: {{var vat_id}}{{/depend}}
-TEMPLATE;
-
-        $expectedResult = <<<EXPECTED_RESULT
-Felicia Henry
-A. L. Price
-687 Vernon Street
-
-
-
-
-Parker Dam,  CA, 92267
-
-T: 760-663-5876
-
-
-EXPECTED_RESULT;
-
-        $this->assertEquals(
-            $expectedResult,
-            $this->templateFilter->filter($template),
-            'Template was processed incorrectly'
-        );
+        $this->templateFilter = $objectManager->getObject(\Magento\Framework\Filter\Template::class);
+        $this->store = $objectManager->getObject(Store::class);
     }
 
     /**
@@ -127,65 +87,135 @@ EXPECTED_RESULT;
     }
 
     /**
-     * @covers \Magento\Framework\Filter\Template::varDirective
-     * @covers \Magento\Framework\Filter\Template::getVariable
-     * @covers \Magento\Framework\Filter\Template::getStackArgs
-     * @dataProvider varDirectiveDataProvider
+     * @param $type
+     * @return array
      */
-    public function testVarDirective($construction, $variables, $expectedResult)
+    public function getTemplateAndExpectedResults($type)
     {
-        $this->templateFilter->setVariables($variables);
-        $this->assertEquals($expectedResult, $this->templateFilter->filter($construction));
+        switch ($type) {
+            case 'noLoopTag':
+                $template = $expected = '';
+                break;
+            case 'noBodyTag':
+                $template = <<<TEMPLATE
+<ul>
+{{for item in order.all_visible_items}}{{/for}}
+</ul>
+TEMPLATE;
+                $expected = <<<TEMPLATE
+<ul>
+{{for item in order.all_visible_items}}{{/for}}
+</ul>
+TEMPLATE;
+                break;
+            case 'noItemTag':
+                $template = <<<TEMPLATE
+<ul>
+{{for in order.all_visible_items}}
+    <li>
+        {{var loop.index}} name: {{var thing.name}}, lastname: {{var thing.lastname}}, age: {{var thing.age}}
+    </li>
+{{/for}}
+</ul>
+TEMPLATE;
+                $expected = <<<TEMPLATE
+<ul>
+{{for in order.all_visible_items}}
+    <li>
+         name: , lastname: , age: 
+    </li>
+{{/for}}
+</ul>
+TEMPLATE;
+                break;
+            case 'noItemNoBodyTag':
+                $template = <<<TEMPLATE
+<ul>
+{{for in order.all_visible_items}}
+    
+{{/for}}
+</ul>
+TEMPLATE;
+                $expected = <<<TEMPLATE
+<ul>
+{{for in order.all_visible_items}}
+    
+{{/for}}
+</ul>
+TEMPLATE;
+                break;
+            case 'noItemNoDataNoBodyTag':
+                $template = <<<TEMPLATE
+<ul>
+{{for in }}
+    
+{{/for}}
+</ul>
+TEMPLATE;
+                $expected = <<<TEMPLATE
+<ul>
+{{for in }}
+    
+{{/for}}
+</ul>
+TEMPLATE;
+                break;
+            default:
+                $template = <<<TEMPLATE
+<ul>
+    {{for item in order.all_visible_items}}
+    <li>
+        index: {{var loop.index}} sku: {{var item.sku}}
+        name: {{var item.name}} price: {{var item.price}} quantity: {{var item.ordered_qty}}
+    </li>
+    {{/for}}
+</ul>
+TEMPLATE;
+                $expected = <<<TEMPLATE
+<ul>
+    
+    <li>
+        index: 0 sku: ABC123
+        name: Product ABC price: 123 quantity: 2
+    </li>
+    
+    <li>
+        index: 1 sku: DOREMI
+        name: Product DOREMI price: 456 quantity: 1
+    </li>
+    
+</ul>
+TEMPLATE;
+        }
+        return [$template, ['order' => $this->getObjectData()], $expected];
     }
 
-    public function varDirectiveDataProvider()
+    /**
+     * @return object
+     */
+    private function getObjectData()
     {
-        /* @var $stub \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
-        $stub = $this->getMockBuilder('\Magento\Framework\DataObject')
-            ->disableOriginalConstructor()
-            ->disableProxyingToOriginalMethods()
-            ->setMethods(['bar'])
-            ->getMock();
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $dataObject = $objectManager->getObject(\Magento\Framework\DataObject::class);
 
-        $stub->expects($this->once())
-            ->method('bar')
-            ->will($this->returnCallback(function ($arg) {
-                return serialize($arg);
-            }));
+        /* $var @dataObject \Magento\Framework\DataObject */
 
-        return [
-            'no variables' => [
-                '{{var}}',
-                [],
-                '{{var}}',
+        $visibleItems = [
+            [
+                'sku' => 'ABC123',
+                'name' => 'Product ABC',
+                'price' => '123',
+                'ordered_qty' => '2'
             ],
-            'invalid variable' => [
-                '{{var invalid}}',
-                ['foobar' => 'barfoo'],
-                '',
-            ],
-            'string variable' => [
-                '{{var foobar}}',
-                ['foobar' => 'barfoo'],
-                'barfoo',
-            ],
-            'array argument to method' => [
-                '{{var foo.bar([param_1:value_1, param_2:$value_2, param_3:[a:$b, c:$d]])}}',
-                [
-                    'foo' => $stub,
-                    'value_2' => 'lorem',
-                    'b' => 'bee',
-                    'd' => 'dee',
-                ],
-                serialize([
-                    'param_1' => 'value_1',
-                    'param_2' => 'lorem',
-                    'param_3' => [
-                        'a' => 'bee',
-                        'c' => 'dee',
-                    ],
-                ]),
-            ],
+            [
+                'sku' => 'DOREMI',
+                'name' => 'Product DOREMI',
+                'price' => '456',
+                'ordered_qty' => '1'
+            ]
         ];
+
+        $dataObject->setAllVisibleItems($visibleItems);
+        return $dataObject;
     }
 }

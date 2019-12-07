@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,6 +12,8 @@
     <type name="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints">
         <arguments>
             <argument name="debugHintsPath" xsi:type="string">dev/debug/template_hints_admin</argument>
+            <argument name="debugHintsWithParam" xsi:type="string">dev/debug/template_hints_storefront_show_with_parameter</argument>
+            <argument name="debugHintsParameter" xsi:type="string">dev/debug/template_hints_parameter_value</argument>
         </arguments>
     </type>
 </config>

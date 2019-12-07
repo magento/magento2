@@ -1,26 +1,38 @@
 <?php
 /**
- * Magento validator config factory
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Validator;
 
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Validator;
+use Magento\Framework\Cache\FrontendInterface;
+
+/**
+ * Factory for \Magento\Framework\Validator and \Magento\Framework\Validator\Builder.
+ */
 class Factory
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * cache key
+     *
+     * @deprecated
+     */
+    const CACHE_KEY = __CLASS__;
+
+    /**
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
      * Validator config files
      *
-     * @var array|null
+     * @var iterable|null
      */
     protected $_configFiles = null;
 
@@ -30,23 +42,44 @@ class Factory
     private $isDefaultTranslatorInitialized = false;
 
     /**
+     * @var Reader
+     */
+    private $moduleReader;
+
+    /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param ObjectManagerInterface $objectManager
+     * @param Reader $moduleReader
+     * @param FrontendInterface $cache @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Module\Dir\Reader $moduleReader
+        ObjectManagerInterface $objectManager,
+        Reader $moduleReader,
+        FrontendInterface $cache
     ) {
         $this->_objectManager = $objectManager;
-        $this->_configFiles = $moduleReader->getConfigurationFiles('validation.xml');
+        $this->moduleReader = $moduleReader;
+    }
+
+    /**
+     * Init cached list of validation files
+     *
+     * @return void
+     */
+    protected function _initializeConfigList()
+    {
+        if (!$this->_configFiles) {
+            $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
+        }
     }
 
     /**
      * Create and set default translator to \Magento\Framework\Validator\AbstractValidator.
      *
      * @return void
+     * @throws \Zend_Translate_Exception
      */
     protected function _initializeDefaultTranslator()
     {
@@ -54,10 +87,10 @@ class Factory
             // Pass translations to \Magento\Framework\TranslateInterface from validators
             $translatorCallback = function () {
                 $argc = func_get_args();
-                return (string)new \Magento\Framework\Phrase(array_shift($argc), $argc);
+                return (string)new Phrase(array_shift($argc), $argc);
             };
             /** @var \Magento\Framework\Translate\Adapter $translator */
-            $translator = $this->_objectManager->create('Magento\Framework\Translate\Adapter');
+            $translator = $this->_objectManager->create(\Magento\Framework\Translate\Adapter::class);
             $translator->setOptions(['translator' => $translatorCallback]);
             \Magento\Framework\Validator\AbstractValidator::setDefaultTranslator($translator);
             $this->isDefaultTranslatorInitialized = true;
@@ -69,12 +102,17 @@ class Factory
      *
      * Will instantiate \Magento\Framework\Validator\Config
      *
-     * @return \Magento\Framework\Validator\Config
+     * @return Config
+     * @throws \Zend_Translate_Exception
      */
     public function getValidatorConfig()
     {
+        $this->_initializeConfigList();
         $this->_initializeDefaultTranslator();
-        return $this->_objectManager->create('Magento\Framework\Validator\Config', ['configFiles' => $this->_configFiles]);
+        return $this->_objectManager->create(
+            Config::class,
+            ['configFiles' => $this->_configFiles]
+        );
     }
 
     /**
@@ -83,7 +121,8 @@ class Factory
      * @param string $entityName
      * @param string $groupName
      * @param array|null $builderConfig
-     * @return \Magento\Framework\Validator\Builder
+     * @return Builder
+     * @throws \Zend_Translate_Exception
      */
     public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
     {
@@ -97,7 +136,8 @@ class Factory
      * @param string $entityName
      * @param string $groupName
      * @param array|null $builderConfig
-     * @return \Magento\Framework\Validator
+     * @return Validator
+     * @throws \Zend_Translate_Exception
      */
     public function createValidator($entityName, $groupName, array $builderConfig = null)
     {

@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
 
+use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Newsletter\Model\Template
@@ -17,8 +21,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Template'
+        $this->_model = Bootstrap::getObjectManager()->create(
+            \Magento\Newsletter\Model\Template::class
         );
     }
 
@@ -35,8 +39,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         if ($store != 'default') {
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            Bootstrap::getObjectManager()->get(
+                \Magento\Framework\App\Config\MutableScopeConfigInterface::class
             )->setValue(
                 \Magento\Theme\Model\View\Design::XML_PATH_THEME_ID,
                 $design,
@@ -45,8 +49,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             );
         }
         $this->_model->emulateDesign($store, 'frontend');
-        $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
+        $processedTemplate = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\State::class
         )->emulateAreaCode(
             'frontend',
             [$this->_model, 'getProcessedTemplate']
@@ -78,8 +82,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         $this->_model->emulateDesign('default', $area);
-        $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
+        $processedTemplate = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\State::class
         )->emulateAreaCode(
             $area,
             [$this->_model, 'getProcessedTemplate']
@@ -130,5 +134,78 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ['', 'john.doe', '', false],
             ['', '', '', false]
         ];
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testLegacyTemplateFromDbLoadsInLegacyMode()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+
+        $this->_model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
+        $templateText = '{{var store.isSaveAllowed()}} - {{template config_path="foobar"}}';
+        $this->_model->setTemplateText($templateText);
+
+        $template = $objectManager->create(\Magento\Email\Model\Template::class);
+        $templateData = [
+            'is_legacy' => '1',
+            'template_code' => 'some_unique_code',
+            'template_type' => TemplateTypesInterface::TYPE_HTML,
+            'template_text' => '{{var this.template_code}}'
+                . ' - {{var store.isSaveAllowed()}} - {{var this.getTemplateCode()}}',
+        ];
+        $template->setData($templateData);
+        $template->save();
+
+        // Store the ID of the newly created template in the system config so that this template will be loaded
+        $objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
+            ->setValue('foobar', $template->getId(), ScopeInterface::SCOPE_STORE, 'default');
+
+        $this->_model->emulateDesign('default', 'frontend');
+        $processedTemplate = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\State::class
+        )->emulateAreaCode(
+            'frontend',
+            [$this->_model, 'getProcessedTemplate']
+        );
+        self::assertEquals('1 - some_unique_code - 1 - some_unique_code', $processedTemplate);
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testTemplateFromDbLoadsInStrictMode()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+
+        $this->_model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
+        $templateText = '{{var store.isSaveAllowed()}} - {{template config_path="foobar"}}';
+        $this->_model->setTemplateText($templateText);
+
+        $template = $objectManager->create(\Magento\Email\Model\Template::class);
+        $templateData = [
+            'template_code' => 'some_unique_code',
+            'template_type' => TemplateTypesInterface::TYPE_HTML,
+            'template_text' => '{{var this.template_code}}'
+                . ' - {{var store.isSaveAllowed()}} - {{var this.getTemplateCode()}}',
+        ];
+        $template->setData($templateData);
+        $template->save();
+
+        // Store the ID of the newly created template in the system config so that this template will be loaded
+        $objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
+            ->setValue('foobar', $template->getId(), ScopeInterface::SCOPE_STORE, 'default');
+
+        $this->_model->emulateDesign('default', 'frontend');
+        $processedTemplate = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\State::class
+        )->emulateAreaCode(
+            'frontend',
+            [$this->_model, 'getProcessedTemplate']
+        );
+        self::assertEquals('1 - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 }

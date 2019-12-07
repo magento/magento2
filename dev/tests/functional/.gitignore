@@ -6,3 +6,4 @@
 /vendor
 phpunit.xml
 credentials.xml
+.htaccess

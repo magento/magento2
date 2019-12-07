@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -101,46 +101,46 @@
     padding-right: 0;
 }
 
-.magento_message {
+.magento-message {
     padding: 19px;
     position: relative;
 }
-.magento_message > .page-actions {
+.magento-message > .page-actions {
     padding-top: 0;
 }
 
-.popup-window .magento_message .fieldset {
+.popup-window .magento-message .fieldset {
     border: 0;
 }
 
-.popup-window .magento_message .fieldset select {
+.popup-window .magento-message .fieldset select {
     border-radius: 4px;
 }
 
-.popup-window .magento_message .fieldset select {
+.popup-window .magento-message .fieldset select {
     border-radius: 4px;
 }
 
-.popup-window .magento_message .fieldset .addon select {
+.popup-window .magento-message .fieldset .addon select {
     display: block;
 }
 
-.popup-window .magento_message .fieldset .addon .addafter {
+.popup-window .magento-message .fieldset .addon .addafter {
     border: 0;
     color: #666;
     display: block;
 }
 
-.popup-window .magento_message .fieldset .nm {
+.popup-window .magento-message .fieldset .nm {
     margin: 4px 0 0;
 }
 
-.popup-window .magento_message .fieldset .nm small {
+.popup-window .magento-message .fieldset .nm small {
     font-size: 11px;
     font-weight: normal;
 }
 
-.popup-window .magento_message .fieldset .widget-option-label {
+.popup-window .magento-message .fieldset .widget-option-label {
     padding: 6px 0 0;
 }
 
@@ -201,38 +201,38 @@
 /*
     Upload images
 -------------------------------------- */
-.magento_message .main-col-inner .uploader {
+.magento-message .main-col-inner .uploader {
     background: #fbfaf6;
     border: 1px solid #cac2b5;
     margin: 0 0 10px;
     padding: 5px;
 }
 
-.magento_message .breadcrumbs {
+.magento-message .breadcrumbs {
     padding-left: 0;
 }
 
-.magento_message .breadcrumbs li:after {
+.magento-message .breadcrumbs li:after {
     content: "";
     margin: 0 5px 0 0;
 }
 
-.magento_message #contents-uploader {
+.magento-message #contents-uploader {
     margin: 0 0 18px;
 }
 
-.magento_message .fileinput-button {
+.magento-message .fileinput-button {
     display: inline-block;
     cursor: pointer;
     float: none;
     vertical-align: middle;
 }
 
-.magento_message .fileinput-button span {
+.magento-message .fileinput-button span {
     display: none;
 }
 
-.magento_message .fileinput-button input {
+.magento-message .fileinput-button input {
     position: static;
     border: none;
     opacity: 1;
@@ -240,14 +240,14 @@
     -moz-transform: none;
 }
 
-.magento_message .file-row {
+.magento-message .file-row {
     background: #fff;
     border: 1px solid #cac2b5;
     margin: 5px 0;
     padding: 2px;
 }
 
-.magento_message .filecnt {
+.magento-message .filecnt {
     border: 1px solid #cac2b5;
     display: inline-block;
     margin: 0 4px 15px 0;
@@ -256,25 +256,25 @@
     overflow: hidden;
 }
 
-.magento_message .filecnt.selected {
+.magento-message .filecnt.selected {
     border-color: #19a3d1;
 }
 
-.magento_message .filecnt p {
+.magento-message .filecnt p {
     text-align: center;
 }
 
-.magento_message #contents-uploader:after,
-.magento_message #contents-uploader:before {
+.magento-message #contents-uploader:after,
+.magento-message #contents-uploader:before {
     content: "";
     display: table;
 }
 
-.magento_message #contents-uploader:after {
+.magento-message #contents-uploader:after {
     clear: both;
 }
 
-.magento_message .x-tree {
+.magento-message .x-tree {
     margin-bottom: 20px;
 }
 

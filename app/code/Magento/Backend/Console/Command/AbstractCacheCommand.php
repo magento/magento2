@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,16 @@ use Magento\Framework\App\Cache\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * Abstract cache command
+ *
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractCacheCommand extends Command
 {
     /**
-     * Input option bootsrap
+     * Input option bootstrap
      */
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
@@ -36,7 +42,7 @@ abstract class AbstractCacheCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {

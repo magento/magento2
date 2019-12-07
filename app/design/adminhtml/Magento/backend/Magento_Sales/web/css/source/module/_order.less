@@ -1,11 +1,11 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
 //  Page components
-//  ---------------------------------------------
+//  _____________________________________________
 
 @import 'order/_address.less';
 @import 'order/_discounts.less';
@@ -20,7 +20,7 @@
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @order-create-icon-refresh__font-size: 2rem;
 @order-create-icon-refresh__color: @color-gray83;
@@ -93,6 +93,14 @@
         border: 0;
         margin: 0;
         padding: 0;
+    }
+     .admin__data-grid-pager-wrap{
+         .selectmenu {
+             margin-bottom: 10px;
+         }
+     }
+   .data-grid-search-control-wrap {
+        margin-bottom: 10px;
     }
 }
 
@@ -242,44 +250,120 @@
             display: block;
             font-size: 1.3rem;
             &:before {
-                content: attr(data-label) ": ";
+                content: attr(data-label) ': ';
             }
         }
     }
 }
 
-//  ToDo UI: review the collapsible block
-//.order-subtotal {
-//    .summary-collapse {
-//        cursor: pointer;
-//        display: inline-block;
-//        &:before {
-//            @iconsize: 16px;
+.options-list {
+    &.nested {
+        .admin__field-option {
+            .admin__field-label {
+                > span {
+                    &:after {
+                        content: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.summary-total {
+    cursor: pointer;
+
+    .summary-collapse {
+        display: inline-block;
+        padding: 0 0 0 (@collapsible-title-icon__size + .5rem);
+        position: relative;
+        &:before {
+            &:extend(.abs-icon all);
+            content: @icon-expand-open__content;
+            font-size: @collapsible-title-icon__size;
+            left: 0;
+            position: absolute;
+            top: 0;
+        }
+        &:active {
+            &:before {
+                .scale();
+            }
+        }
+    }
+}
+
+.show-details {
+    .summary-collapse {
+        &:before {
+            content: @icon-expand-close__content;
+        }
+    }
+}
+
+.summary-details {
+    .label,
+    .admin__total-mark {
+        padding-left: @collapsible-title-icon__size + .5rem + @admin__table-secondary__padding-horizontal;
+    }
+}
+
 //
-//            background: #f2ebde;
-//            border: 1px solid #ada89e;
-//            border-radius: 2px;
-//            color: #816063;
-//            content: '+';
-//            display: inline-block;
-//            font-size: @iconsize;
-//            -webkit-font-smoothing: antialiased;
-//            font-style: normal;
-//            font-weight: normal;
-//            height: @iconsize;
-//            line-height: @iconsize;
-//            margin-right: 7px;
-//            overflow: hidden;
-//            speak: none;
-//            text-indent: 0;
-//            vertical-align: top;
-//            width: @iconsize;
-//        }
-//        &:hover:before {
-//            background: #cac3b4;
-//        }
-//    }
-//    &.show-details .summary-collapse:before {
-//        content: '\e03a';
-//    }
-//}
+//  Create Order - Add Product Grid
+//  ---------------------------------------------
+
+#sales_order_create_search_grid {
+    .col-in_products {
+        .data-grid-checkbox-cell-inner {
+            position: relative;
+        }
+        .checkbox {
+            width: 1.6rem;
+            height: 1.6rem;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+    }
+}
+
+//
+//  Create Order - Add Product with Custom Options Modal
+//  ----------------------------------------------------
+
+#product_composite_configure_form_fields {
+    .admin__field {
+        &.required {
+            .admin__field-label {
+                &:after {
+                    color: #e22626;
+                    content: '*';
+                    display: inline-block;
+                    font-size: 1.6rem;
+                    font-weight: 500;
+                    line-height: 1;
+                    margin-left: 10px;
+                    margin-top: .2rem;
+                    position: absolute;
+                    z-index: 1;
+                }
+            }
+            .price-container, .price-notice, .price-wrapper {
+                &:after {
+                    color: unset;
+                    content: unset;
+                    display: unset;
+                    font-size: unset;
+                    font-weight: unset;
+                    line-height: unset;
+                    margin-left: unset;
+                    margin-top: unset;
+                    position: unset;
+                    z-index: unset;
+                }
+            }
+        }
+    }
+}
+
+//  ToDo: MAGETWO-32299 UI: review the collapsible block

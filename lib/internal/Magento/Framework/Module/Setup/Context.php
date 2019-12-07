@@ -1,10 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Setup;
 
+/**
+ * Constructor modification point for Magento\Framework\Module\Setup.
+ *
+ * All context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
+ * the classes they were introduced for.
+ */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
@@ -88,6 +99,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Retrieve event manager
+     *
      * @return \Magento\Framework\Event\ManagerInterface
      */
     public function getEventManager()
@@ -96,7 +109,9 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Psr\Log\LoggerInterface $logger
+     * Retrieve logger
+     *
+     * @return \Psr\Log\LoggerInterface
      */
     public function getLogger()
     {
@@ -104,6 +119,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Retrieve module list
+     *
      * @return \Magento\Framework\Module\ModuleListInterface
      */
     public function getModuleList()
@@ -112,6 +129,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Retrieve modules reader
+     *
      * @return \Magento\Framework\Module\Dir\Reader
      */
     public function getModulesReader()
@@ -120,6 +139,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Retrieve resource model
+     *
      * @return \Magento\Framework\App\ResourceConnection
      */
     public function getResourceModel()
@@ -128,6 +149,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Retrieve migration factory
+     *
      * @return \Magento\Framework\Module\Setup\MigrationFactory
      */
     public function getMigrationFactory()
@@ -136,6 +159,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Retrieve resource
+     *
      * @return \Magento\Framework\Module\ResourceInterface
      */
     public function getResource()
@@ -144,6 +169,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Retrieve encryptor
+     *
      * @return \Magento\Framework\Encryption\EncryptorInterface
      */
     public function getEncryptor()
@@ -152,6 +179,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
+     * Retrieve filesystem
+     *
      * @return \Magento\Framework\Filesystem
      */
     public function getFilesystem()

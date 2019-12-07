@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,8 +12,8 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Payment::payment" title="Payment Methods Section" />
-                            <resource id="Magento_Payment::payment_services" title="Payment Services" />
+                            <resource id="Magento_Payment::payment" title="Payment Methods Section" translate="title" />
+                            <resource id="Magento_Payment::payment_services" title="Payment Services" translate="title" />
                         </resource>
                     </resource>
                 </resource>

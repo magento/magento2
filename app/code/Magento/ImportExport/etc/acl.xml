@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,9 +11,9 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Backend::convert">
-                        <resource id="Magento_ImportExport::import" title="Import" sortOrder="10" />
-                        <resource id="Magento_ImportExport::export" title="Export" sortOrder="20" />
-                        <resource id="Magento_ImportExport::history" title="Import History" sortOrder="40" />
+                        <resource id="Magento_ImportExport::import" title="Import" translate="title" sortOrder="10" />
+                        <resource id="Magento_ImportExport::export" title="Export" translate="title" sortOrder="20" />
+                        <resource id="Magento_ImportExport::history" title="Import History" translate="title" sortOrder="40" />
                     </resource>
                 </resource>
             </resource>

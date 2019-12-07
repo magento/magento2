@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,13 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Swatches\Model\Swatch;
 
 /**
- * Class Save
- * @package Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin
+ * Plugin for product attribute save controller.
  */
 class Save
 {
     /**
+     * Performs the conversion of the frontend input value.
+     *
      * @param Attribute\Save $subject
      * @param RequestInterface $request
      * @return array
@@ -25,6 +26,7 @@ class Save
     public function beforeDispatch(Attribute\Save $subject, RequestInterface $request)
     {
         $data = $request->getPostValue();
+
         if (isset($data['frontend_input'])) {
             switch ($data['frontend_input']) {
                 case 'swatch_visual':

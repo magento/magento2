@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
@@ -41,6 +41,8 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     }
 
     /**
+     * Get label.
+     *
      * @return string
      * @codeCoverageIgnore
      */
@@ -50,6 +52,8 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     }
 
     /**
+     * Get href.
+     *
      * @return string
      * @codeCoverageIgnore
      */
@@ -65,7 +69,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      */
     protected function _toHtml()
     {
-        if ($this->_moduleManager->isOutputEnabled('Magento_Checkout')) {
+        if (!$this->_moduleManager->isOutputEnabled('Magento_Checkout')) {
             return '';
         }
         return parent::_toHtml();

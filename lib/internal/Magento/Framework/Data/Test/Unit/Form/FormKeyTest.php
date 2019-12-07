@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,10 @@ use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Session\SessionManager;
 
-class FormKeyTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class FormKeyTest
+ */
+class FormKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Random|\PHPUnit_Framework_MockObject_MockObject
@@ -23,18 +26,26 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
     protected $sessionMock;
 
     /**
+     * @var \Zend\Escaper\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $escaperMock;
+
+    /**
      * @var FormKey
      */
     protected $formKey;
 
     protected function setUp()
     {
-        $this->mathRandomMock = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
+        $this->mathRandomMock = $this->createMock(\Magento\Framework\Math\Random::class);
         $methods = ['setData', 'getData'];
-        $this->sessionMock = $this->getMock('Magento\Framework\Session\SessionManager', $methods, [], '', false);
+        $this->sessionMock = $this->createPartialMock(\Magento\Framework\Session\SessionManager::class, $methods);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock->expects($this->any())->method('escapeJs')->willReturnArgument(0);
         $this->formKey = new FormKey(
             $this->mathRandomMock,
-            $this->sessionMock
+            $this->sessionMock,
+            $this->escaperMock
         );
     }
 

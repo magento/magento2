@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api;
@@ -12,16 +12,17 @@ namespace Magento\Sales\Api;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 100.0.2
  */
 interface OrderAddressRepositoryInterface
 {
     /**
      * Lists order addresses that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\OrderAddressSearchResultInterface Order address search result interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Loads a specified order address.

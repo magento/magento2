@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Attribute\Data;
@@ -14,6 +14,7 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
 {
     /**
      * Validate file by attribute validate rules
+     *
      * Return array of errors
      *
      * @param array $value
@@ -54,9 +55,9 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
                 $errors[] = __('"%1" width exceeds allowed value of %2 px.', $label, $r);
             }
         }
-        if (!empty($rules['max_image_heght'])) {
-            if ($rules['max_image_heght'] < $imageProp[1]) {
-                $r = $rules['max_image_heght'];
+        if (!empty($rules['max_image_height'])) {
+            if ($rules['max_image_height'] < $imageProp[1]) {
+                $r = $rules['max_image_height'];
                 $errors[] = __('"%1" height exceeds allowed value of %2 px.', $label, $r);
             }
         }

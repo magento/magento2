@@ -1,30 +1,38 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\ExtensionAttribute;
 
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Api\ExtensionAttribute\Config\Reader;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Extension attributes config
  */
 class Config extends \Magento\Framework\Config\Data
 {
+    /**
+     * Cache identifier
+     */
     const CACHE_ID = 'extension_attributes_config';
 
     /**
-     * Initialize reader and cache.
+     * Constructor
      *
      * @param Reader $reader
      * @param CacheInterface $cache
+     * @param string $cacheId|null
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         Reader $reader,
-        CacheInterface $cache
+        CacheInterface $cache,
+        $cacheId = self::CACHE_ID,
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, self::CACHE_ID);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 }

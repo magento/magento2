@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\Service;
 
 /**
  * Class CreditmemoService
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterface
 {
@@ -47,6 +48,26 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     protected $eventManager;
 
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var \Magento\Sales\Model\Order\RefundAdapterInterface
+     */
+    private $refundAdapter;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    /**
      * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
      * @param \Magento\Sales\Api\CreditmemoCommentRepositoryInterface $creditmemoCommentRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -77,24 +98,13 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      * Cancel an existing creditmemo
      *
      * @param int $id Credit Memo Id
-     * @return bool
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cancel($id)
     {
         throw new \Magento\Framework\Exception\LocalizedException(__('You can not cancel Credit Memo'));
-        try {
-            $creditmemo = $this->creditmemoRepository->get($id);
-            $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_CANCELED);
-            foreach ($creditmemo->getAllItems() as $item) {
-                $item->cancel();
-            }
-            $this->eventManager->dispatch('sales_order_creditmemo_cancel', ['creditmemo' => $creditmemo]);
-            $this->creditmemoRepository->save($creditmemo);
-        } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Could not cancel creditmemo'), $e);
-        }
-        return true;
     }
 
     /**
@@ -130,6 +140,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @param bool $offlineRequested
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function refund(
         \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
@@ -138,29 +149,44 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
         $this->validateForRefund($creditmemo);
         $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
 
-        foreach ($creditmemo->getAllItems() as $item) {
-            if ($item->getQty() > 0) {
-                $item->register();
-            } else {
-                $item->isDeleted(true);
+        $connection = $this->getResource()->getConnection('sales');
+        $connection->beginTransaction();
+        try {
+            $invoice = $creditmemo->getInvoice();
+            if ($invoice && !$offlineRequested) {
+                $invoice->setIsUsedForRefund(true);
+                $invoice->setBaseTotalRefunded(
+                    $invoice->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
+                );
+                $creditmemo->setInvoiceId($invoice->getId());
+                $this->getInvoiceRepository()->save($creditmemo->getInvoice());
             }
+            $order = $this->getRefundAdapter()->refund(
+                $creditmemo,
+                $creditmemo->getOrder(),
+                !$offlineRequested
+            );
+            $this->creditmemoRepository->save($creditmemo);
+            $this->getOrderRepository()->save($order);
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollBack();
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         }
 
-        $creditmemo->setDoTransaction(!$offlineRequested);
-
-        $this->eventManager->dispatch('sales_order_creditmemo_refund', ['creditmemo' => $creditmemo]);
-        $this->creditmemoRepository->save($creditmemo);
         return $creditmemo;
     }
 
     /**
+     * Validates if credit memo is available for refund.
+     *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateForRefund(\Magento\Sales\Api\Data\CreditmemoInterface $creditmemo)
     {
-        if ($creditmemo->getId()) {
+        if ($creditmemo->getId() && $creditmemo->getState() != \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot register an existing credit memo.')
             );
@@ -176,10 +202,70 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The most money available to refund is %1.',
-                    $creditmemo->getOrder()->formatBasePrice($baseAvailableRefund)
+                    $creditmemo->getOrder()->getBaseCurrency()->formatTxt($baseAvailableRefund)
                 )
             );
         }
         return true;
+    }
+
+    /**
+     * Initializes RefundAdapterInterface dependency.
+     *
+     * @return \Magento\Sales\Model\Order\RefundAdapterInterface
+     * @deprecated 100.1.3
+     */
+    private function getRefundAdapter()
+    {
+        if ($this->refundAdapter === null) {
+            $this->refundAdapter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Sales\Model\Order\RefundAdapterInterface::class);
+        }
+        return $this->refundAdapter;
+    }
+
+    /**
+     * Initializes ResourceConnection dependency.
+     *
+     * @return \Magento\Framework\App\ResourceConnection|mixed
+     * @deprecated 100.1.3
+     */
+    private function getResource()
+    {
+        if ($this->resource === null) {
+            $this->resource = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\ResourceConnection::class);
+        }
+        return $this->resource;
+    }
+
+    /**
+     * Initializes OrderRepositoryInterface dependency.
+     *
+     * @return \Magento\Sales\Api\OrderRepositoryInterface
+     * @deprecated 100.1.3
+     */
+    private function getOrderRepository()
+    {
+        if ($this->orderRepository === null) {
+            $this->orderRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Sales\Api\OrderRepositoryInterface::class);
+        }
+        return $this->orderRepository;
+    }
+
+    /**
+     * Initializes InvoiceRepositoryInterface dependency.
+     *
+     * @return \Magento\Sales\Api\InvoiceRepositoryInterface
+     * @deprecated 100.1.3
+     */
+    private function getInvoiceRepository()
+    {
+        if ($this->invoiceRepository === null) {
+            $this->invoiceRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Sales\Api\InvoiceRepositoryInterface::class);
+        }
+        return $this->invoiceRepository;
     }
 }

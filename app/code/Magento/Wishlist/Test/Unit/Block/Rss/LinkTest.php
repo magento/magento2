@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Block\Rss;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Wishlist\Block\Rss\Link */
     protected $link;
@@ -32,21 +32,18 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', ['getId'], [], '', false);
+        $wishlist = $this->createPartialMock(\Magento\Wishlist\Model\Wishlist::class, ['getId']);
         $wishlist->expects($this->any())->method('getId')->will($this->returnValue(5));
 
-        $customer = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customer->expects($this->any())->method('getId')->will($this->returnValue(8));
         $customer->expects($this->any())->method('getEmail')->will($this->returnValue('test@example.com'));
 
-        $this->wishlistHelper = $this->getMock(
-            'Magento\Wishlist\Helper\Data',
-            ['getWishlist', 'getCustomer', 'urlEncode'],
-            [],
-            '',
-            false
+        $this->wishlistHelper = $this->createPartialMock(
+            \Magento\Wishlist\Helper\Data::class,
+            ['getWishlist', 'getCustomer', 'urlEncode']
         );
-        $this->urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', ['encode'], [], '', false);
+        $this->urlEncoder = $this->createPartialMock(\Magento\Framework\Url\EncoderInterface::class, ['encode']);
 
         $this->wishlistHelper->expects($this->any())->method('getWishlist')->will($this->returnValue($wishlist));
         $this->wishlistHelper->expects($this->any())->method('getCustomer')->will($this->returnValue($customer));
@@ -56,12 +53,12 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                 return strtr(base64_encode($url), '+/=', '-_,');
             });
 
-        $this->urlBuilder = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->urlBuilder = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->link = $this->objectManagerHelper->getObject(
-            'Magento\Wishlist\Block\Rss\Link',
+            \Magento\Wishlist\Block\Rss\Link::class,
             [
                 'wishlistHelper' => $this->wishlistHelper,
                 'rssUrlBuilder' => $this->urlBuilder,

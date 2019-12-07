@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
 use Magento\Framework\UrlInterface;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -30,16 +30,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $collectionFactoryMock = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
-        $this->urlBuilder = $this->getMock('\Magento\Framework\Url', [], [], '', false);
+        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
+        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\Url::class);
         $this->_image = new \Magento\Framework\Data\Form\Element\Image(
             $factoryMock,
             $collectionFactoryMock,

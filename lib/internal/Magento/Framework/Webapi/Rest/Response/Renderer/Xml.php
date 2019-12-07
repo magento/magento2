@@ -2,11 +2,14 @@
 /**
  *  XML Renderer allows to format array or object as valid XML document.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
+/**
+ * Renders response data in Xml format.
+ */
 class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**
@@ -24,7 +27,9 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     const DEFAULT_ENTITY_ITEM_NAME = 'item';
 
-    /** @var \Magento\Framework\Xml\Generator */
+    /**
+     * @var \Magento\Framework\Xml\Generator
+     */
     protected $_xmlGenerator;
 
     /**
@@ -109,8 +114,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
             /** Without the following transformation boolean values are rendered incorrectly */
             $value = $value ? 'true' : 'false';
         }
-        $replacementMap = ['&' => '&amp;'];
-        return str_replace(array_keys($replacementMap), array_values($replacementMap), $value);
+        return (string) $value;
     }
 
     /**

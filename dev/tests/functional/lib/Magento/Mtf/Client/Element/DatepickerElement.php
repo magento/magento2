@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -65,13 +65,17 @@ class DatepickerElement extends SimpleElement
     {
         $date = $this->parseDate($value);
         $date[1] = ltrim($date[1], '0');
-        $this->find($this->datePickerButton, Locator::SELECTOR_XPATH)->click();
+        $this->click();
         $datapicker = $this->find($this->datePickerBlock, Locator::SELECTOR_XPATH);
-        $datapicker->find($this->datePickerMonth, Locator::SELECTOR_XPATH, 'select')->setValue($date[0]);
+        $datepickerClose = $datapicker->find($this->datePickerButtonClose, Locator::SELECTOR_XPATH);
+        if (!$datepickerClose->isVisible()) {
+            $this->find($this->datePickerButton, Locator::SELECTOR_XPATH)->click();
+        }
         $datapicker->find($this->datePickerYear, Locator::SELECTOR_XPATH, 'select')->setValue($date[2]);
+        $datapicker->find($this->datePickerMonth, Locator::SELECTOR_XPATH, 'select')->setValue($date[0]);
         $datapicker->find(sprintf($this->datePickerCalendar, $date[1]), Locator::SELECTOR_XPATH)->click();
         if ($datapicker->isVisible()) {
-            $datapicker->find($this->datePickerButtonClose, Locator::SELECTOR_XPATH)->click();
+            $datepickerClose->click();
         }
     }
 

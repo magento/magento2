@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,7 +69,7 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->timezone as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -93,7 +93,7 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->currency as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -117,7 +117,7 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->language as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -178,7 +178,7 @@
             <p class="advanced-modules-select">
                 <input id="selectAll" type="checkbox"
                    class="form-el-checkbox"
-                   ng-model="store.selectAll"
+                   ng-checked="store.selectAll"
                    ng-click="toggleAllModules()">
                 <label class="form-label" for="selectAll">
                    Select All

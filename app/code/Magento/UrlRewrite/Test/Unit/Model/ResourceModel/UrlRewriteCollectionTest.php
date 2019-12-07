@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -41,17 +41,14 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->select = $this->getMock('Magento\Framework\DB\Select', ['from', 'where'], [], '', false);
-        $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'prepareSqlCondition', 'quoteIdentifier'],
-            [],
-            '',
-            false
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'where']);
+        $this->connectionMock = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'prepareSqlCondition', 'quoteIdentifier']
         );
         $this->resource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -81,7 +78,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test_main_table'));
 
         $this->collection = (new ObjectManager($this))->getObject(
-            'Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection',
+            \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class,
             [
                 'storeManager' => $this->storeManager,
                 'resource' => $this->resource,
@@ -125,7 +122,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddStoreFilterIfStoreIsInt($storeId, $withAdmin, $condition)
     {
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
 

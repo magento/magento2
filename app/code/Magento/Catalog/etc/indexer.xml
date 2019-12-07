@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,11 +14,11 @@
         <title translate="true">Category Flat Data</title>
         <description translate="true">Reorganize EAV category structure to flat structure</description>
     </indexer>
-    <indexer id="catalog_category_product" view_id="catalog_category_product" class="Magento\Catalog\Model\Indexer\Category\Product">
+    <indexer id="catalog_category_product" view_id="catalog_category_product" class="Magento\Catalog\Model\Indexer\Category\Product" shared_index="category_product">
         <title translate="true">Category Products</title>
         <description translate="true">Indexed category/products association</description>
     </indexer>
-    <indexer id="catalog_product_category" view_id="catalog_product_category" class="Magento\Catalog\Model\Indexer\Product\Category">
+    <indexer id="catalog_product_category" view_id="catalog_product_category" class="Magento\Catalog\Model\Indexer\Product\Category" shared_index="category_product">
         <title translate="true">Product Categories</title>
         <description translate="true">Indexed product/categories association</description>
     </indexer>

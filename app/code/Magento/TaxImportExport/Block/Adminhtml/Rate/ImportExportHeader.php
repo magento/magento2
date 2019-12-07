@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,5 +16,5 @@ class ImportExportHeader extends \Magento\Backend\Block\Widget
      *
      * @var string
      */
-    protected $_template = 'importExportHeader.phtml';
+    protected $_template = 'Magento_TaxImportExport::importExportHeader.phtml';
 }

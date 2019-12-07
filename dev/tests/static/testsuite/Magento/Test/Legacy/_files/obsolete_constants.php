@@ -4,11 +4,11 @@
  *
  * Format: array(<constant_name>[, <class_scope> = ''[, <replacement>]])
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// @codingStandardsIgnoreStart
 
 return [
     ['ADMIN_STORE_ID', 'Magento\Framework\AppInterface'],
@@ -562,10 +562,13 @@ return [
         '\Magento\Framework\App\Filesystem',
         '\Magento\Framework\App\Filesystem\DirectoryList::SESSION',
     ],
-    ['DI_DIR', '\Magento\Framework\App\Filesystem', '\Magento\Framework\App\Filesystem\DirectoryList::DI'],
+    ['DI_DIR',
+        '\Magento\Framework\App\Filesystem',
+        '\Magento\Framework\App\Filesystem\DirectoryList::GENERATED_METADATA'
+    ],
     ['GENERATION_DIR',
         '\Magento\Framework\App\Filesystem',
-        '\Magento\Framework\App\Filesystem\DirectoryList::GENERATION',
+        '\Magento\Framework\App\Filesystem\DirectoryList::GENERATED_CODE',
     ],
     ['UPLOAD_DIR',
         '\Magento\Framework\App\Filesystem',
@@ -709,7 +712,6 @@ return [
         'Magento\Sales\Block\Reorder\Sidebar',
         '\Magento\Sales\CustomerData\LastOrderedItems::SIDEBAR_ORDER_LIMIT',
     ],
-    ['ENTITY', 'Magento\Framework\App\Config\ValueInterface'],
     ['XML_PATH_ALLOW_CURRENCIES_INSTALLED', 'Magento\Framework\Locale\CurrencyInterface'],
     [
         'DEFAULT_CURRENCY',
@@ -725,11 +727,6 @@ return [
         'DEFAULT_GROUP',
         'Magento\Framework\Message\ManagerInterface',
         'Magento\Framework\Message\Manager::DEFAULT_GROUP',
-    ],
-    [
-        'SCOPE_DEFAULT',
-        'Magento\Framework\App\ScopeInterface',
-        'Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT',
     ],
     ['CURRENT_CUSTOMER', 'Magento\Customer\Controller\RegistryConstants'],
     ['METHOD_WPS', 'Magento\Paypal\Model\Config'],
@@ -949,5 +946,11 @@ return [
         'DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR',
         'Magento\CatalogImportExport\Model\Import\Product',
         'Magento\ImportExport\Model\Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR'
-    ]
+    ],
+    ['TAB_GENERAL_CODE', 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group'],
+    ['TAB_IMAGE_MANAGEMENT_CODE', 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group'],
+    [
+        'CALLBACK',
+        'Magento\Framework\MessageQueue\ConsumerConfiguration'
+    ],
 ];

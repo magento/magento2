@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,12 +8,12 @@ namespace Magento\CatalogRule\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions;
+use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\Conditions;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 
 /**
- * Create a Catalog Price Rules and check whether this attribute visible in Dropdown on Conditions tab.
+ * Create a Catalog Price Rules and check whether this attribute visible in Dropdown in Conditions section.
  */
 class AssertProductAttributeIsUsedPromoRules extends AbstractConstraint
 {
@@ -32,12 +32,12 @@ class AssertProductAttributeIsUsedPromoRules extends AbstractConstraint
     ) {
         $catalogRuleIndex->open();
         $catalogRuleIndex->getGridPageActions()->addNew();
-        $catalogRuleNew->getEditForm()->openTab('conditions');
+        $catalogRuleNew->getEditForm()->openSection('conditions');
 
-        /** @var Conditions $conditionsTab */
-        $conditionsTab = $catalogRuleNew->getEditForm()->getTab('conditions');
-        \PHPUnit_Framework_Assert::assertTrue(
-            $conditionsTab->isAttributeInConditions($attribute),
+        /** @var Conditions $conditionsSection */
+        $conditionsSection = $catalogRuleNew->getEditForm()->getSection('conditions');
+        \PHPUnit\Framework\Assert::assertTrue(
+            $conditionsSection->isAttributeInConditions($attribute),
             'Product attribute can\'t be used on promo rules conditions.'
         );
     }

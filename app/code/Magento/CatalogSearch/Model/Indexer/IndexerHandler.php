@@ -1,23 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
+use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
+/**
+ * Catalog search indexer handler.
+ *
+ * @api
+ * @since 100.0.2
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class IndexerHandler implements IndexerInterface
 {
     /**
-     * @var IndexStructure
+     * @var IndexStructureInterface
      */
     private $indexStructure;
 
@@ -57,22 +64,22 @@ class IndexerHandler implements IndexerInterface
     private $indexScopeResolver;
 
     /**
-     * @param IndexStructure $indexStructure
+     * @param IndexStructureInterface $indexStructure
      * @param ResourceConnection $resource
      * @param Config $eavConfig
      * @param Batch $batch
-     * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param IndexScopeResolverInterface $indexScopeResolver
      * @param array $data
      * @param int $batchSize
      */
     public function __construct(
-        IndexStructure $indexStructure,
+        IndexStructureInterface $indexStructure,
         ResourceConnection $resource,
         Config $eavConfig,
         Batch $batch,
-        IndexScopeResolver $indexScopeResolver,
+        IndexScopeResolverInterface $indexScopeResolver,
         array $data,
-        $batchSize = 100
+        $batchSize = 500
     ) {
         $this->indexScopeResolver = $indexScopeResolver;
         $this->indexStructure = $indexStructure;
@@ -87,7 +94,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function saveIndex($dimensions, \Traversable $documents)
     {
@@ -97,7 +104,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
@@ -108,7 +115,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function cleanIndex($dimensions)
     {
@@ -117,14 +124,20 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function isAvailable()
+    public function isAvailable($dimensions = [])
     {
-        return true;
+        if (empty($dimensions)) {
+            return true;
+        }
+
+        return $this->resource->getConnection()->isTableExists($this->getTableName($dimensions));
     }
 
     /**
+     * Returns table name.
+     *
      * @param Dimension[] $dimensions
      * @return string
      */
@@ -134,6 +147,8 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
+     * Returns index name.
+     *
      * @return string
      */
     private function getIndexName()
@@ -142,6 +157,8 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
+     * Add documents to storage.
+     *
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
@@ -160,6 +177,8 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
+     * Searchable filter preparation.
+     *
      * @param array $documents
      * @return array
      */
@@ -180,6 +199,8 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
+     * Prepare fields.
+     *
      * @return void
      */
     private function prepareFields()

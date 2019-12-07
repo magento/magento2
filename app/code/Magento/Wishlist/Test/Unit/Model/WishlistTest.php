@@ -1,79 +1,108 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Model;
 
-use \Magento\Wishlist\Model\Wishlist;
+use ArrayIterator;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Product as HelperProduct;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\ItemFactory;
+use Magento\Wishlist\Model\ResourceModel\Item\Collection;
+use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
+use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResource;
+use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection as WishlistCollection;
+use Magento\Wishlist\Model\Wishlist;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class WishlistTest extends \PHPUnit_Framework_TestCase
+class WishlistTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|PHPUnit_Framework_MockObject_MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperProduct|PHPUnit_Framework_MockObject_MockObject
      */
     protected $productHelper;
 
     /**
-     * @var \Magento\Wishlist\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|PHPUnit_Framework_MockObject_MockObject
      */
     protected $helper;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist|\PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistResource|PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistCollection|PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime\DateTime|PHPUnit_Framework_MockObject_MockObject
      */
     protected $date;
 
     /**
-     * @var \Magento\Wishlist\Model\ItemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemFactory;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemsFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $productFactory;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|PHPUnit_Framework_MockObject_MockObject
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|PHPUnit_Framework_MockObject_MockObject
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventDispatcher;
 
@@ -83,57 +112,81 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     protected $wishlist;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $productRepository;
 
-    public function setUp()
+    /**
+     * @var Json|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $serializer;
+
+    /**
+     * @var StockItemRepository|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfig;
+
+    /**
+     * @var StockRegistryInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockRegistry;
+
+    protected function setUp()
     {
-        $context = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->eventDispatcher = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productHelper = $this->getMockBuilder('Magento\Catalog\Helper\Product')
+        $this->productHelper = $this->getMockBuilder(HelperProduct::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->helper = $this->getMockBuilder('Magento\Wishlist\Helper\Data')
+        $this->helper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Wishlist')
+        $this->resource = $this->getMockBuilder(WishlistResource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Wishlist\Collection')
+        $this->collection = $this->getMockBuilder(WishlistCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
-        $this->date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
+        $this->date = $this->getMockBuilder(DateTime\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->itemFactory = $this->getMockBuilder('Magento\Wishlist\Model\ItemFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->itemsFactory = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory')
+        $this->itemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->productFactory = $this->getMockBuilder('Magento\Catalog\Model\ProductFactory')
+        $this->itemsFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->mathRandom = $this->getMockBuilder('Magento\Framework\Math\Random')
+        $this->productFactory = $this->getMockBuilder(ProductFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->mathRandom = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
+        $this->dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productRepository = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->stockRegistry = $this->createMock(StockRegistryInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer = $this->getMockBuilder(Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $context->expects($this->once())
             ->method('getEventDispatcher')
@@ -154,7 +207,11 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             $this->mathRandom,
             $this->dateTime,
             $this->productRepository,
-            false
+            false,
+            [],
+            $this->serializer,
+            $this->stockRegistry,
+            $this->scopeConfig
         );
     }
 
@@ -175,7 +232,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($sharingCode));
 
         $this->assertInstanceOf(
-            'Magento\Wishlist\Model\Wishlist',
+            Wishlist::class,
             $this->wishlist->loadByCustomerId($customerId, true)
         );
         $this->assertEquals($customerId, $this->wishlist->getCustomerId());
@@ -183,10 +240,10 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int|\Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemId
-     * @param \Magento\Framework\DataObject $buyRequest
-     * @param null|array|\Magento\Framework\DataObject $param
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param int|Item|PHPUnit_Framework_MockObject_MockObject $itemId
+     * @param DataObject $buyRequest
+     * @param null|array|DataObject $param
+     * @throws LocalizedException
      *
      * @dataProvider updateItemDataProvider
      */
@@ -194,9 +251,14 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $productId = 1;
-        $stores = [(new \Magento\Framework\DataObject())->setId($storeId)];
+        $stores = [(new DataObject())->setId($storeId)];
 
-        $newItem = $this->getMockBuilder('Magento\Wishlist\Model\Item')->disableOriginalConstructor()->getMock();
+        $newItem = $this->getMockBuilder(Item::class)
+            ->setMethods(
+                ['setProductId', 'setWishlistId', 'setStoreId', 'setOptions', 'setProduct', 'setQty', 'getItem', 'save']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $newItem->expects($this->any())->method('setProductId')->will($this->returnSelf());
         $newItem->expects($this->any())->method('setWishlistId')->will($this->returnSelf());
         $newItem->expects($this->any())->method('setStoreId')->will($this->returnSelf());
@@ -204,28 +266,39 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $newItem->expects($this->any())->method('setProduct')->will($this->returnSelf());
         $newItem->expects($this->any())->method('setQty')->will($this->returnSelf());
         $newItem->expects($this->any())->method('getItem')->will($this->returnValue(2));
+        $newItem->expects($this->any())->method('save')->will($this->returnSelf());
 
         $this->itemFactory->expects($this->once())->method('create')->will($this->returnValue($newItem));
 
         $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue($stores));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($stores[0]));
 
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock();
+        $product = $this->getMockBuilder(
+            Product::class
+        )->disableOriginalConstructor()->getMock();
         $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
 
-        $instanceType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+        $stockItem = $this->getMockBuilder(StockItem::class)->disableOriginalConstructor()->getMock();
+        $stockItem->expects($this->any())->method('getIsInStock')->will($this->returnValue(true));
+        $this->stockRegistry->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($stockItem));
+
+        $instanceType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
         $instanceType->expects($this->once())
             ->method('processConfiguration')
             ->will(
                 $this->returnValue(
-                    $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock()
+                    $this->getMockBuilder(Product::class)->disableOriginalConstructor()->getMock()
                 )
             );
 
-        $newProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock();
+        $newProduct = $this->getMockBuilder(
+            Product::class
+        )->disableOriginalConstructor()->getMock();
         $newProduct->expects($this->any())
             ->method('setStoreId')
             ->with($storeId)
@@ -234,12 +307,12 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeInstance')
             ->will($this->returnValue($instanceType));
 
-        $item = $this->getMockBuilder('Magento\Wishlist\Model\Item')->disableOriginalConstructor()->getMock();
+        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->getMock();
         $item->expects($this->once())
             ->method('getProduct')
             ->will($this->returnValue($product));
 
-        $items = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
+        $items = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -257,7 +330,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($item));
         $items->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$item])));
+            ->will($this->returnValue(new ArrayIterator([$item])));
 
         $this->itemsFactory->expects($this->any())
             ->method('create')
@@ -269,7 +342,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($newProduct));
 
         $this->assertInstanceOf(
-            'Magento\Wishlist\Model\Wishlist',
+            Wishlist::class,
             $this->wishlist->updateItem($itemId, $buyRequest, $param)
         );
     }
@@ -280,7 +353,72 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     public function updateItemDataProvider()
     {
         return [
-            '0' => [1, new \Magento\Framework\DataObject(), null],
+            '0' => [1, new DataObject(), null]
         ];
+    }
+
+    public function testAddNewItem()
+    {
+        $productId = 1;
+        $storeId = 1;
+        $buyRequest = json_encode(
+            [
+                'number' => 42,
+                'string' => 'string_value',
+                'boolean' => true,
+                'collection' => [1, 2, 3],
+                'product' => 1,
+                'form_key' => 'abc'
+            ]
+        );
+        $result = 'product';
+
+        $instanceType = $this->getMockBuilder(AbstractType::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $instanceType->expects($this->once())
+            ->method('processConfiguration')
+            ->willReturn('product');
+
+        $productMock = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'hasWishlistStoreId', 'getStoreId', 'getTypeInstance'])
+            ->getMock();
+        $productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($productId);
+        $productMock->expects($this->once())
+            ->method('hasWishlistStoreId')
+            ->willReturn(false);
+        $productMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $productMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($instanceType);
+
+        $this->productRepository->expects($this->once())
+            ->method('getById')
+            ->with($productId, false, $storeId)
+            ->willReturn($productMock);
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
+        $stockItem = $this->getMockBuilder(
+            StockItem::class
+        )->disableOriginalConstructor()->getMock();
+        $stockItem->expects($this->any())->method('getIsInStock')->will($this->returnValue(true));
+
+        $this->stockRegistry->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($stockItem));
+
+        $this->assertEquals($result, $this->wishlist->addNewItem($productMock, $buyRequest));
     }
 }

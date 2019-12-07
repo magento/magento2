@@ -1,15 +1,19 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'mageUtils',
     'uiRegistry',
     './column',
-    'Magento_Ui/js/modal/confirm'
-], function (_, utils, registry, Column, confirm) {
+    'Magento_Ui/js/modal/confirm',
+    'mage/dataPost'
+], function (_, utils, registry, Column, confirm, dataPost) {
     'use strict';
 
     return Column.extend({
@@ -75,8 +79,8 @@ define([
         },
 
         /**
-         * Adds new action. If action with a specfied identifier
-         * already exists, than the original will be overrided.
+         * Adds new action. If an action with the specified identifier
+         * already exists, then the original will be overridden.
          *
          * @param {String} index - Actions' identifier.
          * @param {Object} action - Actions' data.
@@ -105,7 +109,7 @@ define([
 
         /**
          * Processes actions, setting additional information to them and
-         * evaluating ther properties as a string templates.
+         * evaluating their properties as string templates.
          *
          * @private
          * @param {Object} row - Row object.
@@ -174,6 +178,20 @@ define([
         },
 
         /**
+         * Returns target of action if it's been set.
+         *
+         * @param {Object} action - Action object.
+         * @returns {String}
+         */
+        getTarget: function (action) {
+            if (action.target) {
+                return action.target;
+            }
+
+            return '_self';
+        },
+
+        /**
          * Checks if specified action requires a handler function.
          *
          * @param {String} actionIndex - Actions' identifier.
@@ -187,11 +205,11 @@ define([
         },
 
         /**
-         * Creates action callback based on its' data. If action doesn't spicify
+         * Creates action callback based on it's data. If the action doesn't specify
          * a callback function than the default one will be used.
          *
          * @private
-         * @param {Object} action - Actions' object.
+         * @param {Object} action - Action's object.
          * @returns {Function} Callback function.
          */
         _getCallback: function (action) {
@@ -202,6 +220,8 @@ define([
                 args.unshift(callback.target);
 
                 callback = registry.async(callback.provider);
+            } else if (_.isArray(callback)) {
+                return this._getCallbacks(action);
             } else if (!_.isFunction(callback)) {
                 callback = this.defaultCallback.bind(this);
             }
@@ -212,22 +232,56 @@ define([
         },
 
         /**
-         * Default action callback. Redirects to
-         * the specified in actions' data url.
+         * Creates action callback for multiple actions.
          *
-         * @param {String} actionIndex - Actions' identifier.
-         * @param {(Number|String)} recordId - Id of the record accociated
-         *      with a specfied action.
-         * @param {Object} action - Actions' data.
+         * @private
+         * @param {Object} action - Action's object.
+         * @returns {Function} Callback function.
+         */
+        _getCallbacks: function (action) {
+            var callback = action.callback,
+                callbacks = [],
+                tmpCallback;
+
+            _.each(callback, function (cb) {
+                tmpCallback = {
+                    action: registry.async(cb.provider),
+                    args: _.compact([cb.target, cb.params])
+                };
+                callbacks.push(tmpCallback);
+            });
+
+            return function () {
+                _.each(callbacks, function (cb) {
+                    cb.action.apply(cb.action, cb.args);
+                });
+            };
+        },
+
+        /**
+         * Default action callback. Redirects to
+         * the specified in action's data url.
+         *
+         * @param {String} actionIndex - Action's identifier.
+         * @param {(Number|String)} recordId - Id of the record associated
+         *      with a specified action.
+         * @param {Object} action - Action's data.
          */
         defaultCallback: function (actionIndex, recordId, action) {
-            window.location.href = action.href;
+            if (action.post) {
+                dataPost().postData({
+                    action: action.href,
+                    data: {}
+                });
+            } else {
+                window.location.href = action.href;
+            }
         },
 
         /**
          * Shows actions' confirmation window.
          *
-         * @param {Object} action - Actions' data.
+         * @param {Object} action - Action's data.
          * @param {Function} callback - Callback that will be
          *      invoked if action is confirmed.
          */

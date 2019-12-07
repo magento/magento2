@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class ManagementTest extends \PHPUnit_Framework_TestCase
+class ManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductLink\Management
@@ -34,26 +32,20 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     protected $linkTypeProviderMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
     protected function setUp()
     {
-        $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Model\ProductRepository', [], [], '', false);
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $this->linkTypeProviderMock = $this->getMock(
-            '\Magento\Catalog\Model\Product\LinkTypeProvider',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->linkTypeProviderMock = $this->createMock(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject(
-            'Magento\Catalog\Model\ProductLink\Management',
+            \Magento\Catalog\Model\ProductLink\Management::class,
             [
                 'productRepository' => $this->productRepositoryMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock
@@ -68,7 +60,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
 
-        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
         $inputRelatedLink->setData("sku", "Simple Product 2");
@@ -87,7 +79,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Unknown link type: bad type
+     * @expectedExceptionMessage The "bad type" link type is unknown. Verify the type and try again.
      */
     public function testGetLinkedItemsByTypeWithWrongType()
     {
@@ -96,7 +88,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->never())->method('get')->with($productSku)
             ->willReturn($this->productMock);
 
-        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
         $inputRelatedLink->setData("sku", "Simple Product 2");
@@ -120,7 +112,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
 
-        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
         $inputRelatedLink->setData("sku", "Simple Product 1");
@@ -140,13 +132,13 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage linkType is a required field.
+     * @expectedExceptionMessage "linkType" is required. Enter and try again.
      */
     public function testSetProductLinksWithoutLinkTypeInLink()
     {
         $productSku = 'Simple Product 1';
 
-        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setData("sku", "Simple Product 1");
         $inputRelatedLink->setPosition(0);
@@ -162,7 +154,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Provided link type "bad type" does not exist
+     * @expectedExceptionMessage The "bad type" link type wasn't found. Verify the type and try again.
      */
     public function testSetProductLinksThrowExceptionIfProductLinkTypeDoesNotExist()
     {
@@ -171,7 +163,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->never())->method('get')->with($productSku)
             ->willReturn($this->productMock);
 
-        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
         $inputRelatedLink->setData("sku", "Simple Product 2");
@@ -189,14 +181,14 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testSetProductLinksNoProductException()
     {
         $productSku = 'Simple Product 1';
         $linkType = 'related';
 
-        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
         $inputRelatedLink->setData("sku", "Simple Product 2");
@@ -211,14 +203,19 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
-            ->will($this->throwException(
-                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))));
+            ->will(
+                $this->throwException(
+                    new \Magento\Framework\Exception\NoSuchEntityException(
+                        __("The product that was requested doesn't exist. Verify the product and try again.")
+                    )
+                )
+            );
         $this->model->setProductLinks($productSku, $links);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Invalid data provided for linked products
+     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
      */
     public function testSetProductLinksInvalidDataException()
     {
@@ -227,7 +224,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
 
-        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink = $this->objectManager->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
         $inputRelatedLink->setData("sku", "bad sku");

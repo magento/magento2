@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Test\Constraint;
@@ -21,7 +21,7 @@ class AssertMultishippingOrderSuccessPlacedMessage extends AbstractConstraint
     /**
      * Expected success message
      */
-    const SUCCESS_MESSAGE = 'We received your order!';
+    const SUCCESS_MESSAGE = 'Thank you for your purchase!';
 
     /**
      * Assert that success message is correct.
@@ -31,7 +31,7 @@ class AssertMultishippingOrderSuccessPlacedMessage extends AbstractConstraint
      */
     public function processAssert(MultishippingCheckoutSuccess $multishippingCheckoutSuccess)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $multishippingCheckoutSuccess->getTitleBlock()->getTitle(),
             'Wrong success message is displayed.'

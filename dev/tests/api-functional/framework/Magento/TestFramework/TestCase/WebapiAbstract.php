@@ -1,20 +1,23 @@
 <?php
 /**
- * Generic test case for Web API functional tests.
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\Soap\Fault;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * Test case for Web API functional tests for REST and SOAP.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
+abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 {
     /** TODO: Reconsider implementation of fixture-management methods after implementing several tests */
     /**#@+
@@ -94,15 +97,17 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_webApiAdaptersMap = [
-        self::ADAPTER_SOAP => 'Magento\TestFramework\TestCase\Webapi\Adapter\Soap',
-        self::ADAPTER_REST => 'Magento\TestFramework\TestCase\Webapi\Adapter\Rest',
+        self::ADAPTER_SOAP => \Magento\TestFramework\TestCase\Webapi\Adapter\Soap::class,
+        self::ADAPTER_REST => \Magento\TestFramework\TestCase\Webapi\Adapter\Rest::class,
     ];
 
     /**
      * Initialize fixture namespaces.
+     * //phpcs:disable
      */
     public static function setUpBeforeClass()
     {
+        //phpcs:enable
         parent::setUpBeforeClass();
         self::_setFixtureNamespace();
     }
@@ -111,13 +116,13 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * Run garbage collector for cleaning memory
      *
      * @return void
+     * //phpcs:disable
      */
     public static function tearDownAfterClass()
     {
+        //phpcs:enable
         //clear garbage in memory
-        if (version_compare(PHP_VERSION, '5.3', '>=')) {
-            gc_collect_cycles();
-        }
+        gc_collect_cycles();
 
         $fixtureNamespace = self::_getFixtureNamespace();
         if (isset(self::$_classLevelFixtures[$fixtureNamespace])
@@ -133,8 +138,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Call safe delete for models which added to delete list
-     * Restore config values changed during the test
+     * Call safe delete for models which added to delete list, Restore config values changed during the test
      *
      * @return void
      */
@@ -178,6 +182,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
 
     /**
      * Mark test to be executed for SOAP adapter only.
+     *
+     * @param ?string $message
      */
     protected function _markTestAsSoapOnly($message = null)
     {
@@ -188,6 +194,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
 
     /**
      * Mark test to be executed for REST adapter only.
+     *
+     * @param ?string $message
      */
     protected function _markTestAsRestOnly($message = null)
     {
@@ -203,9 +211,11 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * @param mixed $fixture
      * @param int $tearDown
      * @return void
+     * //phpcs:disable
      */
     public static function setFixture($key, $fixture, $tearDown = self::AUTO_TEAR_DOWN_AFTER_METHOD)
     {
+        //phpcs:enable
         $fixturesNamespace = self::_getFixtureNamespace();
         if (!isset(self::$_fixtures[$fixturesNamespace])) {
             self::$_fixtures[$fixturesNamespace] = [];
@@ -231,9 +241,11 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      *
      * @param string $key
      * @return mixed
+     * //phpcs:disable
      */
     public static function getFixture($key)
     {
+        //phpcs:enable
         $fixturesNamespace = self::_getFixtureNamespace();
         if (array_key_exists($key, self::$_fixtures[$fixturesNamespace])) {
             return self::$_fixtures[$fixturesNamespace][$key];
@@ -247,9 +259,11 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * @param \Magento\Framework\Model\AbstractModel $model
      * @param bool $secure
      * @return \Magento\TestFramework\TestCase\WebapiAbstract
+     * //phpcs:disable
      */
     public static function callModelDelete($model, $secure = false)
     {
+        //phpcs:enable
         if ($model instanceof \Magento\Framework\Model\AbstractModel && $model->getId()) {
             if ($secure) {
                 self::_enableSecureArea();
@@ -289,7 +303,9 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
                     sprintf('Declaration of the requested Web API adapter "%s" was not found.', $webApiAdapterCode)
                 );
             }
-            $this->_webApiAdapters[$webApiAdapterCode] = new $this->_webApiAdaptersMap[$webApiAdapterCode]();
+            $this->_webApiAdapters[$webApiAdapterCode] = Bootstrap::getObjectManager()->get(
+                $this->_webApiAdaptersMap[$webApiAdapterCode]
+            );
         }
         return $this->_webApiAdapters[$webApiAdapterCode];
     }
@@ -298,9 +314,11 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * Set fixtures namespace
      *
      * @throws \RuntimeException
+     * //phpcs:disable
      */
     protected static function _setFixtureNamespace()
     {
+        //phpcs:enable
         if (self::$_fixturesNamespace !== null) {
             throw new \RuntimeException('Fixture namespace is already set.');
         }
@@ -309,9 +327,11 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
 
     /**
      * Unset fixtures namespace
+     * //phpcs:disable
      */
     protected static function _unsetFixtureNamespace()
     {
+        //phpcs:enable
         $fixturesNamespace = self::_getFixtureNamespace();
         unset(self::$_fixtures[$fixturesNamespace]);
         self::$_fixturesNamespace = null;
@@ -322,9 +342,12 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      *
      * @throws \RuntimeException
      * @return string
+     * //phpcs:disable
      */
     protected static function _getFixtureNamespace()
     {
+        //phpcs:enable
+
         $fixtureNamespace = self::$_fixturesNamespace;
         if ($fixtureNamespace === null) {
             throw new \RuntimeException('Fixture namespace must be set.');
@@ -337,15 +360,18 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      *
      * @param bool $flag
      * @return void
+     * //phpcs:disable
      */
     protected static function _enableSecureArea($flag = true)
     {
+        //phpcs:enable
+
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get('Magento\Framework\Registry')->unregister('isSecureArea');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('isSecureArea');
         if ($flag) {
-            $objectManager->get('Magento\Framework\Registry')->register('isSecureArea', $flag);
+            $objectManager->get(\Magento\Framework\Registry::class)->register('isSecureArea', $flag);
         }
     }
 
@@ -386,9 +412,11 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * Delete array of fixtures
      *
      * @param array $fixtures
+     * //phpcs:disable
      */
     protected static function _deleteFixtures($fixtures)
     {
+        //phpcs:enable
         foreach ($fixtures as $fixture) {
             self::deleteFixture($fixture, true);
         }
@@ -400,9 +428,11 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * @param string $key
      * @param bool $secure
      * @return void
+     * //phpcs:disable
      */
     public static function deleteFixture($key, $secure = false)
     {
+        //phpcs:enable
         $fixturesNamespace = self::_getFixtureNamespace();
         if (array_key_exists($key, self::$_fixtures[$fixturesNamespace])) {
             self::callModelDelete(self::$_fixtures[$fixturesNamespace][$key], $secure);
@@ -423,16 +453,16 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
             //set application path
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
             /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
-            $config = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+            $config = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
             $options = $config->getOptions();
             $currentCacheDir = $options->getCacheDir();
             $currentEtcDir = $options->getEtcDir();
             /** @var Filesystem $filesystem */
-            $filesystem = $objectManager->get('Magento\Framework\Filesystem');
+            $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
             $options->setCacheDir($filesystem->getDirectoryRead(DirectoryList::CACHE)->getAbsolutePath());
             $options->setEtcDir($filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath());
 
-            $this->_appCache = $objectManager->get('Magento\Framework\App\Cache');
+            $this->_appCache = $objectManager->get(\Magento\Framework\App\Cache::class);
 
             //revert paths options
             $options->setCacheDir($currentCacheDir);
@@ -454,11 +484,11 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
     /**
      * Update application config data
      *
-     * @param string $path              Config path with the form "section/group/node"
-     * @param string|int|null $value    Value of config item
-     * @param bool $cleanAppCache       If TRUE application cache will be refreshed
-     * @param bool $updateLocalConfig   If TRUE local config object will be updated too
-     * @param bool $restore             If TRUE config value will be restored after test run
+     * @param string $path Config path with the form "section/group/node"
+     * @param string|int|null $value Value of config item
+     * @param bool $cleanAppCache If TRUE application cache will be refreshed
+     * @param bool $updateLocalConfig If TRUE local config object will be updated too
+     * @param bool $restore If TRUE config value will be restored after test run
      * @return \Magento\TestFramework\TestCase\WebapiAbstract
      * @throws \RuntimeException
      */
@@ -479,13 +509,13 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $config \Magento\Config\Model\Config */
-        $config = $objectManager->create('Magento\Config\Model\Config');
+        $config = $objectManager->create(\Magento\Config\Model\Config::class);
         $data[$group]['fields'][$node]['value'] = $value;
         $config->setSection($section)->setGroups($data)->save();
 
         if ($restore && !isset($this->_origConfigValues[$path])) {
             $this->_origConfigValues[$path] = (string)$objectManager->get(
-                'Magento\Framework\App\Config\ScopeConfigInterface'
+                \Magento\Framework\App\Config\ScopeConfigInterface::class
             )->getNode(
                 $path,
                 'default'
@@ -495,8 +525,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         //refresh local cache
         if ($cleanAppCache) {
             if ($updateLocalConfig) {
-                $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-                $objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+                $objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class)->reinit();
+                $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
             }
 
             if (!$this->_cleanAppConfigCache()) {
@@ -518,6 +548,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Process rest exception result.
+     *
      * @param \Exception $e
      * @return array
      * <pre> ex.
@@ -574,7 +606,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         if ($traceString) {
             /** Check error trace */
             $traceNode = Fault::NODE_DETAIL_TRACE;
-            $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get(\Magento\Framework\App\State::class)
                 ->getMode();
             if ($mode == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 /** Developer mode changes tested behavior and it cannot properly be tested for now */
@@ -638,27 +671,15 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         $wrappedErrorsNode = Fault::NODE_DETAIL_WRAPPED_ERRORS;
         if ($expectedWrappedErrors) {
             $wrappedErrorNode = Fault::NODE_DETAIL_WRAPPED_ERROR;
-            $wrappedErrorNodeFieldName = 'fieldName';
-            $wrappedErrorNodeValue = Fault::NODE_DETAIL_WRAPPED_ERROR_VALUE;
             $actualWrappedErrors = [];
             if (isset($errorDetails->$wrappedErrorsNode->$wrappedErrorNode)) {
-                if (is_array($errorDetails->$wrappedErrorsNode->$wrappedErrorNode)) {
-                    foreach ($errorDetails->$wrappedErrorsNode->$wrappedErrorNode as $error) {
-                        $actualParameters = [];
-                        foreach ($error->parameters->parameter as $parameter) {
-                            $actualParameters[$parameter->key] = $parameter->value;
-                        }
-                        $actualWrappedErrors[] = [
-                            'message' => $error->message,
-                            'params' => $actualParameters,
-                        ];
+                $errorNode = $errorDetails->$wrappedErrorsNode->$wrappedErrorNode;
+                if (is_array($errorNode)) {
+                    foreach ($errorNode as $error) {
+                        $actualWrappedErrors[] = $this->getActualWrappedErrors($error);
                     }
                 } else {
-                    $error = $errorDetails->$wrappedErrorsNode->$wrappedErrorNode;
-                    $actualWrappedErrors[] = [
-                        "fieldName" => $error->$wrappedErrorNodeFieldName,
-                        "value" => $error->$wrappedErrorNodeValue,
-                    ];
+                    $actualWrappedErrors[] = $this->getActualWrappedErrors($errorNode);
                 }
             }
             $this->assertEquals(
@@ -671,6 +692,74 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
                 isset($errorDetails->$wrappedErrorsNode),
                 "Wrapped errors are not expected in fault details."
             );
+        }
+    }
+
+    /**
+     * Get actual wrapped errors.
+     *
+     * @param \stdClass $errorNode
+     * @return array
+     */
+    private function getActualWrappedErrors(\stdClass $errorNode)
+    {
+        if (!isset($errorNode->parameters)) {
+            return [
+                'message' => $errorNode->message,
+            ];
+        }
+
+        $actualParameters = [];
+        $parameterNode = $errorNode->parameters->parameter;
+        if (is_array($parameterNode)) {
+            foreach ($parameterNode as $parameter) {
+                $actualParameters[$parameter->key] = $parameter->value;
+            }
+        } else {
+            $actualParameters[$parameterNode->key] = $parameterNode->value;
+        }
+        return [
+            'message' => $errorNode->message,
+            // Can not rename on parameters due to Backward Compatibility
+            'params' => $actualParameters,
+        ];
+    }
+
+    /**
+     * Assert webapi errors.
+     *
+     * @param array $serviceInfo
+     * @param array $data
+     * @param array $expectedErrorData
+     * @return void
+     * @throws \Exception
+     */
+    protected function assertWebApiCallErrors(array $serviceInfo, array $data, array $expectedErrorData)
+    {
+        try {
+            $this->_webApiCall($serviceInfo, $data);
+            $this->fail('Expected throwing exception');
+        } catch (\Exception $e) {
+            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+                self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
+                self::assertEquals(WebapiException::HTTP_BAD_REQUEST, $e->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $e);
+                $expectedWrappedErrors = [];
+                foreach ($expectedErrorData['errors'] as $error) {
+                    // @see \Magento\TestFramework\TestCase\WebapiAbstract::getActualWrappedErrors()
+                    $expectedWrappedError = [
+                        'message' => $error['message'],
+                    ];
+                    if (isset($error['parameters'])) {
+                        $expectedWrappedError['params'] = $error['parameters'];
+                    }
+                    $expectedWrappedErrors[] = $expectedWrappedError;
+                }
+                $this->checkSoapFault($e, $expectedErrorData['message'], 'env:Sender', [], $expectedWrappedErrors);
+            } else {
+                throw $e;
+            }
         }
     }
 }

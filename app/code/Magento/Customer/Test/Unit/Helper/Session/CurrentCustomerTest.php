@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Helper\Session;
 
-class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
+/**
+ * Current customer test.
+ */
+class CurrentCustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
@@ -51,7 +52,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     protected $moduleManagerMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewMock;
 
@@ -68,34 +69,19 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setup
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->customerInterfaceFactoryMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
-            ['create', 'setGroupId'],
-            [],
-            '',
-            false
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->customerInterfaceFactoryMock = $this->createPartialMock(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
+            ['create', 'setGroupId']
         );
-        $this->customerDataMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->customerRepositoryMock = $this->getMock(
-            'Magento\Customer\Api\CustomerRepositoryInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
-        $this->viewMock = $this->getMock('Magento\Framework\App\View', [], [], '', false);
+        $this->customerDataMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $this->customerRepositoryMock = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->viewMock = $this->createMock(\Magento\Framework\App\View::class);
 
         $this->currentCustomer = new \Magento\Customer\Helper\Session\CurrentCustomer(
             $this->customerSessionMock,
@@ -116,38 +102,20 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(false));
         $this->layoutMock->expects($this->once())->method('isCacheable')->will($this->returnValue(true));
         $this->viewMock->expects($this->once())->method('isLayoutLoaded')->will($this->returnValue(true));
-        $this->moduleManagerMock->expects(
-            $this->once()
-        )->method(
-                'isEnabled'
-            )->with(
-                $this->equalTo('Magento_PageCache')
-            )->will(
-                $this->returnValue(true)
-            );
-        $this->customerSessionMock->expects(
-            $this->once()
-        )->method(
-                'getCustomerGroupId'
-            )->will(
-                $this->returnValue($this->customerGroupId)
-            );
-        $this->customerInterfaceFactoryMock->expects(
-            $this->once()
-        )->method(
-                'create'
-            )->will(
-                $this->returnValue($this->customerDataMock)
-            );
-        $this->customerDataMock->expects(
-            $this->once()
-        )->method(
-                'setGroupId'
-            )->with(
-                $this->equalTo($this->customerGroupId)
-            )->will(
-                $this->returnSelf()
-            );
+        $this->moduleManagerMock->expects($this->once())
+            ->method('isEnabled')
+            ->with($this->equalTo('Magento_PageCache'))
+            ->will($this->returnValue(true));
+        $this->customerSessionMock->expects($this->once())
+            ->method('getCustomerGroupId')
+            ->will($this->returnValue($this->customerGroupId));
+        $this->customerInterfaceFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->customerDataMock));
+        $this->customerDataMock->expects($this->once())
+            ->method('setGroupId')
+            ->with($this->equalTo($this->customerGroupId))
+            ->will($this->returnSelf());
         $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
     }
 
@@ -156,31 +124,17 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomerLoadCustomerFromService()
     {
-        $this->moduleManagerMock->expects(
-            $this->once()
-        )->method(
-                'isEnabled'
-            )->with(
-                $this->equalTo('Magento_PageCache')
-            )->will(
-                $this->returnValue(false)
-            );
-        $this->customerSessionMock->expects(
-            $this->once()
-        )->method(
-                'getId'
-            )->will(
-                $this->returnValue($this->customerId)
-            );
-        $this->customerRepositoryMock->expects(
-            $this->once()
-        )->method(
-                'getById'
-            )->with(
-                $this->equalTo($this->customerId)
-            )->will(
-                $this->returnValue($this->customerDataMock)
-            );
+        $this->moduleManagerMock->expects($this->once())
+            ->method('isEnabled')
+            ->with($this->equalTo('Magento_PageCache'))
+            ->will($this->returnValue(false));
+        $this->customerSessionMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($this->customerId));
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($this->equalTo($this->customerId))
+            ->will($this->returnValue($this->customerDataMock));
         $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
     }
 }

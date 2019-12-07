@@ -2,12 +2,12 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Profiler\Driver\Factory
@@ -54,7 +54,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $driver = $this->_factory->create($config);
         $this->assertInstanceOf($expectedClass, $driver);
-        $this->assertInstanceOf('Magento\Framework\Profiler\DriverInterface', $driver);
+        $this->assertInstanceOf(\Magento\Framework\Profiler\DriverInterface::class, $driver);
     }
 
     /**
@@ -63,13 +63,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function createDataProvider()
     {
         $defaultDriverClass = $this->getMockClass(
-            'Magento\Framework\Profiler\DriverInterface',
+            \Magento\Framework\Profiler\DriverInterface::class,
             [],
             [],
             'Magento_Framework_Profiler_Driver_Test_Default'
         );
         $testDriverClass = $this->getMockClass(
-            'Magento\Framework\Profiler\DriverInterface',
+            \Magento\Framework\Profiler\DriverInterface::class,
             [],
             [],
             'Magento_Framework_Profiler_Driver_Test_Test'
@@ -83,8 +83,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateUndefinedClass()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Cannot create profiler driver, class "Magento_Framework_Profiler_Driver_Test_Baz" doesn\'t exist.'
         );
         $this->_factory->create(['type' => 'baz']);

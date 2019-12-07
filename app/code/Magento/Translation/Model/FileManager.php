@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Translation\Model\Inline\File as TranslationFile;
 
 /**
  * A service for handling Translation config files
@@ -17,28 +19,42 @@ class FileManager
      */
     const TRANSLATION_CONFIG_FILE_NAME = 'Magento_Translation/js/i18n-config.js';
 
-    /** @var \Magento\Framework\View\Asset\Repository */
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
     private $assetRepo;
 
-    /** @var \Magento\Framework\App\Filesystem\DirectoryList */
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     */
     private $directoryList;
 
-    /** @var \Magento\Framework\Filesystem\Driver\File */
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File
+     */
     private $driverFile;
 
     /**
+     * @var TranslationFile
+     */
+    private $translationFile;
+
+    /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-     * @param \Magento\Framework\Filesystem\Driver\File $driverFile,
+     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+     * @param \Magento\Framework\Filesystem\Driver\File $driverFile
+     * @param TranslationFile $translationFile
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        \Magento\Framework\Filesystem\Driver\File $driverFile
+        \Magento\Framework\Filesystem\Driver\File $driverFile,
+        \Magento\Translation\Model\Inline\File $translationFile = null
     ) {
         $this->assetRepo = $assetRepo;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
+        $this->translationFile = $translationFile ?: ObjectManager::getInstance()->get(TranslationFile::class);
     }
 
     /**
@@ -88,5 +104,37 @@ class FileManager
     public function getTranslationFilePath()
     {
         return $this->assetRepo->getStaticViewFileContext()->getPath();
+    }
+
+    /**
+     * @param string $content
+     * @return void
+     */
+    public function updateTranslationFileContent($content)
+    {
+        $translationDir = $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
+            \DIRECTORY_SEPARATOR .
+            $this->assetRepo->getStaticViewFileContext()->getPath();
+        if (!$this->driverFile->isExists($this->getTranslationFileFullPath())) {
+            $this->driverFile->createDirectory($translationDir);
+        }
+        $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
+    }
+
+    /**
+     * Calculate translation file version hash.
+     *
+     * @return string
+     */
+    public function getTranslationFileVersion()
+    {
+        $translationFile = $this->getTranslationFileFullPath();
+        $translationFileHash = '';
+
+        if ($this->driverFile->isExists($translationFile)) {
+            $translationFileHash = sha1_file($translationFile);
+        }
+
+        return sha1($translationFileHash . $this->getTranslationFilePath());
     }
 }

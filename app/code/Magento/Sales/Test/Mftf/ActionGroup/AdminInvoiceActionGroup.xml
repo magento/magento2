@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Check customer information is correct in invoice-->
+    <actionGroup name="verifyBasicInvoiceInformation">
+        <annotations>
+            <description>Validates that the provided Customer, Address and Customer Group details are present and correct on the Admin View Invoice page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customer"/>
+            <argument name="shippingAddress"/>
+            <argument name="billingAddress"/>
+            <argument name="customerGroup" defaultValue="GeneralCustomerGroup"/>
+        </arguments>
+
+        <see selector="{{AdminInvoiceOrderInformationSection.customerName}}" userInput="{{customer.firstname}}" stepKey="seeCustomerName"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.customerEmail}}" userInput="{{customer.email}}" stepKey="seeCustomerEmail"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.customerGroup}}" userInput="{{customerGroup.code}}" stepKey="seeCustomerGroup"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.billingAddress}}" userInput="{{billingAddress.street[0]}}" stepKey="seeBillingAddressStreet"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.billingAddress}}" userInput="{{billingAddress.city}}" stepKey="seeBillingAddressCity"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.billingAddress}}" userInput="{{billingAddress.country_id}}" stepKey="seeBillingAddressCountry"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.billingAddress}}" userInput="{{billingAddress.postcode}}" stepKey="seeBillingAddressPostcode"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.street[0]}}" stepKey="seeShippingAddressStreet"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.city}}" stepKey="seeShippingAddressCity"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country_id}}" stepKey="seeShippingAddressCountry"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.postcode}}" stepKey="seeShippingAddressPostcode"/>
+    </actionGroup>
+
+    <!--Check that product is in invoice items-->
+    <actionGroup name="seeProductInInvoiceItems">
+        <annotations>
+            <description>Validates that the provided Product appears under the 'SKU' column in the Admin Invoices edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <see selector="{{AdminInvoiceItemsSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
+    </actionGroup>
+
+    <!--Admin Fast Create Invoice-->
+    <actionGroup name="adminFastCreateInvoice">
+        <annotations>
+            <description>Clicks on 'Invoice' on the Admin Orders view page. Clicks on 'Submit Invoice'. Clicks on 'View Invoice'.</description>
+        </annotations>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
+        <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5"/>
+        <conditionalClick selector="{{AdminOrderInvoicesTabSection.clearFilters}}" dependentSelector="{{AdminOrderInvoicesTabSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="openInvoicePage"/>
+        <waitForPageLoad stepKey="waitForInvoicePageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="clearInvoicesGridFilters">
+        <annotations>
+            <description>Goes to the Admin Invoices grid page. Clicks on 'Clear Filters', if present.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminInvoicesPage.url}}" stepKey="goToInvoices"/>
+        <waitForPageLoad stepKey="waitInvoicesGridToLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearFilters"/>
+        <waitForPageLoad stepKey="waitInvoicesGrid"/>
+    </actionGroup>
+
+    <actionGroup name="goToInvoiceIntoOrder">
+        <annotations>
+            <description>Clicks on 'Invoice' on the Admin Orders view page. Validates that the URL and Page Title are correct.</description>
+        </annotations>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
+    </actionGroup>
+
+    <actionGroup name="StartCreateInvoiceFromOrderPage">
+        <annotations>
+            <description>Clicks on 'Invoice' on the Admin Orders view page. Validates that the URL and Page Title are correct.</description>
+        </annotations>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeNewInvoiceUrl"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoicePageTitle"/>
+    </actionGroup>
+
+    <actionGroup name="SubmitInvoice">
+        <annotations>
+            <description>Clicks on 'Submit Invoice' on the Admin 'New Invoice' page. Validates that the Success Message is present and correct. Validates that the Order ID appears in the URL.</description>
+        </annotations>
+
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" stepKey="seeViewOrderPageInvoice"/>
+    </actionGroup>
+
+    <!--Filter invoices by order id -->
+    <actionGroup name="filterInvoiceGridByOrderId">
+        <annotations>
+            <description>Goes to the Admin Invoices grid page. Filters the grid for the provided Order ID.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminInvoicesPage.url}}" stepKey="goToInvoices"/>
+        <click selector="{{AdminInvoicesGridSection.filter}}" stepKey="clickFilter"/>
+        <fillField selector="{{AdminInvoicesFiltersSection.orderNum}}" userInput="{{orderId}}" stepKey="fillOrderIdForFilter"/>
+        <click selector="{{AdminInvoicesFiltersSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersApply"/>
+    </actionGroup>
+
+    <actionGroup name="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" extends="filterInvoiceGridByOrderId">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminInvoicesGridSection.clearFilters}}" dependentSelector="{{AdminInvoicesGridSection.clearFilters}}" visible="true" stepKey="clearFilters" after="goToInvoices"/>
+    </actionGroup>
+</actionGroups>

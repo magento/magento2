@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="AdminExportIndex" area="Adminhtml" mca="admin/export/index" module="Magento_ImportExport">
-    <block name="filterExport" class="Magento\ImportExport\Test\Block\Adminhtml\Export\Filter" locator="#export_filter_container" strategy="css selector"/>
-    <block name="exportForm" class="Magento\ImportExport\Test\Block\Adminhtml\Export\Edit\Form" locator="#base_fieldset" strategy="css selector"/>
+    <block name="filterExport" class="Magento\ImportExport\Test\Block\Adminhtml\Export\Filter" locator="#export_filter_container" strategy="css selector" />
+    <block name="exportForm" class="Magento\ImportExport\Test\Block\Adminhtml\Export\Edit\Form" locator="#container" strategy="css selector" />
+    <block name="exportedGrid" class="Magento\ImportExport\Test\Block\Adminhtml\Export\ExportedGrid" locator="#container" strategy="css selector" />
+    <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages" strategy="css selector" />
+    <block name="systemMessageDialog" class="Magento\AdminNotification\Test\Block\System\Messages" locator='.ui-popup-message .modal-inner-wrap' strategy="css selector" />
+    <block name="notificationsArea" class="Magento\ImportExport\Test\Block\Adminhtml\Export\NotificationsArea" locator='//ul[contains(@data-mark-as-read-url,"notification")]' strategy="xpath" />
   </page>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
@@ -8,7 +8,8 @@ namespace Magento\Ui\Component;
 use Magento\Ui\Component\Listing\Columns;
 
 /**
- * Class Listing
+ * @api
+ * @since 100.0.2
  */
 class Listing extends AbstractComponent
 {

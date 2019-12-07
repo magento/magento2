@@ -1,55 +1,52 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
-    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintAllInvoicesUrl($_order) ?>"
+    <a href="<?= $block->escapeUrl($block->getPrintAllInvoicesUrl($_order)) ?>"
+       class="action print"
        target="_blank"
-       class="action print">
-        <span><?php /* @escapeNotVerified */ echo __('Print All Invoices') ?></span>
+       rel="noopener">
+        <span><?= $block->escapeHtml(__('Print All Invoices')) ?></span>
     </a>
 </div>
-<?php foreach ($_order->getInvoiceCollection() as $_invoice): ?>
-<div class="order-title">
-    <strong><?php /* @escapeNotVerified */ echo __('Invoice #') ?><?php /* @escapeNotVerified */ echo $_invoice->getIncrementId(); ?></strong>
-    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintInvoiceUrl($_invoice) ?>"
-       onclick="this.target='_blank'"
-       class="action print">
-        <span><?php /* @escapeNotVerified */ echo __('Print Invoice') ?></span>
-    </a>
-</div>
-<div class="table-wrapper table-order-items invoice">
-    <table class="data table table-order-items invoice" id="my-invoice-table-<?php /* @escapeNotVerified */ echo $_invoice->getId(); ?>">
-        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Invoiced') ?></caption>
-        <thead>
-            <tr>
-                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
-                <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty Invoiced') ?></th>
-                <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
-            </tr>
-        </thead>
-        <?php $_items = $_invoice->getAllItems(); ?>
-        <?php $_count = count($_items) ?>
-        <?php foreach ($_items as $_item): ?>
-        <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} ?>
-        <tbody>
-            <?php echo $block->getItemHtml($_item) ?>
-        </tbody>
-        <?php endforeach; ?>
-        <tfoot>
-            <?php echo $block->getInvoiceTotalsHtml($_invoice)?>
-        </tfoot>
-    </table>
-</div>
-<?php echo $block->getInvoiceCommentsHtml($_invoice)?>
+<?php foreach ($_order->getInvoiceCollection() as $_invoice) : ?>
+    <div class="order-title">
+        <strong><?= $block->escapeHtml(__('Invoice #')) ?><?= $block->escapeHtml($_invoice->getIncrementId()) ?></strong>
+        <a href="<?= $block->escapeUrl($block->getPrintInvoiceUrl($_invoice)) ?>"
+           class="action print"
+           target="_blank"
+           rel="noopener">
+            <span><?= $block->escapeHtml(__('Print Invoice')) ?></span>
+        </a>
+    </div>
+    <div class="table-wrapper table-order-items invoice">
+        <table class="data table table-order-items invoice" id="my-invoice-table-<?= (int) $_invoice->getId() ?>">
+            <caption class="table-caption"><?= $block->escapeHtml(__('Items Invoiced')) ?></caption>
+            <thead>
+                <tr>
+                    <th class="col name"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                    <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+                    <th class="col price"><?= $block->escapeHtml(__('Price')) ?></th>
+                    <th class="col qty"><?= $block->escapeHtml(__('Qty Invoiced')) ?></th>
+                    <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                </tr>
+            </thead>
+            <?php $_items = $_invoice->getAllItems(); ?>
+            <?php foreach ($_items as $_item) : ?>
+                <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+                    <tbody>
+                        <?= $block->getItemHtml($_item) ?>
+                    </tbody>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <tfoot>
+                <?= $block->getInvoiceTotalsHtml($_invoice) ?>
+            </tfoot>
+        </table>
+    </div>
+    <?= $block->getInvoiceCommentsHtml($_invoice) ?>
 <?php endforeach; ?>

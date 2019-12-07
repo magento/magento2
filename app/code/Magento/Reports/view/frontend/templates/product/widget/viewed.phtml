@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/**
+ * @deprecated
+ */
 
 /* @var $block \Magento\Reports\Block\Product\Widget\Viewed */
 ?>
@@ -15,12 +17,12 @@ $type = $block->getType() . '-' . $mode;
 $class = 'widget viewed' . ' ' . $mode;
 $title = __('Recently Viewed');
 ?>
-<div class="block <?php /* @escapeNotVerified */ echo $class; ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?php /* @escapeNotVerified */ echo $block->getCount(); ?>" style="display: none;">
+<div class="block <?= $block->escapeHtmlAttr($class) ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?= $block->escapeHtmlAttr($block->getCount()) ?>" style="display: none;">
     <div class="title">
-        <strong><?php /* @escapeNotVerified */ echo $title; ?></strong>
+        <strong><?= $block->escapeHtml($title) ?></strong>
     </div>
     <div class="content">
-        <ol class="products list items <?php /* @escapeNotVerified */ echo $type; ?>">
+        <ol class="products list items <?= $block->escapeHtmlAttr($type) ?>">
         </ol>
     </div>
 </div>

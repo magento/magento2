@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\CopyConstructor;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GroupedProduct\Model\Product\CopyConstructor\Grouped
@@ -36,28 +36,19 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = new \Magento\GroupedProduct\Model\Product\CopyConstructor\Grouped();
 
-        $this->_productMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
-            ['getTypeId', '__wakeup', 'getLinkInstance'],
-            [],
-            '',
-            false
+        $this->_productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getTypeId', '__wakeup', 'getLinkInstance']
         );
 
-        $this->_duplicateMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
-            ['setGroupedLinkData', '__wakeup'],
-            [],
-            '',
-            false
+        $this->_duplicateMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['setGroupedLinkData', '__wakeup']
         );
 
-        $this->_linkMock = $this->getMock(
-            '\Magento\Catalog\Model\Product\Link',
-            ['setLinkTypeId', '__wakeup', 'getAttributes', 'getLinkCollection'],
-            [],
-            '',
-            false
+        $this->_linkMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Link::class,
+            ['setLinkTypeId', '__wakeup', 'getAttributes', 'getLinkCollection']
         );
 
         $this->_productMock->expects(
@@ -95,12 +86,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
 
-        $productLinkMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Link',
-            ['__wakeup', 'getLinkedProductId', 'toArray'],
-            [],
-            '',
-            false
+        $productLinkMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Link::class,
+            ['__wakeup', 'getLinkedProductId', 'toArray']
         );
         $this->_linkMock->expects(
             $this->atLeastOnce()
@@ -122,7 +110,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         );
 
         $collectionMock = $helper->getCollectionMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Link\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Link\Collection::class,
             [$productLinkMock]
         );
         $collectionMock->expects($this->once())->method('setProduct')->with($this->_productMock);

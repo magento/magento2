@@ -1,10 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model\Condition;
 
+/**
+ * Combine
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Combine extends AbstractCondition
 {
     /**
@@ -18,6 +24,8 @@ class Combine extends AbstractCondition
     protected $_logger;
 
     /**
+     * Construct
+     *
      * @param Context $context
      * @param array $data
      */
@@ -28,7 +36,7 @@ class Combine extends AbstractCondition
 
         parent::__construct($context, $data);
         $this->setType(
-            'Magento\Rule\Model\Condition\Combine'
+            \Magento\Rule\Model\Condition\Combine::class
         )->setAggregator(
             'all'
         )->setValue(
@@ -42,15 +50,16 @@ class Combine extends AbstractCondition
         $this->loadAggregatorOptions();
         $options = $this->getAggregatorOptions();
         if ($options) {
-            foreach (array_keys($options) as $aggregator) {
-                $this->setAggregator($aggregator);
-                break;
-            }
+            reset($options);
+            $this->setAggregator(key($options));
         }
     }
 
     /* start aggregator methods */
+
     /**
+     * Load aggregation options
+     *
      * @return $this
      */
     public function loadAggregatorOptions()
@@ -60,6 +69,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Return agregator selected options
+     *
      * @return array
      */
     public function getAggregatorSelectOptions()
@@ -72,6 +83,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Get Agregator name
+     *
      * @return string
      */
     public function getAggregatorName()
@@ -80,14 +93,17 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Return agregator element
+     *
      * @return object
      */
     public function getAggregatorElement()
     {
         if ($this->getAggregator() === null) {
-            foreach (array_keys($this->getAggregatorOption()) as $key) {
-                $this->setAggregator($key);
-                break;
+            $options = $this->getAggregatorOption();
+            if ($options) {
+                reset($options);
+                $this->setAggregator(key($options));
             }
         }
         return $this->getForm()->addField(
@@ -97,16 +113,19 @@ class Combine extends AbstractCondition
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][aggregator]',
                 'values' => $this->getAggregatorSelectOptions(),
                 'value' => $this->getAggregator(),
-                'value_name' => $this->getAggregatorName()
+                'value_name' => $this->getAggregatorName(),
+                'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
     }
 
     /* end aggregator methods */
 
     /**
+     * Load value options
+     *
      * @return $this
      */
     public function loadValueOptions()
@@ -116,6 +135,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Adds condition
+     *
      * @param object $condition
      * @return $this
      */
@@ -129,7 +150,7 @@ class Combine extends AbstractCondition
         $conditions[] = $condition;
 
         if (!$condition->getId()) {
-            $condition->setId($this->getId() . '--' . sizeof($conditions));
+            $condition->setId($this->getId() . '--' . count($conditions));
         }
 
         $this->setData($this->getPrefix(), $conditions);
@@ -137,6 +158,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Return value element type
+     *
      * @return string
      */
     public function getValueElementType()
@@ -176,6 +199,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As xml
+     *
      * @param string $containerKey
      * @param string $itemKey
      * @return string
@@ -197,6 +222,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Load array
+     *
      * @param array $arr
      * @param string $key
      * @return $this
@@ -225,6 +252,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Load xml
+     *
      * @param array|string $xml
      * @return $this
      */
@@ -242,6 +271,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As html
+     *
      * @return string
      */
     public function asHtml()
@@ -258,6 +289,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Get new child element
+     *
      * @return $this
      */
     public function getNewChildElement()
@@ -268,14 +301,17 @@ class Combine extends AbstractCondition
             [
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][new_child]',
                 'values' => $this->getNewChildSelectOptions(),
-                'value_name' => $this->getNewChildName()
+                'value_name' => $this->getNewChildName(),
+                'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Newchild')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Newchild::class)
         );
     }
 
     /**
+     * As html recursive
+     *
      * @return string
      */
     public function asHtmlRecursive()
@@ -294,6 +330,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As string
+     *
      * @param string $format
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -305,6 +343,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As string recursive
+     *
      * @param int $level
      * @return string
      */
@@ -318,6 +358,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Validate
+     *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
@@ -368,6 +410,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Set js From object
+     *
      * @param \Magento\Framework\Data\Form $form
      * @return $this
      */

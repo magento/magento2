@@ -2,12 +2,12 @@
 /**
  * Find "widget.xml" files and validate them
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Widget;
 
-class WidgetConfigTest extends \PHPUnit_Framework_TestCase
+class WidgetConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;

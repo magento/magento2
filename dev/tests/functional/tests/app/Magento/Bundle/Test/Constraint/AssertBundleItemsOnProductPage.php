@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
         }
 
         $error = $this->verifyData($productOptions, $formOptions);
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**
@@ -61,25 +61,46 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
         foreach ($bundleOptions as $optionKey => $bundleOption) {
             $optionData = [
                 'title' => $bundleOption['title'],
-                'type' => $bundleOption['type'],
+                'type' => $bundleOption['frontend_type'],
                 'is_require' => $bundleOption['required'],
             ];
 
+            $key = 0;
             foreach ($bundleOption['assigned_products'] as $productKey => $assignedProduct) {
-                $price = isset($assignedProduct['data']['selection_price_value'])
-                    ? $assignedProduct['data']['selection_price_value']
-                    : $bundleSelections['products'][$optionKey][$productKey]->getPrice();
+                if ($this->isInStock($product, $key++)) {
+                    $price = isset($assignedProduct['data']['selection_price_value'])
+                        ? $assignedProduct['data']['selection_price_value']
+                        : $bundleSelections['products'][$optionKey][$productKey]->getPrice();
 
-                $optionData['options'][$productKey] = [
-                    'title' => $assignedProduct['search_data']['name'],
-                    'price' => number_format($price, 2),
-                ];
+                    $optionData['options'][$productKey] = [
+                        'title' => $assignedProduct['search_data']['name'],
+                        'price' => number_format($price, 2),
+                    ];
+                }
             }
 
             $result[$optionKey] = $optionData;
         }
 
         return $result;
+    }
+
+    /**
+     * Check product attribute 'is_in_stock'.
+     *
+     * @param BundleProduct $product
+     * @param int $key
+     * @return bool
+     */
+    private function isInStock(BundleProduct $product, $key)
+    {
+        $assignedProducts = $product->getBundleSelections()['products'][0];
+        $status = $assignedProducts[$key]->getData()['quantity_and_stock_status']['is_in_stock'];
+
+        if ($status == 'In Stock') {
+            return true;
+        }
+        return false;
     }
 
     /**

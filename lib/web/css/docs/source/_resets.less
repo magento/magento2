@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -9,7 +9,7 @@
 //  In Magento UI library there are 5 pre-defined resets that can be called by appropriate mixin..
 //
 //  ## Magento reset
-//  Magento UI library has a set of variables that configure UI elements. Mageno reset uses this list to define the default state of html elements. It sets up the basic typography, forms style, buttons style, tables style using variables which are specified in your theme. Mageno reset is made to avoid re-defining same elements by using some reset techniques and then set up different styles to these elements.
+//  Magento UI library has a set of variables that configure UI elements. Magento reset uses this list to define the default state of html elements. It sets up the basic typography, forms style, buttons style, tables style using variables which are specified in your theme. Magento reset is made to avoid re-defining same elements by using some reset techniques and then set up different styles to these elements.
 //
 //  To get Magento UI library reset in your theme, use mixin:
 //
@@ -51,5 +51,14 @@
 //
 //  ```CSS
 //  .lib-html5doctor-reset();
+//  ```
+//
+//  ## Global border-box
+//  This mixin defines all elements' <code>box-sizing</code> to <code>border-box</code>.
+//
+//  To set <code>box-sizing: border-box</code> globally, use mixin:
+//
+//  ```CSS
+//  .lib-set-default-border-box();
 //  ```
 //  &nbsp;

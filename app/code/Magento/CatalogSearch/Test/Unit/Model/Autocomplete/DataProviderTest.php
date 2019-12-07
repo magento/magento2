@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Autocomplete;
@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Autocomplete;
 use Magento\CatalogSearch\Model\Autocomplete\DataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider
@@ -30,16 +30,21 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $suggestCollection;
 
+    /**
+     * @var integer
+     */
+    private $limit = 3;
+
     protected function setUp()
     {
         $helper = new ObjectManager($this);
 
-        $this->suggestCollection = $this->getMockBuilder('Magento\Search\Model\ResourceModel\Query\Collection')
+        $this->suggestCollection = $this->getMockBuilder(\Magento\Search\Model\ResourceModel\Query\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIterator'])
             ->getMock();
 
-        $this->query = $this->getMockBuilder('Magento\Search\Model\Query')
+        $this->query = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQueryText', 'getSuggestCollection'])
             ->getMock();
@@ -47,7 +52,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getSuggestCollection')
             ->willReturn($this->suggestCollection);
 
-        $queryFactory = $this->getMockBuilder('Magento\Search\Model\QueryFactory')
+        $queryFactory = $this->getMockBuilder(\Magento\Search\Model\QueryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -55,16 +60,25 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($this->query);
 
-        $this->itemFactory = $this->getMockBuilder('Magento\Search\Model\Autocomplete\ItemFactory')
+        $this->itemFactory = $this->getMockBuilder(\Magento\Search\Model\Autocomplete\ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
+        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturn($this->limit);
+
         $this->model = $helper->getObject(
-            '\Magento\CatalogSearch\Model\Autocomplete\DataProvider',
+            \Magento\CatalogSearch\Model\Autocomplete\DataProvider::class,
             [
                 'queryFactory' => $queryFactory,
-                'itemFactory' => $this->itemFactory
+                'itemFactory' => $this->itemFactory,
+                'scopeConfig' => $scopeConfig
             ]
         );
     }
@@ -85,7 +99,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getQueryText')
             ->willReturn($queryString);
 
-         $itemMock =  $this->getMockBuilder('Magento\Search\Model\Autocomplete\Item')
+         $itemMock =  $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTitle', 'toArray'])
             ->getMock();
@@ -103,10 +117,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expected));
 
         $this->itemFactory->expects($this->any())->method('create')->willReturn($itemMock);
+
         $result = $this->model->getItems();
         $this->assertEquals($expected, $result[0]->toArray());
+        $this->assertEquals($this->limit, count($result));
     }
 
+    /**
+     * @param array $data
+     */
     private function buildCollection(array $data)
     {
         $collectionData = [];

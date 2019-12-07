@@ -2,7 +2,7 @@
 /**
  * An ultimate accessor to cache types' statuses
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Cache;
@@ -11,6 +11,9 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 
+/**
+ * Cache State
+ */
 class State implements StateInterface
 {
     /**
@@ -74,7 +77,7 @@ class State implements StateInterface
     public function isEnabled($cacheType)
     {
         $this->load();
-        return isset($this->statuses[$cacheType]) ? (bool)$this->statuses[$cacheType] : false;
+        return (bool)($this->statuses[$cacheType] ?? false);
     }
 
     /**

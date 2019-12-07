@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -26,6 +26,12 @@
 //  Headings
 @h3__font-weight: @font-weight__semibold;
 @h3__margin-top: @indent__base;
+
+//  Links
+@link__color: @theme__color__primary-alt;
+
+//  Focus
+@focus__color: @color-blue3;
 
 //
 //  Tables
@@ -54,6 +60,7 @@
 
 @navigation__background: @color-gray94;
 @navigation-level0-item__active__color: @primary__color;
+
 @submenu-item__active__color: @navigation-level0-item__active__color;
 
 //  Desktop navigation
@@ -62,6 +69,7 @@
 @submenu-desktop-item__active__color: @navigation-level0-item__active__color;
 
 //  Tabs
+@tab-control__color: @color-gray43;
 @tab-control__font-weight: @font-weight__regular;
 @tab-control__height: @indent__base*2;
 @tab-control__margin-right: -1px;
@@ -153,6 +161,13 @@
 //  Forms
 //  ---------------------------------------------
 
+
+//  Select
+@select__background: @form-element-input__background url('../images/select-bg.svg') no-repeat 100% 45%;
+@select__border: 1px solid @border-color__base;
+@select__height: 32px;
+@select__padding: 4px 25px @indent__xs @indent__s;
+
 //  Form fieldset
 @form-fieldset-legend__font-size: 18px;
 @form-fieldset-legend__font-weight: @font-weight__light;
@@ -170,6 +185,9 @@
 
 //  Form field note icon
 @form-field-note-icon-font__content: false;
+
+//  Placeholder
+@form-element-input-placeholder__color: @color-gray34;
 
 //
 //  Pager
@@ -202,7 +220,6 @@
 
 @rating-icon__font-size: 16px;
 @rating-icon__letter-spacing: 2px;
-@rating-icon__active__color: @active__color;
 
 //
 //  Dropdowns
@@ -228,6 +245,12 @@
 @breadcrumbs-icon__font-size: 10px;
 @breadcrumbs-icon__font-margin: 0 @indent__s;
 
+@breadcrumbs-current__color: @color-gray-middle5;
+@breadcrumbs-link__color: @link__color;
+@breadcrumbs-link__visited__color: @breadcrumbs-link__color;
+@breadcrumbs-link__hover__color: @breadcrumbs-link__color;
+@breadcrumbs-link__active__color: @breadcrumbs-link__color;
+
 //
 //  Popups
 //  ---------------------------------------------
@@ -252,16 +275,22 @@
 //  Checkout tooltip icon
 @checkout-tooltip-icon__font-size: 21px;
 
-// Checkout Payment Option icon
+//  Checkout Payment Option icon
 @checkout-payment-option-title-icon__font-size: 14px;
 @checkout-payment-option-title-icon__line-height: 16px;
 @checkout-payment-option-title-icon__margin: 0 0 0 @indent__s;
 
-// Checkout Sidebar Shipping Information
+//  Checkout Sidebar Shipping Information
 @checkout-sidebar-shipping-information-edit-icon__content: @icon-edit;
 @checkout-sidebar-shipping-information-edit-icon__font-size: 18px;
 @checkout-sidebar-shipping-information-edit-icon__line-height: 20px;
 @checkout-sidebar-shipping-information-edit-icon__top: @indent__s;
 
-// Checkout
+//  Checkout
 @checkout-sidebar__columns: 8;
+
+//
+//  Footer
+//  ---------------------------------------------
+
+@copyright__background-color: @color-gray-middle4;

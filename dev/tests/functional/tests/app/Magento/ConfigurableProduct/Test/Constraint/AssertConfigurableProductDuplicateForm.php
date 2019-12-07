@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,7 +36,7 @@ class AssertConfigurableProductDuplicateForm extends AssertConfigurableProductFo
 
         $productData = $product->getData();
         $productData['sku'] = $duplicateProductSku;
-        $productData['status'] = 'Product offline';
+        $productData['status'] = 'No';
         if (isset($compareData['quantity_and_stock_status']['qty'])) {
             $compareData['quantity_and_stock_status']['qty'] = '';
             $compareData['quantity_and_stock_status']['is_in_stock'] = 'Out of Stock';
@@ -44,7 +44,7 @@ class AssertConfigurableProductDuplicateForm extends AssertConfigurableProductFo
         $fixtureData = $this->prepareFixtureData($productData, $this->sortFields);
         $formData = $this->prepareFormData($productPage->getProductForm()->getData($product), $this->sortFields);
         $error = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertTrue(empty($error), $error);
+        \PHPUnit\Framework\Assert::assertTrue(empty($error), $error);
     }
 
     /**
@@ -70,7 +70,7 @@ class AssertConfigurableProductDuplicateForm extends AssertConfigurableProductFo
     protected function prepareUrlKey($urlKey)
     {
         preg_match("~\d+$~", $urlKey, $matches);
-        $key = intval($matches[0]) + 1;
+        $key = (int)$matches[0] + 1;
         return str_replace($matches[0], $key, $urlKey);
     }
 

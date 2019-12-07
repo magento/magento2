@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Timezone;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Timezone\Validator
@@ -15,12 +16,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validateWithTimestampOutOfSystemRangeDataProvider
      * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage Transition year is out of system date range.
      */
     public function testValidateWithTimestampOutOfSystemRangeThrowsException($range, $validateArgs)
     {
         $this->_validator = new \Magento\Framework\Stdlib\DateTime\Timezone\Validator($range['min'], $range['max']);
         $this->_validator->validate($validateArgs['timestamp'], $validateArgs['to_date']);
+
+        $this->expectExceptionMessage(
+            "The transition year isn't included in the system date range. Verify the year date range and try again."
+        );
     }
 
     /**

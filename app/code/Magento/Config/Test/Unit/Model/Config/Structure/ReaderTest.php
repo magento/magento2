@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
@@ -8,7 +8,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure;
 /**
  * Class ReaderTest
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Reader
@@ -47,18 +47,19 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->fileResolverMock = $this->getMockBuilder('Magento\Framework\Config\FileResolverInterface')
+        $this->fileResolverMock = $this->getMockBuilder(\Magento\Framework\Config\FileResolverInterface::class)
             ->getMockForAbstractClass();
-        $this->converterMock = $this->getMockBuilder('Magento\Config\Model\Config\Structure\Converter')
+        $this->converterMock = $this->getMockBuilder(\Magento\Config\Model\Config\Structure\Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->schemaLocatorMock = $this->getMockBuilder('Magento\Config\Model\Config\SchemaLocator')
+        $this->schemaLocatorMock = $this->getMockBuilder(\Magento\Config\Model\Config\SchemaLocator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->validationStateMock = $this->getMockBuilder('Magento\Framework\Config\ValidationStateInterface')
+        $this->validationStateMock = $this->getMockBuilder(\Magento\Framework\Config\ValidationStateInterface::class)
             ->getMockForAbstractClass();
-        $this->compilerMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface')
-            ->getMockForAbstractClass();
+        $this->compilerMock = $this->getMockBuilder(
+            \Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface::class
+        )->getMockForAbstractClass();
 
         $this->reader = new \Magento\Config\Model\Config\Structure\Reader(
             $this->fileResolverMock,
@@ -89,14 +90,34 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('compile')
             ->with(
                 $this->isInstanceOf('\DOMElement'),
-                $this->isInstanceOf('Magento\Framework\DataObject'),
-                $this->isInstanceOf('Magento\Framework\DataObject')
+                $this->isInstanceOf(\Magento\Framework\DataObject::class),
+                $this->isInstanceOf(\Magento\Framework\DataObject::class)
             );
         $this->converterMock->expects($this->once())
             ->method('convert')
             ->with($this->isInstanceOf('\DOMDocument'))
             ->willReturn($expectedResult);
 
+        $this->assertEquals($expectedResult, $this->reader->read());
+    }
+
+    /**
+     * Test the execution with the Validation exception of the 'read' method
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Verify the XML and try again.
+     */
+    public function testReadWithValidationException()
+    {
+        $content = '<config><item name="test1"></item><wrong></config>';
+        $expectedResult = ['result_data'];
+        $fileList = ['file' => $content];
+
+        $this->fileResolverMock->expects($this->once())
+            ->method('get')
+            ->with('system.xml', 'global')
+            ->willReturn($fileList);
+        
         $this->assertEquals($expectedResult, $this->reader->read());
     }
 }

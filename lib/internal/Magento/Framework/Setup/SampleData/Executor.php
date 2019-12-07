@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\SampleData;
 
+/**
+ * Performs sample data installations.
+ */
 class Executor
 {
     /**
@@ -39,6 +42,7 @@ class Executor
 
     /**
      * Execute SampleData module installation.
+     *
      * Catch exception if it appeared and continue installation
      *
      * @param InstallerInterface $installer
@@ -47,9 +51,9 @@ class Executor
     public function exec(InstallerInterface $installer)
     {
         try {
-            $this->appState->emulateAreaCode('setup', [$installer, 'install']);
+            $this->appState->emulateAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL, [$installer, 'install']);
             $this->state->setInstalled();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->state->setError();
             $this->logger->error('Sample Data error: ' . $e->getMessage());
         }

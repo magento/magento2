@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Model\Order\Shipment;
 
@@ -13,9 +11,9 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item getResource()
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements ShipmentItemInterface
 {
@@ -83,7 +81,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment\Item');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Item::class);
     }
 
     /**
@@ -146,27 +144,12 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Declare qty
      *
      * @param float $qty
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return \Magento\Sales\Model\Order\Shipment\Item
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
-        if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (double)$qty;
-        } else {
-            $qty = (int)$qty;
-        }
-        $qty = $qty > 0 ? $qty : 0;
-        /**
-         * Check qty availability
-         */
-        if ($qty <= $this->getOrderItem()->getQtyToShip() || $this->getOrderItem()->isDummy(true)) {
-            $this->setData('qty', $qty);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid quantity to ship for item "%1".', $this->getName())
-            );
-        }
+        $this->setData('qty', $qty);
         return $this;
     }
 
@@ -174,6 +157,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Applying qty to order item
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function register()
     {
@@ -182,6 +166,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns additional_data
      *
@@ -392,5 +377,6 @@ class Item extends AbstractModel implements ShipmentItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

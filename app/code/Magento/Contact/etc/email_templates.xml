@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
-    <template id="contact_email_email_template" label="Contact Form" file="submitted_form.html" type="text" module="Magento_Contact" area="adminhtml"/>
+    <template id="contact_email_email_template" label="Contact Form" file="submitted_form.html" type="html" module="Magento_Contact" area="frontend"/>
 </config>

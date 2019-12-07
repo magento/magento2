@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme\Customization;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class PathTest extends \PHPUnit_Framework_TestCase
+class PathTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\Customization\Path
@@ -35,14 +35,14 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_theme = $this->getMockForAbstractClass('\Magento\Framework\View\Design\ThemeInterface');
+        $this->_theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject $filesystem */
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->_directory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_directory = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($this->_directory));
         $this->_directory->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
         $this->componentRegistrar = $this->getMockForAbstractClass(
-            '\Magento\Framework\Component\ComponentRegistrarInterface'
+            \Magento\Framework\Component\ComponentRegistrarInterface::class
         );
         $this->_model = new \Magento\Framework\View\Design\Theme\Customization\Path(
             $filesystem,

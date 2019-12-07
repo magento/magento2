@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Request\Deserializer;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_xmlParserMock;
@@ -19,8 +19,11 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_xmlParserMock = $this->getMock('Magento\Framework\Xml\Parser', ['xmlToArray', 'loadXML']);
-        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->_xmlParserMock = $this->createPartialMock(
+            \Magento\Framework\Xml\Parser::class,
+            ['xmlToArray', 'loadXML']
+        );
+        $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
         /** Initialize SUT. */
         $this->_xmlDeserializer = new \Magento\Framework\Webapi\Rest\Request\Deserializer\Xml(
             $this->_xmlParserMock,
@@ -39,7 +42,8 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 
     public function testDeserializeInvalidArgumentException()
     {
-        $this->setExpectedException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('"boolean" data type is invalid. String is expected.');
         $this->_xmlDeserializer->deserialize(false);
     }
 
@@ -100,7 +104,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
             $this->fail("Exception is expected to be raised");
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $exceptionMessage = 'Decoding Error: End tag for "key1" was omitted.';
-            $this->assertInstanceOf('Magento\Framework\Webapi\Exception', $e, 'Exception type is invalid');
+            $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
             $this->assertEquals($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
             $this->assertEquals(
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
@@ -125,7 +129,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
             $this->_xmlDeserializer->deserialize($invalidXml);
             $this->fail("Exception is expected to be raised");
         } catch (\Magento\Framework\Webapi\Exception $e) {
-            $this->assertInstanceOf('Magento\Framework\Webapi\Exception', $e, 'Exception type is invalid');
+            $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
             $this->assertEquals('Decoding error.', $e->getMessage(), 'Exception message is invalid');
             $this->assertEquals(
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,

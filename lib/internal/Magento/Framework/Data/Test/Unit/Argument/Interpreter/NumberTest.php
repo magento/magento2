@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
 use \Magento\Framework\Data\Argument\Interpreter\Number;
 
-class NumberTest extends \PHPUnit_Framework_TestCase
+class NumberTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Number
@@ -30,6 +30,9 @@ class NumberTest extends \PHPUnit_Framework_TestCase
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateExceptionDataProvider()
     {
         return ['no value' => [[]], 'non-numeric value' => [['value' => 'non-numeric']]];
@@ -47,6 +50,9 @@ class NumberTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateDataProvider()
     {
         return [

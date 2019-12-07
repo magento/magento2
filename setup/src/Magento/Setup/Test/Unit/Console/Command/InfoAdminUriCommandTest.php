@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -9,7 +9,7 @@ use Magento\Setup\Console\Command\InfoAdminUriCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Setup\BackendFrontnameGenerator;
 
-class InfoAdminUriCommandTest extends \PHPUnit_Framework_TestCase
+class InfoAdminUriCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -18,7 +18,7 @@ class InfoAdminUriCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
     }
 
     public function testExecute()

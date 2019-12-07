@@ -1,15 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Checkout;
 
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Customer\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Customer\Model\Session;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Fields attribute merger.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class AttributeMerger
 {
     /**
@@ -23,6 +31,8 @@ class AttributeMerger
         'textarea'    => 'Magento_Ui/js/form/element/textarea',
         'multiline'   => 'Magento_Ui/js/form/components/group',
         'multiselect' => 'Magento_Ui/js/form/element/multiselect',
+        'image' => 'Magento_Ui/js/form/element/media',
+        'file' => 'Magento_Ui/js/form/element/media',
     ];
 
     /**
@@ -32,6 +42,7 @@ class AttributeMerger
      */
     protected $templateMap = [
         'image' => 'media',
+        'file' => 'media',
     ];
 
     /**
@@ -43,8 +54,10 @@ class AttributeMerger
         'alpha' => 'validate-alpha',
         'numeric' => 'validate-number',
         'alphanumeric' => 'validate-alphanum',
+        'alphanum-with-spaces' => 'validate-alphanum-with-spaces',
         'url' => 'validate-url',
         'email' => 'email2',
+        'length' => 'validate-length',
     ];
 
     /**
@@ -63,7 +76,7 @@ class AttributeMerger
     private $customerRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @var CustomerInterface
      */
     private $customer;
 
@@ -164,20 +177,19 @@ class AttributeMerger
 
         $element = [
             'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
-            'config' => [
-                // customScope is used to group elements within a single form (e.g. they can be validated separately)
-                'customScope' => $dataScopePrefix,
-                'customEntry' => isset($additionalConfig['config']['customEntry'])
-                    ? $additionalConfig['config']['customEntry']
-                    : null,
-                'template' => 'ui/form/field',
-                'elementTmpl' => isset($additionalConfig['config']['elementTmpl'])
-                    ? $additionalConfig['config']['elementTmpl']
-                    : $elementTemplate,
-                'tooltip' => isset($additionalConfig['config']['tooltip'])
-                    ? $additionalConfig['config']['tooltip']
-                    : null
-            ],
+            'config' => $this->mergeConfigurationNode(
+                'config',
+                $additionalConfig,
+                [
+                    'config' => [
+                        // customScope is used to group elements within a single
+                        // form (e.g. they can be validated separately)
+                        'customScope' => $dataScopePrefix,
+                        'template' => 'ui/form/field',
+                        'elementTmpl' => $elementTemplate,
+                    ],
+                ]
+            ),
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
             'provider' => $providerName,
@@ -190,6 +202,15 @@ class AttributeMerger
             'customEntry' => isset($additionalConfig['customEntry']) ? $additionalConfig['customEntry'] : null,
             'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
         ];
+
+        if ($attributeCode === 'region_id' || $attributeCode === 'country_id') {
+            unset($element['options']);
+            $element['deps'] = [$providerName];
+            $element['imports'] = [
+                'initialOptions' => 'index = ' . $providerName . ':dictionaries.' . $attributeCode,
+                'setOptions' => 'index = ' . $providerName . ':dictionaries.' . $attributeCode
+            ];
+        }
 
         if (isset($attributeConfig['value']) && $attributeConfig['value'] != null) {
             $element['value'] = $attributeConfig['value'];
@@ -257,6 +278,7 @@ class AttributeMerger
         for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
             $line = [
+                'label' => __("%1: Line %2", $attributeConfig['label'], $lineIndex + 1),
                 'component' => 'Magento_Ui/js/form/element/abstract',
                 'config' => [
                     // customScope is used to group elements within a single form e.g. they can be validated separately
@@ -272,7 +294,7 @@ class AttributeMerger
                         $attributeConfig['validation']
                     )
                     : $attributeConfig['validation'],
-                'additionalClasses' => $isFirstLine ? : 'additional'
+                'additionalClasses' => $isFirstLine ? 'field' : 'additional'
 
             ];
             if ($isFirstLine && isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
@@ -297,32 +319,54 @@ class AttributeMerger
     }
 
     /**
+     * Returns default attribute value.
+     *
      * @param string $attributeCode
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      * @return null|string
      */
-    protected function getDefaultValue($attributeCode)
+    protected function getDefaultValue($attributeCode): ?string
     {
+        if ($attributeCode === 'country_id') {
+            return $this->directoryHelper->getDefaultCountry();
+        }
+
+        $customer = $this->getCustomer();
+        if ($customer === null) {
+            return null;
+        }
+
+        $attributeValue = null;
         switch ($attributeCode) {
+            case 'prefix':
+                $attributeValue = $customer->getPrefix();
+                break;
             case 'firstname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getFirstname();
-                }
+                $attributeValue = $customer->getFirstname();
+                break;
+            case 'middlename':
+                $attributeValue = $customer->getMiddlename();
                 break;
             case 'lastname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getLastname();
-                }
+                $attributeValue = $customer->getLastname();
                 break;
-            case 'country_id':
-                return $this->directoryHelper->getDefaultCountry();
+            case 'suffix':
+                $attributeValue = $customer->getSuffix();
+                break;
         }
-        return null;
+
+        return $attributeValue;
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * Returns logged customer.
+     *
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     * @return CustomerInterface|null
      */
-    protected function getCustomer()
+    protected function getCustomer(): ?CustomerInterface
     {
         if (!$this->customer) {
             if ($this->customerSession->isLoggedIn()) {
@@ -340,11 +384,11 @@ class AttributeMerger
      * @param string $attributeCode
      * @param array $attributeConfig
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function getFieldOptions($attributeCode, array $attributeConfig)
     {
-        $options = isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
-        return ($attributeCode == 'country_id') ? $this->orderCountryOptions($options) : $options;
+        return isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
     }
 
     /**
@@ -352,6 +396,7 @@ class AttributeMerger
      *
      * @param array $countryOptions
      * @return array
+     * @deprecated 100.2.0
      */
     protected function orderCountryOptions(array $countryOptions)
     {
@@ -367,11 +412,10 @@ class AttributeMerger
         ]];
         foreach ($countryOptions as $countryOption) {
             if (empty($countryOption['value']) || in_array($countryOption['value'], $this->topCountryCodes)) {
-                array_push($headOptions, $countryOption);
+                $headOptions[] = $countryOption;
             } else {
-                array_push($tailOptions, $countryOption);
+                $tailOptions[] = $countryOption;
             }
-
         }
         return array_merge($headOptions, $tailOptions);
     }

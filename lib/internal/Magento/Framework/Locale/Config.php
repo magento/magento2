@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Allowed locale and currency configuration.
+ */
 class Config implements \Magento\Framework\Locale\ConfigInterface
 {
     /**
@@ -31,6 +34,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'de_AT', /*German (Austria)*/
         'de_CH', /*German (Switzerland)*/
         'de_DE', /*German (Germany)*/
+        'de_LU', /*German (Luxembourg)*/
         'el_GR', /*Greek (Greece)*/
         'en_AU', /*English (Australian)*/
         'en_CA', /*English (Canadian)*/
@@ -50,8 +54,11 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'fa_IR', /*Persian (Iran)*/
         'fi_FI', /*Finnish (Finland)*/
         'fil_PH', /*Filipino (Philippines)*/
+        'fr_BE', /*French (Belgium)*/
         'fr_CA', /*French (Canada)*/
+        'fr_CH', /*French (Switzerland)*/
         'fr_FR', /*French (France)*/
+        'fr_LU', /*French (Luxembourg)*/
         'gu_IN', /*Gujarati (India)*/
         'he_IL', /*Hebrew (Israel)*/
         'hi_IN', /*Hindi (India)*/
@@ -70,9 +77,11 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'lv_LV', /*Latvian (Latvia)*/
         'mk_MK', /*Macedonian (Macedonia)*/
         'mn_Cyrl_MN', /*Mongolian (Mongolia)*/
+        'ms_MY', /*Malaysian (Malaysia)*/
         'ms_Latn_MY', /*Malaysian (Malaysia)*/
+        'nl_BE', /*Dutch (Belgium)*/
         'nl_NL', /*Dutch (Netherlands)*/
-        'nb_NO', /*Norwegian BokmГ_l (Norway)*/
+        'nb_NO', /*Norwegian Bokmål (Norway)*/
         'nn_NO', /*Norwegian Nynorsk (Norway)*/
         'pl_PL', /*Polish (Poland)*/
         'pt_BR', /*Portuguese (Brazil)*/
@@ -82,8 +91,10 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'sk_SK', /*Slovak (Slovakia)*/
         'sl_SI', /*Slovenian (Slovenia)*/
         'sq_AL', /*Albanian (Albania)*/
-        'sr_Cyrl_RS', /*Serbian (Serbia)*/
+        'sr_Cyrl_RS', /*Serbian (Cyrillic, Serbia)*/
+        'sr_Latn_RS', /*Serbian (Latin, Serbia)*/
         'sv_SE', /*Swedish (Sweden)*/
+        'sv_FI', /*Swedish (Finland)*/
         'sw_KE', /*Swahili (Kenya)*/
         'th_TH', /*Thai (Thailand)*/
         'tr_TR', /*Turkish (Turkey)*/
@@ -96,6 +107,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'lo_LA', /*Laotian*/
         'es_VE', /*Spanish (Venezuela)*/
         'en_IE', /*English (Ireland)*/
+        'es_BO', /*Spanish (Bolivia)*/
     ];
 
     /**

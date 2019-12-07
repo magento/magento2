@@ -2,12 +2,12 @@
 /**
  * \Magento\Customer\Model\ResourceModel\Customer\Collection
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel\Customer;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
@@ -17,7 +17,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Customer\Collection'
+            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
         );
     }
 

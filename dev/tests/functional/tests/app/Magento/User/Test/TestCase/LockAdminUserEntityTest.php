@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,17 +21,17 @@ use Magento\User\Test\Fixture\User;
  * Steps:
  * 1. Open Magento admin user login page.
  * 2. Enter incorrect password specified number of times.
- * 3. "You did not sign in correctly or your account is temporarily disabled." appears after each login attempt.
+ * 3. "The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+ *    appears after each login attempt.
  * 4. Perform all assertions.
  *
- * @group AuthN_&_AuthZ_(PS)
+ * @group AuthN_&_AuthZ
  * @ZephyrId MAGETWO-12386
  */
 class LockAdminUserEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

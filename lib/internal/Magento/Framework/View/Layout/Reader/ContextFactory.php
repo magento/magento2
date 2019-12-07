@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Reader;
@@ -28,6 +28,6 @@ class ContextFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\View\Layout\Reader\Context', $data);
+        return $this->objectManager->create(\Magento\Framework\View\Layout\Reader\Context::class, $data);
     }
 }

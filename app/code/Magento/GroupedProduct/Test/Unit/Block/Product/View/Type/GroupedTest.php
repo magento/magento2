@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Product\View\Type;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GroupedProduct\Block\Product\View\Type\Grouped
@@ -38,14 +38,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             'getTypeId',
             '__wakeup',
         ];
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methodsProduct, [], '', false);
-        $this->typeInstanceMock = $this->getMock(
-            'Magento\GroupedProduct\Model\Product\Type\Grouped',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methodsProduct);
+        $this->typeInstanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
         $this->productMock->expects(
             $this->any()
         )->method(
@@ -53,16 +47,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->typeInstanceMock)
         );
-        $this->configuredValueMock = $this->getMock(
-            'Magento\Framework\DataObject',
-            ['getSuperGroup'],
-            [],
-            '',
-            false
-        );
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $this->configuredValueMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSuperGroup']);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->groupedView = $helper->getObject(
-            'Magento\GroupedProduct\Block\Product\View\Type\Grouped',
+            \Magento\GroupedProduct\Block\Product\View\Type\Grouped::class,
             [
                 'data' => ['product' => $this->productMock],
                 'layout' => $layout
@@ -123,6 +111,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->groupedView->setPreconfiguredValue();
     }
 
+    /**
+     * @return array
+     */
     public function setPreconfiguredValueDataProvider()
     {
         return ['item_id_exist_in_config' => ['id_one'], 'item_id_not_exist_in_config' => ['id_two']];

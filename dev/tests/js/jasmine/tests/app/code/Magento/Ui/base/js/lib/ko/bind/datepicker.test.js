@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7,21 +7,34 @@ define([
     'ko',
     'jquery',
     'moment',
-    'Magento_Ui/js/lib/ko/bind/datepicker'
-], function (ko, $, moment) {
+    'mageUtils',
+    'Magento_Ui/js/lib/knockout/bindings/datepicker'
+], function (ko, $, moment, utils) {
     'use strict';
 
     describe('Datepicker binding', function () {
         var observable,
-            element;
+            element,
+            config;
 
         beforeEach(function () {
-            element    = $('<input />');
+            element = $('<input />');
             observable = ko.observable();
+
+            config = {
+                options: {
+                    dateFormat: 'M/d/yy',
+                    storeLocale: 'en_US',
+                    timeFormat: 'h:mm: a'
+                },
+                storage: observable
+            };
 
             $(document.body).append(element);
 
-            ko.applyBindingsToNode(element[0], { datepicker: observable });
+            ko.applyBindingsToNode(element[0], {
+                datepicker: config
+            });
         });
 
         afterEach(function () {
@@ -29,24 +42,34 @@ define([
         });
 
         it('writes picked date\'s value to assigned observable', function () {
-            var openBtn,
-                todayBtn,
-                todayDate,
-                dateFormat,
-                result;
+            var todayDate, momentFormat, result,
+                inputFormat = 'M/d/yy';
 
-            dateFormat  = element.datepicker('option', 'dateFormat');
-            todayDate   = moment().format(dateFormat);
+            momentFormat = utils.convertToMomentFormat(inputFormat);
+            todayDate = moment().format(momentFormat);
 
-            openBtn  = $('img.ui-datepicker-trigger');
-            todayBtn = $('[data-handler="today"]');
-
-            openBtn.click();
-            todayBtn.click();
-
-            result = moment(observable()).format(dateFormat);
+            element.datepicker('setTimezoneDate').blur().trigger('change');
+            result = moment(observable()).format(momentFormat);
 
             expect(todayDate).toEqual(result);
+        });
+
+        it('update picked date\'s value after update observable value', function () {
+            var date = '06/21/2019',
+                inputFormat = 'M/d/yy',
+                expectedDate;
+
+            expectedDate = moment(date, utils.convertToMomentFormat(inputFormat)).toDate();
+            observable(date);
+
+            expect(expectedDate.valueOf()).toEqual(element.datepicker('getDate').valueOf());
+        });
+
+        it('clear picked date\'s value after clear observable value', function () {
+            element.datepicker('setTimezoneDate').blur().trigger('change');
+            observable('');
+
+            expect(null).toEqual(element.datepicker('getDate'));
         });
     });
 });

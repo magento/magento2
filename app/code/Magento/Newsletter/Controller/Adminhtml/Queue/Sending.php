@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
@@ -17,16 +17,16 @@ class Sending extends \Magento\Newsletter\Controller\Adminhtml\Queue
     {
         // Todo: put it somewhere in config!
         $countOfQueue = 3;
-        $countOfSubscritions = 20;
+        $countOfSubscriptions = 20;
 
         $collection = $this->_objectManager->create(
-            'Magento\Newsletter\Model\ResourceModel\Queue\Collection'
+            \Magento\Newsletter\Model\ResourceModel\Queue\Collection::class
         )->setPageSize(
             $countOfQueue
         )->setCurPage(
             1
         )->addOnlyForSendingFilter()->load();
 
-        $collection->walk('sendPerSubscriber', [$countOfSubscritions]);
+        $collection->walk('sendPerSubscriber', [$countOfSubscriptions]);
     }
 }

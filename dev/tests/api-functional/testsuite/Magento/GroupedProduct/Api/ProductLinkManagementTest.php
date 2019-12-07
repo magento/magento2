@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Api;
@@ -41,9 +41,10 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             [
                 'sku' => 'grouped-product',
                 'link_type' => 'associated',
-                'linked_product_sku' => 'simple-1',
+                'linked_product_sku' => 'simple',
                 'linked_product_type' => 'simple',
                 'position' => 1,
+                'extension_attributes' => ['qty' => 1]
             ],
             [
                 'sku' => 'grouped-product',
@@ -51,24 +52,10 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
                 'linked_product_sku' => 'virtual-product',
                 'linked_product_type' => 'virtual',
                 'position' => 2,
+                'extension_attributes' => ['qty' => 2]
             ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            array_walk(
-                $expected,
-                function (&$item) {
-                    $item['extension_attributes'] = ['qty' => 1.0000];
-                }
-            );
-        } else {
-            array_walk(
-                $expected,
-                function (&$item) {
-                    $item['extension_attributes'] = ['qty' => 1.0000];
-                }
-            );
-        }
         $this->assertEquals($expected, $actual);
     }
 }

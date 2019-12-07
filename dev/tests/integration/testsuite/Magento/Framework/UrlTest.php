@@ -1,41 +1,45 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
 use Zend\Stdlib\Parameters;
+use Magento\TestFramework\Helper\Bootstrap;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test class for \Magento\Framework\Url
+ */
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected $_model;
+    protected $model;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Framework\Url');
+        $this->model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class);
     }
 
     public function testSetGetUseSession()
     {
-        $this->assertTrue((bool)$this->_model->getUseSession());
-        $this->_model->setUseSession(false);
-        $this->assertFalse($this->_model->getUseSession());
+        $this->assertFalse((bool)$this->model->getUseSession());
+        $this->model->setUseSession(false);
+        $this->assertFalse($this->model->getUseSession());
     }
 
     public function testSetRouteFrontName()
     {
         $value = 'route';
-        $this->_model->setRouteFrontName($value);
-        $this->assertEquals($value, $this->_model->getData('route_front_name'));
+        $this->model->setRouteFrontName($value);
+        $this->assertEquals($value, $this->model->getData('route_front_name'));
     }
 
     public function testGetConfigData()
     {
-        $this->assertEquals('http://localhost/', $this->_model->getConfigData('base_url'));
+        $this->assertEquals('http://localhost/', $this->model->getConfigData('base_url'));
     }
 
     /**
@@ -44,7 +48,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBaseUrlDefaults()
     {
-        $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl());
+        $this->assertEquals('http://localhost/index.php/', $this->model->getBaseUrl());
     }
 
     /**
@@ -54,7 +58,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBaseUrlSeoRewrites()
     {
-        $this->assertEquals('http://localhost/', $this->_model->getBaseUrl());
+        $this->assertEquals('http://localhost/', $this->model->getBaseUrl());
     }
 
     /**
@@ -73,8 +77,94 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBaseUrlConfigured($params, $expectedUrl)
     {
-        $actualUrl = $this->_model->getBaseUrl($params);
+        $actualUrl = $this->model->getBaseUrl($params);
         $this->assertEquals($expectedUrl, $actualUrl);
+    }
+
+    /**
+     * Note: isolation flushes the URL memory cache
+     * @magentoAppIsolation enabled
+     *
+     * @magentoConfigFixture current_store web/secure/base_url http://sample.com/
+     * @magentoConfigFixture current_store web/unsecure/base_link_url http://sample.com/
+     * @magentoConfigFixture current_store web/secure/base_link_url https://sample.com/
+     * @magentoConfigFixture current_store web/secure/use_in_frontend 1
+     *
+     * @magentoAppArea frontend
+     */
+    public function testGetUnsecureUrlInSecureArea()
+    {
+        /** @var \Magento\Framework\App\Request\Http $request */
+        $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\Request\Http::class);
+        //Emulate HTTPS request
+        $request->getServer()->set('HTTPS', 'on');
+        $request->getServer()->set('SERVER_PORT', 443);
+
+        $model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class, ['request' => $request]);
+
+        $secureUrl = $model->getUrl('some/index/controller', ['_nosid' => 1]);
+        $this->assertEquals(
+            'https://sample.com/index.php/some/index/controller/',
+            $secureUrl,
+            'Default URL in secure area is incorrect'
+        );
+
+        $secureUrl = $model->getUrl('some/index/controller', ['_secure' => true, '_nosid' => 1]);
+        $this->assertEquals(
+            'https://sample.com/index.php/some/index/controller/',
+            $secureUrl,
+            'Secure URL in secure area is incorrect'
+        );
+
+        $unsecureUrl = $model->getUrl('some/index/controller', ['_secure' => false, '_nosid' => 1]);
+        $this->assertEquals(
+            'http://sample.com/index.php/some/index/controller/',
+            $unsecureUrl,
+            'Unsecure URL in secure area is incorrect'
+        );
+    }
+
+    /**
+     * Note: isolation flushes the URL memory cache
+     * @magentoAppIsolation enabled
+     *
+     * @magentoConfigFixture current_store web/secure/base_url http://sample.com/
+     * @magentoConfigFixture current_store web/unsecure/base_link_url http://sample.com/
+     * @magentoConfigFixture current_store web/secure/base_link_url https://sample.com/
+     * @magentoConfigFixture current_store web/secure/use_in_frontend 1
+     *
+     * @magentoAppArea frontend
+     */
+    public function testGetSecureUrlInUnsecureArea()
+    {
+        /** @var \Magento\Framework\App\Request\Http $request */
+        $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\Request\Http::class);
+        //Emulate HTTPS request
+        $request->getServer()->set('HTTPS', 'off');
+        $request->getServer()->set('SERVER_PORT', 80);
+
+        $model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class, ['request' => $request]);
+
+        $secureUrl = $model->getUrl('some/index/controller', ['_nosid' => 1]);
+        $this->assertEquals(
+            'http://sample.com/index.php/some/index/controller/',
+            $secureUrl,
+            'Default URL in unsecure area is incorrect'
+        );
+
+        $secureUrl = $model->getUrl('some/index/controller', ['_secure' => true, '_nosid' => 1]);
+        $this->assertEquals(
+            'https://sample.com/index.php/some/index/controller/',
+            $secureUrl,
+            'Secure URL in unsecure area is incorrect'
+        );
+
+        $unsecureUrl = $model->getUrl('some/index/controller', ['_secure' => false, '_nosid' => 1]);
+        $this->assertEquals(
+            'http://sample.com/index.php/some/index/controller/',
+            $unsecureUrl,
+            'Unsecure URL in unsecure area is incorrect'
+        );
     }
 
     /**
@@ -85,21 +175,21 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         /**
          * Get base URL with default type
          */
-        $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl(), 'Incorrect link url');
+        $this->assertEquals('http://localhost/index.php/', $this->model->getBaseUrl(), 'Incorrect link url');
 
         /**
          * Set specified type
          */
-        $webUrl = $this->_model->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_WEB]);
+        $webUrl = $this->model->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_WEB]);
         $this->assertEquals('http://localhost/', $webUrl, 'Incorrect web url');
-        $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl(), 'Incorrect link url');
+        $this->assertEquals('http://localhost/index.php/', $this->model->getBaseUrl(), 'Incorrect link url');
 
         /**
          * Get url with type specified in params
          */
-        $mediaUrl = $this->_model->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]);
+        $mediaUrl = $this->model->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]);
         $this->assertEquals('http://localhost/pub/media/', $mediaUrl, 'Incorrect media url');
-        $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl(), 'Incorrect link url');
+        $this->assertEquals('http://localhost/index.php/', $this->model->getBaseUrl(), 'Incorrect link url');
     }
 
     public function getBaseUrlConfiguredDataProvider()
@@ -119,24 +209,24 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetRouteName()
     {
-        $this->_model->setRouteName('catalog');
-        $this->assertEquals('catalog', $this->_model->getRouteName());
+        $this->model->setRouteName('catalog');
+        $this->assertEquals('catalog', $this->model->getRouteName());
 
         $this->markTestIncomplete('setRouteName() logic is unclear.');
     }
 
     public function testSetGetControllerName()
     {
-        $this->_model->setControllerName('product');
-        $this->assertEquals('product', $this->_model->getControllerName());
+        $this->model->setControllerName('product');
+        $this->assertEquals('product', $this->model->getControllerName());
 
         $this->markTestIncomplete('setControllerName() logic is unclear.');
     }
 
     public function testSetGetActionName()
     {
-        $this->_model->setActionName('view');
-        $this->assertEquals('view', $this->_model->getActionName());
+        $this->model->setActionName('view');
+        $this->assertEquals('view', $this->model->getActionName());
 
         $this->markTestIncomplete('setActionName() logic is unclear.');
     }
@@ -147,21 +237,21 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRouteUrl()
     {
-        $this->assertEquals('http://localhost/index.php/', $this->_model->getRouteUrl());
+        $this->assertEquals('http://localhost/index.php/', $this->model->getRouteUrl());
         $this->assertEquals(
             'http://localhost/index.php/catalog/product/view/id/50/',
-            $this->_model->getRouteUrl('catalog/product/view', ['id' => 50])
+            $this->model->getRouteUrl('catalog/product/view', ['id' => 50])
         );
         $this->assertEquals(
             'http://localhost/index.php/fancy_uri',
-            $this->_model->getRouteUrl('core/index/index', ['_direct' => 'fancy_uri'])
+            $this->model->getRouteUrl('core/index/index', ['_direct' => 'fancy_uri'])
         );
     }
 
     public function testSetGetFragment()
     {
-        $this->_model->setFragment('value');
-        $this->assertEquals('value', $this->_model->getFragment());
+        $this->model->setFragment('value');
+        $this->assertEquals('value', $this->model->getFragment());
     }
 
     /**
@@ -170,7 +260,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrl()
     {
-        $result = $this->_model->getUrl(
+        $result = $this->model->getUrl(
             'catalog/product/view',
             ['_fragment' => 'anchor', '_escape' => 1, '_query' => 'foo=bar', '_nosid' => 1, 'id' => 100]
         );
@@ -183,9 +273,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrlDoesntAddQueryParamsOnConsequentCalls()
     {
-        $result = $this->_model->getUrl('catalog/product/view', ['_query' => 'foo=bar', '_nosid' => 1]);
+        $result = $this->model->getUrl('catalog/product/view', ['_query' => 'foo=bar', '_nosid' => 1]);
         $this->assertEquals('http://localhost/index.php/catalog/product/view/?foo=bar', $result);
-        $result = $this->_model->getUrl('catalog/product/view', ['_nosid' => 1]);
+        $result = $this->model->getUrl('catalog/product/view', ['_nosid' => 1]);
         $this->assertEquals('http://localhost/index.php/catalog/product/view/', $result);
     }
 
@@ -196,9 +286,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrlDoesntAddFragmentOnConsequentCalls()
     {
-        $result = $this->_model->getUrl('catalog/product/view', ['_nosid' => 1, '_fragment' => 'section']);
+        $result = $this->model->getUrl('catalog/product/view', ['_nosid' => 1, '_fragment' => 'section']);
         $this->assertEquals('http://localhost/index.php/catalog/product/view/#section', $result);
-        $result = $this->_model->getUrl('catalog/product/view', ['_nosid' => 1]);
+        $result = $this->model->getUrl('catalog/product/view', ['_nosid' => 1]);
         $this->assertEquals('http://localhost/index.php/catalog/product/view/', $result);
     }
 
@@ -224,10 +314,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $firstExpectedUrl,
         $secondExpectedUrl
     ) {
-        $result = $this->_model->getUrl($firstCallUrl, $firstRouteParams);
+        $result = $this->model->getUrl($firstCallUrl, $firstRouteParams);
         $this->assertEquals($firstExpectedUrl, $result);
 
-        $result = $this->_model->getUrl($secondCallUrl, $secondRouteParams);
+        $result = $this->model->getUrl($secondCallUrl, $secondRouteParams);
         $this->assertEquals($secondExpectedUrl, $result);
     }
 
@@ -373,7 +463,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testEscape()
     {
-        $this->assertEquals('%22%27%3E%3C', $this->_model->escape('"\'><'));
+        $this->assertEquals('%22%27%3E%3C', $this->model->escape('"\'><'));
     }
 
     /**
@@ -382,7 +472,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirectUrl()
     {
-        $directUrl = $this->_model->getDirectUrl('fancy_uri', ['_query' => ['foo' => 'bar']]);
+        $directUrl = $this->model->getDirectUrl('fancy_uri', ['_query' => ['foo' => 'bar']]);
         $this->assertEquals('http://localhost/index.php/fancy_uri?foo=bar', $directUrl);
     }
 
@@ -396,17 +486,18 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testSessionUrlVar()
     {
         $sessionId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Session\Generic'
+            \Magento\Framework\Session\Generic::class
         )->getSessionId();
-        $sessionUrl = $this->_model->sessionUrlVar('<a href="http://example.com/?___SID=U">www.example.com</a>');
+        $sessionUrl = $this->model->sessionUrlVar('<a href="http://example.com/?___SID=U">www.example.com</a>');
         $this->assertEquals('<a href="http://example.com/?SID=' . $sessionId . '">www.example.com</a>', $sessionUrl);
     }
 
     public function testUseSessionIdForUrl()
     {
+        // phpcs:ignore
         $_SERVER['HTTP_HOST'] = 'localhost';
-        $this->assertFalse($this->_model->useSessionIdForUrl(true));
-        $this->assertFalse($this->_model->useSessionIdForUrl(false));
+        $this->assertFalse($this->model->useSessionIdForUrl(true));
+        $this->assertFalse($this->model->useSessionIdForUrl(false));
     }
 
     /**
@@ -417,11 +508,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
         $request->setServer(new Parameters(['HTTP_REFERER' => 'http://localhost/']));
-        $this->assertTrue($this->_model->isOwnOriginUrl());
+        $this->assertTrue($this->model->isOwnOriginUrl());
 
         $request->setServer(new Parameters(['HTTP_REFERER' => 'http://example.com/']));
-        $this->assertFalse($this->_model->isOwnOriginUrl());
+        $this->assertFalse($this->model->isOwnOriginUrl());
     }
 }

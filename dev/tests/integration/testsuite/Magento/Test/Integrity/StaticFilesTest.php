@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * An integrity test that searches for references to static files and asserts that they are resolved via fallback
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StaticFilesTest extends \PHPUnit_Framework_TestCase
+class StaticFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile
@@ -36,20 +39,44 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      */
     private $baseTheme;
 
+    /**
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative
+     */
+    private $alternativeResolver;
+
+    /**
+     * Factory for simple rule
+     *
+     * @var \Magento\Framework\View\Design\Fallback\Rule\SimpleFactory
+     */
+    private $simpleFactory;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
     protected function setUp()
     {
         $om = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager();
-        $this->fallback = $om->get('Magento\Framework\View\Design\FileResolution\Fallback\StaticFile');
-        $this->explicitFallback = $om->get('Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple');
-        $this->themeRepo = $om->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
-        $this->design = $om->get('Magento\Framework\View\DesignInterface');
-        $this->baseTheme = $om->get('Magento\Framework\View\Design\ThemeInterface');
+        $this->fallback = $om->get(\Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class);
+        $this->explicitFallback = $om->get(
+            \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple::class
+        );
+        $this->themeRepo = $om->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
+        $this->design = $om->get(\Magento\Framework\View\DesignInterface::class);
+        $this->baseTheme = $om->get(\Magento\Framework\View\Design\ThemeInterface::class);
+        $this->alternativeResolver = $om->get(
+            \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative::class
+        );
+        $this->simpleFactory = $om->get(\Magento\Framework\View\Design\Fallback\Rule\SimpleFactory::class);
+        $this->filesystem = $om->get(\Magento\Framework\Filesystem::class);
     }
 
     /**
      * Scan references to files from other static files and assert they are correct
      *
-     * The CSS or LESS files may refer to other resources using @import or url() notation
+     * The CSS or LESS files may refer to other resources using `import` or url() notation
      * We want to check integrity of all these references
      * Note that the references may have syntax specific to the Magento preprocessing subsystem
      *
@@ -91,8 +118,17 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
                 $relatedPath = \Magento\Framework\View\FileSystem::getRelatedPath($filePath, $relatedResource);
             }
             // the $relatedPath will be suitable for feeding to the fallback system
+            $staticFile = $this->getStaticFile($area, $themePath, $locale, $relatedPath, $fallbackModule);
+            if (empty($staticFile) && substr($relatedPath, 0, 2) === '..') {
+                //check if static file exists on lib level
+                $path = substr($relatedPath, 2);
+                $libDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');
+                $rule = $this->simpleFactory->create(['pattern' => $libDir]);
+                $params = ['area' => $area, 'theme' => $themePath, 'locale' => $locale];
+                $staticFile = $this->alternativeResolver->resolveFile($rule, $path, $params);
+            }
             $this->assertNotEmpty(
-                $this->getStaticFile($area, $themePath, $locale, $relatedPath, $fallbackModule),
+                $staticFile,
                 "The related resource cannot be resolved through fallback: '{$relatedResource}'"
             );
         }
@@ -130,7 +166,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      * @param bool $isExplicit
      * @return bool|string
      */
-    private function getStaticFile($area, $theme, $locale, $filePath, $module, $isExplicit = false)
+    private function getStaticFile($area, $theme, $locale, $filePath, $module = null, $isExplicit = false)
     {
         if ($area == 'base') {
             $theme = $this->baseTheme;

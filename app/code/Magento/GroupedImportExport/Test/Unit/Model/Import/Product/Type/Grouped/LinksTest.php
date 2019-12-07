@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type\Groupe
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class LinksTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links */
     protected $links;
@@ -34,21 +34,21 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->link = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Link', [], [], '', false);
-        $this->connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->link = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Link::class);
+        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->resource
             ->expects($this->once())
             ->method('getConnection')
             ->will($this->returnValue($this->connection));
 
-        $this->import = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
-        $this->importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', ['create'], [], '', false);
+        $this->import = $this->createMock(\Magento\ImportExport\Model\Import::class);
+        $this->importFactory = $this->createPartialMock(\Magento\ImportExport\Model\ImportFactory::class, ['create']);
         $this->importFactory->expects($this->any())->method('create')->will($this->returnValue($this->import));
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->links = $this->objectManagerHelper->getObject(
-            'Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links',
+            \Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links::class,
             [
                 'productLink' => $this->link,
                 'resource' => $this->resource,
@@ -57,6 +57,9 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function linksDataProvider()
     {
         return [
@@ -95,7 +98,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $linksData['position'] = [4 => 6];
         $linksData['qty'] = [9 => 3];
         $this->processBehaviorGetter('append');
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
@@ -107,18 +110,21 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->links->saveLinksData($linksData);
     }
 
+    /**
+     * @return array
+     */
     public function attributesDataProvider()
     {
         return [
             [
                 'dbAttributes' => [],
-                'returnedAttibutes' => null
+                'returnedAttributes' => null
             ],
             [
                 'dbAttributes' => [
                     ['code' => 2, 'id' => 6, 'type' => 'sometable']
                 ],
-                'returnedAttibutes' => [
+                'returnedAttributes' => [
                     2 => ['id' => 6, 'table' => 'table_name']
                 ]
             ],
@@ -127,7 +133,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
                     ['code' => 8, 'id' => 11, 'type' => 'sometable1'],
                     ['code' => 4, 'id' => 7, 'type' => 'sometable2']
                 ],
-                'returnedAttibutes' => [
+                'returnedAttributes' => [
                     4 => ['id' => 7, 'table' => 'table_name'],
                     8 => ['id' => 11, 'table' => 'table_name']
                 ]
@@ -135,9 +141,12 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param $dbAttributes
+     */
     protected function processAttributeGetter($dbAttributes)
     {
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($select));
         $select->expects($this->once())->method('from')->will($this->returnSelf());
         $select->expects($this->once())->method('where')->will($this->returnSelf());
@@ -151,20 +160,23 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $dbAttributes
-     * @param array $returnedAttibutes
+     * @param array $returnedAttributes
      *
      * @dataProvider attributesDataProvider
      */
-    public function testGetAttributes($dbAttributes, $returnedAttibutes)
+    public function testGetAttributes($dbAttributes, $returnedAttributes)
     {
         $this->processAttributeGetter($dbAttributes);
         $actualAttributes = $this->links->getAttributes();
-        $this->assertEquals($returnedAttibutes, $actualAttributes);
+        $this->assertEquals($returnedAttributes, $actualAttributes);
     }
 
+    /**
+     * @param $behavior
+     */
     protected function processBehaviorGetter($behavior)
     {
-        $dataSource = $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false);
+        $dataSource = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
         $dataSource->expects($this->once())->method('getBehavior')->will($this->returnValue($behavior));
         $this->import->expects($this->once())->method('getDataSourceModel')->will($this->returnValue($dataSource));
     }

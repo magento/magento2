@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper\Dashboard;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Adminhtml dashboard helper for orders
+ *
+ * @api
+ * @since 100.0.2
  */
-class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
+class Order extends AbstractDashboard
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Order\Collection
@@ -16,21 +21,33 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
     protected $_orderCollection;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 100.0.6
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
+        \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->_orderCollection = $orderCollection;
-        parent::__construct(
-            $context
-        );
+        $this->_storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\StoreManagerInterface::class);
+
+        parent::__construct($context);
     }
 
     /**
      * @return void
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _initCollection()
     {

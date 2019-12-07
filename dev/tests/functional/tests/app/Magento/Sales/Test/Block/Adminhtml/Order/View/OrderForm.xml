@@ -1,11 +1,16 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <tabs>
+    <info>
+        <class>Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info</class>
+        <selector>#sales_order_view_tabs_order_info</selector>
+        <strategy>css selector</strategy>
+    </info>
     <invoices>
         <class>Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices</class>
         <selector>#sales_order_view_tabs_order_invoices</selector>
@@ -27,8 +32,8 @@
         <strategy>css selector</strategy>
     </returns>
     <transactions>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#sales_order_view_tabs_order_transactions</selector>
-        <strategy>css selector</strategy>
+        <class>Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Transactions</class>
+        <selector>.//*[@id='sales_order_view_tabs_order_transactions']</selector>
+        <strategy>xpath</strategy>
     </transactions>
 </tabs>

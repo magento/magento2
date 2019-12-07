@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,27 +13,26 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Block\Form as ParentForm;
 
 /**
- * Class AffectedAttributeSet
- * Choose affected attribute set dialog popup window
+ * Choose affected attribute set dialog popup window.
  */
 class AffectedAttributeSet extends ParentForm
 {
     /**
-     * 'Confirm' button locator
+     * 'Confirm' button locator.
      *
      * @var string
      */
-    protected $confirmButton = '[data-role=action]';
+    protected $confirmButton = '[data-index="confirm_button"]';
 
     /**
-     * Locator buttons new name attribute set
+     * Add configurable attributes to the New Attribute Set.
      *
      * @var string
      */
-    protected $affectedAttributeSetNew = '#new-affected-attribute-set';
+    protected $affectedAttributeSetNew = 'input[data-index="affectedAttributeSetNew"]';
 
     /**
-     * Fill popup form
+     * Fill popup form.
      *
      * @param FixtureInterface $product
      * @param SimpleElement|null $element [optional]
@@ -55,7 +54,7 @@ class AffectedAttributeSet extends ParentForm
     }
 
     /**
-     * Click confirm button
+     * Click confirm button.
      *
      * @return void
      */

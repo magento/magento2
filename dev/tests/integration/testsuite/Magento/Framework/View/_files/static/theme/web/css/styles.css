@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /* FrameworkViewMinifier/frontend */
@@ -484,7 +484,6 @@ table .col-draggable .draggable-handle {
   border: 0;
   display: inline;
   line-height: 1.42857143;
-  margin: 0;
   padding: 0;
   color: #1979c3;
   text-decoration: none;
@@ -621,7 +620,6 @@ fieldset[disabled] .grid-actions .action-reset {
   background: none;
   border: 0;
   display: inline;
-  line-height: 1.42857143;
   margin: 0;
   padding: 0;
   color: #1979c3;
@@ -683,7 +681,6 @@ fieldset[disabled] .pager .action-next {
   text-decoration: none;
 }
 .pager .action-previous > span {
-  clip: rect(0, 0, 0, 0);
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
@@ -733,7 +730,6 @@ fieldset[disabled] .pager .action-next {
   text-decoration: none;
 }
 .pager .action-next > span {
-  clip: rect(0, 0, 0, 0);
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
@@ -1000,15 +996,13 @@ fieldset[disabled] .pager .action-next {
 }
 @font-face {
   font-family: 'icons-blank-theme';
-  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot');
-  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot?#iefix') format('embedded-opentype'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff2') format('woff2'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.ttf') format('truetype'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.svg#icons-blank-theme') format('svg');
+  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff2') format('woff2'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'icons-blank-theme';
-  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot');
-  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot?#iefix') format('embedded-opentype'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff2') format('woff2'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.ttf') format('truetype');
+  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff2') format('woff2'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -1450,7 +1444,7 @@ fieldset[disabled] .pager .action-next {
   margin-bottom: 25px;
 }
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 .sales-order-create-index .order-errors .notice {
@@ -1512,7 +1506,6 @@ fieldset[disabled] .pager .action-next {
   text-decoration: none;
 }
 .search-global-field .label > span {
-  clip: rect(0, 0, 0, 0);
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
@@ -1624,7 +1617,6 @@ fieldset[disabled] .pager .action-next {
   color: #676056;
 }
 .notifications-action .text {
-  clip: rect(0, 0, 0, 0);
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
@@ -1709,7 +1701,6 @@ fieldset[disabled] .pager .action-next {
   z-index: 1;
   top: 12px;
   right: 12px;
-  display: inline-block;
   background-image: none;
   background: none;
   border: 0;
@@ -2360,7 +2351,6 @@ fieldset[disabled] .notifications-close.action {
   text-decoration: none;
 }
 #product-variations-matrix .actions-image-uploader {
-  display: inline-block;
   position: relative;
   display: block;
   width: 50px;
@@ -3111,7 +3101,6 @@ body > * {
   background-image: none;
   background: none;
   border: 0;
-  margin: 0;
   padding: 0;
   -moz-box-sizing: content-box;
   box-shadow: none;
@@ -3398,7 +3387,6 @@ fieldset[disabled] .page-main-actions .page-actions .action-add.mselect-button-a
   box-shadow: none;
   text-shadow: none;
   text-decoration: none;
-  line-height: inherit;
   font-weight: 400;
   color: #026294;
   line-height: normal;
@@ -3466,7 +3454,6 @@ fieldset[disabled] .store-switcher .actions.dropdown .action.toggle {
   margin-top: 10px;
 }
 .store-switcher .actions.dropdown ul.dropdown-menu .dropdown-toolbar a {
-  display: inline-block;
   text-decoration: none;
   display: block;
 }
@@ -4835,17 +4822,11 @@ fieldset[disabled] .control-text + .ui-datepicker-trigger {
   width: 100%;
 }
 .filters-toggle {
-  background: #f2ebde;
-  padding: 6px 13px;
   color: #645d53;
-  border: 1px solid #ada89e;
   cursor: pointer;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 1.3rem;
-  font-weight: 500;
-  line-height: 1.4rem;
   box-sizing: border-box;
-  margin: 3px;
   vertical-align: middle;
   display: inline-block;
   background-image: none;
@@ -4948,7 +4929,6 @@ fieldset[disabled] .filters-toggle {
 .filters-item .action-remove {
   background-image: none;
   background: #f2ebde;
-  padding: 6px 13px;
   color: #645d53;
   border: 1px solid #ada89e;
   cursor: pointer;
@@ -5040,17 +5020,11 @@ fieldset[disabled] .filters-item .action-remove {
   position: absolute;
   top: 3px;
   right: 7px;
-  background: #f2ebde;
-  padding: 6px 13px;
   color: #645d53;
-  border: 1px solid #ada89e;
   cursor: pointer;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 1.3rem;
-  font-weight: 500;
-  line-height: 1.4rem;
   box-sizing: border-box;
-  margin: 3px;
   vertical-align: middle;
   display: inline-block;
   background-image: none;
@@ -5285,13 +5259,11 @@ fieldset[disabled] .filters-form .action-close {
   border: 1px solid #c2c2c2;
   border-radius: 1px;
   height: 32px;
-  width: 100%;
   padding: 0 9px;
   font-size: 14px;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.428571429;
   background-clip: padding-box;
-  vertical-align: baseline;
   width: auto;
   white-space: nowrap;
   vertical-align: middle;
@@ -5489,17 +5461,11 @@ fieldset[disabled] .filters .field-date .group .hasDatepicker + .ui-datepicker-t
   background: rgba(0, 0, 0, 0.2);
 }
 .mass-select-toggle {
-  background: #f2ebde;
-  padding: 6px 13px;
   color: #645d53;
-  border: 1px solid #ada89e;
   cursor: pointer;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 1.3rem;
-  font-weight: 500;
-  line-height: 1.4rem;
   box-sizing: border-box;
-  margin: 3px;
   vertical-align: middle;
   display: inline-block;
   background-image: none;
@@ -5756,7 +5722,6 @@ fieldset[disabled] .mass-select-toggle {
 .page-actions.fixed .page-actions-inner,
 .page-content,
 .page-footer {
-  width: auto;
   min-width: 960px;
   max-width: 1300px;
   margin: 0 auto;
@@ -6106,7 +6071,7 @@ table tfoot tr td:last-child {
   clear: both;
 }
 .test-content {
-  width: calc(20px + 100*0.2);
+  width: calc(20px + 100 * 0.2);
 }
 .test-content:before {
   content: '.test {\A    ' attr(data-attribute) ': 0.2em;' '\A    content:\'';
@@ -6115,4 +6080,10 @@ table tfoot tr td:last-child {
 .test-content:after {
   content: ' Test\';\A}' "\A" '\A.test + .test._other ~ ul > li' " {\A    height: @var;\A    content: ' + ';\A}";
   white-space: pre;
+}
+.test-content-calc {
+  width: calc((100% / 12 * 2) - 10px);
+}
+.test-svg-xml-image {
+  background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" viewBox="0 0 38 40"><style>.st0{fill:none;stroke:%23ffffff;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}</style><circle cx="14.7" cy="14.7" r="13.7" class="st0"/><path d="M23.9 24.7L37 39" class="st0"/></svg>') no-repeat left center;
 }

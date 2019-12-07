@@ -1,15 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Secure extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\Framework\View\Asset\MergeService */
+    /**
+     * @var \Magento\Framework\View\Asset\MergeService
+     */
     protected $_mergeService;
-
 
     /**
      * @param \Magento\Framework\Model\Context $context

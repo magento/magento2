@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog;
 
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     public function testNewProductsWidget()
     {
-        $type = 'Magento\Catalog\Block\Product\Widget\NewWidget';
+        $type = \Magento\Catalog\Block\Product\Widget\NewWidget::class;
 
         /** @var $model \Magento\Widget\Model\Widget\Instance */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Widget\Instance'
+            \Magento\Widget\Model\Widget\Instance::class
         );
         $config = $model->setType($type)->getWidgetConfigAsArray();
         $templates = $config['parameters']['template']['values'];

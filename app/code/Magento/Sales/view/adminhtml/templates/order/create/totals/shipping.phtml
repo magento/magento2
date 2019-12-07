@@ -1,49 +1,47 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * @var $block \Magento\Tax\Block\Checkout\Shipping
  * @see \Magento\Tax\Block\Checkout\Shipping
  */
 ?>
-<?php if ($block->displayBoth()):?>
+<?php if ($block->displayBoth()) :?>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo $block->getExcludeTaxLabel() ?>
+    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $block->escapeHtml($block->getExcludeTaxLabel()) ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingExcludeTax()) ?>
+    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+        <?= /* @noEscape */ $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo $block->getIncludeTaxLabel() ?>
+    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $block->escapeHtml($block->getIncludeTaxLabel()) ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingIncludeTax()) ?>
+    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+        <?= /* @noEscape */ $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php elseif ($block->displayIncludeTax()) : ?>
 <tr>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?>
+    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingIncludeTax()) ?>
+    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+        <?= /* @noEscape */ $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
-<?php else:?>
+<?php else : ?>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php echo $block->escapeHtml($block->getTotal()->getTitle()) ?>
+    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingExcludeTax()) ?>
+    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+        <?= /* @noEscape */ $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <?php endif;?>

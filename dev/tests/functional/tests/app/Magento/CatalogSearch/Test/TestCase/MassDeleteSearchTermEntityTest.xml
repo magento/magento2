@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogSearch\Test\TestCase\MassDeleteSearchTermEntityTest" summary="Mass Delete Search Term" ticketId="MAGETWO-26599">
         <variation name="MassDeleteSearchTermEntityTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="searchTerms" xsi:type="string">catalogSearchQuery::default,catalogSearchQuery::default,catalogSearchQuery::default</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionsNotInGrid" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymMassActionNotOnFrontend" />
         </variation>
     </testCase>
 </config>

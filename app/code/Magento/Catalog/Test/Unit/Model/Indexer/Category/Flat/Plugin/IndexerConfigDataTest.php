@@ -1,40 +1,37 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
-class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
+use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData;
+use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Indexer\Model\Config\Data;
+
+class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData
+     * @var IndexerConfigData
      */
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
     protected function setUp()
     {
-        $this->stateMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Category\Flat\State',
-            ['isFlatEnabled'],
-            [],
-            '',
-            false
-        );
-
-        $this->subjectMock = $this->getMock('Magento\Indexer\Model\Config\Data', [], [], '', false);
-
-        $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData($this->stateMock);
+        $this->stateMock = $this->createPartialMock(State::class, ['isFlatEnabled']);
+        $this->subjectMock = $this->createMock(Data::class);
+        $this->model = (new ObjectManager($this))->getObject(IndexerConfigData::class, ['state' => $this->stateMock]);
     }
 
     /**
@@ -48,12 +45,12 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
     public function testAroundGet($isFlat, $path, $default, $inputData, $outputData)
     {
         $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue($isFlat));
-        $closureMock = function () use ($inputData) {
-            return $inputData;
-        };
-        $this->assertEquals($outputData, $this->model->aroundGet($this->subjectMock, $closureMock, $path, $default));
+        $this->assertEquals($outputData, $this->model->afterGet($this->subjectMock, $inputData, $path, $default));
     }
 
+    /**
+     * @return array
+     */
     public function aroundGetDataProvider()
     {
         $flatIndexerData = [

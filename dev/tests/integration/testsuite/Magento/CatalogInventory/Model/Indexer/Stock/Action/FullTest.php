@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 /**
  * Full reindex Test
  */
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
@@ -18,7 +18,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogInventory\Model\Indexer\Stock\Processor'
+            \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
         );
     }
 
@@ -32,11 +32,11 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $this->_processor->reindexAll();
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\CategoryFactory'
+            \Magento\Catalog\Model\CategoryFactory::class
         );
         /** @var \Magento\Catalog\Block\Product\ListProduct $listProduct */
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Block\Product\ListProduct'
+            \Magento\Catalog\Block\Product\ListProduct::class
         );
 
         $category = $categoryFactory->create()->load(2);
@@ -45,7 +45,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $productCollection = $layer->getProductCollection();
         $productCollection->joinField(
             'qty',
-            'cataloginventory_stock_status_idx',
+            'cataloginventory_stock_status',
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

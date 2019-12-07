@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class CustomTest extends \Magento\ImportExport\Test\Unit\Model\Source\Import\Abs
     protected function setUp()
     {
         parent::setUp();
-        $this->_model = new \Magento\ImportExport\Model\Source\Import\Behavior\Custom([]);
+        $this->_model = new \Magento\ImportExport\Model\Source\Import\Behavior\Custom();
     }
 
     /**

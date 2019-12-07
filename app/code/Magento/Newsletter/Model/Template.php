@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -8,8 +8,6 @@ namespace Magento\Newsletter\Model;
 /**
  * Template model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Template _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Newsletter\Model\Template setTemplateCode(string $value)
  * @method \Magento\Newsletter\Model\Template setTemplateText(string $value)
@@ -33,13 +31,17 @@ namespace Magento\Newsletter\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
     /**
      * Mail object
      *
-     * @var \Zend_Mail
+     * @deprecated Unused property
+     *
      */
     protected $_mail;
 
@@ -127,7 +129,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\ResourceModel\Template');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Template::class);
     }
 
     /**
@@ -174,7 +176,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     public function beforeSave()
     {
         $this->validate();
-        return parent::beforeSave();
+        parent::beforeSave();
+        return $this;
     }
 
     /**
@@ -197,9 +200,16 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     {
         $variables['this'] = $this;
 
-        return $this->getTemplateFilter()
-            ->setVariables($variables)
-            ->filter($this->getTemplateSubject());
+        $filter = $this->getTemplateFilter();
+        $filter->setVariables($variables);
+
+        $previousStrictMode = $filter->setStrictMode(
+            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
+        );
+        $result = $filter->filter($this->getTemplateSubject());
+        $filter->setStrictMode($previousStrictMode);
+
+        return $result;
     }
 
     /**
@@ -224,6 +234,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     }
 
     /**
+     * Return the filter factory
+     *
      * @return \Magento\Newsletter\Model\Template\FilterFactory
      */
     protected function getFilterFactory()
@@ -238,9 +250,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function isValidForSend()
     {
-        return !$this->scopeConfig->isSetFlag(
-            \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
+        return $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
     }
 }

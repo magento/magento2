@@ -2,21 +2,23 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\AbstractOutput
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 
-class OutputAbstractTest extends \PHPUnit_Framework_TestCase
+class OutputAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_output;
 
     protected function setUp()
     {
-        $this->_output = $this->getMockForAbstractClass('Magento\Framework\Profiler\Driver\Standard\AbstractOutput');
+        $this->_output = $this->getMockForAbstractClass(
+            \Magento\Framework\Profiler\Driver\Standard\AbstractOutput::class
+        );
     }
 
     /**
@@ -39,7 +41,7 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_output->setThreshold($thresholdKey, 100);
         $thresholds = class_exists('PHPUnit_Util_Class')
             ? \PHPUnit_Util_Class::getObjectAttribute($this->_output, '_thresholds')
-            : \PHPUnit_Framework_Assert::readAttribute($this->_output, '_thresholds');
+            : \PHPUnit\Framework\Assert::readAttribute($this->_output, '_thresholds');
         $this->assertArrayHasKey($thresholdKey, $thresholds);
         $this->assertEquals(100, $thresholds[$thresholdKey]);
 
@@ -55,7 +57,7 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
         $configuration = ['filterPattern' => '/filter pattern/', 'thresholds' => ['fetchKey' => 100]];
         /** @var $output \Magento\Framework\Profiler\Driver\Standard\AbstractOutput  */
         $output = $this->getMockForAbstractClass(
-            'Magento\Framework\Profiler\Driver\Standard\AbstractOutput',
+            \Magento\Framework\Profiler\Driver\Standard\AbstractOutput::class,
             [$configuration]
         );
         $this->assertEquals('/filter pattern/', $output->getFilterPattern());
@@ -113,7 +115,7 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->_output->setFilterPattern('/filter pattern/');
 
-        $mockStat = $this->getMock('Magento\Framework\Profiler\Driver\Standard\Stat');
+        $mockStat = $this->createMock(\Magento\Framework\Profiler\Driver\Standard\Stat::class);
         $expectedTimerIds = ['test'];
         $mockStat->expects(
             $this->once()

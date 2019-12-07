@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\ResourceModel;
 
 /**
  * Store group resource model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -32,6 +35,18 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_updateWebsiteDefaultGroup($model->getWebsiteId(), $model->getId());
         $this->_changeWebsite($model);
 
+        return $this;
+    }
+
+    /**
+     * Initialize unique fields
+     *
+     * @return $this
+     * @since 100.2.0
+     */
+    protected function _initUniqueFields()
+    {
+        $this->_uniqueFields = [['field' => 'code', 'title' => __('Group with the same code')]];
         return $this;
     }
 

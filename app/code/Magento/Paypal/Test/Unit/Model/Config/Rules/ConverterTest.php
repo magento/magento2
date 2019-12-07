@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
@@ -10,7 +10,7 @@ namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
  *
  * Test for class \Magento\Paypal\Model\Config\Rules\Converter
  */
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\Config\Rules\Converter
@@ -60,6 +60,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                                     'value' => '0',
                                     'predicate' => [
                                     ],
+                                    'include' => '',
                                 ],
                                 'event1' => [
                                     'value' => '1',
@@ -72,6 +73,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                                             'argument2' => 'argument2',
                                         ],
                                     ],
+                                    'include' => '',
                                 ],
                             ],
                         ],
@@ -109,6 +111,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                                 'event0' => [
                                     'value' => '0',
                                     'predicate' => [],
+                                    'include' => '',
                                 ],
                                 'event1' => [
                                     'value' => '1',
@@ -121,6 +124,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                                             'argument2' => 'argument2',
                                         ],
                                     ],
+                                    'include' => '',
                                 ],
                             ],
                         ],

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Test class for \Magento\CustomerImportExport\Model\Import\Customer
@@ -12,8 +10,9 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\CustomerImportExport\Model\Import\Customer;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Customer entity import model
@@ -81,7 +80,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     protected function _getModelMockForTestImportDataWithCustomBehaviour()
     {
         // entity adapter mock
-        $modelMock = $this->getMockBuilder('Magento\CustomerImportExport\Model\Import\Customer')
+        $modelMock = $this->getMockBuilder(\Magento\CustomerImportExport\Model\Import\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -92,15 +91,14 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                     '_saveCustomerAttributes',
                     '_deleteCustomerEntities',
                     'getErrorAggregator',
-                ])
+                    'getCustomerStorage',
+                ]
+            )
             ->getMock();
 
-        $errorAggregator = $this->getMock(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            ['hasToBeTerminated'],
-            [],
-            '',
-            false
+        $errorAggregator = $this->createPartialMock(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class,
+            ['hasToBeTerminated']
         );
 
         $availableBehaviors = new \ReflectionProperty($modelMock, '_availableBehaviors');
@@ -108,7 +106,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $availableBehaviors->setValue($modelMock, $this->_availableBehaviors);
 
         // mock to imitate data source model
-        $dataSourceModelMock = $this->getMockBuilder('Magento\ImportExport\Model\ResourceModel\Import\Data')
+        $dataSourceModelMock = $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\Import\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([
                     'getNextBunch',
@@ -124,7 +122,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
 
         $property = new \ReflectionProperty(
-            'Magento\CustomerImportExport\Model\Import\Customer',
+            \Magento\CustomerImportExport\Model\Import\Customer::class,
             '_dataSourceModel'
         );
         $property->setAccessible(true);
@@ -157,6 +155,12 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $modelMock->expects($this->any())
             ->method('getErrorAggregator')
             ->will($this->returnValue($errorAggregator));
+        /** @var \PHPUnit_Framework_MockObject_MockObject $storageMock */
+        $storageMock = $this->createMock(Storage::class);
+        $storageMock->expects($this->any())->method('prepareCustomers');
+        $modelMock->expects($this->any())
+            ->method('getCustomerStorage')
+            ->willReturn($storageMock);
 
         return $modelMock;
     }

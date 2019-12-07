@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
-use Magento\Framework\Phrase;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Source;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
+use Magento\Framework\Phrase;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\Source;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Processor
@@ -61,7 +61,6 @@ class Processor implements ContentProcessorInterface
 
     /**
      * @inheritdoc
-     * @throws ContentProcessorException
      */
     public function processContent(File $asset)
     {
@@ -77,27 +76,27 @@ class Processor implements ContentProcessorInterface
             $content = $this->assetSource->getContent($asset);
 
             if (trim($content) === '') {
-                return '';
+                throw new ContentProcessorException(
+                    new Phrase('Compilation from source: LESS file is empty: ' . $path)
+                );
             }
 
             $tmpFilePath = $this->temporaryFile->createFile($path, $content);
-            $parser->parseFile($tmpFilePath, '');
 
+            gc_disable();
+            $parser->parseFile($tmpFilePath, '');
             $content = $parser->getCss();
+            gc_enable();
 
             if (trim($content) === '') {
-                $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path;
-                $this->logger->critical($errorMessage);
-
-                throw new ContentProcessorException(new Phrase($errorMessage));
+                throw new ContentProcessorException(
+                    new Phrase('Compilation from source: LESS file is empty: ' . $path)
+                );
+            } else {
+                return $content;
             }
-
-            return $content;
         } catch (\Exception $e) {
-            $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path . PHP_EOL . $e->getMessage();
-            $this->logger->critical($errorMessage);
-
-            throw new ContentProcessorException(new Phrase($errorMessage));
+            throw new ContentProcessorException(new Phrase($e->getMessage()));
         }
     }
 }

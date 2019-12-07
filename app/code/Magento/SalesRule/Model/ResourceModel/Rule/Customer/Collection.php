@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule\Customer;
@@ -20,6 +20,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\SalesRule\Model\Rule\Customer', 'Magento\SalesRule\Model\ResourceModel\Rule\Customer');
+        $this->_init(
+            \Magento\SalesRule\Model\Rule\Customer::class,
+            \Magento\SalesRule\Model\ResourceModel\Rule\Customer::class
+        );
     }
 }

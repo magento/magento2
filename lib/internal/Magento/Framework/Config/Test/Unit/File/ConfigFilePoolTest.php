@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,14 +8,14 @@ namespace Magento\Framework\Config\Test\Unit\File;
 
 use Magento\Framework\Config\File\ConfigFilePool;
 
-class ConfigFilePoolTest extends \PHPUnit_Framework_TestCase
+class ConfigFilePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Config\File\ConfigFilePool
      */
     private $configFilePool;
 
-    public function setUp()
+    protected function setUp()
     {
         $newPath = [
             'new_key' => 'new_config.php'

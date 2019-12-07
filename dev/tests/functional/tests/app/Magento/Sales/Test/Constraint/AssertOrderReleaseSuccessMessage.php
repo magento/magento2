@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class AssertOrderReleaseSuccessMessage extends AbstractConstraint
      */
     public function processAssert(OrderIndex $orderIndex, $ordersCount)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::SUCCESS_RELEASE_MESSAGE, $ordersCount),
             $orderIndex->getMessagesBlock()->getSuccessMessage()
         );

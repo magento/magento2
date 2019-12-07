@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * Bundle tier prices model
@@ -32,8 +33,25 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
     public function getDiscountPercent()
     {
         if ($this->percent === null) {
-            $percent = parent::getValue();
-            $this->percent = ($percent) ? max(0, min(100, 100 - $percent)) : null;
+            $prices = $this->getStoredTierPrices();
+            $prevQty = PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT;
+            $this->value = $prevPrice = false;
+            $priceGroup = $this->groupManagement->getAllCustomersGroup()->getId();
+
+            foreach ($prices as $price) {
+                if (!$this->canApplyTierPrice($price, $priceGroup, $prevQty)
+                    || !isset($price['percentage_value'])
+                    || !is_numeric($price['percentage_value'])
+                ) {
+                    continue;
+                }
+                if (false === $prevPrice || $this->isFirstPriceBetter($price['website_price'], $prevPrice)) {
+                    $prevPrice = $price['website_price'];
+                    $prevQty = $price['price_qty'];
+                    $priceGroup = $price['cust_group'];
+                    $this->percent = max(0, min(100, 100 - $price['percentage_value']));
+                }
+            }
         }
         return $this->percent;
     }
@@ -89,14 +107,5 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
     public function isPercentageDiscount()
     {
         return true;
-    }
-
-    /**
-     * @param AmountInterface $amount
-     * @return float
-     */
-    public function getSavePercent(AmountInterface $amount)
-    {
-        return round($amount->getBaseAmount());
     }
 }

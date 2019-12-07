@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,13 +26,31 @@ class AssertCustomerForm extends AbstractConstraint
      *
      * @var array
      */
-    protected $customerSkippedFields = [
+    private $customerSkippedFields = [
         'id',
         'password',
         'password_confirmation',
+        'current_password',
         'is_subscribed',
-        'address'
+        'address',
+        'group_id'
     ];
+
+    /**
+     * Locale map.
+     *
+     * @var array
+     */
+    private $localeMap = [
+        'en_GB' => 'd/m/Y'
+    ];
+
+    /**
+     * Format date for current locale.
+     *
+     * @var string
+     */
+    private $localeFormat = 'm/d/Y';
 
     /**
      * Assert that displayed customer data on edit page(backend) equals passed from fixture.
@@ -40,8 +58,8 @@ class AssertCustomerForm extends AbstractConstraint
      * @param Customer $customer
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerIndexEdit $pageCustomerIndexEdit
-     * @param Address $address[optional]
-     * @param Customer $initialCustomer [optional]
+     * @param Address $address [optional]
+     * @param string $locale
      * @return void
      */
     public function processAssert(
@@ -49,22 +67,22 @@ class AssertCustomerForm extends AbstractConstraint
         CustomerIndex $pageCustomerIndex,
         CustomerIndexEdit $pageCustomerIndexEdit,
         Address $address = null,
-        Customer $initialCustomer = null
+        $locale = ''
     ) {
+        $this->localeFormat = '' !== $locale && isset($this->localeMap[$locale])
+            ? $this->localeMap[$locale]
+            : $this->localeFormat;
         $data = [];
         $filter = [];
 
-        if ($initialCustomer) {
-            $data['customer'] = $customer->hasData()
-                ? array_merge($initialCustomer->getData(), $customer->getData())
-                : $initialCustomer->getData();
-        } else {
-            $data['customer'] = $customer->getData();
-        }
+        $data['customer'] = $customer->getData();
         if ($address) {
             $data['addresses'][1] = $address->hasData() ? $address->getData() : [];
         } else {
             $data['addresses'] = [];
+        }
+        if (isset($data['customer']['dob'])) {
+            $data['customer']['dob'] = date($this->localeFormat, strtotime($data['customer']['dob']));
         }
         $filter['email'] = $data['customer']['email'];
 
@@ -73,11 +91,12 @@ class AssertCustomerForm extends AbstractConstraint
 
         $dataForm = $pageCustomerIndexEdit->getCustomerForm()->getDataCustomer($customer, $address);
         $dataDiff = $this->verify($data, $dataForm);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             empty($dataDiff),
             'Customer data on edit page(backend) not equals to passed from fixture.'
             . "\nFailed values: " . implode(', ', $dataDiff)
         );
+        $this->assertCustomerGroupName($customer, $dataForm);
     }
 
     /**
@@ -87,7 +106,7 @@ class AssertCustomerForm extends AbstractConstraint
      * @param array $dataForm
      * @return array
      */
-    protected function verify(array $dataFixture, array $dataForm)
+    private function verify(array $dataFixture, array $dataForm)
     {
         $result = [];
 
@@ -115,6 +134,33 @@ class AssertCustomerForm extends AbstractConstraint
         }
 
         return $result;
+    }
+
+    /**
+     * Check is Customer Group name correct.
+     *
+     * @param Customer $customer
+     * @param array $formData
+     * @return void
+     */
+    private function assertCustomerGroupName(Customer $customer, array $formData)
+    {
+        $customerGroupName = $customer->getGroupId();
+
+        if ($customerGroupName) {
+            \PHPUnit\Framework\Assert::assertNotEmpty(
+                $formData['customer']['group_id'],
+                'Customer Group value is empty.'
+            );
+
+            if (!empty($formData['customer']['group_id'])) {
+                \PHPUnit\Framework\Assert::assertContains(
+                    $customerGroupName,
+                    $formData['customer']['group_id'],
+                    'Customer Group name is incorrect.'
+                );
+            }
+        }
     }
 
     /**

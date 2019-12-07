@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'mageUtils',
@@ -11,7 +15,8 @@ define([
 
     return Column.extend({
         defaults: {
-            dateFormat: 'MMM D, YYYY h:mm:ss A'
+            dateFormat: 'MMM d, YYYY h:mm:ss A',
+            calendarConfig: []
         },
 
         /**
@@ -22,7 +27,7 @@ define([
         initConfig: function () {
             this._super();
 
-            this.dateFormat = utils.normalizeDate(this.dateFormat);
+            this.dateFormat = utils.normalizeDate(this.dateFormat ? this.dateFormat : this.options.dateFormat);
 
             return this;
         },
@@ -32,11 +37,16 @@ define([
          *
          * @returns {String} Formatted date.
          */
-        getLabel: function () {
-            var date = moment(this._super());
+        getLabel: function (value, format) {
+            var date;
 
-            date = date.isValid() ?
-                date.format(this.dateFormat) :
+            if (this.storeLocale !== undefined) {
+                moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
+            }
+            date = moment(this._super());
+
+            date = date.isValid() && value[this.index] ?
+                date.format(format || this.dateFormat) :
                 '';
 
             return date;

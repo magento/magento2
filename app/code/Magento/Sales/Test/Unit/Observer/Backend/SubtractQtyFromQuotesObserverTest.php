@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Observer\Backend;
 
 use Magento\Sales\Observer\Backend\SubtractQtyFromQuotesObserver;
 
-class SubtractQtyFromQuotesObserverTest extends \PHPUnit_Framework_TestCase
+class SubtractQtyFromQuotesObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SubtractQtyFromQuotesObserver
@@ -31,14 +31,11 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock('Magento\Quote\Model\ResourceModel\Quote', [], [], '', false);
-        $this->_observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->_eventMock = $this->getMock(
-            'Magento\Framework\Event',
-            ['getProduct', 'getStatus', 'getProductId'],
-            [],
-            '',
-            false
+        $this->_quoteMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote::class);
+        $this->_observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->_eventMock = $this->createPartialMock(
+            \Magento\Framework\Event::class,
+            ['getProduct', 'getStatus', 'getProductId']
         );
         $this->_observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->_eventMock));
         $this->_model = new SubtractQtyFromQuotesObserver($this->_quoteMock);
@@ -46,15 +43,12 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testSubtractQtyFromQuotes()
     {
-        $productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['getId', 'getStatus', '__wakeup'],
-            [],
-            '',
-            false
+        $productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getId', 'getStatus', '__wakeup']
         );
         $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
-        $this->_quoteMock->expects($this->once())->method('substractProductFromQuotes')->with($productMock);
+        $this->_quoteMock->expects($this->once())->method('subtractProductFromQuotes')->with($productMock);
         $this->_model->execute($this->_observerMock);
     }
 }

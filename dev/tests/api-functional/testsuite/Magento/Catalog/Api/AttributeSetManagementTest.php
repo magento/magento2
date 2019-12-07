@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -82,7 +83,6 @@ class AttributeSetManagementTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Can not create attribute set based on not existing attribute set
      */
     public function testCreateThrowsExceptionIfGivenSkeletonIdIsInvalid()
     {
@@ -95,11 +95,14 @@ class AttributeSetManagementTest extends WebapiAbstract
             'skeletonId' => 0,
         ];
         $this->_webApiCall($this->createServiceInfo, $arguments);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be created because it's based on a non-existing attribute set."
+        );
     }
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Can not create attribute set based on non product attribute set.
      */
     public function testCreateThrowsExceptionIfGivenSkeletonIdHasWrongEntityType()
     {
@@ -112,11 +115,14 @@ class AttributeSetManagementTest extends WebapiAbstract
             'skeletonId' => 7,
         ];
         $this->_webApiCall($this->createServiceInfo, $arguments);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be created because it's based on a non-product attribute set."
+        );
     }
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Can not create attribute set based on not existing attribute set
      */
     public function testCreateThrowsExceptionIfGivenSkeletonAttributeSetDoesNotExist()
     {
@@ -129,11 +135,15 @@ class AttributeSetManagementTest extends WebapiAbstract
             'skeletonId' => 9999,
         ];
         $this->_webApiCall($this->createServiceInfo, $arguments);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be created because it's based on a non-existing attribute set."
+        );
     }
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Attribute set name is empty.
+     * @expectedExceptionMessage The attribute set name is empty. Enter the name and try again.
      */
     public function testCreateThrowsExceptionIfAttributeSetNameIsEmpty()
     {
@@ -156,7 +166,7 @@ class AttributeSetManagementTest extends WebapiAbstract
         $entityTypeCode = 'catalog_product';
         $entityType = $this->getEntityTypeByCode($entityTypeCode);
         $attributeSetName = 'Default';
-        $expectedMessage = 'An attribute set named "Default" already exists.';
+        $expectedMessage = 'A "Default" attribute set name already exists. Create a new name and try again.';
 
         $arguments = [
             'attributeSet' => [
@@ -196,7 +206,7 @@ class AttributeSetManagementTest extends WebapiAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
-        $attributeSet = $objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
+        $attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
             ->load($attributeSetName, 'attribute_set_name');
         if ($attributeSet->getId() === null) {
             return null;
@@ -214,7 +224,7 @@ class AttributeSetManagementTest extends WebapiAbstract
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Eav\Model\Entity\Type $entityType */
-        $entityType = $objectManager->create('Magento\Eav\Model\Config')
+        $entityType = $objectManager->create(\Magento\Eav\Model\Config::class)
             ->getEntityType($entityTypeCode);
         return $entityType;
     }

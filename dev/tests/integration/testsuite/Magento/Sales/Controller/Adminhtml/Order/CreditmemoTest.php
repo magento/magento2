@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -16,17 +16,18 @@ class CreditmemoTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testAddCommentAction()
     {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/393');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\CatalogInventory\Api\StockIndexInterface $stockIndex */
-        $stockIndex = $objectManager->get('Magento\CatalogInventory\Api\StockIndexInterface');
+        $stockIndex = $objectManager->get(\Magento\CatalogInventory\Api\StockIndexInterface::class);
         $stockIndex->rebuild(1, 1);
 
         /** @var \Magento\CatalogInventory\Api\StockStateInterface $stockState */
-        $stockState = $objectManager->create('Magento\CatalogInventory\Api\StockStateInterface');
+        $stockState = $objectManager->create(\Magento\CatalogInventory\Api\StockStateInterface::class);
         $this->assertEquals(95, $stockState->getStockQty(1, 1));
 
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $objectManager->create('Magento\Sales\Model\Order');
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->load('100000001', 'increment_id');
         $items = $order->getCreditmemosCollection()->getItems();
         $creditmemo = array_shift($items);
@@ -38,7 +39,7 @@ class CreditmemoTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->assertContains($comment, $html);
 
         /** @var \Magento\CatalogInventory\Api\StockStateInterface $stockState */
-        $stockState = $objectManager->create('Magento\CatalogInventory\Api\StockStateInterface');
+        $stockState = $objectManager->create(\Magento\CatalogInventory\Api\StockStateInterface::class);
         $this->assertEquals(95, $stockState->getStockQty(1, 1));
     }
 }

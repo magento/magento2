@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Framework\App\Config\MutableScopeConfigInterface'
+    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
 )->setValue(
     'carriers/flatrate/active',
     1,
     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
     'simple'
 )->setId(
@@ -67,7 +67,7 @@ $billingData = [
 ];
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Quote\Model\Quote\Address',
+    \Magento\Quote\Model\Quote\Address::class,
     ['data' => $billingData]
 );
 $billingAddress->setAddressType('billing');
@@ -78,12 +78,12 @@ $shippingAddress->setShippingMethod('flatrate_flatrate');
 $shippingAddress->setCollectShippingRates(true);
 
 /** @var $quote \Magento\Quote\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        \Magento\Store\Model\StoreManagerInterface::class
     )->getStore()->getId()
 )->setReservedOrderId(
     'test02'
@@ -99,12 +99,14 @@ $quote->getShippingAddress()->setShippingMethod('flatrate_flatrate');
 $quote->getShippingAddress()->setCollectShippingRates(true);
 $quote->collectTotals()->save();
 
-$payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Payment');
+$payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Sales\Model\Order\Payment::class
+);
 $payment->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS_EXPRESS);
 
 $quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS_EXPRESS)->save();
 
 /** @var $service \Magento\Quote\Api\CartManagementInterface */
 $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('\Magento\Quote\Api\CartManagementInterface');
+    ->create(\Magento\Quote\Api\CartManagementInterface::class);
 $order = $service->submit($quote, ['increment_id' => '100000001']);

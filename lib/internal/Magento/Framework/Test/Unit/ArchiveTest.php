@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Test\Unit;
 
 use \Magento\Framework\Archive;
 
-class ArchiveTest extends \PHPUnit_Framework_TestCase
+class ArchiveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Archive
@@ -64,6 +64,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isArchive, $this->archive->isArchive($file));
     }
 
+    /**
+     * @return array
+     */
     public function isArchiveProvider()
     {
         return [
@@ -98,6 +101,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isArchive, $this->archive->isTar($file));
     }
 
+    /**
+     * @return array
+     */
     public function isTarProvider()
     {
         return [
@@ -143,6 +149,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
         $this->assertStringStartsWith($this->destinationDir, $this->unpacked);
     }
 
+    /**
+     * @return array
+     */
     public function destinationProvider()
     {
         return [
@@ -200,6 +209,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
         $this->assertStringStartsWith($this->destinationDir, $this->unpacked);
     }
 
+    /**
+     * @return array
+     */
     public function tarProvider()
     {
         return [

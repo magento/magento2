@@ -2,7 +2,7 @@
 /**
  * Product controller.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Marketplace\Controller\Adminhtml;
@@ -10,12 +10,9 @@ namespace Magento\Marketplace\Controller\Adminhtml;
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**
-     * Check for is allowed
+     * Authorization level of a basic admin session
      *
-     * @return boolean
+     * @see _isAllowed()
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Marketplace::index');
-    }
+    const ADMIN_RESOURCE = 'Magento_Marketplace::index';
 }

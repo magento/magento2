@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component;
 
 use Magento\Customer\Ui\Component\ColumnFactory;
 
-class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test ColumnFactory Class
+ */
+class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeOption;
@@ -30,42 +33,39 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var ColumnFactory */
     protected $columnFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false
         );
-        $this->componentFactory = $this->getMock(
-            'Magento\Framework\View\Element\UiComponentFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->componentFactory = $this->createPartialMock(
+            \Magento\Framework\View\Element\UiComponentFactory::class,
+            ['create']
         );
         $this->attributeMetadata = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AttributeMetadataInterface',
+            \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
             [],
             '',
             false
         );
         $this->column = $this->getMockForAbstractClass(
-            'Magento\Ui\Component\Listing\Columns\ColumnInterface',
+            \Magento\Ui\Component\Listing\Columns\ColumnInterface::class,
             [],
             '',
             false
         );
         $this->attributeOption = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\OptionInterface',
+            \Magento\Customer\Api\Data\OptionInterface::class,
             [],
             '',
             false
         );
 
         $this->inlineEditUpdater = $this->getMockBuilder(
-            'Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater'
+            \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -93,6 +93,7 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'component' => 'Magento_Ui/js/grid/columns/column',
+                    '__disableTmpl' => 'true'
                 ],
             ],
             'context' => $this->context,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class TotalsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
      */
     public function testExecute()
     {
-        $titleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $titleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
         $titleMock

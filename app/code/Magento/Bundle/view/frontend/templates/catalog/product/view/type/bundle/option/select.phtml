@@ -1,11 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select */ ?>
@@ -13,44 +10,56 @@
 <?php $_selections  = $_option->getSelections(); ?>
 <?php $_default     = $_option->getDefaultSelection(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
-<div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
-    <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
-        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
+<div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">
+    <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>">
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
-        <?php if ($block->showSingle()): ?>
-            <?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selections[0]) ?>
+        <?php if ($block->showSingle()) : ?>
+            <?= /* @noEscape */ $block->getSelectionTitlePrice($_selections[0]) ?>
+            <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
             <input type="hidden"
-                   class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>  product bundle option"
-                   name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                   value="<?php /* @escapeNotVerified */ echo $_selections[0]->getSelectionId() ?>"/>
-        <?php else:?>
-            <select id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
-                    name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                    class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> product bundle option bundle-option-select change-container-classname"
-                <?php if ($_option->getRequired()) echo 'data-validate = {required:true}' ?>>
-                <option value=""><?php /* @escapeNotVerified */ echo __('Choose a selection...') ?></option>
-                <?php foreach ($_selections as $_selection): ?>
-                    <option value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
-                        <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
-                        <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
-                        <?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selection, false) ?>
+                   class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>  product bundle option"
+                   name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                   value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"/>
+        <?php else :?>
+            <select id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
+                    name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                    data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                    class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> product bundle option bundle-option-select change-container-classname"
+                <?php if ($_option->getRequired()) { echo 'data-validate = {required:true}'; } ?>>
+                <option value=""><?= $block->escapeHtml(__('Choose a selection...')) ?></option>
+                <?php foreach ($_selections as $_selection) : ?>
+                    <option value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                        <?php if ($block->isSelected($_selection)) { echo ' selected="selected"'; } ?>
+                        <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>>
+                        <?= /* @noEscape */ $block->getSelectionTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
+            <div id="option-tier-prices-<?= $block->escapeHtmlAttr($_option->getId()) ?>" class="option-tier-prices">
+                <?php foreach ($_selections as $_selection) : ?>
+                    <div data-role="selection-tier-prices"
+                         data-selection-id="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                         class="selection-tier-prices">
+                        <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
         <div class="nested">
             <div class="field qty qty-holder">
-                <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input">
-                    <span><?php /* @escapeNotVerified */ echo __('Quantity') ?></span>
+                <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input">
+                    <span><?= $block->escapeHtml(__('Quantity')) ?></span>
                 </label>
                 <div class="control">
-                    <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
-                           id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input"
-                           class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
+                    <input <?php if (!$_canChangeQty) { echo ' disabled="disabled"'; } ?>
+                           id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
+                           class="input-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
                            type="number"
-                           name="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                           value="<?php /* @escapeNotVerified */ echo $_defaultQty ?>"/>
+                           name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                           data-selector="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                           value="<?= $block->escapeHtmlAttr($_defaultQty) ?>"/>
                 </div>
             </div>
         </div>

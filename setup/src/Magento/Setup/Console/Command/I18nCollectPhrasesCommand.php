@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -35,7 +35,11 @@ class I18nCollectPhrasesCommand extends Command
         $this->setName('i18n:collect-phrases')
             ->setDescription('Discovers phrases in the codebase');
         $this->setDefinition([
-            new InputArgument(self::INPUT_KEY_DIRECTORY, InputArgument::REQUIRED, 'Directory path to parse'),
+            new InputArgument(
+                self::INPUT_KEY_DIRECTORY,
+                InputArgument::OPTIONAL,
+                'Directory path to parse. Not needed if --magento flag is set'
+            ),
             new InputOption(
                 self::INPUT_KEY_OUTPUT,
                 self::SHORTCUT_KEY_OUTPUT,
@@ -46,8 +50,8 @@ class I18nCollectPhrasesCommand extends Command
                 self::INPUT_KEY_MAGENTO,
                 self::SHORTCUT_KEY_MAGENTO,
                 InputOption::VALUE_NONE,
-                'Use the --magento parameter to specify the directory is the Magento root directory.' .
-                ' Omit the parameter if the directory is not the Magento root directory.'
+                'Use the --magento parameter to parse the current Magento codebase.' .
+                ' Omit the parameter if a directory is specified.'
             ),
         ]);
     }
@@ -57,12 +61,22 @@ class I18nCollectPhrasesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $directory = $input->getArgument(self::INPUT_KEY_DIRECTORY);
+        if ($input->getOption(self::INPUT_KEY_MAGENTO)) {
+            $directory = BP;
+            if ($input->getArgument(self::INPUT_KEY_DIRECTORY)) {
+                throw new \InvalidArgumentException('Directory path is not needed when --magento flag is set.');
+            }
+        } elseif (!$input->getArgument(self::INPUT_KEY_DIRECTORY)) {
+            throw new \InvalidArgumentException('Directory path is needed when --magento flag is not set.');
+        }
         $generator = ServiceLocator::getDictionaryGenerator();
         $generator->generate(
-            $input->getArgument(self::INPUT_KEY_DIRECTORY),
+            $directory,
             $input->getOption(self::INPUT_KEY_OUTPUT),
             $input->getOption(self::INPUT_KEY_MAGENTO)
         );
         $output->writeln('<info>Dictionary successfully processed.</info>');
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

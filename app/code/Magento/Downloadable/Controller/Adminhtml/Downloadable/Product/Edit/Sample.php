@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
@@ -15,7 +15,7 @@ class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Pro
      */
     protected function _createLink()
     {
-        return $this->_objectManager->create('Magento\Downloadable\Model\Sample');
+        return $this->_objectManager->create(\Magento\Downloadable\Model\Sample::class);
     }
 
     /**
@@ -23,7 +23,7 @@ class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Pro
      */
     protected function _getLink()
     {
-        return $this->_objectManager->get('Magento\Downloadable\Model\Sample');
+        return $this->_objectManager->get(\Magento\Downloadable\Model\Sample::class);
     }
 
     /**
@@ -44,7 +44,7 @@ class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Pro
                 $resourceType = DownloadHelper::LINK_TYPE_URL;
             } elseif ($sample->getSampleType() == DownloadHelper::LINK_TYPE_FILE) {
                 $resource = $this->_objectManager->get(
-                    'Magento\Downloadable\Helper\File'
+                    \Magento\Downloadable\Helper\File::class
                 )->getFilePath(
                     $this->_getLink()->getBasePath(),
                     $sample->getSampleFile()

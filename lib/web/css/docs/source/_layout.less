@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -52,34 +52,34 @@ footer.footer {
 //            <td>Page indents on the left and right</td>
 //        </tr>
 //        <tr>
-//            <th colspan="3" class="vars_section">Class names defining different layouts</th>
+//            <th colspan="4" class="vars_section">Class names defining different layouts</th>
 //        </tr>
 //        <tr>
 //            <th>@layout-class-1column</th>
 //            <td class="vars_value">page-layout-1column</td>
-//            <td class="vars_value">'' | false | <nobr>page-layout-1column</nobr> | <nobr>page-layout-2columns-left</nobr> | <nobr>page-layout-2columns-right</nobr> | <nobr>page-layout-3columns</nobr></td>
+//            <td class="vars_value">'' | false | <span style="white-space: nowrap">page-layout-1column</span> | <span style="white-space: nowrap">page-layout-2columns-left</span> | <span style="white-space: nowrap">page-layout-2columns-right</span> | <span style="white-space: nowrap">page-layout-3columns</span></td>
 //            <td>Class name for one column layout</td>
 //        </tr>
 //        <tr>
 //            <th>@layout-class-2columns__left</th>
 //            <td class="vars_value">page-layout-2columns-left</td>
-//            <td class="vars_value">'' | false | <nobr>page-layout-1column</nobr> | <nobr>page-layout-2columns-left</nobr> | <nobr>page-layout-2columns-right</nobr> | <nobr>page-layout-3columns</nobr></td>
+//            <td class="vars_value">'' | false | <span style="white-space: nowrap">page-layout-1column</span> | <span style="white-space: nowrap">page-layout-2columns-left</span> | <span style="white-space: nowrap">page-layout-2columns-right</span> | <span style="white-space: nowrap">page-layout-3columns</span></td>
 //            <td>Class name for two columns layout with left sidebar</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@layout-class-2columns__right</th>
 //            <td class="vars_value">page-layout-2columns-right</td>
-//            <td class="vars_value">'' | false | <nobr>page-layout-1column</nobr> | <nobr>page-layout-2columns-left</nobr> | <nobr>page-layout-2columns-right</nobr> | <nobr>page-layout-3columns</nobr></td>
+//            <td class="vars_value">'' | false | <span style="white-space: nowrap">page-layout-1column</span> | <span style="white-space: nowrap">page-layout-2columns-left</span> | <span style="white-space: nowrap">page-layout-2columns-right</span> | <span style="white-space: nowrap">page-layout-3columns</span></td>
 //            <td>Class name for two columns layout with right sidebar</td>
 //        </tr>
 //        <tr>
 //            <th>@layout-class-3columns</th>
 //            <td class="vars_value">page-layout-3columns</td>
-//            <td class="vars_value">'' | false | <nobr>page-layout-1column</nobr> | <nobr>page-layout-2columns-left</nobr> | <nobr>page-layout-2columns-right</nobr> | <nobr>page-layout-3columns</nobr></td>
+//            <td class="vars_value">'' | false | <span style="white-space: nowrap">page-layout-1column</span> | <span style="white-space: nowrap">page-layout-2columns-left</span> | <span style="white-space: nowrap">page-layout-2columns-right</span> | <span style="white-space: nowrap">page-layout-3columns</span></td>
 //            <td>Class name for three columns layout with left sidebar</td>
 //        </tr>
 //        <tr>
-//            <th colspan="3" class="vars_section">Variables used for layout grid</th>
+//            <th colspan="4" class="vars_section">Variables used for layout grid</th>
 //        </tr>
 //        <tr>
 //            <th>@total-columns</th>
@@ -91,10 +91,10 @@ footer.footer {
 //            <th>@gutter-width</th>
 //            <td class="vars_value">0</td>
 //            <td class="vars_value">'' | false | value</td>
-//            <td>Distanse between columns</td>
+//            <td>Distance between columns</td>
 //        </tr>
 //        <tr>
-//            <th colspan="3" class="vars_section">Variables for layout columns</th>
+//            <th colspan="4" class="vars_section">Variables for layout columns</th>
 //        </tr>
 //        <tr>
 //            <th>@layout-column__width</th>
@@ -121,7 +121,7 @@ footer.footer {
 //            <td>Sets right column width</td>
 //        </tr>
 //        <tr>
-//            <th colspan="3" class="vars_section">Variables for layout columns depending on layout used</th>
+//            <th colspan="4" class="vars_section">Variables for layout columns depending on layout used</th>
 //        </tr>
 //        <tr>
 //            <th>@layout-column-main__width-1</th>
@@ -148,7 +148,7 @@ footer.footer {
 //            <td>Sets three columns layout main column width</td>
 //        </tr>
 //        <tr>
-//            <th colspan="3" class="vars_section">Settings variables</th>
+//            <th colspan="4" class="vars_section">Settings variables</th>
 //        </tr>
 //        <tr>
 //            <th>@use-flex</th>
@@ -332,11 +332,12 @@ footer.footer {
 }
 
 //  # Layout column variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
@@ -360,15 +361,16 @@ footer.footer {
 
 //  # Layout width
 //
-//  The <code>.lib-layout-width()</code> mixin is used to set default page width of the element the mixin is applyed to. It can be used to set width for the whole page wrapper or for the page elements individualy like header, footer, and so on.
+//  The <code>.lib-layout-width()</code> mixin is used to set default page width of the element the mixin is applied to. It can be used to set width for the whole page wrapper or for the page elements individually like header, footer, and so on.
 
 //  # Layout width variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Default value</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>

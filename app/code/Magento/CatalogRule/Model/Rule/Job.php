@@ -4,9 +4,13 @@
  *
  * Uses for encapsulate some logic of rule model and for having ability change behavior (for example, in controller)
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\CatalogRule\Model\Rule;
+
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
 /**
  * Catalog Rule job model
@@ -18,12 +22,11 @@
  * @method bool hasSuccess()
  * @method bool hasError()
  *
- * @author    Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\CatalogRule\Model\Rule;
-
-use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
-
 class Job extends \Magento\Framework\DataObject
 {
     /**
@@ -35,10 +38,14 @@ class Job extends \Magento\Framework\DataObject
      * Basic object initialization
      *
      * @param RuleProductProcessor $ruleProcessor
+     * @param array $data
      */
-    public function __construct(RuleProductProcessor $ruleProcessor)
-    {
+    public function __construct(
+        RuleProductProcessor $ruleProcessor,
+        array $data = []
+    ) {
         $this->ruleProcessor = $ruleProcessor;
+        parent::__construct($data);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Cron;
@@ -64,6 +64,7 @@ class ReportModulesInfo
             $moduleData = $this->collect->getModuleData();
             if (count($moduleData['changes']) > 0) {
                 foreach ($moduleData['changes'] as $change) {
+                    $modelData = [];
                     switch ($change['type']) {
                         case Config::ENABLED:
                             $modelData = [

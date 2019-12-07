@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
-
 
 /**
  * Adminhtml dashboard sales statistics bar
@@ -16,7 +15,7 @@ class Sales extends \Magento\Backend\Block\Dashboard\Bar
     /**
      * @var string
      */
-    protected $_template = 'dashboard/salebar.phtml';
+    protected $_template = 'Magento_Backend::dashboard/salebar.phtml';
 
     /**
      * @var \Magento\Framework\Module\Manager
@@ -40,6 +39,8 @@ class Sales extends \Magento\Backend\Block\Dashboard\Bar
     }
 
     /**
+     * Prepare layout.
+     *
      * @return $this|void
      */
     protected function _prepareLayout()

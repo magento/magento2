@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Api;
 
@@ -15,6 +13,7 @@ namespace Magento\Sales\Api;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 100.0.2
  */
 interface OrderManagementInterface
 {
@@ -30,7 +29,8 @@ interface OrderManagementInterface
      * Lists comments for a specified order.
      *
      * @param int $id The order ID.
-     * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history search results interface.
+     * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history
+     * search results interface.
      */
     public function getCommentsList($id);
 

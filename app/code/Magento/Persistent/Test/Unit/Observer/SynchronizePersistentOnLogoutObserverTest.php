@@ -1,13 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit_Framework_TestCase
+class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver
@@ -34,7 +34,6 @@ class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit_Framework_TestC
      */
     protected $observerMock;
 
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -42,12 +41,12 @@ class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit_Framework_TestC
 
     protected function setUp()
     {
-        $this->helperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
+        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $this->sessionFactoryMock =
-            $this->getMock('Magento\Persistent\Model\SessionFactory', ['create'], [], '', false);
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->sessionMock = $this->getMock('Magento\Persistent\Model\Session', [], [], '', false);
+            $this->createPartialMock(\Magento\Persistent\Model\SessionFactory::class, ['create']);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->sessionMock = $this->createMock(\Magento\Persistent\Model\Session::class);
         $this->model = new \Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver(
             $this->helperMock,
             $this->sessionHelperMock,

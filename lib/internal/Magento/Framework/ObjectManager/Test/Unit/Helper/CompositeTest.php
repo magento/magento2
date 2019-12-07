@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,8 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Helper;
 use \Magento\Framework\ObjectManager\Helper\Composite;
 
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CompositeHelper
@@ -26,7 +25,9 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->compositeHelper = $this->objectManager->getObject('Magento\Framework\ObjectManager\Helper\Composite');
+        $this->compositeHelper = $this->objectManager->getObject(
+            \Magento\Framework\ObjectManager\Helper\Composite::class
+        );
     }
 
     public function testFilterAndSortDeclaredComponents()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
@@ -8,7 +8,8 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 /**
  * Directory tree renderer for Cms Wysiwyg Images
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Tree extends \Magento\Backend\Block\Template
 {
@@ -27,19 +28,29 @@ class Tree extends \Magento\Backend\Block\Template
     protected $_cmsWysiwygImages = null;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages,
         \Magento\Framework\Registry $registry,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_coreRegistry = $registry;
         $this->_cmsWysiwygImages = $cmsWysiwygImages;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context, $data);
     }
 
@@ -58,14 +69,23 @@ class Tree extends \Magento\Backend\Block\Template
         );
         $jsonArray = [];
         foreach ($collection as $item) {
-            $jsonArray[] = [
+            $data = [
                 'text' => $this->_cmsWysiwygImages->getShortFilename($item->getBasename(), 20),
                 'id' => $this->_cmsWysiwygImages->convertPathToId($item->getFilename()),
                 'path' => substr($item->getFilename(), strlen($storageRoot)),
                 'cls' => 'folder',
             ];
+
+            $hasNestedDirectories = count(glob($item->getFilename() . '/*', GLOB_ONLYDIR)) > 0;
+
+            // if no nested directories inside dir, add 'leaf' state so that jstree hides dropdown arrow next to dir
+            if (!$hasNestedDirectories) {
+                $data['state'] = 'leaf';
+            }
+
+            $jsonArray[] = $data;
         }
-        return \Zend_Json::encode($jsonArray);
+        return $this->serializer->serialize($jsonArray);
     }
 
     /**
@@ -75,7 +95,18 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeLoaderUrl()
     {
-        return $this->getUrl('cms/*/treeJson');
+        $params = [];
+
+        $currentTreePath = $this->getRequest()->getParam('current_tree_path');
+
+        if (strlen($currentTreePath)) {
+            $params['current_tree_path'] = $currentTreePath;
+        }
+
+        return $this->getUrl(
+            'cms/*/treeJson',
+            $params
+        );
     }
 
     /**
@@ -96,7 +127,14 @@ class Tree extends \Magento\Backend\Block\Template
     public function getTreeCurrentPath()
     {
         $treePath = ['root'];
-        if ($path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath()) {
+
+        if ($idEncodedPath = $this->getRequest()->getParam('current_tree_path')) {
+            $path = $this->_cmsWysiwygImages->idDecode($idEncodedPath);
+        } else {
+            $path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath();
+        }
+
+        if (strlen($path)) {
             $path = str_replace($this->_cmsWysiwygImages->getStorageRoot(), '', $path);
             $relative = [];
             foreach (explode('/', $path) as $dirName) {
@@ -106,6 +144,7 @@ class Tree extends \Magento\Backend\Block\Template
                 }
             }
         }
+
         return $treePath;
     }
 

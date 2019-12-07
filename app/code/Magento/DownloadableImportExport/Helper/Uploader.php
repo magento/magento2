@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\DownloadableImportExport\Helper;
@@ -37,6 +37,11 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * @var array
      */
     protected $parameters = [];
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public $connection;
 
     /**
      * Construct
@@ -77,12 +82,10 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
         $dirConfig = DirectoryList::getDefaultConfig();
         $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
-        $DS = DIRECTORY_SEPARATOR;
-
         if (!empty($parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR])) {
             $tmpPath = $parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR];
         } else {
-            $tmpPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath('import');
+            $tmpPath = $dirAddon . '/' . $this->mediaDirectory->getRelativePath('import');
         }
 
         if (!$this->fileUploader->setTmpDir($tmpPath)) {
@@ -91,9 +94,9 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
         $destinationDir = "downloadable/files/" . $type;
-        $destinationPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath($destinationDir);
+        $destinationPath = $dirAddon . '/' . $this->mediaDirectory->getRelativePath($destinationDir);
 
-        $this->mediaDirectory->create($destinationDir);
+        $this->mediaDirectory->create($destinationPath);
         if (!$this->fileUploader->setDestDir($destinationPath)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('File directory \'%1\' is not writable.', $destinationPath)

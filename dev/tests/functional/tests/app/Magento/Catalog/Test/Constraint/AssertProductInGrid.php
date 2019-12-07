@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertProductInGrid extends AbstractConstraint
 {
     /**
-     * Product fixture
+     * Product fixture.
      *
      * @var FixtureInterface $product
      */
@@ -34,7 +34,7 @@ class AssertProductInGrid extends AbstractConstraint
         $this->product = $product;
         $productIndex->open();
         $productIndex->getProductGrid()->resetFilter();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $productIndex->getProductGrid()->isRowVisible($this->prepareFilter()),
             'Product \'' . $this->product->getName() . '\' is absent in Products grid.'
         );
@@ -47,7 +47,7 @@ class AssertProductInGrid extends AbstractConstraint
      */
     protected function prepareFilter()
     {
-        $productStatus = ($this->product->getStatus() === null || $this->product->getStatus() === 'Product online')
+        $productStatus = ($this->product->getStatus() === null || $this->product->getStatus() === 'Yes')
             ? 'Enabled'
             : 'Disabled';
         $filter = [

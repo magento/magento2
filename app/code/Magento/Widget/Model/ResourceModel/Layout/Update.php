@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Widget\Model\ResourceModel\Layout;
 
@@ -17,6 +15,11 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Framework\Cache\FrontendInterface
      */
     private $_cache;
+
+    /**
+     * @var array
+     */
+    private $layoutUpdateCache;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -48,28 +51,36 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $handle
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param \Magento\Framework\App\ScopeInterface $store
+     *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function fetchUpdatesByHandle(
         $handle,
         \Magento\Framework\View\Design\ThemeInterface $theme,
         \Magento\Framework\App\ScopeInterface $store
     ) {
-        $bind = ['layout_update_handle' => $handle, 'theme_id' => $theme->getId(), 'store_id' => $store->getId()];
-        $result = '';
-        $connection = $this->getConnection();
-        if ($connection) {
-            $select = $this->_getFetchUpdatesByHandleSelect();
-            $result = join('', $connection->fetchCol($select, $bind));
+        $bind = ['theme_id' => $theme->getId(), 'store_id' => $store->getId()];
+        $cacheKey = implode('-', $bind);
+        if (!isset($this->layoutUpdateCache[$cacheKey])) {
+            $this->layoutUpdateCache[$cacheKey] = [];
+            foreach ($this->getConnection()->fetchAll($this->_getFetchUpdatesByHandleSelect(), $bind) as $layout) {
+                if (!isset($this->layoutUpdateCache[$cacheKey][$layout['handle']])) {
+                    $this->layoutUpdateCache[$cacheKey][$layout['handle']] = '';
+                }
+                $this->layoutUpdateCache[$cacheKey][$layout['handle']] .= $layout['xml'];
+            }
         }
-        return $result;
+        return $this->layoutUpdateCache[$cacheKey][$handle] ?? '';
     }
 
     /**
      * Get select to fetch updates by handle
      *
      * @param bool $loadAllUpdates
+     *
      * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getFetchUpdatesByHandleSelect($loadAllUpdates = false)
     {
@@ -79,7 +90,7 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $select = $this->getConnection()->select()->from(
             ['layout_update' => $this->getMainTable()],
-            ['xml']
+            ['xml', 'handle']
         )->join(
             ['link' => $this->getTable('layout_link')],
             'link.layout_update_id=layout_update.layout_update_id',
@@ -88,8 +99,6 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'link.store_id IN (0, :store_id)'
         )->where(
             'link.theme_id = :theme_id'
-        )->where(
-            'layout_update.handle = :layout_update_handle'
         )->order(
             'layout_update.sort_order ' . \Magento\Framework\DB\Select::SQL_ASC
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,12 +8,12 @@
 
 ?>
 <header ng-controller="headerController" class="page-header row"
-        data-ng-init="redirectTo('<?php echo $this->redirect?>')"
+        data-ng-init="redirectTo('<?= $this->redirect ?>')"
         ng-hide="$state.current.main">
     <div class="page-header-hgroup col-l-8 col-m-6">
         <div class="page-title-wrapper">
             <h1 class="page-title">
-                {{$state.current.noMenu ? $state.current.title : titles[$state.current.type]}}</h1>
+                {{$state.current.noMenu ? $state.current.title : $root.titles[$state.current.type]}}</h1>
         </div>
     </div>
     <div class="page-header-actions col-l-4 col-m-6" style="display: none">

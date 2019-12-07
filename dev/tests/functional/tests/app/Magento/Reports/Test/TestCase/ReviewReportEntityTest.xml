@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Reports\Test\TestCase\ReviewReportEntityTest" summary="Review Report">
+        <variation name="CustomerReviewReportEntityTestVariation1" summary="Customer Review Report" ticketId="MAGETWO-27555">
+            <data name="isCustomerLoggedIn" xsi:type="boolean">true</data>
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="review/data/type" xsi:type="string">Customer</data>
+            <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
+            <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
+            <data name="review/data/detail" xsi:type="string">review_upd_%isolation%</data>
+            <data name="reviewsCount" xsi:type="string">1</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewsQtyByCustomer" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReportByCustomerInGrid" />
+        </variation>
+        <variation name="CustomerReviewReportEntityTestVariation2" summary="Customer Review Report" ticketId="MAGETWO-27555">
+            <data name="isCustomerLoggedIn" xsi:type="boolean">true</data>
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="review/data/type" xsi:type="string">Customer</data>
+            <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
+            <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
+            <data name="review/data/detail" xsi:type="string">review_upd_%isolation%</data>
+            <data name="reviewsCount" xsi:type="string">2</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewsQtyByCustomer" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReportByCustomerInGrid" />
+        </variation>
+        <variation name="CustomerReviewReportEntityTestVariation3" summary="Guest Review Report by Customer" ticketId="MAGETWO-27555">
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="review/data/type" xsi:type="string">Guest</data>
+            <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
+            <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
+            <data name="review/data/detail" xsi:type="string">review_upd_%isolation%</data>
+            <data name="reviewsCount" xsi:type="string">2</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewsQtyByCustomer" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReportByCustomerNotInGrid" />
+        </variation>
+        <variation name="ProductReviewReportEntityTestVariation4" summary="Assert product review report by guest" ticketId="MAGETWO-27223">
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="review/dataset" xsi:type="string">frontend_guest</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewIsAvailableForProduct" />
+        </variation>
+        <variation name="ProductReviewReportEntityTestVariation5" summary="Assert product Review Report by Administrator" ticketId="MAGETWO-27223">
+            <data name="review/dataset" xsi:type="string">frontend_review</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewReportIsVisibleInGrid" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewIsAvailableForProduct" />
+        </variation>
+    </testCase>
+</config>

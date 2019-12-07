@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
@@ -80,7 +80,7 @@ class DataSourcePool
             return $this->dataSources;
         }
 
-        return isset($this->dataSources[$name]) ? $this->dataSources[$name] : null;
+        return $this->dataSources[$name] ?? null;
     }
 
     /**
@@ -107,6 +107,6 @@ class DataSourcePool
      */
     public function getNamespaceData($namespace)
     {
-        return isset($this->assignments[$namespace]) ? $this->assignments[$namespace] : [];
+        return $this->assignments[$namespace] ?? [];
     }
 }

@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace %moduleName%\Setup\Patch\%patchType%;
+
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+%useDataPatchInterface%%usePatchRevertableInterface%%SchemaPatchInterface%
+/**
+* Patch is mechanism, that allows to do atomic upgrade data changes
+*/
+class %class% implements %implementsInterfaces%
+{
+    /**
+     * @var ModuleDataSetupInterface $moduleDataSetup
+     */
+    private $moduleDataSetup;
+
+    /**
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     */
+    public function __construct(ModuleDataSetupInterface $moduleDataSetup)
+    {
+        $this->moduleDataSetup = $moduleDataSetup;
+    }
+
+    /**
+     * Do Upgrade
+     *
+     * @return void
+     */
+    public function apply()
+    {
+    }
+%revertFunction%
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [
+
+        ];
+    }
+}

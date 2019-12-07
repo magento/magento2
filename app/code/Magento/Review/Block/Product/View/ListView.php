@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Product\View;
@@ -8,7 +8,8 @@ namespace Magento\Review\Block\Product\View;
 /**
  * Detailed Product Reviews
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class ListView extends \Magento\Review\Block\Product\View
 {

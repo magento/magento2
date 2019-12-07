@@ -2,12 +2,12 @@
 namespace Magento\Framework\Stdlib;
 
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\Webapi\Curl;
+use Magento\TestFramework\TestCase\HttpClient\CurlClientWithCookies;
 
 /**
  * End to end test of the Cookie Manager, using curl.
@@ -18,14 +18,16 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     private $cookieTesterUrl = 'testmoduleone/CookieTester';
 
-    /** @var Curl */
+    /** @var CurlClientWithCookies */
     protected $curlClient;
 
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->config = $objectManager->get('Magento\Webapi\Model\Config');
-        $this->curlClient = $objectManager->get('Magento\TestFramework\TestCase\Webapi\Curl');
+        $this->config = $objectManager->get(\Magento\Webapi\Model\Config::class);
+        $this->curlClient = $objectManager->get(
+            \Magento\TestFramework\TestCase\HttpClient\CurlClientWithCookies::class
+        );
     }
 
     /**

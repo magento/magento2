@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="GotoCatalogProductsPage">
+        <annotations>
+            <description>Goes to the Admin Products grid via the Admin Side Menu.</description>
+        </annotations>
+        
+        <click stepKey="clickOnCatalogItem" selector="{{CatalogProductsSection.catalogItem}}"/>
+        <waitForPageLoad stepKey="waitForCatalogLoad"/>
+        <click stepKey="clickOnProductItem" selector="{{CatalogProductsSection.productItem}}"/>
+        <waitForPageLoad stepKey="waitForCatalogProductPageLoad"/>
+        <seeInCurrentUrl stepKey="assertWeAreOnTheCatalogProductPage" url="{{assertionData.catalogProduct}}"/>
+    </actionGroup>
+
+    <actionGroup name="GotoConfigurableProductPage">
+        <annotations>
+            <description>Clicks on create Configurable Product from the Admin Products grid page.</description>
+        </annotations>
+        
+        <click stepKey="clickOnAddProductItem" selector="{{ConfigurableProductSection.addProductItem}}"/>
+        <click stepKey="clickOnConfigurationProductItem" selector="{{ConfigurableProductSection.configProductItem}}"/>
+        <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
+        <seeInCurrentUrl stepKey="assertWeAreOnTheConfigurableProductPage" url="{{assertionData.configurableProduct}}"/>
+    </actionGroup>
+
+    <actionGroup name="FillAllRequiredFields">
+        <annotations>
+            <description>Fills the Product Name, Price and Weight fields. Clicks on 'Create Configurations'. Clicks on 'Create New Attribute'.</description>
+        </annotations>
+        
+        <fillField stepKey="fillInProductNameFields" selector="{{NewProduct.productName}}" userInput="{{NewProductsData.productName}}"/>
+        <fillField stepKey="fillInPriceFields" selector="{{NewProduct.price}}" userInput="{{NewProductsData.price}}"/>
+        <fillField stepKey="fillInWeightFields" selector="{{NewProduct.weight}}" userInput="{{NewProductsData.weight}}"/>
+        <click stepKey="clickOnCreateConfigurationsButton" selector="{{NewProduct.createConfigurationButton}}"/>
+        <waitForPageLoad stepKey="waitForCreateProductConfigurationsPageLoad"/>
+        <click stepKey="clickOnCreateNewAttributeButton" selector="{{NewProduct.createNewAttributeButton}}"/>
+        <waitForPageLoad stepKey="waitForNewAttributePageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="CreateNewAttribute">
+        <annotations>
+            <description>Creates a new Product Attribute via the Admin Products creation/edit page. PLEASE NOTE: The Product Attributes are Hardcoded.</description>
+        </annotations>
+
+        <switchToIFrame stepKey="NewAttributePage" selector="{{NewProduct.newAttributeIFrame}}"/>
+        <fillField stepKey="fillInDefaultLabelField" selector="{{NewProduct.defaultLabel}}" userInput="{{NewProductsData.defaultLabel}}"/>
+
+        <!--Add option 1 to attribute-->
+        <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption1"/>
+        <waitForPageLoad stepKey="waitForOption1"/>
+        <fillField stepKey="fillInAdminFieldRed" selector="{{NewProduct.adminFieldRed}}" userInput="{{NewProductsData.adminFieldRed}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldRed" selector="{{NewProduct.defaultStoreViewFieldRed}}" userInput="{{NewProductsData.defaultStoreViewFieldRed}}"/>
+
+        <!--Add option 2 to attribute-->
+        <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption2"/>
+        <waitForPageLoad stepKey="waitForOption2"/>
+        <fillField stepKey="fillInAdminFieldBlue" selector="{{NewProduct.adminFieldBlue}}" userInput="{{NewProductsData.adminFieldBlue}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldBlue" selector="{{NewProduct.defaultStoreViewFieldBlue}}" userInput="{{NewProductsData.defaultStoreViewFieldBlue}}"/>
+
+        <!--Add option 3 to attribute-->
+        <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption3"/>
+        <waitForPageLoad stepKey="waitForOption3"/>
+        <fillField stepKey="fillInAdminFieldYellow" selector="{{NewProduct.adminFieldYellow}}" userInput="{{NewProductsData.adminFieldYellow}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldYellow" selector="{{NewProduct.defaultStoreViewFieldYellow}}" userInput="{{NewProductsData.defaultStoreViewFieldYellow}}"/>
+
+        <!--Add option 4 to attribute-->
+        <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption4"/>
+        <waitForPageLoad stepKey="waitForOption4"/>
+        <fillField stepKey="fillInAdminFieldGreen" selector="{{NewProduct.adminFieldGreen}}" userInput="{{NewProductsData.adminFieldGreen}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldGreen" selector="{{NewProduct.defaultStoreViewFieldGreen}}" userInput="{{NewProductsData.defaultStoreViewFieldGreen}}"/>
+
+        <!--Add option 5 to attribute-->
+        <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption5"/>
+        <waitForPageLoad stepKey="waitForOption5"/>
+        <fillField stepKey="fillInAdminFieldBlack" selector="{{NewProduct.adminFieldBlack}}" userInput="{{NewProductsData.adminFieldBlack}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldBlack" selector="{{NewProduct.defaultStoreViewFieldBlack}}" userInput="{{NewProductsData.defaultStoreViewFieldBlack}}"/>
+
+        <!--Click Save Attribute button-->
+        <click selector="{{NewProduct.saveAttributeButton}}" stepKey="clickSaveAttributeButton"/>
+        <waitForPageLoad stepKey="waitForSavingSettings"/>
+
+        <!--Select created Attribute -->
+        <click selector="{{ConfigurableProductSection.selectCreatedAttribute}}" stepKey="selectCreatedAttribute"/>
+
+        <!--Click Next button-->
+        <click selector="{{ConfigurableProductSection.nextButton}}" stepKey="clickNextButton"/>
+        <waitForPageLoad stepKey="waitForNextPageLoaded"/>
+
+        <!--Select all the options of all the attributes button-->
+        <click selector="{{CreateProductConfigurations.checkboxRed}}" stepKey="selectCheckboxRed"/>
+        <click selector="{{CreateProductConfigurations.checkboxBlue}}" stepKey="selectCheckboxBlue"/>
+        <click selector="{{CreateProductConfigurations.checkboxYellow}}" stepKey="selectCheckboxYellow"/>
+        <click selector="{{CreateProductConfigurations.checkboxGreen}}" stepKey="selectCheckboxGreen"/>
+        <click selector="{{CreateProductConfigurations.checkboxBlack}}" stepKey="selectCheckboxBlack"/>
+
+        <!--Click Next button-->
+        <click selector="{{ConfigurableProductSection.nextButton}}" stepKey="clickNextButton2"/>
+        <waitForPageLoad stepKey="waitForBulkImagesPricePageLoaded"/>
+
+        <!--Click Next button-->
+        <click selector="{{ConfigurableProductSection.nextButton}}" stepKey="clickNextButton3"/>
+        <waitForPageLoad stepKey="waitForSummaryPageLoaded"/>
+
+        <!--Click Generate Configure button-->
+        <click selector="{{ConfigurableProductSection.generateConfigure}}" stepKey="generateConfigure"/>
+        <waitForPageLoad stepKey="waitForGenerateConfigure"/>
+
+        <!-- This Error message shouldn't appear: Test will pass when bug will be fixed-->
+        <dontSee selector="{{CreateProductConfigurations.errorMessage}}" userInput="{{assertionData.errorMessage}}"  stepKey="dontSeeError"/>
+
+        <!--Close frame-->
+        <conditionalClick selector="{{ConfigurableProductSection.closeFrame}}" dependentSelector="{{ConfigurableProductSection.closeFrame}}" visible="1" stepKey="closeFrame"/>
+        <waitForPageLoad stepKey="waitForClosingFrame"/>
+    </actionGroup>
+
+    <actionGroup name="DeleteCreatedAttribute">
+        <annotations>
+            <description>Deletes the Configurable Product Attribute.</description>
+        </annotations>
+        
+        <!--Click on Stores item-->
+        <click stepKey="clickOnStoresItem" selector="{{CatalogProductsSection.storesItem}}"/>
+        <waitForPageLoad stepKey="waitForNavigationPanel"/>
+
+        <!--Click on Products item-->
+        <waitForElementVisible selector="{{CatalogProductsSection.storesProductItem}}" stepKey="waitForCatalogLoad"/>
+        <click stepKey="clickOnStoresProductItem" selector="{{CatalogProductsSection.storesProductItem}}"/>
+        <waitForPageLoad stepKey="waitForStoresProductPageLoad"/>
+
+        <!--Click on created Attribute -->
+        <fillField stepKey="searchProductDefaultLabel" selector="{{CatalogProductsSection.searchDefaultLabelField}}" userInput="{{NewProductsData.defaultLabel}}"/>
+        <click stepKey="clickSearchButton" selector="{{CatalogProductsSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForCreatedAttributeLoad"/>
+        <click stepKey="clickOnCreatedAttributeItem" selector="{{CatalogProductsSection.createdAttributeItem}}"/>
+        <waitForPageLoad stepKey="waitForAttributePropertiesPageLoad"/>
+
+        <!--Click on Delete Attribute item-->
+        <click stepKey="clickOnDeleteAttributeItem" selector="{{CatalogProductsSection.deleteAttributeItem}}"/>
+        <waitForPageLoad stepKey="waitForDeletedDialogOpened"/>
+
+        <!--Click on OK button-->
+        <click stepKey="clickOnOKButton" selector="{{CatalogProductsSection.okButton}}"/>
+        <waitForPageLoad stepKey="waitFordAttributeDeleted"/>
+        <see userInput="You deleted the product attribute." stepKey="seeDeletedTheProductAttributeMessage"/>
+
+        <!-- Click Reset Filter button-->
+        <click stepKey="clickResetFilterButton" selector="{{CatalogProductsSection.resetFilter}}"/>
+        <waitForPageLoad stepKey="waitForAllFilterReset"/>
+    </actionGroup>
+</actionGroups>

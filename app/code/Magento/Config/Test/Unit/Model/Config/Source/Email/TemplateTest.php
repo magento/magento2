@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Test\Unit\Model\Config\Source\Email;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test class for Template.
+ */
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Source\Email\Template
@@ -32,14 +33,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
-        $this->_emailConfig = $this->getMock('Magento\Email\Model\Template\Config', [], [], '', false);
-        $this->_templatesFactory = $this->getMock(
-            'Magento\Email\Model\ResourceModel\Template\CollectionFactory',
-            [],
-            [],
-            '',
-            false
+        $this->_coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->_emailConfig = $this->createMock(\Magento\Email\Model\Template\Config::class);
+        $this->_templatesFactory = $this->createMock(
+            \Magento\Email\Model\ResourceModel\Template\CollectionFactory::class
         );
         $this->_model = new \Magento\Config\Model\Config\Source\Email\Template(
             $this->_coreRegistry,
@@ -50,7 +47,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
-        $collection = $this->getMock('Magento\Email\Model\ResourceModel\Template\Collection', [], [], '', false);
+        $collection = $this->createMock(\Magento\Email\Model\ResourceModel\Template\Collection::class);
         $collection->expects(
             $this->once()
         )->method(
@@ -82,9 +79,21 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('Template New')
         );
         $expectedResult = [
-            ['value' => 'template_new', 'label' => 'Template New (Default)'],
-            ['value' => 'template_one', 'label' => 'Template One'],
-            ['value' => 'template_two', 'label' => 'Template Two'],
+            [
+                'value' => 'template_new',
+                'label' => 'Template New (Default)',
+                '__disableTmpl' => true
+            ],
+            [
+                'value' => 'template_one',
+                'label' => 'Template One',
+                '__disableTmpl' => true
+            ],
+            [
+                'value' => 'template_two',
+                'label' => 'Template Two',
+                '__disableTmpl' => true
+            ],
         ];
         $this->_model->setPath('template/new');
         $this->assertEquals($expectedResult, $this->_model->toOptionArray());

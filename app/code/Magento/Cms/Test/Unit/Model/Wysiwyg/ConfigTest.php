@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\Wysiwyg;
 
 /**
  * @covers \Magento\Cms\Model\Wysiwyg\Config
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
@@ -61,47 +62,78 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $assetFileMock;
 
     /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystemMock;
+
+    /**
+     * @var \Magento\Cms\Model\Wysiwyg\CompositeConfigProvider
+     */
+    private $configProvider;
+
+    /**
      * @var array
      */
     protected $windowSize = [];
 
     protected function setUp()
     {
-        $this->backendUrlMock = $this->getMockBuilder('Magento\Backend\Model\UrlInterface')
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->backendUrlMock = $this->getMockBuilder(\Magento\Backend\Model\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assetRepoMock = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+        $this->assetRepoMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
+        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->variableConfigMock = $this->getMockBuilder('Magento\Variable\Model\Variable\Config')
+        $this->variableConfigMock = $this->getMockBuilder(\Magento\Variable\Model\Variable\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->widgetConfigMock = $this->getMockBuilder('Magento\Widget\Model\Widget\Config')
+        $this->widgetConfigMock = $this->getMockBuilder(\Magento\Widget\Model\Widget\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assetFileMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+        $this->assetFileMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->windowSize = [
             'width' => 1200,
             'height' => 800,
         ];
-
+        $defaultConfigProvider = new \Magento\Cms\Model\WysiwygDefaultConfig();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $configProviderFactory = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\ConfigProviderFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configProviderFactory->expects($this->any())->method('create')->willReturn($defaultConfigProvider);
+        $this->configProvider = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\CompositeConfigProvider::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs(
+                [
+                    'activeEditor' => $this->getMockBuilder(\Magento\Ui\Block\Wysiwyg\ActiveEditor::class)
+                        ->disableOriginalConstructor()->getMock(),
+                    'configProviderFactory' => $configProviderFactory,
+                    'variablePluginConfigProvider' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
+                    'widgetPluginConfigProvider' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
+                    'wysiwygConfigPostProcessor' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
+                    'galleryConfigProvider' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
+                ]
+            )
+            ->setMethods(['processVariableConfig', 'processWidgetConfig'])
+            ->getMock();
+
         $this->wysiwygConfig = $objectManager->getObject(
-            'Magento\Cms\Model\Wysiwyg\Config',
+            \Magento\Cms\Model\Wysiwyg\Config::class,
             [
                 'backendUrl' => $this->backendUrlMock,
                 'assetRepo' => $this->assetRepoMock,
@@ -110,7 +142,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'widgetConfig' => $this->widgetConfigMock,
                 'scopeConfig' => $this->scopeConfigMock,
                 'windowSize' => $this->windowSize,
-                'storeManager' => $this->storeManagerMock
+                'storeManager' => $this->storeManagerMock,
+                'filesystem' => $this->filesystemMock,
+                'configProvider' => $this->configProvider
             ]
         );
     }
@@ -125,44 +159,49 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfig($data, $isAuthorizationAllowed, $expectedResults)
     {
-        $wysiwygPluginSettings = [
-            'wysiwygPluginSettings' => 'wysiwyg is here',
-        ];
-
-        $pluginSettings = [
-            'pluginSettings' => 'plugins are here',
-        ];
-
         $this->backendUrlMock->expects($this->atLeastOnce())
             ->method('getUrl')
             ->withConsecutive(
                 ['cms/wysiwyg/directive'],
                 ['cms/wysiwyg_images/index']
             );
-        $this->assetRepoMock->expects($this->atLeastOnce())
-            ->method('getUrl')
-            ->withConsecutive(
-                ['mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'],
-                ['mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css']
-            );
+        $this->backendUrlMock->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('localhost/index.php/');
+        $this->filesystemMock->expects($this->once())
+            ->method('getUri')
+            ->willReturn('pub/static');
+        /** @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        $contextMock = $this->createMock(\Magento\Framework\View\Asset\ContextInterface::class);
+        $contextMock->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('localhost/pub/static/');
+        $this->assetRepoMock->expects($this->once())
+            ->method('getStaticViewFileContext')
+            ->willReturn($contextMock);
         $this->authorizationMock->expects($this->atLeastOnce())
             ->method('isAllowed')
             ->with('Magento_Cms::media_gallery')
             ->willReturn($isAuthorizationAllowed);
-        $this->variableConfigMock->expects($this->any())
-            ->method('getWysiwygPluginSettings')
-            ->willReturn($wysiwygPluginSettings);
-        $this->widgetConfigMock->expects($this->any())
-            ->method('getPluginSettings')
-            ->willReturn($pluginSettings);
+        if ($data['add_variables']) {
+            $this->configProvider->expects($this->once())
+                ->method('processVariableConfig');
+        }
+        if ($data['add_widgets']) {
+            $this->configProvider->expects($this->once())
+                ->method('processWidgetConfig');
+        }
 
         $config = $this->wysiwygConfig->getConfig($data);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $config);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $config);
         $this->assertEquals($expectedResults[0], $config->getData('someData'));
-        $this->assertEquals($expectedResults[1], $config->getData('wysiwygPluginSettings'));
-        $this->assertEquals($expectedResults[2], $config->getData('pluginSettings'));
+        $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticUrl'));
+        $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticDefaultUrl'));
     }
 
+    /**
+     * @return array
+     */
     public function getConfigDataProvider()
     {
         return [

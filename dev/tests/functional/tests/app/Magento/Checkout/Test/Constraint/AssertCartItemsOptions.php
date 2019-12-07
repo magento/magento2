@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Constraint\Utils\CartPageLoadTrait;
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Fixture\Cart\Items;
 use Magento\Checkout\Test\Page\CheckoutCart;
@@ -21,12 +22,19 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertCartItemsOptions extends AbstractAssertForm
 {
+    use CartPageLoadTrait;
+
     /**
      * Error message for verify options
      *
      * @var string
      */
     protected $errorMessage = '- %s: "%s" instead of "%s"';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $skippedFields = ['sku'];
 
     /**
      * Assert that cart item options for product(s) display with correct information block
@@ -39,6 +47,8 @@ class AssertCartItemsOptions extends AbstractAssertForm
     public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
     {
         $checkoutCart->open();
+        $this->waitForCartPageLoaded($checkoutCart);
+
         /** @var Items $sourceProducts */
         $sourceProducts = $cart->getDataFieldConfig('items')['source'];
         $products = $sourceProducts->getProducts();
@@ -63,7 +73,7 @@ class AssertCartItemsOptions extends AbstractAssertForm
         }
 
         $error = $this->verifyContainsData($productsData, $cartData, true);
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**

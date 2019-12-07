@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\CustomerData\ItemPoolInterface">
-        <arguments>
-            <argument name="itemMap" xsi:type="array">
-                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\CustomerData\ConfigurableItem</item>
-            </argument>
-        </arguments>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
+        <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_InStockOptionSelectBuilder" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="product_identities_extender" type="Magento\ConfigurableProduct\Model\Plugin\Frontend\ProductIdentitiesExtender" />
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
+        <plugin name="used_products_cache" type="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsCache" />
     </type>
 </config>

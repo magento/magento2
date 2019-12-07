@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Builder\Query;
@@ -10,7 +10,7 @@ use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class MatchTest extends \PHPUnit_Framework_TestCase
+class MatchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -36,12 +36,12 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             "AGAINST ('{$expectedSuffix}someValue*' IN BOOLEAN MODE))";
 
         /** @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder $scoreBuilder */
-        $scoreBuilder = $this->objectManager->create('Magento\Framework\Search\Adapter\Mysql\ScoreBuilder');
+        $scoreBuilder = $this->objectManager->create(\Magento\Framework\Search\Adapter\Mysql\ScoreBuilder::class);
         /** @var \Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match $match */
-        $match = $this->objectManager->create('Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match');
+        $match = $this->objectManager->create(\Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match::class);
         /** @var \Magento\Framework\Search\Request\Query\Match $query */
         $query = $this->objectManager->create(
-            'Magento\Framework\Search\Request\Query\Match',
+            \Magento\Framework\Search\Request\Query\Match::class,
             [
                 'name' => 'Match query',
                 'boost' => 3.14,
@@ -53,7 +53,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ]
         );
         /** @var \Magento\Framework\App\ResourceConnection $resource */
-        $resource = $this->objectManager->create('Magento\Framework\App\ResourceConnection');
+        $resource = $this->objectManager->create(\Magento\Framework\App\ResourceConnection::class);
         /** @var \Magento\Framework\DB\Select $select */
         $select = $resource->getConnection()->select();
         $select->from('someTable');

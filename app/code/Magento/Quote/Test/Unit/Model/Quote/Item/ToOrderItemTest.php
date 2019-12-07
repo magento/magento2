@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
@@ -8,7 +8,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 /**
  * Class ToOrderItemTest
  */
-class ToOrderItemTest extends \PHPUnit_Framework_TestCase
+class ToOrderItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Item\ToOrderItem
@@ -45,51 +45,18 @@ class ToOrderItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderItemMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->orderItemFactoryMock = $this->getMock(
-            'Magento\Sales\Api\Data\OrderItemInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->orderItemFactoryMock = $this->createPartialMock(
+            \Magento\Sales\Api\Data\OrderItemInterfaceFactory::class,
+            ['create']
         );
-        $this->objectCopyServiceMock = $this->getMock(
-            'Magento\Framework\DataObject\Copy',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->quoteItemMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->productTypeMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Type\Simple',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderItemMock = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
-            [],
-            [],
-            '',
-            false
-        );
-        $dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->objectCopyServiceMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
+        $this->quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type\Simple::class);
+        $this->orderItemMock = $this->createMock(\Magento\Sales\Model\Order\Item::class);
+        $dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
 
         $this->converter = new \Magento\Quote\Model\Quote\Item\ToOrderItem(
             $this->orderItemFactoryMock,
@@ -125,7 +92,7 @@ class ToOrderItemTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->orderItemMock);
         $this->assertInstanceOf(
-            'Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             $this->converter->convert($this->quoteItemMock, [])
         );
     }

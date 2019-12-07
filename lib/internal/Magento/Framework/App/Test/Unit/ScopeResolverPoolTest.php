@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App\Test\Unit;
 
-class ScopeResolverPoolTest extends \PHPUnit_Framework_TestCase
+class ScopeResolverPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -20,12 +20,13 @@ class ScopeResolverPoolTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $scope = $this->getMock('\Magento\Framework\App\ScopeResolverInterface');
-        $scopeResolver = $this->_helper->getObject('Magento\Framework\App\ScopeResolverPool', [
-            'scopeResolvers' => [
-                'test' => $scope,
+        $scope = $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);
+        $scopeResolver = $this->_helper->getObject(
+            \Magento\Framework\App\ScopeResolverPool::class,
+            [
+                'scopeResolvers' => ['test' => $scope]
             ]
-        ]);
+        );
         $this->assertSame($scope, $scopeResolver->get('test'));
     }
 
@@ -39,14 +40,18 @@ class ScopeResolverPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetException($scope)
     {
-        $scopeResolver = $this->_helper->getObject('Magento\Framework\App\ScopeResolverPool', [
-            'scopeResolvers' => [
-                'test' => new \Magento\Framework\DataObject(),
+        $scopeResolver = $this->_helper->getObject(
+            \Magento\Framework\App\ScopeResolverPool::class,
+            [
+                'scopeResolvers' => ['test' => new \Magento\Framework\DataObject()]
             ]
-        ]);
+        );
         $scopeResolver->get($scope);
     }
 
+    /**
+     * @return array
+     */
     public function testGetExceptionDataProvider()
     {
         return [

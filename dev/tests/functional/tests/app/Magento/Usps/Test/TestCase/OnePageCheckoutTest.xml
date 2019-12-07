@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="OnePageCheckout within Offline Payment Methods and USPS shipping method.">
         <variation name="OnePageCheckoutUspsTestVariation1" summary="Use USPS Online Shipping Carrier on Checkout as a Registered Customer" ticketId="MAGETWO-12444">
-            <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/1" xsi:type="string">configurableProduct::default</data>
+            <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="address/dataset" xsi:type="string">US_address_1</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">United States Postal Service</data>
-            <data name="shipping/shipping_method" xsi:type="string">Priority Mail 1-Day</data>
-            <data name="cart/data/shipping_method" xsi:type="string">Priority Mail 1-Day</data>
+            <data name="shipping/shipping_method" xsi:type="string">Priority Mail 1-Day Small Flat Rate Box</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Priority Mail 1-Day Small Flat Rate Box</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="configData" xsi:type="string">checkmo, usps, shipping_origin_US_CA</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="configData" xsi:type="string">checkmo, usps, shipping_origin_US_CA, usps_container_sm_flat_rate_box</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>
         <variation name="OnePageCheckoutUspsTestVariation2" summary="Check Out as Guest using USPS with US shipping origin and UK customer">
-            <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="address/dataset" xsi:type="string">UK_address</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
             <data name="shipping/shipping_service" xsi:type="string">United States Postal Service</data>
-            <data name="shipping/shipping_method" xsi:type="string">Priority Mail International</data>
-            <data name="cart/data/shipping_method" xsi:type="string">Priority Mail International</data>
+            <data name="shipping/shipping_method" xsi:type="string">Priority Mail Express International Flat Rate Envelope</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Priority Mail Express International Flat Rate Envelope</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, usps, shipping_origin_US_CA</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>

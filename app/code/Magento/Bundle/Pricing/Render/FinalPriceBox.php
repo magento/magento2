@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Pricing\Render;
 
-use Magento\Bundle\Pricing\Price;
-use Magento\Catalog\Pricing\Render as CatalogRender;
+use Magento\Bundle\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Catalog\Pricing\Render as CatalogRender;
 
 /**
  * Class for final_price rendering
@@ -22,10 +22,9 @@ class FinalPriceBox extends CatalogRender\FinalPriceBox
      */
     public function showRangePrice()
     {
-        //Check the bundle options
-        /** @var Price\BundleOptionPrice $bundleOptionPrice */
-        $bundleOptionPrice = $this->getPriceType(Price\BundleOptionPrice::PRICE_CODE);
-        $showRange = $bundleOptionPrice->getValue() != $bundleOptionPrice->getMaxValue();
+        /** @var FinalPrice $bundlePrice */
+        $bundlePrice = $this->getPriceType(FinalPrice::PRICE_CODE);
+        $showRange = $bundlePrice->getMinimalPrice() != $bundlePrice->getMaximalPrice();
 
         if (!$showRange) {
             //Check the custom options, if any

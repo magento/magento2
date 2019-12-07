@@ -2,7 +2,7 @@
 /**
  * Product attribute edit form observer
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\LayeredNavigation\Observer\Grid;
@@ -10,6 +10,9 @@ namespace Magento\LayeredNavigation\Observer\Grid;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Product attribute grid build observer
+ */
 class ProductAttributeGridBuildObserver implements ObserverInterface
 {
     /**
@@ -18,6 +21,8 @@ class ProductAttributeGridBuildObserver implements ObserverInterface
     protected $moduleManager;
 
     /**
+     * Construct.
+     *
      * @param Manager $moduleManager
      */
     public function __construct(Manager $moduleManager)
@@ -26,6 +31,8 @@ class ProductAttributeGridBuildObserver implements ObserverInterface
     }
 
     /**
+     * Execute.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */

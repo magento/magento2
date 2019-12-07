@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class AssertSwaggerSectionLoadOnPage extends AbstractConstraint
      */
     public function processAssert(SwaggerUiPage $swaggerPage)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $swaggerPage->isElementVisible($this->swaggerSectionSelector),
             'Class swagger-section on swagger page.'
         );

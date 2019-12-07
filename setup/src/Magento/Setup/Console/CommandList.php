@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Console;
 
+use Magento\Setup\Console\Command\TablesWhitelistGenerateCommand;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * Class CommandList contains predefined list of commands for Setup
+ * Class CommandList contains predefined list of commands for Setup.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CommandList
 {
@@ -38,44 +41,45 @@ class CommandList
     protected function getCommandsClasses()
     {
         return [
-            'Magento\Setup\Console\Command\AdminUserCreateCommand',
-            'Magento\Setup\Console\Command\BackupCommand',
-            'Magento\Setup\Console\Command\ConfigSetCommand',
-            'Magento\Setup\Console\Command\CronRunCommand',
-            'Magento\Setup\Console\Command\DbDataUpgradeCommand',
-            'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
-            'Magento\Setup\Console\Command\DbStatusCommand',
-            'Magento\Setup\Console\Command\DependenciesShowFrameworkCommand',
-            'Magento\Setup\Console\Command\DependenciesShowModulesCircularCommand',
-            'Magento\Setup\Console\Command\DependenciesShowModulesCommand',
-            'Magento\Setup\Console\Command\DiCompileCommand',
-            'Magento\Setup\Console\Command\DiCompileMultiTenantCommand',
-            'Magento\Setup\Console\Command\GenerateFixturesCommand',
-            'Magento\Setup\Console\Command\I18nCollectPhrasesCommand',
-            'Magento\Setup\Console\Command\I18nPackCommand',
-            'Magento\Setup\Console\Command\InfoAdminUriCommand',
-            'Magento\Setup\Console\Command\InfoBackupsListCommand',
-            'Magento\Setup\Console\Command\InfoCurrencyListCommand',
-            'Magento\Setup\Console\Command\InfoLanguageListCommand',
-            'Magento\Setup\Console\Command\InfoTimezoneListCommand',
-            'Magento\Setup\Console\Command\InstallCommand',
-            'Magento\Setup\Console\Command\InstallStoreConfigurationCommand',
-            'Magento\Setup\Console\Command\ModuleEnableCommand',
-            'Magento\Setup\Console\Command\ModuleDisableCommand',
-            'Magento\Setup\Console\Command\ModuleStatusCommand',
-            'Magento\Setup\Console\Command\ModuleUninstallCommand',
-            'Magento\Setup\Console\Command\MaintenanceAllowIpsCommand',
-            'Magento\Setup\Console\Command\MaintenanceDisableCommand',
-            'Magento\Setup\Console\Command\MaintenanceEnableCommand',
-            'Magento\Setup\Console\Command\MaintenanceStatusCommand',
-            'Magento\Setup\Console\Command\RollbackCommand',
-            'Magento\Setup\Console\Command\UpgradeCommand',
-            'Magento\Setup\Console\Command\UninstallCommand',
+            \Magento\Setup\Console\Command\AdminUserCreateCommand::class,
+            \Magento\Setup\Console\Command\BackupCommand::class,
+            \Magento\Setup\Console\Command\ConfigSetCommand::class,
+            \Magento\Setup\Console\Command\CronRunCommand::class,
+            \Magento\Setup\Console\Command\DbDataUpgradeCommand::class,
+            \Magento\Setup\Console\Command\DbSchemaUpgradeCommand::class,
+            \Magento\Setup\Console\Command\DbStatusCommand::class,
+            \Magento\Setup\Console\Command\DependenciesShowFrameworkCommand::class,
+            \Magento\Setup\Console\Command\DependenciesShowModulesCircularCommand::class,
+            \Magento\Setup\Console\Command\DependenciesShowModulesCommand::class,
+            \Magento\Setup\Console\Command\DiCompileCommand::class,
+            \Magento\Setup\Console\Command\GenerateFixturesCommand::class,
+            \Magento\Setup\Console\Command\I18nCollectPhrasesCommand::class,
+            \Magento\Setup\Console\Command\I18nPackCommand::class,
+            \Magento\Setup\Console\Command\InfoAdminUriCommand::class,
+            \Magento\Setup\Console\Command\InfoBackupsListCommand::class,
+            \Magento\Setup\Console\Command\InfoCurrencyListCommand::class,
+            \Magento\Setup\Console\Command\InfoLanguageListCommand::class,
+            \Magento\Setup\Console\Command\InfoTimezoneListCommand::class,
+            \Magento\Setup\Console\Command\InstallCommand::class,
+            \Magento\Setup\Console\Command\InstallStoreConfigurationCommand::class,
+            \Magento\Setup\Console\Command\ModuleEnableCommand::class,
+            \Magento\Setup\Console\Command\ModuleDisableCommand::class,
+            \Magento\Setup\Console\Command\ModuleStatusCommand::class,
+            \Magento\Setup\Console\Command\ModuleUninstallCommand::class,
+            \Magento\Setup\Console\Command\ModuleConfigStatusCommand::class,
+            \Magento\Setup\Console\Command\MaintenanceAllowIpsCommand::class,
+            \Magento\Setup\Console\Command\MaintenanceDisableCommand::class,
+            \Magento\Setup\Console\Command\MaintenanceEnableCommand::class,
+            \Magento\Setup\Console\Command\MaintenanceStatusCommand::class,
+            \Magento\Setup\Console\Command\RollbackCommand::class,
+            \Magento\Setup\Console\Command\UpgradeCommand::class,
+            \Magento\Setup\Console\Command\UninstallCommand::class,
+            \Magento\Setup\Console\Command\DeployStaticContentCommand::class
         ];
     }
 
     /**
-     * Gets list of command instances
+     * Gets list of command instances.
      *
      * @return \Symfony\Component\Console\Command\Command[]
      * @throws \Exception
@@ -86,8 +90,9 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $commands[] = $this->serviceManager->create($class);
+                $commands[] = $this->serviceManager->get($class);
             } else {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Class ' . $class . ' does not exist');
             }
         }

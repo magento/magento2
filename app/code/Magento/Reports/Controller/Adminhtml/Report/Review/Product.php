@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 
-class Product extends \Magento\Reports\Controller\Adminhtml\Report\Review
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Product extends \Magento\Reports\Controller\Adminhtml\Report\Review implements HttpGetActionInterface
 {
     /**
      * Product reviews report action

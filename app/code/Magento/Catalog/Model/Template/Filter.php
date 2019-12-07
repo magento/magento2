@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Catalog Template Filter Model
@@ -14,6 +12,11 @@
  */
 namespace Magento\Catalog\Model\Template;
 
+/**
+ * Work with catalog(store, website) urls
+ *
+ * @package Magento\Catalog\Model\Template
+ */
 class Filter extends \Magento\Framework\Filter\Template
 {
     /**
@@ -63,7 +66,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Set use absolute links flag
      *
      * @param bool $flag
-     * @return \Magento\Email\Model\Template\Filter
+     * @return $this
      */
     public function setUseAbsoluteLinks($flag)
     {
@@ -73,10 +76,11 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Setter whether SID is allowed in store directive
+     *
      * Doesn't set anything intentionally, since SID is not allowed in any kind of emails
      *
      * @param bool $flag
-     * @return \Magento\Email\Model\Template\Filter
+     * @return $this
      */
     public function setUseSessionInUrl($flag)
     {
@@ -122,12 +126,14 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->getParameters($construction[2]);
-        return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
+        $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
+        return $this->_storeManager->getStore()
+                ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
     /**
      * Retrieve store URL directive
+     *
      * Support url and direct_url properties
      *
      * @param array $construction

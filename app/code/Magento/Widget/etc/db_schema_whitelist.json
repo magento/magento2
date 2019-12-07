@@ -1,0 +1,98 @@
+{
+    "widget": {
+        "column": {
+            "widget_id": true,
+            "widget_code": true,
+            "widget_type": true,
+            "parameters": true
+        },
+        "index": {
+            "WIDGET_WIDGET_CODE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "widget_instance": {
+        "column": {
+            "instance_id": true,
+            "instance_type": true,
+            "theme_id": true,
+            "title": true,
+            "store_ids": true,
+            "widget_parameters": true,
+            "sort_order": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "WIDGET_INSTANCE_THEME_ID_THEME_THEME_ID": true
+        }
+    },
+    "widget_instance_page": {
+        "column": {
+            "page_id": true,
+            "instance_id": true,
+            "page_group": true,
+            "layout_handle": true,
+            "block_reference": true,
+            "page_for": true,
+            "entities": true,
+            "page_template": true
+        },
+        "index": {
+            "WIDGET_INSTANCE_PAGE_INSTANCE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "WIDGET_INSTANCE_PAGE_INSTANCE_ID_WIDGET_INSTANCE_INSTANCE_ID": true
+        }
+    },
+    "widget_instance_page_layout": {
+        "column": {
+            "page_id": true,
+            "layout_update_id": true
+        },
+        "index": {
+            "WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID": true
+        },
+        "constraint": {
+            "WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID_WIDGET_INSTANCE_PAGE_PAGE_ID": true,
+            "WIDGET_INSTANCE_PAGE_LYT_LYT_UPDATE_ID_LYT_UPDATE_LYT_UPDATE_ID": true,
+            "WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID": true
+        }
+    },
+    "layout_update": {
+        "column": {
+            "layout_update_id": true,
+            "handle": true,
+            "xml": true,
+            "sort_order": true,
+            "updated_at": true
+        },
+        "index": {
+            "LAYOUT_UPDATE_HANDLE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "layout_link": {
+        "column": {
+            "layout_link_id": true,
+            "store_id": true,
+            "theme_id": true,
+            "layout_update_id": true,
+            "is_temporary": true
+        },
+        "index": {
+            "LAYOUT_LINK_LAYOUT_UPDATE_ID": true,
+            "LAYOUT_LINK_STORE_ID_THEME_ID_LAYOUT_UPDATE_ID_IS_TEMPORARY": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "LAYOUT_LINK_LAYOUT_UPDATE_ID_LAYOUT_UPDATE_LAYOUT_UPDATE_ID": true,
+            "LAYOUT_LINK_STORE_ID_STORE_STORE_ID": true,
+            "LAYOUT_LINK_THEME_ID_THEME_THEME_ID": true
+        }
+    }
+}

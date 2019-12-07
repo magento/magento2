@@ -1,47 +1,63 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
 
+/**
+ * Class View
+ */
 abstract class View extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
     /**
      * @var Registry
      */
     protected $registry;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 
     /**
+     * @var InvoiceRepositoryInterface
+     */
+    protected $invoiceRepository;
+
+    /**
      * @param Context $context
      * @param Registry $registry
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param ForwardFactory $resultForwardFactory
+     * @param InvoiceRepositoryInterface $invoiceRepository
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        InvoiceRepositoryInterface $invoiceRepository = null
     ) {
-        $this->registry = $registry;
         parent::__construct($context);
+        $this->registry = $registry;
         $this->resultForwardFactory = $resultForwardFactory;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
+        $this->invoiceRepository = $invoiceRepository ?:
+            ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
     }
 
     /**
@@ -63,20 +79,20 @@ abstract class View extends \Magento\Backend\App\Action
     }
 
     /**
+     * Get invoice using invoice Id from request params
+     *
      * @return \Magento\Sales\Model\Order\Invoice|bool
      */
     protected function getInvoice()
     {
-        $invoiceId = $this->getRequest()->getParam('invoice_id');
-        if (!$invoiceId) {
+        try {
+            $invoice = $this->invoiceRepository->get($this->getRequest()->getParam('invoice_id'));
+            $this->registry->register('current_invoice', $invoice);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('Invoice capturing error'));
             return false;
         }
-        /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-        $invoice = $this->_objectManager->create('Magento\Sales\Api\InvoiceRepositoryInterface')->get($invoiceId);
-        if (!$invoice) {
-            return false;
-        }
-        $this->registry->register('current_invoice', $invoice);
+
         return $invoice;
     }
 }

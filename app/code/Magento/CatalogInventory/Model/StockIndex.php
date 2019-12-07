@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\CatalogInventory\Model;
 
@@ -14,6 +12,7 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\StockIndexInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Class StockIndex
@@ -78,6 +77,7 @@ class StockIndex implements StockIndexInterface
      *
      * @param int $productId
      * @param int $scopeId
+     * @deprecated 100.1.0
      * @return true
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -108,6 +108,7 @@ class StockIndex implements StockIndexInterface
      *
      * @param int $productId
      * @param int $websiteId
+     * @deprecated 100.1.0
      * @return void
      */
     public function updateProductStockStatus($productId, $websiteId)
@@ -174,7 +175,7 @@ class StockIndex implements StockIndexInterface
                         if (isset($childrenStatus[$childId])
                             && isset($childrenWebsites[$childId])
                             && in_array($websiteId, $childrenWebsites[$childId])
-                            && $childrenStatus[$childId] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+                            && $childrenStatus[$childId] == Status::STATUS_ENABLED
                             && isset($childrenStock[$childId])
                             && $childrenStock[$childId] == \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
                         ) {
@@ -199,13 +200,13 @@ class StockIndex implements StockIndexInterface
      */
     protected function getWebsitesWithDefaultStores($websiteId = null)
     {
-        if (is_null($this->websites)) {
+        if ($this->websites === null) {
             /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status $resource */
             $resource = $this->getStockStatusResource();
             $this->websites = $resource->getWebsiteStores();
         }
         $websites = $this->websites;
-        if (!is_null($websiteId) && isset($this->websites[$websiteId])) {
+        if ($websiteId !== null && isset($this->websites[$websiteId])) {
             $websites = [$websiteId => $this->websites[$websiteId]];
         }
         return $websites;
@@ -267,7 +268,7 @@ class StockIndex implements StockIndexInterface
     {
         if (empty($this->stockStatusResource)) {
             $this->stockStatusResource = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\CatalogInventory\Model\ResourceModel\Stock\Status'
+                \Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class
             );
         }
         return $this->stockStatusResource;

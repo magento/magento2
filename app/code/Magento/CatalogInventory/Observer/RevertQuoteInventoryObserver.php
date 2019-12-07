@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -64,8 +64,8 @@ class RevertQuoteInventoryObserver implements ObserverInterface
     {
         $quote = $observer->getEvent()->getQuote();
         $items = $this->productQty->getProductQty($quote->getAllItems());
-        $this->stockManagement->revertProductsSale($items, $quote->getStore()->getWebsiteId());
-        $productIds = array_keys($items);
+        $revertedItems = $this->stockManagement->revertProductsSale($items, $quote->getStore()->getWebsiteId());
+        $productIds = array_keys($revertedItems);
         if (!empty($productIds)) {
             $this->stockIndexerProcessor->reindexList($productIds);
             $this->priceIndexer->reindexList($productIds);

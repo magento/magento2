@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,7 +61,7 @@ class Curl extends AbstractCurl implements OrderStatusInterface
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("OrderStatus entity creating by curl handler was not successful! Response: $response");
         }
 
@@ -73,7 +73,7 @@ class Curl extends AbstractCurl implements OrderStatusInterface
             $response = $curl->read();
             $curl->close();
 
-            if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+            if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
                 throw new \Exception(
                     "Assigning OrderStatus entity by curl handler was not successful! Response: $response"
                 );

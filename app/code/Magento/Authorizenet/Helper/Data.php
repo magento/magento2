@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -14,6 +16,10 @@ use Magento\Authorizenet\Model\Authorizenet;
 
 /**
  * Authorize.net Data Helper
+ *
+ * @api
+ * @since 100.0.2
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Data extends AbstractHelper
 {
@@ -150,6 +156,7 @@ class Data extends AbstractHelper
 
     /**
      * Update all child and parent order's edit increment numbers.
+     *
      * Needed for Admin area.
      *
      * @param \Magento\Sales\Model\Order $order
@@ -252,6 +259,7 @@ class Data extends AbstractHelper
 
     /**
      * Format price with currency sign
+     *
      * @param  \Magento\Payment\Model\InfoInterface $payment
      * @param float $amount
      * @return string

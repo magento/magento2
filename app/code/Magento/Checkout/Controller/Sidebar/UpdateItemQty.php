@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Sidebar;
@@ -55,7 +55,7 @@ class UpdateItemQty extends Action
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = (int)$this->getRequest()->getParam('item_qty');
+        $itemQty = $this->getRequest()->getParam('item_qty') * 1;
 
         try {
             $this->sidebar->checkQuoteItem($itemId);

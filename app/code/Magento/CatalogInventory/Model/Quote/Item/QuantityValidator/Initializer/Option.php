@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
@@ -9,6 +9,9 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
+/**
+ * Quote item option initializer.
+ */
 class Option
 {
     /**
@@ -67,10 +70,6 @@ class Option
          * define that stock item is child for composite product
          */
         $stockItem->setIsChildItem(true);
-        /**
-         * don't check qty increments value for option product
-         */
-        $stockItem->setSuppressCheckQtyIncrements(true);
 
         return $stockItem;
     }
@@ -101,6 +100,7 @@ class Option
         );
 
         $stockItem = $this->getStockItem($option, $quoteItem);
+        $stockItem->setProductName($option->getProduct()->getName());
         $result = $this->stockState->checkQuoteItemQty(
             $option->getProduct()->getId(),
             $optionQty,
@@ -120,7 +120,7 @@ class Option
             /**
              * if option's qty was updates we also need to update quote item qty
              */
-            $quoteItem->setData('qty', intval($qty));
+            $quoteItem->setData('qty', (int) $qty);
         }
         if ($result->getMessage() !== null) {
             $option->setMessage($result->getMessage());
@@ -131,6 +131,8 @@ class Option
         }
 
         $stockItem->unsIsChildItem();
+
+        $option->setStockStateResult($result);
 
         return $result;
     }

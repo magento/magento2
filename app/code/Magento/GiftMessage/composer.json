@@ -1,23 +1,26 @@
 {
     "name": "magento/module-gift-message",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
-        "magento/module-store": "100.0.*",
-        "magento/module-catalog": "100.0.*",
-        "magento/module-checkout": "100.0.*",
-        "magento/module-sales": "100.0.*",
-        "magento/module-backend": "100.0.*",
-        "magento/module-customer": "100.0.*",
-        "magento/module-eav": "100.0.*",
-        "magento/module-quote": "100.0.*",
-        "magento/framework": "100.0.*"
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-checkout": "*",
+        "magento/module-customer": "*",
+        "magento/module-quote": "*",
+        "magento/module-sales": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-multishipping": "100.0.*"
+        "magento/module-eav": "*",
+        "magento/module-multishipping": "*"
     },
     "type": "magento2-module",
-    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

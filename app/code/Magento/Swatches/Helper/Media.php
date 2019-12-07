@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Helper;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\Area;
 use Magento\Catalog\Helper\Image;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Helper to move images from tmp to catalog directory
- *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -67,6 +68,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     protected $swatchImageTypes = ['swatch_image', 'swatch_thumb'];
 
     /**
+     * @var array
+     */
+    private $imageConfig;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
@@ -91,7 +97,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $this->imageFactory = $imageFactory;
         $this->themeCollection = $themeCollection;
         $this->viewConfig = $configInterface;
-
     }
 
     /**
@@ -101,11 +106,15 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getSwatchAttributeImage($swatchType, $file)
     {
-        $generationPath = $swatchType. '/' . $this->getFolderNameSize($swatchType). $file;
+        $generationPath = $swatchType . '/' . $this->getFolderNameSize($swatchType) . $file;
         $absoluteImagePath = $this->mediaDirectory
-            ->getAbsolutePath($this->getSwatchMediaPath().'/'.$generationPath);
+            ->getAbsolutePath($this->getSwatchMediaPath() . '/' . $generationPath);
         if (!file_exists($absoluteImagePath)) {
-            $this->generateSwatchVariations($file);
+            try {
+                $this->generateSwatchVariations($file);
+            } catch (\Exception $e) {
+                return '';
+            }
         }
         return $this->getSwatchMediaUrl() . '/' . $generationPath;
     }
@@ -202,7 +211,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         if ($isSwatch) {
             $image->keepFrame(true);
             $image->keepTransparency(true);
-            $image->backgroundColor('#FFF');
+            $image->backgroundColor([255, 255, 255]);
         }
         return $this;
     }
@@ -247,18 +256,14 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getImageConfig()
     {
-        $imageConfig = [];
-        foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
-            $config = $this->viewConfig->getViewConfig([
-                'area' => Area::AREA_FRONTEND,
-                'themeModel' => $theme,
-            ]);
-            $imageConfig = array_merge(
-                $imageConfig,
-                $config->getMediaEntities('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE)
+        if (!$this->imageConfig) {
+            $this->imageConfig = $this->viewConfig->getViewConfig()->getMediaEntities(
+                'Magento_Catalog',
+                Image::MEDIA_TYPE_CONFIG_NODE
             );
         }
-        return $imageConfig;
+
+        return $this->imageConfig;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class AssertNewsletterQueue extends AbstractAssertForm
     public function processAssert(TemplateQueue $templateQueue, Template $newsletter)
     {
         $dataDiff = $this->verifyData($newsletter->getData(), $templateQueue->getEditForm()->getData($newsletter));
-        \PHPUnit_Framework_Assert::assertEmpty($dataDiff, $dataDiff);
+        \PHPUnit\Framework\Assert::assertEmpty($dataDiff, $dataDiff);
     }
 
     /**

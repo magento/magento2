@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron\Queue;
 
 use Magento\Setup\Model\Cron\Queue\Reader;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
@@ -26,9 +26,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->directoryRead = $this->getMockForAbstractClass(
-            'Magento\Framework\Filesystem\Directory\ReadInterface',
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
             [],
             '',
             false

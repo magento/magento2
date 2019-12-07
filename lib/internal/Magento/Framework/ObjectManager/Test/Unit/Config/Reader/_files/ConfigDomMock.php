@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-class ConfigDomMock extends \PHPUnit_Framework_TestCase
+/**
+ * @codingStandardsIgnoreStart
+ */
+class ConfigDomMock extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param null|string $initialContents
@@ -32,6 +33,9 @@ class ConfigDomMock extends \PHPUnit_Framework_TestCase
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getDom()
     {
         return 'reader dom result';

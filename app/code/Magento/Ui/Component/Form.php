@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
@@ -10,7 +10,9 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
- * Class Form
+ * Ui component Form
+ * @api
+ * @since 100.0.2
  */
 class Form extends AbstractComponent
 {
@@ -34,7 +36,11 @@ class Form extends AbstractComponent
         array $data = []
     ) {
         $this->filterBuilder = $filterBuilder;
-        parent::__construct($context, $components, $data);
+        parent::__construct(
+            $context,
+            $components,
+            $data
+        );
     }
 
     /**
@@ -48,28 +54,33 @@ class Form extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataSourceData()
     {
         $dataSource = [];
-        $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName());
 
-        if ($id) {
-            $filter = $this->filterBuilder->setField($this->getContext()->getDataProvider()->getPrimaryFieldName())
-                ->setValue($id)
-                ->create();
-            $this->getContext()->getDataProvider()
-                ->addFilter($filter);
-        }
+        $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName(), null);
+        $idFieldName = $this->getContext()->getDataProvider()->getPrimaryFieldName();
+        $filter = $this->filterBuilder->setField($idFieldName)
+            ->setValue($id)
+            ->create();
+        $this->getContext()->getDataProvider()
+            ->addFilter($filter);
+
         $data = $this->getContext()->getDataProvider()->getData();
 
         if (isset($data[$id])) {
             $dataSource = [
                 'data' => $data[$id]
             ];
+        } elseif (isset($data['items'])) {
+            foreach ($data['items'] as $item) {
+                if ($item[$idFieldName] == $id) {
+                    $dataSource = ['data' => ['general' => $item]];
+                }
+            }
         }
-
         return $dataSource;
     }
 }

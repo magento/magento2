@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link\Purchased;
@@ -10,8 +10,6 @@ use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item as Resource;
 /**
  * Downloadable links purchased item model
  *
- * @method Resource _getResource()
- * @method Resource getResource()
  * @method int getPurchasedId()
  * @method Item setPurchasedId($value)
  * @method int getOrderItemId()
@@ -43,7 +41,8 @@ use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item as Resource;
  * @method string getUpdatedAt()
  * @method Item setUpdatedAt($value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Item extends \Magento\Framework\Model\AbstractModel
 {
@@ -66,7 +65,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item::class);
         parent::_construct();
     }
 

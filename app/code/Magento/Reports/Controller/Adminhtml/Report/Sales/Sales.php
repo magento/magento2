@@ -1,14 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Reports\Model\Flag;
 
-class Sales extends \Magento\Reports\Controller\Adminhtml\Report\Sales
+class Sales extends \Magento\Reports\Controller\Adminhtml\Report\Sales implements HttpGetActionInterface
 {
     /**
      * Sales report action
@@ -25,7 +26,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Sales Report'),
             __('Sales Report')
         );
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Sales Report'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Orders Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_sales.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

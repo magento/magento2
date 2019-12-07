@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,8 +11,15 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
+ * Product Low Stock Report Collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
 {
@@ -72,7 +79,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $itemResource
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -243,12 +250,13 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Add filter by product type(s)
      *
      * @param array|string $typeFilter
+     * @throws LocalizedException
      * @return $this
      */
     public function filterByProductType($typeFilter)
     {
         if (!is_string($typeFilter) && !is_array($typeFilter)) {
-            new \Magento\Framework\Exception\LocalizedException(__('The product type filter specified is incorrect.'));
+            throw new LocalizedException(__('The product type filter specified is incorrect.'));
         }
         $this->addAttributeToFilter('type_id', $typeFilter);
         return $this;

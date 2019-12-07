@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form;
 
+/**
+ * Wysiwyg helper.
+ */
 class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
 {
     /**
@@ -78,7 +81,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
         if ($this->getIsWysiwygEnabled()) {
             $disabled = $this->getDisabled() || $this->getReadonly();
             $html .= $this->_layout->createBlock(
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 '',
                 [
                     'data' => [
@@ -102,19 +105,7 @@ require([
 var config = $config,
     editor;
 
-jQuery.extend(config, {
-    settings: {
-        theme_advanced_buttons1 : 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
-            'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
-        theme_advanced_buttons2: null,
-        theme_advanced_buttons3: null,
-        theme_advanced_buttons4: null,
-        theme_advanced_statusbar_location: null
-    },
-    files_browser_window_url: false
-});
-
-editor = new tinyMceWysiwygSetup(
+editor = new wysiwygSetup(
     '{$this->getHtmlId()}',
     config
 );

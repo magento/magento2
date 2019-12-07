@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_CatalogRule::promo" title="Promotions" module="Magento_CatalogRule" parent="Magento_Backend::marketing" sortOrder="10" resource="Magento_CatalogRule::promo"/>
-        <add id="Magento_CatalogRule::promo_catalog" title="Catalog Price Rule" sortOrder="10" module="Magento_CatalogRule" parent="Magento_CatalogRule::promo" action="catalog_rule/promo_catalog/" dependsOnModule="Magento_Catalog" resource="Magento_CatalogRule::promo_catalog"/>
+        <add id="Magento_CatalogRule::promo" title="Promotions" translate="title" module="Magento_CatalogRule" parent="Magento_Backend::marketing" sortOrder="10" resource="Magento_CatalogRule::promo"/>
+        <add id="Magento_CatalogRule::promo_catalog" title="Catalog Price Rule" translate="title" sortOrder="10" module="Magento_CatalogRule" parent="Magento_CatalogRule::promo" action="catalog_rule/promo_catalog/" dependsOnModule="Magento_Catalog" resource="Magento_CatalogRule::promo_catalog"/>
     </menu>
 </config>

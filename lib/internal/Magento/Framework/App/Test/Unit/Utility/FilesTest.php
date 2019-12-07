@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Utility;
@@ -8,24 +8,29 @@ namespace Magento\Framework\App\Test\Unit\Utility;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class FilesTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for Utility/Files class.
+ *
+ * @package Magento\Framework\App\Test\Unit\Utility
+ */
+class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dirSearch;
-
-    /**
-     * @var ComponentRegistrar
-     */
-    private $componentRegistrar;
+    private $dirSearchMock;
 
     protected function setUp()
     {
-        $this->componentRegistrar = new ComponentRegistrar();
-        $this->dirSearch = $this->getMock('Magento\Framework\Component\DirSearch', [], [], '', false);
-        $themePackageList = $this->getMock('Magento\Framework\View\Design\Theme\ThemePackageList', [], [], '', false);
-        Files::setInstance(new Files($this->componentRegistrar, $this->dirSearch, $themePackageList));
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
+        $fileUtilities = $objectManager->getObject(
+            Files::class,
+            [
+                'dirSearch' => $this->dirSearchMock
+            ]
+        );
+        Files::setInstance($fileUtilities);
     }
 
     protected function tearDown()
@@ -35,7 +40,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfigFiles()
     {
-        $this->dirSearch->expects($this->once())
+        $this->dirSearchMock->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::MODULE, '/etc/some.file')
             ->willReturn(['/one/some.file', '/two/some.file', 'some.other.file']);
@@ -47,9 +52,24 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
+    public function testGetDbSchemaFiles()
+    {
+        $this->dirSearchMock->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::MODULE, '/etc/db_schema.xml')
+            ->willReturn(['First/Module/etc/db_schema.xml', 'Second/Module/etc/db_schema.xml']);
+
+        $expected = [
+            'First/Module/etc/db_schema.xml' => ['First/Module/etc/db_schema.xml'],
+            'Second/Module/etc/db_schema.xml' => ['Second/Module/etc/db_schema.xml'],
+        ];
+        $actual = Files::init()->getDbSchemaFiles('db_schema.xml', ['Second/Module/etc/db_schema.xml']);
+        $this->assertSame($expected, $actual);
+    }
+
     public function testGetLayoutConfigFiles()
     {
-        $this->dirSearch->expects($this->once())
+        $this->dirSearchMock->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::THEME, '/etc/some.file')
             ->willReturn(['/one/some.file', '/two/some.file']);

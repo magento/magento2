@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,10 +11,11 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $connection;
+
     /**
      * @var Attribute
      */
@@ -37,9 +38,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
 
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
         $this->resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
@@ -52,7 +53,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSaveLabel()
+    public function testSaveNewLabel()
     {
         $attributeId = 4354;
 
@@ -69,7 +70,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ]
         )->willReturn(0);
 
-        $this->connection->expects($this->once())->method('insertOnDuplicate')->with(
+        $this->connection->expects($this->once())->method('insert')->with(
             'catalog_product_super_attribute_label',
             [
                 'product_super_attribute_id' => $attributeId,
@@ -78,12 +79,48 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'value' => 'test',
             ]
         );
-        $attributeMode = $this->getMockBuilder(AttributeModel::class)->setMethods(
+        $attributeMock = $this->getMockBuilder(AttributeModel::class)->setMethods(
             ['getId', 'getUseDefault', 'getLabel']
         )->disableOriginalConstructor()->getMock();
-        $attributeMode->expects($this->any())->method('getId')->willReturn($attributeId);
-        $attributeMode->expects($this->any())->method('getUseDefault')->willReturn(0);
-        $attributeMode->expects($this->any())->method('getLabel')->willReturn('test');
-        $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMode));
+        $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
+        $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
+        $attributeMock->expects($this->atLeastOnce())->method('getLabel')->willReturn('test');
+        $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
+    }
+
+    public function testSaveExistingLabel()
+    {
+        $attributeId = 4354;
+
+        $select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $this->connection->expects($this->once())->method('select')->willReturn($select);
+        $select->expects($this->once())->method('from')->willReturnSelf();
+        $select->expects($this->at(1))->method('where')->willReturnSelf();
+        $select->expects($this->at(2))->method('where')->willReturnSelf();
+        $this->connection->expects($this->once())->method('fetchOne')->with(
+            $select,
+            [
+                'product_super_attribute_id' => $attributeId,
+                'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ]
+        )->willReturn(1);
+
+        $this->connection->expects($this->once())->method('insertOnDuplicate')->with(
+            'catalog_product_super_attribute_label',
+            [
+                'product_super_attribute_id' => $attributeId,
+                'use_default' => 0,
+                'store_id' => 1,
+                'value' => 'test',
+            ]
+        );
+        $attributeMock = $this->getMockBuilder(AttributeModel::class)->setMethods(
+            ['getId', 'getUseDefault', 'getLabel', 'getStoreId']
+        )->disableOriginalConstructor()->getMock();
+        $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
+        $attributeMock->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
+        $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
+        $attributeMock->expects($this->atLeastOnce())->method('getLabel')->willReturn('test');
+        $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 }

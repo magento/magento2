@@ -1,16 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
-class Save extends \Magento\Backend\App\Action
+class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
      */
@@ -42,14 +50,6 @@ class Save extends \Magento\Backend\App\Action
         $this->creditmemoSender = $creditmemoSender;
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
     }
 
     /**
@@ -101,15 +101,16 @@ class Save extends \Magento\Backend\App\Action
                     }
                 }
                 $creditmemoManagement = $this->_objectManager->create(
-                    'Magento\Sales\Api\CreditmemoManagementInterface'
+                    \Magento\Sales\Api\CreditmemoManagementInterface::class
                 );
-                $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline'], !empty($data['send_email']));
+                $creditmemo->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
+                $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline']);
 
                 if (!empty($data['send_email'])) {
                     $this->creditmemoSender->send($creditmemo);
                 }
 
-                $this->messageManager->addSuccess(__('You created the credit memo.'));
+                $this->messageManager->addSuccessMessage(__('You created the credit memo.'));
                 $this->_getSession()->getCommentText(true);
                 $resultRedirect->setPath('sales/order/view', ['order_id' => $creditmemo->getOrderId()]);
                 return $resultRedirect;
@@ -119,11 +120,11 @@ class Save extends \Magento\Backend\App\Action
                 return $resultForward;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->messageManager->addError(__('We can\'t save the credit memo right now.'));
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->messageManager->addErrorMessage(__('We can\'t save the credit memo right now.'));
         }
         $resultRedirect->setPath('sales/*/new', ['_current' => true]);
         return $resultRedirect;

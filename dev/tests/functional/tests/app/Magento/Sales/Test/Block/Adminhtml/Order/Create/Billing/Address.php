@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,13 @@ class Address extends Form
     protected $saveInAddressBook = '#order-billing_address_save_in_address_book';
 
     /**
+     * CSS selector for 'Phone Number' label.
+     *
+     * @var string
+     */
+    private $billingTelephoneLabel = '[data-ui-id$="billing-address-telephone-label"]';
+
+    /**
      * Get existing customer addresses.
      *
      * @return array
@@ -46,6 +53,8 @@ class Address extends Form
      */
     public function saveInAddressBookBillingAddress($saveAddress)
     {
+        $this->_rootElement->find($this->saveInAddressBook, Locator::SELECTOR_CSS, 'checkbox')->hover();
+        $this->browser->find($this->billingTelephoneLabel)->hover();
         $this->_rootElement->find($this->saveInAddressBook, Locator::SELECTOR_CSS, 'checkbox')->setValue($saveAddress);
     }
 }

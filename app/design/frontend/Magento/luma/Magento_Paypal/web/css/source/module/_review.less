@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -28,10 +28,12 @@
 
         .paypal-review-title {
             padding: 0 0 @indent__s;
+
             > strong {
                 .lib-font-size(24);
                 font-weight: @font-weight__light;
             }
+
             .action {
                 display: inline-block;
                 margin: 12px 0 0 @indent__l;
@@ -44,9 +46,11 @@
                 &.subtotal {
                     &:extend(.abs-incl-excl-tax all);
                 }
+
                 &.name {
                     padding-top: 16px;
                 }
+
                 &.qty {
                     text-align: center;
                 }
@@ -67,6 +71,7 @@
                     content: ': ';
                 }
             }
+
             dd {
                 margin: 0;
             }
@@ -79,6 +84,14 @@
         border-bottom: @border-width__base solid @border-color__base;
         margin: 0 0 @indent__xl;
         padding: @indent__s 0 0;
+    }
+
+    .order-review-form {
+        .action {
+            &.primary {
+                &:extend(.abs-button-l all);
+            }
+        }
     }
 }
 
@@ -93,6 +106,7 @@
                 text-align: left;
             }
         }
+
         .product-item-name {
             display: inline-block;
         }
@@ -108,6 +122,7 @@
         .paypal-review-title {
             border-bottom: @border-width__base solid @border-color__base;
         }
+
         .block-content {
             &:extend(.abs-add-clearfix-desktop all);
 
@@ -137,6 +152,7 @@
                 &.qty {
                     text-align: center;
                 }
+
                 &.item {
                     width: 60%;
                 }
@@ -155,5 +171,43 @@
         &:extend(.abs-add-clearfix-desktop all);
         &:extend(.abs-discount-block-desktop all);
         border-top: @border-width__base solid @border-color__base;
+
+        .block {
+            .lib-css(margin-bottom, @indent__base - @indent__xs);
+
+            &.giftcard {
+                &.active {
+                    .lib-css(padding-bottom, @indent__xl);
+                }
+            }
+
+            .title {
+                &:after {
+                    display: inline;
+                    margin-left: @indent__s;
+                    position: static;
+                }
+            }
+
+            .content {
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    .order-review-form {
+        &:extend(.abs-add-clearfix-desktop all);
+
+        .actions-toolbar {
+            > .primary {
+                float: right;
+            }
+        }
+
+        .action {
+            &.primary {
+                margin-right: 0;
+            }
+        }
     }
 }

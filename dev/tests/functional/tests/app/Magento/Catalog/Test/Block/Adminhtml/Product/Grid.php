@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Backend catalog product grid.
@@ -60,6 +60,10 @@ class Grid extends DataGrid
             'selector' => '[name="attribute_set_id"]',
             'input' => 'select',
         ],
+        'store_id' => [
+            'selector' => '[name="store_id"]',
+            'input' => 'select',
+        ],
     ];
 
     /**
@@ -72,22 +76,40 @@ class Grid extends DataGrid
     /**
      * Update attributes for selected items.
      *
-     * @param array $items [optional]
+     * @param array $items
      * @return void
      */
     public function updateAttributes(array $items = [])
     {
-        $this->massaction($items, 'Update attributes');
+        $products = [];
+        /** @var FixtureInterface $product */
+        foreach ($items as $product) {
+            $products[] = ["sku" => $product->getSku()];
+        }
+        $this->massaction($products, 'Update attributes');
     }
 
     /**
      * Get base image source link.
      *
      * @return string
+     * @deprecated for general get attribute method
+     * @see getBaseImageAttribute
      */
     public function getBaseImageSource()
     {
+        return $this->getBaseImageAttribute('src');
+    }
+
+    /**
+     * Get attribute from base image component
+     *
+     * @param string $attributeName
+     * @return string
+     */
+    public function getBaseImageAttribute($attributeName)
+    {
         $baseImage = $this->_rootElement->find($this->baseImage);
-        return $baseImage->isVisible() ? $baseImage->getAttribute('src') : '';
+        return $baseImage->isVisible() ? $baseImage->getAttribute($attributeName) : '';
     }
 }

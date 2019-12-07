@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\AdminOrder;
@@ -55,7 +55,7 @@ class EmailSender
             $this->orderSender->send($order);
         } catch (\Magento\Framework\Exception\MailException $exception) {
             $this->logger->critical($exception);
-            $this->messageManager->addWarning(
+            $this->messageManager->addWarningMessage(
                 __('You did not email your customer. Please check your email settings.')
             );
             return false;

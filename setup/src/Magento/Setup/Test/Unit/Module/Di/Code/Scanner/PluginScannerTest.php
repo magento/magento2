@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
-class PluginScannerTest extends \PHPUnit_Framework_TestCase
+class PluginScannerTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
@@ -28,7 +26,7 @@ class PluginScannerTest extends \PHPUnit_Framework_TestCase
     public function testCollectEntities()
     {
         $actual = $this->_model->collectEntities($this->_testFiles);
-        $expected = ['Magento\Framework\App\Cache\TagPlugin', 'Magento\Store\Model\Action\Plugin'];
+        $expected = [\Magento\Framework\App\Cache\TagPlugin::class, \Magento\Store\Model\Action\Plugin::class];
         $this->assertEquals($expected, $actual);
     }
 }

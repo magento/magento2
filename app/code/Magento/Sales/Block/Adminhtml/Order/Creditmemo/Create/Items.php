@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
 /**
  * Adminhtml credit memo items grid
+ *
+ * @api
+ * @since 100.0.2
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
@@ -52,7 +55,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         $onclick = "submitAndReloadArea($('creditmemo_item_container'),'" . $this->getUpdateUrl() . "')";
         $this->addChild(
             'update_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Update Qty\'s'), 'class' => 'update-button', 'onclick' => $onclick]
         );
 
@@ -60,7 +63,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             if ($this->getCreditmemo()->getInvoice() && $this->getCreditmemo()->getInvoice()->getTransactionId()) {
                 $this->addChild(
                     'submit_button',
-                    'Magento\Backend\Block\Widget\Button',
+                    \Magento\Backend\Block\Widget\Button::class,
                     [
                         'label' => __('Refund'),
                         'class' => 'save submit-button refund primary',
@@ -70,7 +73,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             }
             $this->addChild(
                 'submit_offline',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Refund Offline'),
                     'class' => 'save submit-button primary',
@@ -80,7 +83,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         } else {
             $this->addChild(
                 'submit_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Refund Offline'),
                     'class' => 'save submit-button primary',

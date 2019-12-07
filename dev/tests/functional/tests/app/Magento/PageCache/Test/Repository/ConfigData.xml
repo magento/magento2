@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="enable_built_in_cache">
+            <field name="system/full_page_cache/caching_application" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Built-in Cache</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="enable_varnish_cache">
+            <field name="system/full_page_cache/caching_application" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Varnish Cache (Recommended)</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="locale_german">
+            <field name="general/locale/code" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">German (Germany)</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="locale_english">
+            <field name="general/locale/code" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">English (United States)</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category\Flat;
@@ -12,11 +12,13 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Catalog category flat collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -49,11 +51,19 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_storeId;
 
     /**
+     * Core store config
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param AbstractDb $resource
      */
@@ -63,10 +73,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -77,7 +89,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Category', 'Magento\Catalog\Model\ResourceModel\Category\Flat');
+        $this->_init(
+            \Magento\Catalog\Model\Category::class,
+            \Magento\Catalog\Model\ResourceModel\Category\Flat::class
+        );
     }
 
     /**
@@ -116,7 +131,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $condition = ['in' => $ids];
             }
         }
-        $this->addFieldToFilter('entity_id', $condition);
+        $this->addFieldToFilter('main_table.entity_id', $condition);
         return $this;
     }
 
@@ -382,6 +397,23 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function setPage($pageNum, $pageSize)
     {
         $this->setCurPage($pageNum)->setPageSize($pageSize);
+        return $this;
+    }
+
+    /**
+     * Add navigation max depth filter
+     *
+     * @return $this
+     */
+    public function addNavigationMaxDepthFilter()
+    {
+        $navigationMaxDepth = (int)$this->scopeConfig->getValue(
+            'catalog/navigation/max_depth',
+            ScopeInterface::SCOPE_STORE
+        );
+        if ($navigationMaxDepth > 0) {
+            $this->addLevelFilter($navigationMaxDepth);
+        }
         return $this;
     }
 }

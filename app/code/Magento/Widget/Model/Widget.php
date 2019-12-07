@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model;
 
 /**
  * Widget model for different purposes
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Widget
 {
@@ -51,6 +55,11 @@ class Widget
     protected $conditionsHelper;
 
     /**
+     * @var \Magento\Framework\Math\Random
+     */
+    private $mathRandom;
+
+    /**
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Widget\Model\Config\Data $dataStorage
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -75,11 +84,26 @@ class Widget
     }
 
     /**
+     * Get math random
+     *
+     * @return \Magento\Framework\Math\Random
+     *
+     * @deprecated 100.1.0
+     */
+    private function getMathRandom()
+    {
+        if ($this->mathRandom === null) {
+            $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Math\Random::class);
+        }
+        return $this->mathRandom;
+    }
+
+    /**
      * Return widget config based on its class type
      *
      * @param string $type Widget type
      * @return null|array
-     * @api
      */
     public function getWidgetByClassType($type)
     {
@@ -102,6 +126,8 @@ class Widget
      *
      * @param string $type Widget type
      * @return null|\Magento\Framework\Simplexml\Element
+     *
+     * @deprecated 100.2.0
      */
     public function getConfigAsXml($type)
     {
@@ -125,8 +151,8 @@ class Widget
         $widget = $this->getAsCanonicalArray($widget);
 
         // Save all nodes to object data
-        $object->setType($type);
         $object->setData($widget);
+        $object->setType($type);
 
         // Correct widget parameters and convert its data to objects
         $newParams = $this->prepareWidgetParameters($object);
@@ -215,7 +241,6 @@ class Widget
      *
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
-     * @api
      */
     public function getWidgets($filters = [])
     {
@@ -223,17 +248,13 @@ class Widget
         $result = $widgets;
 
         // filter widgets by params
-        if (is_array($filters) && count($filters) > 0) {
+        if (is_array($filters) && !empty($filters)) {
             foreach ($widgets as $code => $widget) {
-                try {
-                    foreach ($filters as $field => $value) {
-                        if (!isset($widget[$field]) || (string)$widget[$field] != $value) {
-                            throw new \Exception();
-                        }
+                foreach ($filters as $field => $value) {
+                    if (!isset($widget[$field]) || (string)$widget[$field] != $value) {
+                        unset($result[$code]);
+                        break;
                     }
-                } catch (\Exception $e) {
-                    unset($result[$code]);
-                    continue;
                 }
             }
         }
@@ -246,7 +267,6 @@ class Widget
      *
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
-     * @api
      */
     public function getWidgetsArray($filters = [])
     {
@@ -273,11 +293,11 @@ class Widget
      * @param array $params Pre-configured Widget Params
      * @param bool $asIs Return result as widget directive(true) or as placeholder image(false)
      * @return string Widget directive ready to parse
-     * @api
      */
     public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
         $directive = '{{widget type="' . $type . '"';
+        $widget = $this->getConfigAsObject($type);
 
         foreach ($params as $name => $value) {
             // Retrieve default option value if pre-configured
@@ -287,16 +307,18 @@ class Widget
             } elseif (is_array($value)) {
                 $value = implode(',', $value);
             } elseif (trim($value) == '') {
-                $widget = $this->getConfigAsObject($type);
                 $parameters = $widget->getParameters();
                 if (isset($parameters[$name]) && is_object($parameters[$name])) {
                     $value = $parameters[$name]->getValue();
                 }
             }
-            if ($value) {
-                $directive .= sprintf(' %s="%s"', $name, $value);
+            if (isset($value)) {
+                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false));
             }
         }
+
+        $directive .= $this->getWidgetPageVarName($params);
+
         $directive .= '}}';
 
         if ($asIs) {
@@ -310,6 +332,26 @@ class Widget
             $this->escaper->escapeUrl($directive)
         );
         return $html;
+    }
+
+    /**
+     * Get widget page varname
+     *
+     * @param array $params
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getWidgetPageVarName($params = [])
+    {
+        $pageVarName = '';
+        if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
+            $pageVarName = sprintf(
+                ' %s="%s"',
+                'page_var_name',
+                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+            );
+        }
+        return $pageVarName;
     }
 
     /**
@@ -332,7 +374,7 @@ class Widget
                 return $asset->getUrl();
             }
         }
-        return $this->assetRepo->getUrl('Magento_Widget::placeholder.gif');
+        return $this->assetRepo->getUrl('Magento_Widget::placeholder.png');
     }
 
     /**

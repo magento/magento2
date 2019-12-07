@@ -1,10 +1,10 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
-//  Resetes
+//  Resets
 //  _____________________________________________
 
 //
@@ -55,7 +55,7 @@
     object,
     video,
     embed {
-        height: auto;
+        max-height: 100%;
         max-width: 100%;
     }
 
@@ -138,6 +138,7 @@
     summary {
         display: block;
     }
+
     audio,
     canvas,
     progress,
@@ -145,41 +146,52 @@
         display: inline-block;
         vertical-align: baseline;
     }
+
     audio:not([controls]) {
         display: none;
         height: 0;
     }
+
     template {
         display: none;
     }
+
     a {
         background: transparent;
     }
+
     a:active,
     a:hover {
         outline: 0;
     }
+
     abbr[title] {
         border-bottom: 1px dotted;
     }
+
     b,
     strong {
         font-weight: bold;
     }
+
     dfn {
         font-style: italic;
     }
+
     h1 {
         font-size: 2em;
         margin: .67em 0;
     }
+
     mark {
         background: #ff0;
-        color: #000;
+        color: @color-black;
     }
+
     small {
         font-size: 80%;
     }
+
     sub,
     sup {
         font-size: 75%;
@@ -187,28 +199,36 @@
         position: relative;
         vertical-align: baseline;
     }
+
     sup {
         top: -.5em;
     }
+
     sub {
         bottom: -.25em;
     }
+
     img {
         border: 0;
     }
+
     svg:not(:root) {
         overflow: hidden;
     }
+
     figure {
         margin: 1em 40px;
     }
+
     hr {
         box-sizing: content-box;
         height: 0;
     }
+
     pre {
         overflow: auto;
     }
+
     code,
     kbd,
     pre,
@@ -216,6 +236,7 @@
         font-family: monospace, monospace;
         font-size: 1em;
     }
+
     button,
     input,
     optgroup,
@@ -225,13 +246,16 @@
         font: inherit;
         margin: 0;
     }
+
     button {
         overflow: visible;
     }
+
     button,
     select {
         text-transform: none;
     }
+
     button,
     html input[type="button"],
     input[type="reset"],
@@ -239,53 +263,66 @@
         -webkit-appearance: button;
         cursor: pointer;
     }
+
     button[disabled],
     html input[disabled] {
         cursor: default;
     }
+
     button::-moz-focus-inner,
     input::-moz-focus-inner {
         border: 0;
         padding: 0;
     }
+
     input {
         line-height: normal;
     }
+
     input[type="checkbox"],
     input[type="radio"] {
         box-sizing: border-box;
         padding: 0;
     }
+
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
         height: auto;
     }
+
     input[type="search"] {
         box-sizing: content-box;
     }
+
     input[type="search"]::-webkit-search-cancel-button,
     input[type="search"]::-webkit-search-decoration {
         -webkit-appearance: none;
     }
+
     fieldset {
         border: 1px solid #c0c0c0;
         margin: 0 2px;
         padding: .35em .625em .75em;
     }
+
     legend {
         border: 0;
         padding: 0;
     }
+
     textarea {
         overflow: auto;
     }
+
     optgroup {
         font-weight: bold;
     }
+
     table {
         border-collapse: collapse;
         border-spacing: 0;
     }
+
     td,
     th {
         padding: 0;
@@ -321,24 +358,30 @@
         padding: 0;
         vertical-align: baseline;
     }
+
     article, aside, details, figcaption, figure, main,
     footer, header, menu, nav, section {
         display: block;
     }
+
     body {
         line-height: 1;
     }
+
     ol, ul {
         list-style: none;
     }
+
     blockquote, q {
         quotes: none;
     }
+
     blockquote:before, blockquote:after,
     q:before, q:after {
         content: '';
         content: none;
     }
+
     table {
         border-collapse: collapse;
         border-spacing: 0;
@@ -388,24 +431,30 @@
         padding: 0;
         vertical-align: baseline;
     }
+
     body {
         line-height: 1;
     }
+
     article, aside, details, figcaption, figure, main,
     footer, header, menu, nav, section {
         display: block;
     }
+
     nav ul {
         list-style: none;
     }
+
     blockquote, q {
         quotes: none;
     }
+
     blockquote:before, blockquote:after,
     q:before, q:after {
         content: '';
         content: none;
     }
+
     a {
         background: transparent;
         font-size: 100%;
@@ -413,28 +462,34 @@
         padding: 0;
         vertical-align: baseline;
     }
+
     ins {
         background-color: #ff9;
-        color: #000;
+        color: @color-black;
         text-decoration: none;
     }
+
     mark {
         background-color: #ff9;
-        color: #000;
+        color: @color-black;
         font-style: italic;
         font-weight: bold;
     }
+
     del {
         text-decoration: line-through;
     }
+
     abbr[title], dfn[title] {
         border-bottom: 1px dotted;
         cursor: help;
     }
+
     table {
         border-collapse: collapse;
         border-spacing: 0;
     }
+
     hr {
         border: 0;
         border-top: 1px solid #ccc;
@@ -443,7 +498,24 @@
         margin: 1em 0;
         padding: 0;
     }
+
     input, select {
         vertical-align: middle;
+    }
+}
+
+//
+//  Global border-box
+//  ---------------------------------------------
+
+.lib-set-default-border-box() {
+    html {
+        box-sizing: border-box;
+    }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @package Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmailTest extends \PHPUnit_Framework_TestCase
+class EmailTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Email
@@ -89,21 +89,24 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected $invoiceManagement;
 
-    public function setUp()
+    /**
+     * Test setup
+     */
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
-        $this->messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-        $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
-        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
-        $this->helper = $this->getMock('\Magento\Backend\Helper\Data', [], [], '', false);
-        $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $this->helper = $this->createMock(\Magento\Backend\Helper\Data::class);
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $this->resultRedirectFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -133,19 +136,19 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactory);
 
-        $this->invoiceManagement = $this->getMockBuilder('Magento\Sales\Api\InvoiceManagementInterface')
+        $this->invoiceManagement = $this->getMockBuilder(\Magento\Sales\Api\InvoiceManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+        $this->resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultForwardFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+        $this->resultForwardFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\ForwardFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->invoiceEmail = $objectManagerHelper->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\Invoice\Email',
+            \Magento\Sales\Controller\Adminhtml\Order\Invoice\Email::class,
             [
                 'context' => $this->context,
                 'resultForwardFactory' => $this->resultForwardFactory,
@@ -153,17 +156,20 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * testEmail
+     */
     public function testEmail()
     {
         $invoiceId = 10000031;
         $orderId = 100000030;
-        $invoiceClassName = 'Magento\Sales\Model\Order\Invoice';
-        $cmNotifierClassName = 'Magento\Sales\Api\InvoiceManagementInterface';
-        $invoice = $this->getMock($invoiceClassName, [], [], '', false);
+        $invoiceClassName = \Magento\Sales\Model\Order\Invoice::class;
+        $cmNotifierClassName = \Magento\Sales\Api\InvoiceManagementInterface::class;
+        $invoice = $this->createMock($invoiceClassName);
         $invoice->expects($this->once())
             ->method('getEntityId')
             ->willReturn($invoiceId);
-        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $order = $this->createMock(\Magento\Sales\Model\Order::class);
         $order->expects($this->once())
             ->method('getId')
             ->willReturn($orderId);
@@ -172,7 +178,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('invoice_id')
             ->willReturn($invoiceId);
-        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+        $invoiceRepository = $this->getMockBuilder(\Magento\Sales\Api\InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoiceRepository->expects($this->any())
@@ -180,7 +186,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->willReturn($invoice);
         $this->objectManager->expects($this->at(0))
             ->method('create')
-            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->with(\Magento\Sales\Api\InvoiceRepositoryInterface::class)
             ->willReturn($invoiceRepository);
 
         $invoice->expects($this->once())
@@ -196,7 +202,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->with($invoiceId)
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the message.');
 
         $this->resultRedirectFactory->expects($this->atLeastOnce())
@@ -206,9 +212,12 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('sales/invoice/view', ['order_id' => $orderId, 'invoice_id' => $invoiceId])
             ->willReturnSelf();
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Redirect', $this->invoiceEmail->execute());
+        $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Redirect::class, $this->invoiceEmail->execute());
     }
 
+    /**
+     * testEmailNoInvoiceId
+     */
     public function testEmailNoInvoiceId()
     {
         $this->request->expects($this->once())
@@ -223,9 +232,12 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->invoiceEmail->execute());
+        $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Forward::class, $this->invoiceEmail->execute());
     }
 
+    /**
+     * testEmailNoInvoice
+     */
     public function testEmailNoInvoice()
     {
         $invoiceId = 10000031;
@@ -234,7 +246,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->with('invoice_id')
             ->willReturn($invoiceId);
 
-        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+        $invoiceRepository = $this->getMockBuilder(\Magento\Sales\Api\InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoiceRepository->expects($this->any())
@@ -242,7 +254,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
         $this->objectManager->expects($this->at(0))
             ->method('create')
-            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->with(\Magento\Sales\Api\InvoiceRepositoryInterface::class)
             ->willReturn($invoiceRepository);
 
         $this->resultForwardFactory->expects($this->any())
@@ -253,6 +265,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->with('noroute')
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->invoiceEmail->execute());
+        $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Forward::class, $this->invoiceEmail->execute());
     }
 }

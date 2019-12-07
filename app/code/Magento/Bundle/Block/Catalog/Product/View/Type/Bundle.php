@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 use Magento\Bundle\Model\Option;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
 
 /**
  * Catalog bundle product info block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -49,6 +53,16 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     private $selectedOptions = [];
 
     /**
+     * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
+     */
+    private $catalogRuleProcessor;
+
+    /**
+     * @var array
+     */
+    private $optionsPosition = [];
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -78,12 +92,35 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Return catalog rule processor or creates processor if it does not exist
+     *
+     * @deprecated 100.2.0
+     * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
+     */
+    private function getCatalogRuleProcessor()
+    {
+        if ($this->catalogRuleProcessor === null) {
+            $this->catalogRuleProcessor = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor::class);
+        }
+
+        return $this->catalogRuleProcessor;
+    }
+
+    /**
+     * Returns the bundle product options
+     *
+     * Will return cached options data if the product options are already initialized
+     * In a case when $stripSelection parameter is true will reload stored bundle selections collection from DB
+     *
+     * @param bool $stripSelection
      * @return array
      */
-    public function getOptions()
+    public function getOptions($stripSelection = false)
     {
         if (!$this->options) {
             $product = $this->getProduct();
+            /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
             $typeInstance = $product->getTypeInstance();
             $typeInstance->setStoreFilter($product->getStoreId(), $product);
 
@@ -93,10 +130,12 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 $typeInstance->getOptionsIds($product),
                 $product
             );
+            $this->getCatalogRuleProcessor()->addPriceData($selectionCollection);
+            $selectionCollection->addTierPriceData();
 
             $this->options = $optionCollection->appendSelections(
                 $selectionCollection,
-                false,
+                $stripSelection,
                 $this->catalogProduct->getSkipSaleableCheck()
             );
         }
@@ -105,6 +144,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Return true if product has options
+     *
      * @return bool
      */
     public function hasOptions()
@@ -120,7 +161,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * Returns JSON encoded config to be used in JS scripts
      *
      * @return string
-     *
      */
     public function getJsonConfig()
     {
@@ -131,7 +171,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
         $defaultValues = [];
         $preConfiguredFlag = $currentProduct->hasPreconfiguredValues();
-        /** @var \Magento\Framework\DataObject|null $preConfiguredValues */
+        /** @var DataObject|null $preConfiguredValues */
         $preConfiguredValues = $preConfiguredFlag ? $currentProduct->getPreconfiguredValues() : null;
 
         $position = 0;
@@ -142,19 +182,25 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             }
             $optionId = $optionItem->getId();
             $options[$optionId] = $this->getOptionItemData($optionItem, $currentProduct, $position);
+            $this->optionsPosition[$position] = $optionId;
 
             // Add attribute default value (if set)
             if ($preConfiguredFlag) {
                 $configValue = $preConfiguredValues->getData('bundle_option/' . $optionId);
                 if ($configValue) {
                     $defaultValues[$optionId] = $configValue;
+                    $configQty = $preConfiguredValues->getData('bundle_option_qty/' . $optionId);
+                    if ($configQty) {
+                        $options[$optionId]['selections'][$configValue]['qty'] = $configQty;
+                    }
                 }
+                $options = $this->processOptions($optionId, $options, $preConfiguredValues);
             }
             $position++;
         }
         $config = $this->getConfigData($currentProduct, $options);
 
-        $configObj = new \Magento\Framework\DataObject(
+        $configObj = new DataObject(
             [
                 'config' => $config,
             ]
@@ -187,10 +233,11 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Get formed data from option selection item
+     * Get formed data from option selection item.
      *
      * @param Product $product
      * @param Product $selection
+     *
      * @return array
      */
     private function getSelectionItemData(Product $product, Product $selection)
@@ -198,10 +245,15 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $qty = ($selection->getSelectionQty() * 1) ?: '1';
 
         $optionPriceAmount = $product->getPriceInfo()
-            ->getPrice('bundle_option')
+            ->getPrice(\Magento\Bundle\Pricing\Price\BundleOptionPrice::PRICE_CODE)
             ->getOptionSelectionAmount($selection);
         $finalPrice = $optionPriceAmount->getValue();
         $basePrice = $optionPriceAmount->getBaseAmount();
+
+        $oldPrice = $product->getPriceInfo()
+            ->getPrice(\Magento\Bundle\Pricing\Price\BundleOptionRegularPrice::PRICE_CODE)
+            ->getOptionSelectionAmount($selection)
+            ->getValue();
 
         $selection = [
             'qty' => $qty,
@@ -209,20 +261,21 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             'optionId' => $selection->getId(),
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $basePrice
+                    'amount' => $oldPrice,
                 ],
                 'basePrice' => [
-                    'amount' => $basePrice
+                    'amount' => $basePrice,
                 ],
                 'finalPrice' => [
-                    'amount' => $finalPrice
-                ]
+                    'amount' => $finalPrice,
+                ],
             ],
             'priceType' => $selection->getSelectionPriceType(),
             'tierPrice' => $this->getTierPrices($product, $selection),
             'name' => $selection->getName(),
-            'canApplyMsrp' => false
+            'canApplyMsrp' => false,
         ];
+
         return $selection;
     }
 
@@ -333,6 +386,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = [
             'options' => $options,
             'selected' => $this->selectedOptions,
+            'positions' => $this->optionsPosition,
             'bundleId' => $product->getId(),
             'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => [
@@ -350,5 +404,31 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             'isFixedPrice' => $isFixedPrice,
         ];
         return $config;
+    }
+
+    /**
+     * Set preconfigured quantities and selections to options.
+     *
+     * @param string $optionId
+     * @param array $options
+     * @param DataObject $preConfiguredValues
+     * @return array
+     */
+    private function processOptions(string $optionId, array $options, DataObject $preConfiguredValues)
+    {
+        $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/${optionId}") ?? [];
+        $selections = $options[$optionId]['selections'];
+        array_walk($selections, function (&$selection, $selectionId) use ($preConfiguredQtys) {
+            if (is_array($preConfiguredQtys) && isset($preConfiguredQtys[$selectionId])) {
+                $selection['qty'] = $preConfiguredQtys[$selectionId];
+            } else {
+                if ((int)$preConfiguredQtys > 0) {
+                    $selection['qty'] = $preConfiguredQtys;
+                }
+            }
+        });
+        $options[$optionId]['selections'] = $selections;
+
+        return $options;
     }
 }

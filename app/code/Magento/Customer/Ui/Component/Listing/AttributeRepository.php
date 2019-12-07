@@ -1,38 +1,53 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component\Listing;
 
-use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Api\CustomerMetadataManagementInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataManagementInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\MetadataManagementInterface;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
 
+/**
+ * Class AttributeRepository
+ */
 class AttributeRepository
 {
     const BILLING_ADDRESS_PREFIX = 'billing_';
 
-    /** @var [] */
+    /**
+     * @var array
+     */
     protected $attributes;
 
-    /** @var CustomerMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerMetadataInterface
+     */
     protected $customerMetadata;
 
-    /** @var AddressMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     */
     protected $addressMetadata;
 
-    /** @var CustomerMetadataManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerMetadataManagementInterface
+     */
     protected $customerMetadataManagement;
 
-    /** @var AddressMetadataManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataManagementInterface
+     */
     protected $addressMetadataManagement;
 
-    /** @var Filter */
+    /**
+     * @var \Magento\Customer\Model\Indexer\Attribute\Filter
+     */
     protected $attributeFilter;
 
     /**
@@ -57,6 +72,8 @@ class AttributeRepository
     }
 
     /**
+     * Returns attribute list for current customer
+     *
      * @return array
      */
     public function getList()
@@ -81,6 +98,8 @@ class AttributeRepository
     }
 
     /**
+     * Returns attribute list for given entity type code
+     *
      * @param AttributeMetadataInterface[] $metadata
      * @param string $entityTypeCode
      * @param MetadataManagementInterface $management
@@ -124,13 +143,18 @@ class AttributeRepository
     {
         /** @var \Magento\Customer\Api\Data\OptionInterface $option */
         foreach ($options as &$option) {
-            $option = ['label' => (string)$option->getLabel(), 'value' => $option->getValue()];
+            $option = [
+                'label' => (string)$option->getLabel(),
+                'value' => $option->getValue(),
+                '__disableTmpl' => true
+            ];
         }
         return $options;
     }
 
-
     /**
+     * Return customer group's metadata by given group code
+     *
      * @param string $code
      * @return []
      */

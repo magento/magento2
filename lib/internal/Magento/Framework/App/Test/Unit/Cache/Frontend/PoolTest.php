@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
@@ -8,7 +8,10 @@ namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 
-class PoolTest extends \PHPUnit_Framework_TestCase
+/**
+ * And another docblock to make the sniff shut up.
+ */
+class PoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool
@@ -25,9 +28,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_frontendInstances = [
-            Pool::DEFAULT_FRONTEND_ID => $this->getMock('Magento\Framework\Cache\FrontendInterface'),
-            'resource1' => $this->getMock('Magento\Framework\Cache\FrontendInterface'),
-            'resource2' => $this->getMock('Magento\Framework\Cache\FrontendInterface'),
+            Pool::DEFAULT_FRONTEND_ID => $this->createMock(\Magento\Framework\Cache\FrontendInterface::class),
+            'resource1' => $this->createMock(\Magento\Framework\Cache\FrontendInterface::class),
+            'resource2' => $this->createMock(\Magento\Framework\Cache\FrontendInterface::class),
         ];
 
         $frontendFactoryMap = [
@@ -38,10 +41,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
             [['r1d1' => 'value1', 'r1d2' => 'value2'], $this->_frontendInstances['resource1']],
             [['r2d1' => 'value1', 'r2d2' => 'value2'], $this->_frontendInstances['resource2']],
         ];
-        $frontendFactory = $this->getMock('Magento\Framework\App\Cache\Frontend\Factory', [], [], '', false);
+        $frontendFactory = $this->createMock(\Magento\Framework\App\Cache\Frontend\Factory::class);
         $frontendFactory->expects($this->any())->method('create')->will($this->returnValueMap($frontendFactoryMap));
 
-        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfig->expects(
             $this->any()
         )->method(
@@ -69,8 +72,8 @@ class PoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNoInitialization()
     {
-        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $frontendFactory = $this->getMock('Magento\Framework\App\Cache\Frontend\Factory', [], [], '', false);
+        $deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $frontendFactory = $this->createMock(\Magento\Framework\App\Cache\Frontend\Factory::class);
         $frontendFactory->expects($this->never())->method('create');
         new \Magento\Framework\App\Cache\Frontend\Pool($deploymentConfig, $frontendFactory);
     }
@@ -87,7 +90,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         array $frontendSettings,
         array $expectedFactoryArg
     ) {
-        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfig->expects(
             $this->once()
         )->method(
@@ -98,35 +101,51 @@ class PoolTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($fixtureCacheConfig)
         );
 
-        $frontendFactory = $this->getMock('Magento\Framework\App\Cache\Frontend\Factory', [], [], '', false);
+        $frontendFactory = $this->createMock(\Magento\Framework\App\Cache\Frontend\Factory::class);
         $frontendFactory->expects($this->at(0))->method('create')->with($expectedFactoryArg);
 
         $model = new \Magento\Framework\App\Cache\Frontend\Pool($deploymentConfig, $frontendFactory, $frontendSettings);
         $model->current();
     }
 
+    /**
+     * @return array
+     */
     public function initializationParamsDataProvider()
     {
         return [
-            'default frontend, default settings' => [
+            'no deployment config, default settings' => [
                 ['frontend' => []],
                 [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
                 ['default_option' => 'default_value'],
             ],
-            'default frontend, overridden settings' => [
+            'deployment config, default settings' => [
                 ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
-                [Pool::DEFAULT_FRONTEND_ID => ['ignored_option' => 'ignored_value']],
+                [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
+                ['configured_option' => 'configured_value', 'default_option' => 'default_value'],
+            ],
+            'deployment config, overridden settings' => [
+                ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
+                [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'default_value']],
                 ['configured_option' => 'configured_value'],
             ],
-            'custom frontend, default settings' => [
-                ['frontend' => []],
-                ['custom' => ['default_option' => 'default_value']],
-                ['default_option' => 'default_value'],
+            'deployment config, default settings, overridden settings' => [
+                ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
+                [Pool::DEFAULT_FRONTEND_ID => [
+                    'configured_option' => 'default_value',
+                    'default_setting' => 'default_value'
+                ]],
+                ['configured_option' => 'configured_value', 'default_setting' => 'default_value'],
             ],
-            'custom frontend, overridden settings' => [
+            'custom deployent config, default settings' => [
                 ['frontend' => ['custom' => ['configured_option' => 'configured_value']]],
-                ['custom' => ['ignored_option' => 'ignored_value']],
-                ['configured_option' => 'configured_value'],
+                ['custom' => ['default_option' => 'default_value']],
+                ['configured_option' => 'configured_value', 'default_option' => 'default_value'],
+            ],
+            'custom deployent config, default settings, overridden settings' => [
+                ['frontend' => ['custom' => ['configured_option' => 'configured_value']]],
+                ['custom' => ['default_option' => 'default_value', 'configured_option' => 'default_value']],
+                ['configured_option' => 'configured_value', 'default_option' => 'default_value'],
             ]
         ];
     }

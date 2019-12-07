@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -15,7 +15,7 @@ use Magento\Framework\ObjectManagerInterface;
 class CollectionFactory
 {
     /**
-     * @var AbstractCollection[]
+     * @var Collection[]
      */
     protected $collections;
 
@@ -37,8 +37,10 @@ class CollectionFactory
     }
 
     /**
+     * Get report collection
+     *
      * @param string $requestName
-     * @return AbstractCollection
+     * @return Collection
      * @throws \Exception
      */
     public function getReport($requestName)
@@ -46,6 +48,10 @@ class CollectionFactory
         if (!isset($this->collections[$requestName])) {
             throw new \Exception(sprintf('Not registered handle %s', $requestName));
         }
-        return $this->objectManager->create($this->collections[$requestName]);
+        $collection = $this->objectManager->create($this->collections[$requestName]);
+        if (!$collection instanceof Collection) {
+            throw new \Exception(sprintf('%s is not of Collection type.', $requestName));
+        }
+        return $collection;
     }
 }

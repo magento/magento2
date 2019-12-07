@@ -1,53 +1,77 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\Url;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Confirm
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Confirm extends \Magento\Customer\Controller\AbstractAccount
+class Confirm extends AbstractAccount implements HttpGetActionInterface
 {
-    /** @var ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $scopeConfig;
 
-    /** @var StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var AccountManagementInterface  */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $customerAccountManagement;
 
-    /** @var CustomerRepositoryInterface  */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
-    /** @var Address */
+    /**
+     * @var \Magento\Customer\Helper\Address
+     */
     protected $addressHelper;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $urlModel;
 
     /**
      * @var Session
      */
     protected $session;
+
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     */
+    private $cookieMetadataManager;
 
     /**
      * @param Context $context
@@ -80,6 +104,38 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
+     * Retrieve cookie manager
+     *
+     * @deprecated 100.2.0
+     * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     */
+    private function getCookieManager()
+    {
+        if (!$this->cookieMetadataManager) {
+            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
+            );
+        }
+        return $this->cookieMetadataManager;
+    }
+
+    /**
+     * Retrieve cookie metadata factory
+     *
+     * @deprecated 100.2.0
+     * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    private function getCookieMetadataFactory()
+    {
+        if (!$this->cookieMetadataFactory) {
+            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+            );
+        }
+        return $this->cookieMetadataFactory;
+    }
+
+    /**
      * Confirm customer account by id and confirmation key
      *
      * @return \Magento\Framework\Controller\Result\Redirect
@@ -93,19 +149,26 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
-        try {
-            $customerId = $this->getRequest()->getParam('id', false);
-            $key = $this->getRequest()->getParam('key', false);
-            if (empty($customerId) || empty($key)) {
-                throw new \Exception(__('Bad request.'));
-            }
 
+        $customerId = $this->getRequest()->getParam('id', false);
+        $key = $this->getRequest()->getParam('key', false);
+        if (empty($customerId) || empty($key)) {
+            $this->messageManager->addErrorMessage(__('Bad request.'));
+            $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
+            return $resultRedirect->setUrl($this->_redirect->error($url));
+        }
+
+        try {
             // log in and send greeting email
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
             $customer = $this->customerAccountManagement->activate($customerEmail, $key);
             $this->session->setCustomerDataAsLoggedIn($customer);
-
-            $this->messageManager->addSuccess($this->getSuccessMessage());
+            if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
+                $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
+                $metadata->setPath('/');
+                $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
+            }
+            $this->messageManager->addSuccessMessage($this->getSuccessMessage());
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
         } catch (StateException $e) {

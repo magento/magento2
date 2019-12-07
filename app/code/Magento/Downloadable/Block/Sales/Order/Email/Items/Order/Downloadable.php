@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items\Order;
 
 use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Link\Purchased\Item;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Downloadable Sales Order Email items renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder
 {
@@ -33,6 +33,11 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
      */
     protected $_itemsFactory;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $frontendUrlBuilder;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -85,7 +90,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      */
     public function getPurchasedLinkUrl($item)
     {
-        return $this->getUrl(
+        $url = $this->getFrontendUrlBuilder()->getUrl(
             'downloadable/download/link',
             [
                 'id' => $item->getLinkHash(),
@@ -94,5 +99,20 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
                 '_nosid' => true
             ]
         );
+        return $url;
+    }
+
+    /**
+     * Get frontend URL builder
+     *
+     * @return \Magento\Framework\UrlInterface
+     * @deprecated 100.1.0
+     */
+    private function getFrontendUrlBuilder()
+    {
+        if (!$this->frontendUrlBuilder) {
+            $this->frontendUrlBuilder = ObjectManager::getInstance()->get(\Magento\Framework\Url::class);
+        }
+        return $this->frontendUrlBuilder;
     }
 }

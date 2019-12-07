@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search;
@@ -10,6 +10,9 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Builder;
 
+/**
+ * Search API for all requests.
+ */
 class Search implements SearchInterface
 {
     /**
@@ -51,13 +54,13 @@ class Search implements SearchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function search(SearchCriteriaInterface $searchCriteria)
     {
         $this->requestBuilder->setRequestName($searchCriteria->getRequestName());
 
-        $scope = $this->scopeResolver->getScope();
+        $scope = $this->scopeResolver->getScope()->getId();
         $this->requestBuilder->bindDimension('scope', $scope);
 
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
@@ -68,6 +71,16 @@ class Search implements SearchInterface
 
         $this->requestBuilder->setFrom($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
+
+        /**
+         * This added in Backward compatibility purposes.
+         * Temporary solution for an existing API of a fulltext search request builder.
+         * It must be moved to different API.
+         * Scope to split Search request builder API in MC-16461.
+         */
+        if (method_exists($this->requestBuilder, 'setSort')) {
+            $this->requestBuilder->setSort($searchCriteria->getSortOrders());
+        }
         $request = $this->requestBuilder->create();
         $searchResponse = $this->searchEngine->search($request);
 
@@ -84,7 +97,7 @@ class Search implements SearchInterface
      */
     private function addFieldToFilter($field, $condition = null)
     {
-        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
+        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'], true)) {
             $this->requestBuilder->bind($field, $condition);
         } else {
             if (!empty($condition['from'])) {

@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Paypal\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
@@ -41,12 +41,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Payflow\Link\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Payflow\Link\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payflow\Link\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * Availability option
@@ -110,6 +110,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @var OrderSender
      */
     protected $orderSender;
+
+    /**
+     * @var \Magento\Framework\Math\Random
+     */
+    private $mathRandom;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -235,11 +240,13 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             case \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH:
             case \Magento\Paypal\Model\Config::PAYMENT_ACTION_SALE:
                 $payment = $this->getInfoInstance();
+                /** @var Order $order */
                 $order = $payment->getOrder();
                 $order->setCanSendNewEmailFlag(false);
                 $payment->setAmountAuthorized($order->getTotalDue());
                 $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
                 $this->_generateSecureSilentPostHash($payment);
+                $this->setStore($order->getStoreId());
                 $request = $this->_buildTokenRequest($payment);
                 $response = $this->postRequest($request, $this->getConfig());
                 $this->_processTokenErrors($response, $payment);
@@ -303,18 +310,16 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         $response = $this->getResponse();
         $payment = $order->getPayment();
         $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(0);
-        $canSendNewOrderEmail = true;
+        $payment->setCcType($response->getData(OrderPaymentInterface::CC_TYPE));
 
+        $canSendNewOrderEmail = true;
         if ($response->getResult() == self::RESPONSE_CODE_FRAUDSERVICE_FILTER ||
             $response->getResult() == self::RESPONSE_CODE_DECLINED_BY_FILTER
         ) {
             $canSendNewOrderEmail = false;
 
-            $payment->setIsTransactionPending(
-                true
-            )->setIsFraudDetected(
-                true
-            );
+            $payment->setIsTransactionPending(true)
+                ->setIsFraudDetected(true);
 
             $fraudMessage = $response->getData('respmsg');
             if ($response->getData('fps_prexmldata')) {
@@ -393,12 +398,16 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             $order->getState() != \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
             !$amountCompared
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__(self::RESPONSE_ERROR_MSG, 'Order'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment error. %value was not found.', ['value' => 'Order'])
+            );
         }
 
         $fetchData = $this->fetchTransactionInfo($order->getPayment(), $response->getPnref());
         if (!isset($fetchData['custref']) || $fetchData['custref'] != $order->getIncrementId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__(self::RESPONSE_ERROR_MSG, 'Transaction'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment error. %value was not found.', ['value' => 'Transaction'])
+            );
         }
 
         return $order;
@@ -431,8 +440,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     }
 
     /**
-     * Get store id from response if exists
-     * or default
+     * Get store id from response if exists or default
      *
      * @return int
      */
@@ -455,7 +463,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         /** @var \Magento\Paypal\Model\Payflow\Request $request */
         $request = $this->_requestFactory->create();
         $cscEditable = $this->getConfigData('csc_editable');
-
         $data = parent::buildBasicRequest();
 
         $request->setData($data->getData());
@@ -505,6 +512,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 
     /**
      * If response is failed throw exception
+     *
      * Set token data in payment object
      *
      * @param \Magento\Framework\DataObject $response
@@ -549,6 +557,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     protected function _generateSecureSilentPostHash($payment)
     {
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $secureHash = md5($this->mathRandom->getRandomString(10));
         $payment->setAdditionalInformation($this->_secureSilentPostHashKey, $secureHash);
         return $secureHash;
@@ -570,7 +579,9 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultStore()
             );
-            $path = $secure ? \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL : \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL;
+            $path = $secure
+                ? \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL
+                : \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL;
             $websiteUrl = $this->_scopeConfig->getValue(
                 $path,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -581,7 +592,10 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
                 \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-            $websiteUrl = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, $secure);
+            $websiteUrl = $this->storeManager->getStore()->getBaseUrl(
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
+                $secure
+            );
         }
 
         return $websiteUrl . 'paypal/' . $this->_callbackController . '/' . $actionName;

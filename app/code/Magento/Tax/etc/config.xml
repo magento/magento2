@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,7 +20,6 @@
                 <based_on>shipping</based_on>
                 <price_includes_tax>0</price_includes_tax>
                 <shipping_includes_tax>0</shipping_includes_tax>
-                <discount_tax>0</discount_tax>
                 <apply_tax_on>0</apply_tax_on>
             </calculation>
             <defaults>
@@ -50,7 +49,7 @@
                 <zero_tax>0</zero_tax>
             </sales_display>
             <notification>
-                <info_url>http://docs.magento.com/m2/ce/user_guide/tax/warning-messages.html</info_url>
+                <info_url>https://docs.magento.com/m2/ce/user_guide/tax/warning-messages.html</info_url>
             </notification>
         </tax>
     </default>

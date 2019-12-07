@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Block\Order\Item\Renderer;
 
-class DefaultRendererTest extends \PHPUnit_Framework_TestCase
+class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
@@ -40,22 +38,22 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->layoutMock = $this->getMockBuilder('\Magento\Framework\View\Layout')
+        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBlock'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
-            'Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer',
+            \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer::class,
             [
                 'context' => $this->objectManager->getObject(
-                        'Magento\Backend\Block\Template\Context',
-                        ['layout' => $this->layoutMock]
-                    )
+                    \Magento\Backend\Block\Template\Context::class,
+                    ['layout' => $this->layoutMock]
+                )
             ]
         );
 
-        $this->priceRenderBlock = $this->getMockBuilder('\Magento\Backend\Block\Template')
+        $this->priceRenderBlock = $this->getMockBuilder(\Magento\Backend\Block\Template::class)
             ->disableOriginalConstructor()
             ->setMethods(['setItem', 'toHtml'])
             ->getMock();
@@ -68,7 +66,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             'getDiscountTaxCompensationAmount',
             'getWeeeTaxAppliedRowAmount',
         ];
-        $this->itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+        $this->itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods($itemMockMethods)
             ->getMock();
@@ -142,7 +140,11 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
         $discountAmount = 20;
         $weeeTaxAppliedRowAmount = 10;
 
-        $expectedResult = $rowTotal + $taxAmount + $discountTaxCompensationAmount - $discountAmount + $weeeTaxAppliedRowAmount;
+        $expectedResult = $rowTotal
+            + $taxAmount
+            + $discountTaxCompensationAmount
+            - $discountAmount
+            + $weeeTaxAppliedRowAmount;
         $this->itemMock->expects($this->once())
             ->method('getRowTotal')
             ->will($this->returnValue($rowTotal));

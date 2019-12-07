@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
@@ -16,7 +16,7 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that that widget with type Recently Viewed Products is present on category page
+ * Check that widget with type Recently Viewed Products is present on category page
  */
 class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
 {
@@ -45,7 +45,7 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
      * Assert that widget with type Recently Viewed Products is present on category page
      *
      * @param CmsIndex $cmsIndex
-     * @param AdminCache $adminCache
+     * @param Cache $cache
      * @param CatalogCategoryView $catalogCategoryView
      * @param BrowserInterface $browser
      * @param CatalogProductSimple $productSimple
@@ -55,7 +55,7 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
      */
     public function processAssert(
         CmsIndex $cmsIndex,
-        AdminCache $adminCache,
+        Cache $cache,
         CatalogCategoryView $catalogCategoryView,
         BrowserInterface $browser,
         CatalogProductSimple $productSimple,
@@ -67,14 +67,12 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
         $this->catalogCategoryView = $catalogCategoryView;
 
         // Flush cache
-        $adminCache->open();
-        $adminCache->getActionsBlock()->flushMagentoCache();
-        $adminCache->getMessagesBlock()->waitSuccessMessage();
+        $cache->flush();
 
         // Log in customer
         $customer->persist();
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
 
@@ -82,7 +80,17 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
         $productSimple->persist();
         $category->persist();
         $this->browser->open($_ENV['app_frontend_url'] . $productSimple->getUrlKey() . '.html');
+        $this->waitForJsCoreInitialize();
         $this->checkRecentlyViewedBlockOnCategory($productSimple, $category);
+    }
+
+    /**
+     * as JS is loaded after page is initialized we should have time it to load
+     * @return void
+     */
+    private function waitForJsCoreInitialize()
+    {
+        sleep(1);
     }
 
     /**
@@ -100,7 +108,7 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
         $this->cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
         $products = $this->catalogCategoryView->getViewBlock()->getProductsFromRecentlyViewedBlock();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             in_array($productSimple->getName(), $products),
             'Product' . $productSimple->getName() . ' is absent on Recently Viewed block on Category page.'
         );

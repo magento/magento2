@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,5 +18,5 @@ class Container extends Template
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/widget/chooser/container.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/widget/chooser/container.phtml';
 }

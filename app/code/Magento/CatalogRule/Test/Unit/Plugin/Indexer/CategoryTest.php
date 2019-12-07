@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -27,23 +27,16 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRuleProcessor = $this->getMock(
-            'Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor',
-            [],
-            [],
-            '',
-            false
+        $this->productRuleProcessor = $this->createMock(
+            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class
         );
-        $this->subject = $this->getMock(
-            'Magento\Catalog\Model\Category',
-            ['getAffectedProductIds', '__wakeUp'],
-            [],
-            '',
-            false
+        $this->subject = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getChangedProductIds', '__wakeUp']
         );
 
         $this->plugin = (new ObjectManager($this))->getObject(
-            'Magento\CatalogRule\Plugin\Indexer\Category',
+            \Magento\CatalogRule\Plugin\Indexer\Category::class,
             [
                 'productRuleProcessor' => $this->productRuleProcessor,
             ]
@@ -53,7 +46,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveWithoutAffectedProductIds()
     {
         $this->subject->expects($this->any())
-            ->method('getAffectedProductIds')
+            ->method('getChangedProductIds')
             ->will($this->returnValue([]));
 
         $this->productRuleProcessor->expects($this->never())
@@ -67,7 +60,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $productIds = [1, 2, 3];
 
         $this->subject->expects($this->any())
-            ->method('getAffectedProductIds')
+            ->method('getChangedProductIds')
             ->will($this->returnValue($productIds));
 
         $this->productRuleProcessor->expects($this->once())

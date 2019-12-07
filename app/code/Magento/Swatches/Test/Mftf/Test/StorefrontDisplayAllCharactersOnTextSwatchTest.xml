@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDisplayAllCharactersOnTextSwatchTest" extends="StorefrontFilterByTextSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create/configure swatches and check the display characters length"/>
+            <title value="Admin can create product attribute with text swatch and view the display characters  in full"/>
+            <description value="Admin can create product attribute with text swatch and check the display characters in full"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-5975"/>
+            <group value="Swatches"/>
+        </annotations>
+
+        <!-- Create swatch #3 -->
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch2" after="fillDescription1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('2')}}" userInput="1234567890123456789012341234" stepKey="fillSwatch2" after="clickAddSwatch2"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('2')}}" userInput="1234567890123456789012341234GreenD" stepKey="fillDescription2" after="fillSwatch2"/>
+
+        <!-- Create swatch #4 -->
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch3" after="fillDescription2"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('3')}}" userInput="123456789012345678901" stepKey="fillSwatch3" after="clickAddSwatch3"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('3')}}" userInput="123456789012345678901BrownD" stepKey="fillDescription3" after="fillSwatch3"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '3')}}" userInput="123456789012345678901" stepKey="seeGreen" after="seeBlue"/>
+        <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '4')}}" userInput="123456789012345678901" stepKey="seeBrown" after="seeGreen"/>
+
+        <!-- Go to the category page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage2"/>
+        <waitForPageLoad stepKey="waitForCategoryPage2"/>
+
+        <!-- Verify swatch2 is present and shown in full display text characters on storefront in the layered navigation -->
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeInLayeredNav2"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute2"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" stepKey="filterBySwatch2"/>
+
+        <!-- Go to the category page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage3"/>
+        <waitForPageLoad stepKey="waitForCategoryPage3"/>
+
+        <!-- Verify swatch3 is present and shown in full display text characters on storefront in the layered navigation -->
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeInLayeredNav3"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute3"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '3')}}" stepKey="filterBySwatch3"/>
+
+        <!-- Go to the category page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage4"/>
+        <waitForPageLoad stepKey="waitForCategoryPage4"/>
+
+        <!-- Verify swatch4 is present and shown in full display text characters on storefront in the layered navigation -->
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeInLayeredNav4"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute4"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '4')}}" stepKey="filterBySwatch4"/>
+
+        <!-- Deletes the created configurable product-->
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+    </test>
+
+</tests>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Cart;
@@ -8,8 +8,8 @@ namespace Magento\Quote\Model\Cart;
 use Magento\Quote\Api;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
-use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Quote\Model\Cart\Totals\ItemConverter;
 use Magento\Quote\Api\CouponManagementInterface;
 
@@ -39,7 +39,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     private $dataObjectHelper;
 
     /**
-     * @var ConfigurationPool
+     * @var ItemConverter
      */
     private $itemConverter;
 
@@ -78,7 +78,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      *
      * @param int $cartId The cart ID.
      * @return Totals Quote totals data.
@@ -94,13 +94,14 @@ class CartTotalRepository implements CartTotalRepositoryInterface
             $addressTotalsData = $quote->getShippingAddress()->getData();
             $addressTotals = $quote->getShippingAddress()->getTotals();
         }
+        unset($addressTotalsData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
 
         /** @var \Magento\Quote\Api\Data\TotalsInterface $quoteTotals */
         $quoteTotals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $quoteTotals,
             $addressTotalsData,
-            '\Magento\Quote\Api\Data\TotalsInterface'
+            \Magento\Quote\Api\Data\TotalsInterface::class
         );
         $items = [];
         foreach ($quote->getAllVisibleItems() as $index => $item) {

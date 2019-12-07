@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
@@ -18,6 +16,8 @@ use Magento\Framework\Registry;
 
 /**
  * Adminhtml billing agreement related orders tab
+ * @api
+ * @since 100.0.2
  */
 class Orders extends ExtendedGrid implements TabInterface
 {
@@ -98,6 +98,17 @@ class Orders extends ExtendedGrid implements TabInterface
         parent::_construct();
         $this->setId('billing_agreement_orders');
         $this->setUseAjax(true);
+    }
+
+    /**
+     * Get grid url
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getGridUrl()
+    {
+        return $this->getUrl('paypal/billing_agreement/ordersGrid', ['_current' => true]);
     }
 
     /**

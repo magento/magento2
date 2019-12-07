@@ -1,37 +1,79 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
-use Magento\Customer\Ui\Component\Listing\AttributeRepository;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\AddressRegistry;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Ui\Component\Listing\AttributeRepository;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
+ * Customer inline edit action
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEdit extends \Magento\Backend\App\Action
+class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
-    /** @var CustomerInterface */
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerInterface
+     */
     private $customer;
 
-    /** @var CustomerRepositoryInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory  */
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
     protected $resultJsonFactory;
 
-    /** @var \Magento\Customer\Model\Customer\Mapper  */
+    /**
+     * @var \Magento\Customer\Model\Customer\Mapper
+     */
     protected $customerMapper;
 
-    /** @var \Magento\Framework\Api\DataObjectHelper  */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $dataObjectHelper;
 
-    /** @var \Psr\Log\LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
+
+    /**
+     * @var \Magento\Customer\Model\EmailNotificationInterface
+     */
+    private $emailNotification;
+
+    /**
+     * @var AddressRegistry
+     */
+    private $addressRegistry;
+
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
 
     /**
      * @param Action\Context $context
@@ -40,6 +82,8 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param AddressRegistry|null $addressRegistry
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         Action\Context $context,
@@ -47,18 +91,43 @@ class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        AddressRegistry $addressRegistry = null,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
+        $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
         parent::__construct($context);
     }
 
     /**
+     * Get email notification
+     *
+     * @return EmailNotificationInterface
+     * @deprecated 100.1.0
+     */
+    private function getEmailNotification()
+    {
+        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                EmailNotificationInterface::class
+            );
+        } else {
+            return $this->emailNotification;
+        }
+    }
+
+    /**
+     * Inline edit action execute
+     *
      * @return \Magento\Framework\Controller\Result\Json
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
     {
@@ -67,32 +136,42 @@ class InlineEdit extends \Magento\Backend\App\Action
 
         $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
-            return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
-                'error' => true,
-            ]);
+            return $resultJson->setData(
+                [
+                    'messages' => [
+                        __('Please correct the data sent.')
+                    ],
+                    'error' => true,
+                ]
+            );
         }
 
         foreach (array_keys($postItems) as $customerId) {
             $this->setCustomer($this->customerRepository->getById($customerId));
+            $currentCustomer = clone $this->getCustomer();
+
             if ($this->getCustomer()->getDefaultBilling()) {
                 $this->updateDefaultBilling($this->getData($postItems[$customerId]));
             }
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
+
+            $this->getEmailNotification()->credentialsChanged($this->getCustomer(), $currentCustomer->getEmail());
         }
 
-        return $resultJson->setData([
-            'messages' => $this->getErrorMessages(),
-            'error' => $this->isErrorExists()
-        ]);
+        return $resultJson->setData(
+            [
+                'messages' => $this->getErrorMessages(),
+                'error' => $this->isErrorExists()
+            ]
+        );
     }
 
     /**
      * Receive entity(customer|customer_address) data from request
      *
      * @param array $data
-     * @param null $isCustomerData
+     * @param mixed $isCustomerData
      * @return array
      */
     protected function getData(array $data, $isCustomerData = null)
@@ -130,7 +209,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         $this->dataObjectHelper->populateWithArray(
             $customer,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
     }
 
@@ -149,7 +228,7 @@ class InlineEdit extends \Magento\Backend\App\Action
                 $this->dataObjectHelper->populateWithArray(
                     $address,
                     $this->processAddressData($data),
-                    '\Magento\Customer\Api\Data\AddressInterface'
+                    \Magento\Customer\Api\Data\AddressInterface::class
                 );
                 break;
             }
@@ -165,15 +244,20 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function saveCustomer(CustomerInterface $customer)
     {
         try {
+            // No need to validate customer address during inline edit action
+            $this->disableAddressValidation($customer);
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
         } catch (\Exception $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
+            $this->getMessageManager()
+                ->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
             $this->logger->critical($e);
         }
     }
@@ -202,7 +286,7 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function getErrorMessages()
     {
         $messages = [];
-        foreach ($this->getMessageManager()->getMessages()->getItems() as $error) {
+        foreach ($this->getMessageManager()->getMessages()->getErrors() as $error) {
             $messages[] = $error->getText();
         }
         return $messages;
@@ -215,7 +299,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function isErrorExists()
     {
-        return (bool)$this->getMessageManager()->getMessages(true)->getCount();
+        return (bool)$this->getMessageManager()->getMessages(true)->getCountByType(MessageInterface::TYPE_ERROR);
     }
 
     /**
@@ -252,12 +336,16 @@ class InlineEdit extends \Magento\Backend\App\Action
     }
 
     /**
-     * Customer access rights checking
+     * Disable Customer Address Validation
      *
-     * @return bool
+     * @param CustomerInterface $customer
+     * @throws NoSuchEntityException
      */
-    protected function _isAllowed()
+    private function disableAddressValidation($customer)
     {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
+        foreach ($customer->getAddresses() as $address) {
+            $addressModel = $this->addressRegistry->retrieve($address->getId());
+            $addressModel->setShouldIgnoreValidation(true);
+        }
     }
 }

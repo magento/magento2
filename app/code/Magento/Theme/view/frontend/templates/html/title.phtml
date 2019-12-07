@@ -1,30 +1,31 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * @var $block \Magento\Theme\Block\Html\Title
  */
 $cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
-$title = '';
+$titleHtml = '';
 if (trim($block->getPageHeading())) {
-    $title = '<span class="base" data-ui-id="page-title-wrapper" ' .  $block->getAddBaseAttribute() . '>'
-        . $block->escapeHtml($block->getPageHeading()) . '</span>';
+    $titleHtml = '<span class="base" data-ui-id="page-title-wrapper" '
+        . $block->getAddBaseAttribute()
+        . '>'
+        . $block->escapeHtml($block->getPageHeading())
+        . '</span>';
 }
 ?>
-<?php if ($title): ?>
-<div class="page-title-wrapper<?php /* @escapeNotVerified */ echo $cssClass; ?>">
+<?php if ($titleHtml) : ?>
+<div class="page-title-wrapper<?= $block->escapeHtmlAttr($cssClass) ?>">
     <h1 class="page-title"
-        <?php if ($block->getId()): ?> id="<?php /* @escapeNotVerified */ echo $block->getId();?>" <?php endif; ?>
-        <?php if ($block->getAddBaseAttributeAria()): ?>
-            aria-labelledby="<?php /* @escapeNotVerified */ echo $block->getAddBaseAttributeAria(); ?>"
+        <?php if ($block->getId()) : ?> id="<?= $block->escapeHtmlAttr($block->getId()) ?>" <?php endif; ?>
+        <?php if ($block->getAddBaseAttributeAria()) : ?>
+            aria-labelledby="<?= $block->escapeHtmlAttr($block->getAddBaseAttributeAria()) ?>"
         <?php endif; ?>>
-        <?php /* @escapeNotVerified */ echo $title ?>
+        <?= /* @noEscape */ $titleHtml ?>
     </h1>
-    <?php echo $block->getChildHtml(); ?>
+    <?= $block->getChildHtml() ?>
 </div>
 <?php endif; ?>

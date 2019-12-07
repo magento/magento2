@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Cron;
@@ -39,8 +39,6 @@ class JobModule extends AbstractJob
         $params = []
     ) {
         $this->command = $command;
-        $this->output = $output;
-        $this->status = $status;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
 
         // map name to command string
@@ -92,7 +90,6 @@ class JobModule extends AbstractJob
 
             //perform the generated file cleanup
             $this->performCleanup();
-
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(

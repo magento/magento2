@@ -1,15 +1,18 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
-    'jquery/ui',
-    'Magento_Ui/js/modal/modal',
-    'mage/translate'
-], function ($, _) {
+    'mage/translate',
+    'jquery-ui-modules/widget',
+    'Magento_Ui/js/modal/modal'
+], function ($, _, $t) {
     'use strict';
 
     $.widget('mage.confirm', $.mage.modal, {
@@ -35,7 +38,7 @@ define([
                 cancel: function () {}
             },
             buttons: [{
-                text: $.mage.__('Cancel'),
+                text: $t('Cancel'),
                 class: 'action-secondary action-dismiss',
 
                 /**
@@ -45,7 +48,7 @@ define([
                     this.closeModal(event);
                 }
             }, {
-                text: $.mage.__('OK'),
+                text: $t('OK'),
                 class: 'action-primary action-accept',
 
                 /**

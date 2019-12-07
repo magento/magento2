@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Block\Product\View;
@@ -8,7 +8,7 @@ namespace Magento\ProductVideo\Test\Unit\Block\Product\View;
 /**
  * Class GalleryTest
  */
-class GalleryTest extends \PHPUnit_Framework_TestCase
+class GalleryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -49,21 +49,21 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->contextMock = $this->getMock('\Magento\Catalog\Block\Product\Context', [], [], '', false);
-        $this->arrayUtilsMock = $this->getMock('\Magento\Framework\Stdlib\ArrayUtils', [], [], '', false);
-        $this->mediaHelperMock = $this->getMock('\Magento\ProductVideo\Helper\Media', [], [], '', false);
-        $this->jsonEncoderMock = $this->getMock('\Magento\Framework\Json\EncoderInterface', [], [], '', false);
-        $this->coreRegistry = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
+        $this->contextMock = $this->createMock(\Magento\Catalog\Block\Product\Context::class);
+        $this->arrayUtilsMock = $this->createMock(\Magento\Framework\Stdlib\ArrayUtils::class);
+        $this->mediaHelperMock = $this->createMock(\Magento\ProductVideo\Helper\Media::class);
+        $this->jsonEncoderMock = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);
+        $this->coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
         $this->contextMock->expects($this->once())->method('getRegistry')->willReturn($this->coreRegistry);
 
-        $this->productModelMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productModelMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->gallery = $objectManager->getObject(
-            '\Magento\ProductVideo\Block\Product\View\Gallery',
+            \Magento\ProductVideo\Block\Product\View\Gallery::class,
             [
                 'context' => $this->contextMock,
                 'arrayUtils' => $this->arrayUtilsMock,
@@ -99,7 +99,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $mediaGalleryData->setData($data);
 
         $this->coreRegistry->expects($this->any())->method('registry')->willReturn($this->productModelMock);
-        $typeInstance = $this->getMock('\Magento\Catalog\Model\Product\Type\AbstractType', [], [], '', false);
+        $typeInstance = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
         $typeInstance->expects($this->any())->method('getStoreFilter')->willReturn('_cache_instance_store_filter');
         $this->productModelMock->expects($this->any())->method('getTypeInstance')->willReturn($typeInstance);
         $this->productModelMock->expects($this->any())->method('getMediaGalleryImages')->willReturn(
@@ -115,7 +115,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     {
         $mediaGalleryData = [];
         $this->coreRegistry->expects($this->any())->method('registry')->willReturn($this->productModelMock);
-        $typeInstance = $this->getMock('\Magento\Catalog\Model\Product\Type\AbstractType', [], [], '', false);
+        $typeInstance = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
         $typeInstance->expects($this->any())->method('getStoreFilter')->willReturn('_cache_instance_store_filter');
         $this->productModelMock->expects($this->any())->method('getTypeInstance')->willReturn($typeInstance);
         $this->productModelMock->expects($this->any())->method('getMediaGalleryImages')->willReturn($mediaGalleryData);

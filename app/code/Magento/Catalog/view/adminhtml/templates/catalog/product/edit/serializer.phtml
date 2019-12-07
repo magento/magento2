@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer */
 ?>
 
+// phpcs:disable Magento2.Security.InsecureFunction.DiscouragedWithAlternative
 <?php $_id = 'id_' . md5(microtime()) ?>
-<input type="hidden" name="<?php /* @escapeNotVerified */ echo $block->getInputElementName()?>"  value="" id="<?php /* @escapeNotVerified */ echo $_id?>" />
+<input type="hidden"
+       name="<?= $block->escapeHtmlAttr($block->getInputElementName()) ?>"
+       value=""
+       id="<?= /* @noEscape */ $_id ?>" />

@@ -1,70 +1,93 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\Cache\State;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Xpath;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;
+    private $objectManager;
 
     /**
      * @var \Magento\Framework\Data\FormFactory
      */
-    protected $_formFactory;
+    private $formFactory;
 
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Section
      */
-    protected $_section;
+    private $section;
 
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Group
      */
-    protected $_group;
+    private $group;
 
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Field
      */
-    protected $_field;
+    private $field;
 
     /**
      * @var array
      */
-    protected $_configData;
+    private $configData;
+
+    /** @var string Encrypted value stored in config.xml */
+    private static $defaultConfigEncrypted = 'Encrypted value';
+
+    /** @var array Serialized value stored in config.xml  */
+    private static $defaultConfigSerialized = ['value1', 'value2'];
+
+    /** @var string Serialized value stored in config.xml  */
+    private static $defaultConfigString = 'test config value';
+
+    /** @var string Encrypted value stored in DB */
+    private static $websiteDbEncrypted = 'DB encrypted value';
+
+    /** @var array Serialized value stored in DB */
+    private static $websiteDbSerialized = ['value3', 'value4'];
+
+    /** @var string String value stored in DB */
+    private static $websiteDBString = 'test db value';
 
     protected function setUp()
     {
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_formFactory = $this->_objectManager->create('Magento\Framework\Data\FormFactory');
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->formFactory = $this->objectManager->create(\Magento\Framework\Data\FormFactory::class);
     }
 
     public function testDependenceHtml()
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout',
+        $layout = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\View\Layout::class,
             ['area' => 'adminhtml']
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+        Bootstrap::getObjectManager()->get(
+            ScopeInterface::class
         )->setCurrentScope(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+            FrontNameResolver::AREA_CODE
         );
         /** @var $block \Magento\Config\Block\System\Config\Form */
-        $block = $layout->createBlock('Magento\Config\Block\System\Config\Form', 'block');
+        $block = $layout->createBlock(\Magento\Config\Block\System\Config\Form::class, 'block');
 
         /** @var $childBlock \Magento\Framework\View\Element\Text */
-        $childBlock = $layout->addBlock('Magento\Framework\View\Element\Text', 'element_dependence', 'block');
+        $childBlock = $layout->addBlock(\Magento\Framework\View\Element\Text::class, 'element_dependence', 'block');
 
         $expectedValue = 'dependence_html_relations';
         $this->assertNotContains($expectedValue, $block->toHtml());
@@ -91,72 +114,78 @@ class FormTest extends \PHPUnit_Framework_TestCase
     ) {
         $this->_setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue);
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+        Bootstrap::getObjectManager()->get(
+            ScopeInterface::class
         )->setCurrentScope(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+            FrontNameResolver::AREA_CODE
         );
-        $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), []);
+        $form = $this->formFactory->create();
+        $fieldset = $form->addFieldset($this->section->getId() . '_' . $this->group->getId(), []);
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
-        /** @var $block \Magento\Config\Block\System\Config\FormStub */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+        /** @var $block FormStub */
+        $block = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Config\Block\System\Config\FormStub'
+            FormStub::class
         );
         $block->setScope(\Magento\Config\Block\System\Config\Form::SCOPE_WEBSITES);
-        $block->setStubConfigData($this->_configData);
-        $block->initFields($fieldset, $this->_group, $this->_section);
+        $block->setStubConfigData($this->configData);
+        $block->initFields($fieldset, $this->group, $this->section);
 
-        $fieldsetSel = 'fieldset';
         $valueSel = sprintf(
-            'input#%s_%s_%s',
-            $this->_section->getId(),
-            $this->_group->getId(),
-            $this->_field->getId()
+            '//input[@id="%s_%s_%s"]',
+            $this->section->getId(),
+            $this->group->getId(),
+            $this->field->getId()
         );
-        $valueDisabledSel = sprintf('%s[disabled="disabled"]', $valueSel);
+        $valueDisabledSel = sprintf('%s[@disabled="disabled"]', $valueSel);
         $useDefaultSel = sprintf(
-            'input#%s_%s_%s_inherit.checkbox',
-            $this->_section->getId(),
-            $this->_group->getId(),
-            $this->_field->getId()
+            '//input[@id="%s_%s_%s_inherit" and contains(@class,"checkbox")]',
+            $this->section->getId(),
+            $this->group->getId(),
+            $this->field->getId()
         );
-        $useDefaultCheckedSel = sprintf('%s[checked="checked"]', $useDefaultSel);
+        $useDefaultCheckedSel = sprintf('%s[@checked="checked"]', $useDefaultSel);
         $fieldsetHtml = $fieldset->getElementHtml();
-
-        $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
-        $this->assertSelectCount(
-            $valueSel,
+        $this->assertGreaterThanOrEqual(
+            1,
+            Xpath::getElementsCountForXpath('//fieldset', $fieldsetHtml),
+            'Fieldset HTML is invalid'
+        );
+        $this->assertEquals(
             $valueSelCtr,
-            $fieldsetHtml,
+            Xpath::getElementsCountForXpath($valueSel, $fieldsetHtml),
             'Field input should appear ' . $valueSelCtr . ' times in fieldset HTML'
         );
-        $this->assertSelectCount(
-            $useDefaultSel,
+        $this->assertEquals(
             $valueSelCtr,
-            $fieldsetHtml,
+            Xpath::getElementsCountForXpath($useDefaultSel, $fieldsetHtml),
             '"Use Default" checkbox should appear' . $valueSelCtr . ' times  in fieldset HTML.'
         );
 
         if ($expectedUseDefault) {
-            $this->assertSelectCount(
-                $useDefaultCheckedSel,
-                true,
-                $fieldsetHtml,
+            $this->assertGreaterThanOrEqual(
+                1,
+                Xpath::getElementsCountForXpath($useDefaultCheckedSel, $fieldsetHtml),
                 '"Use Default" checkbox should be checked'
             );
-            $this->assertSelectCount($valueDisabledSel, true, $fieldsetHtml, 'Field input should be disabled');
+            $this->assertGreaterThanOrEqual(
+                1,
+                Xpath::getElementsCountForXpath($valueDisabledSel, $fieldsetHtml),
+                'Field input should be disabled'
+            );
         } else {
-            $this->assertSelectCount(
-                $useDefaultCheckedSel,
-                false,
-                $fieldsetHtml,
+            $this->assertEquals(
+                0,
+                Xpath::getElementsCountForXpath($useDefaultCheckedSel, $fieldsetHtml),
                 '"Use Default" checkbox should not be checked'
             );
-            $this->assertSelectCount($valueDisabledSel, false, $fieldsetHtml, 'Field input should not be disabled');
+            $this->assertEquals(
+                0,
+                Xpath::getElementsCountForXpath($valueDisabledSel, $fieldsetHtml),
+                'Field input should not be disabled'
+            );
         }
     }
 
@@ -188,39 +217,48 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->_setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue);
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+        Bootstrap::getObjectManager()->get(
+            ScopeInterface::class
         )->setCurrentScope(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+            FrontNameResolver::AREA_CODE
         );
-        $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), []);
+        $form = $this->formFactory->create();
+        $fieldset = $form->addFieldset($this->section->getId() . '_' . $this->group->getId(), []);
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
-        /** @var $block \Magento\Config\Block\System\Config\FormStub */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+        /** @var $block FormStub */
+        $block = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Config\Block\System\Config\FormStub'
+            FormStub::class
         );
         $block->setScope(\Magento\Config\Block\System\Config\Form::SCOPE_DEFAULT);
-        $block->setStubConfigData($this->_configData);
-        $block->initFields($fieldset, $this->_group, $this->_section);
+        $block->setStubConfigData($this->configData);
+        $block->initFields($fieldset, $this->group, $this->section);
 
-        $fieldsetSel = 'fieldset';
         $valueSel = sprintf(
-            'input#%s_%s_%s',
-            $this->_section->getId(),
-            $this->_group->getId(),
-            $this->_field->getId()
+            '//input[@id="%s_%s_%s"]',
+            $this->section->getId(),
+            $this->group->getId(),
+            $this->field->getId()
         );
         $fieldsetHtml = $fieldset->getElementHtml();
 
-        $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
-        $this->assertSelectCount(
-            $valueSel,
+        $this->assertGreaterThanOrEqual(
+            1,
+            Xpath::getElementsCountForXpath(
+                '//fieldset',
+                $fieldsetHtml
+            ),
+            'Fieldset HTML is invalid'
+        );
+
+        $this->assertEquals(
             $valueSelCtr,
-            $fieldsetHtml,
+            Xpath::getElementsCountForXpath(
+                $valueSel,
+                $fieldsetHtml
+            ),
             'Field input should appear ' . $valueSelCtr . ' times in fieldset HTML'
         );
     }
@@ -241,80 +279,172 @@ class FormTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test cases with retrieving config data with backend models for different scopes.
+     * Config data are stored in config.xml and database.
+     *
+     * @param string $fieldId
+     * @param string $expectedConfigValue
+     * @param string $currentScope
+     * @param string $currentScopeCode
+     * @param bool $isDbOverrideValue whether values should be overridden in the database for the current scope
+     *
+     * @dataProvider initFieldsWithBackendModelDataProvider
+     * @covers \Magento\Config\Block\System\Config\Form::initFields
+     */
+    public function testInitFieldsWithBackendModel(
+        $fieldId,
+        $expectedConfigValue,
+        $currentScope,
+        $currentScopeCode,
+        $isDbOverrideValue
+    ) {
+        $this->_setupFieldsInheritCheckbox($fieldId, false, $expectedConfigValue);
+
+        if ($isDbOverrideValue) {
+            $backendModel = $this->field->getAttribute('backend_model') ? : \Magento\Framework\App\Config\Value::class;
+            $path = $this->section->getId() .'/'. $this->group->getId() . '/' . $this->field->getId();
+            $model = Bootstrap::getObjectManager()->create($backendModel);
+            $model->setPath($path);
+            $model->setScopeId($currentScopeCode);
+            $model->setScope($currentScope);
+            $model->setScopeCode($currentScopeCode);
+            $model->setValue($expectedConfigValue);
+            $model->save();
+        }
+
+        $this->registerTestConfigXmlMetadata();
+        Bootstrap::getObjectManager()->get(\Magento\TestFramework\App\Config::class)->clean();
+
+        $form = $this->formFactory->create();
+        $fieldset = $form->addFieldset($this->section->getId() . '_' . $this->group->getId(), []);
+
+        /** @var $block FormStub */
+        $block = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
+        )->createBlock(
+            FormStub::class
+        );
+
+        $block->setScope($currentScope);
+        $block->setScopeCode($currentScopeCode);
+        $block->setStubConfigData($this->configData);
+        $block->initFields($fieldset, $this->group, $this->section);
+
+        $fieldsetHtml = $fieldset->getElementHtml();
+
+        $elementId = $this->section->getId() .'_'. $this->group->getId() . '_' . $this->field->getId();
+        if (is_array($expectedConfigValue)) {
+            $expectedConfigValue = implode('|', $expectedConfigValue);
+        }
+        $this->assertEquals(
+            $expectedConfigValue,
+            $this->getElementAttributeValueById($fieldsetHtml, $elementId)
+        );
+    }
+
+    /**
+     * Provides config data variations with different data types and scopes.
+     *
+     * @return array
+     */
+    public static function initFieldsWithBackendModelDataProvider()
+    {
+        return [
+            /** Values stored in config.xml only for default scope, then retrieved for default scope. */
+            ['test_field_encrypted', self::$defaultConfigEncrypted, FormStub::SCOPE_DEFAULT, 0, false],
+            ['test_field_serialized', self::$defaultConfigSerialized, FormStub::SCOPE_DEFAULT, 0, false],
+            ['test_field', self::$defaultConfigString, FormStub::SCOPE_DEFAULT, 0, false],
+
+            /** Values stored in config.xml only for default scope, then retrieved for website scope. */
+            ['test_field_encrypted', self::$defaultConfigEncrypted, FormStub::SCOPE_WEBSITES, 1, false],
+            ['test_field_serialized', self::$defaultConfigSerialized, FormStub::SCOPE_WEBSITES, 1, false],
+            ['test_field', self::$defaultConfigString, FormStub::SCOPE_WEBSITES, 1, false],
+
+            /**
+             * Values stored in config.xml for default scope and in database for website scope,
+             * then retrieved for website scope.
+             */
+            ['test_field_encrypted', self::$websiteDbEncrypted, FormStub::SCOPE_WEBSITES, 1, true],
+            ['test_field_serialized', self::$websiteDbSerialized, FormStub::SCOPE_WEBSITES, 1, true],
+            ['test_field', self::$websiteDBString, FormStub::SCOPE_WEBSITES, 1, true],
+        ];
+    }
+
+    /**
      * @param string $fieldId uses the test_field_use_config field if true
      * @param bool $isConfigDataEmpty if the config data array should be empty or not
      * @param string $configDataValue the value that the field path should be set to in the config data
      */
     protected function _setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize([
+        Bootstrap::getInstance()->reinitialize([
             State::PARAM_BAN_CACHE => true,
         ]);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
-            ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+        Bootstrap::getObjectManager()
+            ->get(ScopeInterface::class)
+            ->setCurrentScope(FrontNameResolver::AREA_CODE);
+        Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class)
+            ->getArea(FrontNameResolver::AREA_CODE)
             ->load(\Magento\Framework\App\Area::PART_CONFIG);
 
         $fileResolverMock = $this->getMockBuilder(
-            'Magento\Framework\App\Config\FileResolver'
+            \Magento\Framework\App\Config\FileResolver::class
         )->disableOriginalConstructor()->getMock();
-        $fileIteratorFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\FileIteratorFactory'
+        $fileIteratorFactory = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Config\FileIteratorFactory::class
         );
         $fileIterator = $fileIteratorFactory->create(
-            [__DIR__ . '/_files/test_section_config.xml']
+            [__DIR__ . '/_files/test_system.xml']
         );
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         $structureReader = $objectManager->create(
-            'Magento\Config\Model\Config\Structure\Reader',
+            \Magento\Config\Model\Config\Structure\Reader::class,
             ['fileResolver' => $fileResolverMock]
         );
         $structureData = $objectManager->create(
-            'Magento\Config\Model\Config\Structure\Data',
+            \Magento\Config\Model\Config\Structure\Data::class,
             ['reader' => $structureReader]
         );
         /** @var \Magento\Config\Model\Config\Structure $structure  */
         $structure = $objectManager->create(
-            'Magento\Config\Model\Config\Structure',
+            \Magento\Config\Model\Config\Structure::class,
             ['structureData' => $structureData]
         );
 
-        $this->_section = $structure->getElement('test_section');
+        $this->section = $structure->getElement('test_section');
 
-        $this->_group = $structure->getElement('test_section/test_group');
+        $this->group = $structure->getElement('test_section/test_group');
 
-        $this->_field = $structure->getElement('test_section/test_group/' . $fieldId);
+        $this->field = $structure->getElement('test_section/test_group/' . $fieldId);
 
-        $fieldPath = $this->_field->getConfigPath();
+        $fieldPath = $this->field->getConfigPath();
 
         if ($isConfigDataEmpty) {
-            $this->_configData = [];
+            $this->configData = [];
         } else {
-            $this->_configData = [$fieldPath => $configDataValue];
+            $this->configData = [$fieldPath => $configDataValue];
         }
     }
 
     public function testInitFormAddsFieldsets()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\ResponseInterface'
+        Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\ResponseInterface::class
         )->headersSentThrowsException = false;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\RequestInterface'
+        Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\RequestInterface::class
         )->setParam(
             'section',
             'general'
         );
         /** @var $block \Magento\Config\Block\System\Config\Form */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+        $block = Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Config\Block\System\Config\Form'
+            \Magento\Config\Block\System\Config\Form::class
         );
         $block->initForm();
         $expectedIds = [
@@ -354,7 +484,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $elements = $block->getForm()->getElements();
         foreach ($elements as $element) {
             /** @var $element \Magento\Framework\Data\Form\Element\Fieldset */
-            $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Fieldset', $element);
+            $this->assertInstanceOf(
+                \Magento\Framework\Data\Form\Element\Fieldset::class,
+                $element
+            );
             $this->assertArrayHasKey($element->getId(), $expectedIds);
             $fields = $element->getElements();
             $this->assertEquals(count($expectedIds[$element->getId()]), count($fields));
@@ -363,5 +496,101 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals($expectedIds[$element->getId()][$field->getId()], $field->getType());
             }
         }
+    }
+
+    /**
+     * Add metadata from test_config.xml to metadataConfigTypeProcessor.
+     */
+    private function registerTestConfigXmlMetadata()
+    {
+        /** @var \Magento\Framework\Encryption\EncryptorInterface $encryptor */
+        $encryptor = Bootstrap::getObjectManager()->get(\Magento\Framework\Encryption\EncryptorInterface::class);
+        $this->setEncryptedValue(
+            $encryptor->encrypt(self::$defaultConfigEncrypted)
+        );
+
+        $fileResolver = Bootstrap::getObjectManager()->create(\Magento\Framework\Config\FileResolverInterface::class);
+        $directories = $fileResolver->get('config.xml', 'global');
+
+        $property = new \ReflectionProperty($directories, 'paths');
+        $property->setAccessible(true);
+        $property->setValue(
+            $directories,
+            array_merge($property->getValue($directories), [__DIR__ . '/_files/test_config.xml'])
+        );
+
+        $fileResolverMock = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolverMock->method('get')->willReturn($directories);
+
+        $initialReader = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\App\Config\Initial\Reader::class,
+            ['fileResolver' => $fileResolverMock]
+        );
+
+        $initialConfig = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\App\Config\Initial::class,
+            ['reader' => $initialReader]
+        );
+        $metadataConfigTypeProcessor = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\App\Config\MetadataConfigTypeProcessor::class,
+            ['initialConfig' => $initialConfig]
+        );
+
+        $composite = Bootstrap::getObjectManager()->get('systemConfigPostProcessorComposite');
+        $property = new \ReflectionProperty($composite, 'processors');
+        $property->setAccessible(true);
+        $processors = $property->getValue($composite);
+        $processors['metadata'] = $metadataConfigTypeProcessor;
+        $property->setValue($composite, $processors);
+
+        Bootstrap::getObjectManager()->get(\Magento\TestFramework\App\State::class)
+            ->setAreaCode(FrontNameResolver::AREA_CODE);
+    }
+
+    /**
+     * Finds element by id and returns value of attribute value property.
+     *
+     * @param string $html
+     * @param string $nodeId
+     *
+     * @return string
+     */
+    private function getElementAttributeValueById($html, $nodeId)
+    {
+        $domDocument = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $domDocument->loadHTML($html);
+        libxml_use_internal_errors(false);
+        $element = $domDocument->getElementById($nodeId);
+
+        return $element ? $element->attributes->getNamedItem('value')->nodeValue : '';
+    }
+
+    /**
+     * Save encrypted value to test_config.xml
+     *
+     * @param string $encryptedValue
+     */
+    private function setEncryptedValue($encryptedValue)
+    {
+        $config = simplexml_load_file(__DIR__ . '/_files/test_config.xml');
+        $config->default->test_section->test_group->test_field_encrypted = $encryptedValue;
+        $config->asXml(__DIR__ . '/_files/test_config.xml');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->setEncryptedValue('{ENCRYPTED_VALUE}');
+
+        $configResourceModel = Bootstrap::getObjectManager()->get(\Magento\Config\Model\ResourceModel\Config::class);
+        foreach (['test_field_encrypted', 'test_field_serialized', 'test_field'] as $field) {
+            $path = 'test_section/test_group/' . $field;
+            $configResourceModel->deleteConfig($path, FormStub::SCOPE_WEBSITES, 1);
+        }
+
+        parent::tearDown();
     }
 }

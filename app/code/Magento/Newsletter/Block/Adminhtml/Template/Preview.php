@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Newsletter template preview block
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
+/**
+ * Newsletter template preview block
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**
@@ -58,9 +60,11 @@ class Preview extends \Magento\Backend\Block\Widget
         if ($id = (int)$this->getRequest()->getParam('id')) {
             $this->loadTemplate($template, $id);
         } else {
-            $template->setTemplateType($this->getRequest()->getParam('type'));
-            $template->setTemplateText($this->getRequest()->getParam('text'));
-            $template->setTemplateStyles($this->getRequest()->getParam('styles'));
+            $previewData = $this->getPreviewData();
+
+            $template->setTemplateType($previewData['type']);
+            $template->setTemplateText($previewData['text']);
+            $template->setTemplateStyles($previewData['styles']);
         }
 
         \Magento\Framework\Profiler::start($this->profilerName);
@@ -80,12 +84,38 @@ class Preview extends \Magento\Backend\Block\Widget
         $template->revertDesign();
 
         if ($template->isPlain()) {
-            $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
+            $templateProcessed = "<pre>" . $this->escapeHtml($templateProcessed) . "</pre>";
         }
 
         \Magento\Framework\Profiler::stop($this->profilerName);
 
         return $templateProcessed;
+    }
+
+    /**
+     * Return template preview data
+     *
+     * @return array
+     */
+    private function getPreviewData()
+    {
+        $previewData = [];
+        $previewParams = ['type', 'text', 'styles'];
+
+        $sessionData = [];
+        if ($this->_backendSession->hasPreviewData()) {
+            $sessionData = $this->_backendSession->getPreviewData();
+        }
+
+        foreach ($previewParams as $param) {
+            if (isset($sessionData[$param])) {
+                $previewData[$param] = $sessionData[$param];
+            } else {
+                $previewData[$param] = $this->getRequest()->getParam($param);
+            }
+        }
+
+        return $previewData;
     }
 
     /**
@@ -112,6 +142,8 @@ class Preview extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return template
+     *
      * @param \Magento\Newsletter\Model\Template $template
      * @param string $id
      * @return $this

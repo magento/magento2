@@ -1,17 +1,20 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@toolbar-mode-icon-font-size: 24px;
+@toolbar-element-background: @panel__background-color;
 
 //
 //  Common
 //  _____________________________________________
 
-@toolbar-mode-icon-font-size: 24px;
-@toolbar-element-background: @panel__background-color;
-
 & when (@media-common = true) {
-
     .page-products {
         .columns {
             position: relative;
@@ -21,56 +24,74 @@
 
     .toolbar {
         &:extend(.abs-add-clearfix all);
-        &-amount {
-            display: block;
-            line-height: @toolbar-mode-icon-font-size+2;
-            margin: 0;
-            padding: 8px 0 0;
-            vertical-align: middle;
-            .products.wrapper ~ .toolbar & {
-                display: none;
+    }
+
+    .toolbar-amount {
+        display: block;
+        line-height: @toolbar-mode-icon-font-size + 2;
+        margin: 0;
+        padding: 8px 0 0;
+        vertical-align: middle;
+
+        .products.wrapper ~ .toolbar & {
+            display: none;
+        }
+    }
+
+    .toolbar-products {
+        margin-bottom: @indent__xl;
+        padding: 0 @indent__s;
+        text-align: center;
+        &:extend(.abs-add-clearfix all);
+
+        .pages {
+            display: none;
+
+            .products.wrapper ~ & {
+                display: block;
             }
         }
-        &-products {
-            margin-bottom: @indent__xl;
-            padding: 0 @indent__s;
-            text-align: center;
-            &:extend(.abs-add-clearfix all);
-            .pages {
-                display: none;
-                .products.wrapper ~ & {
-                    display: block;
-                }
-            }
-            .limiter {
-                display: none;
-                .control {
-                    display: inline-block;
-                }
+
+        .limiter {
+            .control {
+                display: inline-block;
             }
         }
     }
 
     .sorter {
         padding: 4px 0 0;
+
         .products.wrapper ~ .toolbar & {
             display: none;
         }
-        &-options {
-            margin: 0 0 0 7px;
-            width: auto;
+
+        .sorter-action {
+            position: relative;
+            top: -2px;
         }
-        &-action {
-            vertical-align: top;
-            .lib-icon-font(
+    }
+
+    .sorter-options {
+        margin: 0 0 0 7px;
+        width: auto;
+    }
+
+    .sorter-action {
+        vertical-align: top;
+        .lib-icon-font(
             @icon-arrow-up,
             @_icon-font-size: 28px,
             @_icon-font-line-height: 32px,
             @_icon-font-color: @header-icons-color,
             @_icon-font-color-hover: @header-icons-color-hover,
             @_icon-font-text-hide: true
-            );
-            &.sort-desc:before {
+        );
+    }
+
+    .sorter {
+        .sort-desc {
+            &:before {
                 content: @icon-arrow-down;
             }
         }
@@ -80,14 +101,16 @@
         display: none;
     }
 
+    .limiter-options {
+        margin: 0 5px 0 7px;
+        width: auto;
+    }
+
+    .limiter-label {
+        font-weight: @font-weight__regular;
+    }
+
     .limiter {
-        &-options {
-            width: auto;
-            margin: 0 5px 0 7px;
-        }
-        &-label {
-            font-weight: 400;
-        }
         .page-products .toolbar & {
             display: none;
         }
@@ -95,10 +118,10 @@
 }
 
 //
-//  Desctop
+//  Desktop
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .page-products {
         .columns {
             padding-top: 0;
@@ -111,9 +134,10 @@
         .products.wrapper ~ & .pages {
             float: left;
         }
-        &-amount {
-            float: left;
-        }
+    }
+
+    .toolbar-amount {
+        float: left;
     }
 
     .sorter {
@@ -128,48 +152,54 @@
         .products.wrapper ~ .toolbar & {
             display: none;
         }
+    }
 
-        &-label {
-            &:extend(.abs-visually-hidden-desktop-s all);
-        }
+    .modes-label {
+        &:extend(.abs-visually-hidden-desktop all);
+    }
 
-        &-mode {
-            .lib-css(color, @text__color__muted);
-            border: 1px solid @border-color__base;
-            border-right: 0;
-            float: left;
-            font-weight: @font-weight__regular;
-            line-height: 1;
-            padding: 7px 10px;
-            text-align: center;
-            &:not(.active):hover {
+    .modes-mode {
+        .lib-css(color, @text__color__muted);
+        border: 1px solid @border-color__base;
+        border-right: 0;
+        float: left;
+        font-weight: @font-weight__regular;
+        line-height: 1;
+        padding: 7px 10px;
+        text-align: center;
+
+        &:not(.active) {
+            &:hover {
                 .lib-css(color, @text__color__muted);
                 background: darken(@toolbar-element-background, 7%);
             }
-            &:last-child {
-                border-right: 1px solid @border-color__base;
-            }
-            &.active {
-                .lib-css(color, @primary__color__light);
-            }
-            .lib-icon-font(
+        }
+
+        &:last-child {
+            border-right: 1px solid @border-color__base;
+        }
+
+        &.active {
+            .lib-css(color, @primary__color__light);
+        }
+
+        .lib-icon-font(
             @icon-grid,
             @_icon-font-size: @toolbar-mode-icon-font-size,
             @_icon-font-text-hide: true,
             @_icon-font-color: @text__color__muted,
             @_icon-font-color-hover: @text__color__muted
-            );
-        }
+        );
     }
 
     .mode-list {
         .lib-icon-font-symbol(@icon-list);
     }
 
-    .limiter {
-        float: right;
-        .products.wrapper ~ .toolbar & {
+    .toolbar {
+        .products.wrapper ~ & .limiter {
             display: block;
+            float: right;
         }
     }
 }

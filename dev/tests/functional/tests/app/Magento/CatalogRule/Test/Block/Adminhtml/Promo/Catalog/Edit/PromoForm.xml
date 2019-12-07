@@ -1,43 +1,44 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <rule_information>
-        <class>\Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab\RuleInformation</class>
-        <selector>#promo_catalog_edit_tabs_main_section</selector>
+        <class>\Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\RuleInformation</class>
+        <selector>[data-index="rule_information"]</selector>
         <strategy>css selector</strategy>
         <fields>
             <is_active>
-                <input>select</input>
+                <input>switcher</input>
             </is_active>
             <website_ids>
-                <selector>[name='website_ids[]']</selector>
+                <selector>[name='website_ids']</selector>
                 <input>multiselect</input>
             </website_ids>
             <customer_group_ids>
-                <selector>[name='customer_group_ids[]']</selector>
+                <selector>[name='customer_group_ids']</selector>
                 <input>multiselect</input>
             </customer_group_ids>
         </fields>
     </rule_information>
     <conditions>
-        <class>Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions</class>
-        <selector>#promo_catalog_edit_tabs_conditions_section</selector>
+        <class>\Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\Conditions</class>
+        <selector>[data-index="block_promo_catalog_edit_tab_conditions"]</selector>
         <strategy>css selector</strategy>
         <fields>
             <conditions>
-                <selector>#rule_conditions_fieldset</selector>
+                <selector>[id^="catalog_rule_formrule_conditions_fieldset_"]</selector>
+                <strategy>css selector</strategy>
                 <input>conditions</input>
             </conditions>
         </fields>
     </conditions>
     <actions>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#promo_catalog_edit_tabs_actions_section</selector>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="actions"]</selector>
         <strategy>css selector</strategy>
         <fields>
             <simple_action>
@@ -45,4 +46,4 @@
             </simple_action>
         </fields>
     </actions>
-</tabs>
+</sections>

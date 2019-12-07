@@ -1,18 +1,22 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Category\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="categoryTag" xsi:type="const">Magento\Catalog\Model\Category::CACHE_TAG</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Catalog\Model\ResourceModel\Category\Collection">
         <arguments>
-            <argument name="fetchStrategy" xsi:type="object">Magento\Framework\Data\Collection\Db\FetchStrategy\Cache</argument>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Collection\FetchStrategy</argument>
         </arguments>
-    </type>
-    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
-        <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
     </type>
     <type name="Magento\Catalog\Model\Indexer\AbstractFlatState">
         <arguments>
@@ -52,5 +56,68 @@
                 <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\Pricing\Render\PriceBox">
+        <plugin name="catalog_price_box_key" type="Magento\Catalog\Block\Category\Plugin\PriceBoxTags" />
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPool">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="recently_viewed_product" xsi:type="string">Magento\Catalog\CustomerData\RecentlyViewedProductsSection</item>
+                <item name="recently_compared_product" xsi:type="string">Magento\Catalog\CustomerData\RecentlyComparedProductsSection</item>
+                <item name="product_data_storage" xsi:type="string">Magento\Catalog\CustomerData\ProductsRenderInfoSection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\CustomerData\RecentlyViewedProductsSection" type="Magento\Catalog\CustomerData\ProductFrontendActionSection">
+        <arguments>
+            <argument name="typeId" xsi:type="string">recently_viewed_product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\CustomerData\RecentlyComparedProductsSection" type="Magento\Catalog\CustomerData\ProductFrontendActionSection">
+        <arguments>
+            <argument name="typeId" xsi:type="string">recently_compared_product</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addCompareSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Catalog::messages/addCompareSuccessMessage.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Block\Product\View\Gallery">
+        <arguments>
+            <argument name="galleryImagesConfig" xsi:type="array">
+                <item name="small_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_small</item>
+                    <item name="data_object_key" xsi:type="string">small_image_url</item>
+                    <item name="json_object_key" xsi:type="string">thumb</item>
+                </item>
+                <item name="medium_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_medium</item>
+                    <item name="data_object_key" xsi:type="string">medium_image_url</item>
+                    <item name="json_object_key" xsi:type="string">img</item>
+                </item>
+                <item name="large_image" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_large</item>
+                    <item name="data_object_key" xsi:type="string">large_image_url</item>
+                    <item name="json_object_key" xsi:type="string">full</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\ResourceConnection">
+        <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
+        <plugin name="get_catalog_product_price_index_table_name" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\TableResolver"/>
+    </type>
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="catalog_app_action_dispatch_controller_context_plugin"
+                type="Magento\Catalog\Plugin\Framework\App\Action\ContextPlugin" />
     </type>
 </config>

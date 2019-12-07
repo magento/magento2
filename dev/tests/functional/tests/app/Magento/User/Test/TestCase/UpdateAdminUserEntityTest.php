@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,13 @@ namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Config\Test\Fixture\ConfigData;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserEdit;
 use Magento\User\Test\Page\Adminhtml\UserIndex;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
@@ -27,15 +29,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save user
  * 6. Perform all assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-24345
  */
 class UpdateAdminUserEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
+    const SEVERITY = 'S3';
     /* end tags */
 
     /**
@@ -74,6 +76,18 @@ class UpdateAdminUserEntityTest extends Injectable
     protected $fixtureFactory;
 
     /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    protected $testStepFactory;
+
+    /**
+     * @var string
+     */
+    private $configData;
+
+    /**
      * Setup necessary data for test.
      *
      * @param UserIndex $userIndex
@@ -81,6 +95,7 @@ class UpdateAdminUserEntityTest extends Injectable
      * @param Dashboard $dashboard
      * @param AdminAuthLogin $adminAuth
      * @param FixtureFactory $fixtureFactory
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
     public function __inject(
@@ -88,13 +103,15 @@ class UpdateAdminUserEntityTest extends Injectable
         UserEdit $userEdit,
         Dashboard $dashboard,
         AdminAuthLogin $adminAuth,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        TestStepFactory $testStepFactory
     ) {
         $this->userIndex = $userIndex;
         $this->userEdit = $userEdit;
         $this->dashboard = $dashboard;
         $this->adminAuth = $adminAuth;
         $this->fixtureFactory = $fixtureFactory;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -103,15 +120,25 @@ class UpdateAdminUserEntityTest extends Injectable
      * @param User $initialUser
      * @param User $user
      * @param string $loginAsDefaultAdmin
+     * @param ConfigData $config
+     * @param string $configData
      * @return array
      * @throws \Exception
      */
     public function testUpdateAdminUser(
         User $initialUser,
         User $user,
-        $loginAsDefaultAdmin
+        $loginAsDefaultAdmin,
+        ConfigData $config,
+        $configData = null
     ) {
-        // Precondition
+        // Preconditions
+        $this->configData = $configData;
+        $config->persist();
+        $this->testStepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $configData]
+        )->run();
         $initialUser->persist();
 
         // Steps
@@ -120,6 +147,8 @@ class UpdateAdminUserEntityTest extends Injectable
             $this->adminAuth->open();
             $this->adminAuth->getLoginBlock()->fill($initialUser);
             $this->adminAuth->getLoginBlock()->submit();
+            $this->adminAuth->waitForHeaderBlock();
+            $this->adminAuth->dismissAdminUsageNotification();
         }
         $this->userIndex->open();
         $this->userIndex->getUserGrid()->searchAndOpen($filter);

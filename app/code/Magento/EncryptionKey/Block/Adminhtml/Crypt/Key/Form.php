@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
 
 /**
  * Encryption key change form block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -40,16 +45,24 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'generate_random',
                 'label' => __('Auto-generate a Key'),
                 'options' => [0 => __('No'), 1 => __('Yes')],
-                'onclick' => "var cryptKey = $('crypt_key'); cryptKey.disabled = this.value == 1; " .
-                    "if (cryptKey.disabled) {cryptKey.parentNode.parentNode.hide();} " .
-                    "else {cryptKey.parentNode.parentNode.show();}",
+                'onchange' => "var cryptKey = jQuery('#crypt_key'); var cryptKeyBlock = cryptKey.parent().parent(); ".
+                    "cryptKey.prop('disabled', this.value === '1'); " .
+                    "if (cryptKey.prop('disabled')) { cryptKeyBlock.hide() } " .
+                    "else { cryptKeyBlock.show() }",
                 'note' => __('The generated key will be displayed after changing.')
             ]
         );
         $fieldset->addField(
             'crypt_key',
             'text',
-            ['name' => 'crypt_key', 'label' => __('New Key'), 'style' => 'width:32em;', 'maxlength' => 32]
+            [
+                'name' => 'crypt_key',
+                'label' => __('New Key'),
+                'style' => 'width:32em;',
+                'maxlength' => 32,
+                'required' => true,
+                'class' => 'required-entry'
+            ]
         );
         $form->setUseContainer(true);
         if ($data = $this->getFormData()) {

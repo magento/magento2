@@ -1,23 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CheckboxTest extends \PHPUnit_Framework_TestCase
+class CheckboxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox
      */
     protected $block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->block = (new ObjectManager($this))
-            ->getObject('Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox');
+            ->getObject(
+                \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox::class
+            );
     }
 
     public function testSetValidationContainer()

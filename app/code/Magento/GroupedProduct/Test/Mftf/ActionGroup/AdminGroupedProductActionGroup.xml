@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Check that required fields are actually required-->
+    <actionGroup name="checkRequiredFieldsInGroupedProductForm">
+        <annotations>
+            <description>Clears the Product Name and SKU fields when adding a Grouped Product and then verifies that they are required after attempting to Save.</description>
+        </annotations>
+        
+        <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductSku"/>
+        <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductName"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeStillOnEditPage"/>
+        <see selector="{{AdminProductFormSection.fieldError('name')}}" userInput="This is a required field." stepKey="seeNameRequired"/>
+        <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
+    </actionGroup>
+
+    <!--Fill main fields in grouped product form-->
+    <actionGroup name="fillGroupedProductForm">
+        <annotations>
+            <description>Fills in the provided Product Name and SKU on the Grouped Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="GroupedProduct"/>
+        </arguments>
+        
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
+    </actionGroup>
+
+    <!--Filter product grid and see expected grouped product-->
+    <actionGroup name="viewGroupedProductInAdminGrid">
+        <annotations>
+            <description>Goes to the Admin Products grid page. Filters the grid for the provided Product. Validates that the provided Product appears in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="GroupedProduct"/>
+        </arguments>
+        
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillProductNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="{{product.type_id}}" stepKey="selectionProductType"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.name}}"  stepKey="seeProductNameInGrid"/>
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
+    </actionGroup>
+
+    <!--Fill product min quantity in group products grid-->
+    <actionGroup name="fillDefaultQuantityForLinkedToGroupProductInGrid">
+        <annotations>
+            <description>Fills the provided Qty for a Product linked to a Grouped Product.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+        
+        <fillField selector="{{AdminAddedProductsToGroupGrid.inputByProductName(productName)}}" userInput="{{qty}}" stepKey="fillDefaultQtyForLinkedProduct"/>
+    </actionGroup>
+
+    <!-- Assign Specified Product To Grouped Product -->
+    <!-- Assumes web client is on grouped product edit page -->
+    <actionGroup name="AdminAssignProductToGroup">
+        <annotations>
+            <description>Adds the provided Product to a Grouped Product on an Admin Grouped Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <conditionalClick selector="{{AdminAddProductsToGroupPanel.clearFilters}}" dependentSelector="{{AdminAddProductsToGroupPanel.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <click selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="showFiltersPanel"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminAddProductsToGroupPanel.nameFilter}}" stepKey="fillNameFilter"/>
+        <click selector="{{AdminAddProductsToGroupPanel.applyFilters}}" stepKey="clickApplyFilters"/>
+        <click selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectProduct"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+    </actionGroup>
+</actionGroups>

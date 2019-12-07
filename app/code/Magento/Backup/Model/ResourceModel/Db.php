@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Model\ResourceModel;
 
 /**
  * Database backup resource model
+ * @api
+ * @since 100.0.2
  */
 class Db
 {
@@ -110,6 +112,31 @@ class Db
             $fkScript = $this->getTableForeignKeysSql($tableName);
         }
         return $fkScript;
+    }
+
+    /**
+     * Return triggers for table(s).
+     *
+     * @param string|null $tableName
+     * @param bool $addDropIfExists
+     * @return string
+     */
+    public function getTableTriggersSql($tableName = null, $addDropIfExists = true)
+    {
+        $triggerScript = '';
+        if (!$tableName) {
+            $tables = $this->getTables();
+            foreach ($tables as $table) {
+                $tableTriggerScript = $this->_resourceHelper->getTableTriggersSql($table, $addDropIfExists);
+                if (!empty($tableTriggerScript)) {
+                    $triggerScript .= "\n" . $tableTriggerScript;
+                }
+            }
+        } else {
+            $triggerScript = $this->getTableTriggersSql($tableName, $addDropIfExists);
+        }
+
+        return $triggerScript;
     }
 
     /**

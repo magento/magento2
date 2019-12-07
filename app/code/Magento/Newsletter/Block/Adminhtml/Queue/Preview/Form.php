@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Preview;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -34,6 +38,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if ($data = $this->getFormData()) {
             $mapper = ['preview_store_id' => 'store_id'];
+
+            if (empty($data['id']) && !empty($data['text'])) {
+                $this->_backendSession->setPreviewData($data);
+            }
 
             foreach ($data as $key => $value) {
                 if (array_key_exists($key, $mapper)) {

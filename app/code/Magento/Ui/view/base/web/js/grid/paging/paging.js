@@ -1,8 +1,11 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'ko',
     'underscore',
@@ -16,9 +19,10 @@ define([
         defaults: {
             template: 'ui/grid/paging/paging',
             totalTmpl: 'ui/grid/paging-total',
-            pageSize: 20,
+            totalRecords: 0,
+            pages: 1,
             current: 1,
-            selectProvider: '',
+            selectProvider: 'ns = ${ $.ns }, index = ids',
 
             sizesConfig: {
                 component: 'Magento_Ui/js/grid/paging/sizes',
@@ -30,14 +34,24 @@ define([
             },
 
             imports: {
-                pageSize: '${ $.sizesConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
-                totalRecords: '${ $.provider }:data.totalRecords'
+                totalRecords: '${ $.provider }:data.totalRecords',
+                filters: '${ $.provider }:params.filters'
             },
 
             exports: {
                 pageSize: '${ $.provider }:params.paging.pageSize',
                 current: '${ $.provider }:params.paging.current'
+            },
+
+            links: {
+                options: '${ $.sizesConfig.name }:options',
+                pageSize: '${ $.sizesConfig.name }:value'
+            },
+
+            statefull: {
+                pageSize: true,
+                current: true
             },
 
             listens: {
@@ -111,6 +125,26 @@ define([
         },
 
         /**
+         * Gets first item index on current page.
+         *
+         * @returns {Number}
+         */
+        getFirstItemIndex: function () {
+            return this.pageSize * (this.current - 1) + 1;
+        },
+
+        /**
+         * Gets last item index on current page.
+         *
+         * @returns {Number}
+         */
+        getLastItemIndex: function () {
+            var lastItem = this.getFirstItemIndex() + this.pageSize - 1;
+
+            return this.totalRecords < lastItem ? this.totalRecords : lastItem;
+        },
+
+        /**
          * Sets cursor to the provied value.
          *
          * @param {(Number|String)} value - New value of the cursor.
@@ -150,7 +184,9 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            this.current = 1;
+            if (!_.isUndefined(this.filters)) {
+                this.current = 1;
+            }
 
             return this;
         },
@@ -196,14 +232,12 @@ define([
         /**
          * Calculates new page cursor based on the
          * previous and current page size values.
-         *
-         * @returns {Number} Updated cursor value.
          */
         updateCursor: function () {
-            var cursor  = this.current - 1,
-                size    = this.pageSize,
-                oldSize = this.previousSize,
-                delta   = cursor * (oldSize  - size) / size;
+            var cursor = this.current - 1,
+                size = this.pageSize,
+                oldSize = _.isUndefined(this.previousSize) ? this.pageSize : this.previousSize,
+                delta = cursor * (oldSize - size) / size;
 
             delta = size > oldSize ?
                 Math.ceil(delta) :

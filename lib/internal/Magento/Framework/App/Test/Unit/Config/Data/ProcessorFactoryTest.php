@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config\Data;
 
-class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
+class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\Data\ProcessorFactory
@@ -24,9 +24,11 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\App\Config\Data\ProcessorFactory($this->_objectManager);
-        $this->_processorMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\Data\ProcessorInterface');
+        $this->_processorMock = $this->getMockForAbstractClass(
+            \Magento\Framework\App\Config\Data\ProcessorInterface::class
+        );
     }
 
     /**
@@ -39,21 +41,20 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\App\Config\Data\TestBackendModel'
+            \Magento\Framework\App\Config\Data\TestBackendModel::class
         )->will(
             $this->returnValue($this->_processorMock)
         );
 
         $this->assertInstanceOf(
-            'Magento\Framework\App\Config\Data\ProcessorInterface',
-            $this->_model->get('Magento\Framework\App\Config\Data\TestBackendModel')
+            \Magento\Framework\App\Config\Data\ProcessorInterface::class,
+            $this->_model->get(\Magento\Framework\App\Config\Data\TestBackendModel::class)
         );
     }
 
     /**
      * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /\w+\\WrongBackendModel is not instance of \w+\\ProcessorInterface/
      */
     public function testGetModelWithWrongInterface()
     {
@@ -62,14 +63,14 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\App\Config\Data\WrongBackendModel'
+            \Magento\Framework\App\Config\Data\WrongBackendModel::class
         )->will(
             $this->returnValue(
-                $this->getMock('Magento\Framework\App\Config\Data\WrongBackendModel', [], [], '', false)
+                $this->getMockBuilder('WrongBackendModel')->getMock()
             )
         );
 
-        $this->_model->get('Magento\Framework\App\Config\Data\WrongBackendModel');
+        $this->_model->get(\Magento\Framework\App\Config\Data\WrongBackendModel::class);
     }
 
     /**
@@ -82,12 +83,12 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\App\Config\Data\TestBackendModel'
+            \Magento\Framework\App\Config\Data\TestBackendModel::class
         )->will(
             $this->returnValue($this->_processorMock)
         );
 
-        $this->_model->get('Magento\Framework\App\Config\Data\TestBackendModel');
-        $this->_model->get('Magento\Framework\App\Config\Data\TestBackendModel');
+        $this->_model->get(\Magento\Framework\App\Config\Data\TestBackendModel::class);
+        $this->_model->get(\Magento\Framework\App\Config\Data\TestBackendModel::class);
     }
 }

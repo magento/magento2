@@ -1,14 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Gateway\Validator;
 
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 
+/**
+ * Class ValidatorPool
+ * @package Magento\Payment\Gateway\Validator
+ * @api
+ * @since 100.0.2
+ */
 class ValidatorPool implements \Magento\Payment\Gateway\Validator\ValidatorPoolInterface
 {
     /**
@@ -42,7 +49,7 @@ class ValidatorPool implements \Magento\Payment\Gateway\Validator\ValidatorPoolI
     public function get($code)
     {
         if (!isset($this->validators[$code])) {
-            throw new NotFoundException(__('Validator for field %1 does not exist.', $code));
+            throw new NotFoundException(__('The validator for the "%1" field doesn\'t exist.', $code));
         }
 
         return $this->validators[$code];

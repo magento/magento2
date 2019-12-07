@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\GlobalSearchEntityTest" summary="Global Search Backend " ticketId="MAGETWO-28457">
+        <variation name="GlobalSearchEntityTestVariation1">
+            <data name="description" xsi:type="string">search shows admin preview</data>
+            <data name="search/data/query" xsi:type="string">Some search term</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertGlobalSearchPreview" />
+        </variation>
         <variation name="GlobalSearchEntityTestVariation2">
             <data name="description" xsi:type="string">search with 2 sign return no results</data>
             <data name="search/data/query" xsi:type="string">:)</data>

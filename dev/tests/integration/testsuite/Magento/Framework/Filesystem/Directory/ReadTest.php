@@ -2,18 +2,19 @@
 /**
  * Test for \Magento\Framework\Filesystem\Directory\Read
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\Exception\ValidatorException;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class ReadTest
  * Test for Magento\Framework\Filesystem\Directory\Read class
  */
-class ReadTest extends \PHPUnit_Framework_TestCase
+class ReadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test instance of Read
@@ -34,11 +35,64 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('_files/foo/bar', $dir->getAbsolutePath('bar'));
     }
 
+    public function testGetAbsolutePathOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->getAbsolutePath('../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->getAbsolutePath('//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->getAbsolutePath('\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
+    }
+
     public function testGetRelativePath()
     {
         $dir = $this->getDirectoryInstance('foo');
+        $this->assertEquals(
+            'file_three.txt',
+            $dir->getRelativePath('file_three.txt')
+        );
         $this->assertEquals('', $dir->getRelativePath());
         $this->assertEquals('bar', $dir->getRelativePath(__DIR__ . '/../_files/foo/bar'));
+    }
+
+    public function testGetRelativePathOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->getRelativePath(__DIR__ .'/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->getRelativePath(__DIR__ .'//./..////Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->getRelativePath(__DIR__ .'\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->getRelativePath('../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(4, $exceptions);
     }
 
     /**
@@ -72,6 +126,28 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testReadOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->read('../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->read('//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->read('\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
+    }
+
     /**
      * Test for search method
      *
@@ -103,6 +179,28 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testSearchOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->search('/*/*.txt', '../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->search('/*/*.txt', '//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->search('/*/*.txt', '\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
+    }
+
     /**
      * Test for isExist method
      *
@@ -125,6 +223,28 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function existsProvider()
     {
         return [['foo', 'bar', true], ['foo', 'bar/baz/', true], ['foo', 'bar/notexists', false]];
+    }
+
+    public function testIsExistOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->isExist('../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->isExist('//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->isExist('\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
     }
 
     /**
@@ -168,6 +288,28 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         return [['foo', 'bar'], ['foo', 'file_three.txt']];
     }
 
+    public function testStatOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->stat('bar/../../../Directory');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->stat('bar//./..///../../Directory');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->stat('bar\..\..\..\Directory');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
+    }
+
     /**
      * Test for isReadable method
      *
@@ -182,6 +324,28 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($readable, $dir->isReadable($path));
     }
 
+    public function testIsReadableOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->isReadable('../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->isReadable('//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->isReadable('\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
+    }
+
     /**
      * Test for isFile method
      *
@@ -194,6 +358,28 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isFile, $this->getDirectoryInstance('foo')->isFile($path));
     }
 
+    public function testIsFileOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->isFile('../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->isFile('//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->isFile('\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
+    }
+
     /**
      * Test for isDirectory method
      *
@@ -204,6 +390,28 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testIsDirectory($path, $isDirectory)
     {
         $this->assertEquals($isDirectory, $this->getDirectoryInstance('foo')->isDirectory($path));
+    }
+
+    public function testIsDirectoryOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->isDirectory('../../Directory');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->isDirectory('//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->isDirectory('\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
     }
 
     /**
@@ -246,6 +454,28 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($file instanceof \Magento\Framework\Filesystem\File\ReadInterface);
     }
 
+    public function testOpenFileOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->openFile('../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->openFile('//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->openFile('\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
+    }
+
     /**
      * Test readFile
      *
@@ -268,8 +498,33 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['popup.csv', 'var myData = 5;'],
-            ['data.csv', '"field1", "field2"' . "\n" . '"field3", "field4"' . "\n"]
+            [
+                'data.csv',
+                '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL
+            ]
         ];
+    }
+
+    public function testReadFileOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->readFile('../../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->readFile('//./..///../Directory/ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->readFile('\..\..\Directory\ReadTest.php');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
     }
 
     /**
@@ -284,7 +539,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $fullPath = __DIR__ . '/../_files/' . $path;
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Filesystem\Directory\ReadFactory $directoryFactory */
-        $directoryFactory = $objectManager->create('Magento\Framework\Filesystem\Directory\ReadFactory');
+        $directoryFactory = $objectManager->create(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         return $directoryFactory->create($fullPath);
     }
 
@@ -300,5 +555,27 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($expected, $actual);
         sort($expected);
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testReadRecursivelyOutside()
+    {
+        $exceptions = 0;
+        $dir = $this->getDirectoryInstance('foo');
+        try {
+            $dir->readRecursively('../../Directory');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->readRecursively('//./..///../Directory');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        try {
+            $dir->readRecursively('\..\..\Directory');
+        } catch (ValidatorException $exception) {
+            $exceptions++;
+        }
+        $this->assertEquals(3, $exceptions);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Adminhtml\Rating;
@@ -121,9 +121,9 @@ class Detailed extends \Magento\Backend\Block\Template
                 )->setStoreFilter(
                     $stores
                 )->setPositionOrder()->load()->addOptionToItems();
-                if (intval($this->getRequest()->getParam('id'))) {
+                if ((int)$this->getRequest()->getParam('id')) {
                     $this->_voteCollection = $this->_votesFactory->create()->setReviewFilter(
-                        intval($this->getRequest()->getParam('id'))
+                        (int)$this->getRequest()->getParam('id')
                     )->addOptionInfo()->load()->addRatingOptions();
                 }
             }

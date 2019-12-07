@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class AssertProductReviewMassActionSuccessMessage extends AbstractConstraint
     {
         $reviews = is_array($review) ? $review : [$review];
         $successMessage = sprintf(self::SUCCESS_MESSAGE, count($reviews));
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $successMessage,
             $reviewIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success message is displayed.'

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Xml;
@@ -146,8 +146,6 @@ class Generator
      */
     protected function _getIndexedArrayItemName()
     {
-        return isset($this->_defaultIndexedArrayItemName)
-            ? $this->_defaultIndexedArrayItemName
-            : self::DEFAULT_ENTITY_ITEM_NAME;
+        return $this->_defaultIndexedArrayItemName ?? self::DEFAULT_ENTITY_ITEM_NAME;
     }
 }

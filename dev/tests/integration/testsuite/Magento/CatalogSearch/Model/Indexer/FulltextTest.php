@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
  */
-class FulltextTest extends \PHPUnit_Framework_TestCase
+class FulltextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\IndexerInterface
@@ -24,11 +26,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
      */
     protected $engine;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
-     */
-    protected $resourceFulltext;
 
     /**
      * @var \Magento\CatalogSearch\Model\Fulltext
@@ -74,24 +71,16 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = Bootstrap::getObjectManager()->create(
-            'Magento\Indexer\Model\Indexer'
+            \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalogsearch_fulltext');
 
-        $this->engine = Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\ResourceModel\Engine'
-        );
-
-        $this->resourceFulltext = Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\ResourceModel\Fulltext'
-        );
-
         $this->queryFactory = Bootstrap::getObjectManager()->get(
-            'Magento\Search\Model\QueryFactory'
+            \Magento\Search\Model\QueryFactory::class
         );
 
         $this->dimension = Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Search\Request\Dimension',
+            \Magento\Framework\Search\Request\Dimension::class,
             ['name' => 'scope', 'value' => '1']
         );
 
@@ -152,7 +141,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Product\Action $action */
         $action = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Action'
+            \Magento\Catalog\Model\Product\Action::class
         );
         $action->updateAttributes($productIds, $attrData, 1);
 
@@ -187,26 +176,56 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the case when the last child product of the configurable becomes disabled/out of stock.
+     *
+     * Such behavior should enforce parent product to be deleted from the index as its latest child become unavailable
+     * and the configurable cannot be sold anymore.
+     *
+     * @return void
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_with_single_child.php
+     */
+    public function testReindexParentProductWhenChildBeingDisabled()
+    {
+        $this->indexer->reindexAll();
+
+        $visibilityFilter = [
+            Visibility::VISIBILITY_IN_SEARCH,
+            Visibility::VISIBILITY_IN_CATALOG,
+            Visibility::VISIBILITY_BOTH
+        ];
+        $products = $this->search('Configurable', $visibilityFilter);
+        $this->assertCount(1, $products);
+
+        $childProduct = $this->getProductBySku('configurable_option_single_child');
+        $childProduct->setStatus(Product\Attribute\Source\Status::STATUS_DISABLED)->save();
+
+        $products = $this->search('Configurable', $visibilityFilter);
+        $this->assertCount(0, $products);
+    }
+
+    /**
      * Search the text and return result collection
      *
      * @param string $text
+     * @param array|null $visibilityFilter
      * @return Product[]
      */
-    protected function search($text)
+    protected function search(string $text, $visibilityFilter = null): array
     {
-        $this->resourceFulltext->resetSearchResults();
         $query = $this->queryFactory->get();
         $query->unsetData();
         $query->setQueryText($text);
         $query->saveIncrementalPopularity();
         $products = [];
-        $collection = Bootstrap::getObjectManager()->create(
-            Collection::class,
-            [
-                'searchRequestName' => 'quick_search_container'
-            ]
-        );
+        $searchLayer = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Layer\Search::class);
+        $collection = $searchLayer->getProductCollection();
         $collection->addSearchFilter($text);
+
+        if (null !== $visibilityFilter) {
+            $collection->setVisibility($visibilityFilter);
+        }
+
         foreach ($collection as $product) {
             $products[] = $product;
         }
@@ -217,13 +236,13 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      * Return product by SKU
      *
      * @param string $sku
-     * @return Product
+     * @return Product|bool
      */
-    protected function getProductBySku($sku)
+    protected function getProductBySku(string $sku)
     {
         /** @var Product $product */
         $product = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         return $product->loadByAttribute('sku', $sku);
     }

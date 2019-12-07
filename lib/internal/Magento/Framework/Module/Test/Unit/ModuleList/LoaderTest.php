@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
 use \Magento\Framework\Module\ModuleList\Loader;
 
-class LoaderTest extends \PHPUnit_Framework_TestCase
+class LoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * A sample empty XML
@@ -49,18 +49,11 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->converter = $this->getMock('Magento\Framework\Module\Declaration\Converter\Dom', [], [], '', false);
-        $this->parser = $this->getMock('Magento\Framework\Xml\Parser', [], [], '', false);
+        $this->converter = $this->createMock(\Magento\Framework\Module\Declaration\Converter\Dom::class);
+        $this->parser = $this->createMock(\Magento\Framework\Xml\Parser::class);
         $this->parser->expects($this->once())->method('initErrorHandler');
-        $this->registry = $this->getMock(
-            'Magento\Framework\Component\ComponentRegistrarInterface',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->driver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false, false);
+        $this->registry = $this->createMock(\Magento\Framework\Component\ComponentRegistrarInterface::class);
+        $this->driver = $this->createMock(\Magento\Framework\Filesystem\DriverInterface::class);
         $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
     }
 
@@ -108,14 +101,12 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadDataProvider()
     {
         return [
-            'Ordered modules list returned by registrar' =>
-                [[
-                    '/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e'
-                ]],
-            'UnOrdered modules list returned by registrar' =>
-                [[
-                    '/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d'
-                ]],
+            'Ordered modules list returned by registrar' => [[
+                '/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e'
+            ]],
+            'UnOrdered modules list returned by registrar' => [[
+                '/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d'
+            ]],
         ];
     }
 
@@ -168,5 +159,56 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
         ]));
         $this->loader->load();
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testLoadPrearranged(): void
+    {
+        $fixtures = [
+            'Foo_Bar' => ['name' => 'Foo_Bar', 'sequence' => ['Magento_Store']],
+            'Magento_Directory' => ['name' => 'Magento_Directory', 'sequence' => ['Magento_Store']],
+            'Magento_Store' => ['name' => 'Magento_Store', 'sequence' => []],
+            'Magento_Theme' => ['name' => 'Magento_Theme', 'sequence' => ['Magento_Store', 'Magento_Directory']],
+            'Test_HelloWorld' => ['name' => 'Test_HelloWorld', 'sequence' => ['Magento_Theme']]
+        ];
+
+        $index = 0;
+        foreach ($fixtures as $name => $fixture) {
+            $this->converter->expects($this->at($index++))->method('convert')->willReturn([$name => $fixture]);
+        }
+
+        $this->registry->expects($this->once())
+            ->method('getPaths')
+            ->willReturn([
+                '/path/to/Foo_Bar',
+                '/path/to/Magento_Directory',
+                '/path/to/Magento_Store',
+                '/path/to/Magento_Theme',
+                '/path/to/Test_HelloWorld'
+            ]);
+
+        $this->driver->expects($this->exactly(5))
+            ->method('fileGetContents')
+            ->will($this->returnValueMap([
+                ['/path/to/Foo_Bar/etc/module.xml', null, null, self::$sampleXml],
+                ['/path/to/Magento_Directory/etc/module.xml', null, null, self::$sampleXml],
+                ['/path/to/Magento_Store/etc/module.xml', null, null, self::$sampleXml],
+                ['/path/to/Magento_Theme/etc/module.xml', null, null, self::$sampleXml],
+                ['/path/to/Test_HelloWorld/etc/module.xml', null, null, self::$sampleXml],
+            ]));
+
+        // Load the full module list information
+        $result = $this->loader->load();
+
+        $this->assertSame(
+            ['Magento_Store', 'Magento_Directory', 'Magento_Theme', 'Foo_Bar', 'Test_HelloWorld'],
+            array_keys($result)
+        );
+
+        foreach ($fixtures as $name => $fixture) {
+            $this->assertSame($fixture, $result[$name]);
+        }
     }
 }

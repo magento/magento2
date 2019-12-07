@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportSystemCacheFlush;
 /**
  * Class ReportSystemCacheFlushTest
  */
-class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
+class ReportSystemCacheFlushTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportSystemCacheFlush
@@ -42,20 +42,20 @@ class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->config = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
+        $this->config = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->systemFactory = $this->getMockBuilder('Magento\NewRelicReporting\Model\SystemFactory')
+        $this->systemFactory = $this->getMockBuilder(\Magento\NewRelicReporting\Model\SystemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->systemModel = $this->getMockBuilder('Magento\NewRelicReporting\Model\System')
+        $this->systemModel = $this->getMockBuilder(\Magento\NewRelicReporting\Model\System::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jsonEncoder = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
+        $this->jsonEncoder = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->getMock();
         $this->systemFactory->expects($this->any())
             ->method('create')
@@ -76,7 +76,7 @@ class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
     public function testReportSystemCacheFlushModuleDisabledFromConfig()
     {
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -98,7 +98,7 @@ class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
         $testAction = 'JSON string';
 
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

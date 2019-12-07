@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 100.0.2
  */
 interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -397,7 +398,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const KEY_PRODUCT_OPTION = 'product_option';
 
-
     /**
      * Gets the additional data for the order item.
      *
@@ -414,6 +414,8 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
 
     /**
      * Gets the applied rule IDs for the order item.
+     *
+     * Rules are comma separated if there are more than one.
      *
      * @return string|null Applied rule IDs.
      */
@@ -457,21 +459,21 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the base discount tax compensation amount for the order item.
      *
-     * @return float Base discount tax compensation amount.
+     * @return float|null Base discount tax compensation amount.
      */
     public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base discount tax compensation invoiced for the order item.
      *
-     * @return float Base discount tax compensation invoiced.
+     * @return float|null Base discount tax compensation invoiced.
      */
     public function getBaseDiscountTaxCompensationInvoiced();
 
     /**
      * Gets the base discount tax compensation refunded for the order item.
      *
-     * @return float Base discount tax compensation refunded.
+     * @return float|null Base discount tax compensation refunded.
      */
     public function getBaseDiscountTaxCompensationRefunded();
 
@@ -738,28 +740,28 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the discount tax compensation amount for the order item.
      *
-     * @return float Discount tax compensation amount.
+     * @return float|null Discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the discount tax compensation canceled for the order item.
      *
-     * @return float Discount tax compensation canceled.
+     * @return float|null Discount tax compensation canceled.
      */
     public function getDiscountTaxCompensationCanceled();
 
     /**
      * Gets the discount tax compensation invoiced for the order item.
      *
-     * @return float Discount tax compensation invoiced.
+     * @return float|null Discount tax compensation invoiced.
      */
     public function getDiscountTaxCompensationInvoiced();
 
     /**
      * Gets the discount tax compensation refunded for the order item.
      *
-     * @return float Discount tax compensation refunded.
+     * @return float|null Discount tax compensation refunded.
      */
     public function getDiscountTaxCompensationRefunded();
 

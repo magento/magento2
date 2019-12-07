@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$mtfRoot = dirname(__DIR__);
+$mtfRoot = str_replace('\\', '/', $mtfRoot);
+define('MTF_PHPUNIT_FILE', $mtfRoot . DIRECTORY_SEPARATOR . 'phpunit.xml');
+include $mtfRoot . '/vendor/magento/mtf/utils/mtf';

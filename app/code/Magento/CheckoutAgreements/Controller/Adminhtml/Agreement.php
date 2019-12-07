@@ -1,12 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml;
 
-abstract class Agreement extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+
+abstract class Agreement extends Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_CheckoutAgreements::checkoutagreement';
+
     /**
      * Core registry
      *
@@ -15,12 +26,14 @@ abstract class Agreement extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Registry $coreRegistry
      * @codeCoverageIgnore
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
-    {
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry
+    ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -43,14 +56,5 @@ abstract class Agreement extends \Magento\Backend\App\Action
             __('Checkout Terms and Conditions')
         );
         return $this;
-    }
-
-    /**
-     * @return bool
-     * @codeCoverageIgnore
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_CheckoutAgreements::checkoutagreement');
     }
 }

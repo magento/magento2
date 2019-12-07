@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module;
@@ -34,7 +34,7 @@ class ResourceFactory
      */
     public function create(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
     {
-        $connectionFactory = $this->serviceLocator->get('Magento\Setup\Module\ConnectionFactory');
+        $connectionFactory = $this->serviceLocator->get(\Magento\Setup\Module\ConnectionFactory::class);
         $resource = new ResourceConnection(
             new ResourceConfig(),
             $connectionFactory,

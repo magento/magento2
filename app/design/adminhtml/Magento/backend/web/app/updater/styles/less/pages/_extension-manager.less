@@ -1,0 +1,88 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Web Setup Wizard -> Extension Manager
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@extension-manager-wrap__border-color: @color-gray-light2;
+
+@extension-manager-title__background-color: @color-white-fog;
+@extension-manager-title__border-color: @color-gray89;
+@extension-manager-title__color: @color-brown-darker;
+
+@extension-manager-button__border-color: @color-gray68;
+
+//
+
+.extension-manager-wrap {
+    border: 1px solid @extension-manager-wrap__border-color;
+    margin: 0 0 @indent__xl;
+}
+
+.extension-manager-account {
+    .lib-font-size(21);
+    display: inline-block;
+    font-weight: @font-weight__regular;
+}
+
+.extension-manager-title {
+    &:extend(.abs-clearer all);
+    .lib-font-size(32);
+    background-color: @extension-manager-title__background-color;
+    border-bottom: 1px solid @extension-manager-title__border-color;
+    color: @extension-manager-title__color;
+    font-weight: @font-weight__semibold;
+    line-height: 1.2;
+    padding: @indent__base;
+}
+
+.extension-manager-content {
+    &:extend(.abs-clearer all);
+    padding: @indent__m @indent__base @indent__base;
+}
+
+.extension-manager-items {
+    list-style: none;
+    margin: 0;
+    text-align: center;
+
+    .btn {
+        border: 1px solid @extension-manager-button__border-color;
+        display: block;
+        margin: @indent__s auto 0;
+    }
+
+    .item-title {
+        .lib-font-size(21);
+        display: inline-block;
+        text-align: left;
+    }
+
+    .item-number {
+        .lib-font-size(41);
+        display: inline-block;
+        line-height: .8;
+        margin: 0 5px 1.5rem 0;
+        vertical-align: top;
+    }
+
+    .item-date {
+        .lib-font-size(26);
+        margin-top: 1px;
+    }
+
+    .item-date-title {
+        .lib-font-size(15);
+    }
+
+    .item-install {
+        margin: 0 0 @indent__base;
+    }
+}

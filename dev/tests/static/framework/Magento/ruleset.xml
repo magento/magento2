@@ -1,10 +1,18 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <ruleset name="Magento">
-    <description>A custom coding standard.</description>
+    <description>Custom Magento coding standard.</description>
+    <rule ref="./../../../../../vendor/magento/magento-coding-standard/Magento2"/>
+
+    <!-- ToDo: Improve Annotation sniffs in magento/magento-coding-standard and remove from here. -->
+    <rule ref="Magento.Annotation">
+        <exclude-pattern>*/_files/*</exclude-pattern>
+        <exclude-pattern>*/Test/*</exclude-pattern>
+        <exclude-pattern>*Test.php</exclude-pattern>
+    </rule>
 </ruleset>

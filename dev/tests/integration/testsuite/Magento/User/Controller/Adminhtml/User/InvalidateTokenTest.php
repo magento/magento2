@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\User\Controller\Adminhtml\User;
 
@@ -13,6 +11,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for Magento\User\Controller\Adminhtml\User\InvalidateToken.
+ *
+ * @magentoAppArea adminhtml
  */
 class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -22,11 +22,11 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     public function testInvalidateSingleToken()
     {
         /** @var \Magento\Integration\Api\AdminTokenServiceInterface $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Api\AdminTokenServiceInterface');
+        $tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Api\AdminTokenServiceInterface::class);
         /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
-        $tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
+        $tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
         /** @var \Magento\User\Model\User $userModel */
-        $userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
 
         $adminUserNameFromFixture = 'adminUser';
         $tokenService->createAdminAccessToken(
@@ -39,7 +39,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
         $token = $tokenModel->loadByAdminId($adminUserId);
-        $this->assertEquals(1, $token->getRevoked());
+        $this->assertEquals(null, $token->getId());
     }
 
     /**
@@ -48,15 +48,15 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     public function testInvalidateMultipleTokens()
     {
         /** @var \Magento\Integration\Api\AdminTokenServiceInterface $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Api\AdminTokenServiceInterface');
+        $tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Api\AdminTokenServiceInterface::class);
 
         /** @var \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory $tokenModelCollectionFactory */
         $tokenModelCollectionFactory = Bootstrap::getObjectManager()->get(
-            'Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory'
+            \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory::class
         );
 
         /** @var \Magento\User\Model\User $userModel */
-        $userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
 
         $adminUserNameFromFixture = 'adminUser';
         $tokenService->createAdminAccessToken(
@@ -82,22 +82,18 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     /**
      * @magentoDataFixture Magento/User/_files/user_with_role.php
      */
-    public function testInvalidateToken_NoTokens()
+    public function testInvalidateTokenNoTokens()
     {
         /** @var \Magento\User\Model\User $userModel */
-        $userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
         $adminUserNameFromFixture = 'adminUser';
         $adminUserId = $userModel->loadByUsername($adminUserNameFromFixture)->getId();
         // invalidate token
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
-        $this->assertSessionMessages(
-            $this->equalTo(['This user has no tokens.']),
-            MessageInterface::TYPE_ERROR
-        );
     }
 
-    public function testInvalidateToken_NoUser()
+    public function testInvalidateTokenNoUser()
     {
         $this->dispatch('backend/admin/user/invalidateToken');
         $this->assertSessionMessages(
@@ -106,15 +102,11 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         );
     }
 
-    public function testInvalidateToken_InvalidUser()
+    public function testInvalidateTokenInvalidUser()
     {
         $adminUserId = 999;
         // invalidate token
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
-        $this->assertSessionMessages(
-            $this->equalTo(['This user has no tokens.']),
-            MessageInterface::TYPE_ERROR
-        );
     }
 }

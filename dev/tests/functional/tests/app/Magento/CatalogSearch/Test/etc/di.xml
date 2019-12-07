@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -42,11 +42,6 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSynonymOnFrontend">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessDeleteMessage">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
@@ -62,11 +57,6 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymNotOnFrontend">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
@@ -78,11 +68,6 @@
         </arguments>
     </type>
     <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymMassActionNotOnFrontend">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>

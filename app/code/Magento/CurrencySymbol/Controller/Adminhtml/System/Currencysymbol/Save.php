@@ -1,12 +1,16 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
-class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+/**
+ * Class Save
+ */
+class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol implements HttpPostActionInterface
 {
     /**
      * Save custom Currency symbol
@@ -19,17 +23,17 @@ class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencys
         if (is_array($symbolsDataArray)) {
             foreach ($symbolsDataArray as &$symbolsData) {
                 /** @var $filterManager \Magento\Framework\Filter\FilterManager */
-                $filterManager = $this->_objectManager->get('Magento\Framework\Filter\FilterManager');
+                $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
                 $symbolsData = $filterManager->stripTags($symbolsData);
             }
         }
 
         try {
-            $this->_objectManager->create('Magento\CurrencySymbol\Model\System\Currencysymbol')
+            $this->_objectManager->create(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
                 ->setCurrencySymbolsData($symbolsDataArray);
-            $this->messageManager->addSuccess(__('You applied the custom currency symbols.'));
+            $this->messageManager->addSuccessMessage(__('You applied the custom currency symbols.'));
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));

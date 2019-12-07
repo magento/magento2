@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,7 +12,7 @@
 
     <div class="product-item-inner">
         <div class="product-item-name-block">
-            <strong class="product-item-name" data-bind="text: $parent.name"></strong>
+            <strong class="product-item-name" data-bind="html: $parent.name"></strong>
             <div class="details-qty">
                 <span class="label"><!-- ko i18n: 'Qty' --><!-- /ko --></span>
                 <span class="value" data-bind="text: $parent.qty"></span>
@@ -43,3 +43,6 @@
     </div>
     <!-- /ko -->
 </div>
+<!-- ko foreach: getRegion('item_message') -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!-- /ko -->

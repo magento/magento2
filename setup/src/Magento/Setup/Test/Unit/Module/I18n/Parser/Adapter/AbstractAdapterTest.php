@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 
-class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
+class AbstractAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter|\PHPUnit_Framework_MockObject_MockObject
@@ -20,7 +20,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_adapterMock = $this->getMockForAbstractClass(
-            'Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter',
+            \Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter::class,
             [],
             '',
             false,
@@ -29,7 +29,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
             ['_parse']
         );
         $this->_adapterReflection = new \ReflectionMethod(
-            'Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter',
+            \Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter::class,
             '_addPhrase'
         );
         $this->_adapterReflection->setAccessible(true);

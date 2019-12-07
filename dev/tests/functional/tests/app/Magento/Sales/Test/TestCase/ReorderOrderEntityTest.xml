@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -16,7 +16,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">1,030.00</item>
+                <item name="grandTotal" xsi:type="string">1030.00</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="previousOrderStatus" xsi:type="string">Pending</data>

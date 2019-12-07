@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var $block Magento\Paypal\Block\Express\Shortcut
  */
 ?>
-<?php if ($block->getIsInCatalogProduct()): ?>
+<?php if ($block->getIsInCatalogProduct()) : ?>
     <input type="hidden" id="pp-checkout-url" name="return_url" value=""/>
 <?php endif; ?>

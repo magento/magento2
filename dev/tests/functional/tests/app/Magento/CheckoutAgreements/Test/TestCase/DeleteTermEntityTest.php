@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,14 +19,14 @@ use Magento\Mtf\TestCase\Scenario;
  * 3. Click on 'Delete' button.
  * 4. Perform all assertions.
  *
- * @group Terms_and_Conditions_(CS)
+ * @group Terms_and_Conditions
  * @ZephyrId MAGETWO-29687
  */
 class DeleteTermEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
+    const SEVERITY = 'S3';
     /* end tags */
 
     /**

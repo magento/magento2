@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 'use strict';
@@ -26,7 +26,9 @@ module.exports = {
     read: function (filePath) {
         console.log('Collect data from ' + filePath + ': Start!');
 
-        return glob.sync(filePath);
+        return glob.sync(filePath, {
+            symlinks:  true
+        });
     },
 
     arrayRead: function (pathArr, callback) {

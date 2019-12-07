@@ -2,14 +2,16 @@
 /**
  * Filesystem configuration loader. Loads configuration from XML files, split by scopes
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
+
 namespace Magento\Framework\Config\Reader;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Filesystem implements \Magento\Framework\Config\ReaderInterface
 {
@@ -68,6 +70,18 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
     protected $validationState;
 
     /**
+     * @var string
+     * @since 100.0.3
+     */
+    protected $_defaultScope;
+
+    /**
+     * @var string
+     * @since 100.0.3
+     */
+    protected $_schemaFile;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
@@ -86,7 +100,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName,
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'
     ) {
         $this->_fileResolver = $fileResolver;
@@ -139,7 +153,10 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
                 }
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
+                    new \Magento\Framework\Phrase(
+                        'The XML in file "%1" is invalid:' . "\n%2\nVerify the XML and try again.",
+                        [$key, $e->getMessage()]
+                    )
                 );
             }
         }

@@ -1,21 +1,43 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate
 
+/** @var $block \Magento\Checkout\Block\Total\DefaultTotal */
 ?>
 <tr class="totals">
-    <th colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="mark" scope="row">
-        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?><strong><?php endif; ?>
-            <?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>
-        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
+    <th
+            colspan="<?= $block->escapeHtmlAttr($block->getColspan()) ?>"
+            style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>"
+            class="mark" scope="row"
+    >
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
+            <strong>
+        <?php endif; ?>
+        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
+            </strong>
+        <?php endif; ?>
     </th>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
-        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?><strong><?php endif; ?>
-            <span><?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></span>
-        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
+    <td
+            style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>"
+            class="amount"
+            data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>"
+    >
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
+            <strong>
+        <?php endif; ?>
+            <span>
+                <?= $block->escapeHtml(
+                    $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()),
+                    ['span']
+                ) ?>
+            </span>
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
+            </strong>
+        <?php endif; ?>
     </td>
 </tr>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class AssertGridSorting extends AbstractConstraint
     public function processAssert(array $sortingResults)
     {
         foreach ($sortingResults as $columnName => $sortingResult) {
-            \PHPUnit_Framework_Assert::assertNotEquals(
+            \PHPUnit\Framework\Assert::assertNotEquals(
                 $sortingResult['firstIdAfterFirstSoring'],
                 $sortingResult['firstIdAfterSecondSoring'],
                 sprintf('Sorting for "%s" column have not changed the first item of grid!', $columnName)

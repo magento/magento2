@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateAnAdminOrderUsingBraintreePaymentTest1">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Creation an admin order using Braintree payment"/>
+            <title value="Create order using Braintree payment"/>
+            <description value="Admin should be able to create order using Braintree payment"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-93677"/>
+            <group value="braintree"/>
+            <skip>
+                <issueId value="MQE-1576"/>
+            </skip>
+        </annotations>
+
+
+        <before>
+            <!--Login As Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--CreateNewProduct-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!--Create New Customer-->
+            <createData stepKey="createCustomer" entity="Simple_US_Customer"/>
+        </before>
+
+
+        <!--Configure Braintree-->
+        <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
+
+        <!--Create New Role-->
+        <actionGroup ref="GoToUserRoles" stepKey="GoToUserRoles"/>
+        <waitForPageLoad stepKey="waitForAllRoles" time="15"/>
+        <actionGroup ref="AdminCreateNewRole" stepKey="AdminCreateNewRole"/>
+
+        <!--Create new admin user-->
+        <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
+        <waitForPageLoad stepKey="waitForUsers" time="15"/>
+        <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
+
+        <!--SignOut-->
+        <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
+
+        <!--Log in as new user-->
+        <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
+        <waitForPageLoad stepKey="waitForLogin" time="3"/>
+
+        <!--Create New Order-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <!--Add Product to Order-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!--Fill Order Customer Information-->
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!--Select Shipping-->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <waitForPageLoad stepKey="waitForShippingToFinish"/>
+
+        <!--Pay with Braintree -->
+        <actionGroup ref="useBraintreeForMasterCard" stepKey="selectCardWithBraintree"/>
+
+        <!--Submit Order-->
+        <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
+        <waitForPageLoad stepKey="waitForSaveConfig"/>
+        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+
+        <after>
+            <!-- Disable BrainTree -->
+            <actionGroup ref="DisableBrainTree" stepKey="disableBrainTree"/>
+
+            <!--SignOut-->
+            <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Delete Product-->
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+
+            <!--Delete Customer-->
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+
+            <!--Delete User -->
+            <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
+
+            <!--Delete Role-->
+            <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
+        </after>
+    </test>
+</tests>

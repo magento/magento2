@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
@@ -18,8 +18,8 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
     public function __construct($mapper = '')
     {
         $this->mapperInterfaceName =
-            $mapper ?: 'Magento\CatalogInventory\Model\ResourceModel\Stock\StockCriteriaMapper';
-        $this->data['initial_condition'] = true;
+            $mapper ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\StockCriteriaMapper::class;
+        $this->data['initial_condition'] = [true];
     }
 
     /**
@@ -27,7 +27,7 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
      */
     public function setScopeFilter($scope)
     {
-        $this->data['website_filter'] = $scope;
+        $this->data['website_filter'] = [$scope];
         return true;
     }
 

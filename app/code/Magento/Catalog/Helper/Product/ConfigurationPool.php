@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class ConfigurationPool
 {
     /**
@@ -47,7 +51,7 @@ class ConfigurationPool
             ) {
                 throw new \LogicException(
                     "{$className} doesn't implement " .
-                    "\\Magento\\Catalog\\Helper\\Product\\Configuration\\ConfigurationInterface"
+                    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface::class
                 );
             }
             $this->_instances[$className] = $helperInstance;

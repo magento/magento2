@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer\Attribute\Source;
@@ -12,7 +12,7 @@ use Magento\Customer\Api\GroupManagementInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
+class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table implements GroupSourceLoggedInOnlyInterface
 {
     /**
      * @var GroupManagementInterface
@@ -42,14 +42,23 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function getAllOptions()
+    public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
         if (!$this->_options) {
             $groups = $this->_groupManagement->getLoggedInGroups();
+
             $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
+
+            array_walk(
+                $this->_options,
+                function (&$item) {
+                    $item['__disableTmpl'] = true;
+                }
+            );
         }
+
         return $this->_options;
     }
 }

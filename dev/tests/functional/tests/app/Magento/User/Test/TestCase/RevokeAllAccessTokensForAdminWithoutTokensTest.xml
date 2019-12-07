@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -9,7 +9,7 @@
     <testCase name="Magento\User\Test\TestCase\RevokeAllAccessTokensForAdminWithoutTokensTest" summary="Revoke All Access Tokens for Admin without Tokens" ticketId="MAGETWO-29675">
         <variation name="RevokeAllAccessTokensForAdminWithoutTokensTestVariation1">
             <data name="user/dataset" xsi:type="string">custom_admin</data>
-            <constraint name="Magento\User\Test\Constraint\AssertAccessTokensErrorRevokeMessage" />
+            <constraint name="Magento\User\Test\Constraint\AssertAccessTokensSuccessfullyRevoked" />
         </variation>
     </testCase>
 </config>

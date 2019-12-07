@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Code\GeneratedFiles;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Module\Status;
+use Magento\Framework\Console\Cli;
 
 abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 {
@@ -16,6 +21,16 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      */
     const INPUT_KEY_ALL = 'all';
     const INPUT_KEY_FORCE = 'force';
+
+    /**
+     * @var GeneratedFiles
+     */
+    protected $generatedFiles;
+
+    /**
+     * @var DeploymentConfig
+     */
+    protected $deploymentConfig;
 
     /**
      * {@inheritdoc}
@@ -54,7 +69,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         $isEnable = $this->isEnable();
         if ($input->getOption(self::INPUT_KEY_ALL)) {
             /** @var \Magento\Framework\Module\FullModuleList $fullModulesList */
-            $fullModulesList = $this->objectManager->get('Magento\Framework\Module\FullModuleList');
+            $fullModulesList = $this->objectManager->get(\Magento\Framework\Module\FullModuleList::class);
             $modules = $fullModulesList->getNames();
         } else {
             $modules = $input->getArgument(self::INPUT_KEY_MODULES);
@@ -62,45 +77,32 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         $messages = $this->validate($modules);
         if (!empty($messages)) {
             $output->writeln(implode(PHP_EOL, $messages));
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return Cli::RETURN_FAILURE;
         }
-        /**
-         * @var \Magento\Framework\Module\Status $status
-         */
-        $status = $this->objectManager->get('Magento\Framework\Module\Status');
         try {
-            $modulesToChange = $status->getModulesToChange($isEnable, $modules);
+            $modulesToChange = $this->getStatus()->getModulesToChange($isEnable, $modules);
         } catch (\LogicException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return Cli::RETURN_FAILURE;
         }
         if (!empty($modulesToChange)) {
             $force = $input->getOption(self::INPUT_KEY_FORCE);
             if (!$force) {
-                $constraints = $status->checkConstraints($isEnable, $modulesToChange);
+                $constraints = $this->getStatus()->checkConstraints($isEnable, $modulesToChange);
                 if ($constraints) {
                     $output->writeln(
                         "<error>Unable to change status of modules because of the following constraints:</error>"
                     );
                     $output->writeln('<error>' . implode("</error>\n<error>", $constraints) . '</error>');
-                    return;
+                    // we must have an exit code higher than zero to indicate something was wrong
+                    return Cli::RETURN_FAILURE;
                 }
             }
-            $status->setIsEnabled($isEnable, $modulesToChange);
-            if ($isEnable) {
-                $output->writeln('<info>The following modules have been enabled:</info>');
-                $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
-                $output->writeln('');
-                $output->writeln(
-                    '<info>To make sure that the enabled modules are properly registered,'
-                    . " run 'setup:upgrade'.</info>"
-                );
-            } else {
-                $output->writeln('<info>The following modules have been disabled:</info>');
-                $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
-                $output->writeln('');
-            }
+            $this->setIsEnabled($isEnable, $modulesToChange, $output);
             $this->cleanup($input, $output);
+            $this->getGeneratedFiles()->requestRegeneration();
             if ($force) {
                 $output->writeln(
                     '<error>Alert: You used the --force option.'
@@ -110,6 +112,45 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         } else {
             $output->writeln('<info>No modules were changed.</info>');
         }
+        return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Enable/disable modules
+     *
+     * @param bool $isEnable
+     * @param string[] $modulesToChange
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function setIsEnabled($isEnable, $modulesToChange, $output)
+    {
+        $this->getStatus()->setIsEnabled($isEnable, $modulesToChange);
+        if ($isEnable) {
+            $output->writeln('<info>The following modules have been enabled:</info>');
+            $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
+            $output->writeln('');
+            if ($this->getDeploymentConfig()->isAvailable()) {
+                $output->writeln(
+                    '<info>To make sure that the enabled modules are properly registered,'
+                    . " run 'setup:upgrade'.</info>"
+                );
+            }
+        } else {
+            $output->writeln('<info>The following modules have been disabled:</info>');
+            $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
+            $output->writeln('');
+        }
+    }
+
+    /**
+     * Get module status
+     *
+     * @return Status
+     */
+    private function getStatus()
+    {
+        return $this->objectManager->get(Status::class);
     }
 
     /**
@@ -134,4 +175,32 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * @return bool
      */
     abstract protected function isEnable();
+
+    /**
+     * Get deployment config
+     *
+     * @return DeploymentConfig
+     * @deprecated 2.0.6
+     */
+    private function getDeploymentConfig()
+    {
+        if (!($this->deploymentConfig instanceof DeploymentConfig)) {
+            return $this->objectManager->get(DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
+    }
+
+    /**
+     * Get deployment config
+     *
+     * @return GeneratedFiles
+     * @deprecated 2.1.0
+     */
+    private function getGeneratedFiles()
+    {
+        if (!($this->generatedFiles instanceof GeneratedFiles)) {
+            return $this->objectManager->get(GeneratedFiles::class);
+        }
+        return $this->generatedFiles;
+    }
 }

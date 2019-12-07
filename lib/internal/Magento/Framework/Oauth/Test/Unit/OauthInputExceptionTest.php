@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Oauth\Test\Unit;
 
 use \Magento\Framework\Oauth\OauthInputException;
 use Magento\Framework\Phrase;
 
-class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
+class OauthInputExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void
@@ -17,12 +18,14 @@ class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new OauthInputException();
         foreach (['field1', 'field2'] as $param) {
-            $exception->addError(new Phrase(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]));
+            $exception->addError(
+                new Phrase('"%fieldName" is required. Enter and try again.', ['fieldName' => $param])
+            );
         }
         $exception->addError(new Phrase('Message with period.'));
 
         $this->assertEquals(
-            'field1 is a required field, field2 is a required field, Message with period',
+            '"field1" is required. Enter and try again, "field2" is required. Enter and try again, Message with period',
             $exception->getAggregatedErrorMessage()
         );
     }

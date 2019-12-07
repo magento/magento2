@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Api\Data;
@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api\Data;
  * Interface ConditionInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -27,7 +28,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setConditionType($conditionType);
-
 
     /**
      * Return list of conditions

@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\ImportExport\Helper;
 
 /**
  * ImportExport data helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -24,9 +23,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\File\Size
-     */
+    /**#@-*/
     protected $_fileSize;
 
     /**
@@ -66,7 +63,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getLocalValidPaths()
     {
-        $paths = $this->scopeConfig->getValue(self::XML_PATH_EXPORT_LOCAL_VALID_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $paths = $this->scopeConfig->getValue(
+            self::XML_PATH_EXPORT_LOCAL_VALID_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return $paths;
     }
 
@@ -77,6 +77,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBunchSize()
     {
-        return (int)$this->scopeConfig->getValue(self::XML_PATH_BUNCH_SIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (int)$this->scopeConfig->getValue(
+            self::XML_PATH_BUNCH_SIZE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,8 +9,18 @@
     <type name="Magento\Checkout\Block\Cart\LayoutProcessor">
         <plugin name="checkout_cart_shipping_dhl" type="Magento\Dhl\Model\Plugin\Checkout\Block\Cart\Shipping"/>
     </type>
-    <type name="Magento\Rma\Block\Adminhtml\Rma\Edit\Tab\General\Shippingmethod">
-        <plugin name="rma_tab_shippingmethod_dhl"
-                type="Magento\Dhl\Model\Plugin\Rma\Block\Adminhtml\Rma\Edit\Tab\General\Shippingmethod"/>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="carriers/dhl/account" xsi:type="string">1</item>
+                <item name="carriers/dhl/gateway_url" xsi:type="string">1</item>
+                <item name="carriers/dhl/id" xsi:type="string">1</item>
+                <item name="carriers/dhl/password" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="carriers/dhl/debug" xsi:type="string">1</item>
+                <item name="carriers/dhl/gateway_url" xsi:type="string">1</item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Delete User" button
  * 5. Perform all assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-23416
  */
 class DeleteAdminUserEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -102,11 +101,13 @@ class DeleteAdminUserEntityTest extends Injectable
      *
      * @param User $user
      * @param string $isDefaultUser
+     * @param User $systemAdmin
      * @return void
      */
     public function testDeleteAdminUserEntity(
         User $user,
-        $isDefaultUser
+        $isDefaultUser,
+        User $systemAdmin = null
     ) {
         $filter = [
             'username' => $user->getUsername(),
@@ -116,9 +117,12 @@ class DeleteAdminUserEntityTest extends Injectable
             $this->adminAuthLogin->open();
             $this->adminAuthLogin->getLoginBlock()->fill($user);
             $this->adminAuthLogin->getLoginBlock()->submit();
+            $this->adminAuthLogin->waitForHeaderBlock();
+            $this->adminAuthLogin->dismissAdminUsageNotification();
         }
         $this->userIndex->open();
         $this->userIndex->getUserGrid()->searchAndOpen($filter);
+        $this->userEdit->getUserForm()->fill($systemAdmin);
         $this->userEdit->getPageActions()->delete();
         $this->userEdit->getModalBlock()->acceptAlert();
     }

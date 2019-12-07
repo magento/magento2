@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Test\Block\Product;
 
 use Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
+use Magento\Mtf\Client\Locator;
+use Magento\ConfigurableProduct\Test\Block\Product\Price;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -18,6 +18,23 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class View extends \Magento\Catalog\Test\Block\Product\View
 {
     /**
+     * Gets a configurable product price block.
+     *
+     * @param FixtureInterface|null $product
+     *
+     * @return Price
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getPriceBlock(FixtureInterface $product = null)
+    {
+        return $this->blockFactory->create(
+            Price::class,
+            ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
+        );
+    }
+
+    /**
      * Get configurable options block
      *
      * @return ConfigurableOptions
@@ -25,7 +42,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     public function getConfigurableOptionsBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions',
+            \Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions::class,
             ['element' => $this->_rootElement]
         );
     }
@@ -78,6 +95,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     {
         $options = [
             'configurable_options' => $this->getConfigurableOptionsBlock()->getOptions($product),
+            'matrix' => $this->getConfigurableOptionsBlock()->getOptionsPrices($product)
         ];
         $options += parent::getOptions($product);
 

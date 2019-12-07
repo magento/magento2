@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<div class="block <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>">
-    <div class="block-title <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>-title"><strong><?php /* @escapeNotVerified */ echo $block->getBlockTitle(); ?></strong></div>
-    <div class="block-content <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>-content">
-        <?php echo $block->getChildHtml(); ?>
+<div class="block <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>">
+    <div class="block-title <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-title">
+        <strong><?= $block->escapeHtml($block->getBlockTitle()) ?></strong>
+    </div>
+    <div class="block-content <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-content">
+        <?= $block->getChildHtml() ?>
     </div>
 </div>

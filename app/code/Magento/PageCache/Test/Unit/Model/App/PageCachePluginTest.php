@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\App\PageCachePlugin;
 use Magento\PageCache\Model\Cache\Type;
 
-class PageCachePluginTest extends \PHPUnit_Framework_TestCase
+class PageCachePluginTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PageCachePlugin */
     private $plugin;
@@ -18,10 +18,10 @@ class PageCachePluginTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\PageCache\Cache*/
     private $subjectMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->plugin = (new ObjectManager($this))->getObject('\Magento\PageCache\Model\App\PageCachePlugin');
-        $this->subjectMock = $this->getMockBuilder('\Magento\Framework\App\PageCache\Cache')
+        $this->plugin = (new ObjectManager($this))->getObject(\Magento\PageCache\Model\App\PageCachePlugin::class);
+        $this->subjectMock = $this->getMockBuilder(\Magento\Framework\App\PageCache\Cache::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -57,6 +57,9 @@ class PageCachePluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($data, $this->plugin->afterLoad($this->subjectMock, $initResult));
     }
 
+    /**
+     * @return array
+     */
     public function afterSaveDataProvider()
     {
         return [

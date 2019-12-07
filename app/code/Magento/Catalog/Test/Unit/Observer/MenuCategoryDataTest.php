@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MenuCategoryDataTest extends \PHPUnit_Framework_TestCase
+class MenuCategoryDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Observer\MenuCategoryData
@@ -37,31 +35,28 @@ class MenuCategoryDataTest extends \PHPUnit_Framework_TestCase
      */
     protected $_categoryFlatState;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_catalogCategory = $this->getMock(
-            '\Magento\Catalog\Helper\Category',
-            ['getStoreCategories', 'getCategoryUrl'],
-            [],
-            '',
-            false
+        $this->_catalogCategory = $this->createPartialMock(
+            \Magento\Catalog\Helper\Category::class,
+            ['getStoreCategories', 'getCategoryUrl']
         );
 
-        $layerResolver = $this->getMock('Magento\Catalog\Model\Layer\Resolver', [], [], '', false);
+        $layerResolver = $this->createMock(\Magento\Catalog\Model\Layer\Resolver::class);
         $layerResolver->expects($this->once())->method('get')->willReturn(null);
         $this->_observer = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Observer\MenuCategoryData',
+            \Magento\Catalog\Observer\MenuCategoryData::class,
             [
                 'layerResolver' => $layerResolver,
                 'catalogCategory' => $this->_catalogCategory,
-                'catalogData' => $this->getMock('\Magento\Catalog\Helper\Data', [], [], '', false),
+                'catalogData' => $this->createMock(\Magento\Catalog\Helper\Data::class),
             ]
         );
     }
 
     public function testGetMenuCategoryData()
     {
-        $category = $this->getMock('Magento\Catalog\Model\Category', ['getId', 'getName'], [], '', false);
+        $category = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getId', 'getName']);
         $category->expects($this->once())->method('getId')->willReturn('id');
         $category->expects($this->once())->method('getName')->willReturn('name');
         $this->_catalogCategory->expects($this->once())->method('getCategoryUrl')->willReturn('url');

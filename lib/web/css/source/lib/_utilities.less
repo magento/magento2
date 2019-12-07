@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -57,6 +57,7 @@
         content: '';
         display: table;
     }
+
     &:after {
         clear: both;
     }
@@ -259,9 +260,8 @@
     @_line-height: normal
 ) {
     .lib-font-size(@_font-size);
-    font-size: @_font-size;
+    .lib-line-height(@_line-height);
     letter-spacing: normal;
-    line-height: @_line-height;
 }
 
 //
@@ -352,28 +352,28 @@
     @_position,
     @_color
 ) when (@_position = left) {
-    border-right-color: @_color;
+    .lib-css(border-right-color, @_color);
 }
 
 ._lib-abbor_el(
     @_position,
     @_color
 ) when (@_position = right) {
-    border-left-color: @_color;
+    .lib-css(border-left-color, @_color);
 }
 
 ._lib-abbor_el(
     @_position,
     @_color
 ) when (@_position = up) {
-    border-bottom-color: @_color;
+    .lib-css(border-bottom-color, @_color);
 }
 
 ._lib-abbor_el(
     @_position,
     @_color
 ) when (@_position = down) {
-    border-top-color: @_color;
+    .lib-css(border-top-color, @_color);
 }
 
 //
@@ -385,20 +385,23 @@
     @_input-placeholder-font-weight: @form-element-input__font-weight
 ) {
     &::-webkit-input-placeholder {
-        color: @_input-placeholder-color;
-        font-weight: @_input-placeholder-font-weight;
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
     }
+
     &:-moz-placeholder {
-        color: @_input-placeholder-color;
-        font-weight: @_input-placeholder-font-weight;
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
     }
+
     &::-moz-placeholder {
-        color: @_input-placeholder-color;
-        font-weight: @_input-placeholder-font-weight;
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
     }
+
     &:-ms-input-placeholder {
-        color: @_input-placeholder-color;
-        font-weight: @_input-placeholder-font-weight;
+        .lib-css(color, @_input-placeholder-color);
+        .lib-css(font-weight, @_input-placeholder-font-weight);
     }
 }
 
@@ -505,6 +508,7 @@
         height: 0;
         border-bottom-style: solid;
     }
+
     &:before {
         .lib-css(@_position__horizontal, @_position__horizontal__value);
         .lib-css(@_position__vertical, @_position__vertical__value);
@@ -512,6 +516,7 @@
         .lib-css(border-color, transparent transparent @_background-color transparent);
         .lib-css(z-index, @_z-index);
     }
+
     &:after {
         .lib-css(@_position__horizontal, @_position__horizontal__value - 1);
         .lib-css(@_position__vertical, @_position__vertical__value - 2);

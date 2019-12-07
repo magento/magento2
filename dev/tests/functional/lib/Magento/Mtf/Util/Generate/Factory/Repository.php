@@ -1,10 +1,8 @@
 <?php
 /**
- * @api
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Mtf\Util\Generate\Factory;
 
 /**
@@ -12,6 +10,7 @@ namespace Magento\Mtf\Util\Generate\Factory;
  *
  * Repository Factory generator
  *
+ * @api
  */
 class Repository extends AbstractFactory
 {
@@ -56,7 +55,8 @@ class Repository extends AbstractFactory
             $this->factoryContent .= "\n";
         }
 
-        $this->factoryContent .= "        return \$this->objectManager->create('{$realClass}', "
+        $this->factoryContent .= "        return \$this->objectManager->create(
+            {$realClass}::class, "
             . "array('defaultConfig' => \$defaultConfig, 'defaultData' => \$defaultData));\n";
         $this->factoryContent .= "    }\n";
 

@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use \Magento\Sales\Model\Order\CreditmemoNotifier;
-
 use Magento\Framework\Exception\MailException;
+
+use Magento\Sales\Model\Order\CreditmemoNotifier;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 
 /**
  * Class CreditmemoNotifierTest
  */
-class CreditmemoNotifierTest extends \PHPUnit_Framework_TestCase
+class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionFactory |\PHPUnit_Framework_MockObject_MockObject
@@ -41,30 +41,21 @@ class CreditmemoNotifierTest extends \PHPUnit_Framework_TestCase
      */
     protected $creditmemoSenderMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->historyCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->historyCollectionFactory = $this->createPartialMock(
+            \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory::class,
+            ['create']
         );
-        $this->creditmemo = $this->getMock(
-            'Magento\Sales\Model\Order\Creditmemo',
-            ['__wakeUp', 'getEmailSent'],
-            [],
-            '',
-            false
+        $this->creditmemo = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Creditmemo::class,
+            ['__wakeUp', 'getEmailSent']
         );
-        $this->creditmemoSenderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender\CreditmemoSender',
-            ['send'],
-            [],
-            '',
-            false
+        $this->creditmemoSenderMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender::class,
+            ['send']
         );
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->notifier = new CreditmemoNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -77,19 +68,13 @@ class CreditmemoNotifierTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotifySuccess()
     {
-        $historyCollection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\History\Collection',
-            ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified'],
-            [],
-            '',
-            false
+        $historyCollection = $this->createPartialMock(
+            \Magento\Sales\Model\ResourceModel\Order\Status\History\Collection::class,
+            ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified']
         );
-        $historyItem = $this->getMock(
-            'Magento\Sales\Model\Order\Status\History',
-            ['setIsCustomerNotified', 'save', '__wakeUp'],
-            [],
-            '',
-            false
+        $historyItem = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Status\History::class,
+            ['setIsCustomerNotified', 'save', '__wakeUp']
         );
         $historyItem->expects($this->at(0))
             ->method('setIsCustomerNotified')

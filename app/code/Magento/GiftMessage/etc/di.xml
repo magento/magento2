@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -27,5 +27,14 @@
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
         <plugin name="save_gift_message" type="Magento\GiftMessage\Model\Plugin\OrderSave"/>
         <plugin name="get_gift_message" type="Magento\GiftMessage\Model\Plugin\OrderGet"/>
+    </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="gift_message_available" xsi:type="string">catalog_product</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
 </config>

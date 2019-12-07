@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
@@ -34,17 +34,26 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-        $helper = $this->_objectManager->get('Magento\Cms\Helper\Wysiwyg\Images');
-        $storeId = $this->getRequest()->getParam('store');
+        $imagesHelper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $request = $this->getRequest();
 
-        $filename = $this->getRequest()->getParam('filename');
-        $filename = $helper->idDecode($filename);
-        $asIs = $this->getRequest()->getParam('as_is');
+        $storeId = $request->getParam('store');
 
-        $this->_objectManager->get('Magento\Catalog\Helper\Data')->setStoreId($storeId);
-        $helper->setStoreId($storeId);
+        $filename = $request->getParam('filename');
+        $filename = $imagesHelper->idDecode($filename);
 
-        $image = $helper->getImageHtmlDeclaration($filename, $asIs);
+        $asIs = $request->getParam('as_is');
+
+        $forceStaticPath = $request->getParam('force_static_path');
+
+        $this->_objectManager->get(\Magento\Catalog\Helper\Data::class)->setStoreId($storeId);
+        $imagesHelper->setStoreId($storeId);
+
+        if ($forceStaticPath) {
+            $image = parse_url($imagesHelper->getCurrentUrl() . $filename, PHP_URL_PATH);
+        } else {
+            $image = $imagesHelper->getImageHtmlDeclaration($filename, $asIs);
+        }
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();

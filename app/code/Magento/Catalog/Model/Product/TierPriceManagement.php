@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,8 +12,11 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\TemporaryStateExceptionInterface;
 
 /**
+ * Product tier price management
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManagementInterface
@@ -81,14 +84,14 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function add($sku, $customerGroupId, $price, $qty)
     {
         if (!\Zend_Validate::is($price, 'Float') || $price <= 0 || !\Zend_Validate::is($qty, 'Float') || $qty <= 0) {
-            throw new InputException(__('Please provide valid data'));
+            throw new InputException(__('The data was invalid. Verify the data and try again.'));
         }
         $product = $this->productRepository->get($sku, ['edit_mode' => true]);
         $tierPrices = $product->getData('tier_price');
@@ -131,19 +134,23 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         if (is_array($errors) && count($errors)) {
             $errorAttributeCodes = implode(', ', array_keys($errors));
             throw new InputException(
-                __('Values of following attributes are invalid: %1', $errorAttributeCodes)
+                __('Values in the %1 attributes are invalid. Verify the values and try again.', $errorAttributeCodes)
             );
         }
         try {
             $this->productRepository->save($product);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save group price'));
+            if ($e instanceof TemporaryStateExceptionInterface) {
+                // temporary state exception must be already localized
+                throw $e;
+            }
+            throw new CouldNotSaveException(__("The group price couldn't be saved."));
         }
         return true;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($sku, $customerGroupId, $qty)
     {
@@ -158,7 +165,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku, $customerGroupId)
     {
@@ -175,16 +182,19 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
             : $customerGroupId);
 
         $prices = [];
-        foreach ($product->getData('tier_price') as $price) {
-            if ((is_numeric($customerGroupId) && intval($price['cust_group']) === intval($customerGroupId))
-                || ($customerGroupId === 'all' && $price['all_groups'])
-            ) {
-                /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
-                $tierPrice = $this->priceFactory->create();
-                $tierPrice->setValue($price[$priceKey])
-                    ->setQty($price['price_qty'])
-                    ->setCustomerGroupId($cgi);
-                $prices[] = $tierPrice;
+        $tierPrices = $product->getData('tier_price');
+        if ($tierPrices !== null) {
+            foreach ($tierPrices as $price) {
+                if ((is_numeric($customerGroupId) && (int) $price['cust_group'] === (int) $customerGroupId)
+                    || ($customerGroupId === 'all' && $price['all_groups'])
+                ) {
+                    /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
+                    $tierPrice = $this->priceFactory->create();
+                    $tierPrice->setValue($price[$priceKey])
+                        ->setQty($price['price_qty'])
+                        ->setCustomerGroupId($cgi);
+                    $prices[] = $tierPrice;
+                }
             }
         }
         return $prices;

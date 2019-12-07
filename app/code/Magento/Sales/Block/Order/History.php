@@ -1,19 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
 
+use \Magento\Framework\App\ObjectManager;
+use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
+
 /**
  * Sales order history block
+ *
+ * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'order/history.phtml';
+    protected $_template = 'Magento_Sales::order/history.phtml';
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
@@ -30,8 +36,15 @@ class History extends \Magento\Framework\View\Element\Template
      */
     protected $_orderConfig;
 
-    /** @var \Magento\Sales\Model\ResourceModel\Order\Collection */
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
+     */
     protected $orders;
+
+    /**
+     * @var CollectionFactoryInterface
+     */
+    private $orderCollectionFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -54,7 +67,7 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function _construct()
     {
@@ -63,6 +76,22 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Provide order collection factory
+     *
+     * @return CollectionFactoryInterface
+     * @deprecated 100.1.1
+     */
+    private function getOrderCollectionFactory()
+    {
+        if ($this->orderCollectionFactory === null) {
+            $this->orderCollectionFactory = ObjectManager::getInstance()->get(CollectionFactoryInterface::class);
+        }
+        return $this->orderCollectionFactory;
+    }
+
+    /**
+     * Get customer orders
+     *
      * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getOrders()
@@ -71,11 +100,8 @@ class History extends \Magento\Framework\View\Element\Template
             return false;
         }
         if (!$this->orders) {
-            $this->orders = $this->_orderCollectionFactory->create()->addFieldToSelect(
+            $this->orders = $this->getOrderCollectionFactory()->create($customerId)->addFieldToSelect(
                 '*'
-            )->addFieldToFilter(
-                'customer_id',
-                $customerId
             )->addFieldToFilter(
                 'status',
                 ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
@@ -88,14 +114,14 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
         if ($this->getOrders()) {
             $pager = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
+                \Magento\Theme\Block\Html\Pager::class,
                 'sales.order.history.pager'
             )->setCollection(
                 $this->getOrders()
@@ -107,6 +133,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Pager child block output
+     *
      * @return string
      */
     public function getPagerHtml()
@@ -115,6 +143,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order view URL
+     *
      * @param object $order
      * @return string
      */
@@ -124,15 +154,23 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order track URL
+     *
      * @param object $order
      * @return string
+     * @deprecated Action does not exist
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)
     {
-        return $this->getUrl('sales/order/track', ['order_id' => $order->getId()]);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+        return '';
     }
 
     /**
+     * Get reorder URL
+     *
      * @param object $order
      * @return string
      */
@@ -142,6 +180,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer account URL
+     *
      * @return string
      */
     public function getBackUrl()

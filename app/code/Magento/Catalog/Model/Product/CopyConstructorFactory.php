@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -30,7 +30,7 @@ class CopyConstructorFactory
      */
     public function create($instance, array $arguments = [])
     {
-        if (!is_subclass_of($instance, '\Magento\Catalog\Model\Product\CopyConstructorInterface')) {
+        if (!is_subclass_of($instance, \Magento\Catalog\Model\Product\CopyConstructorInterface::class)) {
             throw new \InvalidArgumentException(
                 $instance . ' does not implement \Magento\Catalog\Model\Product\CopyConstructorInterface'
             );

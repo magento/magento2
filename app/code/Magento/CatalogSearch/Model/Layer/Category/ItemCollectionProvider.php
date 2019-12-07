@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Category;
@@ -9,6 +9,9 @@ namespace Magento\CatalogSearch\Model\Layer\Category;
 use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
+/**
+ * Catalog search category layer collection provider.
+ */
 class ItemCollectionProvider implements ItemCollectionProviderInterface
 {
     /**
@@ -25,8 +28,7 @@ class ItemCollectionProvider implements ItemCollectionProviderInterface
     }
 
     /**
-     * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @inheritdoc
      */
     public function getCollection(\Magento\Catalog\Model\Category $category)
     {

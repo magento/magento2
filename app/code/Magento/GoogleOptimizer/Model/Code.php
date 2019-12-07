@@ -1,13 +1,13 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\GoogleOptimizer\Model;
 
 /**
- * Google Experiment Code Model
+ * Google Experiment Code model
  *
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- * @method \Magento\GoogleOptimizer\Model\ResourceModel\Code _getResource()
- * @method \Magento\GoogleOptimizer\Model\ResourceModel\Code getResource()
  * @method \Magento\GoogleOptimizer\Model\Code setEntityId(int $value)
  * @method string getEntityId()
  * @method \Magento\GoogleOptimizer\Model\Code setEntityType(string $value)
@@ -16,6 +16,8 @@ namespace Magento\GoogleOptimizer\Model;
  * @method int getStoreId()
  * @method \Magento\GoogleOptimizer\Model\Code setExperimentScript(int $value)
  * @method string getExperimentScript()
+ * @api
+ * @since 100.0.2
  */
 class Code extends \Magento\Framework\Model\AbstractModel
 {
@@ -30,9 +32,7 @@ class Code extends \Magento\Framework\Model\AbstractModel
 
     /**#@-*/
 
-    /**
-     * @var bool
-     */
+    /**#@-*/
     protected $_validateEntryFlag = false;
 
     /**
@@ -42,7 +42,7 @@ class Code extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\GoogleOptimizer\Model\ResourceModel\Code');
+        $this->_init(\Magento\GoogleOptimizer\Model\ResourceModel\Code::class);
     }
 
     /**

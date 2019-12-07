@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CmsNewBlockBlockActionsSection">
+        <element name="savePage" type="button" selector="#save-button" timeout="30"/>
+    </section>
+    <section name="BlockNewPagePageActionsSection">
+        <element name="saveBlock" type="button" selector="#save-button" timeout="10"/>
+        <element name="saveAndContinueEdit" type="button" selector="#save-button" timeout="10"/>
+        <element name="saveAndDuplicate" type="button" selector="#save_and_duplicate" timeout="10"/>
+        <element name="saveAndClose" type="button" selector="#save_and_close" timeout="10"/>
+        <element name="expandSplitButton" type="button" selector="//button[@data-ui-id='save-button-dropdown']" timeout="10"/>
+        <element name="back" type="button" selector="#back"/>
+    </section>
+    <section name="BlockWYSIWYGSection">
+        <element name="ShowHideBtn" type="button" selector="#togglecms_block_form_content"/>
+    </section>
+    <section name="BlockContentSection">
+        <element name="TextArea" type="input" selector="#cms_block_form_content"/>
+        <element name="image" type="file" selector="#tinymce img"/>
+        <element name="contentIframe" type="iframe" selector="cms_block_form_content_ifr"/>
+    </section>
+    <section name="CmsBlockBlockActionSection">
+        <element name="deleteBlock" type="button" selector="#delete" timeout="30"/>
+        <element name="deleteConfirm" type="button" selector=".action-primary.action-accept" timeout="60"/>
+    </section>
+</sections>

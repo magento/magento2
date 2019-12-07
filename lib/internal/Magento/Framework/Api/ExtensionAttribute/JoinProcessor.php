@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Api\ExtensionAttribute;
 
 use Magento\Framework\Api\ExtensionAttribute\Config;
-use Magento\Framework\Api\ExtensionAttribute\Config\Converter as Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -25,13 +25,19 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      */
     protected $objectManager;
 
-    /** @var TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     private $typeProcessor;
 
-    /** @var ExtensionAttributesFactory */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     */
     private $extensionAttributesFactory;
 
-    /** @var JoinProcessorHelper */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorHelper
+     */
     private $joinProcessorHelper;
 
     /**
@@ -55,7 +61,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(DbCollection $collection, $extensibleEntityClass = null)
     {
@@ -89,7 +95,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractExtensionAttributes($extensibleEntityClass, array $data)
     {
@@ -121,10 +127,9 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      *
      * @param string $attributeCode
      * @param array $directive
-     * @param array &$data
-     * @param array &$extensionData
+     * @param array $data
+     * @param array $extensionData
      * @param string $extensibleEntityClass
-     * @return void
      */
     private function populateAttributeCodeWithDirective(
         $attributeCode,

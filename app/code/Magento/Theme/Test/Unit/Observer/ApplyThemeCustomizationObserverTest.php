@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Unit\Observer;
 
-class ApplyThemeCustomizationObserverTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -35,20 +38,8 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->themeCustomization = $this->getMock(
-            'Magento\Framework\View\Design\Theme\Customization',
-            [],
-            [],
-            '',
-            false
-        );
-        $themeMock = $this->getMock(
-            'Magento\Theme\Model\Theme',
-            ['__wakeup', 'getCustomization'],
-            [],
-            '',
-            false
-        );
+        $this->themeCustomization = $this->createMock(\Magento\Framework\View\Design\Theme\Customization::class);
+        $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getCustomization']);
         $themeMock->expects(
             $this->any()
         )->method(
@@ -57,25 +48,18 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->themeCustomization)
         );
 
-        $designMock = $this->getMock('Magento\Framework\View\DesignInterface');
+        $designMock = $this->createMock(\Magento\Framework\View\DesignInterface::class);
         $designMock->expects($this->any())->method('getDesignTheme')->will($this->returnValue($themeMock));
 
-        $this->assetsMock = $this->getMock(
-            'Magento\Framework\View\Asset\GroupedCollection',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->assetsMock = $this->createMock(\Magento\Framework\View\Asset\GroupedCollection::class);
 
-        $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
 
-        $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->themeObserver = $objectManagerHelper->getObject(
-            'Magento\Theme\Observer\ApplyThemeCustomizationObserver',
+            \Magento\Theme\Observer\ApplyThemeCustomizationObserver::class,
             [
                 'design' => $designMock,
                 'assets' => $this->assetsMock,
@@ -87,10 +71,10 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyThemeCustomization()
     {
-        $asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
-        $file = $this->getMock('Magento\Theme\Model\Theme\File', [], [], '', false);
+        $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $file = $this->createMock(\Magento\Theme\Model\Theme\File::class);
         $fileService = $this->getMockForAbstractClass(
-            '\Magento\Framework\View\Design\Theme\Customization\FileAssetInterface'
+            \Magento\Framework\View\Design\Theme\Customization\FileAssetInterface::class
         );
         $file->expects($this->any())->method('getCustomizationService')->will($this->returnValue($fileService));
 
@@ -107,7 +91,7 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyThemeCustomizationException()
     {
-        $file = $this->getMock('Magento\Theme\Model\Theme\File', [], [], '', false);
+        $file = $this->createMock(\Magento\Theme\Model\Theme\File::class);
         $file->expects($this->any())
             ->method('getCustomizationService')
             ->willThrowException(new \InvalidArgumentException());

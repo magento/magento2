@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-class Label
+class Label implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Labels collection array
@@ -49,6 +49,14 @@ class Label
      * @return array
      */
     public function getLabelsCollectionForSystemConfiguration()
+    {
+        return $this->toOptionArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toOptionArray()
     {
         return $this->getLabelsCollection((string)new \Magento\Framework\Phrase('-- No Theme --'));
     }

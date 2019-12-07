@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,6 +27,8 @@ class Curl extends AbstractCurl
     protected $mappingData = [
         'code' => [
             'CMS Page Link' => 'cms_page_link',
+            'Recently Viewed Products' => 'recently_viewed',
+            'Catalog New Products List' => 'new_products',
         ],
         'block' => [
             'Main Content Area' => 'content',
@@ -41,9 +43,18 @@ class Curl extends AbstractCurl
         ],
         'template' => [
             'CMS Page Link Block Template' => 'widget/link/link_block.phtml',
+            'New Products List Template' => 'product/widget/new/content/new_grid.phtml',
         ],
         'layout_handle' => [
             'Shopping Cart' => 'checkout_cart_index',
+        ],
+        'display_type' => [
+            'All products' => 'all_products',
+            'New products' => 'new_products',
+        ],
+        'show_pager' => [
+            'No' => '0',
+            'Yes' => '1',
         ],
     ];
 
@@ -91,7 +102,7 @@ class Curl extends AbstractCurl
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("Widget instance creation by curl handler was not successful! Response: $response");
         }
         $id = null;
@@ -161,7 +172,7 @@ class Curl extends AbstractCurl
         $widgetInstances = [];
         foreach ($data['widget_instance'] as $key => $widgetInstance) {
             $pageGroup = $widgetInstance['page_group'];
-            $method = 'prepare' . str_replace(' ', '', ucwords(str_replace('_', ' ', $pageGroup))) . 'Group';
+            $method = 'prepare' . str_replace('_', '', ucwords($pageGroup, '_')) . 'Group';
             if (!method_exists(__CLASS__, $method)) {
                 throw new \Exception('Method for prepare page group "' . $method . '" is not exist.');
             }
@@ -233,14 +244,22 @@ class Curl extends AbstractCurl
      */
     protected function getThemeId($title)
     {
-        $filter = base64_encode('theme_title=' . $title);
-        $url = $_ENV['app_backend_url'] . 'admin/system_design_theme/grid/filter/' . $filter;
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'design_theme_listing',
+            'filters' => [
+                'placeholder' => true,
+                'theme_title' => $title
+            ],
+            'isAjax' => true
+        ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write($url, [], CurlInterface::GET);
+
+        $curl->write($url, $data, CurlInterface::POST);
         $response = $curl->read();
         $curl->close();
 
-        preg_match('/<tr data-role="row" title="[^"]+system_design_theme\/edit\/id\/([\d]+)\/"/', $response, $match);
+        preg_match('/design_theme_listing_data_source.+items.+"theme_id":"(\d+)"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
     }
 }

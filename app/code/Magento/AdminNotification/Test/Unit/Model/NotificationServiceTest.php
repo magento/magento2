@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\AdminNotification\Test\Unit\Model;
 
-class NotificationServiceTest extends \PHPUnit_Framework_TestCase
+class NotificationServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Retrieve instance of notification service model
@@ -23,19 +23,13 @@ class NotificationServiceTest extends \PHPUnit_Framework_TestCase
          * @var
          *  $notificationFactory \PHPUnit_Framework_MockObject_MockObject|\Magento\AdminNotification\Model\InboxFactory
          */
-        $notificationFactory = $this->getMock(
-            'Magento\AdminNotification\Model\InboxFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $notificationFactory = $this->createPartialMock(
+            \Magento\AdminNotification\Model\InboxFactory::class,
+            ['create']
         );
-        $notification = $this->getMock(
-            'Magento\AdminNotification\Model\Inbox',
-            ['load', 'getId', 'save', 'setIsRead', '__sleep', '__wakeup'],
-            [],
-            '',
-            false
+        $notification = $this->createPartialMock(
+            \Magento\AdminNotification\Model\Inbox::class,
+            ['load', 'getId', 'save', 'setIsRead', '__sleep', '__wakeup']
         );
         $notification->expects($this->once())->method('load')->with($notificationId)->will($this->returnSelf());
         $notification->expects($this->once())->method('getId')->will($this->returnValue($notificationId));

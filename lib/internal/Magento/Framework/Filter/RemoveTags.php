@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter;
@@ -34,7 +34,8 @@ class RemoveTags implements \Zend_Filter_Interface
             [$this, '_convertEntities'],
             $value
         );
-        $value = strip_tags($value);
-        return htmlspecialchars_decode($value);
+        $value = htmlspecialchars_decode($value);
+        
+        return strip_tags($value);
     }
 }

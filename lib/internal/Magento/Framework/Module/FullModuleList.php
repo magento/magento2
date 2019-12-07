@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
@@ -55,7 +55,7 @@ class FullModuleList implements ModuleListInterface
     public function getOne($name)
     {
         $data = $this->getAll();
-        return isset($data[$name]) ? $data[$name] : null;
+        return $data[$name] ?? null;
     }
 
     /**

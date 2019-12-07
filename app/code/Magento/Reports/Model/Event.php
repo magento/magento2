@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model;
@@ -8,8 +8,6 @@ namespace Magento\Reports\Model;
 /**
  * Events model
  *
- * @method \Magento\Reports\Model\ResourceModel\Event _getResource()
- * @method \Magento\Reports\Model\ResourceModel\Event getResource()
  * @method string getLoggedAt()
  * @method \Magento\Reports\Model\Event setLoggedAt(string $value)
  * @method int getEventTypeId()
@@ -24,6 +22,8 @@ namespace Magento\Reports\Model;
  * @method \Magento\Reports\Model\Event setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Event extends \Magento\Framework\Model\AbstractModel
 {
@@ -79,7 +79,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\ResourceModel\Event');
+        $this->_init(\Magento\Reports\Model\ResourceModel\Event::class);
     }
 
     /**

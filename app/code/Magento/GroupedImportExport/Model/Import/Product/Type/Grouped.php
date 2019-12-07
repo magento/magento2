@@ -2,7 +2,7 @@
 /**
  * Import entity of grouped product type
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedImportExport\Model\Import\Product\Type;
@@ -28,6 +28,13 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * @var Grouped\Links
      */
     protected $links;
+
+    /**
+     * Product entity identifier field
+     *
+     * @var string
+     */
+    private $productEntityIdentifierField;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
@@ -82,23 +89,23 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 foreach ($associatedSkusAndQtyPairs as $associatedSkuAndQty) {
                     ++$position;
                     $associatedSkuAndQty = explode(self::SKU_QTY_DELIMITER, $associatedSkuAndQty);
-                    $associatedSku = isset($associatedSkuAndQty[0]) ? trim($associatedSkuAndQty[0]) : null;
+                    $associatedSku = isset($associatedSkuAndQty[0]) ? strtolower(trim($associatedSkuAndQty[0])) : null;
                     if (isset($newSku[$associatedSku])) {
-                        $linkedProductId = $newSku[$associatedSku]['entity_id'];
+                        $linkedProductId = $newSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } elseif (isset($oldSku[$associatedSku])) {
-                        $linkedProductId = $oldSku[$associatedSku]['entity_id'];
+                        $linkedProductId = $oldSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } else {
                         continue;
                     }
                     $scope = $this->_entityModel->getRowScope($rowData);
                     if (Product::SCOPE_DEFAULT == $scope) {
-                        $productData = $newSku[$rowData[Product::COL_SKU]];
+                        $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
                     } else {
                         $colAttrSet = Product::COL_ATTR_SET;
                         $rowData[$colAttrSet] = $productData['attr_set_code'];
                         $rowData[Product::COL_TYPE] = $productData['type_id'];
                     }
-                    $productId = $productData['entity_id'];
+                    $productId = $productData[$this->getProductEntityLinkField()];
 
                     $linksData['product_ids'][$productId] = true;
                     $linksData['relation'][] = ['parent_id' => $productId, 'child_id' => $linkedProductId];
@@ -120,5 +127,20 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
             $this->links->saveLinksData($linksData);
         }
         return $this;
+    }
+
+    /**
+     * Get product entity identifier field
+     *
+     * @return string
+     */
+    private function getProductEntityIdentifierField()
+    {
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getIdentifierField();
+        }
+        return $this->productEntityIdentifierField;
     }
 }

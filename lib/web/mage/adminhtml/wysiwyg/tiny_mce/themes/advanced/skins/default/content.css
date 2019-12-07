@@ -1,10 +1,11 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+html {height: 100%;}
 body, td, pre { color:#2f2f2f; font-family:Arial, Helvetica, sans-serif; font-size:12px; margin:8px; }
-body { background:#fff; }
+body {background:#fff; min-height: calc(100% - 20px);}
 body.mceForceColors { background:#fff; color:#2f2f2f; }
 h1 {font-size: 2em}
 h2 {font-size: 1.5em}

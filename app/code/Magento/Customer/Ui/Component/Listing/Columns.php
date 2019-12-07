@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component\Listing;
@@ -14,13 +14,19 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $columnSortOrder;
 
-    /** @var AttributeRepository  */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\AttributeRepository
+     */
     protected $attributeRepository;
 
-    /** @var InlineEditUpdater */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
+     */
     protected $inlineEditUpdater;
 
     /**

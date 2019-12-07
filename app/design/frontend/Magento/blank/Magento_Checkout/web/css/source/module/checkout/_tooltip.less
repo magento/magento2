@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -8,7 +8,6 @@
 //  _____________________________________________
 
 @checkout-tooltip__hover__z-index: @tooltip__z-index;
-@checkout-tooltip-breakpoint__screen-m: @modal-popup-breakpoint-screen__m;
 
 @checkout-tooltip-icon-arrow__font-size: 10px;
 @checkout-tooltip-icon-arrow__left: -( @checkout-tooltip-content__padding + @checkout-tooltip-icon-arrow__font-size - @checkout-tooltip-content__border-width);
@@ -48,11 +47,16 @@
             .field-tooltip-content {
                 display: block;
             }
+
             .field-tooltip-action {
                 &:before {
                     .lib-css(color, @checkout-tooltip-icon__hover__color);
                 }
             }
+        }
+
+        .label {
+            .lib-visually-hidden();
         }
 
         .field-tooltip-action {
@@ -65,12 +69,18 @@
                 @_icon-font-color-active: false
             );
 
+            &:before { 
+                padding-left : 1px;  
+            }
+
             &:focus {
                 ._keyfocus & {
                     .lib-css(z-index, @checkout-tooltip__hover__z-index);
+
                     + .field-tooltip-content {
                         display: block;
                     }
+
                     &:before {
                         .lib-css(color, @checkout-tooltip-icon__hover__color);
                     }
@@ -107,9 +117,11 @@
                 position: absolute;
                 z-index: 3;
             }
+
             &:before {
                 .lib-css(border-right-color, @checkout-tooltip-content__active__border-color);
             }
+
             &:after {
                 .lib-css(border-right-color, @checkout-tooltip-content__background-color);
                 width: 1px;
@@ -133,10 +145,42 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @checkout-tooltip-breakpoint__screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break >= @screen__m) {
     .field-tooltip {
         .field-tooltip-content {
+            .lib-css(right, @checkout-tooltip-content-mobile__right);
+            .lib-css(top, @checkout-tooltip-content-mobile__top);
+            left: auto;
             &:extend(.abs-checkout-tooltip-content-position-top-mobile all);
         }
+    }
+}
+
+//
+//  Tablet
+//  _____________________________________________
+
+@media only screen and (max-width: @screen__m) {
+    .field-tooltip .field-tooltip-content {
+        left: auto;
+        right: -10px;
+        top: 40px;
+    }
+    .field-tooltip .field-tooltip-content::before,
+    .field-tooltip .field-tooltip-content::after {
+        border: 10px solid transparent;
+        height: 0;
+        left: auto;
+        margin-top: -21px;
+        right: 10px;
+        top: 0;
+        width: 0;
+    }
+    .field-tooltip .field-tooltip-content::before {
+        .lib-css(border-bottom-color, @checkout-tooltip-content__border-color);
+    }
+    .field-tooltip .field-tooltip-content::after {
+        .lib-css(border-bottom-color, @checkout-tooltip-content__background-color);
+        top: 1px;
     }
 }

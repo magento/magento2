@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,20 +9,28 @@ namespace Magento\Framework\Indexer;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Full text search index structure.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
      */
     private $resource;
+
     /**
      * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
      */
     private $indexScopeResolver;
+
     /**
      * @var FlatScopeResolver
      */
@@ -56,9 +64,7 @@ class IndexStructure implements IndexStructureInterface
     }
 
     /**
-     * @param string $index
-     * @param Dimension[] $dimensions
-     * @return void
+     * @inheritdoc
      */
     public function delete($index, array $dimensions = [])
     {
@@ -67,10 +73,7 @@ class IndexStructure implements IndexStructureInterface
     }
 
     /**
-     * @param string $index
-     * @param array $fields
-     * @param Dimension[] $dimensions
-     * @return void
+     * @inheritdoc
      */
     public function create($index, array $fields, array $dimensions = [])
     {
@@ -81,6 +84,8 @@ class IndexStructure implements IndexStructureInterface
     }
 
     /**
+     * Create full text index.
+     *
      * @param string $tableName
      * @throws \Zend_Db_Exception
      * @return void
@@ -92,6 +97,8 @@ class IndexStructure implements IndexStructureInterface
     }
 
     /**
+     * Configure full text index table.
+     *
      * @param Table $table
      * @return Table
      */
@@ -127,6 +134,8 @@ class IndexStructure implements IndexStructureInterface
     }
 
     /**
+     * Create flat index.
+     *
      * @param string $tableName
      * @param array $fields
      * @throws \Zend_Db_Exception
@@ -158,6 +167,8 @@ class IndexStructure implements IndexStructureInterface
     }
 
     /**
+     * Drop table.
+     *
      * @param AdapterInterface $connection
      * @param string $tableName
      * @return void

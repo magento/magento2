@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Product;
@@ -8,7 +8,7 @@ namespace Magento\Reports\Model\ResourceModel\Review\Product;
 /**
  * @magentoAppArea adminhtml
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Review\Product\Collection
@@ -18,7 +18,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Reports\Model\ResourceModel\Review\Product\Collection'
+            \Magento\Reports\Model\ResourceModel\Review\Product\Collection::class
         );
     }
 

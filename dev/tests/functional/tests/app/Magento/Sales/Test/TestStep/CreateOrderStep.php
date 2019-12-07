@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Step for create order.
@@ -22,14 +23,21 @@ class CreateOrderStep implements TestStepInterface
     protected $order;
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Preparing step properties.
      *
-     * @constructor
      * @param OrderInjectable $order
      */
-    public function __construct(OrderInjectable $order)
+    public function __construct(OrderInjectable $order, FixtureFactory $fixtureFactory)
     {
         $this->order = $order;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -40,7 +48,13 @@ class CreateOrderStep implements TestStepInterface
     public function run()
     {
         $this->order->persist();
+        $products = $this->order->getEntityId()['products'];
+        $cart['data']['items'] = ['products' => $products];
 
-        return ['products' => $this->order->getEntityId()['products'], 'order' => $this->order];
+        return [
+            'products' => $products,
+            'order' => $this->order,
+            'cart' => $this->fixtureFactory->createByCode('cart', $cart)
+        ];
     }
 }

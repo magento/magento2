@@ -1,16 +1,23 @@
 {
     "name": "magento/module-ui",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
-        "magento/module-backend": "100.0.*",
-        "magento/framework": "100.0.*",
-        "magento/module-eav": "100.0.*",
-        "magento/module-authorization": "100.0.*",
-        "magento/module-user": "100.0.*"
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "magento/framework": "*",
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*",
+        "magento/module-eav": "*",
+        "magento/module-store": "*",
+        "magento/module-user": "*",
+        "magento/module-cms": "*"
+    },
+    "suggest": {
+        "magento/module-config": "*"
     },
     "type": "magento2-module",
-    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

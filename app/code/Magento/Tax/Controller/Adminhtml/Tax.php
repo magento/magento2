@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,13 @@ use Magento\Framework\Exception\InputException;
  */
 abstract class Tax extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
+
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
      */
@@ -54,15 +61,5 @@ abstract class Tax extends \Magento\Backend\App\Action
             throw new InputException(__('Invalid name of tax class specified.'));
         }
         return $className;
-    }
-
-    /**
-     * Check current user permission on resource and privilege
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
     }
 }

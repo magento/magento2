@@ -1,53 +1,158 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Directory\Model\RegionFactory;
+use Magento\Sales\Api\OrderAddressRepositoryInterface;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Controller\Adminhtml\Order;
+use Magento\Sales\Model\Order\Address as AddressModel;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Sales address save
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AddressSave extends Order implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
+
+    /**
+     * @var RegionFactory
+     */
+    private $regionFactory;
+
+    /**
+     * @var OrderAddressRepositoryInterface
+     */
+    private $orderAddressRepository;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param InlineInterface $translateInline
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
+     * @param RegionFactory|null $regionFactory
+     * @param OrderAddressRepositoryInterface|null $orderAddressRepository
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        InlineInterface $translateInline,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $resultLayoutFactory,
+        RawFactory $resultRawFactory,
+        OrderManagementInterface $orderManagement,
+        OrderRepositoryInterface $orderRepository,
+        LoggerInterface $logger,
+        RegionFactory $regionFactory = null,
+        OrderAddressRepositoryInterface $orderAddressRepository = null
+    ) {
+        $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
+        $this->orderAddressRepository = $orderAddressRepository ?: ObjectManager::getInstance()
+            ->get(OrderAddressRepositoryInterface::class);
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $fileFactory,
+            $translateInline,
+            $resultPageFactory,
+            $resultJsonFactory,
+            $resultLayoutFactory,
+            $resultRawFactory,
+            $orderManagement,
+            $orderRepository,
+            $logger
+        );
+    }
+
     /**
      * Save order address
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
         $addressId = $this->getRequest()->getParam('address_id');
-        /** @var $address \Magento\Sales\Api\Data\OrderAddressInterface|\Magento\Sales\Model\Order\Address */
-        $address = $this->_objectManager->create('Magento\Sales\Api\Data\OrderAddressInterface')->load($addressId);
+        /** @var $address OrderAddressInterface|AddressModel */
+        $address = $this->_objectManager->create(
+            OrderAddressInterface::class
+        )->load($addressId);
         $data = $this->getRequest()->getPostValue();
+        $data = $this->updateRegionData($data);
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data && $address->getId()) {
             $address->addData($data);
             try {
-                $address->save();
+                $this->orderAddressRepository->save($address);
                 $this->_eventManager->dispatch(
                     'admin_sales_order_address_update',
                     [
                         'order_id' => $address->getParentId()
                     ]
                 );
-                $this->messageManager->addSuccess(__('You updated the order address.'));
+                $this->messageManager->addSuccessMessage(__('You updated the order address.'));
                 return $resultRedirect->setPath('sales/*/view', ['order_id' => $address->getParentId()]);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('We can\'t update the order address right now.'));
+                $this->messageManager->addExceptionMessage($e, __('We can\'t update the order address right now.'));
             }
             return $resultRedirect->setPath('sales/*/address', ['address_id' => $address->getId()]);
         } else {
             return $resultRedirect->setPath('sales/*/');
         }
     }
-
+    
     /**
-     * @return bool
+     * Update region data
+     *
+     * @param array $attributeValues
+     * @return array
      */
-    protected function _isAllowed()
+    private function updateRegionData($attributeValues)
     {
-        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
+        if (!empty($attributeValues['region_id'])) {
+            $newRegion = $this->regionFactory->create()->load($attributeValues['region_id']);
+            $attributeValues['region_code'] = $newRegion->getCode();
+            $attributeValues['region'] = $newRegion->getDefaultName();
+        }
+        return $attributeValues;
     }
 }

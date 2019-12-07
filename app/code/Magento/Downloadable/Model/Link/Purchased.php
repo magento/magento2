@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link;
@@ -8,8 +8,7 @@ namespace Magento\Downloadable\Model\Link;
 /**
  * Downloadable links purchased model
  *
- * @method \Magento\Downloadable\Model\ResourceModel\Link\Purchased _getResource()
- * @method \Magento\Downloadable\Model\ResourceModel\Link\Purchased getResource()
+ * @api
  * @method int getOrderId()
  * @method \Magento\Downloadable\Model\Link\Purchased setOrderId(int $value)
  * @method string getOrderIncrementId()
@@ -29,7 +28,8 @@ namespace Magento\Downloadable\Model\Link;
  * @method string getLinkSectionTitle()
  * @method \Magento\Downloadable\Model\Link\Purchased setLinkSectionTitle(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Purchased extends \Magento\Framework\Model\AbstractModel
 {
@@ -40,7 +40,7 @@ class Purchased extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\ResourceModel\Link\Purchased');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Link\Purchased::class);
         parent::_construct();
     }
 

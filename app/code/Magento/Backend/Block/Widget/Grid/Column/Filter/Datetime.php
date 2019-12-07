@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
@@ -28,7 +26,6 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($index) {
             if ($data = $this->getData('value', 'orig_' . $index)) {
-                // date('Y-m-d', strtotime($data));
                 return $data;
             }
             return null;
@@ -142,16 +139,21 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     /**
      * Return escaped value for calendar
      *
-     * @param string $index
-     * @return string
+     * @param string|null $index
+     * @return array|string|int|float|null
      */
     public function getEscapedValue($index = null)
     {
         if ($this->getColumn()->getFilterTime()) {
             $value = $this->getValue($index);
-            if ($value instanceof \DateTime) {
+            if ($value instanceof \DateTimeInterface) {
                 return $this->_localeDate->formatDateTime($value);
             }
+
+            if (is_string($value)) {
+                return $this->escapeHtml($value);
+            }
+
             return $value;
         }
 

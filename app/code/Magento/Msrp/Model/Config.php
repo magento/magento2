@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Model;
@@ -10,6 +10,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
 
+/**
+ * Class Config
+ */
 class Config
 {
     /**#@+
@@ -21,9 +24,7 @@ class Config
     const XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS = 'sales/msrp/explanation_message_whats_this';
     /**#@-*/
 
-    /**
-     * @var ScopeConfigInterface
-     */
+    /**#@-*/
     protected $scopeConfig;
 
     /**
@@ -42,6 +43,8 @@ class Config
     protected $storeId;
 
     /**
+     * Config constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param Escaper $escaper
@@ -76,7 +79,7 @@ class Config
      */
     public function isEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_MSRP_ENABLED,
             ScopeInterface::SCOPE_STORE,
             $this->storeId

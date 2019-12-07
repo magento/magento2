@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,13 +11,19 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Sold;
 
+use Magento\Framework\DB\Select;
+
 /**
+ * Data collection.
+ *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 {
     /**
-     * Set Date range to collection
+     * Set Date range to collection.
      *
      * @param int $from
      * @param int $to
@@ -61,18 +67,24 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 
         $this->getSelect()->reset()->from(
             ['order_items' => $this->getTable('sales_order_item')],
-            ['ordered_qty' => 'SUM(order_items.qty_ordered)', 'order_items_name' => 'order_items.name']
+            [
+                'ordered_qty' => 'order_items.qty_ordered',
+                'order_items_name' => 'order_items.name',
+                'order_items_sku' => 'order_items.sku'
+            ]
         )->joinInner(
             ['order' => $this->getTable('sales_order')],
             implode(' AND ', $orderJoinCondition),
             []
         )->where(
-            'parent_item_id IS NULL'
+            'order_items.parent_item_id IS NULL'
+        )->having(
+            'order_items.qty_ordered > ?',
+            0
+        )->columns(
+            'SUM(order_items.qty_ordered) as ordered_qty'
         )->group(
             'order_items.product_id'
-        )->having(
-            'SUM(order_items.qty_ordered) > ?',
-            0
         );
         return $this;
     }
@@ -107,6 +119,22 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return Select
+     * @since 100.2.0
+     */
+    public function getSelectCountSql()
+    {
+        $countSelect = clone parent::getSelectCountSql();
+
+        $countSelect->reset(Select::COLUMNS);
+        $countSelect->columns('COUNT(DISTINCT order_items.item_id)');
+
+        return $countSelect;
     }
 
     /**

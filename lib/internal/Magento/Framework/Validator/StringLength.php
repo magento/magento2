@@ -2,7 +2,7 @@
 /**
  * String length validator
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator;
@@ -20,24 +20,12 @@ class StringLength extends \Zend_Validate_StringLength implements \Magento\Frame
     public function setEncoding($encoding = null)
     {
         if ($encoding !== null) {
-            $orig = PHP_VERSION_ID < 50600
-                ? iconv_get_encoding('internal_encoding')
-                : ini_get('default_charset');
-            if (PHP_VERSION_ID < 50600) {
-                $result = iconv_set_encoding('internal_encoding', $encoding);
-            } else {
-                ini_set('default_charset', $encoding);
-                $result = ini_get('default_charset');
-            }
-            if (!$result) {
+            $orig = ini_get('default_charset');
+            ini_set('default_charset', $encoding);
+            if (!ini_get('default_charset')) {
                 throw new \Zend_Validate_Exception('Given encoding not supported on this OS!');
             }
-
-            if (PHP_VERSION_ID < 50600) {
-                iconv_set_encoding('internal_encoding', $orig);
-            } else {
-                ini_set('default_charset', $orig);
-            }
+            ini_set('default_charset', $orig);
         }
 
         $this->_encoding = $encoding;

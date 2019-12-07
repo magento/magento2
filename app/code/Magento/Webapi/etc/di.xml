@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Webapi\Model\ConfigInterface" type="Magento\Webapi\Model\Config" />
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -55,6 +56,13 @@
                     <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Response\Renderer\Xml</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Webapi\Model\Config\Reader">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Webapi\Model\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Webapi\Model\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">webapi.xml</argument>
         </arguments>
     </type>
 </config>

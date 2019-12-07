@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,9 +11,9 @@ use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**
- * Tests to find obsolete install/upgrade schema/data scripts
+ * Tests to find obsolete install/upgrade schema/data scripts.
  */
-class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
+class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
 {
     public function testForOldInstallUpgradeScripts()
     {
@@ -22,6 +22,7 @@ class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $scriptPattern[] = $moduleDir . '/sql';
             $scriptPattern[] = $moduleDir . '/data';
+            $scriptPattern[] = $moduleDir . '/Setup';
         }
         $invoker = new AggregateInvoker($this);
         $invoker(
@@ -32,7 +33,20 @@ class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
                 $this->assertStringStartsNotWith(
                     'install-',
                     basename($file),
-                    'Install scripts are obsolete. Please create class InstallSchema in module\'s Setup folder'
+                    'Install scripts are obsolete. '
+                    . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
+                );
+                $this->assertStringStartsNotWith(
+                    'InstallSchema',
+                    basename($file),
+                    'InstallSchema objects are obsolete. '
+                    . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
+                );
+                $this->assertStringStartsNotWith(
+                    'InstallData',
+                    basename($file),
+                    'InstallData objects are obsolete. '
+                    . 'Please use data patches approach in module\'s Setup/Patch/Data dir'
                 );
                 $this->assertStringStartsNotWith(
                     'data-install-',
@@ -42,21 +56,39 @@ class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
                 $this->assertStringStartsNotWith(
                     'upgrade-',
                     basename($file),
-                    'Upgrade scripts are obsolete. Please create class UpgradeSchema in module\'s Setup folder'
+                    'Upgrade scripts are obsolete. '
+                    . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
+                );
+                $this->assertStringStartsNotWith(
+                    'UpgradeSchema',
+                    basename($file),
+                    'UpgradeSchema scripts are obsolete. '
+                    . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
+                );
+                $this->assertStringStartsNotWith(
+                    'UpgradeData',
+                    basename($file),
+                    'UpgradeSchema scripts are obsolete. '
+                    . 'Please use data patches approach in module\'s Setup/Patch/Data dir'
                 );
                 $this->assertStringStartsNotWith(
                     'data-upgrade-',
                     basename($file),
-                    'Upgrade scripts are obsolete. Please create class UpgradeData in module\'s Setup folder'
+                    'Upgrade scripts are obsolete. '
+                    . 'Please use data patches approach in module\'s Setup/Patch/Data dir'
                 );
                 $this->assertStringStartsNotWith(
                     'recurring',
                     basename($file),
                     'Recurring scripts are obsolete. Please create class Recurring in module\'s Setup folder'
                 );
-                $this->fail(
-                    'Invalid directory. Please convert data/sql scripts to a class within module\'s Setup folder'
-                );
+                if (preg_match('/.*\/(sql\/|data\/)/', dirname($file))) {
+                    $this->fail(
+                        "Invalid directory:\n"
+                        . "- Create an data patch within module's Setup/Patch/Data folder for data upgrades.\n"
+                        . "- Use declarative schema approach in module's etc/db_schema.xml file for schema changes."
+                    );
+                }
             },
             $this->convertArray(
                 Files::init()->getFiles($scriptPattern, '*.php')

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CaptchaFormsDisplayingSection">
+        <element name="store" type="button" selector="#menu-magento-backend-stores"/>
+        <element name="config" type="button" selector="//li[@data-ui-id='menu-magento-config-system-config']//span"/>
+        <element name="customer" type="button" selector="//div[@class='admin__page-nav-title title _collapsible']//strong[text()='Customers']"/>
+        <element name="customerConfig" type="text" selector="//span[text()='Customer Configuration']"/>
+        <element name="captcha" type="button" selector="#customer_captcha-head"/>
+        <element name="dependent" type="button" selector="//a[@id='customer_captcha-head' and @class='open']"/>
+        <element name="forms" type="multiselect" selector="#customer_captcha_forms"/>
+        <element name="createUser" type="multiselect" selector="//select[@id='customer_captcha_forms']/option[@value='user_create']"/>
+        <element name="forgotpassword" type="multiselect" selector="//select[@id='customer_captcha_forms']/option[@value='user_forgotpassword']"/>
+        <element name="userLogin" type="multiselect" selector="//select[@id='customer_captcha_forms']/option[@value='user_login']"/>
+        <element name="guestCheckout" type="multiselect" selector="//select[@id='customer_captcha_forms']/option[@value='guest_checkout']"/>
+        <element name="register" type="multiselect" selector="//select[@id='customer_captcha_forms']/option[@value='register_during_checkout']"/>
+        <element name="userEdit" type="multiselect" selector="//select[@id='customer_captcha_forms']/option[@value='user_edit']"/>
+        <element name="contactUs" type="multiselect" selector="//select[@id='customer_captcha_forms']/option[@value='contact_us']"/>
+    </section>
+</sections>

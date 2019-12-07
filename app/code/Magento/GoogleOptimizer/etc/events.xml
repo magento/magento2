@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -23,8 +23,5 @@
     </event>
     <event name="cms_page_delete_after">
         <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\CmsPage\DeleteCmsGoogleExperimentScriptObserver" />
-    </event>
-    <event name="adminhtml_catalog_category_tabs">
-        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Block\Category\AddGoogleExperimentTabObserver" />
     </event>
 </config>

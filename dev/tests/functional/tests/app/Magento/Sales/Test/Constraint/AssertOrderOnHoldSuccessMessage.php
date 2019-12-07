@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,7 @@ class AssertOrderOnHoldSuccessMessage extends AbstractConstraint
             ? sprintf(self::MULTIPLE_SUCCESS_ON_HOLD_MESSAGE, $ordersCount)
             : self::SINGLE_SUCCESS_ON_HOLD_MESSAGE;
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $successOnHoldMessage,
             $orderIndex->getMessagesBlock()->getSuccessMessage()
         );

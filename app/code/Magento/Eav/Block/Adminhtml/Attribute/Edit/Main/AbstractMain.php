@@ -1,20 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-/**
- * Product attribute add/edit form main tab
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
+/**
+ * Product attribute add/edit form main tab
+ */
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -131,7 +127,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
             'text',
             [
                 'name' => 'frontend_label[0]',
-                'label' => __('Default label'),
+                'label' => __('Default Label'),
                 'title' => __('Default label'),
                 'required' => true,
                 'value' => is_array($labels) ? $labels[0] : $labels
@@ -235,7 +231,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'is_unique',
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
-                'note' => __('Not shared with other products'),
+                'note' => __('Not shared with other products.'),
                 'values' => $yesno
             ]
         );
@@ -266,7 +262,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Initialize form fileds values
+     * Initialize form fields values
      *
      * @return $this
      */
@@ -281,15 +277,17 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Processing block html after rendering
+     * Processing block html after rendering.
+     *
      * Adding js block to the end of this block
      *
-     * @param   string $html
+     * @param string $html
      * @return  string
      */
     protected function _afterToHtml($html)
     {
-        $jsScripts = $this->getLayout()->createBlock('Magento\Eav\Block\Adminhtml\Attribute\Edit\Js')->toHtml();
+        $jsScripts = $this->getLayout()->createBlock(\Magento\Eav\Block\Adminhtml\Attribute\Edit\Js::class)
+            ->toHtml();
         return $html . $jsScripts;
     }
 }

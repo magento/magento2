@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Design;
 
+/**
+ * Edit store design schedule block.
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
@@ -20,6 +23,8 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $_coreRegistry = null;
 
     /**
+     * @inheritdoc
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
@@ -34,6 +39,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * @inheritdoc
+     *
      * @return void
      */
     protected function _construct()
@@ -44,13 +51,13 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
         $this->getToolbar()->addChild(
             'back_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Back'),
                 'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/') . '\')',
@@ -61,12 +68,12 @@ class Edit extends \Magento\Backend\Block\Widget
         if ($this->getDesignChangeId()) {
             $this->getToolbar()->addChild(
                 'delete_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Delete'),
                     'onclick' => 'deleteConfirm(\'' . __(
                         'Are you sure?'
-                    ) . '\', \'' . $this->getDeleteUrl() . '\')',
+                    ) . '\', \'' . $this->getDeleteUrl() . '\', {data: {}})',
                     'class' => 'delete'
                 ]
             );
@@ -74,7 +81,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save'),
                 'class' => 'save primary',
@@ -88,6 +95,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return design change Id.
+     *
      * @return string
      */
     public function getDesignChangeId()
@@ -96,6 +105,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return delete url.
+     *
      * @return string
      */
     public function getDeleteUrl()
@@ -104,6 +115,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return save url for edit form.
+     *
      * @return string
      */
     public function getSaveUrl()
@@ -112,6 +125,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return validation url for edit form.
+     *
      * @return string
      */
     public function getValidationUrl()
@@ -120,6 +135,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return page header.
+     *
      * @return string
      */
     public function getHeader()

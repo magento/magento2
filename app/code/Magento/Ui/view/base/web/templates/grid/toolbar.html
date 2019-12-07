@@ -1,37 +1,25 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-
-<div class="admin__data-grid-header" data-role="data-grid-toolbar">
+<div class="admin__data-grid-header" afterRender="$data.setToolbarNode">
     <div class="admin__data-grid-header-row">
-        <div class="admin__data-grid-actions-wrap" data-bind="foreach: getRegion('dataGridActions')">
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        </div>
-        <!-- ko foreach: getRegion('dataGridFilters') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+        <div class="admin__data-grid-actions-wrap" each="getRegion('dataGridActions')" render=""/>
+        <each args="getRegion('dataGridFilters')" render=""/>
     </div>
     <div class="admin__data-grid-header-row row row-gutter">
-        <!-- ko if: hasChild('listing_massaction') -->
-        <div class="col-xs-2" data-bind="scope: requestChild('listing_massaction')">
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        </div>
-        <!-- /ko -->
-        <div data-bind="css: {
-                'col-xs-10': hasChild('listing_massaction'),
-                'col-xs-12': !hasChild('listing_massaction')
-                }">
-            <div class="row">
-                <div class="col-xs-3" data-bind="scope: requestChild('listing_paging')">
-                    <!-- ko template: totalTmpl --><!-- /ko -->
-                </div>
-                <div class="col-xs-9" data-bind="scope: requestChild('listing_paging')">
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                </div>
+        <div class="col-xs-2" if="hasChild('listing_massaction')" ko-scope="requestChild('listing_massaction')" render=""/>
+        <div css="
+            'col-xs-10': hasChild('listing_massaction'),
+            'col-xs-12': !hasChild('listing_massaction')">
+            <div class="row" ko-scope="requestChild('listing_paging')">
+                <div class="col-xs-3" render="totalTmpl"/>
+                <div class="col-xs-9" render=""/>
             </div>
         </div>
     </div>
 </div>
+
+<render args="stickyTmpl" if="$data.sticky"/>

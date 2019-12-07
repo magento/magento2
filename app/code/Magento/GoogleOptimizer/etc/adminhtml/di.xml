@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="GoogleOptimizer" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\GoogleOptimizer\Ui\DataProvider\Product\Form\Modifier\GoogleOptimizer</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\GoogleOptimizer\Block\Adminhtml\Form\CmsPage" type="Magento\GoogleOptimizer\Block\Adminhtml\Form">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code-entity" xsi:type="string">Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page\EntityCmsPage</item>
+                <item name="form-name" xsi:type="string">cms_page_form</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Cms\Model\Page\DataProvider">
+        <plugin name="google_optimizer_cms_page_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Cms\Page\DataProvider" />
+    </type>
+    <type name="Magento\Catalog\Model\Category\DataProvider">
+        <plugin name="google_optimizer_category_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Catalog\Category\DataProvider" />
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider">
+        <plugin name="google_optimizer_product_new_category_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Catalog\Product\Category\DataProvider" />
+    </type>
+</config>

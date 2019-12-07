@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var $block \Magento\Catalog\Block\Product\View\Additional */
 ?>
-<?php foreach ($block->getChildHtmlList() as $_html): ?>
-    <?php /* @escapeNotVerified */ echo $_html ?>
+<?php foreach ($block->getChildHtmlList() as $_html) :?>
+    <?= /* @noEscape */ $_html ?>
 <?php endforeach; ?>

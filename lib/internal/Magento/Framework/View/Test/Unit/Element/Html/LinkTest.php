@@ -1,12 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
+    private $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+    }
+
     /**
      * @var array
      */
@@ -24,93 +32,86 @@ class LinkTest extends \PHPUnit_Framework_TestCase
      */
     protected $link;
 
-    /**
-     * @param \Magento\Framework\View\Element\Html\Link $link
-     * @param string $expected
-     *
-     * @dataProvider getLinkAttributesDataProvider
-     */
-    public function testGetLinkAttributes($link, $expected)
+    public function testGetLinkAttributes()
     {
-        $this->assertEquals($expected, $link->getLinkAttributes());
-    }
-
-    public function getLinkAttributesDataProvider()
-    {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
+        $escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->setMethods(['escapeHtml'])->disableOriginalConstructor()->getMock();
 
         $escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->will($this->returnArgument(0));
 
-        $urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->setMethods(['getUrl'])->disableOriginalConstructor()->getMockForAbstractClass();
 
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnArgument('http://site.com/link.html'));
+            ->willReturn('http://site.com/link.html');
 
-        $validtorMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\File\Validator')
+        $validtorMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\File\Validator::class)
             ->setMethods(['isValid'])->disableOriginalConstructor()->getMock();
+        $validtorMock->expects($this->any())
+            ->method('isValid')
+            ->willReturn(false);
 
-        $scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config')
+        $scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->setMethods(['isSetFlag'])->disableOriginalConstructor()->getMock();
+        $scopeConfigMock->expects($this->any())
+            ->method('isSetFlag')
+            ->willReturn(true);
 
-        $resolverMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\File\Resolver')
+        $resolverMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\File\Resolver::class)
             ->setMethods([])->disableOriginalConstructor()->getMock();
 
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->setMethods(['getEscaper', 'getUrlBuilder', 'getValidator', 'getResolver', 'getScopeConfig'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $contextMock->expects($this->any())
             ->method('getValidator')
-            ->will($this->returnValue($validtorMock));
+            ->willReturn($validtorMock);
 
         $contextMock->expects($this->any())
             ->method('getResolver')
-            ->will($this->returnValue($resolverMock));
+            ->willReturn($resolverMock);
 
         $contextMock->expects($this->any())
             ->method('getEscaper')
-            ->will($this->returnValue($escaperMock));
+            ->willReturn($escaperMock);
 
         $contextMock->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($urlBuilderMock));
+            ->willReturn($urlBuilderMock);
 
         $contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         /** @var \Magento\Framework\View\Element\Html\Link $linkWithAttributes */
-        $linkWithAttributes = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\Html\Link',
-            ['context' => $contextMock]
-        );
-        /** @var \Magento\Framework\View\Element\Html\Link $linkWithoutAttributes */
-        $linkWithoutAttributes = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\Html\Link',
+        $linkWithAttributes = $this->objectManager->getObject(
+            \Magento\Framework\View\Element\Html\Link::class,
             ['context' => $contextMock]
         );
 
+        $this->assertEquals(
+            'href="http://site.com/link.html"',
+            $linkWithAttributes->getLinkAttributes()
+        );
+
+        /** @var \Magento\Framework\View\Element\Html\Link $linkWithoutAttributes */
+        $linkWithoutAttributes = $this->objectManager->getObject(
+            \Magento\Framework\View\Element\Html\Link::class,
+            ['context' => $contextMock]
+        );
         foreach ($this->allowedAttributes as $attribute) {
-            $linkWithAttributes->setDataUsingMethod($attribute, $attribute);
+            $linkWithoutAttributes->setDataUsingMethod($attribute, $attribute);
         }
 
-        return [
-            'full' => [
-                'link' => $linkWithAttributes,
-                'expected' => 'shape="shape" tabindex="tabindex" onfocus="onfocus" onblur="onblur" id="id"',
-            ],
-            'empty' => [
-                'link' => $linkWithoutAttributes,
-                'expected' => '',
-            ],
-        ];
+        $this->assertEquals(
+            'href="http://site.com/link.html" shape="shape" tabindex="tabindex"'
+            . ' onfocus="onfocus" onblur="onblur" id="id"',
+            $linkWithoutAttributes->getLinkAttributes()
+        );
     }
 }

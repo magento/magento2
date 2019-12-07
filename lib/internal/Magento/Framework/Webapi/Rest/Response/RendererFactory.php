@@ -2,7 +2,7 @@
 /**
  * Factory of REST renders
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Rest\Response;
@@ -16,7 +16,9 @@ class RendererFactory
      */
     protected $_objectManager;
 
-    /** @var \Magento\Framework\Webapi\Rest\Request */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request
+     */
     protected $_request;
 
     /**

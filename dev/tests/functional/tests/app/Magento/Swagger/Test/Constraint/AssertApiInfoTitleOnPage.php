@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class AssertApiInfoTitleOnPage extends AbstractConstraint
      *
      * @var string
      */
-    protected $titleSelector = '.info_title';
+    protected $titleSelector = '.title';
 
     /**
      * Assert API info title on swagger page
@@ -29,7 +29,7 @@ class AssertApiInfoTitleOnPage extends AbstractConstraint
      */
     public function processAssert(SwaggerUiPage $swaggerPage)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $swaggerPage->isElementVisible($this->titleSelector),
             'REST API info title on swagger page.'
         );

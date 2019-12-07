@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Model\File\Storage;
 
 /**
  * Class Database
+ *
+ * @api
+ * @since 100.0.2
  */
 class Database extends \Magento\MediaStorage\Model\File\Storage\Database\AbstractDatabase
 {
@@ -40,6 +43,14 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @var \Magento\MediaStorage\Helper\File\Media
      */
     protected $_mediaHelper;
+
+    /**
+     * Store media base directory path
+     *
+     * @var string
+     * @since 100.1.0
+     */
+    protected $mediaBaseDirectory = null;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -351,5 +362,19 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
         $this->_getResource()->deleteFile($filename, $directory);
 
         return $this;
+    }
+
+    /**
+     * Retrieve media base directory path
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getMediaBaseDirectory()
+    {
+        if ($this->mediaBaseDirectory === null) {
+            $this->mediaBaseDirectory = $this->_coreFileStorageDb->getMediaBaseDir();
+        }
+        return $this->mediaBaseDirectory;
     }
 }

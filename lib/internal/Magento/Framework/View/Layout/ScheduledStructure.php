@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
 
 /**
  * Layout structure model
+ *
+ * @api
  */
 class ScheduledStructure
 {
@@ -18,6 +20,18 @@ class ScheduledStructure
     const ELEMENT_OFFSET_OR_SIBLING  = 'offsetOrSibling';
     const ELEMENT_IS_AFTER = 'isAfter';
     /**#@-*/
+
+    /**#@-*/
+    private $serializableProperties = [
+        'scheduledStructure',
+        'scheduledData',
+        'scheduledElements',
+        'scheduledMoves',
+        'scheduledRemoves',
+        'scheduledPaths',
+        'elementsToSort',
+        'brokenParent',
+    ];
 
     /**
      * Information about structural elements, scheduled for creation
@@ -55,13 +69,6 @@ class ScheduledStructure
     protected $scheduledRemoves = [];
 
     /**
-     * Scheduled structure elements with ifconfig attribute
-     *
-     * @var array
-     */
-    protected $scheduledIfconfig = [];
-
-    /**
      * Materialized paths for overlapping workaround of scheduled structural elements
      *
      * @var array
@@ -84,18 +91,10 @@ class ScheduledStructure
 
     /**
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(array $data = [])
     {
-        $this->scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : [];
-        $this->scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : [];
-        $this->scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : [];
-        $this->scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : [];
-        $this->scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
-        $this->scheduledIfconfig = isset($data['scheduledIfconfig']) ? $data['scheduledIfconfig'] : [];
-        $this->scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
+        $this->populateWithArray($data);
     }
 
     /**
@@ -147,7 +146,7 @@ class ScheduledStructure
      */
     public function getElementToSort($elementName, array $default = [])
     {
-        return isset($this->elementsToSort[$elementName]) ? $this->elementsToSort[$elementName] : $default;
+        return $this->elementsToSort[$elementName] ?? $default;
     }
 
     /**
@@ -181,16 +180,6 @@ class ScheduledStructure
             $this->scheduledElements,
             array_merge($this->scheduledRemoves, $this->brokenParent)
         ));
-    }
-
-    /**
-     * Get elements to check ifconfig attribute
-     *
-     * @return array
-     */
-    public function getIfconfigList()
-    {
-        return array_keys(array_intersect_key($this->scheduledElements, $this->scheduledIfconfig));
     }
 
     /**
@@ -268,19 +257,7 @@ class ScheduledStructure
      */
     public function getElementToMove($elementName, $default = null)
     {
-        return isset($this->scheduledMoves[$elementName]) ? $this->scheduledMoves[$elementName] : $default;
-    }
-
-    /**
-     * Get element to check by name
-     *
-     * @param string $elementName
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getIfconfigElement($elementName, $default = null)
-    {
-        return isset($this->scheduledIfconfig[$elementName]) ? $this->scheduledIfconfig[$elementName] : $default;
+        return $this->scheduledMoves[$elementName] ?? $default;
     }
 
     /**
@@ -315,30 +292,6 @@ class ScheduledStructure
     public function setElementToRemoveList($elementName)
     {
         $this->scheduledRemoves[$elementName] = 1;
-    }
-
-    /**
-     * Unset element by name removed by ifconfig attribute
-     *
-     * @param string $elementName
-     * @return void
-     */
-    public function unsetElementFromIfconfigList($elementName)
-    {
-        unset($this->scheduledIfconfig[$elementName]);
-    }
-
-    /**
-     * Set element value to check ifconfig attribute
-     *
-     * @param string $elementName
-     * @param string $configPath
-     * @param string $scopeType
-     * @return void
-     */
-    public function setElementToIfconfigList($elementName, $configPath, $scopeType)
-    {
-        $this->scheduledIfconfig[$elementName] = [$configPath, $scopeType];
     }
 
     /**
@@ -417,7 +370,7 @@ class ScheduledStructure
      */
     public function getStructureElementData($elementName, $default = null)
     {
-        return isset($this->scheduledData[$elementName]) ? $this->scheduledData[$elementName] : $default;
+        return $this->scheduledData[$elementName] ?? $default;
     }
 
     /**
@@ -530,5 +483,47 @@ class ScheduledStructure
         $this->flushPaths();
         $this->scheduledElements = [];
         $this->scheduledStructure = [];
+    }
+
+    /**
+     * Reformat 'Layout scheduled structure' to array.
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    public function __toArray()
+    {
+        $result = [];
+        foreach ($this->serializableProperties as $property) {
+            $result[$property] = $this->{$property};
+        }
+
+        return $result;
+    }
+
+    /**
+     * Update 'Layout scheduled structure' data.
+     *
+     * @param array $data
+     * @return void
+     * @since 100.2.0
+     */
+    public function populateWithArray(array $data)
+    {
+        foreach ($this->serializableProperties as $property) {
+            $this->{$property} = $this->getArrayValueByKey($property, $data);
+        }
+    }
+
+    /**
+     * Get value from array by key.
+     *
+     * @param string $key
+     * @param array $array
+     * @return array
+     */
+    private function getArrayValueByKey($key, array $array)
+    {
+        return $array[$key] ?? [];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,14 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Phrase;
 
 /**
- * Deployment configuration writer
+ * Deployment configuration writer to files: env.php, config.php.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Writer
 {
@@ -48,26 +51,34 @@ class Writer
     private $deploymentConfig;
 
     /**
-     * Constructor
+     * The parser of comments from configuration files.
      *
+     * @var CommentParser
+     */
+    private $commentParser;
+
+    /**
      * @param Reader $reader
      * @param Filesystem $filesystem
      * @param ConfigFilePool $configFilePool
      * @param DeploymentConfig $deploymentConfig
      * @param Writer\FormatterInterface $formatter
+     * @param CommentParser $commentParser The parser of comments from configuration files
      */
     public function __construct(
         Reader $reader,
         Filesystem $filesystem,
         ConfigFilePool $configFilePool,
         DeploymentConfig $deploymentConfig,
-        Writer\FormatterInterface $formatter = null
+        Writer\FormatterInterface $formatter = null,
+        CommentParser $commentParser = null
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
-        $this->formatter = $formatter ?: new Writer\PhpFormatter();
         $this->configFilePool = $configFilePool;
         $this->deploymentConfig = $deploymentConfig;
+        $this->formatter = $formatter ?: new Writer\PhpFormatter();
+        $this->commentParser = $commentParser ?: new CommentParser($filesystem, $configFilePool);
     }
 
     /**
@@ -87,21 +98,39 @@ class Writer
     }
 
     /**
-     * Saves config
+     * Saves config in specified file.
+     * $pool option is deprecated since version 2.2.0.
      *
-     * @param array $data
-     * @param bool $override
+     * Usage:
+     * ```php
+     * saveConfig(
+     *      [
+     *          ConfigFilePool::APP_ENV => ['some' => 'value'],
+     *      ],
+     *      true,
+     *      null,
+     *      []
+     * )
+     * ```
+     *
+     * @param array $data The data to be saved
+     * @param bool $override Whether values should be overridden
+     * @param string $pool The file pool (deprecated)
+     * @param array $comments The array of comments
      * @return void
+     * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function saveConfig(array $data, $override = false)
+    public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
     {
-        $paths = $this->configFilePool->getPaths();
-
         foreach ($data as $fileKey => $config) {
-            if (isset($paths[$fileKey])) {
+            $paths = $this->configFilePool->getPaths();
 
-                if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isExist($paths[$fileKey])) {
-                    $currentData = $this->reader->load($fileKey);
+            if (isset($paths[$fileKey])) {
+                $currentData = $this->reader->load($fileKey);
+                $currentComments = $this->commentParser->execute($paths[$fileKey]);
+
+                if ($currentData) {
                     if ($override) {
                         $config = array_merge($currentData, $config);
                     } else {
@@ -109,8 +138,17 @@ class Writer
                     }
                 }
 
-                $contents = $this->formatter->format($config);
-                $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
+                $comments = array_merge($currentComments, $comments);
+
+                $contents = $this->formatter->format($config, $comments);
+                try {
+                    $writeFilePath = $paths[$fileKey];
+                    $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($writeFilePath, $contents);
+                } catch (FileSystemException $e) {
+                    throw new FileSystemException(
+                        new Phrase('The "%1" deployment config file isn\'t writable.', [$paths[$fileKey]])
+                    );
+                }
                 if (function_exists('opcache_invalidate')) {
                     opcache_invalidate(
                         $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath($paths[$fileKey])

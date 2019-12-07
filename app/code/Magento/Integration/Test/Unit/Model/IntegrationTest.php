@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Unit\Model;
 /**
  * Unit test for \Magento\Integration\Model\Integration
  */
-class IntegrationTest extends \PHPUnit_Framework_TestCase
+class IntegrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Model\Integration
@@ -35,17 +35,11 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceCollectionMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->contextMock = $this->getMock(
-            'Magento\Framework\Model\Context',
-            ['getEventDispatcher'],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $eventManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             '',
             false,
@@ -56,15 +50,9 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->will($this->returnValue($eventManagerMock));
-        $this->registryMock = $this->getMock(
-            'Magento\Framework\Registry',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\AbstractResource',
+            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
             [],
             '',
             false,
@@ -72,13 +60,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             true,
             ['getIdFieldName', 'load', 'selectActiveIntegrationByConsumerId']
         );
-        $this->resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\AbstractDb',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceCollectionMock = $this->createMock(\Magento\Framework\Data\Collection\AbstractDb::class);
         $this->integrationModel = new \Magento\Integration\Model\Integration(
             $this->contextMock,
             $this->registryMock,

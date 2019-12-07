@@ -1,59 +1,197 @@
 <?php
 /**
- * Mail Message
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mail;
 
-class Message extends \Zend_Mail implements MessageInterface
+use Zend\Mime\Mime;
+use Zend\Mime\Part;
+
+/**
+ * Class Message for email transportation
+ *
+ * @deprecated
+ * @see \Magento\Framework\Mail\EmailMessage
+ */
+class Message implements MailMessageInterface
 {
     /**
-     * @param string $charset
+     * @var \Zend\Mail\Message
      */
-    public function __construct($charset = 'utf-8')
-    {
-        parent::__construct($charset);
-    }
+    protected $zendMessage;
 
     /**
      * Message type
      *
      * @var string
      */
-    protected $messageType = self::TYPE_TEXT;
+    private $messageType = Mime::TYPE_TEXT;
 
     /**
-     * Set message body
+     * Initialize dependencies.
      *
-     * @param string $body
-     * @return $this
+     * @param string $charset
      */
-    public function setBody($body)
+    public function __construct($charset = 'utf-8')
     {
-        return $this->messageType == self::TYPE_TEXT ? $this->setBodyText($body) : $this->setBodyHtml($body);
+        $this->zendMessage = new \Zend\Mail\Message();
+        $this->zendMessage->setEncoding($charset);
     }
 
     /**
-     * Set message body
+     * @inheritdoc
      *
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->messageType == self::TYPE_TEXT ? $this->getBodyText() : $this->getBodyHtml();
-    }
-
-    /**
-     * Set message type
-     *
-     * @param string $type
-     * @return $this
+     * @deprecated
+     * @see \Magento\Framework\Mail\Message::setBodyText
+     * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
     public function setMessageType($type)
     {
         $this->messageType = $type;
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @deprecated
+     * @see \Magento\Framework\Mail\Message::setBodyText
+     * @see \Magento\Framework\Mail\Message::setBodyHtml
+     */
+    public function setBody($body)
+    {
+        if (is_string($body)) {
+            $body = self::createMimeFromString($body, $this->messageType);
+        }
+        $this->zendMessage->setBody($body);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSubject($subject)
+    {
+        $this->zendMessage->setSubject($subject);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSubject()
+    {
+        return $this->zendMessage->getSubject();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getBody()
+    {
+        return $this->zendMessage->getBody();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @deprecated This function is missing the from name. The
+     * setFromAddress() function sets both from address and from name.
+     * @see setFromAddress()
+     */
+    public function setFrom($fromAddress)
+    {
+        $this->setFromAddress($fromAddress, null);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setFromAddress($fromAddress, $fromName = null)
+    {
+        $this->zendMessage->setFrom($fromAddress, $fromName);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addTo($toAddress)
+    {
+        $this->zendMessage->addTo($toAddress);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addCc($ccAddress)
+    {
+        $this->zendMessage->addCc($ccAddress);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addBcc($bccAddress)
+    {
+        $this->zendMessage->addBcc($bccAddress);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setReplyTo($replyToAddress)
+    {
+        $this->zendMessage->setReplyTo($replyToAddress);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRawMessage()
+    {
+        return $this->zendMessage->toString();
+    }
+
+    /**
+     * Create mime message from the string.
+     *
+     * @param string $body
+     * @param string $messageType
+     * @return \Zend\Mime\Message
+     */
+    private function createMimeFromString($body, $messageType)
+    {
+        $part = new Part($body);
+        $part->setCharset($this->zendMessage->getEncoding());
+        $part->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE);
+        $part->setType($messageType);
+        $mimeMessage = new \Zend\Mime\Message();
+        $mimeMessage->addPart($part);
+        return $mimeMessage;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setBodyHtml($html)
+    {
+        $this->setMessageType(Mime::TYPE_HTML);
+        return $this->setBody($html);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setBodyText($text)
+    {
+        $this->setMessageType(Mime::TYPE_TEXT);
+        return $this->setBody($text);
     }
 }

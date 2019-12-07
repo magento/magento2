@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Security\Test\TestCase\LockAdminUserWhenCreatingNewUserTest" summary="Lock admin user after entering incorrect password while creating new User">
+        <variation name="LockAdminUserWhenCreatingNewUserTestVariation1">
+            <data name="configData" xsi:type="string">user_lockout_failures</data>
+            <data name="tag" xsi:type="string">severity:S2,mftf_migrated:yes</data>
+            <data name="customAdmin/dataset" xsi:type="string">custom_admin_with_default_role</data>
+            <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
+            <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
+            <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
+            <data name="user/data/email" xsi:type="string">email%isolation%@example.com</data>
+            <data name="user/data/password" xsi:type="string">123123q</data>
+            <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
+            <data name="user/data/current_password" xsi:type="string">incorrect password</data>
+            <data name="attempts" xsi:type="string">4</data>
+            <constraint name="Magento\Security\Test\Constraint\AssertUserIsLocked" />
+        </variation>
+    </testCase>
+</config>

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template\Config;
@@ -47,7 +47,6 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
             );
         }
 
-        /** @var \Magento\Framework\Filesystem\File\Read $fileRead */
         $fileRead = $this->fileReadFactory->create($this->key(), DriverPool::FILE);
         $contents = $fileRead->readAll();
         return str_replace('<template ', '<template module="' . $moduleName . '" ', $contents);

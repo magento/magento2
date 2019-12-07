@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,15 +27,14 @@ class AssertProductForm extends AbstractAssertForm
     ];
 
     /**
-     * Sort fields for fixture and form data
+     * Sort fields for fixture and form data.
      *
      * @var array
      */
     protected $sortFields = [
-        'custom_options::title',
-        'cross_sell_products::entity_id',
-        'up_sell_products::entity_id',
-        'related_products::entity_id',
+        'cross_sell_products::id',
+        'up_sell_products::id',
+        'related_products::id',
     ];
 
     /**
@@ -70,7 +69,7 @@ class AssertProductForm extends AbstractAssertForm
         $fixtureData = $this->prepareFixtureData($productData, $this->sortFields);
         $formData = $this->prepareFormData($productPage->getProductForm()->getData($product), $this->sortFields);
         $error = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertTrue(empty($error), $error);
+        \PHPUnit\Framework\Assert::assertTrue(empty($error), $error);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,11 +27,7 @@ class RulePool
     const TYPE_EMAIL_TEMPLATE = 'email';
     /**#@-*/
 
-    /**
-     * File system
-     *
-     * @var \Magento\Framework\Filesystem
-     */
+    /**#@-*/
     protected $filesystem;
 
     /**
@@ -180,7 +176,12 @@ class RulePool
                                         'optionalParams' => ['locale']
                                     ]),
                                 $this->simpleFactory
-                                    ->create(['pattern' => "<theme_dir>/web"])
+                                    ->create(['pattern' => "<theme_dir>/web"]),
+                                $this->simpleFactory
+                                    ->create([
+                                        'pattern' => "<theme_pubstatic_dir>",
+                                        'optionalParams' => ['theme_pubstatic_dir']
+                                    ]),
                             ]
                         )]
                     ),

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!-- Include section -->
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/ui_component.xsd"/>
+
+    <xs:complexType name="componentSelect">
+        <xs:sequence>
+            <xs:group ref="configurable" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="abstractSettings"/>
+                        <xs:group ref="componentSelectSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:complexType name="componentFilterSelect">
+        <xs:complexContent>
+            <xs:extension base="componentSelect"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="formElementSelect">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="componentSelectSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:group name="componentSelectSettings">
+        <xs:choice>
+            <xs:element name="options" type="optionsType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Options for "select" element.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="caption" type="translatableString">
+                <xs:annotation>
+                    <xs:documentation>
+                        Caption for DOM "select" element.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="captionValue" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Caption value for DOM "select" element.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="filterBy">
+                <xs:annotation>
+                    <xs:documentation>
+                        Search criteria configuration for options list.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="target" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    Reference to the UI component that provides value to be used to filter provided
+                                    options data.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="field" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    The key in the options data object that will be filtered by target value.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="customEntry" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        The path to the component instance that will be used in case no options were were found after
+                        "filterBy" configuration applied.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+</xs:schema>

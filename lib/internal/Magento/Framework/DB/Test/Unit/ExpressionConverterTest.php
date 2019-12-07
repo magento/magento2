@@ -1,15 +1,14 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\DB\Test\Unit;
 
-
 use Magento\Framework\DB\ExpressionConverter;
 
-class ExpressionConverterTest extends \PHPUnit_Framework_TestCase
+class ExpressionConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider shortenEntityNameDataProvider
@@ -23,6 +22,9 @@ class ExpressionConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function shortenEntityNameDataProvider()
     {
         $length64 = '________________________________________________________________';

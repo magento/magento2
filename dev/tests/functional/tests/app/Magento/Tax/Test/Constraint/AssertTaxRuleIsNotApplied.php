@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,7 +34,7 @@ class AssertTaxRuleIsNotApplied extends AssertTaxRuleApplying
                 . "\nActual: " . $actualGrandTotal;
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(empty($errorMessages), implode(";\n", $errorMessages));
+        \PHPUnit\Framework\Assert::assertTrue(empty($errorMessages), implode(";\n", $errorMessages));
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Class ShipmentSender
@@ -56,10 +57,10 @@ class ShipmentSender extends Sender
      * @param ShipmentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      * @param PaymentHelper $paymentHelper
      * @param ShipmentResource $shipmentResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
      */
     public function __construct(
@@ -95,14 +96,16 @@ class ShipmentSender extends Sender
      * @param Shipment $shipment
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Shipment $shipment, $forceSyncMode = false)
     {
-        $shipment->setSendEmail(true);
+        $shipment->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $shipment->getOrder();
-            
+            $this->identityContainer->setStore($order->getStore());
+
             $transport = [
                 'order' => $order,
                 'shipment' => $shipment,
@@ -111,21 +114,34 @@ class ShipmentSender extends Sender
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
-                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+                'order_data' => [
+                    'customer_name' => $order->getCustomerName(),
+                    'is_not_virtual' => $order->getIsNotVirtual(),
+                    'email_customer_note' => $order->getEmailCustomerNote(),
+                    'frontend_status_label' => $order->getFrontendStatusLabel()
+                ]
             ];
+            $transportObject = new DataObject($transport);
 
+            /**
+             * Event argument `transport` is @deprecated. Use `transportObject` instead.
+             */
             $this->eventManager->dispatch(
                 'email_shipment_set_template_vars_before',
-                ['sender' => $this, 'transport' => $transport]
+                ['sender' => $this, 'transport' => $transportObject->getData(), 'transportObject' => $transportObject]
             );
 
-            $this->templateContainer->setTemplateVars($transport);
+            $this->templateContainer->setTemplateVars($transportObject->getData());
 
             if ($this->checkAndSend($order)) {
                 $shipment->setEmailSent(true);
                 $this->shipmentResource->saveAttribute($shipment, ['send_email', 'email_sent']);
                 return true;
             }
+        } else {
+            $shipment->setEmailSent(null);
+            $this->shipmentResource->saveAttribute($shipment, 'email_sent');
         }
 
         $this->shipmentResource->saveAttribute($shipment, 'send_email');
@@ -138,6 +154,7 @@ class ShipmentSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {

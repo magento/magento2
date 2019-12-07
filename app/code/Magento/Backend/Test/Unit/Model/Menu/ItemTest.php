@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Menu;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu\Item
@@ -40,12 +43,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_validatorMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_moduleListMock;
+
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
 
     /**
      * @var array
@@ -57,31 +58,25 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         'resource' => 'Magento_Config::config',
         'dependsOnModule' => 'Magento_Backend',
         'dependsOnConfig' => 'system/config/isEnabled',
-        'tooltip' => 'Item tooltip',
+        'toolTip' => 'Item tooltip',
     ];
 
     protected function setUp()
     {
-        $this->_aclMock = $this->getMock('Magento\Framework\AuthorizationInterface');
-        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_menuFactoryMock = $this->getMock(
-            'Magento\Backend\Model\MenuFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
-        $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
-        $this->_validatorMock = $this->getMock('Magento\Backend\Model\Menu\Item\Validator');
-        $this->_validatorMock->expects($this->any())->method('validate');
-        $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
+        $this->_aclMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
+        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_menuFactoryMock = $this->createPartialMock(\Magento\Backend\Model\MenuFactory::class, ['create']);
+        $this->_urlModelMock = $this->createMock(\Magento\Backend\Model\Url::class);
+        $this->_moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $validatorMock = $this->createMock(\Magento\Backend\Model\Menu\Item\Validator::class);
+        $validatorMock->expects($this->any())->method('validate');
+        $this->_moduleListMock = $this->createMock(\Magento\Framework\Module\ModuleListInterface::class);
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $helper->getObject(
-            'Magento\Backend\Model\Menu\Item',
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_model = $this->objectManager->getObject(
+            \Magento\Backend\Model\Menu\Item::class,
             [
-                'validator' => $this->_validatorMock,
+                'validator' => $validatorMock,
                 'authorization' => $this->_aclMock,
                 'scopeConfig' => $this->_scopeConfigMock,
                 'menuFactory' => $this->_menuFactoryMock,
@@ -96,9 +91,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlWithEmptyActionReturnsHashSign()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $item = $helper->getObject(
-            'Magento\Backend\Model\Menu\Item',
+        $item = $this->objectManager->getObject(
+            \Magento\Backend\Model\Menu\Item::class,
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
         );
         $this->assertEquals('#', $item->getUrl());
@@ -126,9 +120,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testHasClickCallbackReturnsTrueIfItemHasNoAction()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $item = $helper->getObject(
-            'Magento\Backend\Model\Menu\Item',
+        $item = $this->objectManager->getObject(
+            \Magento\Backend\Model\Menu\Item::class,
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
         );
         $this->assertTrue($item->hasClickCallback());
@@ -137,9 +130,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetClickCallbackReturnsStoppingJsIfItemDoesntHaveAction()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $item = $helper->getObject(
-            'Magento\Backend\Model\Menu\Item',
+        $item = $this->objectManager->getObject(
+            \Magento\Backend\Model\Menu\Item::class,
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
         );
         $this->assertEquals('return false;', $item->getClickCallback());
@@ -215,15 +207,86 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChildrenCreatesSubmenuOnFirstCall()
     {
-        $menuMock = $this->getMock(
-            'Magento\Backend\Model\Menu',
-            [],
-            [$this->getMock('Psr\Log\LoggerInterface')]
-        );
+        $menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
 
         $this->_menuFactoryMock->expects($this->once())->method('create')->will($this->returnValue($menuMock));
 
         $this->_model->getChildren();
         $this->_model->getChildren();
+    }
+
+    /**
+     * @param array $data
+     * @param array $expected
+     * @dataProvider toArrayDataProvider
+     */
+    public function testToArray(array $data, array $expected)
+    {
+        $menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
+        $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
+        $menuMock->method('toArray')
+            ->willReturn($data['sub_menu']);
+
+        $model = $this->objectManager->getObject(
+            \Magento\Backend\Model\Menu\Item::class,
+            [
+                'authorization' => $this->_aclMock,
+                'scopeConfig' => $this->_scopeConfigMock,
+                'menuFactory' => $this->_menuFactoryMock,
+                'urlModel' => $this->_urlModelMock,
+                'moduleList' => $this->_moduleListMock,
+                'moduleManager' => $this->_moduleManager,
+                'data' => $data
+            ]
+        );
+        $this->assertEquals($expected, $model->toArray());
+    }
+
+    /**
+     * @return array
+     */
+    public function toArrayDataProvider()
+    {
+        return include __DIR__ . '/../_files/menu_item_data.php';
+    }
+
+    /**
+     * @param array $constructorData
+     * @param array $populateFromData
+     * @param array $expected
+     * @dataProvider populateFromArrayDataProvider
+     */
+    public function testPopulateFromArray(
+        array $constructorData,
+        array $populateFromData,
+        array $expected
+    ) {
+        $menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
+        $this->_menuFactoryMock->method('create')->willReturn($menuMock);
+        $menuMock->method('toArray')
+            ->willReturn(['submenuArray']);
+
+        $model = $this->objectManager->getObject(
+            \Magento\Backend\Model\Menu\Item::class,
+            [
+                'authorization' => $this->_aclMock,
+                'scopeConfig' => $this->_scopeConfigMock,
+                'menuFactory' => $this->_menuFactoryMock,
+                'urlModel' => $this->_urlModelMock,
+                'moduleList' => $this->_moduleListMock,
+                'moduleManager' => $this->_moduleManager,
+                'data' => $constructorData
+            ]
+        );
+        $model->populateFromArray($populateFromData);
+        $this->assertEquals($expected, $model->toArray());
+    }
+
+    /**
+     * @return array
+     */
+    public function populateFromArrayDataProvider()
+    {
+        return include __DIR__ . '/../_files/menu_item_constructor_data.php';
     }
 }

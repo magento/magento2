@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -11,6 +11,7 @@ namespace Magento\Sales\Api\Data;
  * An invoice is a record of the receipt of payment for an order. An invoice can include comments that detail the
  * invoice history.
  * @api
+ * @since 100.0.2
  */
 interface InvoiceCommentSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

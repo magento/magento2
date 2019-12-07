@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CodeMessDetectorTest extends \PHPUnit_Framework_TestCase
+class CodeMessDetectorTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanRun()
     {
@@ -15,7 +15,7 @@ class CodeMessDetectorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            class_exists('PHPMD\TextUI\Command'),
+            class_exists(\PHPMD\TextUI\Command::class),
             $messDetector->canRun()
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,14 +22,14 @@ use Magento\Catalog\Test\Page\Product\CatalogProductCompare;
  * 4. Navigate to compare page(click "compare product" link at the top of the page).
  * 5. Perform all asserts.
  *
- * @group Compare_Products_(MX)
+ * @group Compare_Products
  * @ZephyrId MAGETWO-25843
  */
 class AddCompareProductsTest extends AbstractCompareProductsTest
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -76,7 +76,7 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
-        for ($i = 1; $i <= count($this->products); $i++) {
+        for ($i = 1, $count = count($this->products); $i <= $count; $i++) {
             $this->catalogProductCompare->getCompareProductsBlock()->removeProduct();
         }
     }

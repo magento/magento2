@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -103,6 +103,8 @@ class TotalsCollector
     }
 
     /**
+     * Collect quote totals.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return Address\Total
      */
@@ -115,13 +117,15 @@ class TotalsCollector
     }
 
     /**
+     * Collect quote.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote\Address\Total
      */
     public function collect(\Magento\Quote\Model\Quote $quote)
     {
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->totalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class);
 
         $this->eventManager->dispatch(
             'sales_quote_collect_totals_before',
@@ -172,6 +176,8 @@ class TotalsCollector
     }
 
     /**
+     * Validate coupon code.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
@@ -203,11 +209,12 @@ class TotalsCollector
      */
     protected function _collectItemsQtys(\Magento\Quote\Model\Quote $quote)
     {
+        $quoteItems = $quote->getAllVisibleItems();
         $quote->setItemsCount(0);
         $quote->setItemsQty(0);
         $quote->setVirtualItemsQty(0);
 
-        foreach ($quote->getAllVisibleItems() as $item) {
+        foreach ($quoteItems as $item) {
             if ($item->getParentItem()) {
                 continue;
             }
@@ -231,6 +238,8 @@ class TotalsCollector
     }
 
     /**
+     * Collect address total.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address $address
      * @return Address\Total
@@ -250,7 +259,7 @@ class TotalsCollector
         $shippingAssignment->setItems($address->getAllItems());
 
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->totalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class);
         $this->eventManager->dispatch(
             'sales_quote_address_collect_totals_before',
             [

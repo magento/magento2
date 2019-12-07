@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,10 @@ namespace Magento\Review\Test\Unit\Block\Adminhtml;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class RssTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test RSS adminhtml block
+ */
+class RssTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Review\Block\Adminhtml\Rss
@@ -35,14 +38,17 @@ class RssTest extends \PHPUnit_Framework_TestCase
      */
     protected $urlBuilder;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
-        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->rss = $this->getMock('Magento\Review\Model\Rss', ['__wakeUp', 'getProductCollection'], [], '', false);
-        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
+        $this->storeManagerInterface = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->rss = $this->createPartialMock(\Magento\Review\Model\Rss::class, ['__wakeUp', 'getProductCollection']);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            'Magento\Review\Block\Adminhtml\Rss',
+            \Magento\Review\Block\Adminhtml\Rss::class,
             [
                 'storeManager' => $this->storeManagerInterface,
                 'rssModel' => $this->rss,
@@ -51,18 +57,22 @@ class RssTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetRssData()
     {
+        $rssUrl = '';
         $rssData = [
             'title' => 'Pending product review(s)',
             'description' => 'Pending product review(s)',
-            'link' => 'http://rss.magento.com',
+            'link' => $rssUrl,
             'charset' => 'UTF-8',
             'entries' => [
                     'title' => 'Product: "Product Name" reviewed by: Product Nick',
                     'link' => 'http://product.magento.com',
                     'description' => [
-                            'rss_url' => 'http://rss.magento.com',
+                            'rss_url' => $rssUrl,
                             'name' => 'Product Name',
                             'summary' => 'Product Title',
                             'review' => 'Product Detail',
@@ -71,9 +81,8 @@ class RssTest extends \PHPUnit_Framework_TestCase
                         ],
                 ],
         ];
-        $rssUrl = 'http://rss.magento.com';
-        $productModel = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product',
+        $productModel = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product::class,
             [
                 'getStoreId',
                 'getId',
@@ -83,12 +92,9 @@ class RssTest extends \PHPUnit_Framework_TestCase
                 'getTitle',
                 'getNickname',
                 'getProductUrl'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $storeModel = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $storeModel = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerInterface->expects($this->once())->method('getStore')->will($this->returnValue($storeModel));
         $storeModel->expects($this->once())->method('getName')
             ->will($this->returnValue($rssData['entries']['description']['store']));
@@ -124,16 +130,25 @@ class RssTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($rssData['entries']['description']['store'], $data['entries'][0]['description']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetCacheLifetime()
     {
         $this->assertEquals(0, $this->block->getCacheLifetime());
     }
 
+    /**
+     * @return void
+     */
     public function testIsAllowed()
     {
         $this->assertEquals(true, $this->block->isAllowed());
     }
 
+    /**
+     * @return void
+     */
     public function testGetFeeds()
     {
         $this->assertEquals([], $this->block->getFeeds());

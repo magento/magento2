@@ -1,13 +1,16 @@
 <?php
 /**
  * @author      Magento Core Team <core@magentocommerce.com>
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Option management model for product attribute.
+ */
 class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
 {
     /**
@@ -25,7 +28,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems($attributeCode)
     {
@@ -36,7 +39,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function add($attributeCode, $option)
     {
@@ -48,7 +51,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($attributeCode, $optionId)
     {

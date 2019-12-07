@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Layout;
@@ -8,7 +8,7 @@ namespace Magento\Theme\Test\Unit\Model\Layout;
 use Magento\Framework\DataObject;
 use Magento\Theme\Model\Layout\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -20,9 +20,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataStorage;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->dataStorage = $this->getMockBuilder('Magento\Framework\Config\DataInterface')
+        $this->dataStorage = $this->getMockBuilder(\Magento\Framework\Config\DataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->_model = new Config($this->dataStorage);

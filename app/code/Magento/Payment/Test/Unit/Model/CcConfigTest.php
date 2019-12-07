@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 
-class CcConfigTest extends \PHPUnit_Framework_TestCase
+class CcConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Model\CcConfig */
     protected $model;
@@ -29,11 +29,11 @@ class CcConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
-        $this->repositoryMock = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->urlMock = $this->getMock('Magento\Framework\UrlInterface');
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->configMock = $this->createMock(\Magento\Payment\Model\Config::class);
+        $this->repositoryMock = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->model = new \Magento\Payment\Model\CcConfig(
             $this->configMock,
@@ -42,12 +42,6 @@ class CcConfigTest extends \PHPUnit_Framework_TestCase
             $this->urlMock,
             $this->loggerMock
         );
-    }
-
-    public function testGetSsStartYears()
-    {
-        $this->assertCount(6, $this->model->getSsStartYears());
-        $this->assertEquals(date("Y"), $this->model->getSsStartYears()[date("Y")]);
     }
 
     public function testGetCcAvailableTypes()
@@ -83,11 +77,6 @@ class CcConfigTest extends \PHPUnit_Framework_TestCase
     public function testHasVerification()
     {
         $this->assertEquals(true, $this->model->hasVerification());
-    }
-
-    public function testHasSsCardType()
-    {
-        $this->assertEquals(false, $this->model->hasSsCardType());
     }
 
     public function testGetCvvImageUrl()

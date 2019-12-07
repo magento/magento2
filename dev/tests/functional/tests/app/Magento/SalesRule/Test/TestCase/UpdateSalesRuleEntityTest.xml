@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,6 +10,7 @@
         <variation name="UpdateSalesRuleEntityTestVariation1">
             <data name="salesRuleOrigin/dataset" xsi:type="string">active_sales_rule_with_complex_conditions</data>
             <data name="salesRule/data/conditions_serialized" xsi:type="string">[Subtotal|is|400]</data>
+            <data name="salesRule/data/actions_serialized" xsi:type="string">[Category|is|%category_id%]</data>
             <data name="salesRule/data/simple_action" xsi:type="string">Buy X get Y free (discount amount is Y)</data>
             <data name="salesRule/data/discount_amount" xsi:type="string">1</data>
             <data name="salesRule/data/discount_step" xsi:type="string">3</data>
@@ -20,6 +21,9 @@
             <data name="address/data/postcode" xsi:type="string">95814</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="cartPrice/sub_total" xsi:type="string">400.00</data>
+            <data name="cartPrice/grand_total" xsi:type="string">300.00</data>
+            <data name="cartPrice/discount" xsi:type="string">100.00</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />

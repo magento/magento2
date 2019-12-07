@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
@@ -83,7 +83,20 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->dispatch('backend/admin/export/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('fieldset#base_fieldset', 1, $body);
-        $this->assertSelectCount('fieldset#base_fieldset div.field', 2, $body);
+
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//fieldset[@id="base_fieldset"]',
+                $body
+            )
+        );
+        $this->assertEquals(
+            3,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//fieldset[@id="base_fieldset"]/div[contains(@class,"field")]',
+                $body
+            )
+        );
     }
 }

@@ -1,25 +1,27 @@
 {
     "name": "magento/module-dhl",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
-        "magento/module-config": "100.0.*",
-        "magento/module-store": "100.0.*",
-        "magento/module-shipping": "100.0.*",
-        "magento/module-backend": "100.0.*",
-        "magento/module-directory": "100.0.*",
-        "magento/module-sales": "100.0.*",
-        "magento/module-catalog": "100.0.*",
-        "magento/module-catalog-inventory": "100.0.*",
-        "magento/module-quote": "100.0.*",
-        "magento/framework": "100.0.*",
-        "lib-libxml": "*"
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "lib-libxml": "*",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-inventory": "*",
+        "magento/module-config": "*",
+        "magento/module-directory": "*",
+        "magento/module-quote": "*",
+        "magento/module-sales": "*",
+        "magento/module-shipping": "*",
+        "magento/module-store": "*"
     },
     "suggest": {
-        "magento/module-checkout": "100.0.*"
+        "magento/module-checkout": "*"
     },
     "type": "magento2-module",
-    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

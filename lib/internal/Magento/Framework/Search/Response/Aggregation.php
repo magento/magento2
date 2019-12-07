@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Response;
@@ -10,6 +10,7 @@ use Magento\Framework\Api\Search\BucketInterface;
 
 /**
  * Faceted data
+ * @api
  */
 class Aggregation implements AggregationInterface, \IteratorAggregate
 {
@@ -46,7 +47,7 @@ class Aggregation implements AggregationInterface, \IteratorAggregate
      */
     public function getBucket($bucketName)
     {
-        return isset($this->buckets[$bucketName]) ? $this->buckets[$bucketName] : null;
+        return $this->buckets[$bucketName] ?? null;
     }
 
     /**

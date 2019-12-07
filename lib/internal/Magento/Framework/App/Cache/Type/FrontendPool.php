@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Cache\Type;
@@ -10,6 +10,8 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * In-memory readonly pool of cache front-ends with enforced access control, specific to cache types
+ *
+ * @api
  */
 class FrontendPool
 {
@@ -84,7 +86,7 @@ class FrontendPool
             $frontendInstance = $this->_frontendPool->get($frontendId);
             /** @var $frontendInstance AccessProxy */
             $frontendInstance = $this->_objectManager->create(
-                'Magento\Framework\App\Cache\Type\AccessProxy',
+                \Magento\Framework\App\Cache\Type\AccessProxy::class,
                 ['frontend' => $frontendInstance, 'identifier' => $cacheType]
             );
             $this->_instances[$cacheType] = $frontendInstance;

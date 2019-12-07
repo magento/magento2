@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Customer\Model\Address;
 
 /**
  * Class AddressTest
  */
-class RelationTest extends \PHPUnit_Framework_TestCase
+class RelationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Customer\Model\CustomerFactory | \PHPUnit_Framework_MockObject_MockObject */
     protected $customerFactoryMock;
@@ -20,15 +21,12 @@ class RelationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerFactoryMock = $this->getMock(
-            'Magento\Customer\Model\CustomerFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->customerFactoryMock = $this->createPartialMock(
+            \Magento\Customer\Model\CustomerFactory::class,
+            ['create']
         );
         $this->relation = (new ObjectManagerHelper($this))->getObject(
-            'Magento\Customer\Model\ResourceModel\Address\Relation',
+            \Magento\Customer\Model\ResourceModel\Address\Relation::class,
             [
                 'customerFactory' => $this->customerFactoryMock
             ]
@@ -43,9 +41,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessRelation($addressId, $isDefaultBilling, $isDefaultShipping)
     {
-        $addressModel = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
-            [
+        $addressModel = $this->createPartialMock(Address::class, [
                 '__wakeup',
                 'getId',
                 'getEntityTypeId',
@@ -55,21 +51,25 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 'validateBeforeSave',
                 'beforeSave',
                 'afterSave',
-                'isSaveAllowed'
-            ],
-            [],
-            '',
-            false
-        );
-        $customerModel = $this->getMock(
-            'Magento\Customer\Model\Customer',
-            ['__wakeup', 'setDefaultBilling', 'setDefaultShipping', 'save', 'load', 'getResource', 'getId'],
-            [],
-            '',
-            false
+                'isSaveAllowed',
+                'getIsCustomerSaveTransaction'
+            ]);
+        $customerModel = $this->createPartialMock(
+            \Magento\Customer\Model\Customer::class,
+            [
+                '__wakeup',
+                'setDefaultBilling',
+                'setDefaultShipping',
+                'save',
+                'load',
+                'getResource',
+                'getId',
+                'getDefaultShippingAddress',
+                'getDefaultBillingAddress'
+            ]
         );
         $customerResource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -78,7 +78,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ['getConnection', 'getTable']
         );
         $connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -99,6 +99,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
         $this->customerFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($customerModel);
+
         if ($addressId && ($isDefaultBilling || $isDefaultShipping)) {
             $customerId = 1;
             $customerResource->expects($this->exactly(2))->method('getConnection')->willReturn($connectionMock);
@@ -123,7 +124,8 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 $conditionSql
             );
         }
-        $this->relation->processRelation($addressModel);
+        $result = $this->relation->processRelation($addressModel);
+        $this->assertNull($result);
     }
 
     /**

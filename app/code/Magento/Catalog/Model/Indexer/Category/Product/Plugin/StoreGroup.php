@@ -1,39 +1,72 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Catalog\Model\Indexer\Category\Product;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+
 class StoreGroup
 {
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var bool
+     */
+    private $needInvalidating;
+
+    /**
+     * @var IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**
-     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @var TableMaintainer
      */
-    public function __construct(\Magento\Framework\Indexer\IndexerRegistry $indexerRegistry)
-    {
+    protected $tableMaintainer;
+
+    /**
+     * @param IndexerRegistry $indexerRegistry
+     * @param TableMaintainer $tableMaintainer
+     */
+    public function __construct(
+        IndexerRegistry $indexerRegistry,
+        TableMaintainer $tableMaintainer
+    ) {
         $this->indexerRegistry = $indexerRegistry;
+        $this->tableMaintainer = $tableMaintainer;
     }
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $subject
-     * @param callable $proceed
-     * @param \Magento\Framework\Model\AbstractModel $group
-     * @return mixed
+     * Check if need invalidate flat category indexer
+     *
+     * @param AbstractDb $subject
+     * @param AbstractModel $group
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $group
-    ) {
-        $needInvalidating = $this->validate($group);
-        $objectResource = $proceed($group);
-        if ($needInvalidating) {
-            $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID)->invalidate();
+    public function beforeSave(AbstractDb $subject, AbstractModel $group)
+    {
+        $this->needInvalidating = $this->validate($group);
+    }
+
+    /**
+     * Invalidate flat product
+     *
+     * @param AbstractDb $subject
+     * @param AbstractDb $objectResource
+     *
+     * @return AbstractDb
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterSave(AbstractDb $subject, AbstractDb $objectResource)
+    {
+        if ($this->needInvalidating) {
+            $this->indexerRegistry->get(Product::INDEXER_ID)->invalidate();
         }
 
         return $objectResource;
@@ -42,15 +75,30 @@ class StoreGroup
     /**
      * Validate changes for invalidating indexer
      *
-     * @param \Magento\Framework\Model\AbstractModel $group
+     * @param AbstractModel $group
      * @return bool
      */
-    protected function validate(\Magento\Framework\Model\AbstractModel $group)
+    protected function validate(AbstractModel $group)
     {
-        return ($group->dataHasChangedFor(
-            'website_id'
-        ) || $group->dataHasChangedFor(
-            'root_category_id'
-        )) && !$group->isObjectNew();
+        return ($group->dataHasChangedFor('website_id') || $group->dataHasChangedFor('root_category_id'))
+               && !$group->isObjectNew();
+    }
+
+    /**
+     * Delete catalog_category_product indexer tables for deleted store group
+     *
+     * @param AbstractDb $subject
+     * @param AbstractDb $objectResource
+     * @param AbstractModel $storeGroup
+     *
+     * @return AbstractDb
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $storeGroup)
+    {
+        foreach ($storeGroup->getStores() as $store) {
+            $this->tableMaintainer->dropTablesForStore((int)$store->getId());
+        }
+        return $objectResource;
     }
 }

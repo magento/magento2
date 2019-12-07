@@ -2,11 +2,15 @@
 /**
  * ID column renderer, also contains image URL in hidden field
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Renderer;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Id extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

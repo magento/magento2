@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'ko',
@@ -13,31 +17,8 @@ define([
     return Element.extend({
         defaults: {
             template: 'ui/grid/paging/sizes',
-            value: 20,
             minSize: 1,
             maxSize: 999,
-            options: {
-                '20': {
-                    value: 20,
-                    label: 20
-                },
-                '30': {
-                    value: 30,
-                    label: 30
-                },
-                '50': {
-                    value: 50,
-                    label: 50
-                },
-                '100': {
-                    value: 100,
-                    label: 100
-                },
-                '200': {
-                    value: 200,
-                    label: 200
-                }
-            },
             statefull: {
                 options: true,
                 value: true

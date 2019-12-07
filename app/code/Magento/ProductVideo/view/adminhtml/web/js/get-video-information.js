@@ -1,14 +1,13 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-require([
-        'jquery',
-        'Magento_Ui/js/modal/alert',
-        'jquery/ui'
-    ],
-    function ($, alert) {
+define([
+    'jquery',
+    'Magento_Ui/js/modal/alert',
+    'jquery/ui',
+    'mage/translate'
+], function ($, alert) {
         'use strict';
 
         var videoRegister = {
@@ -87,6 +86,7 @@ require([
                 this._height = this.element.data('height');
                 this._autoplay = !!this.element.data('autoplay');
                 this._playing = this._autoplay || false;
+                this.useYoutubeNocookie = this.element.data('youtubenocookie') || false;
 
                 this._responsive = this.element.data('responsive') !== false;
 
@@ -164,6 +164,12 @@ require([
                      * @private
                      */
                     'youtubeapiready': function () {
+                        var host = 'https://www.youtube.com';
+
+                        if (self.useYoutubeNocookie) {
+                            host = 'https://www.youtube-nocookie.com';
+                        }
+
                         if (self._player !== undefined) {
                             return;
                         }
@@ -178,6 +184,7 @@ require([
                             width: self._width,
                             videoId: self._code,
                             playerVars: self._params,
+                            host: host,
                             events: {
 
                                 /**
@@ -303,7 +310,7 @@ require([
                     additionalParams += '&autoplay=1';
                 }
 
-                src = window.location.protocol + '//player.vimeo.com/video/' +
+                src = 'https://player.vimeo.com/video/' +
                     this._code + '?api=1&player_id=vimeo' +
                     this._code +
                     timestamp +
@@ -336,6 +343,8 @@ require([
 
             _FINISH_UPDATE_INFORMATION_TRIGGER: 'finish_update_information',
 
+            _VIDEO_URL_VALIDATE_TRIGGER: 'validate_video_url',
+
             _videoInformation: null,
 
             _currentVideoUrl: null,
@@ -351,6 +360,23 @@ require([
                         this._currentVideoUrl = null;
                     }, this
                 ));
+                this.element.on(this._VIDEO_URL_VALIDATE_TRIGGER, $.proxy(this._onUrlValidateHandler, this));
+            },
+
+            /**
+             * @private
+             */
+            _onUrlValidateHandler: function (event, callback, forceVideo) {
+                var url = this.element.val(),
+                    videoInfo;
+
+                videoInfo = this._validateURL(url, forceVideo);
+
+                if (videoInfo) {
+                    callback();
+                } else {
+                    this._onRequestError($.mage.__('Invalid video url'));
+                }
             },
 
             /**
@@ -428,7 +454,7 @@ require([
                             $.unique(errorsMessage).join(', ');
                     };
 
-                    if (data.error && data.error.code === 400) {
+                    if (data.error && [400, 402, 403].indexOf(data.error.code) !== -1) {
                         this._onRequestError(createErrorMessage());
 
                         return;
@@ -451,7 +477,8 @@ require([
                         description: tmp.snippet.description,
                         thumbnail: tmp.snippet.thumbnails.high.url,
                         videoId: videoInfo.id,
-                        videoProvider: videoInfo.type
+                        videoProvider: videoInfo.type,
+                        useYoutubeNocookie: videoInfo.useYoutubeNocookie
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -462,7 +489,7 @@ require([
                  * @private
                  */
                 function _onVimeoLoaded(data) {
-                    var tmp = data[0],
+                    var tmp,
                         respData;
 
                     if (data.length < 1) {
@@ -507,7 +534,7 @@ require([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json',
+                        url: 'https://www.vimeo.com/api/v2/video/' + id + '.json',
                         dataType: 'jsonp',
                         data: {
                             format: 'json'
@@ -582,7 +609,8 @@ require([
                 var id,
                     type,
                     ampersandPosition,
-                    vimeoRegex;
+                    vimeoRegex,
+                    useYoutubeNocookie = false;
 
                 if (typeof href !== 'string') {
                     return href;
@@ -602,9 +630,13 @@ require([
                         id = id.substring(0, ampersandPosition);
                     }
 
-                } else if (href.host.match(/youtube\.com|youtu\.be/)) {
+                } else if (href.host.match(/youtube\.com|youtu\.be|youtube-nocookie.com/)) {
                     id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
                     type = 'youtube';
+
+                    if (href.host.match(/youtube-nocookie.com/)) {
+                        useYoutubeNocookie = true;
+                    }
                 } else if (href.host.match(/vimeo\.com/)) {
                     type = 'vimeo';
                     vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
@@ -622,7 +654,7 @@ require([
                 }
 
                 return id ? {
-                    id: id, type: type, s: href.search.replace(/^\?/, '')
+                    id: id, type: type, s: href.search.replace(/^\?/, ''), useYoutubeNocookie: useYoutubeNocookie
                 } : false;
             }
         });

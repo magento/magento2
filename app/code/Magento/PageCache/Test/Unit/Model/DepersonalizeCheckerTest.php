@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Model;
 
 use Magento\PageCache\Model\DepersonalizeChecker;
 
-class DepersonalizeCheckerTest extends \PHPUnit_Framework_TestCase
+/**
+ * Depersonalize checker test
+ */
+class DepersonalizeCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -26,9 +29,9 @@ class DepersonalizeCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
-        $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->cacheConfigMock = $this->createMock(\Magento\PageCache\Model\Config::class);
     }
 
     /**
@@ -56,7 +59,7 @@ class DepersonalizeCheckerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($moduleManagerResult);
 
         $this->cacheConfigMock->expects($this->any())->method('isEnabled')->willReturn($cacheConfigResult);
-        $layoutMock = $this->getMockForAbstractClass('Magento\Framework\View\LayoutInterface', [], '', false);
+        $layoutMock = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
         $layoutMock->expects($this->any())->method('isCacheable')->willReturn($layoutResult);
 
         $object = new DepersonalizeChecker($this->requestMock, $this->moduleManagerMock, $this->cacheConfigMock);

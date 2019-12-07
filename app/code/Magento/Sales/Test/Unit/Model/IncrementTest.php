@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model;
 /**
  * Class IncrementTest
  */
-class IncrementTest extends \PHPUnit_Framework_TestCase
+class IncrementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Increment
@@ -25,12 +25,15 @@ class IncrementTest extends \PHPUnit_Framework_TestCase
      */
     protected $type;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', ['getEntityType'], [], '', false);
-        $this->model = $objectManager->getObject('Magento\Sales\Model\Increment', ['eavConfig' => $this->eavConfig]);
-        $this->type = $this->getMock('Magento\Eav\Model\Entity\Type', ['fetchNewIncrementId'], [], '', false);
+        $this->eavConfig = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getEntityType']);
+        $this->model = $objectManager->getObject(
+            \Magento\Sales\Model\Increment::class,
+            ['eavConfig' => $this->eavConfig]
+        );
+        $this->type = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId']);
     }
 
     public function testGetCurrentValue()

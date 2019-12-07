@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel\Form\Attribute;
@@ -34,7 +34,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Form\Attribute\Collect
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Eav\Model\Attribute', 'Magento\Customer\Model\ResourceModel\Form\Attribute');
+        $this->_init(\Magento\Eav\Model\Attribute::class, \Magento\Customer\Model\ResourceModel\Form\Attribute::class);
     }
 
     /**

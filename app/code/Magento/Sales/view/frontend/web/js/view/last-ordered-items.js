@@ -1,28 +1,47 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+    'Magento_Customer/js/customer-data',
+    'underscore'
+], function (Component, customerData, _) {
     'use strict';
 
     return Component.extend({
-        initialize: function () {
-            var isShowAddToCart = false;
+        defaults: {
+            isShowAddToCart: false
+        },
 
+        /** @inheritdoc */
+        initialize: function () {
             this._super();
             this.lastOrderedItems = customerData.get('last-ordered-items');
+            this.lastOrderedItems.subscribe(this.checkSalableItems.bind(this));
+            this.checkSalableItems();
 
-            for (var item in this.lastOrderedItems.items) {
-                if (item['is_saleable']) {
-                    isShowAddToCart = true;
-                    break;
-                }
-            }
+            return this;
+        },
 
-            this.lastOrderedItems.isShowAddToCart = isShowAddToCart;
+        /** @inheritdoc */
+        initObservable: function () {
+            this._super()
+                .observe('isShowAddToCart');
+
+            return this;
+        },
+
+        /**
+         * Check if items is_saleable and change add to cart button visibility.
+         */
+        checkSalableItems: function () {
+            var isShowAddToCart = _.some(this.lastOrderedItems().items, {
+                'is_saleable': true
+            });
+
+            this.isShowAddToCart(isShowAddToCart);
         }
     });
 });

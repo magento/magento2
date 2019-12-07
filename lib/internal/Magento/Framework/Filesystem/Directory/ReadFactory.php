@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
@@ -36,7 +36,15 @@ class ReadFactory
     public function create($path, $driverCode = DriverPool::FILE)
     {
         $driver = $this->driverPool->getDriver($driverCode);
-        $factory = new \Magento\Framework\Filesystem\File\ReadFactory($this->driverPool);
-        return new Read($factory, $driver, $path);
+        $factory = new \Magento\Framework\Filesystem\File\ReadFactory(
+            $this->driverPool
+        );
+
+        return new Read(
+            $factory,
+            $driver,
+            $path,
+            new PathValidator($driver)
+        );
     }
 }

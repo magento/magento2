@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Catalog\Category;
 
-class ChooserTest extends \PHPUnit_Framework_TestCase
+class ChooserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection|\PHPUnit_Framework_MockObject_MockObject
@@ -58,37 +58,25 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
      */
     protected $context;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->collection = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Category\Collection',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
 
-        $this->childNode = $this->getMock(
-            'Magento\Framework\Data\Tree\Node',
-            ['getLevel', 'hasChildren'],
-            [],
-            '',
-            false
+        $this->childNode = $this->createPartialMock(
+            \Magento\Framework\Data\Tree\Node::class,
+            ['getLevel', 'hasChildren']
         );
-        $this->rootNode = $this->getMock(
-            'Magento\Framework\Data\Tree\Node',
-            ['getLevel', 'hasChildren', 'getChildren'],
-            [],
-            '',
-            false
+        $this->rootNode = $this->createPartialMock(
+            \Magento\Framework\Data\Tree\Node::class,
+            ['getLevel', 'hasChildren', 'getChildren']
         );
-        $this->categoryTree = $this->getMock('Magento\Catalog\Model\ResourceModel\Category\Tree', [], [], '', false);
-        $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $this->escaper = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
-        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
+        $this->categoryTree = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Tree::class);
+        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->escaper = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->context = $this->createMock(\Magento\Backend\Block\Template\Context::class);
     }
 
     public function testGetTreeHasLevelField()
@@ -132,7 +120,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser $chooser */
         $chooser = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
-                'Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser',
+                \Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser::class,
                 [
                     'categoryTree' => $this->categoryTree,
                     'context' => $this->context

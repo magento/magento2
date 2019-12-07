@@ -1,11 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
 
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Sales\Api\CreditmemoCommentRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentInterface;
+use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
+use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -22,27 +28,33 @@ class CreditmemoCommentsListTest extends WebapiAbstract
      */
     public function testCreditmemoCommentsList()
     {
-        $comment = 'Test comment';
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $creditmemoCollection */
-        $creditmemoCollection = $objectManager->get('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection');
-        $creditmemo = $creditmemoCollection->getFirstItem();
-        $creditmemoComment = $objectManager->get('Magento\Sales\Model\Order\Creditmemo\Comment');
+        $comment = 'Credit Memo Comment';
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Collection $creditmemoCollection */
+        $creditmemoCollection = $objectManager->get(Collection::class);
 
-        $commentData = [
-            CreditmemoCommentInterface::COMMENT => 'Hello world!',
-            CreditmemoCommentInterface::ENTITY_ID => null,
-            CreditmemoCommentInterface::CREATED_AT => null,
-            CreditmemoCommentInterface::PARENT_ID => $creditmemo->getId(),
-            CreditmemoCommentInterface::IS_VISIBLE_ON_FRONT => true,
-            CreditmemoCommentInterface::IS_CUSTOMER_NOTIFIED => true,
-        ];
-        $creditmemoComment->setData($commentData)->save();
+        /** @var CreditmemoInterface $creditmemo */
+        $creditmemo = $creditmemoCollection->getFirstItem();
+        $creditmemoComment = $objectManager->get(CreditmemoCommentInterfaceFactory::class)
+            ->create(
+                [
+                    'data' => [
+                        CreditmemoCommentInterface::COMMENT => $comment,
+                        CreditmemoCommentInterface::PARENT_ID => $creditmemo->getEntityId(),
+                        CreditmemoCommentInterface::IS_VISIBLE_ON_FRONT => true,
+                        CreditmemoCommentInterface::IS_CUSTOMER_NOTIFIED => true,
+                    ]
+                ]
+            );
+
+        /** @var CreditmemoCommentRepositoryInterface $creditMemoRepository */
+        $creditmemoRepository = $objectManager->get(CreditmemoCommentRepositoryInterface::class);
+        $creditmemoRepository->save($creditmemoComment);
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId() . '/comments',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getEntityId() . '/comments',
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -50,13 +62,12 @@ class CreditmemoCommentsListTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'getCommentsList',
             ],
         ];
-        $requestData = ['id' => $creditmemo->getId()];
-        $result = $this->_webApiCall($serviceInfo, $requestData);
-        // TODO Test fails, due to the inability of the framework API to handle data collection
-        $this->assertNotEmpty($result);
-        foreach ($result['items'] as $item) {
-            $comment = $objectManager->get('Magento\Sales\Model\Order\Creditmemo\Comment')->load($item['entity_id']);
-            $this->assertEquals($comment->getComment(), $item['comment']);
-        }
+
+        $result = $this->_webApiCall($serviceInfo, ['id' => $creditmemo->getEntityId()]);
+
+        self::assertNotEmpty($result['items']);
+        $item = $result['items'][0];
+        self::assertNotEmpty($item[CreditmemoCommentInterface::ENTITY_ID]);
+        self::assertEquals($comment, $item[CreditmemoCommentInterface::COMMENT]);
     }
 }

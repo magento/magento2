@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Setup;
@@ -41,13 +41,9 @@ class SetupCache implements DataCacheInterface
     public function get($table, $parentId, $rowId, $field = null)
     {
         if (null === $field) {
-            return isset($this->data[$table][$parentId][$rowId]) ?
-                $this->data[$table][$parentId][$rowId] :
-                false;
+            return $this->data[$table][$parentId][$rowId] ?? false;
         } else {
-            return isset($this->data[$table][$parentId][$rowId][$field]) ?
-                $this->data[$table][$parentId][$rowId][$field] :
-                false;
+            return $this->data[$table][$parentId][$rowId][$field] ?? false;
         }
     }
 

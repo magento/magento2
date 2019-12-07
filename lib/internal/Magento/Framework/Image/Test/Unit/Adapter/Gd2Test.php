@@ -1,8 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Test\Unit\Adapter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -10,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * \Magento\Framework\Image\Adapter\Gd2 class test
  */
-class Gd2Test extends \PHPUnit_Framework_TestCase
+class Gd2Test extends \PHPUnit\Framework\TestCase
 {
     /**
      * Value to mock ini_get('memory_limit')
@@ -23,6 +26,13 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
      * @var array simulation of getimagesize()
      */
     public static $imageData = [];
+
+    /**
+     * Simulation of filesize() function
+     *
+     * @var int
+     */
+    public static $imageSize = 1;
 
     /**
      * Adapter for testing
@@ -38,11 +48,11 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
     /**
      * Setup testing object
      */
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/_files/global_php_mock.php';
         $this->objectManager = new ObjectManager($this);
-        $this->adapter = $this->objectManager->getObject('Magento\Framework\Image\Adapter\Gd2');
+        $this->adapter = $this->objectManager->getObject(\Magento\Framework\Image\Adapter\Gd2::class);
     }
 
     /**
@@ -50,7 +60,7 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
      */
     public function testParentClass()
     {
-        $this->assertInstanceOf('\Magento\Framework\Image\Adapter\AbstractAdapter', $this->adapter);
+        $this->assertInstanceOf(\Magento\Framework\Image\Adapter\AbstractAdapter::class, $this->adapter);
     }
 
     /**
@@ -67,12 +77,15 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
         self::$imageData = $fileData;
 
         if (!empty($exception)) {
-            $this->setExpectedException($exception);
+            $this->expectException($exception);
         }
 
         $this->adapter->open('file');
     }
 
+    /**
+     * @return array
+     */
     public function filesProvider()
     {
         $smallFile = [

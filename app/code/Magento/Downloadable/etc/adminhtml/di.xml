@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,4 +16,31 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="downloadable" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="downloadablePanel" xsi:type="string">Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\DownloadablePanel</item>
+                <item name="links" xsi:type="string">Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links</item>
+                <item name="samples" xsi:type="string">Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples</item>
+                <item name="usedDefault" xsi:type="string">Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\UsedDefault</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Ui\BaseAllowedProductTypes">
+        <arguments>
+            <argument name="productTypes" xsi:type="array">
+                <item name="downloadable" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

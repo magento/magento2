@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Observer;
@@ -49,8 +49,12 @@ class SequenceCreatorObserver implements ObserverInterface
     }
 
     /**
+     * Observer triggered during adding new store
+     *
      * @param EventObserver $observer
-     * @return $this
+     *
+     * @return $this|void
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function execute(EventObserver $observer)
     {

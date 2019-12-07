@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Sales Order Creditmemo PDF model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Creditmemo extends AbstractPdf
@@ -75,12 +79,12 @@ class Creditmemo extends AbstractPdf
     protected function _drawHeader(\Zend_Pdf_Page $page)
     {
         $this->_setFontRegular($page, 10);
-        $page->setFillColor(new \Zend_Pdf_Color_RGB(0.93, 0.92, 0.92));
+        $page->setFillColor(new \Zend_Pdf_Color_Rgb(0.93, 0.92, 0.92));
         $page->setLineColor(new \Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
         $page->drawRectangle(25, $this->y, 570, $this->y - 30);
         $this->y -= 10;
-        $page->setFillColor(new \Zend_Pdf_Color_RGB(0, 0, 0));
+        $page->setFillColor(new \Zend_Pdf_Color_Rgb(0, 0, 0));
 
         //columns headers
         $lines[0][] = ['text' => __('Products'), 'feed' => 35];
@@ -180,11 +184,11 @@ class Creditmemo extends AbstractPdf
             }
             /* Add totals */
             $this->insertTotals($page, $creditmemo);
+            if ($creditmemo->getStoreId()) {
+                $this->_localeResolver->revert();
+            }
         }
         $this->_afterGetPdf();
-        if ($creditmemo->getStoreId()) {
-            $this->_localeResolver->revert();
-        }
         return $pdf;
     }
 

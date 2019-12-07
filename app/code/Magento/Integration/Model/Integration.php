@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model;
@@ -25,7 +25,8 @@ namespace Magento\Integration\Model;
  * @method Integration setCreatedAt(\string $createdAt)
  * @method \string getUpdatedAt()
  * @method Integration setUpdatedAt(\string $createdAt)
- * @method \Magento\Integration\Model\ResourceModel\Integration getResource()
+ * @api
+ * @since 100.0.2
  */
 class Integration extends \Magento\Framework\Model\AbstractModel
 {
@@ -35,6 +36,8 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     const STATUS_INACTIVE = 0;
 
     const STATUS_ACTIVE = 1;
+
+    const STATUS_RECREATED = 2;
 
     /**#@-*/
 
@@ -93,7 +96,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Integration\Model\ResourceModel\Integration');
+        $this->_init(\Magento\Integration\Model\ResourceModel\Integration::class);
     }
 
     /**

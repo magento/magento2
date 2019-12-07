@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-$storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
+$storeManager = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
 
 /** @var \Magento\Store\Model\Store $store */
-$store = Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+$store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 $storeCode = 'fixturestore';
 
 if (!$store->load($storeCode)->getId()) {
@@ -21,7 +21,6 @@ if (!$store->load($storeCode)->getId()) {
         ->setSortOrder(10)
         ->setIsActive(1);
     $store->save();
-
-    /* Refresh stores memory cache */
-    Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
 }
+
+//if test using this fixture relies on full text functionality it is required to explicitly perform re-indexation

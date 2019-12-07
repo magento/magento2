@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,13 +8,15 @@ namespace Magento\Framework\Pricing\Amount;
 
 /**
  * Class AmountFactory
+ *
+ * @api
  */
 class AmountFactory
 {
     /**
      * Default amount class
      */
-    const DEFAULT_PRICE_AMOUNT_CLASS = 'Magento\Framework\Pricing\Amount\AmountInterface';
+    const DEFAULT_PRICE_AMOUNT_CLASS = \Magento\Framework\Pricing\Amount\AmountInterface::class;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface

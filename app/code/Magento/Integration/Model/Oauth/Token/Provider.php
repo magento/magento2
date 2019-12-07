@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -258,7 +258,7 @@ class Provider implements TokenProviderInterface
     {
         if (!$this->validateOauthToken($token)) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Token is not the correct length')
+                __('The token length is invalid. Check the length and try again.')
             );
         }
 

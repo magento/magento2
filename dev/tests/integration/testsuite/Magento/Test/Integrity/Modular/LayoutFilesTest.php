@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
-class LayoutFilesTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class LayoutFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\Argument\Parser
@@ -20,7 +23,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_argParser = $objectManager->get('Magento\Framework\View\Layout\Argument\Parser');
+        $this->_argParser = $objectManager->get(\Magento\Framework\View\Layout\Argument\Parser::class);
         $this->_argInterpreter = $objectManager->get('layoutArgumentGeneratorInterpreter');
     }
 
@@ -74,30 +77,28 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
      */
     protected function isSkippedArgument(array $argumentData)
     {
-        // Do not take into account argument name and parameters
-        unset($argumentData['name']);
-        unset($argumentData['param']);
+        // Do not take into account argument name, shared and parameters
+        unset($argumentData['name'], $argumentData['param'], $argumentData['shared']);
 
         $isUpdater = isset($argumentData['updater']);
         unset($argumentData['updater']);
 
         // Arguments, evaluation of which causes a run-time error, because of unsafe assumptions to the environment
         $typeAttr = \Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE;
-        $prCollection = 'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection';
+        $prCollection =
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection::class;
         $ignoredArguments = [
             [
                 $typeAttr => 'object',
                 'value' => $prCollection,
             ],
-            [$typeAttr => 'object', 'value' => 'Magento\Solr\Model\ResourceModel\Search\Grid\Collection'],
-            [$typeAttr => 'object', 'value' => 'Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid'],
+            [$typeAttr => 'object', 'value' => \Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid::class],
             [
                 $typeAttr => 'object',
-                'value' => 'Magento\CustomerSegment\Model\ResourceModel\Segment\Report\Detail\Collection'
+                'value' => \Magento\CustomerSegment\Model\ResourceModel\Segment\Report\Detail\Collection::class
             ],
-            [$typeAttr => 'options', 'model' => 'Magento\Solr\Model\Adminhtml\Search\Grid\Options'],
-            [$typeAttr => 'options', 'model' => 'Magento\Logging\Model\ResourceModel\Grid\ActionsGroup'],
-            [$typeAttr => 'options', 'model' => 'Magento\Logging\Model\ResourceModel\Grid\Actions'],
+            [$typeAttr => 'options', 'model' => \Magento\Logging\Model\ResourceModel\Grid\ActionsGroup::class],
+            [$typeAttr => 'options', 'model' => \Magento\Logging\Model\ResourceModel\Grid\Actions::class],
         ];
         $isIgnoredArgument = in_array($argumentData, $ignoredArguments, true);
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
     </head>
     <body>
         <referenceContainer name="js">
-            <block class="Magento\Paypal\Block\Adminhtml\System\Config\ResolutionRules" template="Magento_Paypal::system/config/rules.phtml"/>
+            <block class="Magento\Paypal\Block\Adminhtml\System\Config\ResolutionRules" name="js.rules" template="Magento_Paypal::system/config/rules.phtml"/>
         </referenceContainer>
     </body>
 </page>

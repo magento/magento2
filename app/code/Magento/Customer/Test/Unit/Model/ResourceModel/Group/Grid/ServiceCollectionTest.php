@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\Api\SortOrder;
 /**
  * Unit test for \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection
  */
-class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
+class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManager;
@@ -36,25 +36,25 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var ServiceCollection */
     protected $serviceCollection;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->filterBuilder = $this->objectManager->getObject('Magento\Framework\Api\FilterBuilder');
+        $this->filterBuilder = $this->objectManager->getObject(\Magento\Framework\Api\FilterBuilder::class);
         $filterGroupBuilder = $this->objectManager
-            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
+            ->getObject(\Magento\Framework\Api\Search\FilterGroupBuilder::class);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $this->searchCriteriaBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
         $this->sortOrderBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Api\SortOrderBuilder'
+            \Magento\Framework\Api\SortOrderBuilder::class
         );
-        $this->groupRepositoryMock = $this->getMockBuilder('\Magento\Customer\Api\GroupRepositoryInterface')
+        $this->groupRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\GroupRepositoryInterface::class)
             ->getMock();
 
         $this->searchResults = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\SearchResultsInterface',
+            \Magento\Framework\Api\SearchResultsInterface::class,
             ['getTotalCount', 'getItems']
         );
 
@@ -68,7 +68,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->serviceCollection = $this->objectManager
             ->getObject(
-                'Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection',
+                \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class,
                 [
                     'filterBuilder' => $this->filterBuilder,
                     'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
@@ -219,7 +219,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
      * @param array $conditions
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage When passing in a field array there must be a matching condition array
+     * @expectedExceptionMessage The field array failed to pass. The array must have a matching condition array.
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */
     public function testAddFieldToFilterInconsistentArrays($fields, $conditions)
@@ -227,6 +227,9 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $this->serviceCollection->addFieldToFilter($fields, $conditions);
     }
 
+    /**
+     * @return array
+     */
     public function addFieldToFilterInconsistentArraysDataProvider()
     {
         return [
@@ -243,7 +246,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage When passing an array of fields there must be at least one field in the array.
+     * @expectedExceptionMessage The array of fields failed to pass. The array must include at one field.
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */
     public function testAddFieldToFilterEmptyArrays()

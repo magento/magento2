@@ -102,7 +102,9 @@
         "checkAnnotations": {
             "preset": "jsdoc3",
             "extra": {
-                "override": true
+                "override": true,
+                "inheritdoc": true,
+                "api": true
             }
         },
         "checkParamNames": true,

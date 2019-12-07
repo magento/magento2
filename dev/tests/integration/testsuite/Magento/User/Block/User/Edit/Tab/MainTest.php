@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\User\Edit\Tab;
@@ -26,11 +26,11 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_block = $objectManager->create('Magento\User\Block\User\Edit\Tab\Main');
+        $this->_block = $objectManager->create(\Magento\User\Block\User\Edit\Tab\Main::class);
         $this->_block->setArea('adminhtml');
-        $this->_user = $objectManager->create('Magento\User\Model\User');
+        $this->_user = $objectManager->create(\Magento\User\Model\User::class);
 
-        $objectManager->get('Magento\Framework\Registry')->register('permissions_user', $this->_user);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('permissions_user', $this->_user);
     }
 
     protected function tearDown()
@@ -39,7 +39,7 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->_user = null;
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->unregister('permissions_user');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('permissions_user');
         parent::tearDown();
     }
 
@@ -47,37 +47,57 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $this->_user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $actualHtml = $this->_block->toHtml();
-        $this->assertSelectCount(
-            'input.required-entry[type="password"]',
+        $this->assertEquals(
             1,
-            $actualHtml,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"required-entry") and @type="password"]',
+                $actualHtml
+            ),
             'There should be 1 required password entry: current user password.'
         );
-        $this->assertSelectCount('input.validate-admin-password[type="password"][name="password"]', 1, $actualHtml);
-        $this->assertSelectCount(
-            'input.validate-cpassword[type="password"][name="password_confirmation"]',
+        $this->assertEquals(
             1,
-            $actualHtml
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-admin-password") and @type="password" and @name="password"]',
+                $actualHtml
+            )
         );
-        $this->assertSelectCount(
-            'input.validate-current-password[type="password"][name="' . Main::CURRENT_USER_PASSWORD_FIELD . '"]',
+        $this->assertEquals(
             1,
-            $actualHtml
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-cpassword") and @type="password" and ' .
+                '@name="password_confirmation"]',
+                $actualHtml
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-current-password") and @type="password" and @name="'
+                . Main::CURRENT_USER_PASSWORD_FIELD . '"]',
+                $actualHtml
+            )
         );
     }
 
     public function testToHtmlPasswordFieldsNewEntry()
     {
         $actualHtml = $this->_block->toHtml();
-        $this->assertSelectCount(
-            'input.validate-admin-password.required-entry[type="password"][name="password"]',
+        $this->assertEquals(
             1,
-            $actualHtml
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-admin-password") and contains(@class,"required-entry") and  '
+                . '@type="password" and @name="password"]',
+                $actualHtml
+            )
         );
-        $this->assertSelectCount(
-            'input.validate-cpassword.required-entry[type="password"][name="password_confirmation"]',
+        $this->assertEquals(
             1,
-            $actualHtml
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-cpassword") and contains(@class,"required-entry") and  '
+                . '@type="password" and @name="password_confirmation"]',
+                $actualHtml
+            )
         );
     }
 }

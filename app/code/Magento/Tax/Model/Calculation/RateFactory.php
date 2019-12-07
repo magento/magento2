@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,6 +34,6 @@ class RateFactory
      */
     public function create(array $arguments = [])
     {
-        return $this->_objectManager->create('Magento\Tax\Model\Calculation\Rate', $arguments);
+        return $this->_objectManager->create(\Magento\Tax\Model\Calculation\Rate::class, $arguments);
     }
 }

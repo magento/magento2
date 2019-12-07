@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Fill main fields in product form-->
+    <actionGroup name="fillMainDownloadableProductForm">
+        <annotations>
+            <description>Fills the Name, SKU, Price and Quantity on the Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="DownloadableProduct"/>
+        </arguments>
+        
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="fillProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}" stepKey="fillProductQty"/>
+    </actionGroup>
+
+    <!--Add a downloadable link that has max downloads-->
+    <actionGroup name="addDownloadableProductLinkWithMaxDownloads">
+        <annotations>
+            <description>Clicks on 'Add Link'. Fills in the provided Link details including a Max Downloads limit.</description>
+        </annotations>
+        <arguments>
+            <argument name="link" defaultValue="downloadableLinkWithMaxDownloads"/>
+        </arguments>
+        
+        <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="fillDownloadableLinkTitle"/>
+        <fillField userInput="{{link.price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput('0')}}" stepKey="fillDownloadableLinkPrice"/>
+        <selectOption userInput="{{link.file_type}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector('0')}}" stepKey="selectDownloadableLinkFileType"/>
+        <selectOption userInput="{{link.sample_type}}" selector="{{AdminProductDownloadableSection.addLinkSampleTypeSelector('0')}}" stepKey="selectDownloadableLinkSampleType"/>
+        <selectOption userInput="{{link.shareable}}" selector="{{AdminProductDownloadableSection.addLinkShareableSelector('0')}}" stepKey="selectDownloadableLinkShareable"/>
+        <fillField userInput="{{link.max_downloads}}" selector="{{AdminProductDownloadableSection.addLinkMaxDownloadsInput('0')}}" stepKey="fillDownloadableLinkMaxDownloads"/>
+        <attachFile userInput="{{link.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUploadFile('0')}}" stepKey="fillDownloadableLinkUploadFile"/>
+        <fillField userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUrlInput('0')}}" stepKey="fillDownloadableLinkSampleUrl"/>
+    </actionGroup>
+
+    <!--Add a downloadable link with unlimited downloads-->
+    <actionGroup name="addDownloadableProductLink">
+        <annotations>
+            <description>Clicks on 'Add Link', under the 'Links' section. Fills in the provided Link details including Unlimited Downloads.</description>
+        </annotations>
+        <arguments>
+            <argument name="link" defaultValue="downloadableLink"/>
+            <argument name="index" type="string" defaultValue="1"/>
+        </arguments>
+        
+        <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput(index)}}" stepKey="fillDownloadableLinkTitle"/>
+        <fillField userInput="{{link.price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput(index)}}" stepKey="fillDownloadableLinkPrice"/>
+        <selectOption userInput="{{link.file_type}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector(index)}}" stepKey="selectDownloadableLinkFileType"/>
+        <selectOption userInput="{{link.sample_type}}" selector="{{AdminProductDownloadableSection.addLinkSampleTypeSelector(index)}}" stepKey="selectDownloadableLinkSampleType"/>
+        <selectOption userInput="{{link.shareable}}" selector="{{AdminProductDownloadableSection.addLinkShareableSelector(index)}}" stepKey="selectDownloadableLinkShareable"/>
+        <checkOption selector="{{AdminProductDownloadableSection.addLinkIsUnlimitedDownloads(index)}}" stepKey="checkDownloadableLinkUnlimited"/>
+        <fillField userInput="{{link.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUrlInput(index)}}" stepKey="fillDownloadableLinkFileUrl"/>
+        <attachFile userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUploadFile(index)}}" stepKey="attachDownloadableLinkUploadSample"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterFillingOutForm" />
+    </actionGroup>
+
+    <!--Add a downloadable sample file-->
+    <actionGroup name="addDownloadableSampleFile">
+        <annotations>
+            <description>Clicks on 'Add Link' under the 'Samples' section. Fills in the provided Downloadable Sample File details.</description>
+        </annotations>
+        <arguments>
+            <argument name="sample" defaultValue="downloadableSampleFile"/>
+        </arguments>
+        
+        <click selector="{{AdminProductDownloadableSection.samplesAddLinkButton}}" stepKey="clickSampleAddLinkButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField userInput="{{sample.title}}" selector="{{AdminProductDownloadableSection.addSampleTitleInput('0')}}" stepKey="fillDownloadableSampleTitle"/>
+        <selectOption userInput="{{sample.file_type}}" selector="{{AdminProductDownloadableSection.addSampleFileTypeSelector('0')}}" stepKey="selectDownloadableSampleFileType"/>
+        <attachFile userInput="{{sample.file}}" selector="{{AdminProductDownloadableSection.addSampleFileUploadFile('0')}}" stepKey="selectDownloadableSampleUpload"/>
+        <waitForAjaxLoad stepKey="waitForSampleFileUpload"/>
+    </actionGroup>
+
+    <!--Add a downloadable sample URL-->
+    <actionGroup name="addDownloadableSampleUrl">
+        <annotations>
+            <description>Clicks on 'Add Link' under the 'Samples' section. Fills in the provided Downloadable Sample URL details.</description>
+        </annotations>
+        <arguments>
+            <argument name="sample" defaultValue="downloadableSampleUrl"/>
+        </arguments>
+        
+        <click selector="{{AdminProductDownloadableSection.samplesAddLinkButton}}" stepKey="clickSampleAddLinkButton2"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField userInput="{{sample.title}}" selector="{{AdminProductDownloadableSection.addSampleTitleInput('1')}}" stepKey="fillDownloadableSampleTitle"/>
+        <selectOption userInput="{{sample.file_type}}" selector="{{AdminProductDownloadableSection.addSampleFileTypeSelector('1')}}" stepKey="selectDownloadableSampleFileType"/>
+        <fillField userInput="{{sample.file}}" selector="{{AdminProductDownloadableSection.addSampleFileUrlInput('1')}}" stepKey="fillDownloadableSampleFileUrl"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCmsPageTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create a CMS Page via the Admin"/>
+            <title value="Admin should be able to create a CMS Page"/>
+            <description value="Admin should be able to create a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-25580"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" stepKey="fillFieldContentHeading"/>
+        <!-- As of 2017/11/15, this test is failing here (Jenkins only, works locally). See MQE-282. -->
+        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_defaultCmsPage.content}}" stepKey="fillFieldContent"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="{{_defaultCmsPage.content_heading}}" stepKey="seeContentHeading"/>
+        <see userInput="{{_defaultCmsPage.content}}" stepKey="seeContent"/>
+    </test>
+    <test name="AdminConfigDefaultCMSPageLayoutFromConfigurationSettingTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Default layout configuration MAGETWO-88793"/>
+            <title value="Admin should be able to configure the default layout for CMS Page from System Configuration"/>
+            <description value="Admin should be able to configure the default layout for CMS Page from System Configuration"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89025"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="DefaultProductLayout" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="seeOneColumnSelected" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.productLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected1" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected2" />
+        <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="2 columns with right bar" stepKey="selectColumnsWithRightBar"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <click selector="{{CmsDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{CmsDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
+        <seeOptionIsSelected selector="{{CmsDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="seeColumnsWithRightBar" />
+    </test>
+    <test name="AdminCreateDuplicatedCmsPageTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Page Duplication and Reset Removal MAGETWO-87096"/>
+            <title value="Admin should be able to duplicate a CMS Page"/>
+            <description value="Admin should be able to duplicate a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89184"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPageCreationForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Verify Save&Duplicate button and Save&Close button-->
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
+        <see selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
+        <see selector="{{CmsNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
+        <!--Create new CMS Page page-->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="FillOutBlockContent"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
+        <click selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate" />
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="You saved the page." stepKey="seeSavedPageMsgOnForm"/>
+        <see userInput="You duplicated the page." stepKey="seeDuplicatedPageMsg"/>
+        <!--Verify duplicated CMS Page-->
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
+        <actionGroup ref="AssertCMSPageContent" stepKey="assertContent"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn3" />
+        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
+        <see userInput="You saved the page." stepKey="seeSavedCMSPageMsgOnGrid"/>
+        <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage" />
+    </test>
+</tests>

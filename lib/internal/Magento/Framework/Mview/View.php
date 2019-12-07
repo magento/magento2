@@ -1,18 +1,37 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+declare(strict_types=1);
 
 namespace Magento\Framework\Mview;
 
+use InvalidArgumentException;
+use Magento\Framework\DataObject;
+use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
+use Magento\Framework\Mview\View\SubscriptionFactory;
+use Exception;
+use Magento\Framework\Mview\View\SubscriptionInterface;
+
 /**
+ * Mview
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends \Magento\Framework\DataObject implements ViewInterface
+class View extends DataObject implements ViewInterface
 {
+    /**
+     * Default batch size for partial reindex
+     */
+    const DEFAULT_BATCH_SIZE = 1000;
+
+    /**
+     * Max versions to load from database at a time
+     */
+    private static $maxVersionQueryBatch = 100000;
+
     /**
      * @var string
      */
@@ -39,31 +58,39 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
     protected $subscriptionFactory;
 
     /**
-     * @var \Magento\Framework\Mview\View\StateInterface
+     * @var View\StateInterface
      */
     protected $state;
+
+    /**
+     * @var array
+     */
+    private $changelogBatchSize;
 
     /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param View\StateInterface $state
      * @param View\ChangelogInterface $changelog
-     * @param View\SubscriptionFactory $subscriptionFactory
+     * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
+     * @param array $changelogBatchSize
      */
     public function __construct(
         ConfigInterface $config,
         ActionFactory $actionFactory,
         View\StateInterface $state,
         View\ChangelogInterface $changelog,
-        View\SubscriptionFactory $subscriptionFactory,
-        array $data = []
+        SubscriptionFactory $subscriptionFactory,
+        array $data = [],
+        array $changelogBatchSize = []
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
         $this->state = $state;
         $this->changelog = $changelog;
         $this->subscriptionFactory = $subscriptionFactory;
+        $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
     }
 
@@ -92,7 +119,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
     /**
      * Id field name setter
      *
-     * @param  string $name
+     * @param string $name
      * @return $this
      */
     public function setIdFieldName($name)
@@ -146,13 +173,13 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      *
      * @param string $viewId
      * @return ViewInterface
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function load($viewId)
     {
         $view = $this->config->getView($viewId);
-        if (empty($view) || empty($view['view_id']) || $view['view_id'] != $viewId) {
-            throw new \InvalidArgumentException("{$viewId} view does not exist.");
+        if (empty($view) || empty($view['view_id']) || $view['view_id'] !== $viewId) {
+            throw new InvalidArgumentException("{$viewId} view does not exist.");
         }
 
         $this->setId($viewId);
@@ -164,34 +191,21 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
     /**
      * Create subscriptions
      *
-     * @throws \Exception
      * @return ViewInterface
+     * @throws Exception
      */
     public function subscribe()
     {
-        if ($this->getState()->getMode() != View\StateInterface::MODE_ENABLED) {
-            try {
-                // Create changelog table
-                $this->getChangelog()->create();
+        if ($this->getState()->getMode() !== View\StateInterface::MODE_ENABLED) {
+            // Create changelog table
+            $this->getChangelog()->create();
 
-                // Create subscriptions
-                foreach ($this->getSubscriptions() as $subscription) {
-                    /** @var \Magento\Framework\Mview\View\SubscriptionInterface $subscription */
-                    $subscription = $this->subscriptionFactory->create(
-                        [
-                            'view' => $this,
-                            'tableName' => $subscription['name'],
-                            'columnName' => $subscription['column'],
-                        ]
-                    );
-                    $subscription->create();
-                }
-
-                // Update view state
-                $this->getState()->setMode(View\StateInterface::MODE_ENABLED)->save();
-            } catch (\Exception $e) {
-                throw $e;
+            foreach ($this->getSubscriptions() as $subscriptionConfig) {
+                $this->initSubscriptionInstance($subscriptionConfig)->create();
             }
+
+            // Update view state
+            $this->getState()->setMode(View\StateInterface::MODE_ENABLED)->save();
         }
 
         return $this;
@@ -200,34 +214,19 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
     /**
      * Remove subscriptions
      *
-     * @throws \Exception
      * @return ViewInterface
+     * @throws Exception
      */
     public function unsubscribe()
     {
         if ($this->getState()->getMode() != View\StateInterface::MODE_DISABLED) {
-            try {
-                // Remove subscriptions
-                foreach ($this->getSubscriptions() as $subscription) {
-                    /** @var \Magento\Framework\Mview\View\SubscriptionInterface $subscription */
-                    $subscription = $this->subscriptionFactory->create(
-                        [
-                            'view' => $this,
-                            'tableName' => $subscription['name'],
-                            'columnName' => $subscription['column'],
-                        ]
-                    );
-                    $subscription->remove();
-                }
-
-                // Drop changelog table
-                $this->getChangelog()->drop();
-
-                // Update view state
-                $this->getState()->setVersionId(null)->setMode(View\StateInterface::MODE_DISABLED)->save();
-            } catch (\Exception $e) {
-                throw $e;
+            // Remove subscriptions
+            foreach ($this->getSubscriptions() as $subscriptionConfig) {
+                $this->initSubscriptionInstance($subscriptionConfig)->remove();
             }
+
+            // Update view state
+            $this->getState()->setMode(View\StateInterface::MODE_DISABLED)->save();
         }
 
         return $this;
@@ -237,32 +236,76 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Materialize view by IDs in changelog
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function update()
     {
-        if ($this->getState()->getMode() == View\StateInterface::MODE_ENABLED &&
-            $this->getState()->getStatus() == View\StateInterface::STATUS_IDLE
-        ) {
+        if (!$this->isIdle() || !$this->isEnabled()) {
+            return;
+        }
+
+        try {
             $currentVersionId = $this->getChangelog()->getVersion();
-            $lastVersionId = $this->getState()->getVersionId();
-            $ids = $this->getChangelog()->getList($lastVersionId, $currentVersionId);
-            if ($ids) {
-                $action = $this->actionFactory->get($this->getActionClass());
-                $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
-                try {
-                    $action->execute($ids);
-                    $this->getState()->loadByView($this->getId());
-                    $statusToRestore = $this->getState()->getStatus() ==
-                        View\StateInterface::STATUS_SUSPENDED ? View\StateInterface::STATUS_SUSPENDED : View\StateInterface::STATUS_IDLE;
-                    $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
-                } catch (\Exception $exception) {
-                    $this->getState()->loadByView($this->getId());
-                    $statusToRestore = $this->getState()->getStatus() ==
-                        View\StateInterface::STATUS_SUSPENDED ? View\StateInterface::STATUS_SUSPENDED : View\StateInterface::STATUS_IDLE;
-                    $this->getState()->setStatus($statusToRestore)->save();
-                    throw $exception;
-                }
+        } catch (ChangelogTableNotExistsException $e) {
+            return;
+        }
+
+        $lastVersionId = (int)$this->getState()->getVersionId();
+        $action = $this->actionFactory->get($this->getActionClass());
+
+        try {
+            $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
+
+            $this->executeAction($action, $lastVersionId, $currentVersionId);
+
+            $this->getState()->loadByView($this->getId());
+            $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
+                ? View\StateInterface::STATUS_SUSPENDED
+                : View\StateInterface::STATUS_IDLE;
+            $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
+        } catch (\Throwable $exception) {
+            $this->getState()->loadByView($this->getId());
+            $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
+                ? View\StateInterface::STATUS_SUSPENDED
+                : View\StateInterface::STATUS_IDLE;
+            $this->getState()->setStatus($statusToRestore)->save();
+            if (!$exception instanceof \Exception) {
+                $exception = new \RuntimeException(
+                    'Error when updating an mview',
+                    0,
+                    $exception
+                );
+            }
+            throw $exception;
+        }
+    }
+
+    /**
+     * Execute action from last version to current version, by batches
+     *
+     * @param ActionInterface $action
+     * @param int $lastVersionId
+     * @param int $currentVersionId
+     * @return void
+     * @throws \Exception
+     */
+    private function executeAction(ActionInterface $action, int $lastVersionId, int $currentVersionId)
+    {
+        $versionBatchSize = self::$maxVersionQueryBatch;
+        $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
+            ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
+            : self::DEFAULT_BATCH_SIZE;
+
+        for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
+            // Don't go past the current version for atomicity.
+            $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
+            $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
+
+            // We run the actual indexer in batches.
+            // Chunked AFTER loading to avoid duplicates in separate chunks.
+            $chunks = array_chunk($ids, $batchSize);
+            foreach ($chunks as $ids) {
+                $action->execute($ids);
             }
         }
     }
@@ -271,10 +314,11 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Suspend view updates and set version ID to changelog's end
      *
      * @return void
+     * @throws Exception
      */
     public function suspend()
     {
-        if ($this->getState()->getMode() == View\StateInterface::MODE_ENABLED) {
+        if ($this->getState()->getMode() === View\StateInterface::MODE_ENABLED) {
             $state = $this->getState();
             $state->setVersionId($this->getChangelog()->getVersion());
             $state->setStatus(View\StateInterface::STATUS_SUSPENDED);
@@ -286,11 +330,12 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * Resume view updates
      *
      * @return void
+     * @throws Exception
      */
     public function resume()
     {
         $state = $this->getState();
-        if ($state->getStatus() == View\StateInterface::STATUS_SUSPENDED) {
+        if ($state->getStatus() === View\StateInterface::STATUS_SUSPENDED) {
             $state->setStatus(View\StateInterface::STATUS_IDLE);
             $state->save();
         }
@@ -303,7 +348,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      */
     public function clearChangelog()
     {
-        if ($this->getState()->getMode() == View\StateInterface::MODE_ENABLED) {
+        if ($this->getState()->getMode() === View\StateInterface::MODE_ENABLED) {
             $this->getChangelog()->clear($this->getState()->getVersionId());
         }
     }
@@ -340,7 +385,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      */
     public function isEnabled()
     {
-        return $this->getState()->getMode() == View\StateInterface::MODE_ENABLED;
+        return $this->getState()->getMode() === View\StateInterface::MODE_ENABLED;
     }
 
     /**
@@ -350,7 +395,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      */
     public function isIdle()
     {
-        return $this->getState()->getStatus() == \Magento\Framework\Mview\View\StateInterface::STATUS_IDLE;
+        return $this->getState()->getStatus() === View\StateInterface::STATUS_IDLE;
     }
 
     /**
@@ -360,7 +405,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      */
     public function isWorking()
     {
-        return $this->getState()->getStatus() == \Magento\Framework\Mview\View\StateInterface::STATUS_WORKING;
+        return $this->getState()->getStatus() === View\StateInterface::STATUS_WORKING;
     }
 
     /**
@@ -370,7 +415,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      */
     public function isSuspended()
     {
-        return $this->getState()->getStatus() == \Magento\Framework\Mview\View\StateInterface::STATUS_SUSPENDED;
+        return $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED;
     }
 
     /**
@@ -394,5 +439,25 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
             $this->changelog->setViewId($this->getId());
         }
         return $this->changelog;
+    }
+
+    /**
+     * Initializes Subscription instance
+     *
+     * @param array $subscriptionConfig
+     * @return SubscriptionInterface
+     */
+    private function initSubscriptionInstance(array $subscriptionConfig): SubscriptionInterface
+    {
+        return $this->subscriptionFactory->create(
+            [
+                'view' => $this,
+                'tableName' => $subscriptionConfig['name'],
+                'columnName' => $subscriptionConfig['column'],
+                'subscriptionModel' => !empty($subscriptionConfig['subscription_model'])
+                    ? $subscriptionConfig['subscription_model']
+                    : SubscriptionFactory::INSTANCE_NAME,
+            ]
+        );
     }
 }

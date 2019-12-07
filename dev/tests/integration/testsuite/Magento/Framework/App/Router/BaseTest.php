@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Router\Base
@@ -16,7 +16,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $options = ['routerId' => 'standard'];
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Router\Base',
+            \Magento\Framework\App\Router\Base::class,
             $options
         );
     }
@@ -33,11 +33,11 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
 
-        $this->assertInstanceOf('Magento\Framework\App\ActionInterface', $this->_model->match($request));
+        $this->assertInstanceOf(\Magento\Framework\App\ActionInterface::class, $this->_model->match($request));
         $request->setRequestUri('framework/index/index');
-        $this->assertInstanceOf('Magento\Framework\App\ActionInterface', $this->_model->match($request));
+        $this->assertInstanceOf(\Magento\Framework\App\ActionInterface::class, $this->_model->match($request));
 
         $request->setPathInfo(
             'not_exists/not_exists/not_exists'
@@ -54,7 +54,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     public function testGetControllerClassName()
     {
         $this->assertEquals(
-            'Magento\Framework\Controller\Index',
+            \Magento\Framework\Controller\Index::class,
             $this->_model->getActionClassName('Magento_Framework', 'index')
         );
     }

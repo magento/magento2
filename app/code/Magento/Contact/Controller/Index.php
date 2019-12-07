@@ -1,78 +1,55 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Controller;
 
-use Magento\Framework\Exception\NotFoundException;
+use Magento\Contact\Model\ConfigInterface;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
- * Contact index controller
+ * Contact module base controller
  */
 abstract class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * Recipient email config path
      */
-    const XML_PATH_EMAIL_RECIPIENT = 'contact/email/recipient_email';
+    const XML_PATH_EMAIL_RECIPIENT = ConfigInterface::XML_PATH_EMAIL_RECIPIENT;
 
     /**
      * Sender email config path
      */
-    const XML_PATH_EMAIL_SENDER = 'contact/email/sender_email_identity';
+    const XML_PATH_EMAIL_SENDER = ConfigInterface::XML_PATH_EMAIL_SENDER;
 
     /**
      * Email template config path
      */
-    const XML_PATH_EMAIL_TEMPLATE = 'contact/email/email_template';
+    const XML_PATH_EMAIL_TEMPLATE = ConfigInterface::XML_PATH_EMAIL_TEMPLATE;
 
     /**
      * Enabled config path
      */
-    const XML_PATH_ENABLED = 'contact/contact/enabled';
+    const XML_PATH_ENABLED = ConfigInterface::XML_PATH_ENABLED;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @var ConfigInterface
      */
-    protected $_transportBuilder;
+    private $contactsConfig;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface
-     */
-    protected $inlineTranslation;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param ConfigInterface $contactsConfig
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        Context $context,
+        ConfigInterface $contactsConfig
     ) {
         parent::__construct($context);
-        $this->_transportBuilder = $transportBuilder;
-        $this->inlineTranslation = $inlineTranslation;
-        $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
+        $this->contactsConfig = $contactsConfig;
     }
 
     /**
@@ -84,7 +61,7 @@ abstract class Index extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
+        if (!$this->contactsConfig->isEnabled()) {
             throw new NotFoundException(__('Page not found.'));
         }
         return parent::dispatch($request);

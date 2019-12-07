@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Constraint;
 
+use Magento\Checkout\Test\Constraint\Utils\CartPageLoadTrait;
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -16,6 +17,8 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertGrandTotalInShoppingCart extends AbstractConstraint
 {
+    use CartPageLoadTrait;
+
     /**
      * Assert that grand total is equal to expected
      *
@@ -28,12 +31,13 @@ class AssertGrandTotalInShoppingCart extends AbstractConstraint
     {
         if ($requireReload) {
             $checkoutCart->open();
+            $this->waitForCartPageLoaded($checkoutCart);
             $checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
         }
 
         $fixtureGrandTotal = number_format($cart->getGrandTotal(), 2);
         $pageGrandTotal = $checkoutCart->getTotalsBlock()->getGrandTotal();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $fixtureGrandTotal,
             $pageGrandTotal,
             'Grand total price in the shopping cart not equals to grand total price from fixture.'

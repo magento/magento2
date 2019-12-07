@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
@@ -8,7 +8,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 /**
  * Order history tab
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -17,7 +18,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @var string
      */
-    protected $_template = 'order/view/tab/history.phtml';
+    protected $_template = 'Magento_Sales::order/view/tab/history.phtml';
 
     /**
      * Core registry
@@ -60,6 +61,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
     /**
      * Compose and get order full history.
+     *
      * Consists of the status history comments as well as of invoices, shipments and creditmemos creations
      *
      * @TODO This method requires refactoring. Need to create separate model for comment history handling
@@ -157,13 +159,10 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         if (!isset($item['created_at'])) {
             return '';
         }
-        $date = $item['created_at'] instanceof \DateTimeInterface
-            ? $item['created_at']
-            : new \DateTime($item['created_at']);
         if ('date' === $dateType) {
-            return $this->_localeDate->formatDateTime($date, $format, $format);
+            return $this->formatDate($item['created_at'], $format);
         }
-        return $this->_localeDate->formatDateTime($date, \IntlDateFormatter::NONE, $format);
+        return $this->formatTime($item['created_at'], $format);
     }
 
     /**
@@ -210,7 +209,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param string $label
      * @param bool $notified
-     * @param \DateTime $created
+     * @param \DateTimeInterface $created
      * @param string $comment
      * @return array
      */
@@ -220,7 +219,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -228,7 +227,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -266,7 +265,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -274,7 +273,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {
@@ -305,16 +304,12 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
 
-        /** @var $createdAtA \DateTime */
-        if ($createdAtA->getTimestamp() == $createdAtB->getTimestamp()) {
-            return 0;
-        }
-        return $createdAtA->getTimestamp() < $createdAtB->getTimestamp() ? -1 : 1;
+        return $createdAtA->getTimestamp() <=> $createdAtB->getTimestamp();
     }
 
     /**
      * Get order admin date
-     * 
+     *
      * @param int $createdAt
      * @return \DateTime
      */

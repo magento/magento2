@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Indexer\Product;
@@ -15,6 +15,7 @@ class ProductRuleIndexer extends AbstractIndexer
     protected function doExecuteList($ids)
     {
         $this->indexBuilder->reindexByIds(array_unique($ids));
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
     }
 
     /**

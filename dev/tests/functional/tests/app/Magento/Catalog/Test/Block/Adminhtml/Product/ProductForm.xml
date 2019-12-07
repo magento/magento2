@@ -1,95 +1,94 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <product-details>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails</class>
-        <selector>#product_info_tabs_product-details</selector>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails</class>
+        <selector>[data-index='product-details']</selector>
         <strategy>css selector</strategy>
         <wrapper>product</wrapper>
         <fields>
             <status>
-                <selector>.product-actions .switcher</selector>
-                <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\ProductOnlineSwitcher</class>
+                <input>switcher</input>
             </status>
             <attribute_set_id>
-                <selector>#product-template-suggest-container</selector>
-                <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\AttributeSet</class>
+                <selector>[data-index="attribute_set_id"]</selector>
+                <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\AttributeSet</class>
             </attribute_set_id>
-            <attribute_id>
-                <selector>#product-attribute-search-container</selector>
-                <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search</class>
-            </attribute_id>
             <tax_class_id>
                 <input>select</input>
             </tax_class_id>
             <product_has_weight>
-                <selector>[data-role="weight-switcher"]</selector>
-                <input>radiobutton</input>
+                <input>select</input>
             </product_has_weight>
             <category_ids>
-                <selector>#attribute-category_ids-container</selector>
-                <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\CategoryIds</class>
+                <selector>[data-index='container_category_ids']</selector>
+                <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\CategoryIds</class>
             </category_ids>
             <quantity_and_stock_status composite="1">
                 <qty>
-                    <selector>[name="product[quantity_and_stock_status][qty]"]</selector>
+                    <selector>fieldset[data-index="quantity_and_stock_status_qty"] [name="product[quantity_and_stock_status][qty]"]</selector>
                 </qty>
                 <is_in_stock>
-                    <selector>[name="product[quantity_and_stock_status][is_in_stock]"]</selector>
+                    <selector>[data-index="quantity_and_stock_status"] [name="product[quantity_and_stock_status][is_in_stock]"]</selector>
                     <input>select</input>
                 </is_in_stock>
             </quantity_and_stock_status>
-            <description />
             <custom_attribute>
                 <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute</class>
-                <selector>#attribute-%attribute_code%-container</selector>
+                <selector>[data-index="%attribute_code%"]</selector>
             </custom_attribute>
+            <visibility>
+                <input>select</input>
+            </visibility>
+            <news_from_date>
+                <selector>[name="product[news_from_date]"]</selector>
+                <strategy>css selector</strategy>
+            </news_from_date>
+            <news_to_date>
+                <selector>[name="product[news_to_date]"]</selector>
+                <strategy>css selector</strategy>
+            </news_to_date>
+            <country_of_manufacture>
+                <input>select</input>
+            </country_of_manufacture>
+            <use_default_name>
+                <selector>[name="use_default[name]"]</selector>
+                <input>checkbox</input>
+            </use_default_name>
+            <use_default_price>
+                <selector>[name="use_default[price]"]</selector>
+                <input>checkbox</input>
+            </use_default_price>
         </fields>
     </product-details>
-    <search-engine-optimization>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab</class>
-        <selector>#product_info_tabs_search-engine-optimization</selector>
-        <strategy>css selector</strategy>
-        <wrapper>product</wrapper>
-        <fields>
-            <url_key/>
-        </fields>
-    </search-engine-optimization>
-    <websites>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#product_info_tabs_websites</selector>
-        <strategy>css selector</strategy>
-        <wrapper>product</wrapper>
-        <fields>
-            <website_ids>
-                <selector>#product_info_tabs_websites_content .store-tree</selector>
-                <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Websites\StoreTree</class>
-            </website_ids>
-        </fields>
-    </websites>
     <advanced-pricing>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\AdvancedPricingTab</class>
-        <selector>#product_info_tabs_advanced-pricing</selector>
+        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing</class>
+        <selector>[data-index="advanced_pricing_button"]</selector>
         <strategy>css selector</strategy>
         <wrapper>product</wrapper>
         <fields>
-            <special_price />
-            <tier_price>
-                <input>select</input>
-            </tier_price>
-            <msrp_enabled>
-                <input>select</input>
-            </msrp_enabled>
+            <special_price>
+                <selector>[name="product[special_price]"]</selector>
+            </special_price>
+            <special_from_date>
+                <selector>[name="product[special_from_date]"]</selector>
+            </special_from_date>
+            <special_to_date>
+                <selector>[name="product[special_to_date]"]</selector>
+            </special_to_date>
+            <cost>
+                <selector>[name="product[cost]"]</selector>
+            </cost>
         </fields>
     </advanced-pricing>
     <advanced-inventory>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\AdvancedInventory</class>
-        <selector>#product_info_tabs_advanced-inventory</selector>
+        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedInventory</class>
+        <selector>[data-index="advanced_inventory_button"]</selector>
         <strategy>css selector</strategy>
         <wrapper>product[stock_data]</wrapper>
         <fields>
@@ -99,87 +98,150 @@
                     <input>select</input>
                 </manage_stock>
                 <qty>
-                    <selector>[name='product[stock_data][qty]']</selector>
+                    <selector>[name='product[quantity_and_stock_status][qty]']</selector>
                 </qty>
+                <min_qty>
+                    <selector>[name='product[stock_data][min_qty]']</selector>
+                </min_qty>
+                <min_sale_qty>
+                    <selector>[name='product[stock_data][min_sale_qty]']</selector>
+                </min_sale_qty>
+                <max_sale_qty>
+                    <selector>[name='product[stock_data][max_sale_qty]']</selector>
+                </max_sale_qty>
                 <use_config_min_qty>
                     <selector>[name='product[stock_data][use_config_min_qty]']</selector>
                     <input>checkbox</input>
                 </use_config_min_qty>
-                <min_qty>
-                    <selector>[name='product[stock_data][min_qty]']</selector>
-                </min_qty>
+                <use_config_min_sale_qty>
+                    <selector>[name='product[stock_data][use_config_min_sale_qty]']</selector>
+                    <input>checkbox</input>
+                </use_config_min_sale_qty>
+                <use_config_max_sale_qty>
+                    <selector>[name='product[stock_data][use_config_max_sale_qty]']</selector>
+                    <input>checkbox</input>
+                </use_config_max_sale_qty>
                 <use_config_manage_stock>
                     <input>checkbox</input>
                 </use_config_manage_stock>
                 <is_in_stock>
                     <input>select</input>
                 </is_in_stock>
+                <use_config_enable_qty_increments>
+                    <input>checkbox</input>
+                </use_config_enable_qty_increments>
             </stock_data>
         </fields>
     </advanced-inventory>
-    <autosettings>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab</class>
-        <selector>#product_info_tabs_autosettings</selector>
+    <content>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index='content']</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <description />
+            <short_description />
+        </fields>
+    </content>
+    <attributes>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes</class>
+        <selector>[data-index="attributes"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <custom_attribute>
+                <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute</class>
+                <selector>[data-index="%attribute_code%"]</selector>
+            </custom_attribute>
+        </fields>
+    </attributes>
+    <gallery>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\BlockGallery</class>
+        <selector>[data-index='gallery']</selector>
+        <strategy>css selector</strategy>
+    </gallery>
+    <search-engine-optimization>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index='search-engine-optimization']</selector>
         <strategy>css selector</strategy>
         <wrapper>product</wrapper>
         <fields>
-            <visibility>
-                <input>select</input>
-            </visibility>
-            <short_description>
-                <selector>#short_description</selector>
-                <input>textarea</input>
-            </short_description>
-            <is_returnable>
-                <input>select</input>
-            </is_returnable>
+            <url_key/>
+            <use_default_url_key>
+                <selector>[name="use_default[url_key]"]</selector>
+                <input>checkbox</input>
+            </use_default_url_key>
+        </fields>
+    </search-engine-optimization>
+    <related>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index='related']</selector>
+        <strategy>css selector</strategy>
+    </related>
+    <websites>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index='websites']</selector>
+        <strategy>css selector</strategy>
+        <wrapper>product</wrapper>
+        <fields>
+            <website_ids>
+                <selector>.admin__fieldset-product-websites</selector>
+                <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Websites\StoreTree</class>
+            </website_ids>
+        </fields>
+    </websites>
+    <design>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index='design']</selector>
+        <strategy>css selector</strategy>
+    </design>
+    <schedule-design-update>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index='schedule-design-update']</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <custom_design_from>
+                <selector>[name="product[custom_design_from]"]</selector>
+                <strategy>css selector</strategy>
+            </custom_design_from>
+        </fields>
+    </schedule-design-update>
+    <customer-options>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options</class>
+        <selector>[data-index="custom_options"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <title>
+                <selector>input[name$="[title]"]</selector>
+                <strategy>css selector</strategy>
+            </title>
+            <is_require>
+                <selector>input[name$="[is_require]"]</selector>
+                <strategy>css selector</strategy>
+                <input>checkbox</input>
+            </is_require>
+            <type>
+                <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Type</class>
+                <selector>[data-index="type"]</selector>
+                <strategy>css selector</strategy>
+            </type>
+        </fields>
+    </customer-options>
+    <gift-options>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>[data-index="gift-options"]</selector>
+        <strategy>css selector</strategy>
+        <wrapper>product</wrapper>
+        <fields>
             <gift_message_available>
-                <input>select</input>
+                <input>switcher</input>
             </gift_message_available>
             <use_config_gift_message_available>
                 <input>checkbox</input>
             </use_config_gift_message_available>
         </fields>
-    </autosettings>
-    <grouped-product>
-        <class>\Magento\Catalog\Test\Block\Product\Grouped\AssociatedProducts</class>
-        <selector>#product_info_tabs_product-details</selector>
+    </gift-options>
+    <related>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Related</class>
+        <selector>[data-index="related"]</selector>
         <strategy>css selector</strategy>
-    </grouped-product>
-    <customer-options>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options</class>
-        <selector>#product_info_tabs_customer_options</selector>
-        <strategy>css selector</strategy>
-        <fields>
-            <title>
-                <selector>.field [id$='_title']</selector>
-                <strategy>css selector</strategy>
-            </title>
-            <is_require>
-                <selector>.field input[id$='_required']</selector>
-                <strategy>css selector</strategy>
-                <input>checkbox</input>
-            </is_require>
-            <type>
-                <selector>.field [id$='_type']</selector>
-                <strategy>css selector</strategy>
-                <input>optgroupselect</input>
-            </type>
-        </fields>
-    </customer-options>
-    <related-products>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Related</class>
-        <selector>#product_info_tabs_related</selector>
-        <strategy>css selector</strategy>
-    </related-products>
-    <upsells>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Upsell</class>
-        <selector>#product_info_tabs_upsell</selector>
-        <strategy>css selector</strategy>
-    </upsells>
-    <crosssells>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Crosssell</class>
-        <selector>#product_info_tabs_crosssell</selector>
-        <strategy>css selector</strategy>
-    </crosssells>
-</tabs>
+    </related>
+</sections>

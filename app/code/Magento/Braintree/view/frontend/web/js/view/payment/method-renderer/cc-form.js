@@ -1,392 +1,168 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/*browser:true*/
+/*global define*/
 define(
     [
-        'ko',
-        'Magento_Payment/js/view/payment/cc-form',
-        'Magento_Checkout/js/action/set-payment-information',
-        'Magento_Checkout/js/model/quote',
-        'braintree',
         'underscore',
         'jquery',
+        'Magento_Payment/js/view/payment/cc-form',
+        'Magento_Braintree/js/view/payment/adapter',
+        'braintreeHostedFields',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Braintree/js/validator',
         'Magento_Ui/js/model/messageList',
+        'Magento_Braintree/js/view/payment/validator-handler',
+        'Magento_Vault/js/view/payment/vault-enabler',
+        'Magento_Braintree/js/view/payment/kount',
         'mage/translate',
-        'uiRegistry',
-        'mage/utils/wrapper'
+        'prototype',
+        'domReady!'
     ],
     function (
-        ko,
-        Component,
-        setPaymentInformationAction,
-        quote,
-        braintreeClientSDK,
         _,
         $,
-        messageList,
+        Component,
+        braintreeAdapter,
+        hostedFields,
+        quote,
+        validator,
+        globalMessageList,
+        validatorManager,
+        VaultEnabler,
+        kount,
         $t
     ) {
         'use strict';
 
-        var configBraintree = window.checkoutConfig.payment.braintree;
-
         return Component.extend({
-            placeOrderHandler: null,
-            validateHandler: null,
-
-            /**
-             * @param {Function} handler
-             */
-            setPlaceOrderHandler: function (handler) {
-                this.placeOrderHandler = handler;
-            },
-
-            /**
-             * @param {Function} handler
-             */
-            setValidateHandler: function (handler) {
-                this.validateHandler = handler;
-            },
-
-            /**
-             * @returns {Boolean}
-             */
-            isShowLegend: function () {
-                return true;
-            },
-
-            /**
-             * @returns {*}
-             */
-            getSource: function () {
-                return window.checkoutConfig.payment.iframe.source[this.getCode()];
-            },
-
-            /**
-             * @returns {*}
-             */
-            getControllerName: function () {
-                return window.checkoutConfig.payment.iframe.controllerName[this.getCode()];
-            },
-
-            /**
-             * @returns {*}
-             */
-            getPlaceOrderUrl: function () {
-                return window.checkoutConfig.payment.iframe.placeOrderUrl[this.getCode()];
-            },
-
-            /**
-             * @returns {Boolean}
-             */
-            isActive: function () {
-                return true;
-            },
-
             defaults: {
-                template: 'Magento_Braintree/payment/cc-form',
-                isCcFormShown: true,
-                storeInVault: true,
-                paymentMethodNonce: null,
-                selectedCardToken: configBraintree ? configBraintree.selectedCardToken : '',
-                storedCards: configBraintree ? configBraintree.storedCards : {},
-                availableCardTypes: configBraintree ? configBraintree.availableCardTypes : {},
-                lastBillingAddress: null
+                template: 'Magento_Braintree/payment/form',
+                active: false,
+                code: 'braintree',
+                lastBillingAddress: null,
+                hostedFieldsInstance: null,
+                selectorsMapper: {
+                    'expirationMonth': 'expirationMonth',
+                    'expirationYear': 'expirationYear',
+                    'number': 'cc_number',
+                    'cvv': 'cc_cid'
+                },
+                paymentPayload: {
+                    nonce: null
+                },
+                additionalData: {}
             },
 
             /**
-             * @function
+             * @returns {exports.initialize}
              */
-            initVars: function () {
-                this.ajaxGenerateNonceUrl = configBraintree ? configBraintree.ajaxGenerateNonceUrl : '';
-                this.clientToken = configBraintree ? configBraintree.clientToken : '';
-                this.braintreeDataJs = configBraintree ? configBraintree.braintreeDataJs : '';
-                this.canSaveCard = configBraintree ? configBraintree.canSaveCard : false;
-                this.show3dSecure = configBraintree ? configBraintree.show3dSecure : false;
-                this.isFraudDetectionEnabled = configBraintree ? configBraintree.isFraudDetectionEnabled : false;
-                this.deviceData = '';
-                this.deviceDataElementId = '#device_data';
-                this.braintreeDataFrameLoaded = false;
-                this.isBound = false;
-                this.ccToken = '';
-                this.isPaymentProcessing = null;
-                this.braintreeClient = null;
-                this.quoteBaseGrandTotals = quote.totals()['base_grand_total'];
-            },
-
-            /**
-             * @returns {*|String}
-             */
-            canInitialise: function () {
-                return this.clientToken;
-            },
-
-            /**
-             * @override
-             */
-            initObservable: function () {
+            initialize: function () {
                 var self = this;
 
-                this.initVars();
+                self._super();
+                self.vaultEnabler = new VaultEnabler();
+                self.vaultEnabler.setPaymentCode(self.getVaultCode());
+
+                kount.getDeviceData()
+                    .then(function (deviceData) {
+                        self.additionalData['device_data'] = deviceData;
+                    });
+
+                return self;
+            },
+
+            /**
+             * Init hosted fields.
+             *
+             * Is called after knockout finishes input fields bindings.
+             */
+            initHostedFields: function () {
+                var self = this;
+
+                braintreeAdapter.getApiClient()
+                    .then(function (clientInstance) {
+
+                        return hostedFields.create({
+                            client: clientInstance,
+                            fields: self.getFieldsConfiguration()
+                        });
+                    })
+                    .then(function (hostedFieldsInstance) {
+                        self.hostedFieldsInstance = hostedFieldsInstance;
+                        self.isPlaceOrderActionAllowed(true);
+                        self.initFormValidationEvents(hostedFieldsInstance);
+
+                        return self.hostedFieldsInstance;
+                    })
+                    .catch(function () {
+                        self.showError($t('Payment ' + self.getTitle() + ' can\'t be initialized'));
+                    });
+            },
+
+            /**
+             * Set list of observable attributes
+             *
+             * @returns {exports.initObservable}
+             */
+            initObservable: function () {
+                validator.setConfig(window.checkoutConfig.payment[this.getCode()]);
                 this._super()
-                    .track('availableCcValues')
-                    .observe([
-                        'selectedCardToken',
-                        'storeInVault',
-                        'storedCards',
-                        'paymentMethodNonce',
-                        'verified'
-                    ]);
-                this.isCcFormShown = ko.computed(function () {
-
-                    return !this.useVault() ||
-                        this.selectedCardToken() === undefined ||
-                        this.selectedCardToken() === '';
-                }, this);
-
-                if (!this.braintreeDataFrameLoaded && this.isFraudDetectionEnabled) {
-                    $.getScript(this.braintreeDataJs, function () {
-                        self.braintreeDataFrameLoaded = true;
-                    });
-                }
-
-                if (this.canInitialise()) {
-                    this.braintreeClient = new braintreeClientSDK.api.Client({
-                        clientToken: this.clientToken
-                    });
-                } else {
-                    this.messageContainer.addErrorMessage({
-                        'message': $t('Can not initialize PayPal (Braintree)')
-                    });
-                }
-
-                // subscribe on billing address update
-                quote.billingAddress.subscribe(function () {
-                    self.updateAvailableTypeValues();
-                });
+                    .observe(['active']);
 
                 return this;
             },
 
             /**
-             * Prepare and process payment information
-             */
-            preparePayment: function () {
-                var self = this,
-                    cardInfo = null;
-
-                if (this.validateHandler()) {
-                    this.messageContainer.clear();
-                    this.quoteBaseGrandTotals = quote.totals()['base_grand_total'];
-
-                    this.isPaymentProcessing = $.Deferred();
-                    $.when(this.isPaymentProcessing).done(
-                        function () {
-                            self.placeOrder();
-                        }
-                    ).fail(
-                        function (result) {
-                            self.handleError(result);
-                        }
-                    );
-
-                    this.getFraudAdditionalData();
-
-                    if (this.show3dSecure && this.selectedCardToken()) {
-                        this.verify3DSWithToken();
-
-                        return;
-                    }
-
-                    if (this.selectedCardToken()) {
-                        this.isPaymentProcessing.resolve();
-
-                        return;
-                    }
-
-                    cardInfo = {
-                        number: this.creditCardNumber(),
-                        expirationMonth: this.creditCardExpMonth(),
-                        expirationYear: this.creditCardExpYear(),
-                        cvv: this.creditCardVerificationNumber()
-                    };
-                    this.braintreeClient.tokenizeCard(cardInfo, function (error, nonce) {
-                        if (error) {
-                            self.isPaymentProcessing.reject(error);
-
-                            return;
-                        }
-
-                        self.paymentMethodNonce(nonce);
-
-                        if (self.show3dSecure) {
-                            self.verify3DS();
-
-                            return;
-                        }
-
-                        self.isPaymentProcessing.resolve();
-                    });
-                }
-            },
-
-            /**
-             * @override
-             */
-            getData: function () {
-                return {
-                    'method': this.item.method,
-                    'additional_data': {
-                        'cc_last4': this.creditCardNumber().slice(-4),
-                        'store_in_vault': this.storeInVault(),
-                        'payment_method_nonce': this.paymentMethodNonce(),
-                        'cc_token': this.selectedCardToken(),
-                        'device_data': this.deviceData,
-                        'cc_type': this.creditCardType(),
-                        'cc_exp_year': this.creditCardExpYear(),
-                        'cc_exp_month': this.creditCardExpMonth()
-                    }
-                };
-            },
-
-            /**
-             * Display error message on the top of the page and reset payment method nonce.
-             * @param {*} error - error message
-             */
-            handleError: function (error) {
-                this.paymentMethodNonce('');
-
-                if (_.isObject(error)) {
-                    this.messageContainer.addErrorMessage(error);
-                } else {
-                    this.messageContainer.addErrorMessage({
-                        message: error
-                    });
-                }
-            },
-
-            /**
-             * Get payment method nonce from server and perform 3DSecure card verification via braintree client.
-             */
-            verify3DSWithToken: function () {
-                var self = this;
-
-                //Make an ajax call to convert token to payment method nonce and use the nonce for 3dsecure verification
-                $.ajax({
-                    type: 'POST',
-                    url: self.ajaxGenerateNonceUrl,
-                    data: {
-                        token: this.selectedCardToken()
-                    },
-
-                    /**
-                     * Success callback for payment method nonce request.
-                     * @param {Object} response
-                     */
-                    success: function (response) {
-                        if (response.success) {
-                            self.paymentMethodNonce(response.nonce);
-                            self.verify3DS();
-                        } else {
-                            self.isPaymentProcessing.reject(response['error_message']);
-                        }
-                    },
-
-                    /**
-                     * Error callback for payment method nonce request.
-                     * @param {*} response
-                     */
-                    error: function (response) {
-                        self.isPaymentProcessing.reject(response);
-                    }
-                });
-            },
-
-            /**
-             * 3DSecure card verification via braintree client.
-             */
-            verify3DS: function () {
-                var self = this;
-
-                this.bind3dsecureIframe();
-                this.braintreeClient.verify3DS({
-                    amount: this.quoteBaseGrandTotals,
-                    creditCard: this.paymentMethodNonce()
-                }, function (error, response) {
-                    var liability = null;
-
-                    if (error) {
-                        self.isPaymentProcessing.reject(error);
-
-                        return;
-                    }
-                    liability = {
-                        shifted: response.verificationDetails.liabilityShifted,
-                        shiftPossible: response.verificationDetails.liabilityShiftPossible
-                    };
-
-                    if (liability.shifted || !liability.shifted && !liability.shiftPossible) {
-                        self.paymentMethodNonce(response.nonce);
-                        self.isPaymentProcessing.resolve();
-                    } else {
-                        self.paymentMethodNonce('');
-                        self.isPaymentProcessing.reject($t('Please try again with another form of payment.'));
-                    }
-                });
-            },
-
-            /**
-             * @override
+             * Get payment name
+             *
+             * @returns {String}
              */
             getCode: function () {
-                return 'braintree';
+                return this.code;
             },
 
             /**
-             * @returns {*}
+             * Check if payment is active
+             *
+             * @returns {Boolean}
              */
-            useVault: function () {
-                return configBraintree ?
-                    configBraintree.useVault :
-                    false;
+            isActive: function () {
+                var active = this.getCode() === this.isChecked();
+
+                this.active(active);
+
+                return active;
             },
 
             /**
-             * @returns {*}
+             * Get data
+             *
+             * @returns {Object}
              */
-            isCcDetectionEnabled: function () {
-                return configBraintree ?
-                    configBraintree.isCcDetectionEnabled :
-                    false;
-            },
-
-            /**
-             * @returns {Array}
-             */
-            getStoredCards: function () {
-                var availableTypes = this.getCcAvailableTypes(),
-                    storedCards = this.storedCards(),
-                    filteredCards = [],
-                    i,
-                    storedCardType;
-
-                for (i = 0; i < storedCards.length; i++) {
-                    storedCardType = storedCards[i].type;
-
-                    if (typeof availableTypes[storedCardType] != 'undefined') {
-                        filteredCards.push(storedCards[i]);
+            getData: function () {
+                var data = {
+                    'method': this.getCode(),
+                    'additional_data': {
+                        'payment_method_nonce': this.paymentPayload.nonce
                     }
-                }
+                };
 
-                return filteredCards;
+                data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
+                this.vaultEnabler.visitAdditionalData(data);
+
+                return data;
             },
 
             /**
              * Get list of available CC types
+             *
+             * @returns {Object}
              */
             getCcAvailableTypes: function () {
-                var availableTypes = configBraintree.availableCardTypes,
+                var availableTypes = validator.getAvailableCardTypes(),
                     billingAddress = quote.billingAddress(),
                     billingCountryId;
 
@@ -398,13 +174,10 @@ define(
 
                 billingCountryId = billingAddress.countryId;
 
-                if (billingCountryId &&
-                    typeof configBraintree.countrySpecificCardTypes[billingCountryId] !== 'undefined'
-                ) {
-
-                    return this.collectTypes(
+                if (billingCountryId && validator.getCountrySpecificCardTypes(billingCountryId)) {
+                    return validator.collectTypes(
                         availableTypes,
-                        configBraintree.countrySpecificCardTypes[billingCountryId]
+                        validator.getCountrySpecificCardTypes(billingCountryId)
                     );
                 }
 
@@ -412,74 +185,243 @@ define(
             },
 
             /**
-             * @param {Object} availableTypes
-             * @param {Object} countrySpecificCardTypes
-             * @returns {Object}
+             * @returns {Boolean}
              */
-            collectTypes: function (availableTypes, countrySpecificCardTypes) {
-                var key,
-                    filteredTypes = {};
-
-                for (key in availableTypes) {
-                    if (_.indexOf(countrySpecificCardTypes, key) !== -1) {
-                        filteredTypes[key] = availableTypes[key];
-                    }
-                }
-
-                return filteredTypes;
+            isVaultEnabled: function () {
+                return this.vaultEnabler.isVaultEnabled();
             },
 
             /**
-             * @returns {exports.context}
-             */
-            context: function () {
-                return this;
-            },
-
-            /**
-             * Get fraud control token.
-             */
-            getFraudAdditionalData: function () {
-                if ($(this.deviceDataElementId).length > 0 && this.isFraudDetectionEnabled) {
-                    this.deviceData = $(this.deviceDataElementId).val();
-                }
-            },
-
-            /**
-             * Fix the non-observed close button on Braintree iframe
-             */
-            bind3dsecureIframe: function () {
-                var self = this,
-                    $body = $('body');
-
-                if (!self.isBound) {
-                    $body.bind('DOMNodeInserted', function (e) {
-                        if (e.target.nodeName === 'IFRAME') {
-                            self.isBound = true;
-                            $('body').trigger('processStart');
-                        }
-                    });
-                    $body.bind('DOMNodeRemoved', function (e) {
-                        if (e.target.nodeName === 'IFRAME') {
-                            self.isBound = false;
-                            $('body').trigger('processStop');
-                        }
-                    });
-                }
-            },
-
-            /**
+             * Returns vault code.
+             *
              * @returns {String}
              */
-            getCssClass: function () {
-                return this.isCcDetectionEnabled() ? 'field type detection' : 'field type required';
+            getVaultCode: function () {
+                return window.checkoutConfig.payment[this.getCode()].ccVaultCode;
             },
 
             /**
-             * Update list of available CC types values
+             * Action to place order
+             * @param {String} key
              */
-            updateAvailableTypeValues: function () {
-                this.availableCcValues = this.getCcAvailableTypesValues();
+            placeOrder: function (key) {
+                var self = this;
+
+                if (key) {
+                    return self._super();
+                }
+                // place order on success validation
+                validatorManager.validate(self, function () {
+                    return self.placeOrder('parent');
+                }, function (err) {
+
+                    if (err) {
+                        self.showError(err);
+                    }
+                });
+
+                return false;
+            },
+
+            /**
+             * Returns state of place order button
+             *
+             * @returns {Boolean}
+             */
+            isButtonActive: function () {
+                return this.isActive() && this.isPlaceOrderActionAllowed();
+            },
+
+            /**
+             * Trigger order placing
+             */
+            placeOrderClick: function () {
+                var self = this;
+
+                if (this.isFormValid(this.hostedFieldsInstance)) {
+                    self.hostedFieldsInstance.tokenize(function (err, payload) {
+                        if (err) {
+                            self.showError($t('Some payment input fields are invalid.'));
+
+                            return;
+                        }
+
+                        if (self.validateCardType()) {
+                            self.setPaymentPayload(payload);
+                            self.placeOrder();
+                        }
+                    });
+                }
+            },
+
+            /**
+             * Validates credit card form.
+             *
+             * @param {Object} hostedFieldsInstance
+             * @returns {Boolean}
+             * @private
+             */
+            isFormValid: function (hostedFieldsInstance) {
+                var self = this,
+                    state = hostedFieldsInstance.getState();
+
+                return Object.keys(state.fields).every(function (fieldKey) {
+                    if (fieldKey in self.selectorsMapper && state.fields[fieldKey].isValid === false) {
+                        self.addInvalidClass(self.selectorsMapper[fieldKey]);
+                    }
+
+                    return state.fields[fieldKey].isValid;
+                });
+            },
+
+            /**
+             * Init form validation events.
+             *
+             * @param {Object} hostedFieldsInstance
+             * @private
+             */
+            initFormValidationEvents: function (hostedFieldsInstance) {
+                var self = this;
+
+                hostedFieldsInstance.on('empty', function (event) {
+                    if (event.emittedBy === 'number') {
+                        self.selectedCardType(null);
+                    }
+
+                });
+
+                hostedFieldsInstance.on('blur', function (event) {
+                    if (event.emittedBy === 'number') {
+                        self.validateCardType();
+                    }
+                });
+
+                hostedFieldsInstance.on('validityChange', function (event) {
+                    var field = event.fields[event.emittedBy],
+                        fieldKey = event.emittedBy;
+
+                    if (fieldKey === 'number') {
+                        self.isValidCardNumber = field.isValid;
+                    }
+
+                    if (fieldKey in self.selectorsMapper && field.isValid === false) {
+                        self.addInvalidClass(self.selectorsMapper[fieldKey]);
+                    }
+                });
+
+                hostedFieldsInstance.on('cardTypeChange', function (event) {
+                    if (event.cards.length === 1) {
+                        self.selectedCardType(
+                            validator.getMageCardType(event.cards[0].type, self.getCcAvailableTypes())
+                        );
+                    }
+                });
+            },
+
+            /**
+             * Get full selector name
+             *
+             * @param {String} field
+             * @returns {String}
+             * @private
+             */
+            getSelector: function (field) {
+                return '#' + this.getCode() + '_' + field;
+            },
+
+            /**
+             * Add invalid class to field.
+             *
+             * @param {String} field
+             * @returns void
+             * @private
+             */
+            addInvalidClass: function (field) {
+                $(this.getSelector(field)).addClass('braintree-hosted-fields-invalid');
+            },
+
+            /**
+             * Remove invalid class from field.
+             *
+             * @param {String} field
+             * @returns void
+             * @private
+             */
+            removeInvalidClass: function (field) {
+                $(this.getSelector(field)).removeClass('braintree-hosted-fields-invalid');
+            },
+
+            /**
+             * Get Braintree Hosted Fields
+             *
+             * @returns {Object}
+             * @private
+             */
+            getFieldsConfiguration: function () {
+                var self = this,
+                    fields = {
+                        number: {
+                            selector: self.getSelector('cc_number')
+                        },
+                        expirationMonth: {
+                            selector: self.getSelector('expirationMonth'),
+                            placeholder: $t('MM')
+                        },
+                        expirationYear: {
+                            selector: self.getSelector('expirationYear'),
+                            placeholder: $t('YY')
+                        }
+                    };
+
+                if (self.hasVerification()) {
+                    fields.cvv = {
+                        selector: self.getSelector('cc_cid')
+                    };
+                }
+
+                return fields;
+            },
+
+            /**
+             * Validate current credit card type.
+             *
+             * @returns {Boolean}
+             * @private
+             */
+            validateCardType: function () {
+                var cardFieldName = 'cc_number';
+
+                this.removeInvalidClass(cardFieldName);
+
+                if (this.selectedCardType() === null || !this.isValidCardNumber) {
+                    this.addInvalidClass(cardFieldName);
+
+                    return false;
+                }
+
+                return true;
+            },
+
+            /**
+             * Sets payment payload
+             *
+             * @param {Object} paymentPayload
+             * @private
+             */
+            setPaymentPayload: function (paymentPayload) {
+                this.paymentPayload = paymentPayload;
+            },
+
+            /**
+             * Show error message
+             *
+             * @param {String} errorMessage
+             * @private
+             */
+            showError: function (errorMessage) {
+                globalMessageList.addErrorMessage({
+                    message: errorMessage
+                });
             }
         });
     }

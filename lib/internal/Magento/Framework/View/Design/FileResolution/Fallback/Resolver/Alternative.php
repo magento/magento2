@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
-use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\FileResolution\Fallback;
 
@@ -23,12 +23,12 @@ class Alternative extends Simple
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
+     * @param ReadFactory $readFactory
      * @param \Magento\Framework\View\Design\Fallback\RulePool $rulePool
      * @param array $alternativeExtensions
      */
     public function __construct(
-        Filesystem $filesystem,
+        ReadFactory $readFactory,
         \Magento\Framework\View\Design\Fallback\RulePool $rulePool,
         array $alternativeExtensions = []
     ) {
@@ -41,7 +41,7 @@ class Alternative extends Simple
             }
         }
         $this->alternativeExtensions = $alternativeExtensions;
-        parent::__construct($filesystem, $rulePool);
+        parent::__construct($readFactory, $rulePool);
     }
 
     /**

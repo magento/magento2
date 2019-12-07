@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
  */
 namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import
@@ -25,19 +25,18 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_formMock = $this->getMock(
-            'Magento\Framework\Data\Form',
-            ['getFieldNameSuffix', 'addSuffixToName'],
-            [],
-            '',
-            false,
-            false
+        $this->_formMock = $this->createPartialMock(
+            \Magento\Framework\Data\Form::class,
+            ['getFieldNameSuffix', 'addSuffixToName', 'getHtmlIdPrefix', 'getHtmlIdSuffix']
         );
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(
-            'Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import',
-            ['data' => $testData]
+            \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import::class,
+            [
+                'data' => $testData,
+                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+            ]
         );
         $this->_object->setForm($this->_formMock);
     }
@@ -80,8 +79,8 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             $testString
         );
         $this->assertStringEndsWith(
-            '<input id="test_html_id" name="test_name"  data-ui-id="form-element-test_name"' .
-            ' value="" type="file"/>',
+            '<input id="test_name_prefixtest_html_idtest_name_suffix" ' .
+            'name="test_name"  data-ui-id="form-element-test_name" value="" type="file"/>',
             $testString
         );
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,11 +9,14 @@
     <group id="paypal_payflowpro" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
         <label>Payflow Pro</label>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-        <fieldset_css>pp-method-payflow</fieldset_css>
-        <comment>Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.</comment>
+        <fieldset_css>paypal-other-section</fieldset_css>
+        <comment><![CDATA[Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflowpro/active</attribute>
-        <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-payflow-pro?partner_id=NB9WWHYEMVUMS</more_url>
         <attribute type="paypal_ec_separate">1</attribute>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-pro.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -62,13 +65,15 @@
                     </depends>
                     <attribute type="shared">1</attribute>
                 </field>
-                <field id="proxy_port" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1">
+                <field id="proxy_port" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1">
                     <label>Proxy Port</label>
+                    <comment>Please enter at least 0 and at most 65535</comment>
                     <config_path>payment/payflowpro/proxy_port</config_path>
                     <depends>
                         <field id="use_proxy">1</field>
                     </depends>
                     <attribute type="shared">1</attribute>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
                 </field>
             </group>
             <field id="enable_paypal_payflow" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">
@@ -76,6 +81,15 @@
                 <config_path>payment/payflowpro/active</config_path>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
+                <requires>
+                    <group id="paypal_payflow_api_settings"/>
+                </requires>
+            </field>
+            <field id="payflowpro_cc_vault_active" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Vault Enabled</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <config_path>payment/payflowpro_cc_vault/active</config_path>
+                <attribute type="shared">1</attribute>
                 <requires>
                     <group id="paypal_payflow_api_settings"/>
                 </requires>
@@ -89,6 +103,10 @@
                 <comment>It is recommended to set this value to "Debit or Credit Card" per store views.</comment>
                 <config_path>payment/payflowpro/title</config_path>
                 <attribute type="shared">1</attribute>
+            </field>
+            <field id="payflowpro_cc_vault_title" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Vault Title</label>
+                <config_path>payment/payflowpro_cc_vault/title</config_path>
             </field>
             <field id="sort_order" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sort Order</label>
@@ -172,7 +190,7 @@
                         <attribute type="shared">1</attribute>
                     </field>
                     <field id="avs_international" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1">
-                        <label>International AVS Indicator Does Not Match</label>
+                        <label>Card Issuer Is Outside The United States</label>
                         <config_path>payment/payflowpro/avs_international</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <attribute type="shared">1</attribute>

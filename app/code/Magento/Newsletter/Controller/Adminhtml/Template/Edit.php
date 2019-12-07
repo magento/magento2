@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
-class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpGetActionInterface
 {
     /**
      * Core registry
@@ -32,7 +34,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template
      */
     public function execute()
     {
-        $model = $this->_objectManager->create('Magento\Newsletter\Model\Template');
+        $model = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class);
         $id = $this->getRequest()->getParam('id');
         if ($id) {
             $model->load($id);

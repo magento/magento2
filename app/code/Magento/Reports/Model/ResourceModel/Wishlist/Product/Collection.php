@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Wishlist\Product;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
 {
     /**
@@ -20,7 +24,7 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\Wishlist', 'Magento\Wishlist\Model\ResourceModel\Wishlist');
+        $this->_init(\Magento\Wishlist\Model\Wishlist::class, \Magento\Wishlist\Model\ResourceModel\Wishlist::class);
     }
 
     /**

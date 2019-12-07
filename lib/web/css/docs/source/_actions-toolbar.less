@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -19,7 +19,7 @@
 //      </div>
 //  </div>
 //  ```
-// 
+//
 //  **Sample of using a button + button**
 //  ``` html
 //  <div class="example-actions-toolbar-1">
@@ -43,77 +43,89 @@
 }
 
 //  # Actions toolbar mixin variables
+//
 //  <pre>
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
-//        <th class="vars_head">Allowable values</th>
+//        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_actions-toolbar-actions-position</th>
+//        <td>@actions-toolbar-actions__position</td>
 //        <td class="vars_value">justify</td>
 //        <td class="vars_value">justify | left | right | center</td>
 //        <td>Position for actions in Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th>@_actions-toolbar-actions-reverse</th>
+//        <td>@actions-toolbar-actions__reverse</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">true | false</td>
 //        <td>Reverse primary and secondary blocks position in Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th>@_actions-toolbar-margin</th>
+//        <td>@actions-toolbar__margin</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Margins of the Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th>@_actions-toolbar-padding</th>
+//        <td>@actions-toolbar__padding</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | false | value</td>
-//        <td>Paddings of the Actions toolbar</td>
+//        <td>Padding of the Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th>@_actions-toolbar-actions-margin</th>
+//        <td>@actions-toolbar-actions__margin</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Margins of all .actions in the Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th>@_actions-toolbar-primary-actions-margin</th>
+//        <td>@actions-toolbar-actions-primary__margin</td>
 //        <td class="vars_value">0 @indent__xs 0 0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Margins of primary .actions in the Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th>@_actions-toolbar-secondary-actions-margin</th>
+//        <td>@actions-toolbar-actions-secondary__margin</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Margins of secondary .actions in the Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_actions-toolbar-actions-links-margin-top</th>
+//        <td>@actions-toolbar-actions-links__margin-top</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Margin-top for links with class .action in the Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_actions-toolbar-primary-actions-links-margin-top</th>
+//        <td>@actions-toolbar-actions-links-primary__margin-top</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Margin-top for primary links with class .action in the Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_actions-toolbar-secondary-actions-links-margin-top</th>
+//        <td>@actions-toolbar-actions-secondary__margin</td>
 //        <td class="vars_value">6px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Margin-top for secondary links with class .action in the Actions toolbar</td>
 //      </tr>
 //    </table>
 //  </pre>
-// 
+//
 //  # Actions toolbar alignment
 //
 //  <code>@_actions-toolbar-actions-position</code> variable controls aligning actions toolbar elements. It can be set to:
@@ -286,7 +298,7 @@
 //
 //  <code>@_actions-toolbar-margin</code> variable controls margins of the actions toolbar wrapper.
 //
-//  <code>@_actions-toolbar-padding</code> variable controls paddings of the actions toolbar wrapper.
+//  <code>@_actions-toolbar-padding</code> variable controls padding of the actions toolbar wrapper.
 //
 //  ``` html
 //  <div class="example-actions-toolbar-9">

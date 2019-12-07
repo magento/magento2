@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -197,7 +197,7 @@ class Billing extends \Magento\Framework\View\Element\Template
     protected function _getTaxvat()
     {
         if (!$this->taxvat) {
-            $this->taxvat = $this->getLayout()->createBlock('Magento\Customer\Block\Widget\Taxvat');
+            $this->taxvat = $this->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class);
         }
 
         return $this->taxvat;

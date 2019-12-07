@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,6 +15,10 @@
                 <selector>[name='rolename']</selector>
                 <strategy>css selector</strategy>
             </role_name>
+            <current_password>
+                <selector>[name='current_password']</selector>
+                <strategy>css selector</strategy>
+            </current_password>
         </fields>
     </role-info>
     <role-resources>

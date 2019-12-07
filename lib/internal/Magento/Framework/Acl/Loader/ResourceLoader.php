@@ -2,22 +2,25 @@
 /**
  * ACL Resource Loader
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Loader;
 
 use Magento\Framework\Acl;
-use Magento\Framework\Acl\AclResource as AclResource;
+use Magento\Framework\Acl\AclResource;
 use Magento\Framework\Acl\AclResource\ProviderInterface;
 use Magento\Framework\Acl\AclResourceFactory;
 
+/**
+ * ACL Loader
+ */
 class ResourceLoader implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
      * Acl resource config
      *
-     * @var ProviderInterface $resourceProvider
+     * @var ProviderInterface
      */
     protected $_resourceProvider;
 
@@ -43,6 +46,7 @@ class ResourceLoader implements \Magento\Framework\Acl\LoaderInterface
      *
      * @param Acl $acl
      * @return void
+     * @throws \Zend_Acl_Exception
      */
     public function populateAcl(Acl $acl)
     {
@@ -57,6 +61,7 @@ class ResourceLoader implements \Magento\Framework\Acl\LoaderInterface
      * @param AclResource $parent
      * @return void
      * @throws \InvalidArgumentException
+     * @throws \Zend_Acl_Exception
      */
     protected function _addResourceTree(Acl $acl, array $resources, AclResource $parent = null)
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Widget\Page;
@@ -115,8 +115,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
     {
         if ($this->getData('anchor_text')) {
             $this->_anchorText = $this->getData('anchor_text');
-        } elseif ($this->getTitle()) {
-            $this->_anchorText = $this->getTitle();
         } elseif ($this->getData('href')) {
             $this->_anchorText = $this->_resourcePage->setStore(
                 $this->_storeManager->getStore()
@@ -125,6 +123,8 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
             );
         } elseif ($this->getData('page_id')) {
             $this->_anchorText = $this->_resourcePage->getCmsPageTitleById($this->getData('page_id'));
+        } elseif ($this->getTitle()) {
+            $this->_anchorText = $this->getTitle();
         } else {
             $this->_anchorText = $this->getData('href');
         }

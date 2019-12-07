@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel\Rating;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Review\Model\ResourceModel\Rating\Collection
@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Review\Model\ResourceModel\Rating\Collection'
+            \Magento\Review\Model\ResourceModel\Rating\Collection::class
         );
     }
 
@@ -25,7 +25,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddEntitySummaryToItem()
     {
         $ratingData = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Registry')
+            ->get(\Magento\Framework\Registry::class)
             ->registry('rating_data');
 
         $result = $this->collection->addEntitySummaryToItem($ratingData->getEntityId(), $ratingData->getStoreId());

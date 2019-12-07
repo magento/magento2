@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
@@ -25,7 +23,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
 
         $this->integrationController = $this->_createIntegrationController('Delete');
 
-        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultRedirect->expects($this->any())
@@ -60,6 +58,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         $this->integrationController->execute();
     }
 
@@ -89,6 +91,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         $this->integrationController->execute();
     }
 
@@ -116,6 +122,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_translateModelMock = null;
         // verify success message
         $this->_messageManager->expects($this->never())->method('addSuccess');
+
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->integrationController->execute();
     }
@@ -146,7 +156,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willReturn(self::INTEGRATION_ID);
         // Use real translate model
         $this->_translateModelMock = null;
-        $exceptionMessage = __("Integration with ID '%1' doesn't exist.", $intData[Info::DATA_ID]);
+        $exceptionMessage = __('The integration with ID "%1" doesn\'t exist.', $intData[Info::DATA_ID]);
         $invalidIdException = new IntegrationException($exceptionMessage);
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')
@@ -168,7 +178,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willReturn(self::INTEGRATION_ID);
         // Use real translate model
         $this->_translateModelMock = null;
-        $exceptionMessage = __("Integration with ID '%1' doesn't exist.", $intData[Info::DATA_ID]);
+        $exceptionMessage = __('The integration with ID "%1" doesn\'t exist.', $intData[Info::DATA_ID]);
         $invalidIdException = new \Exception($exceptionMessage);
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Swatches\Test\Unit\Block\Adminhtml\Product\Attribute\Edit;
 
 use Magento\Swatches\Model\Swatch;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider dataForAddValues
@@ -16,10 +16,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testAddValues($values)
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $block = $objectManager->getObject('\Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form');
-        $block->addValues($values);
+        $block = $objectManager->getObject(\Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form::class);
+        $result= $block->addValues($values);
+        $this->assertEquals($block, $result);
     }
 
+    /**
+     * @return array
+     */
     public function dataForAddValues()
     {
         $additionalData = [
@@ -50,7 +54,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    'additional_data' => serialize($additionalData),
+                    'additional_data' => json_encode($additionalData),
                     'frontend_input' => 'select',
                 ]
             ],

@@ -1,12 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * OfflinePayments Observer
- */
 namespace Magento\OfflinePayments\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -14,6 +11,9 @@ use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Model\Checkmo;
 
+/**
+ * Sets payment additional information.
+ */
 class BeforeOrderPaymentSaveObserver implements ObserverInterface
 {
     /**
@@ -36,14 +36,13 @@ class BeforeOrderPaymentSaveObserver implements ObserverInterface
                 $payment->getMethodInstance()->getInstructions()
             );
         } elseif ($payment->getMethod() === Checkmo::PAYMENT_METHOD_CHECKMO_CODE) {
-            $payment->setAdditionalInformation(
-                'payable_to',
-                $payment->getMethodInstance()->getPayableTo()
-            );
-            $payment->setAdditionalInformation(
-                'mailing_address',
-                $payment->getMethodInstance()->getMailingAddress()
-            );
+            $methodInstance = $payment->getMethodInstance();
+            if (!empty($methodInstance->getPayableTo())) {
+                $payment->setAdditionalInformation('payable_to', $methodInstance->getPayableTo());
+            }
+            if (!empty($methodInstance->getMailingAddress())) {
+                $payment->setAdditionalInformation('mailing_address', $methodInstance->getMailingAddress());
+            }
         }
     }
 }

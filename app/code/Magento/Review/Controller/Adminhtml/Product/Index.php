@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends ProductController
+class Index extends ProductController implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
@@ -26,7 +27,7 @@ class Index extends ProductController
         $resultPage->setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
         $resultPage->getConfig()->getTitle()->prepend(__('Customer Reviews'));
         $resultPage->getConfig()->getTitle()->prepend(__('Reviews'));
-        $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Main'));
+        $resultPage->addContent($resultPage->getLayout()->createBlock(\Magento\Review\Block\Adminhtml\Main::class));
         return $resultPage;
     }
 }

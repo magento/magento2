@@ -1,9 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
+<a href="" ui-sref="root.extension">< Back</a>
 <h2 class="page-title">{{$state.current.header}}</h2>
 <div class="messages">
     <div ng-show="error === true" class="message message-error error">
@@ -12,48 +13,17 @@
         </span>
     </div>
 </div>
-<div ng-controller="authDialogController" class="admin__data-grid-outer-wrap">
+<div class="admin__data-grid-outer-wrap" id="installExtensionGrid">
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3">
                 <button type="button" class="btn" ng-click="installAll()">Install</button>
                 <div class="admin__control-support-text">
-                    <span>{{total}}</span> records found
+                    <span>{{total}}</span> extensions
                 </div>
             </div>
-            <div class="col-xs-9 admin__data-grid-pager-wrap">
-                <select id="perPage"
-                        class="admin__control-select"
-                        ng-model="rowLimit"
-                        ng-change="recalculatePagination(currentPage, rowLimit)"
-                >
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                </select>
-                <label class="admin__control-support-text">per page</label>
-                <div class="admin__data-grid-pager">
-                    <button class="action-previous"
-                            ng-disabled="currentPage == 1"
-                            ng-click="recalculatePagination(currentPage - 1, rowLimit)"
-                            type="button"
-                    >
-                        <span>Previous page</span>
-                    </button>
-                    <input id="pageCurrent" class="admin__control-text" type="number" value="{{currentPage}}">
-                    <label class="admin__control-support-text" for="pageCurrent">
-                        of {{numberOfPages}}
-                    </label>
-                    <button class="action-next"
-                            ng-disabled="currentPage >= numberOfPages"
-                            ng-click="recalculatePagination(currentPage + 1, rowLimit)"
-                            type="button"
-                    >
-                        <span>Next page</span>
-                    </button>
-                </div>
+            <div class="col-xs-9 admin__data-grid-pager-wrap"
+                 ng-include="'<?= $this->basePath() ?>/pub/magento/setup/view/pagination.html'">
             </div>
         </div>
     </div>
@@ -63,28 +33,31 @@
             <tr>
                 <th class="data-grid-multicheck-cell">
                     <div class="action-multicheck-wrap"
-                         ng-class="{'_active':isNewExtensionsMenuVisible}"
-                         click-out="hideNewExtensionsMenu()"
-                        >
+                         ng-class="{'_active':multipleChoiceService.isNewExtensionsMenuVisible}"
+                         click-out="multipleChoiceService.hideNewExtensionsMenu()"
+                    >
                         <input type="checkbox"
                                style="visibility: hidden;"
                                class="admin__control-checkbox"
-                               ng-class="{'_indeterminate':someExtensionsSelected}"
-                               ng-checked="allExtensionsSelected"
-                            >
+                               ng-class="{'_indeterminate':multipleChoiceService.someExtensionsSelected}"
+                               ng-checked="multipleChoiceService.allExtensionsSelected"
+                        >
                         <label></label>
                         <button class="action-multicheck-toggle"
-                                ng-class="{'_active':isNewExtensionsMenuVisible}"
-                                ng-click="toggleNewExtensionsMenu()"
-                            >
+                                ng-class="{'_active':multipleChoiceService.isNewExtensionsMenuVisible}"
+                                ng-click="multipleChoiceService.toggleNewExtensionsMenu()"
+                        >
                             <span>Options</span>
                         </button>
                         <ul class="action-menu">
-                            <li ng-show="!allExtensionsSelected" ng-click="selectAllExtensions()">
+                            <li ng-show="!multipleChoiceService.allExtensionsSelected"
+                                ng-click="multipleChoiceService.selectAllExtensions()"
+                            >
                                 <span class="action-menu-item">Select all</span>
                             </li>
-                            <li ng-show="allExtensionsSelected || someExtensionsSelected"
-                                ng-click="deselectAllExtensions()">
+                            <li ng-show="multipleChoiceService.allExtensionsSelected
+                                        || multipleChoiceService.someExtensionsSelected"
+                                ng-click="multipleChoiceService.deselectAllExtensions()">
                                 <span class="action-menu-item">Deselect all</span>
                             </li>
                         </ul>
@@ -94,14 +67,6 @@
                 && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
                     <span>Extension Name</span>
                 </th>
-                <th ng-click="order('metapackage')" ng-class="{'_ascend' : predicate === 'metapackage' &&
-                !reverse,'_descend' : predicate === 'metapackage' && reverse}" class="data-grid-th _sortable">
-                    <span>Metapackage</span>
-                </th>
-                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version'
-                && !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th _sortable">
-                    <span>Version</span>
-                </th>
                 <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type' &&
                 !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th _sortable">
                     <span>Type</span>
@@ -110,37 +75,51 @@
                 !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th _sortable _ascend">
                     <span>Vendor</span>
                 </th>
+                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version'
+                && !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th _sortable">
+                    <span>Latest version</span>
+                </th>
                 <th class="data-grid-actions-cell data-grid-th">
                     <span>Action</span>
                 </th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="extension in extensions | orderBy:predicate:reverse | startFrom:start | limitTo:rowLimit">
+            <tr ng-repeat="extension in extensions | orderBy:predicate:reverse
+                | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
+            >
                 <td class="data-grid-checkbox-cell">
                     <label class="data-grid-checkbox-cell-inner">
                         <input type="checkbox"
                                class="admin__control-checkbox"
-                               ng-checked="selectedExtensions.hasOwnProperty(extension.name)"
-                               ng-click="updateSelectedExtensions($event, extension.name, extension.version)"
+                               ng-checked="multipleChoiceService.selectedExtensions.hasOwnProperty(extension.name)"
+                               ng-click="multipleChoiceService.updateSelectedExtensions($event, extension.name,
+                                        extension.version)"
                         >
                         <label></label>
                     </label>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.name}}</span>
+                    <span class="data-grid-data">{{extension.package_title}}</span>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.metapackage}}</span>
-                </td>
-                <td>
-                    <span class="data-grid-data">{{extension.version}}</span>
-                </td>
-                <td>
-                    <span class="data-grid-data">{{extension.type}}</span>
+                    <span class="data-grid-data">{{extension.package_type}}</span>
                 </td>
                 <td>
                     <span class="data-grid-data">{{extension.vendor}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">
+                        <select id="selectedVersion" ng-model="extension.version">
+                            <option ng-repeat="version in extension.versions"
+                                    value="{{version}}">Version {{version}}</option>
+                        </select>
+                    </span>
+                    <span class="component-indicator _tooltip"
+                          ng-show="extension.package_link"
+                          data-label="View info on Marketplace"
+                    ><a href="{{extension.package_link}}" target="_blank"></a>
+                    </span>
                 </td>
                 <td class="data-grid-data">
                     <div class="action-wrap" ng-class="_active">
@@ -156,8 +135,11 @@
     </div>
 </div>
 <!-- loading indicator overlay and loader -->
-<div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
-    <div class="grid-loader"></div>
+<div ng-show="!isHiddenSpinner" class="loading-mask ng-scope" data-role="loader">
+    <div class="popup popup-loading">
+        <div class="popup-inner">
+            <img alt="Loading..." src="<?= $this->basePath() ?>/pub/images/loader-1.gif">
+            Please wait...
+        </div>
+    </div>
 </div>
-<div ng-controller="authDialogController" ng-show="edited===true"
-     ng-include="'index.php/marketplace/popup-auth'" style="display: inline-block"></div>

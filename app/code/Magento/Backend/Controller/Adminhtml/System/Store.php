@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Controller\Adminhtml\System;
 
@@ -16,9 +14,17 @@ use Magento\Framework\Filesystem;
  * Store controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class Store extends Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::store';
+
     /**
      * Core registry
      *
@@ -78,17 +84,11 @@ abstract class Store extends Action
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Backend::store');
-    }
-
-    /**
      * Backup database
      *
      * @return bool
+     *
+     * @deprecated Backup module is to be removed.
      */
     protected function _backupDatabase()
     {
@@ -97,21 +97,21 @@ abstract class Store extends Action
         }
         try {
             /** @var \Magento\Backup\Model\Db $backupDb */
-            $backupDb = $this->_objectManager->create('Magento\Backup\Model\Db');
+            $backupDb = $this->_objectManager->create(\Magento\Backup\Model\Db::class);
             /** @var \Magento\Backup\Model\Backup $backup */
-            $backup = $this->_objectManager->create('Magento\Backup\Model\Backup');
+            $backup = $this->_objectManager->create(\Magento\Backup\Model\Backup::class);
             /** @var Filesystem $filesystem */
-            $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+            $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
             $backup->setTime(time())
                 ->setType('db')
                 ->setPath($filesystem->getDirectoryRead(DirectoryList::VAR_DIR)->getAbsolutePath('backups'));
             $backupDb->createBackup($backup);
-            $this->messageManager->addSuccess(__('The database was backed up.'));
+            $this->messageManager->addSuccessMessage(__('The database was backed up.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             return false;
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t create a backup right now. Please try again later.')
             );
@@ -128,9 +128,11 @@ abstract class Store extends Action
      */
     protected function _addDeletionNotice($typeTitle)
     {
-        $this->messageManager->addNotice(
+        $this->messageManager->addNoticeMessage(
             __(
-                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.',
+                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.)'
+                . ', but the %1 will not be able to be restored. It is suggested that you create a database backup '
+                . 'before deleting the %1.',
                 $typeTitle
             )
         );

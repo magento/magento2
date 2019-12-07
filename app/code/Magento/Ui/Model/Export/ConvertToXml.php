@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model\Export;
@@ -10,9 +10,9 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Convert\Excel;
 use Magento\Framework\Convert\ExcelFactory;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Ui\Component\MassAction\Filter;
 
 /**
@@ -21,7 +21,7 @@ use Magento\Ui\Component\MassAction\Filter;
 class ConvertToXml
 {
     /**
-     * @var WriteInterface
+     * @var DirectoryList
      */
     protected $directory;
 
@@ -51,11 +51,17 @@ class ConvertToXml
     protected $fields;
 
     /**
+     * @var Filter
+     */
+    protected $filter;
+
+    /**
      * @param Filesystem $filesystem
      * @param Filter $filter
      * @param MetadataProvider $metadataProvider
      * @param ExcelFactory $excelFactory
      * @param SearchResultIteratorFactory $iteratorFactory
+     * @throws FileSystemException
      */
     public function __construct(
         Filesystem $filesystem,
@@ -88,6 +94,7 @@ class ConvertToXml
      * Returns DB fields list
      *
      * @return array
+     * @throws LocalizedException
      */
     protected function getFields()
     {
@@ -103,6 +110,7 @@ class ConvertToXml
      *
      * @param DocumentInterface $document
      * @return array
+     * @throws LocalizedException
      */
     public function getRowData(DocumentInterface $document)
     {
@@ -125,19 +133,26 @@ class ConvertToXml
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();
 
+        $component->getContext()->getDataProvider()->setLimit(0, 0);
+
         /** @var SearchResultInterface $searchResult */
         $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
 
-        $this->prepareItems($component->getName(), $searchResult->getItems());
+        /** @var DocumentInterface[] $searchResultItems */
+        $searchResultItems = $searchResult->getItems();
+
+        $this->prepareItems($component->getName(), $searchResultItems);
 
         /** @var SearchResultIterator $searchResultIterator */
-        $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResult->getItems()]);
+        $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResultItems]);
 
         /** @var Excel $excel */
-        $excel = $this->excelFactory->create([
-            'iterator' => $searchResultIterator,
-            'rowCallback'=> [$this, 'getRowData'],
-        ]);
+        $excel = $this->excelFactory->create(
+            [
+                'iterator' => $searchResultIterator,
+                'rowCallback'=> [$this, 'getRowData'],
+            ]
+        );
 
         $this->directory->create('export');
         $stream = $this->directory->openFile($file, 'w+');

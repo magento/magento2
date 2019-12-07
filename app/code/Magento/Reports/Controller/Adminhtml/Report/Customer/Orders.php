@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 
-class Orders extends \Magento\Reports\Controller\Adminhtml\Report\Customer
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Orders extends \Magento\Reports\Controller\Adminhtml\Report\Customer implements HttpGetActionInterface
 {
     /**
      * Customers by number of orders action

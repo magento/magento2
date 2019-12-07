@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
@@ -52,11 +52,11 @@ class CheckUserLoginBackendObserver implements ObserverInterface
         $formId = 'backend_login';
         $captchaModel = $this->_helper->getCaptcha($formId);
         $login = $observer->getEvent()->getUsername();
-        if ($captchaModel->isRequired($login)) {
-            if (!$captchaModel->isCorrect($this->captchaStringResolver->resolve($this->_request, $formId))) {
-                $captchaModel->logAttempt($login);
-                throw new PluginAuthenticationException(__('Incorrect CAPTCHA.'));
-            }
+        if ($captchaModel->isRequired($login)
+            && !$captchaModel->isCorrect($this->captchaStringResolver->resolve($this->_request, $formId))
+        ) {
+            $captchaModel->logAttempt($login);
+            throw new PluginAuthenticationException(__('Incorrect CAPTCHA.'));
         }
         $captchaModel->logAttempt($login);
 

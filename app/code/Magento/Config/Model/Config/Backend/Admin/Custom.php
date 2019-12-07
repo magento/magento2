@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Config\Model\Config\Backend\Admin;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Custom extends \Magento\Framework\App\Config\Value
 {
     const CONFIG_SCOPE = 'stores';
@@ -25,7 +29,11 @@ class Custom extends \Magento\Framework\App\Config\Value
     const XML_PATH_ADMIN_SECURITY_USEFORMKEY = 'admin/security/use_form_key';
     const XML_PATH_MAINTENANCE_MODE = 'maintenance_mode';
     const XML_PATH_WEB_COOKIE_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
+    /**
+     * @deprecated Misspelled constant - use XML_PATH_WEB_COOKIE_COOKIE_PATH instead
+     */
     const XML_PATH_WEB_COOKIE_COOKE_PATH = 'web/cookie/cookie_path';
+    const XML_PATH_WEB_COOKIE_COOKIE_PATH = 'web/cookie/cookie_path';
     const XML_PATH_WEB_COOKIE_COOKIE_DOMAIN = 'web/cookie/cookie_domain';
     const XML_PATH_WEB_COOKIE_HTTPONLY = 'web/cookie/cookie_httponly';
     const XML_PATH_WEB_COOKIE_RESTRICTION = 'web/cookie/cookie_restriction';
@@ -50,9 +58,10 @@ class Custom extends \Magento\Framework\App\Config\Value
     const XML_PATH_CARRIERS = 'carriers';
     const XML_PATH_PAYMENT = 'payment';
 
-    /* @var \Magento\Framework\App\Config\Storage\WriterInterface */
+    /**
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     */
     protected $_configWriter;
-
 
     /**
      * @param \Magento\Framework\Model\Context $context

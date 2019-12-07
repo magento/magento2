@@ -1,49 +1,57 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 .trnslate-inline-area [data-translate],
 .trnslate-inline-area .translate-inline {
-	outline:  dotted 1px red!important;
+    outline: dotted 1px red !important;
 }
+
 * html .translate-inline,
-*+html .translate-inline{
-	border:  dotted 1px red !important;
+* + html .translate-inline {
+    border: dotted 1px red !important;
 }
-.translate-inline-script, .translate-inline-title {
-	background: yellow;
-	color: black;
-	font-weight: bold;
+
+.translate-inline-script,
+.translate-inline-title {
+    background: yellow;
+    color: black;
+    font-weight: bold;
 }
+
 #translate-inline-trig {
-	position: absolute;
-	left: -1000px; 
-	opacity: .8;
-	filter: alpha(opacity=80);
-	cursor: pointer; 
-	margin-top: 10px;
-	z-index: 2000;
+    cursor: pointer;
+    filter: alpha(opacity=80);
+    left: -1000px;
+    margin-top: 10px;
+    opacity: .8;
+    position: absolute;
+    z-index: 2000;
 }
 
 .data.table.translate table {
-	width: 100%;
+    width: 100%;
 }
+
 .data.table.translate td {
-	background: none;
-	padding: 5px 5px 5px 0;
-	text-align: left;
+    background: none;
+    padding: 5px 5px 5px 0;
+    text-align: left;
 }
+
 .data.table.translate th.label {
-	border: none;
-	font-weight: bold;
-	text-align: left;
-	padding: 5px 5px 5px 0;
-	width: 150px;
+    border: none;
+    font-weight: bold;
+    padding: 5px 5px 5px 0;
+    text-align: left;
+    width: 150px;
 }
+
 .data.table.translate td.value .input-text {
-	width: 98%;
+    width: 98%;
 }
+
 p.accent {
-	color: #d12c01;
+    color: #d12c01;
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <default>
         <sendfriend>
             <email>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <template>sendfriend_email_template</template>
                 <allow_guest>0</allow_guest>
                 <max_recipients>5</max_recipients>
@@ -17,5 +17,21 @@
                 <check_by>0</check_by>
             </email>
         </sendfriend>
+        <captcha translate="label">
+            <frontend>
+                <areas>
+                    <product_sendtofriend_form>
+                        <label>Send To Friend Form</label>
+                    </product_sendtofriend_form>
+                </areas>
+            </frontend>
+        </captcha>
+        <customer>
+            <captcha>
+                <shown_to_logged_in_user>
+                    <product_sendtofriend_form>1</product_sendtofriend_form>
+                </shown_to_logged_in_user>
+            </captcha>
+        </customer>
     </default>
 </config>

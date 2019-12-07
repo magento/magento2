@@ -1,11 +1,9 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Api;
 
@@ -59,7 +57,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
         $payload = $this->getAttributeData();
         $payload['attributeSetId'] = -1;
 
-        $expectedMessage = 'AttributeSet with id "%1" does not exist.';
+        $expectedMessage = 'The AttributeSet with a "%1" ID doesn\'t exist. Verify the attributeSet and try again.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
@@ -82,7 +80,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
     {
         $payload = $this->getAttributeData();
         $payload['attributeGroupId'] = -1;
-        $expectedMessage = 'Group with id "%1" does not exist.';
+        $expectedMessage = 'The group with the "%1" ID doesn\'t exist. Verify the ID and try again.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
@@ -105,7 +103,8 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
     {
         $payload = $this->getAttributeData();
         $payload['attributeCode'] = 'badCode';
-        $expectedMessage = 'Attribute with attributeCode "%1" does not exist.';
+        $expectedMessage =
+            'The attribute with a "%1" attributeCode doesn\'t exist. Verify the attribute and try again.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
@@ -130,7 +129,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
 
         //Assign attribute to attribute set
         /** @var \Magento\Eav\Model\AttributeManagement $attributeManagement */
-        $attributeManagement = Bootstrap::getObjectManager()->get('Magento\Eav\Model\AttributeManagement');
+        $attributeManagement = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\AttributeManagement::class);
         $attributeManagement->assign(
             \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
             $payload['attributeSetId'],

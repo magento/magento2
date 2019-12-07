@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,11 +30,11 @@ class AssertCustomerBackendRequiredFields extends AbstractConstraint
     {
         $actualRequiredFields = $customerNewPage->getCustomerForm()->getJsErrors();
         foreach ($expectedRequiredFields as $field) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 isset($actualRequiredFields[$field]),
                 "Field '$field' is not highlighted with an JS error."
             );
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 self::REQUIRE_MESSAGE,
                 $actualRequiredFields[$field],
                 "Field '$field' is not highlighted as required."

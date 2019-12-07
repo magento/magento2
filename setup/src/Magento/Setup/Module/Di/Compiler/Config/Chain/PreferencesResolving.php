@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,21 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
+/**
+ * Class PreferencesResolving
+ *
+ * @package Magento\Setup\Module\Di\Compiler\Config\Chain
+ */
 class PreferencesResolving implements ModificationInterface
 {
+    /**
+     * Argument keys which require recursive resolving
+     */
+    private const RECURSIVE_ARGUMENT_KEYS = [
+        '_i_' => true, // shared instance of a class or interface
+        '_ins_' => true // non-shared instance of a class or interface
+    ];
+
     /**
      * Modifies input config
      *
@@ -32,7 +45,6 @@ class PreferencesResolving implements ModificationInterface
      *
      * @param array $argument
      * @param array $preferences
-     * @return array
      */
     private function resolvePreferences(&$argument, &$preferences)
     {
@@ -41,14 +53,12 @@ class PreferencesResolving implements ModificationInterface
         }
 
         foreach ($argument as $key => &$value) {
-            if (in_array($key, ['_i_', '_ins_'])) {
+            if (isset(self::RECURSIVE_ARGUMENT_KEYS[$key])) {
                 $value = $this->resolvePreferenceRecursive($value, $preferences);
                 continue;
             }
 
-            if (is_array($value)) {
-                $this->resolvePreferences($value, $preferences);
-            }
+            $this->resolvePreferences($value, $preferences);
         }
     }
 

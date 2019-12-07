@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
@@ -10,7 +10,9 @@ use Magento\Sales\Model\Order;
 /**
  * Adminhtml order abstract block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class AbstractOrder extends \Magento\Backend\Block\Widget
 {
@@ -133,7 +135,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrieve subtotal price include tax html formated content
+     * Retrieve subtotal price include tax html formatted content
      *
      * @param \Magento\Framework\DataObject $order
      * @return string

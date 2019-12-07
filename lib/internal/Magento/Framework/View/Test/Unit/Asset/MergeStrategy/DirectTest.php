@@ -1,16 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
 
-use \Magento\Framework\View\Asset\MergeStrategy\Direct;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\View\Asset\MergeStrategy\Direct;
 
-class DirectTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for Magento\Framework\View\Asset\MergeStrategy\Direct.
+ */
+class DirectTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mathRandomMock;
     /**
      * @var \Magento\Framework\View\Asset\MergeStrategy\Direct
      */
@@ -22,9 +29,14 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     protected $cssUrlResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|WriteInterface
      */
-    protected $writeDir;
+    protected $staticDir;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|WriteInterface
+     */
+    protected $tmpDir;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\LocalInterface
@@ -33,37 +45,58 @@ class DirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cssUrlResolver = $this->getMock('\Magento\Framework\View\Url\CssResolver');
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $this->writeDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->cssUrlResolver = $this->createMock(\Magento\Framework\View\Url\CssResolver::class);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->staticDir = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
+        $this->tmpDir = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->writeDir));
-        $this->resultAsset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
-        $this->object = new Direct($filesystem, $this->cssUrlResolver);
+            ->willReturnMap([
+                [DirectoryList::STATIC_VIEW, \Magento\Framework\Filesystem\DriverPool::FILE, $this->staticDir],
+                [DirectoryList::TMP, \Magento\Framework\Filesystem\DriverPool::FILE, $this->tmpDir],
+            ]);
+        $this->resultAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $this->mathRandomMock = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->object = new Direct($filesystem, $this->cssUrlResolver, $this->mathRandomMock);
     }
 
     public function testMergeNoAssets()
     {
+        $uniqId = '_b3bf82fa6e140594420fa90982a8e877';
         $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/result'));
-        $this->writeDir->expects($this->once())->method('writeFile')->with('foo/result', '');
+        $this->staticDir->expects($this->never())->method('writeFile');
+        $this->mathRandomMock->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($uniqId);
+        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, '');
+        $this->tmpDir->expects($this->once())->method('renameFile')
+            ->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge([], $this->resultAsset);
     }
 
     public function testMergeGeneric()
     {
+        $uniqId = '_be50ccf992fd81818c1a2645d1a29e92';
         $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/result'));
         $assets = $this->prepareAssetsToMerge([' one', 'two']); // note leading space intentionally
-        $this->writeDir->expects($this->once())->method('writeFile')->with('foo/result', 'onetwo');
+        $this->staticDir->expects($this->never())->method('writeFile');
+        $this->mathRandomMock->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($uniqId);
+        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, 'onetwo');
+        $this->tmpDir->expects($this->once())->method('renameFile')
+            ->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge($assets, $this->resultAsset);
     }
 
     public function testMergeCss()
     {
+        $uniqId = '_f929c374767e00712449660ea673f2f5';
         $this->resultAsset->expects($this->exactly(3))
             ->method('getPath')
-            ->will($this->returnValue('foo/result'));
+            ->willReturn('foo/result');
         $this->resultAsset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
         $assets = $this->prepareAssetsToMerge(['one', 'two']);
         $this->cssUrlResolver->expects($this->exactly(2))
@@ -72,8 +105,14 @@ class DirectTest extends \PHPUnit_Framework_TestCase
         $this->cssUrlResolver->expects($this->once())
             ->method('aggregateImportDirectives')
             ->with('12')
-            ->will($this->returnValue('1020'));
-        $this->writeDir->expects($this->once())->method('writeFile')->with('foo/result', '1020');
+            ->willReturn('1020');
+        $this->mathRandomMock->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($uniqId);
+        $this->staticDir->expects($this->never())->method('writeFile');
+        $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result' . $uniqId, '1020');
+        $this->tmpDir->expects($this->once())->method('renameFile')
+            ->with('foo/result' . $uniqId, 'foo/result', $this->staticDir);
         $this->object->merge($assets, $this->resultAsset);
     }
 
@@ -87,7 +126,7 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         foreach ($data as $content) {
-            $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
+            $asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
             $asset->expects($this->once())->method('getContent')->will($this->returnValue($content));
             $result[] = $asset;
         }

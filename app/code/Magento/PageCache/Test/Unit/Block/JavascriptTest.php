@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Block;
@@ -8,7 +8,7 @@ namespace Magento\PageCache\Test\Unit\Block;
 /**
  * @covers \Magento\PageCache\Block\Javascript
  */
-class JavascriptTest extends \PHPUnit_Framework_TestCase
+class JavascriptTest extends \PHPUnit\Framework\TestCase
 {
     const COOKIE_NAME = 'private_content_version';
 
@@ -44,12 +44,10 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            [
+        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\RequestInterface::class, [
                 'getRouteName',
                 'getControllerName',
                 'getModuleName',
@@ -63,18 +61,14 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
                 'setActionName',
                 'setRequestUri',
                 'getCookie'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+            ]);
+        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutUpdateMock = $this->getMockBuilder('Magento\Framework\View\Layout\ProcessorInterface')
+        $this->layoutUpdateMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ProcessorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -91,7 +85,7 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->layoutUpdateMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->blockJavascript = $objectManager->getObject(
-            'Magento\PageCache\Block\Javascript',
+            \Magento\PageCache\Block\Javascript::class,
             [
                 'context' => $this->contextMock
             ]
@@ -136,6 +130,9 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
+    /**
+     * @return array
+     */
     public function getScriptOptionsDataProvider()
     {
         return [
@@ -199,6 +196,9 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
+    /**
+     * @return array
+     */
     public function getScriptOptionsPrivateContentDataProvider()
     {
         // @codingStandardsIgnoreStart

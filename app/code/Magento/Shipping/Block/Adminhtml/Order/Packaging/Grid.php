@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Packaging;
@@ -10,7 +10,7 @@ class Grid extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'order/packaging/grid.phtml';
+    protected $_template = 'Magento_Shipping::order/packaging/grid.phtml';
 
     /**
      * Core registry

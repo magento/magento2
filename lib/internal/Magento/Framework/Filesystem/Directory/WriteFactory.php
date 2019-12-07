@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
@@ -37,7 +37,16 @@ class WriteFactory
     public function create($path, $driverCode = DriverPool::FILE, $createPermissions = null)
     {
         $driver = $this->driverPool->getDriver($driverCode);
-        $factory = new \Magento\Framework\Filesystem\File\WriteFactory($this->driverPool);
-        return new Write($factory, $driver, $path, $createPermissions);
+        $factory = new \Magento\Framework\Filesystem\File\WriteFactory(
+            $this->driverPool
+        );
+
+        return new Write(
+            $factory,
+            $driver,
+            $path,
+            $createPermissions,
+            new PathValidator($driver)
+        );
     }
 }

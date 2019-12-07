@@ -1,10 +1,3 @@
-ID,ID
-Status,Status
-Disabled,Disabled
-Enabled,Enabled
-"Store View","Store View"
-Content,Content
-Text,Text
 "Terms and Conditions","Terms and Conditions"
 "Add New Condition","Add New Condition"
 "Save Condition","Save Condition"
@@ -13,21 +6,36 @@ Text,Text
 "New Terms and Conditions","New Terms and Conditions"
 "Terms and Conditions Information","Terms and Conditions Information"
 "Condition Name","Condition Name"
+Status,Status
+Enabled,Enabled
+Disabled,Disabled
 "Show Content as","Show Content as"
+Text,Text
 HTML,HTML
+Applied,Applied
+"Store View","Store View"
 "Checkbox Text","Checkbox Text"
+Content,Content
 "Content Height (css)","Content Height (css)"
 "Content Height","Content Height"
+ID,ID
 Condition,Condition
-"This condition no longer exists.","This condition no longer exists."
-"New Condition","New Condition"
-"Edit Condition","Edit Condition"
-"The condition has been saved.","The condition has been saved."
-"Something went wrong while saving this condition.","Something went wrong while saving this condition."
-"The condition has been deleted.","The condition has been deleted."
-"Something went wrong  while deleting this condition.","Something went wrong  while deleting this condition."
 Sales,Sales
 "Checkout Conditions","Checkout Conditions"
 "Checkout Terms and Conditions","Checkout Terms and Conditions"
+"This condition no longer exists.","This condition no longer exists."
+"You deleted the condition.","You deleted the condition."
+"Something went wrong  while deleting this condition.","Something went wrong  while deleting this condition."
+"Edit Condition","Edit Condition"
+"New Condition","New Condition"
+"You saved the condition.","You saved the condition."
+"Something went wrong while saving this condition.","Something went wrong while saving this condition."
+Automatically,Automatically
+Manually,Manually
+"Please agree to all the terms and conditions before placing the order.","Please agree to all the terms and conditions before placing the order."
+"Unable to save checkout agreement %1","Unable to save checkout agreement %1"
+"Unable to remove checkout agreement %1","Unable to remove checkout agreement %1"
+"Checkout agreement with specified ID ""%1"" not found.","Checkout agreement with specified ID ""%1"" not found."
+Close,Close
+"Terms & Conditions","Terms & Conditions"
 "Enable Terms and Conditions","Enable Terms and Conditions"
-"Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.","Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%."

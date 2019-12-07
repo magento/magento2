@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,7 +40,7 @@ abstract class AbstractFilter extends Form
         foreach ($viewsReport as $key => $reportFilter) {
             if (in_array($key, $this->dateFields)) {
                 $date = ObjectManager::getInstance()->create(
-                    '\Magento\Backend\Test\Fixture\Source\Date',
+                    \Magento\Backend\Test\Fixture\Source\Date::class,
                     ['params' => [], 'data' => ['pattern' => $reportFilter]]
                 );
                 $viewsReport[$key] = $date->getData();

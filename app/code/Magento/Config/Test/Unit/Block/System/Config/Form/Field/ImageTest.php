@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Tests for \Magento\Framework\Data\Form\Field\Image
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
@@ -31,11 +29,12 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->urlBuilderMock = $this->getMock('Magento\Framework\Url', [], [], '', false);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\Url::class);
         $this->image = $objectManager->getObject(
-            'Magento\Config\Block\System\Config\Form\Field\Image',
+            \Magento\Config\Block\System\Config\Form\Field\Image::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
+                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
             ]
         );
 
@@ -74,7 +73,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'showInWebsite' => '1',
                 'showInStore' => '1',
                 'label' => null,
-                'backend_model' => 'Magento\\Backend\\Model\\Config\\Backend\\Image',
+                'backend_model' => \Magento\Config\Model\Config\Backend\Image::class,
                 'upload_dir' => [
                     'config' => 'system/filesystem/media',
                     'scope_info' => '1',
@@ -87,7 +86,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 ],
                 '_elementType' => 'field',
                 'path' => 'catalog/placeholder',
-            ]);
+            ]
+        );
 
         $expectedHtmlId = $this->testData['html_id_prefix']
             . $this->testData['html_id']

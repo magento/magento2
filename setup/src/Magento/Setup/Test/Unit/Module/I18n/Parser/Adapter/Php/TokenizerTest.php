@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter\Php;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer
  */
-class TokenizerTest extends \PHPUnit_Framework_TestCase
+class TokenizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Tokenizer
@@ -28,7 +28,7 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->tokenizer = $this->objectManager->getObject(
-            'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer'
+            \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer::class
         );
     }
 

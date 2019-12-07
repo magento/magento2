@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Observer;
@@ -33,7 +33,7 @@ class CurrencyDisplayOptions implements ObserverInterface
     {
         $baseCode = $observer->getEvent()->getBaseCode();
         $currencyOptions = $observer->getEvent()->getCurrencyOptions();
-        $currencyOptions->setData($this->getCurrencyOptions($baseCode));
+        $currencyOptions->addData($this->getCurrencyOptions($baseCode));
 
         return $this;
     }

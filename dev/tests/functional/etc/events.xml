@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="events.xsd">
     <preset name="base">
         <observer class="Magento\Mtf\System\Observer\WebapiResponse">
+            <tag name="webapi_failed" />
+        </observer>
+    </preset>
+    <preset name="allure">
+        <observer class="Magento\Mtf\System\Observer\AllureWebapiResponse">
             <tag name="webapi_failed" />
         </observer>
     </preset>
@@ -41,6 +46,34 @@
         </observer>
         <observer class="Magento\Mtf\System\Observer\WebapiResponse">
             <tag name="webapi_failed" />
+        </observer>
+    </preset>
+    <preset name="detailed" extends="base">
+        <observer class="Magento\Mtf\System\Observer\ClientError">
+            <tag name="page_changed" />
+            <tag name="exception" />
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\Log">
+            <tag name="execution" />
+            <tag name="persist_before" />
+            <tag name="persist_after" />
+            <tag name="exception" />
+            <tag name="click_before" />
+            <tag name="set_value" />
+            <tag name="is_visible" />
+            <tag name="find" />
+            <tag name="reopen" />
+            <tag name="switch_to_frame" />
+            <tag name="get_value" />
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\SourceCode">
+            <tag name="exception" />
+            <tag name="page_changed" />
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\Screenshot">
+            <tag name="click_before" />
+            <tag name="page_changed" />
+            <tag name="exception" />
         </observer>
     </preset>
 </config>

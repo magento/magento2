@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
 use \Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
 
-class HelperMethodTest extends \PHPUnit_Framework_TestCase
+class HelperMethodTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -26,14 +26,8 @@ class HelperMethodTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_interpreter = $this->getMock(
-            'Magento\Framework\View\Layout\Argument\Interpreter\NamedParams',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_interpreter = $this->createMock(\Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class);
         $this->_model = new HelperMethod($this->_objectManager, $this->_interpreter);
     }
 
@@ -59,6 +53,10 @@ class HelperMethodTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @param $input
+     * @return string
+     */
     public function help($input)
     {
         $this->assertSame('some text (evaluated)', $input);
@@ -73,11 +71,15 @@ class HelperMethodTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateException($helperMethod, $expectedExceptionMessage)
     {
-        $this->setExpectedException('\InvalidArgumentException', $expectedExceptionMessage);
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $input = ['value' => 'some text', 'helper' => $helperMethod];
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateExceptionDataProvider()
     {
         $nonExistingHelper = __CLASS__ . '::non_existing';

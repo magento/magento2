@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth;
@@ -37,13 +37,15 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         $connection = $this->getConnection();
-        $connection->delete($this->getTable('oauth_nonce'), ['consumer_id' => $object->getId()]);
-        $connection->delete($this->getTable('oauth_token'), ['consumer_id' => $object->getId()]);
+        $connection->delete($this->getTable('oauth_nonce'), ['consumer_id = ?' => (int)$object->getId()]);
+        $connection->delete($this->getTable('oauth_token'), ['consumer_id = ?' => (int)$object->getId()]);
         return parent::_afterDelete($object);
     }
 
     /**
      * Compute time in seconds since consumer was created.
+     *
+     * @deprecated 100.0.6
      *
      * @param int $consumerId - The consumer id
      * @return int - time lapsed in seconds

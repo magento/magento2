@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 /**
  * Class RowTest
  */
-class RowTest extends \PHPUnit_Framework_TestCase
+class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product
@@ -23,10 +23,10 @@ class RowTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Indexer\Product\Price\Processor'
+            \Magento\Catalog\Model\Indexer\Product\Price\Processor::class
         );
     }
 
@@ -38,10 +38,10 @@ class RowTest extends \PHPUnit_Framework_TestCase
     public function testProductUpdate()
     {
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\CategoryFactory'
+            \Magento\Catalog\Model\CategoryFactory::class
         );
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Block\Product\ListProduct'
+            \Magento\Catalog\Block\Product\ListProduct::class
         );
 
         $this->_processor->getIndexer()->setScheduled(false);

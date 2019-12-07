@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,41 +25,58 @@ class AssertCustomerInGrid extends AbstractConstraint
      *
      * @param Customer $customer
      * @param CustomerIndex $pageCustomerIndex
-     * @param Customer $initialCustomer [optional]
      * @return void
-     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processAssert(
         Customer $customer,
-        CustomerIndex $pageCustomerIndex,
-        Customer $initialCustomer = null
+        CustomerIndex $pageCustomerIndex
     ) {
-        if ($initialCustomer) {
-            $customer = $customer->hasData()
-                ? array_merge($initialCustomer->getData(), $customer->getData())
-                : $initialCustomer->getData();
-        } else {
-            $customer = $customer->getData();
-        }
-        $name = (isset($customer['prefix']) ? $customer['prefix'] . ' ' : '')
-            . $customer['firstname']
-            . (isset($customer['middlename']) ? ' ' . $customer['middlename'] : '')
-            . ' ' . $customer['lastname']
-            . (isset($customer['suffix']) ? ' ' . $customer['suffix'] : '');
+        $customerData = $customer->getData();
+        $name = (isset($customerData['prefix']) ? $customerData['prefix'] . ' ' : '')
+            . $customerData['firstname']
+            . (isset($customerData['middlename']) ? ' ' . $customerData['middlename'] : '')
+            . ' ' . $customerData['lastname']
+            . (isset($customerData['suffix']) ? ' ' . $customerData['suffix'] : '');
         $filter = [
             'name' => $name,
-            'email' => $customer['email'],
+            'email' => $customerData['email'],
         ];
+        $errorMessage = 'Customer with '
+            . 'name \'' . $filter['name'] . '\', '
+            . 'email \'' . $filter['email'] . '\'';
+
+        if ($customer->hasData('dob')) {
+            $filter['dob_from'] = $customer->getData('dob');
+            $filter['dob_to'] = $customer->getData('dob');
+        }
 
         $pageCustomerIndex->open();
-        \PHPUnit_Framework_Assert::assertTrue(
-            $pageCustomerIndex->getCustomerGridBlock()->isRowVisible($filter),
-            'Customer with '
-            . 'name \'' . $filter['name'] . '\', '
-            . 'email \'' . $filter['email'] . '\' '
-            . 'is absent in Customer grid.'
+        $pageCustomerIndex->getCustomerGridBlock()->isRowVisible($filter);
+        if ($customer->hasData('dob')) {
+            unset($filter['dob_from']);
+            unset($filter['dob_to']);
+            $filter['dob'] = $this->prepareDob($customer->getData('dob'));
+            $errorMessage .= ', dob \'' . $filter['dob'] . '\' ';
+        }
+
+        $errorMessage .= 'is absent in Customer grid.';
+
+        \PHPUnit\Framework\Assert::assertTrue(
+            $pageCustomerIndex->getCustomerGridBlock()->isRowVisible($filter, false),
+            $errorMessage
         );
+    }
+
+    /**
+     * Prepare dob string to grid date format.
+     *
+     * @param string $date
+     * @return false|string
+     */
+    private function prepareDob($date)
+    {
+        return date('M d, Y', strtotime($date));
     }
 
     /**

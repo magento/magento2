@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@
  * Resource product indexer price factory
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
+
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
 
 class Factory
 {
@@ -40,14 +42,17 @@ class Factory
     {
         $indexerPrice = $this->_objectManager->create($className, $data);
 
-        if (!$indexerPrice instanceof \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __(
-                    '%1 doesn\'t extend \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice',
-                    $className
-                )
-            );
+        if ($indexerPrice instanceof PriceInterface || $indexerPrice instanceof DimensionalIndexerInterface) {
+            return $indexerPrice;
         }
-        return $indexerPrice;
+
+        throw new \Magento\Framework\Exception\LocalizedException(
+            __(
+                'Price indexer "%1" must implement %2 or %3',
+                $className,
+                PriceInterface::class,
+                DimensionalIndexerInterface::class
+            )
+        );
     }
 }

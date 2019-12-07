@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class AssertSalesReportTotalResult extends AbstractAssertSalesReportResult
         $this->searchInSalesReportGrid($salesReport);
         $salesResult = $this->prepareSalesResult($salesReportPage->getGridBlock()->getTotalResult());
         $prepareInitialResult = $this->prepareSalesResult($this->prepareExpectedResult($initialSalesTotalResult));
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $salesResult,
             "Grand total Sales result is not correct."
@@ -52,7 +52,7 @@ class AssertSalesReportTotalResult extends AbstractAssertSalesReportResult
     {
         $data = [];
         foreach ($salesResult as $key => $result) {
-            $data[$key] = floatval($result);
+            $data[$key] = (float)$result;
         }
 
         return $data;

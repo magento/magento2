@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * JSON products custom options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Options;
 
 use Magento\Store\Model\Store;
 
+/**
+ * JSON products custom options
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Ajax extends \Magento\Backend\Block\AbstractBlock
 {
     /**
@@ -62,7 +62,7 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
         $results = [];
         /** @var $optionsBlock \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */
         $optionsBlock = $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option'
+            \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option::class
         )->setIgnoreCaching(
             true
         );

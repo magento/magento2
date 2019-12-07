@@ -2,11 +2,22 @@
 /**
  * Customer address entity resource model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Controller\Adminhtml\Group\Delete;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\ResourceModel\Address\DeleteRelation;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Class Address
+ *
+ * @package Magento\Customer\Model\ResourceModel
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
@@ -21,8 +32,8 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
@@ -88,6 +99,9 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     protected function _validate($address)
     {
+        if ($address->getDataByKey('should_ignore_validation')) {
+            return;
+        };
         $validator = $this->_validatorFactory->createValidator('customer_address', 'save');
 
         if (!$validator->isValid($address)) {
@@ -100,7 +114,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($object)
     {
@@ -110,20 +124,38 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * Get instance of DeleteRelation class
+     *
+     * @deprecated 100.2.0
+     * @return DeleteRelation
+     */
+    private function getDeleteRelation()
+    {
+        return ObjectManager::getInstance()->get(DeleteRelation::class);
+    }
+
+    /**
+     * Get instance of CustomerRegistry class
+     *
+     * @deprecated 100.2.0
+     * @return CustomerRegistry
+     */
+    private function getCustomerRegistry()
+    {
+        return ObjectManager::getInstance()->get(CustomerRegistry::class);
+    }
+
+    /**
+     * After delete entity process
+     *
+     * @param \Magento\Customer\Model\Address $address
+     * @return $this
      */
     protected function _afterDelete(\Magento\Framework\DataObject $address)
     {
-        if ($address->getId()) {
-            $customer = $this->customerRepository->getById($address->getCustomerId());
-            if ($customer->getDefaultBilling() == $address->getId()) {
-                $customer->setDefaultBilling(null);
-            }
-            if ($customer->getDefaultShipping() == $address->getId()) {
-                $customer->setDefaultShipping(null);
-            }
-            $this->customerRepository->save($customer);
-        }
+        $customer = $this->getCustomerRegistry()->retrieve($address->getCustomerId());
+
+        $this->getDeleteRelation()->deleteRelation($address, $customer);
         return parent::_afterDelete($address);
     }
 }

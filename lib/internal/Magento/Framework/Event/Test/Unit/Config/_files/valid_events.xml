@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,5 +11,8 @@
     </event>
     <event name="authorization_roles_save_before">
         <observer name="second_name" instance="Some_Test_Value_Two" />
+    </event>
+    <event name="authorization_roles_save_before123">
+        <observer name="second_name" instance="Some_Test_Value_Two"/>
     </event>
 </config>

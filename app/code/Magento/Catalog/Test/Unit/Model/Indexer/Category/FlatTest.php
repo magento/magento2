@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category;
 
-class FlatTest extends \PHPUnit_Framework_TestCase
+class FlatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Flat
@@ -32,26 +32,25 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexerRegistryMock;
 
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheContextMock;
+
     protected function setUp()
     {
-        $this->fullMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Category\Flat\Action\FullFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->fullMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Indexer\Category\Flat\Action\FullFactory::class,
+            ['create']
         );
 
-        $this->rowsMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Category\Flat\Action\RowsFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->rowsMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Indexer\Category\Flat\Action\RowsFactory::class,
+            ['create']
         );
 
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            \Magento\Framework\Indexer\IndexerInterface::class,
             [],
             '',
             false,
@@ -60,12 +59,9 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             ['getId', 'load', 'isInvalid', 'isWorking', '__wakeup']
         );
 
-        $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
-            ['get'],
-            [],
-            '',
-            false
+        $this->indexerRegistryMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['get']
         );
 
         $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat(
@@ -73,6 +69,15 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             $this->rowsMock,
             $this->indexerRegistryMock
         );
+
+        $this->cacheContextMock = $this->createMock(\Magento\Framework\Indexer\CacheContext::class);
+
+        $cacheContextProperty = new \ReflectionProperty(
+            \Magento\Catalog\Model\Indexer\Category\Flat::class,
+            'cacheContext'
+        );
+        $cacheContextProperty->setAccessible(true);
+        $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 
     public function testExecuteWithIndexerInvalid()
@@ -93,17 +98,18 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         $this->indexerMock->expects($this->once())->method('isWorking')->will($this->returnValue(true));
         $this->prepareIndexer();
 
-        $rowMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Category\Flat\Action\Rows',
-            ['reindex'],
-            [],
-            '',
-            false
+        $rowMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Indexer\Category\Flat\Action\Rows::class,
+            ['reindex']
         );
         $rowMock->expects($this->at(0))->method('reindex')->with($ids, true)->will($this->returnSelf());
         $rowMock->expects($this->at(1))->method('reindex')->with($ids, false)->will($this->returnSelf());
 
         $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+
+        $this->cacheContextMock->expects($this->once())
+            ->method('registerEntities')
+            ->with(\Magento\Catalog\Model\Category::CACHE_TAG, $ids);
 
         $this->model->execute($ids);
     }
@@ -116,16 +122,17 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         $this->indexerMock->expects($this->once())->method('isWorking')->will($this->returnValue(false));
         $this->prepareIndexer();
 
-        $rowMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Category\Flat\Action\Rows',
-            ['reindex'],
-            [],
-            '',
-            false
+        $rowMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Indexer\Category\Flat\Action\Rows::class,
+            ['reindex']
         );
         $rowMock->expects($this->once())->method('reindex')->with($ids, false)->will($this->returnSelf());
 
         $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+
+        $this->cacheContextMock->expects($this->once())
+            ->method('registerEntities')
+            ->with(\Magento\Catalog\Model\Category::CACHE_TAG, $ids);
 
         $this->model->execute($ids);
     }
@@ -136,5 +143,20 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
             ->will($this->returnValue($this->indexerMock));
+    }
+
+    public function testExecuteFull()
+    {
+        /** @var \Magento\Catalog\Model\Indexer\Category\Flat\Action\Full $categoryIndexerFlatFull */
+        $categoryIndexerFlatFull = $this->createMock(\Magento\Catalog\Model\Indexer\Category\Flat\Action\Full::class);
+        $this->fullMock->expects($this->once())
+            ->method('create')
+            ->willReturn($categoryIndexerFlatFull);
+        $categoryIndexerFlatFull->expects($this->once())
+            ->method('reindexAll');
+        $this->cacheContextMock->expects($this->once())
+            ->method('registerTags')
+            ->with([\Magento\Catalog\Model\Category::CACHE_TAG]);
+        $this->model->executeFull();
     }
 }

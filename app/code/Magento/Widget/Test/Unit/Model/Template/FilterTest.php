@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\Template;
@@ -8,7 +8,7 @@ namespace Magento\Widget\Test\Unit\Model\Template;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Template\Filter
@@ -51,14 +51,14 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->widgetResourceMock = $this->getMock('Magento\Widget\Model\ResourceModel\Widget', [], [], '', false);
-        $this->widgetMock = $this->getMock('Magento\Widget\Model\Widget', [], [], '', false);
-        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->widgetResourceMock = $this->createMock(\Magento\Widget\Model\ResourceModel\Widget::class);
+        $this->widgetMock = $this->createMock(\Magento\Widget\Model\Widget::class);
+        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
         $this->filter = $this->objectManagerHelper->getObject(
-            'Magento\Widget\Model\Template\Filter',
+            \Magento\Widget\Model\Template\Filter::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'widgetResource' => $this->widgetResourceMock,
@@ -240,7 +240,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected function getBlockMock($returnedResult = '')
     {
         /** @var \Magento\Widget\Block\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $blockMock */
-        $blockMock = $this->getMockBuilder('Magento\Widget\Block\BlockInterface')
+        $blockMock = $this->getMockBuilder(\Magento\Widget\Block\BlockInterface::class)
             ->setMethods(['toHtml'])
             ->getMockForAbstractClass();
         $blockMock->expects($this->any())
@@ -257,6 +257,24 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $image = 'wysiwyg/VB.png';
         $construction = ['{{media url="' . $image . '"}}', 'media', ' url="' . $image . '"'];
+        $baseUrl = 'http://localhost/pub/media/';
+
+        $this->storeMock->expects($this->once())
+            ->method('getBaseUrl')
+            ->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
+            ->willReturn($baseUrl);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
+        $result = $this->filter->mediaDirective($construction);
+        $this->assertEquals($baseUrl . $image, $result);
+    }
+
+    public function testMediaDirectiveWithEncodedQuotes()
+    {
+        $image = 'wysiwyg/VB.png';
+        $construction = ['{{media url=&quot;' . $image . '&quot;}}', 'media', ' url=&quot;' . $image . '&quot;'];
         $baseUrl = 'http://localhost/pub/media/';
 
         $this->storeMock->expects($this->once())

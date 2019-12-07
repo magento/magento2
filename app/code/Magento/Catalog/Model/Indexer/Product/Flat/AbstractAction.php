@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Abstract action reindex class
- *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction
 {
@@ -70,6 +72,11 @@ abstract class AbstractAction
      * @var FlatTableBuilder
      */
     protected $_flatTableBuilder;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -162,8 +169,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Retrieve Product Type Instances
-     * as key - type code, value - instance model
+     * Retrieve Product Type Instances as key - type code, value - instance model
      *
      * @return array
      */
@@ -194,6 +200,8 @@ abstract class AbstractAction
             return $this;
         }
 
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
             /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
             if (!$typeInstance->isComposite(null)) {
@@ -204,13 +212,19 @@ abstract class AbstractAction
             ) {
                 $columns = $this->_productIndexerHelper->getFlatColumns();
                 $fieldList = array_keys($columns);
-                unset($columns['entity_id']);
-                unset($columns['child_id']);
-                unset($columns['is_child']);
+                unset(
+                    $columns['entity_id'],
+                    $columns['child_id'],
+                    $columns['is_child']
+                );
                 /** @var $select \Magento\Framework\DB\Select */
                 $select = $this->_connection->select()->from(
                     ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
-                    [$relation->getParentFieldName(), $relation->getChildFieldName(), new \Zend_Db_Expr('1')]
+                    ['entity_table.entity_id', $relation->getChildFieldName(), new \Zend_Db_Expr('1')]
+                )->join(
+                    ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
+                    "entity_table.{$metadata->getLinkField()} = t.{$relation->getParentFieldName()}",
+                    []
                 )->join(
                     ['e' => $this->_productIndexerHelper->getFlatTableName($storeId)],
                     "e.entity_id = t.{$relation->getChildFieldName()}",
@@ -219,10 +233,10 @@ abstract class AbstractAction
                 if ($relation->getWhere() !== null) {
                     $select->where($relation->getWhere());
                 }
-                if ($productIds !== null) {
+                if (!empty($productIds)) {
                     $cond = [
                         $this->_connection->quoteInto("{$relation->getChildFieldName()} IN(?)", $productIds),
-                        $this->_connection->quoteInto("{$relation->getParentFieldName()} IN(?)", $productIds),
+                        $this->_connection->quoteInto('entity_table.entity_id IN(?)', $productIds),
                     ];
 
                     $select->where(implode(' OR ', $cond));
@@ -240,12 +254,16 @@ abstract class AbstractAction
      *
      * @param int $storeId
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _cleanRelationProducts($storeId)
     {
-        if (!$this->_productIndexerHelper->isAddChildData()) {
+        if (!$this->_productIndexerHelper->isAddChildData() || !$this->_isFlatTableExists($storeId)) {
             return $this;
         }
+
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
             /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
@@ -259,10 +277,10 @@ abstract class AbstractAction
                     true
                 )->from(
                     $this->_productIndexerHelper->getTable($relation->getTable()),
-                    "{$relation->getParentFieldName()}"
+                    $relation->getParentFieldName()
                 );
                 $joinLeftCond = [
-                    "e.entity_id = t.{$relation->getParentFieldName()}",
+                    "e.{$metadata->getLinkField()} = t.{$relation->getParentFieldName()}",
                     "e.child_id = t.{$relation->getChildFieldName()}",
                 ];
                 if ($relation->getWhere() !== null) {
@@ -283,7 +301,7 @@ abstract class AbstractAction
                     'e.is_child = ?',
                     1
                 )->where(
-                    'e.entity_id IN(?)',
+                    "e.{$metadata->getLinkField()} IN(?)",
                     $entitySelect
                 )->where(
                     "t.{$relation->getChildFieldName()} IS NULL"
@@ -313,5 +331,19 @@ abstract class AbstractAction
         }
 
         return $this->_flatTablesExist[$storeId];
+    }
+
+    /**
+     * Get Metadata Pool
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

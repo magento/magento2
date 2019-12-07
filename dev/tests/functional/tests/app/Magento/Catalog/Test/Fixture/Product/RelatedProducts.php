@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Fixture\Product;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Repository\RepositoryFactory;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
@@ -24,24 +23,21 @@ class RelatedProducts extends DataSource
     protected $products = [];
 
     /**
-     * @constructor
-     * @param RepositoryFactory $repositoryFactory
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data [optional]
      */
     public function __construct(
-        RepositoryFactory $repositoryFactory,
         FixtureFactory $fixtureFactory,
         array $params,
         array $data = []
     ) {
         $this->params = $params;
 
-        if (isset($data['dataset']) && isset($this->params['repository'])) {
-            $datasets = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
-            foreach ($datasets as $dataset) {
-                list($fixtureCode, $dataset) = explode('::', $dataset);
+        if (isset($data['dataset'])) {
+            $productsList = array_map('trim', explode(',', $data['dataset']));
+            foreach ($productsList as $productData) {
+                list($fixtureCode, $dataset) = explode('::', $productData);
                 $this->products[] = $fixtureFactory->createByCode($fixtureCode, ['dataset' => $dataset]);
             }
         }
@@ -57,7 +53,7 @@ class RelatedProducts extends DataSource
             }
 
             $this->data[] = [
-                'entity_id' => $product->getId(),
+                'id' => $product->getId(),
                 'name' => $product->getName(),
                 'sku' => $product->getSku(),
             ];

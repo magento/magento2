@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\NavigateUpSellProductsTest" summary="Promote Products as Up-Sells" ticketId="MAGETWO-12391">
         <variation name="NavigateUpSellProductsTestVariation1" method="test">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no, mftf_migrated:yes</data>
             <data name="products" xsi:type="string">simple1::catalogProductSimple::product_with_category,simple2::catalogProductSimple::product_with_category,config1::configurableProduct::two_options_with_fixed_price</data>
             <data name="promotedProducts" xsi:type="string">simple1:simple2,config1;config1:simple2</data>
             <data name="navigateProductsOrder" xsi:type="string">simple1,config1,simple2</data>
             <data name="productsToVerify" xsi:type="string">simple1:simple2,config1;config1:simple2;simple2:</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
         </variation>
     </testCase>
 </config>

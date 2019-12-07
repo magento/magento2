@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@ namespace Magento\CatalogSearch\Model\Layer\Search;
 
 use Magento\Catalog\Model\Layer\StateKeyInterface;
 
+/**
+ * Catalog search state key for layered navigation.
+ */
 class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements StateKeyInterface
 {
     /**
@@ -31,8 +34,7 @@ class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements
     }
 
     /**
-     * @param \Magento\Catalog\Model\Category $category
-     * @return string|void
+     * @inheritdoc
      */
     public function toString($category)
     {

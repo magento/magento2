@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\GeneratorTest;
 
 use Zend\Code\Generator\ClassGenerator;
 
+/**
+ * phpcs:ignoreFile
+ */
 class SourceClassWithNamespace extends ParentClassWithNamespace
 {
     /**
@@ -96,15 +99,70 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     ) {
     }
 
+    /**
+     * Test method
+     */
     public function publicChildWithoutParameters()
     {
     }
 
+    /**
+     * Test method
+     */
     public static function publicChildStatic()
     {
     }
 
+    /**
+     * Test method
+     */
     final public function publicChildFinal()
+    {
+    }
+
+    /**
+     * Test method
+     *
+     * @param mixed $arg1
+     * @param string $arg2
+     * @param int|null $arg3
+     * @param int|null $arg4
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function public71(
+        $arg1,
+        string $arg2,
+        ?int $arg3,
+        ?int $arg4 = null
+    ): void {
+    }
+
+    /**
+     * Test method
+     *
+     * @param \DateTime|null $arg1
+     * @param mixed $arg2
+     *
+     * @return null|string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function public71Another(?\DateTime $arg1, $arg2 = false): ?string
+    {
+    }
+
+    /**
+     * Test method
+     *
+     * @param bool $arg
+     * @return SourceClassWithNamespace
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function publicWithSelf($arg = false): self
     {
     }
 }

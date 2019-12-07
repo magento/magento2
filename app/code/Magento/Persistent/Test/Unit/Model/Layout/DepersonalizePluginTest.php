@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Model\Layout;
@@ -8,7 +8,7 @@ namespace Magento\Persistent\Test\Unit\Model\Layout;
 /**
  * Class DepersonalizePluginTest
  */
-class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
+class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Model\Session|\PHPUnit_Framework_MockObject_MockObject
@@ -39,28 +39,19 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->persistentSessionMock = $this->getMock(
-            'Magento\Persistent\Model\Session',
-            ['setCustomerId'],
-            [],
-            '',
-            false
+        $this->persistentSessionMock = $this->createPartialMock(
+            \Magento\Persistent\Model\Session::class,
+            ['setCustomerId']
         );
 
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
-        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', ['isEnabled'], [], '', false);
-        $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', ['isEnabled'], [], '', false);
-        $this->depersonalizeCheckerMock = $this->getMock(
-            'Magento\PageCache\Model\DepersonalizeChecker',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->moduleManagerMock = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isEnabled']);
+        $this->cacheConfigMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['isEnabled']);
+        $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
 
         $this->plugin = $this->objectManager->getObject(
-            'Magento\Persistent\Model\Layout\DepersonalizePlugin',
+            \Magento\Persistent\Model\Layout\DepersonalizePlugin::class,
             [
                 'persistentSession' => $this->persistentSessionMock,
                 'depersonalizeChecker' => $this->depersonalizeCheckerMock,
@@ -72,7 +63,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
         $subjectMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             [],
             '',
             false,
@@ -82,7 +73,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         );
         /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
         $resultMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             [],
             '',
             false,
@@ -101,7 +92,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
         $subjectMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             [],
             '',
             false,
@@ -111,7 +102,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         );
         /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
         $resultMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             [],
             '',
             false,

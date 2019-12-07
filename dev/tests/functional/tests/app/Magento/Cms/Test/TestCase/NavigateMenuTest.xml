@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest18">
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Content > Pages</data>
             <data name="pageTitle" xsi:type="string">Pages</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest19">
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Content > Blocks</data>
             <data name="pageTitle" xsi:type="string">Blocks</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>

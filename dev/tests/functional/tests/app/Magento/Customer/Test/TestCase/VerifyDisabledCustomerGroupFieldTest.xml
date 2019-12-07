@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Customer\Test\TestCase\VerifyDisabledCustomerGroupFieldTest" summary="Check that field is disabled in system Customer Group" ticketId="MAGETWO-52481">
+        <variation name="VerifyDisabledCustomerGroupField1" summary="Checks that customer_group_code field is disabled in NOT LOGGED IN Customer Group">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="customerGroup/dataset" xsi:type="string">NOT_LOGGED_IN</data>
+            <data name="disabledFields" xsi:type="array">
+                <item name="0" xsi:type="string">customer_group_code</item>
+            </data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupFieldsDisabled" />
+        </variation>
+    </testCase>
+</config>

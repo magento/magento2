@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class AssertIntegrationSuccessDeleteMessage extends AbstractConstraint
     {
         $expectedMessage = sprintf(self::SUCCESS_DELETE_MESSAGE, $integration->getName());
         $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong success message is displayed.'

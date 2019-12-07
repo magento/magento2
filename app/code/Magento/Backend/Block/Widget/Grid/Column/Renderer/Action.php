@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Grid column widget for rendering action grid cells
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
@@ -47,7 +47,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
             return '&nbsp;';
         }
 
-        if (sizeof($actions) == 1 && !$this->getColumn()->getNoLink()) {
+        if (count($actions) == 1 && !$this->getColumn()->getNoLink()) {
             foreach ($actions as $action) {
                 if (is_array($action)) {
                     return $this->_toLinkHtml($action, $row);
@@ -82,8 +82,10 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
 
-        $htmlAttibutes = ['value' => $this->escapeHtml($this->_jsonEncoder->encode($action))];
-        $actionAttributes->setData($htmlAttibutes);
+        $htmlAttributes = [
+            'value' => $this->escapeHtmlAttr($this->_jsonEncoder->encode($action), false)
+        ];
+        $actionAttributes->setData($htmlAttributes);
         return '<option ' . $actionAttributes->serialize() . '>' . $actionCaption . '</option>';
     }
 
@@ -102,6 +104,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $this->_transformActionData($action, $actionCaption, $row);
 
         if (isset($action['confirm'])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $action['onclick'] = 'return window.confirm(\'' . addslashes(
                 $this->escapeHtml($action['confirm'])
             ) . '\')';
@@ -115,8 +118,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Prepares action data for html render
      *
-     * @param array &$action
-     * @param string &$actionCaption
+     * @param &array $action
+     * @param &string $actionCaption
      * @param \Magento\Framework\DataObject $row
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -142,7 +145,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     if (is_array($action['url']) && isset($action['field'])) {
                         $params = [$action['field'] => $this->_getValue($row)];
                         if (isset($action['url']['params'])) {
-                            $params = array_merge($action['url']['params'], $params);
+                            $params[] = $action['url']['params'];
                         }
                         $action['href'] = $this->getUrl($action['url']['base'], $params);
                         unset($action['field']);
@@ -153,7 +156,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     break;
 
                 case 'popup':
-                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,scrollbars=1\');return false;';
+                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,'
+                        . 'scrollbars=1\');return false;';
                     break;
             }
         }

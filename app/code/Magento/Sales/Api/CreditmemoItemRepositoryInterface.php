@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api;
@@ -13,6 +13,7 @@ namespace Magento\Sales\Api;
  * customer account so that the customer can make future purchases. A credit memo item is an invoiced item for which
  * a merchant creates a credit memo.
  * @api
+ * @since 100.0.2
  */
 interface CreditmemoItemRepositoryInterface
 {
@@ -27,16 +28,17 @@ interface CreditmemoItemRepositoryInterface
     /**
      * Lists credit memo items that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\CreditmemoItemSearchResultInterface Credit memo item search results interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Deletes a specified credit memo item.
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 
@@ -45,6 +47,7 @@ interface CreditmemoItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface Credit memo interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 }

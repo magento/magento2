@@ -3,18 +3,26 @@
 /**
  * Default test suites declaration: run verification of coding standards and code integrity test suites
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
          colors="true"
+         columns="max"
+         beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
 >
     <testsuites>
-        <testsuite name="Javascript Static Code Analysis">
-            <file>testsuite/Magento/Test/Js/LiveCodeTest.php</file>
+        <testsuite name="Less Static Code Analysis">
+            <file>testsuite/Magento/Test/Less/LiveCodeTest.php</file>
+        </testsuite>
+        <testsuite name="HTML Static Code Analysis">
+            <file>testsuite/Magento/Test/Html/LiveCodeTest.php</file>
+        </testsuite>
+        <testsuite name="GraphQL Static Code Analysis">
+            <file>testsuite/Magento/Test/GraphQl/LiveCodeTest.php</file>
         </testsuite>
         <testsuite name="PHP Coding Standard Verification">
             <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
@@ -22,15 +30,20 @@
         <testsuite name="Code Integrity Tests">
             <directory>testsuite/Magento/Test/Integrity</directory>
         </testsuite>
-        <testsuite name="Xss Unsafe Output Test">
-            <file>testsuite/Magento/Test/Php/XssPhtmlTemplateTest.php</file>
-        </testsuite>
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
-        <!-- TESTS_JSHINT_PATH specify the path to wsh.js on Windows and jshint-rhino.js on Linux -->
-        <const name="TESTS_JSHINT_PATH" value=""/>
+        <!-- TESTCODESTYLE_IS_FULL_SCAN - specify if full scan should be performed for test code style test -->
+        <const name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/>
         <!-- TESTS_COMPOSER_PATH - specify the path to composer binary, if a relative reference cannot be resolved -->
         <!--<const name="TESTS_COMPOSER_PATH" value="/usr/local/bin/composer"/>-->
     </php>
+    <listeners>
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+            <arguments>
+                <string>var/allure-results</string> <!-- XML files output directory -->
+                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+            </arguments>
+        </listener>
+    </listeners>
 </phpunit>

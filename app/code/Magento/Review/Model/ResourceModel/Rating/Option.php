@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel\Rating;
@@ -8,7 +8,8 @@ namespace Magento\Review\Model\ResourceModel\Rating;
 /**
  * Rating option resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -153,7 +154,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
             $connection->commit();
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw new \Exception($e->getMessage());
         }
         return $this;

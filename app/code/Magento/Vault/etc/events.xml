@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_payment_save_after">
+        <observer name="tax" instance="Magento\Vault\Observer\AfterPaymentSaveObserver" />
+    </event>
+    <event name="payment_method_assign_data">
+        <observer name="vault_enable_assigner" instance="Magento\Vault\Observer\VaultEnableAssigner" />
+    </event>
+    <event name="payment_method_assign_data_vault">
+        <observer name="vault_data_assigner" instance="Magento\Vault\Observer\PaymentTokenAssigner" />
+    </event>
+</config>

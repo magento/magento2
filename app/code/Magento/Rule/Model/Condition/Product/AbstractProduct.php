@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Rule\Model\Condition\Product;
+
+use Magento\Catalog\Model\ProductCategoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Abstract Rule product condition data model
  *
- * @author Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Rule\Model\Condition\Product;
-
-/**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {
@@ -80,6 +82,11 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_localeFormat;
 
     /**
+     * @var ProductCategoryList
+     */
+    private $productCategoryList;
+
+    /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
@@ -89,6 +96,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
+     * @param ProductCategoryList|null $categoryList
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -99,7 +109,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        array $data = []
+        array $data = [],
+        ProductCategoryList $categoryList = null
     ) {
         $this->_backendData = $backendData;
         $this->_config = $config;
@@ -108,6 +119,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $this->_productResource = $productResource;
         $this->_attrSetCollection = $attrSetCollection;
         $this->_localeFormat = $localeFormat;
+        $this->productCategoryList = $categoryList ?: ObjectManager::getInstance()->get(ProductCategoryList::class);
         parent::__construct($context, $data);
     }
 
@@ -502,6 +514,10 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             ) ? $this->_localeFormat->getNumber(
                 $arr['is_value_parsed']
             ) : false;
+        } elseif (!empty($arr['operator']) && $arr['operator'] == '()') {
+            if (isset($arr['value'])) {
+                $arr['value'] = preg_replace('/\s*,\s*/', ',', $arr['value']);
+            }
         }
 
         return parent::loadArray($arr);
@@ -520,7 +536,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attrCode = $this->getAttribute();
 
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($model->getAvailableInCategories());
+            $productId = (int)$model->getEntityId();
+            return $this->validateAttribute($this->productCategoryList->getCategoryIds($productId));
         } elseif (!isset($this->_entityAttributeValues[$model->getId()])) {
             if (!$model->getResource()) {
                 return false;
@@ -602,7 +619,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     public function getMappedSqlField()
     {
-        if (!$this->isAttributeSetOrCategory()) {
+        if ($this->getAttribute() == 'sku') {
+            $mappedSqlField = 'e.sku';
+        } elseif (!$this->isAttributeSetOrCategory()) {
             $mappedSqlField = $this->getEavAttributeTableAlias() . '.value';
         } elseif ($this->getAttribute() == 'category_ids') {
             $mappedSqlField = 'e.entity_id';
@@ -680,6 +699,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
     /**
      * Correct '==' and '!=' operators
+     *
      * Categories can't be equal because product is included categories selected by administrator and in their parents
      *
      * @return string

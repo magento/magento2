@@ -1,15 +1,23 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute as AttributeAction;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
+/**
+ * Form for mass updatings products' attributes.
+ * Can be accessed by GET since it's a form,
+ * can be accessed by POST since it's used as a processor of a mass-action button.
+ */
+class Edit extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -53,8 +61,10 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     public function execute()
     {
-        $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $this->attributeHelper->setProductIds($collection->getAllIds());
+        if ($this->getRequest()->getParam('filters')) {
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
+            $this->attributeHelper->setProductIds($collection->getAllIds());
+        }
 
         if (!$this->_validateProducts()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['_current' => true]);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,14 +21,14 @@ use Magento\Mtf\Fixture\FixtureInterface;
  * 2. Click 'Move to Wishlist' button from Shopping Cart for added product.
  * 3. Perform asserts.
  *
- * @group Shopping_Cart_(CS)
+ * @group Shopping_Cart
  * @ZephyrId MAGETWO-29545
  */
 class MoveProductFromShoppingCartToWishlistTest extends AbstractWishlistTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
+    const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**
@@ -81,7 +81,7 @@ class MoveProductFromShoppingCartToWishlistTest extends AbstractWishlistTest
     protected function addToCart(FixtureInterface $product)
     {
         $addProductsToTheCartStep = $this->objectManager->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => [$product]]
         );
         $addProductsToTheCartStep->run();

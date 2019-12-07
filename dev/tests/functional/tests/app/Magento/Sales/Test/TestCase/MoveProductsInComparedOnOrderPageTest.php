@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Update Changes'.
  * 6. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28050
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -39,7 +39,6 @@ class MoveProductsInComparedOnOrderPageTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -103,7 +102,7 @@ class MoveProductsInComparedOnOrderPageTest extends Injectable
         $customer->persist();
         // Login under customer
         $this->objectManager
-            ->create('Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep', ['customer' => $customer])
+            ->create(\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class, ['customer' => $customer])
             ->run();
         $this->browser = $browser;
 
@@ -149,7 +148,7 @@ class MoveProductsInComparedOnOrderPageTest extends Injectable
         // Preconditions
         // Create products
         $products = $this->objectManager->create(
-            '\Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $products]
         )->run()['products'];
         // Add products to compare

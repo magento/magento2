@@ -2,13 +2,18 @@
 /**
  * Magento-specific SOAP fault.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Webapi Fault Model for Soap.
+ */
 class Fault
 {
     const FAULT_REASON_INTERNAL = 'Internal Error.';
@@ -25,7 +30,7 @@ class Fault
     const NODE_DETAIL_PARAMETERS = 'Parameters';
     const NODE_DETAIL_WRAPPED_ERRORS = 'WrappedErrors';
     const NODE_DETAIL_WRAPPED_EXCEPTION = 'WrappedException';
-    /** Note that parameter node must be unique in scope of all complex types declared in WSDL */
+    /* Note that parameter node must be unique in scope of all complex types declared in WSDL */
     const NODE_DETAIL_PARAMETER = 'GenericFaultParameter';
     const NODE_DETAIL_PARAMETER_KEY = 'key';
     const NODE_DETAIL_PARAMETER_VALUE = 'value';
@@ -39,7 +44,14 @@ class Fault
     const NODE_DETAIL_WRAPPER = 'GenericFault';
     /**#@-*/
 
-    /** @var string */
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @var string
+     */
     protected $_soapFaultCode;
 
     /**
@@ -106,15 +118,17 @@ class Fault
      * @param \Magento\Framework\Webapi\Exception $exception
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param State $appState
+     * @param Escaper|null $escaper
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         Server $soapServer,
         \Magento\Framework\Webapi\Exception $exception,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        State $appState
+        State $appState,
+        Escaper $escaper = null
     ) {
-        $this->_soapCode = $exception->getOriginator();
+        $this->_soapFaultCode = $exception->getOriginator();
         $this->_parameters = $exception->getDetails();
         $this->_wrappedErrors = $exception->getErrors();
         $this->stackTrace = $exception->getStackTrace() ?: $exception->getTraceAsString();
@@ -123,6 +137,9 @@ class Fault
         $this->_soapServer = $soapServer;
         $this->_localeResolver = $localeResolver;
         $this->appState = $appState;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
     }
 
     /**
@@ -194,7 +211,7 @@ class Fault
      */
     public function getSoapCode()
     {
-        return $this->_soapCode;
+        return $this->_soapFaultCode;
     }
 
     /**
@@ -208,6 +225,8 @@ class Fault
     }
 
     /**
+     * Retrieve message
+     *
      * @return string
      */
     public function getMessage()
@@ -284,14 +303,15 @@ FAULT_MESSAGE;
     {
         $detailsXml = '';
         foreach ($details as $detailNode => $detailValue) {
-            $detailNode = htmlspecialchars($detailNode);
+            $detailNode = $this->escaper->escapeHtml($detailNode);
             if (is_numeric($detailNode)) {
                 continue;
             }
             switch ($detailNode) {
                 case self::NODE_DETAIL_TRACE:
                     if (is_string($detailValue) || is_numeric($detailValue)) {
-                        $detailsXml .= "<m:{$detailNode}>" . htmlspecialchars($detailValue) . "</m:{$detailNode}>";
+                        $detailsXml .= "<m:{$detailNode}>" . $this->escaper->escapeHtml($detailValue) .
+                            "</m:{$detailNode}>";
                     }
                     break;
                 case self::NODE_DETAIL_PARAMETERS:
@@ -319,12 +339,17 @@ FAULT_MESSAGE;
         }
         $paramsXml = '';
         foreach ($parameters as $parameterName => $parameterValue) {
-            if (is_string($parameterName) && (is_string($parameterValue) || is_numeric($parameterValue))) {
+            if ((is_string($parameterName) || is_numeric($parameterName))
+                && (is_string($parameterValue) || is_numeric($parameterValue))
+            ) {
                 $keyNode = self::NODE_DETAIL_PARAMETER_KEY;
                 $valueNode = self::NODE_DETAIL_PARAMETER_VALUE;
                 $parameterNode = self::NODE_DETAIL_PARAMETER;
+                if (is_numeric($parameterName)) {
+                    $parameterName++;
+                }
                 $paramsXml .= "<m:$parameterNode><m:$keyNode>$parameterName</m:$keyNode><m:$valueNode>"
-                    . htmlspecialchars($parameterValue) . "</m:$valueNode></m:$parameterNode>";
+                    . $this->escaper->escapeHtml($parameterValue) . "</m:$valueNode></m:$parameterNode>";
             }
         }
         if (!empty($paramsXml)) {
@@ -350,7 +375,7 @@ FAULT_MESSAGE;
 
         $errorsXml = '';
         foreach ($wrappedErrors as $error) {
-            $errorsXml .= $this->_generateErrorNodeXml($error);
+            $errorsXml .= $this->_generateErrorNodeXML($error);
         }
         if (!empty($errorsXml)) {
             $wrappedErrorsNode = self::NODE_DETAIL_WRAPPED_ERRORS;

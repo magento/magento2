@@ -1,13 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Api;
 
+use Magento\Framework\App\Config;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Class CartManagementTest
+ * @package Magento\Quote\Api
+ * @magentoAppIsolation enabled
+ */
 class CartManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
@@ -25,12 +32,14 @@ class CartManagementTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $appConfig = $this->objectManager->get(Config::class);
+        $appConfig->clean();
     }
 
     public function tearDown()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         foreach ($this->createdQuotes as $quoteId) {
             $quote->load($quoteId);
             $quote->delete();
@@ -58,12 +67,12 @@ class CartManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_one_address.php
      */
     public function testCreateEmptyCartForCustomer()
     {
         /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
-        $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
         $customer = $repository->getById(1);
         $customerId = $customer->getId();
@@ -86,7 +95,7 @@ class CartManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_one_address.php
      */
     public function testCreateEmptyCartAndGetCartForCustomer()
     {
@@ -95,9 +104,12 @@ class CartManagementTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
-        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+        $token = $customerTokenService->createCustomerAccessToken(
+            'customer_one_address@test.com',
+            'password'
+        );
 
         $serviceInfo = [
             'rest' => [
@@ -131,10 +143,10 @@ class CartManagementTest extends WebapiAbstract
     public function testAssignCustomer()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
         /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
-        $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
         $customer = $repository->getById(1);
         $customerId = $customer->getId();
@@ -161,7 +173,7 @@ class CartManagementTest extends WebapiAbstract
 
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
         // Reload target quote
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $this->assertEquals(0, $quote->getCustomerIsGuest());
         $this->assertEquals($customer->getId(), $quote->getCustomerId());
         $this->assertEquals($customer->getFirstname(), $quote->getCustomerFirstname());
@@ -175,7 +187,7 @@ class CartManagementTest extends WebapiAbstract
     public function testAssignCustomerThrowsExceptionIfThereIsNoCustomerWithGivenId()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
         $customerId = 9999;
         $serviceInfo = [
@@ -229,15 +241,15 @@ class CartManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart is not anonymous.
+     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
         /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->objectManager->create('Magento\Customer\Model\Customer')->load(1);
+        $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         $customerId = $customer->getId();
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
 
         $serviceInfo = [
@@ -264,15 +276,15 @@ class CartManagementTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_non_default_website_id.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart belongs to different store.
+     * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
      */
     public function testAssignCustomerThrowsExceptionIfCartIsAssignedToDifferentStore()
     {
-        $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
         $customer = $repository->getById(1);
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
 
         $customerId = $customer->getId();
         $cartId = $quote->getId();
@@ -298,22 +310,20 @@ class CartManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot assign customer to the given cart. Customer already has active cart.
      */
-    public function testAssignCustomerThrowsExceptionIfCustomerAlreadyHasActiveCart()
+    public function testAssignCustomerCartMerged()
     {
         /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->objectManager->create('Magento\Customer\Model\Customer')->load(1);
+        $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         // Customer has a quote with reserved order ID test_order_1 (see fixture)
         /** @var $customerQuote \Magento\Quote\Model\Quote */
-        $customerQuote = $this->objectManager->create('Magento\Quote\Model\Quote')
-            ->load('test_order_1', 'reserved_order_id');
-        $customerQuote->setIsActive(1)->save();
+        $customerQuote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
+            ->load('test_order_item_with_items', 'reserved_order_id');
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
+        $expectedQuoteItemsQty = $customerQuote->getItemsQty() + $quote->getItemsQty();
 
         $cartId = $quote->getId();
         $customerId = $customer->getId();
@@ -335,7 +345,13 @@ class CartManagementTest extends WebapiAbstract
             'customerId' => $customerId,
             'storeId' => 1,
         ];
-        $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
+
+        $mergedQuote = $this->objectManager
+            ->create(\Magento\Quote\Model\Quote::class)
+            ->load('test01', 'reserved_order_id');
+
+        $this->assertEquals($expectedQuoteItemsQty, $mergedQuote->getItemsQty());
     }
 
     /**
@@ -344,7 +360,8 @@ class CartManagementTest extends WebapiAbstract
     public function testPlaceOrder()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test_order_1', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
+            ->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
         $serviceInfo = [
@@ -362,7 +379,7 @@ class CartManagementTest extends WebapiAbstract
         $orderId = $this->_webApiCall($serviceInfo, ['cartId' => $cartId]);
 
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         $items = $order->getAllItems();
         $this->assertCount(1, $items);
         $this->assertEquals('Simple Product', $items[0]->getName());
@@ -378,7 +395,7 @@ class CartManagementTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -393,7 +410,7 @@ class CartManagementTest extends WebapiAbstract
         $orderId = $this->_webApiCall($serviceInfo, []);
 
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         $items = $order->getAllItems();
         $this->assertCount(1, $items);
         $this->assertEquals('Simple Product', $items[0]->getName());
@@ -409,7 +426,7 @@ class CartManagementTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -465,7 +482,7 @@ class CartManagementTest extends WebapiAbstract
     protected function getCart($reservedOrderId)
     {
         /** @var $cart \Magento\Quote\Model\Quote */
-        $cart = $this->objectManager->get('Magento\Quote\Model\Quote');
+        $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
         $cart->load($reservedOrderId, 'reserved_order_id');
         if (!$cart->getId()) {
             throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');

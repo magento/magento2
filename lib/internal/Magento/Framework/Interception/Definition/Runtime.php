@@ -3,7 +3,7 @@
  * \Reflection based plugin method list. Uses reflection to retrieve list of interception methods defined in plugin.
  * Should be only used in development mode, because it reads method list on every request which is expensive.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception\Definition;

@@ -1,9 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+declare(strict_types=1);
 /**
  * Widget Instance Main tab block
  *
@@ -11,6 +11,12 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+/**
+ * Edit Main Tab
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
@@ -76,7 +82,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Returns status flag about this tab can be shown or not
      *
      * @return true
      */
@@ -182,7 +188,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
         }
@@ -194,7 +200,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'sort_order',
                 'label' => __('Sort Order'),
                 'title' => __('Sort Order'),
-                'class' => '',
+                'class' => 'validate-number',
                 'required' => false,
                 'note' => __('Sort Order of widget instances in the same container')
             ]
@@ -202,7 +208,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         /* @var $layoutBlock \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout */
         $layoutBlock = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout'
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout::class
         )->setWidgetInstance(
             $widgetInstance
         );
@@ -225,7 +231,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
-     * Initialize form fileds values
+     * Initialize form fields values
      *
      * @return $this
      */

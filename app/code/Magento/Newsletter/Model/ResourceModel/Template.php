@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Newsletter\Model\ResourceModel;
 
@@ -12,6 +10,9 @@ namespace Magento\Newsletter\Model\ResourceModel;
  * Newsletter template resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
 class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -80,7 +81,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function checkCodeUsage(\Magento\Newsletter\Model\Template $template)
     {
-        if ($template->getTemplateActual() != 0 || is_null($template->getTemplateActual())) {
+        if ($template->getTemplateActual() != 0 || $template->getTemplateActual() === null) {
             $bind = [
                 'template_id' => $template->getId(),
                 'template_code' => $template->getTemplateCode(),

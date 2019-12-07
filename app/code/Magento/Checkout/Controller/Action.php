@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
@@ -70,7 +70,7 @@ abstract class Action extends \Magento\Framework\App\Action\Action
             if (!$validationResult->isValid()) {
                 if ($addErrors) {
                     foreach ($validationResult->getMessages() as $error) {
-                        $this->messageManager->addError($error);
+                        $this->messageManager->addErrorMessage($error);
                     }
                 }
                 if ($redirect) {

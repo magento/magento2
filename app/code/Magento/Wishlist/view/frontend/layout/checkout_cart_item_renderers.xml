@@ -1,32 +1,32 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.cart.item.renderers.default.actions">
-            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.default.actions.move_to_wishlist" template="cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.default.actions.edit"/>
+            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.default.actions.move_to_wishlist" template="Magento_Wishlist::cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.default.actions.edit"/>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.simple.actions">
-            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.simple.actions.move_to_wishlist" template="cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.simple.actions.edit"/>
+            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.simple.actions.move_to_wishlist" template="Magento_Wishlist::cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.simple.actions.edit"/>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.bundle.actions">
-            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.bundle.actions.move_to_wishlist" template="cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.bundle.actions.edit"/>
+            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.bundle.actions.move_to_wishlist" template="Magento_Wishlist::cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.bundle.actions.edit"/>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.downloadable.actions">
-            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.downloadable.actions.move_to_wishlist" template="cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.downloadable.actions.edit"/>
+            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.downloadable.actions.move_to_wishlist" template="Magento_Wishlist::cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.downloadable.actions.edit"/>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.grouped.actions">
-            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.grouped.actions.move_to_wishlist" template="cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.grouped.actions.edit"/>
+            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.grouped.actions.move_to_wishlist" template="Magento_Wishlist::cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.grouped.actions.edit"/>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.configurable.actions">
-            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.configurable.actions.move_to_wishlist" template="cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.configurable.actions.edit"/>
+            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.configurable.actions.move_to_wishlist" template="Magento_Wishlist::cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.configurable.actions.edit"/>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.virtual.actions">
-            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.virtual.actions.move_to_wishlist" template="cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.virtual.actions.edit"/>
+            <block class="Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist" name="checkout.cart.item.renderers.virtual.actions.move_to_wishlist" template="Magento_Wishlist::cart/item/renderer/actions/move_to_wishlist.phtml" before="checkout.cart.item.renderers.virtual.actions.edit"/>
         </referenceBlock>
     </body>
 </page>

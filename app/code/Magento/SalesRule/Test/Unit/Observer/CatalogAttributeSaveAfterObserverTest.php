@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Observer;
 
-class CatalogAttributeSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
+class CatalogAttributeSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver|\PHPUnit_Framework_MockObject_MockObject
@@ -17,14 +17,13 @@ class CatalogAttributeSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $checkSalesRulesAvailability;
 
-
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->initMocks();
 
         $this->model = $helper->getObject(
-            'Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver',
+            \Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver::class,
             [
                 'checkSalesRulesAvailability' => $this->checkSalesRulesAvailability
             ]
@@ -33,26 +32,19 @@ class CatalogAttributeSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function initMocks()
     {
-        $this->checkSalesRulesAvailability = $this->getMock(
-            'Magento\SalesRule\Observer\CheckSalesRulesAvailability',
-            [],
-            [],
-            '',
-            false
+        $this->checkSalesRulesAvailability = $this->createMock(
+            \Magento\SalesRule\Observer\CheckSalesRulesAvailability::class
         );
     }
 
     public function testCatalogAttributeSaveAfter()
     {
         $attributeCode = 'attributeCode';
-        $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $event = $this->getMock('Magento\Framework\Event', ['getAttribute', '__wakeup'], [], '', false);
-        $attribute = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
-            ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
+        $observer = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getAttribute', '__wakeup']);
+        $attribute = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode', '__wakeup']
         );
 
         $observer->expects($this->once())

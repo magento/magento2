@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
@@ -32,7 +32,7 @@ class AddConfigured extends \Magento\Sales\Controller\Adminhtml\Order\Create
         }
 
         $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
-        $this->_objectManager->get('Magento\Backend\Model\Session')->setCompositeProductResult($updateResult);
+        $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setCompositeProductResult($updateResult);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('catalog/product/showUpdateResult');

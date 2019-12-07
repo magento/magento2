@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Billing;
 
 /**
- * Billing Agreement abstaract class
+ * Billing Agreement abstract class
  */
 abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
 {

@@ -1,9 +1,9 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
-input[type="checkbox"].banner-content-checkbox {
+input[type='checkbox'].banner-content-checkbox {
     position: absolute;
     top: .8rem;
 
@@ -18,6 +18,21 @@ input[type="checkbox"].banner-content-checkbox {
         .banner-content-checkbox {
             + .addafter {
                 padding: 0 0 0 2.6rem;
+            }
+        }
+    }
+}
+
+.adminhtml-widget_instance-edit,
+.adminhtml-cms_page-edit,
+.adminhtml-banner-edit {
+    .admin__fieldset {
+        .admin__field-control {
+            .data-grid-actions-cell,
+            .data-grid-checkbox-cell-inner {
+                input[type='checkbox'] {
+                    margin-top: 0;
+                }
             }
         }
     }

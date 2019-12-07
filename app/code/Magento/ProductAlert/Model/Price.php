@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model;
@@ -10,8 +10,6 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
 /**
  * ProductAlert for changed price model
  *
- * @method \Magento\ProductAlert\Model\ResourceModel\Price _getResource()
- * @method \Magento\ProductAlert\Model\ResourceModel\Price getResource()
  * @method int getCustomerId()
  * @method \Magento\ProductAlert\Model\Price setCustomerId(int $value)
  * @method int getProductId()
@@ -28,8 +26,13 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
  * @method \Magento\ProductAlert\Model\Price setSendCount(int $value)
  * @method int getStatus()
  * @method \Magento\ProductAlert\Model\Price setStatus(int $value)
+ * @method int getStoreId()
+ * @method \Magento\ProductAlert\Model\Stock setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
 class Price extends \Magento\Framework\Model\AbstractModel
 {
@@ -59,14 +62,18 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create customer collection.
+     *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\ResourceModel\Price');
+        $this->_init(\Magento\ProductAlert\Model\ResourceModel\Price::class);
     }
 
     /**
+     * Create customer collection.
+     *
      * @return Collection
      */
     public function getCustomerCollection()
@@ -75,6 +82,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load by param.
+     *
      * @return $this
      */
     public function loadByParam()
@@ -86,6 +95,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Method for deleting customer from website.
+     *
      * @param int $customerId
      * @param int $websiteId
      * @return $this

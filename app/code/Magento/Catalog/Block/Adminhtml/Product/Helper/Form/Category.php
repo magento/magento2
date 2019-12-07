@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
@@ -126,16 +124,16 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         $newCategoryCaption = __('New Category');
 
         $button = $this->_layout->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
-                [
-                    'id' => 'add_category_button',
-                    'label' => $newCategoryCaption,
-                    'title' => $newCategoryCaption,
-                    'onclick' => 'jQuery("#new-category").modal("openModal")',
-                    'disabled' => $this->getDisabled(),
-                ]
-            );
+            [
+                'id' => 'add_category_button',
+                'label' => $newCategoryCaption,
+                'title' => $newCategoryCaption,
+                'onclick' => 'jQuery("#new-category").modal("openModal")',
+                'disabled' => $this->getDisabled(),
+            ]
+        );
         $return = <<<HTML
     <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />
     <script>

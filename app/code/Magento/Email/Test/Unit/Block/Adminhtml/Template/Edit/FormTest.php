@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Edit;
@@ -8,15 +8,12 @@ namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Edit;
 /**
  * @covers \Magento\Email\Block\Adminhtml\Template\Edit\Form
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Email\Block\Adminhtml\Template\Edit\Form */
     protected $form;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
-    protected $registryMock;
-
-    /** @var \Magento\Email\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Variable\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject */
     protected $variablesMock;
 
     /** @var \Magento\Variable\Model\VariableFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -28,33 +25,28 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject */
     protected $templateMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
-            ->disableOriginalConstructor()
-            ->setMethods(['registry'])
-            ->getMock();
-        $this->variablesMock = $this->getMockBuilder('Magento\Email\Model\Source\Variables')
+        $this->variablesMock = $this->getMockBuilder(\Magento\Variable\Model\Source\Variables::class)
             ->disableOriginalConstructor()
             ->setMethods(['toOptionArray'])
             ->getMock();
-        $this->variableFactoryMock = $this->getMockBuilder('Magento\Variable\Model\VariableFactory')
+        $this->variableFactoryMock = $this->getMockBuilder(\Magento\Variable\Model\VariableFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->variableMock = $this->getMockBuilder('Magento\Variable\Model\Variable')
+        $this->variableMock = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
             ->disableOriginalConstructor()
             ->setMethods(['getVariablesOptionArray'])
             ->getMock();
-        $this->templateMock = $this->getMockBuilder('Magento\Email\Model\Template')
+        $this->templateMock = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getVariablesOptionArray'])
             ->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->form = $objectManager->getObject(
-            'Magento\Email\Block\Adminhtml\Template\Edit\Form',
+            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
             [
-                'registry' => $this->registryMock,
                 'variableFactory' => $this->variableFactoryMock,
                 'variables' => $this->variablesMock
             ]
@@ -75,9 +67,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->variableMock->expects($this->once())
             ->method('getVariablesOptionArray')
             ->willReturn(['custom var 1', 'custom var 2']);
-        $this->registryMock->expects($this->once())
-            ->method('registry')
-            ->willReturn($this->templateMock);
+        $this->form->setEmailTemplate($this->templateMock);
         $this->templateMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
@@ -85,7 +75,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('getVariablesOptionArray')
             ->willReturn(['template var 1', 'template var 2']);
         $this->assertEquals(
-            [['var1', 'var2', 'var3'], ['custom var 1', 'custom var 2'], ['template var 1', 'template var 2']],
+            ['var1', 'var2', 'var3', 'custom var 1', 'custom var 2', ['template var 1', 'template var 2']],
             $this->form->getVariables()
         );
     }
@@ -95,9 +85,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEmailTemplate()
     {
-        $this->registryMock->expects($this->once())
-            ->method('registry')
-            ->with('current_email_template');
-        $this->form->getEmailTemplate();
+        $this->form->setEmailTemplate($this->templateMock);
+        $this->assertEquals($this->templateMock, $this->form->getEmailTemplate());
     }
 }

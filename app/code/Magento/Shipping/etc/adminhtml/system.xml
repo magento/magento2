@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,15 +13,15 @@
             <resource>Magento_Shipping::config_shipping</resource>
             <group id="origin" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Origin</label>
-                <field id="country_id" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="country_id" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Country</label>
                     <frontend_class>countries</frontend_class>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
-                <field id="region_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="region_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Region/State</label>
                 </field>
-                <field id="postcode" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="postcode" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>ZIP/Postal Code</label>
                 </field>
                 <field id="city" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">

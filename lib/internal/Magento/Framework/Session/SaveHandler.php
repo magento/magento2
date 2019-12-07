@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Session\Config\ConfigInterface;
+use \Magento\Framework\Exception\SessionException;
 
 /**
  * Magento session save handler
@@ -24,21 +24,27 @@ class SaveHandler implements SaveHandlerInterface
      * Constructor
      *
      * @param SaveHandlerFactory $saveHandlerFactory
-     * @param DeploymentConfig $deploymentConfig
+     * @param ConfigInterface $sessionConfig
      * @param string $default
      */
     public function __construct(
         SaveHandlerFactory $saveHandlerFactory,
-        DeploymentConfig $deploymentConfig,
+        ConfigInterface $sessionConfig,
         $default = self::DEFAULT_HANDLER
     ) {
-        $saveMethod = $deploymentConfig->get(\Magento\Framework\Session\Config::PARAM_SESSION_SAVE_METHOD);
+        /**
+         * Session handler
+         *
+         * Save handler may be set to custom value in deployment config, which will override everything else.
+         * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
+         */
+        $saveMethod = $sessionConfig->getOption('session.save_handler') ?: $default;
+
         try {
-            $connection = $saveHandlerFactory->create($saveMethod);
+            $this->saveHandlerAdapter = $saveHandlerFactory->create($saveMethod);
         } catch (SessionException $e) {
-            $connection = $saveHandlerFactory->create($default);
+            $this->saveHandlerAdapter = $saveHandlerFactory->create($default);
         }
-        $this->saveHandlerAdapter = $connection;
     }
 
     /**

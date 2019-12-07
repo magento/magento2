@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AdminTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AdminTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -51,23 +54,25 @@ class AdminTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->salesConfigMock = $this->getMockBuilder('Magento\Sales\Model\Config')
+        $this->salesConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->priceCurrency = $this->getMockBuilder('\Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->priceCurrency = $this->getMockBuilder(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+        )->getMock();
 
-        $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adminHelper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Sales\Helper\Admin',
+        $this->adminHelper = (new ObjectManager($this))->getObject(
+            \Magento\Sales\Helper\Admin::class,
             [
                 'context' => $this->contextMock,
                 'storeManager' => $this->storeManagerMock,
@@ -77,12 +82,12 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->magentoObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->magentoObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrder', 'getData'])
             ->getMock();
 
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderMock->expects($this->any())
@@ -116,7 +121,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('isCurrencyDifferent')
             ->will($this->returnValue($isCurrencyDifferent));
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock->expects($this->any())
@@ -164,7 +169,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('isCurrencyDifferent')
             ->will($this->returnValue($isCurrencyDifferent));
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock->expects($this->any())
@@ -193,6 +198,9 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function displayPricesDataProvider()
     {
         return [
@@ -265,20 +273,20 @@ class AdminTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplySalableProductTypesFilter($itemKey, $type, $calledTimes)
     {
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productMock->expects($this->any())
             ->method('getTypeId')
             ->will($this->returnValue($type));
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getProductType'])
             ->getMock();
         $orderMock->expects($this->any())
             ->method('getProductType')
             ->will($this->returnValue($type));
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->any())
@@ -290,7 +298,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             'quote' => $quoteMock,
             'other' => 'other',
         ];
-        $collectionClassName = 'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection';
+        $collectionClassName = \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class;
         $collectionMock = $this->getMockBuilder($collectionClassName)
             ->disableOriginalConstructor()
             ->getMock();
@@ -305,6 +313,9 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->adminHelper->applySalableProductTypesFilter($collectionMock);
     }
 
+    /**
+     * @return array
+     */
     public function applySalableProductTypesFilterDataProvider()
     {
         return [
@@ -319,72 +330,16 @@ class AdminTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $data
-     * @param string $expected
-     * @param null|array $allowedTags
-     * @dataProvider escapeHtmlWithLinksDataProvider
+     * @return void
      */
-    public function testEscapeHtmlWithLinks($data, $expected, $allowedTags = null)
+    public function testEscapeHtmlWithLinks(): void
     {
+        $expected = '&lt;a&gt;some text in tags&lt;/a&gt;';
         $this->escaperMock
             ->expects($this->any())
             ->method('escapeHtml')
             ->will($this->returnValue($expected));
-        $actual = $this->adminHelper->escapeHtmlWithLinks($data, $allowedTags);
+        $actual = $this->adminHelper->escapeHtmlWithLinks('<a>some text in tags</a>');
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public function escapeHtmlWithLinksDataProvider()
-    {
-        return [
-            [
-                '<a>some text in tags</a>',
-                '&lt;a&gt;some text in tags&lt;/a&gt;',
-                'allowedTags' => null
-            ],
-            [
-                'Transaction ID: "<a target="_blank" href="https://www.paypal.com/?id=XX123XX">XX123XX</a>"',
-                'Transaction ID: &quot;<a target="_blank" href="https://www.paypal.com/?id=XX123XX">XX123XX</a>&quot;',
-                'allowedTags' => ['b', 'br', 'strong', 'i', 'u', 'a']
-            ],
-            [
-                '<a>some text in tags</a>',
-                '<a>some text in tags</a>',
-                'allowedTags' => ['a']
-            ],
-            'Not replacement with placeholders' => [
-                "<a><script>alert(1)</script></a>",
-                '<a>&lt;script&gt;alert(1)&lt;/script&gt;</a>',
-                'allowedTags' => ['a']
-            ],
-            'Normal usage, url escaped' => [
-                '<a href=\"#\">Foo</a>',
-                '<a href="#">Foo</a>',
-                'allowedTags' => ['a']
-            ],
-            'Normal usage, url not escaped' => [
-                "<a href=http://example.com?foo=1&bar=2&baz[name]=BAZ>Foo</a>",
-                '<a href="http://example.com?foo=1&amp;bar=2&amp;baz[name]=BAZ">Foo</a>',
-                'allowedTags' => ['a']
-            ],
-            'XSS test' => [
-                "<a href=\"javascript&colon;alert(59)\">Foo</a>",
-                '<a href="#">Foo</a>',
-                'allowedTags' => ['a']
-            ],
-            'Additional regex test' => [
-                "<a href=\"http://example1.com\" href=\"http://example2.com\">Foo</a>",
-                '<a href="http://example1.com">Foo</a>',
-                'allowedTags' => ['a']
-            ],
-            'Break of valid urls' => [
-                "<a href=\"http://example.com?foo=text with space\">Foo</a>",
-                '<a href="#">Foo</a>',
-                'allowedTags' => ['a']
-            ],
-        ];
     }
 }

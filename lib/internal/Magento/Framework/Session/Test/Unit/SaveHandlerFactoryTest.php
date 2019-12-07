@@ -1,27 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\Test\Unit;
 
 use \Magento\Framework\Session\SaveHandlerFactory;
 
-class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider createDataProvider
      */
     public function testCreate($handlers, $saveClass, $saveMethod)
     {
-        $saveHandler = $this->getMock($saveClass);
-        $objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $saveHandler = $this->createMock($saveClass);
+        $objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $objectManager->expects(
             $this->once()
         )->method(
@@ -35,7 +29,7 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $model = new SaveHandlerFactory($objectManager, $handlers);
         $result = $model->create($saveMethod);
         $this->assertInstanceOf($saveClass, $result);
-        $this->assertInstanceOf('\Magento\Framework\Session\SaveHandler\Native', $result);
+        $this->assertInstanceOf(\Magento\Framework\Session\SaveHandler\Native::class, $result);
         $this->assertInstanceOf('\SessionHandlerInterface', $result);
     }
 
@@ -44,7 +38,7 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createDataProvider()
     {
-        return [[[], 'Magento\Framework\Session\SaveHandler\Native', 'files']];
+        return [[[], \Magento\Framework\Session\SaveHandler\Native::class, 'files']];
     }
 
     /**
@@ -54,7 +48,7 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateInvalid()
     {
         $invalidSaveHandler = new \Magento\Framework\DataObject();
-        $objectManager = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+        $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager->expects($this->once())

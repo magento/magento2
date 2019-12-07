@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
 
@@ -12,6 +10,8 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
  * Backend system config array field renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -84,7 +84,9 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             'class' => $this->_getParam($params, 'class'),
             'renderer' => false,
         ];
-        if (!empty($params['renderer']) && $params['renderer'] instanceof \Magento\Framework\View\Element\AbstractBlock) {
+        if (!empty($params['renderer'])
+            && $params['renderer'] instanceof \Magento\Framework\View\Element\AbstractBlock
+        ) {
             $this->_columns[$name]['renderer'] = $params['renderer'];
         }
     }
@@ -148,7 +150,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             foreach ($element->getValue() as $rowId => $row) {
                 $rowColumnValues = [];
                 foreach ($row as $key => $value) {
-                    $row[$key] = $this->escapeHtml($value);
+                    $row[$key] = $value;
                     $rowColumnValues[$this->_getCellInputElementId($rowId, $key)] = $row[$key];
                 }
                 $row['_id'] = $rowId;
@@ -225,11 +227,9 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             $column['size'] .
             '"' : '') .
             ' class="' .
-            (isset(
-            $column['class']
-        ) ? $column['class'] : 'input-text') . '"' . (isset(
-            $column['style']
-        ) ? ' style="' . $column['style'] . '"' : '') . '/>';
+            (isset($column['class'])
+                ? $column['class']
+                : 'input-text') . '"' . (isset($column['style']) ? ' style="' . $column['style'] . '"' : '') . '/>';
     }
 
     /**
@@ -278,5 +278,14 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function getColumns()
     {
         return $this->_columns;
+    }
+
+    /**
+     * @return string
+     * @since 100.2.0
+     */
+    public function getAddButtonLabel()
+    {
+        return $this->_addButtonLabel;
     }
 }

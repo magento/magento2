@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Test\Unit\File;
@@ -10,7 +10,7 @@ use \Magento\Framework\Filesystem\File\Read;
 /**
  * Class ReadTest
  */
-class ReadTest extends \PHPUnit_Framework_TestCase
+class ReadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Read
@@ -37,10 +37,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     protected $driver;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->driver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
-        $this->resource = $this->getMock('resource');
+        $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
@@ -48,7 +47,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->driver->expects($this->once())
             ->method('fileOpen')
             ->with($this->path, $this->mode)
-            ->will($this->returnValue($this->resource));
+            ->willReturn(null);
         $this->file = new Read($this->path, $this->driver);
     }
 
@@ -63,13 +62,13 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstanceFileNotExists()
     {
-        $driver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
+        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
             ->will($this->returnValue(false));
         $file = new Read($this->path, $driver);
-        $this->assertInstanceOf('Magento\Framework\Filesystem\File\Read', $file);
+        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
     }
 
     public function testRead()

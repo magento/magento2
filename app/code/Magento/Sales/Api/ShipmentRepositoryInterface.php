@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api;
@@ -11,16 +11,21 @@ namespace Magento\Sales\Api;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package.
  * @api
+ * @since 100.0.2
  */
 interface ShipmentRepositoryInterface
 {
     /**
      * Lists shipments that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
+     * This call returns an array of objects, but detailed information about each object’s attributes might not be
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#ShipmentRepositoryInterface to
+     * determine which call to use to get detailed information about all attributes for an object.
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\ShipmentSearchResultInterface Shipment search results interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Loads a specified shipment.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel;
@@ -155,7 +155,11 @@ class Order extends SalesResource implements OrderResourceInterface
         }
         $object->setData(
             'protect_code',
-            substr(md5(uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)), 5, 6)
+            substr(
+                hash('sha256', uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)),
+                5,
+                32
+            )
         );
         $isNewCustomer = !$object->getCustomerId() || $object->getCustomerId() === true;
         if ($isNewCustomer && $object->getCustomer()) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store\Grid\Render;
@@ -24,6 +24,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
         $this->getUrl('adminhtml/*/editWebsite', ['website_id' => $row->getWebsiteId()]) .
         '">' .
         $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
-        '</a>';
+        '</a><br />' .
+        '(' . __('Code') . ': ' . $row->getCode() . ')';
     }
 }

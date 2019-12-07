@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
@@ -10,9 +10,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order\Address;
 
 /**
- * Order history block
- * Class Info
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -225,7 +225,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
                 $label = __('Edit');
             }
             $url = $this->getUrl('sales/order/address', ['address_id' => $address->getId()]);
-            return '<a href="' . $url . '">' . $label . '</a>';
+            return '<a href="' . $this->escapeUrl($url) . '">' . $this->escapeHtml($label) . '</a>';
         }
 
         return '';
@@ -301,5 +301,28 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     public function getFormattedAddress(Address $address)
     {
         return $this->addressRenderer->format($address, 'html');
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.2.0
+     */
+    public function getChildHtml($alias = '', $useCache = true)
+    {
+        $layout = $this->getLayout();
+
+        if ($alias || !$layout) {
+            return parent::getChildHtml($alias, $useCache);
+        }
+
+        $childNames = $layout->getChildNames($this->getNameInLayout());
+        $outputChildNames = array_diff($childNames, ['extra_customer_info']);
+
+        $out = '';
+        foreach ($outputChildNames as $childName) {
+            $out .= $layout->renderElement($childName, $useCache);
+        }
+
+        return $out;
     }
 }

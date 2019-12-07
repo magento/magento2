@@ -1,13 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <p class="magento-version">
-    <strong><?php /* @escapeNotVerified */ echo __('Magento'); ?></strong>
-    <?php /* @escapeNotVerified */ echo __('ver. %1', \Magento\Framework\AppInterface::VERSION) ?>
+    <strong><?= $block->escapeHtml(__('Magento')) ?></strong>
+    <?= $block->escapeHtml(__('ver. %1', $block->getMagentoVersion())) ?>
 </p>

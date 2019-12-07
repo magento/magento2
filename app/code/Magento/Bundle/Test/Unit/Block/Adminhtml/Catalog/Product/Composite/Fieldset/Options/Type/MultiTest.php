@@ -1,23 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MultiTest extends \PHPUnit_Framework_TestCase
+class MultiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Multi
      */
     protected $block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->block = (new ObjectManager($this))
-            ->getObject('Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Multi');
+            ->getObject(\Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Multi::class);
     }
 
     public function testSetValidationContainer()

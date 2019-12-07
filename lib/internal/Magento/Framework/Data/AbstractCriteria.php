@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -274,7 +274,7 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      */
     public function getPart($name, $default = null)
     {
-        return isset($this->data[$name]) ? $this->data[$name] : $default;
+        return $this->data[$name] ?? $default;
     }
 
     /**

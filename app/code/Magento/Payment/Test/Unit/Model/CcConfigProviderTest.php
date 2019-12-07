@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model;
 
-class CcConfigProviderTest extends \PHPUnit_Framework_TestCase
+class CcConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Payment\Model\CcConfigProvider
@@ -24,8 +24,8 @@ class CcConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ccConfigMock = $this->getMock('\Magento\Payment\Model\CcConfig', [], [], '', false);
-        $this->assetSourceMock = $this->getMock('\Magento\Framework\View\Asset\Source', [], [], '', false);
+        $this->ccConfigMock = $this->createMock(\Magento\Payment\Model\CcConfig::class);
+        $this->assetSourceMock = $this->createMock(\Magento\Framework\View\Asset\Source::class);
         $this->model = new \Magento\Payment\Model\CcConfigProvider(
             $this->ccConfigMock,
             $this->assetSourceMock
@@ -42,12 +42,14 @@ class CcConfigProviderTest extends \PHPUnit_Framework_TestCase
                         'vi' => [
                             'url' => 'http://cc.card/vi.png',
                             'width' => getimagesize($imagesDirectoryPath . 'vi.png')[0],
-                            'height' => getimagesize($imagesDirectoryPath . 'vi.png')[1]
+                            'height' => getimagesize($imagesDirectoryPath . 'vi.png')[1],
+                            'title' => __('Visa'),
                         ],
                         'ae' => [
                             'url' => 'http://cc.card/ae.png',
                             'width' => getimagesize($imagesDirectoryPath . 'ae.png')[0],
-                            'height' => getimagesize($imagesDirectoryPath . 'ae.png')[1]
+                            'height' => getimagesize($imagesDirectoryPath . 'ae.png')[1],
+                            'title' => __('American Express'),
                         ]
                     ]
                 ]
@@ -56,19 +58,25 @@ class CcConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $ccAvailableTypesMock = [
             'vi' => [
+                'title' => 'Visa',
                 'fileId' => 'Magento_Payment::images/cc/vi.png',
                 'path' => $imagesDirectoryPath . 'vi.png',
                 'url' => 'http://cc.card/vi.png'
             ],
             'ae' => [
+                'title' => 'American Express',
                 'fileId' => 'Magento_Payment::images/cc/ae.png',
                 'path' => $imagesDirectoryPath . 'ae.png',
                 'url' => 'http://cc.card/ae.png'
             ]
         ];
-        $assetMock = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
+        $assetMock = $this->createMock(\Magento\Framework\View\Asset\File::class);
 
-        $this->ccConfigMock->expects($this->once())->method('getCcAvailableTypes')->willReturn($ccAvailableTypesMock);
+        $this->ccConfigMock->expects($this->once())->method('getCcAvailableTypes')
+            ->willReturn(array_combine(
+                array_keys($ccAvailableTypesMock),
+                array_column($ccAvailableTypesMock, 'title')
+            ));
 
         $this->ccConfigMock->expects($this->atLeastOnce())
             ->method('createAsset')
@@ -77,7 +85,7 @@ class CcConfigProviderTest extends \PHPUnit_Framework_TestCase
                 [$ccAvailableTypesMock['ae']['fileId']]
             )->willReturn($assetMock);
         $this->assetSourceMock->expects($this->atLeastOnce())
-            ->method('findRelativeSourceFilePath')
+            ->method('findSource')
             ->with($assetMock)
             ->willReturnOnConsecutiveCalls(
                 $ccAvailableTypesMock['vi']['path'],

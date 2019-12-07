@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Transaction;
 
-
 use Magento\Sales\Model\Order\Payment\Transaction;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -72,99 +74,42 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $repository;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->searchResultFactory = $this->getMock(
-            'Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->searchResultFactory = $this->createPartialMock(
+            \Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory::class,
+            ['create']
         );
-        $this->filterBuilder = $this->getMock(
-            'Magento\Framework\Api\FilterBuilder',
-            [],
-            [],
-            '',
-            false
+        $this->filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $this->searchCriteriaBuilder = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->sortOrderBuilder = $this->createMock(\Magento\Framework\Api\SortOrderBuilder::class);
+        $this->metaData = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
+        $entityStorageFactory = $this->createPartialMock(\Magento\Sales\Model\EntityStorageFactory::class, ['create']);
+        $this->entityStorage = $this->createMock(\Magento\Sales\Model\EntityStorage::class);
+        $this->transactionResource = $this->createMock(
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction::class
         );
-        $this->searchCriteriaBuilder = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->sortOrderBuilder = $this->getMock(
-            'Magento\Framework\Api\SortOrderBuilder',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->metaData = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Metadata',
-            [],
-            [],
-            '',
-            false
-        );
-        $entityStorageFactory = $this->getMock(
-            'Magento\Sales\Model\EntityStorageFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->entityStorage = $this->getMock(
-            'Magento\Sales\Model\EntityStorage',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->transactionResource = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchCriteria = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterGroup = $this->getMock(
-            'Magento\Framework\Api\Search\FilterGroup',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filter = $this->getMock(
-            'Magento\Framework\Api\Filter',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->collection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection',
-            [],
-            [],
-            '',
-            false
+        $this->searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->filterGroup = $this->createMock(\Magento\Framework\Api\Search\FilterGroup::class);
+        $this->filter = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $this->collection = $this->createMock(
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class
         );
         $entityStorageFactory->expects($this->once())->method('create')->willReturn($this->entityStorage);
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+        );
         $this->repository = $objectManager->getObject(
-            'Magento\Sales\Model\Order\Payment\Transaction\Repository',
+            \Magento\Sales\Model\Order\Payment\Transaction\Repository::class,
             [
                 'searchResultFactory' => $this->searchResultFactory,
                 'filterBuilder' => $this->filterBuilder,
@@ -172,18 +117,25 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 'sortOrderBuilder' => $this->sortOrderBuilder,
                 'metaData' => $this->metaData,
                 'entityStorageFactory' => $entityStorageFactory,
+                'collectionProcessor' => $this->collectionProcessor
             ]
         );
     }
 
-    public function testCreate()
+    /**
+     * @return void
+     */
+    public function testCreate(): void
     {
         $expected = "expect";
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($expected);
         $this->assertEquals($expected, $this->repository->create());
     }
 
-    public function testSave()
+    /**
+     * @return void
+     */
+    public function testSave(): void
     {
         $transactionId = 12;
         $transaction = $this->mockTransaction($transactionId);
@@ -196,7 +148,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($transaction, $this->repository->save($transaction));
     }
 
-    public function testDelete()
+    /**
+     * @return void
+     */
+    public function testDelete(): void
     {
         $transactionId = 12;
         $transaction = $this->mockTransaction($transactionId);
@@ -206,7 +161,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->repository->delete($transaction));
     }
 
-    public function testGet()
+    /**
+     * @return void
+     */
+    public function testGet(): void
     {
         $transactionId = 12;
         $transaction = $this->mockTransaction($transactionId);
@@ -219,22 +177,24 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testGetException()
+    public function testGetException(): void
     {
         $transactionId = null;
         $this->repository->get($transactionId);
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testGetNoSuchEntity()
+    public function testGetNoSuchEntity(): void
     {
         $transactionId = null;
         $transactionIdFromArgument = 12;
@@ -247,7 +207,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($transaction, $this->repository->get(12));
     }
 
-    public function testGetExistInStorage()
+    /**
+     * @return void
+     */
+    public function testGetExistInStorage(): void
     {
         $transactionId = 12;
         $transaction = "transaction";
@@ -260,15 +223,22 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($transaction, $this->repository->get($transactionId));
     }
 
-    public function testGetList()
+    /**
+     * @return void
+     */
+    public function testGetList(): void
     {
-        $field = 'txn_id';
-        $value = '33-refund';
-        $this->getListMock($field, $value);
+        $this->initListMock();
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($this->searchCriteria, $this->collection);
         $this->assertSame($this->collection, $this->repository->getList($this->searchCriteria));
     }
 
-    public function testGetByTransactionId()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionId(): void
     {
         $transactionId = "100-refund";
         $paymentId = 1;
@@ -294,7 +264,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($transaction, $this->repository->getByTransactionId($transactionId, $paymentId, $orderId));
     }
 
-    public function testGetByTransactionIdNotFound()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionIdNotFound(): void
     {
         $transactionId = "100-refund";
         $paymentId = 1;
@@ -320,7 +293,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetByTransactionIdFromStorage()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionIdFromStorage(): void
     {
         $transactionId = "100-refund";
         $paymentId = 1;
@@ -337,11 +313,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetByTransactionType()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionType(): void
     {
         $transactionType = Transaction::TYPE_AUTH;
         $paymentId = 1;
-        $orderId = 3;
         $cacheStorage = 'txn_type';
         $identityFieldsForCache = [$transactionType, $paymentId];
         $this->entityStorage->expects($this->once())
@@ -373,9 +351,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $transactionIdSort,
             $createdAtSort
         );
-        $this->searchCriteriaBuilder->expects($this->once())
+        $this->searchCriteriaBuilder->expects($this->exactly(2))
             ->method('addFilters')
-            ->with([$this->filter, $this->filter])
+            ->with([$this->filter])
             ->willReturnSelf();
         $this->searchCriteriaBuilder->expects($this->exactly(2))
             ->method('addSortOrder')
@@ -386,7 +364,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($this->searchCriteria);
-        $this->getListMock(\Magento\Sales\Api\Data\TransactionInterface::TXN_TYPE, $transactionType);
+        $this->initListMock();
         $transaction = $this->mockTransaction(1, true);
         $this->collection->expects($this->once())->method('getItems')->willReturn([$transaction]);
         $this->entityStorage->expects($this->once())
@@ -394,15 +372,17 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($transaction, $identityFieldsForCache, $cacheStorage);
         $this->assertEquals(
             $transaction,
-            $this->repository->getByTransactionType($transactionType, $paymentId, $orderId)
+            $this->repository->getByTransactionType($transactionType, $paymentId)
         );
     }
 
-    public function testGetByTransactionTypeFromCache()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionTypeFromCache(): void
     {
         $transactionType = Transaction::TYPE_AUTH;
         $paymentId = 1;
-        $orderId = 3;
         $cacheStorage = 'txn_type';
         $transaction = "transaction";
         $identityFieldsForCache = [$transactionType, $paymentId];
@@ -411,7 +391,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($transaction);
         $this->assertEquals(
             $transaction,
-            $this->repository->getByTransactionType($transactionType, $paymentId, $orderId)
+            $this->repository->getByTransactionType($transactionType, $paymentId)
         );
     }
 
@@ -422,13 +402,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockTransaction($transactionId, $withoutTransactionIdMatcher = false)
     {
-        $transaction = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction',
-            [],
-            [],
-            '',
-            false
-        );
+        $transaction = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction::class);
         if (!$withoutTransactionIdMatcher) {
             $transaction->expects($this->once())->method('getTransactionId')->willReturn($transactionId);
         }
@@ -436,24 +410,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $field
-     * @param $value
+     * @return void
      */
-    protected function getListMock($field, $value)
+    protected function initListMock(): void
     {
-        $currentPage = 1;
-        $pageSize = 10;
         $this->searchResultFactory->method('create')->willReturn($this->collection);
-        $this->searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([$this->filterGroup]);
-        $this->filterGroup->expects($this->once())->method('getFilters')->willReturn([$this->filter]);
-        $this->filter->expects($this->once())->method('getConditionType')->willReturn(null);
-        $this->filter->expects($this->once())->method('getField')->willReturn($field);
-        $this->filter->expects($this->once())->method('getValue')->willReturn($value);
-        $this->collection->expects($this->once())->method('addFieldToFilter')->with($field, ['eq' => $value]);
-        $this->searchCriteria->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $this->searchCriteria->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $this->collection->expects($this->once())->method('setCurPage')->with();
-        $this->collection->expects($this->once())->method('setPageSize')->with();
         $this->collection->expects($this->once())->method('addPaymentInformation')->with(['method']);
         $this->collection->expects($this->once())->method('addOrderInformation')->with(['increment_id']);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -96,7 +96,7 @@ return [
     'catalogrule_website'                         => 'Magento\CatalogRule',
     'catalogsearch_fulltext'                      => 'Magento\CatalogSearch',
     'catalogsearch_result'                        => 'Magento\CatalogSearch',
-    'search_query'                                => 'Magento\CatalogSearch',
+    'search_query'                                => 'Magento\Search',
     'checkout_agreement'                          => 'Magento\Checkout',
     'checkout_agreement_store'                    => 'Magento\Checkout',
     'cms_block'                                   => 'Magento\Cms',
@@ -300,4 +300,6 @@ return [
     'theme_files'                                 => 'Magento\Theme',
     'variable'                                    => 'Magento\Variable',
     'variable_value'                              => 'Magento\Variable',
+    'job_queue'                                   => 'Magento\Queue',
+    'catalogsearch_recommendations'               => 'Magento\AdvancedSearch',
 ];

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,10 +11,9 @@
 namespace Magento\Framework\Module\Test\Unit\Dir;
 
 use Magento\Framework\Config\FileIteratorFactory;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Module\Dir\Reader
@@ -53,40 +52,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_protFactoryMock = $this->getMock(
-            'Magento\Framework\App\Config\BaseFactory',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->_dirsMock = $this->getMock('Magento\Framework\Module\Dir', [], [], '', false, false);
-        $this->_baseConfigMock = $this->getMock(
-            'Magento\Framework\App\Config\Base',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
-        $this->directoryReadFactoryMock = $this->getMock(
-            '\Magento\Framework\Filesystem\Directory\ReadFactory',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->_fileIteratorFactory = $this->getMock(
-            '\Magento\Framework\Config\FileIteratorFactory',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->_protFactoryMock = $this->createMock(\Magento\Framework\App\Config\BaseFactory::class);
+        $this->_dirsMock = $this->createMock(\Magento\Framework\Module\Dir::class);
+        $this->_baseConfigMock = $this->createMock(\Magento\Framework\App\Config\Base::class);
+        $this->_moduleListMock = $this->createMock(\Magento\Framework\Module\ModuleListInterface::class);
+        $this->directoryReadFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
+        $this->_fileIteratorFactory = $this->createMock(\Magento\Framework\Config\FileIteratorFactory::class);
 
         $this->_model = new \Magento\Framework\Module\Dir\Reader(
             $this->_dirsMock,
@@ -125,7 +96,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigurationFiles()
     {
         $configPath = 'app/code/Test/Module/etc/config.xml';
-        $modulesDirectoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $modulesDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
@@ -151,7 +122,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testGetComposerJsonFiles()
     {
         $configPath = 'app/code/Test/Module/composer.json';
-        $modulesDirectoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $modulesDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,23 +63,59 @@ class BackendDecorator implements CurlInterface
      */
     protected function authorize()
     {
-        // Perform GET to backend url so form_key is set
-        $url = $_ENV['app_backend_url'];
-        $this->transport->write($url, [], CurlInterface::GET);
-        $this->read();
+        // There are situations where magento application backend url could be slightly different from the environment
+        // variable we know. It could be intentionally (e.g. InstallTest) or unintentionally. We would still want tests
+        // to run in this case.
+        // When the original app_backend_url does not work, we will try 4 variants of the it. i.e. with and without
+        // url rewrite, http and https.
+        $urls = [];
+        $originalUrl = rtrim($_ENV['app_backend_url'], '/') . '/';
+        $urls[] = $originalUrl;
+        // It could be the case that the page needs a refresh, so we will try the original one twice.
+        $urls[] = $originalUrl;
+        if (strpos($originalUrl, '/index.php') !== false) {
+            $url2 = str_replace('/index.php', '', $originalUrl);
+        } else {
+            $url2 = $originalUrl . 'index.php/';
+        }
+        $urls[] = $url2;
+        if (strpos($originalUrl, 'https') !== false) {
+            $urls[] = str_replace('https', 'http', $originalUrl);
+            $urls[] = str_replace('https', 'http', $url2);
+        } else {
+            $urls[] = str_replace('http', 'https', $originalUrl);
+            $urls[] = str_replace('http', 'https', $url2);
+        }
 
-        $url = $_ENV['app_backend_url'] . $this->configuration->get('application/0/backendLoginUrl/0/value');
-        $data = [
-            'login[username]' => $this->configuration->get('application/0/backendLogin/0/value'),
-            'login[password]' => $this->configuration->get('application/0/backendPassword/0/value'),
-            'form_key' => $this->formKey,
-        ];
-        $this->transport->write($url, $data, CurlInterface::POST);
-        $response = $this->read();
-        if (strpos($response, 'page-login')) {
-            throw new \Exception(
-                'Admin user cannot be logged in by curl handler!'
-            );
+        $isAuthorized = false;
+        foreach ($urls as $url) {
+            try {
+                // Perform GET to backend url so form_key is set
+                $this->transport->write($url, [], CurlInterface::GET);
+                $this->read();
+
+                $authUrl = $url . $this->configuration->get('application/0/backendLoginUrl/0/value');
+                $data = [
+                    'login[username]' => $this->configuration->get('application/0/backendLogin/0/value'),
+                    'login[password]' => $this->configuration->get('application/0/backendPassword/0/value'),
+                    'form_key' => $this->formKey,
+                ];
+
+                $this->transport->write($authUrl, $data, CurlInterface::POST);
+                $response = $this->read();
+                if (strpos($response, 'login-form') !== false) {
+                    continue;
+                }
+                $isAuthorized = true;
+                $_ENV['app_backend_url'] = $url;
+                break;
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+        if ($isAuthorized == false) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new \Exception('Admin user cannot be logged in by curl handler!');
         }
     }
 
@@ -111,6 +147,7 @@ class BackendDecorator implements CurlInterface
         if ($this->formKey) {
             $params['form_key'] = $this->formKey;
         } else {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(sprintf('Form key is absent! Url: "%s" Response: "%s"', $url, $this->response));
         }
         $this->transport->write($url, http_build_query($params), $method, $headers);

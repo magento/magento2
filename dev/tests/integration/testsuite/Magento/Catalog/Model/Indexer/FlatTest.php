@@ -1,12 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer;
 
-class FlatTest extends \PHPUnit_Framework_TestCase
+use Magento\TestFramework\Helper\Bootstrap;
+
+/**
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
+ */
+class FlatTest extends \Magento\TestFramework\Indexer\TestCase
 {
+    /**
+     * @var int
+     */
+    private static $defaultCategoryId = 2;
+
     /**
      * @var int
      */
@@ -41,33 +52,31 @@ class FlatTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var int
+     * @deprecated
      */
     protected static $totalBefore = 0;
 
     public static function setUpBeforeClass()
     {
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            2
-        );
-
         self::loadAttributeCodes();
-        self::loadAttributeValues($category);
+
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
     }
 
     public function testEntityItemsBefore()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        );
-
+        $category = $this->instantiateCategoryModel();
         $result = $category->getCollection()->getAllIds();
         $this->assertNotEmpty($result);
         $this->assertTrue(is_array($result));
-
-        self::$totalBefore = count($result);
     }
 
     /**
@@ -75,24 +84,21 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
+     *
+     * @magentoDbIsolation disabled
      */
     public function testReindexAll()
     {
         /** @var  $indexer \Magento\Framework\Indexer\IndexerInterface */
         $indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Indexer\Model\Indexer'
+            \Magento\Indexer\Model\Indexer::class
         );
         $indexer->load('catalog_category_flat');
         $indexer->reindexAll();
         $this->assertTrue($indexer->isValid());
 
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            2
-        );
-        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Flat', $category->getResource());
+        $category = $this->getLoadedDefaultCategory();
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
         $this->checkCategoryData($category);
     }
 
@@ -102,14 +108,8 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      */
     public function testFlatItemsBefore()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            2
-        );
-
-        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Flat', $category->getResource());
+        $category = $this->getLoadedDefaultCategory();
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
@@ -117,43 +117,23 @@ class FlatTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Populate EAV category data
+     * Populate EAV category data`
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
+     *
+     * @magentoDbIsolation disabled
      */
     public function testCreateCategory()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        );
-        $category->load(2);
+        $this->createSubCategoriesInDefaultCategory();
 
-        /** @var \Magento\Catalog\Model\Category $categoryOne */
-        $categoryOne = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        );
-        $categoryOne->setName('Category One')->setPath($category->getPath())->setIsActive(true)->save();
-        self::loadAttributeValues($categoryOne);
-
-        self::$categoryOne = $categoryOne->getId();
-
-        /** @var \Magento\Catalog\Model\Category $categoryTwo */
-        $categoryTwo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        );
-
-        $categoryTwo->setName('Category Two')->setPath($categoryOne->getPath())->setIsActive(true)->save();
-
-        self::loadAttributeValues($categoryTwo);
-
-        self::$categoryTwo = $categoryTwo->getId();
-
-        $result = $category->getCollection()->getItems();
+        $result = $this->getLoadedDefaultCategory()->getCollection()->getItems();
         $this->assertTrue(is_array($result));
 
-        $this->assertEquals($category->getId(), $result[self::$categoryOne]->getParentId());
+        $this->assertEquals(self::$defaultCategoryId, $result[self::$categoryOne]->getParentId());
         $this->assertEquals(self::$categoryOne, $result[self::$categoryTwo]->getParentId());
+
+        $this->removeSubCategoriesInDefaultCategory();
     }
 
     /**
@@ -163,32 +143,22 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
      *
-     * @depends testCreateCategory
+     * @magentoDbIsolation disabled
      */
     public function testFlatAfterCreate()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            2
-        );
+        $this->createSubCategoriesInDefaultCategory();
 
-        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Flat', $category->getResource());
+        $category = $this->getLoadedDefaultCategory();
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
         $this->assertCount(3, $result);
         $this->assertContains(self::$categoryOne, $result);
 
-        /** @var \Magento\Catalog\Model\Category $categoryOne */
-        $categoryOne = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            self::$categoryOne
-        );
-
-        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Flat', $categoryOne->getResource());
+        $categoryOne = $this->getLoadedCategory(self::$categoryOne);
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $categoryOne->getResource());
 
         $result = $categoryOne->getAllChildren(true);
         $this->assertNotEmpty($result);
@@ -196,54 +166,29 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(self::$categoryTwo, $result);
         $this->checkCategoryData($categoryOne);
 
-        /** @var \Magento\Catalog\Model\Category $categoryTwo */
-        $categoryTwo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            self::$categoryTwo
-        );
-
-        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Flat', $categoryTwo->getResource());
+        $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $categoryTwo->getResource());
 
         $this->assertEquals(self::$categoryOne, $categoryTwo->getParentId());
         $this->checkCategoryData($categoryTwo);
+
+        $this->removeSubCategoriesInDefaultCategory();
     }
 
     /**
      * Move category and populate EAV category data
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
+     *
+     * @magentoDbIsolation disabled
      */
     public function testMoveCategory()
     {
-        /** @var \Magento\Catalog\Model\Category $categoryTwo */
-        $categoryTwo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            self::$categoryTwo
-        );
+        $this->moveSubCategoriesInDefaultCategory();
+        $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
+        $this->assertEquals($categoryTwo->getData('parent_id'), self::$defaultCategoryId);
 
-        $this->assertEquals($categoryTwo->getData('parent_id'), self::$categoryOne);
-
-        $categoryTwo->move(2, self::$categoryOne);
-        self::loadAttributeValues($categoryTwo);
-
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            2
-        );
-
-        self::loadAttributeValues($category);
-
-        $categoryOne = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            self::$categoryOne
-        );
-        self::loadAttributeValues($categoryOne);
-
-        $this->assertEquals($categoryTwo->getData('parent_id'), 2);
+        $this->removeSubCategoriesInDefaultCategory();
     }
 
     /**
@@ -253,40 +198,27 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
      *
-     * @depends testMoveCategory
+     * @magentoDbIsolation disabled
      */
     public function testFlatAfterMove()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            2
-        );
+        $this->moveSubCategoriesInDefaultCategory();
 
-        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Flat', $category->getResource());
-
+        $category = $this->getLoadedDefaultCategory();
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
         $this->checkCategoryData($category);
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
         $this->assertCount(3, $result);
 
-        /** @var \Magento\Catalog\Model\Category $categoryTwo */
-        $categoryTwo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            self::$categoryTwo
-        );
+        $categoryOne = $this->getLoadedCategory(self::$categoryOne);
+        $this->checkCategoryData($categoryOne);
+
+        $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
         $this->checkCategoryData($categoryTwo);
 
-        /** @var \Magento\Catalog\Model\Category $categoryOne */
-        $categoryOne = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            self::$categoryOne
-        );
-        $this->checkCategoryData($categoryOne);
+        $this->removeSubCategoriesInDefaultCategory();
     }
 
     /**
@@ -297,21 +229,15 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteCategory()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        );
+        $countBeforeModification = count($this->instantiateCategoryModel()->getCollection()->getAllIds());
 
-        $category->load(self::$categoryTwo);
-        $category->delete();
+        $this->deleteSubCategoriesInDefaultCategory();
 
-        $category->load(self::$categoryOne);
-        $category->delete();
-
+        $category = $this->instantiateCategoryModel();
         $result = $category->getCollection()->getAllIds();
         $this->assertNotEmpty($result);
         $this->assertTrue(is_array($result));
-        $this->assertCount(self::$totalBefore, $result);
+        $this->assertCount($countBeforeModification, $result);
     }
 
     /**
@@ -320,19 +246,14 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
-     *
-     * @depends testDeleteCategory
+     * @magentoDbIsolation disabled
      */
     public function testFlatAfterDeleted()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        )->load(
-            2
-        );
+        $this->deleteSubCategoriesInDefaultCategory();
 
-        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Flat', $category->getResource());
+        $category = $this->getLoadedDefaultCategory();
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
@@ -361,7 +282,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Config $catalogConfig */
         $catalogConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Config'
+            \Magento\Catalog\Model\Config::class
         );
         $attributeCodes = $catalogConfig->getEntityAttributeCodes(\Magento\Catalog\Model\Category::ENTITY);
 
@@ -387,5 +308,173 @@ class FlatTest extends \PHPUnit_Framework_TestCase
                 "Data for {$category->getId()} attribute code [{$attributeCode}] is wrong"
             );
         }
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Category
+     */
+    private function getLoadedDefaultCategory()
+    {
+        $category = $this->getLoadedCategory(self::$defaultCategoryId);
+
+        return $category;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return \Magento\Catalog\Model\Category
+     */
+    private function getLoadedCategory($categoryId)
+    {
+        $category = $this->instantiateCategoryModel();
+        $category->load($categoryId);
+        self::loadAttributeValues($category);
+        return $category;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Category
+     */
+    private function instantiateCategoryModel()
+    {
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Category::class
+        );
+    }
+
+    /**
+     * Invoke business logic:
+     * - create child category in the Default category
+     * - create child category in category created in previous step
+     */
+    private function createSubCategoriesInDefaultCategory()
+    {
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $category = $this->getLoadedDefaultCategory();
+
+                $categoryOne = $this->instantiateCategoryModel();
+                $categoryOne->setName('Category One')->setPath($category->getPath())->setIsActive(true);
+                $category->getResource()->save($categoryOne);
+                self::$categoryOne = $categoryOne->getId();
+
+                $categoryTwo = $this->instantiateCategoryModel();
+                $categoryTwo->setName('Category Two')->setPath($categoryOne->getPath())->setIsActive(true);
+                $category->getResource()->save($categoryTwo);
+                self::$categoryTwo = $categoryTwo->getId();
+            }
+        );
+    }
+
+    /**
+     * Invoke business logic:
+     * - create child category in the Default category
+     * - create child category in category created in previous step
+     * - move category created on previous step to default category
+     */
+    private function moveSubCategoriesInDefaultCategory()
+    {
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $this->createSubCategoriesInDefaultCategory();
+                $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
+                $categoryTwo->move(self::$defaultCategoryId, self::$categoryOne);
+            }
+        );
+    }
+
+    /**
+     * Invoke business logic:
+     * - create child category in the Default category
+     * - create child category in category created in previous step
+     * - delete created categories
+     */
+    private function deleteSubCategoriesInDefaultCategory()
+    {
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $this->createSubCategoriesInDefaultCategory();
+                $this->removeSubCategoriesInDefaultCategory();
+            }
+        );
+    }
+
+    /**
+     * Invoke business logic:
+     * - delete created categories
+     */
+    private function removeSubCategoriesInDefaultCategory()
+    {
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $category = $this->instantiateCategoryModel();
+                $category->load(self::$categoryTwo);
+                $category->delete();
+                $category->load(self::$categoryOne);
+                $category->delete();
+            }
+        );
+    }
+
+    /**
+     * Execute callable in an adminhtml area with enabled flat catalog.
+     * After execution area and config option for flat catalog would be restored.
+     *
+     * @param callable $task
+     */
+    private function executeWithFlatEnabledInAdminArea(callable $task)
+    {
+        $app = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication();
+
+        $invocationConfigValue = $this->getActiveConfigInstance()->getValue(
+            'catalog/frontend/flat_catalog_category',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $invocationArea = $app->getArea();
+
+        $this->switchAppArea($app, 'adminhtml');
+        $this->getActiveConfigInstance()->setValue(
+            'catalog/frontend/flat_catalog_category',
+            true,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        call_user_func($task);
+        $this->switchAppArea($app, $invocationArea);
+        $this->getActiveConfigInstance()->setValue(
+            'catalog/frontend/flat_catalog_category',
+            $invocationConfigValue,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Change application area if necessary
+     *
+     * @param \Magento\TestFramework\Application $app
+     * @param string $expectedArea
+     */
+    private function switchAppArea(\Magento\TestFramework\Application $app, $expectedArea)
+    {
+        if ($app->getArea() === $expectedArea) {
+            return;
+        }
+
+        $app->reinitialize();
+        if ($app->getArea() === $expectedArea) {
+            return;
+        }
+        $app->loadArea($expectedArea);
+    }
+
+    /**
+     * Retrieve config object instance that is currently in use by application
+     *
+     * @return \Magento\Framework\App\Config\MutableScopeConfigInterface
+     */
+    private function getActiveConfigInstance()
+    {
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
+        );
     }
 }

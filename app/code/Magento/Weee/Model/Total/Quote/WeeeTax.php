@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model\Total\Quote;
@@ -47,7 +47,7 @@ class WeeeTax extends Weee
             $this->processTotalAmount($total, $weeeTotal, $weeeBaseTotal, $weeeTotal, $weeeBaseTotal);
             return $this;
         }
-        
+
         $extraTaxableDetails = $total->getExtraTaxableDetails();
 
         if (isset($extraTaxableDetails[self::ITEM_TYPE])) {

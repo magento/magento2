@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo;
 
-class Index extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Index
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Index as AbstractIndex;
+
+class Index extends AbstractIndex implements HttpGetActionInterface
 {
     /**
      * Index page

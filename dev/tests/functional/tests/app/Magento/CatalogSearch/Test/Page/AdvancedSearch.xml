@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -15,5 +15,6 @@
             <render name="Dropdown" class="Magento\CatalogSearch\Test\Block\Advanced\CustomAttribute\Select" />
         </block>
         <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector" />
+        <block name="messagesBlock" class="Magento\Cms\Test\Block\Messages" locator="#messages" strategy="css selector"/>
     </page>
 </config>

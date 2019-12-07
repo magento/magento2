@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -37,6 +37,7 @@
             border-color: @steps-wizard-attribute-entity__active__border-color;
             cursor: -moz-grabbing;
             cursor: -webkit-grabbing;
+
             .draggable-handle {
                 cursor: -moz-grabbing;
                 cursor: -webkit-grabbing;
@@ -120,13 +121,16 @@
         .action-remove {
             .action-icon();
             padding: 0 @indent__xs;
+
             &:before {
                 &:extend(.abs-icon all);
                 content: @steps-wizard-attribute-entity-action-save__content;
             }
+
             &:hover {
                 color: @steps-wizard-attribute-entity-action-save__hover__content;
             }
+
             > span {
                 display: none;
             }

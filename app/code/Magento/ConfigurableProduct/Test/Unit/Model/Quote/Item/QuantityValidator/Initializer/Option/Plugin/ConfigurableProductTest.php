@@ -1,59 +1,54 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin;
 
-class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
+use Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct
+    as InitializerOptionPlugin;
+
+class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $data
-     * @dataProvider aroundGetStockItemDataProvider
+     * @dataProvider afterGetStockItemDataProvider
      */
-    public function testAroundGetStockItem(array $data)
+    public function testAfterGetStockItem(array $data)
     {
-        $subjectMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option',
-            [],
-            [],
-            '',
-            false
+        $subjectMock = $this->createMock(
+            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class
         );
 
-        $quoteItemMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item', ['getProductType', '__wakeup'], [], '', false
+        $quoteItemMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            ['getProductType', '__wakeup']
         );
         $quoteItemMock->expects($this->once())
             ->method('getProductType')
             ->will($this->returnValue($data['product_type']));
 
-        $stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item', ['setProductName', '__wakeup'], [], '', false
+        $stockItemMock = $this->createPartialMock(
+            \Magento\CatalogInventory\Model\Stock\Item::class,
+            ['setProductName', '__wakeup']
         );
         $matcherMethod = $data['matcher_method'];
         $stockItemMock->expects($this->$matcherMethod())
             ->method('setProductName');
 
-        $optionMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item\Option', ['getProduct', '__wakeup'], [], '', false
+        $optionMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Item\Option::class,
+            ['getProduct', '__wakeup']
         );
 
-        $proceed = function () use ($stockItemMock) {
-            return $stockItemMock;
-        };
-
-        $model = new \Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct();
-        $model->aroundGetStockItem($subjectMock, $proceed, $optionMock, $quoteItemMock, 0);
+        $model = new InitializerOptionPlugin();
+        $model->afterGetStockItem($subjectMock, $stockItemMock, $optionMock, $quoteItemMock, 0);
     }
 
     /**
      * @return array
      */
-    public function aroundGetStockItemDataProvider()
+    public function afterGetStockItemDataProvider()
     {
         return [
             [

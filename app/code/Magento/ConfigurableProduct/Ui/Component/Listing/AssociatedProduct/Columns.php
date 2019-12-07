@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
-    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface
+     */
     protected $attributeRepository;
 
     /**
@@ -36,8 +38,8 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         foreach ($this->attributeRepository->getList() as $attribute) {
             $column = $this->columnFactory->create($attribute, $this->getContext());
-                $column->prepare();
-                $this->addComponent($attribute->getAttributeCode(), $column);
+            $column->prepare();
+            $this->addComponent($attribute->getAttributeCode(), $column);
         }
         parent::prepare();
     }

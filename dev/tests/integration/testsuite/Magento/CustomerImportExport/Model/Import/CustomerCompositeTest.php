@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -8,7 +8,10 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
-class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for CustomerComposite import class
+ */
+class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Attributes used in test assertions
@@ -83,7 +86,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_entityAdapter = $this->_objectManager->create(
-            'Magento\CustomerImportExport\Model\Import\CustomerComposite'
+            \Magento\CustomerImportExport\Model\Import\CustomerComposite::class
         );
     }
 
@@ -95,7 +98,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected function _assertCustomerData(array $expectedData)
     {
         /** @var $collection \Magento\Customer\Model\ResourceModel\Customer\Collection */
-        $collection = $this->_objectManager->create('Magento\Customer\Model\ResourceModel\Customer\Collection');
+        $collection = $this->_objectManager->create(\Magento\Customer\Model\ResourceModel\Customer\Collection::class);
         $collection->addAttributeToSelect($this->_customerAttributes);
         $customers = $collection->getItems();
 
@@ -129,6 +132,9 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      * @param string $sourceFile
      * @param array $dataBefore
      * @param array $dataAfter
+     * @param int $updatedItemsCount
+     * @param int $createdItemsCount
+     * @param int $deletedItemsCount
      * @param array $errors
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers_for_address_import.php
@@ -136,14 +142,22 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider importDataDataProvider
      */
-    public function testImportData($behavior, $sourceFile, array $dataBefore, array $dataAfter, array $errors = [])
-    {
+    public function testImportData(
+        $behavior,
+        $sourceFile,
+        array $dataBefore,
+        array $dataAfter,
+        $updatedItemsCount,
+        $createdItemsCount,
+        $deletedItemsCount,
+        array $errors = []
+    ) {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         // set entity adapter parameters
         $this->_entityAdapter->setParameters(['behavior' => $behavior]);
         /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = $this->_objectManager->create('Magento\Framework\Filesystem');
+        $filesystem = $this->_objectManager->create(\Magento\Framework\Filesystem::class);
         $rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $this->_entityAdapter->getErrorAggregator()->initValidationStrategy(
@@ -173,6 +187,9 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         // import data
         $this->_entityAdapter->importData();
+        $this->assertSame($updatedItemsCount, $this->_entityAdapter->getUpdatedItemsCount());
+        $this->assertSame($createdItemsCount, $this->_entityAdapter->getCreatedItemsCount());
+        $this->assertSame($deletedItemsCount, $this->_entityAdapter->getDeletedItemsCount());
 
         // assert data after import
         $this->_assertCustomerData($dataAfter);
@@ -192,6 +209,10 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
                 '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
                 '$dataBefore' => $this->_beforeImport,
                 '$dataAfter' => [],
+                '$updatedItemsCount' => 0,
+                '$createdItemsCount' => 0,
+                '$deletedItemsCount' => 1,
+                '$errors' => [],
             ],
         ];
 
@@ -200,6 +221,9 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
             '$dataBefore' => $this->_beforeImport,
             '$dataAfter' => $this->_afterImport,
+            '$updatedItemsCount' => 1,
+            '$createdItemsCount' => 3,
+            '$deletedItemsCount' => 0,
             '$errors' => [],
         ];
 

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -20,6 +20,20 @@
                 &:extend(.abs-field-tooltip all);
             }
         }
+
+        &.choice {
+            .field-tooltip {
+                display: inline-block;
+                margin-left: @indent__s;
+                position: relative;
+                top: -3px;
+            }
+
+            .field-tooltip-action {
+                .lib-css(line-height, @checkout-tooltip-icon__font-size);
+            }
+        }
+
         &._error {
             .control {
                 input,
@@ -30,36 +44,12 @@
             }
         }
     }
+
     .opc-wrapper {
         .fieldset {
             > .field {
                 > .label {
                     font-weight: @font-weight__regular;
-                }
-            }
-        }
-    }
-}
-
-//
-//  Desktop
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    //  ToDo UI: remove with global blank theme .field.required update
-    .opc-wrapper {
-        .fieldset {
-            > .field {
-                &.required {
-                    position: relative;
-                    > label {
-                        padding-right: 25px;
-                        &:after {
-                            margin-left: @indent__s;
-                            position: absolute;
-                            top: 9px;
-                        }
-                    }
                 }
             }
         }

@@ -1,19 +1,47 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Sales\Order\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Order item render block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
+    /**
+     * Serializer
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
+        array $data = [],
+        Json $serializer = null
+    ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Json::class);
+
+        parent::__construct($context, $string, $productOptionFactory, $data);
+    }
+
     /**
      * @param mixed $item
      * @return bool
@@ -100,7 +128,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
             $options = $item->getOrderItem()->getProductOptions();
         }
         if (isset($options['bundle_selection_attributes'])) {
-            return unserialize($options['bundle_selection_attributes']);
+            return $this->serializer->unserialize($options['bundle_selection_attributes']);
         }
         return null;
     }
@@ -114,9 +142,8 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
         if ($attributes = $this->getSelectionAttributes($item)) {
             return sprintf('%d', $attributes['qty']) . ' x ' . $this->escapeHtml($item->getName()) . " "
                 . $this->getOrder()->formatPrice($attributes['price']);
-        } else {
-            return $this->escapeHtml($item->getName());
         }
+        return $this->escapeHtml($item->getName());
     }
 
     /**
@@ -151,9 +178,8 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 
         if (isset($itemsArray[$item->getOrderItem()->getId()])) {
             return $itemsArray[$item->getOrderItem()->getId()];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**

@@ -1,18 +1,28 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Option;
 
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPoolMock;
+
     /**
      * @var Collection
      */
@@ -49,6 +59,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $joinProcessor;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
@@ -65,32 +80,32 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock(
-            'Magento\Framework\Data\Collection\EntityFactory', ['create'], [], '', false
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->entityFactoryMock = $this->createPartialMock(
+            \Magento\Framework\Data\Collection\EntityFactory::class,
+            ['create']
         );
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->fetchStrategyMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db\FetchStrategy\Query', ['fetchAll'], [], '', false
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->fetchStrategyMock = $this->createPartialMock(
+            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
+            ['fetchAll']
         );
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
-        $this->optionsFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $this->optionsFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class,
+            ['create']
         );
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->resourceMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Option',
-            ['getConnection', '__wakeup', 'getMainTable', 'getTable'],
-            [],
-            '',
-            false
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->joinProcessor = $this->getMockBuilder(
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
+        )->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option::class,
+            ['getConnection', '__wakeup', 'getMainTable', 'getTable']
         );
-        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'reset'], [], '', false);
+        $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'reset', 'join']);
         $this->connection =
-            $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['select'], [], '', false);
+            $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['select']);
         $this->connection->expects($this->once())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
@@ -100,10 +115,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')
             ->will($this->returnValue('test_main_table'));
-        $this->resourceMock->expects($this->once())
+        $this->resourceMock->expects($this->exactly(3))
             ->method('getTable')
-            ->with('test_main_table')
-            ->will($this->returnValue('test_main_table'));
+            ->withConsecutive(
+                ['test_main_table'],
+                ['catalog_product_entity'],
+                ['catalog_product_entity']
+            )->willReturnOnConsecutiveCalls(
+                $this->returnValue('test_main_table'),
+                'catalog_product_entity',
+                'catalog_product_entity'
+            );
+        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $metadata = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
+        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
+        $this->selectMock->expects($this->exactly(2))->method('join');
 
         $this->collection = new Collection(
             $this->entityFactoryMock,
@@ -113,7 +140,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->optionsFactoryMock,
             $this->storeManagerMock,
             null,
-            $this->resourceMock
+            $this->resourceMock,
+            $this->metadataPoolMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->collection,
+            'joinProcessor',
+            $this->joinProcessor
         );
     }
 

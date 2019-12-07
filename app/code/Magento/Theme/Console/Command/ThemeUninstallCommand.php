@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Console\Command;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache;
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
@@ -38,13 +39,6 @@ class ThemeUninstallCommand extends Command
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
     const INPUT_KEY_THEMES = 'theme';
     const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
-
-    /**
-     * Maintenance Mode
-     *
-     * @var MaintenanceMode
-     */
-    private $maintenanceMode;
 
     /**
      * Composer general dependency checker
@@ -117,12 +111,17 @@ class ThemeUninstallCommand extends Command
     private $themeDependencyChecker;
 
     /**
+     * @var MaintenanceModeEnabler
+     */
+    private $maintenanceModeEnabler;
+
+    /**
      * Constructor
      *
      * @param Cache $cache
      * @param CleanupFiles $cleanupFiles
      * @param ComposerInformation $composer
-     * @param MaintenanceMode $maintenanceMode
+     * @param MaintenanceMode $maintenanceMode deprecated, use $maintenanceModeEnabler instead
      * @param DependencyChecker $dependencyChecker
      * @param Collection $themeCollection
      * @param BackupRollbackFactory $backupRollbackFactory
@@ -130,6 +129,9 @@ class ThemeUninstallCommand extends Command
      * @param ThemePackageInfo $themePackageInfo
      * @param ThemeUninstaller $themeUninstaller
      * @param ThemeDependencyChecker $themeDependencyChecker
+     * @param MaintenanceModeEnabler $maintenanceModeEnabler
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Cache $cache,
@@ -142,12 +144,12 @@ class ThemeUninstallCommand extends Command
         ThemeValidator $themeValidator,
         ThemePackageInfo $themePackageInfo,
         ThemeUninstaller $themeUninstaller,
-        ThemeDependencyChecker $themeDependencyChecker
+        ThemeDependencyChecker $themeDependencyChecker,
+        MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;
         $this->composer = $composer;
-        $this->maintenanceMode = $maintenanceMode;
         $this->dependencyChecker = $dependencyChecker;
         $this->themeCollection = $themeCollection;
         $this->backupRollbackFactory = $backupRollbackFactory;
@@ -155,6 +157,8 @@ class ThemeUninstallCommand extends Command
         $this->themePackageInfo = $themePackageInfo;
         $this->themeUninstaller = $themeUninstaller;
         $this->themeDependencyChecker = $themeDependencyChecker;
+        $this->maintenanceModeEnabler =
+            $maintenanceModeEnabler ?: ObjectManager::getInstance()->get(MaintenanceModeEnabler::class);
         parent::__construct();
     }
 
@@ -196,7 +200,8 @@ class ThemeUninstallCommand extends Command
         $messages = array_merge($messages, $this->validate($themePaths));
         if (!empty($messages)) {
             $output->writeln($messages);
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         $messages = array_merge(
             $messages,
@@ -209,28 +214,36 @@ class ThemeUninstallCommand extends Command
                 '<error>Unable to uninstall. Please resolve the following issues:</error>'
                 . PHP_EOL . implode(PHP_EOL, $messages)
             );
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        try {
-            $output->writeln('<info>Enabling maintenance mode</info>');
-            $this->maintenanceMode->set(true);
-            if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
-                $time = time();
-                $codeBackup = $this->backupRollbackFactory->create($output);
-                $codeBackup->codeBackup($time);
-            }
+        $result = $this->maintenanceModeEnabler->executeInMaintenanceMode(
+            function () use ($input, $output, $themePaths) {
+                try {
+                    if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
+                        $time = time();
+                        $codeBackup = $this->backupRollbackFactory->create($output);
+                        $codeBackup->codeBackup($time);
+                    }
 
-            $this->themeUninstaller->uninstallRegistry($output, $themePaths);
-            $this->themeUninstaller->uninstallCode($output, $themePaths);
+                    $this->themeUninstaller->uninstallRegistry($output, $themePaths);
+                    $this->themeUninstaller->uninstallCode($output, $themePaths);
 
-            $this->cleanup($input, $output);
-            $output->writeln('<info>Disabling maintenance mode</info>');
-            $this->maintenanceMode->set(false);
-        } catch (\Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
-        }
+                    $this->cleanup($input, $output);
+                    return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+                } catch (\Exception $e) {
+                    $output->writeln('<error>' . $e->getMessage() . '</error>');
+                    $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
+                    // we must have an exit code higher than zero to indicate something was wrong
+                    return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+                }
+            },
+            $output,
+            true
+        );
+
+        return $result;
     }
 
     /**
@@ -242,27 +255,84 @@ class ThemeUninstallCommand extends Command
     private function validate($themePaths)
     {
         $messages = [];
-        $unknownPackages = [];
-        $unknownThemes = [];
-        $installedPackages = $this->composer->getRootRequiredPackages();
-        foreach ($themePaths as $themePath) {
-            if (array_search($this->themePackageInfo->getPackageName($themePath), $installedPackages) === false) {
-                $unknownPackages[] = $themePath;
-            }
-            if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
-                $unknownThemes[] = $themePath;
-            }
+
+        $incorrectThemes = $this->getIncorrectThemes($themePaths);
+        if (!empty($incorrectThemes)) {
+            $text = 'Theme path should be specified as full path which is area/vendor/name.';
+            $messages[] = '<error>Incorrect theme(s) format: ' . implode(', ', $incorrectThemes)
+                . '. ' . $text . '</error>';
+            return $messages;
         }
+
+        $unknownPackages = $this->getUnknownPackages($themePaths);
+        $unknownThemes = $this->getUnknownThemes($themePaths);
+
         $unknownPackages = array_diff($unknownPackages, $unknownThemes);
         if (!empty($unknownPackages)) {
             $text = count($unknownPackages) > 1 ?
                 ' are not installed Composer packages' : ' is not an installed Composer package';
             $messages[] = '<error>' . implode(', ', $unknownPackages) . $text . '</error>';
         }
+
         if (!empty($unknownThemes)) {
             $messages[] = '<error>Unknown theme(s): ' . implode(', ', $unknownThemes) . '</error>';
         }
+
         return $messages;
+    }
+
+    /**
+     * Retrieve list of themes with wrong name format
+     *
+     * @param string[] $themePaths
+     * @return string[]
+     */
+    protected function getIncorrectThemes($themePaths)
+    {
+        $result = [];
+        foreach ($themePaths as $themePath) {
+            if (!preg_match('/^[^\/]+\/[^\/]+\/[^\/]+$/', $themePath)) {
+                $result[] = $themePath;
+                continue;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Retrieve list of unknown packages
+     *
+     * @param string[] $themePaths
+     * @return string[]
+     */
+    protected function getUnknownPackages($themePaths)
+    {
+        $installedPackages = $this->composer->getRootRequiredPackages();
+
+        $result = [];
+        foreach ($themePaths as $themePath) {
+            if (array_search($this->themePackageInfo->getPackageName($themePath), $installedPackages) === false) {
+                $result[] = $themePath;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Retrieve list of unknown themes
+     *
+     * @param string[] $themePaths
+     * @return string[]
+     */
+    protected function getUnknownThemes($themePaths)
+    {
+        $result = [];
+        foreach ($themePaths as $themePath) {
+            if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
+                $result[] = $themePath;
+            }
+        }
+        return $result;
     }
 
     /**

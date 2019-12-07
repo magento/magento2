@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
@@ -18,6 +18,13 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
 
 abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+
     /**
      * @var FileFactory
      */
@@ -57,23 +64,18 @@ abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\Ab
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
-    }
-
-    /**
      * @param AbstractCollection $collection
      * @return $this|ResponseInterface
      * @throws \Exception
      */
     public function massAction(AbstractCollection $collection)
     {
+        $pdf = $this->pdfShipment->getPdf($collection);
+        $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
+
         return $this->fileFactory->create(
             sprintf('packingslip%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
-            $this->pdfShipment->getPdf($collection)->render(),
+            $fileContent,
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

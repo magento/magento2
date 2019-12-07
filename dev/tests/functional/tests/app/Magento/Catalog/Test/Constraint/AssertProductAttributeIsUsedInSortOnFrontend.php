@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class AssertProductAttributeIsUsedInSortOnFrontend extends AbstractConstraint
             ? $attribute->getManageFrontendLabel()
             : $attribute->getFrontendLabel();
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             in_array($label, $catalogsearchResult->getListProductBlock()->getSortByValues()),
             'Attribute is absent in sort dropdown on search results page on frontend.'
         );

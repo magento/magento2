@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Product\TypeHandler;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\ComponentInterface;
 
 /**
  * Class Link
+ * @api
+ * @since 100.0.2
  */
 class Link extends AbstractTypeHandler
 {
@@ -31,7 +34,7 @@ class Link extends AbstractTypeHandler
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
-     * @param \Magento\Downloadable\Model\ComponentInterfaceFactory $linkFactory
+     * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link $linkResource
      */
     public function __construct(
@@ -102,7 +105,9 @@ class Link extends AbstractTypeHandler
         )->setLinkType(
             $data['type']
         )->setProductId(
-            $product->getId()
+            $product->getData(
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+            )
         )->setStoreId(
             $product->getStoreId()
         )->setWebsiteId(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\GroupedProduct\Test\Block\Checkout\Cart;
 
 use Magento\Checkout\Test\Block\Cart\AbstractCartItem;
 use Magento\Checkout\Test\Block\Cart\CartItem as CheckoutCartItem;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class CartItem
@@ -118,5 +119,58 @@ class CartItem extends AbstractCartItem
             /** @var CheckoutCartItem $cartItem */
             $cartItem->removeItem();
         }
+    }
+
+    /**
+     * Get product price including tax
+     *
+     * @return string|null
+     */
+    public function getPriceInclTax()
+    {
+        return $this->getPriceByType($this->priceInclTax, Locator::SELECTOR_XPATH);
+    }
+
+    /**
+     * Get product price excluding tax
+     *
+     * @return string|null
+     */
+    public function getPriceExclTax()
+    {
+        return $this->getPriceByType($this->priceExclTax, Locator::SELECTOR_XPATH);
+    }
+
+    /**
+     * Get sub-total excluding tax for the specified item in the cart
+     *
+     * @return string|null
+     */
+    public function getSubtotalPriceExclTax()
+    {
+        return $this->getPriceByType($this->subTotalPriceExclTax);
+    }
+
+    /**
+     * Get price for the specified item in the cart by the price type
+     *
+     * @return string|null
+     */
+    public function getSubtotalPriceInclTax()
+    {
+        return $this->getPriceByType($this->subTotalPriceInclTax);
+    }
+
+    /**
+     * @param string $priceType
+     * @param string $strategy
+     * @return mixed|null
+     */
+    private function getPriceByType($priceType, $strategy = Locator::SELECTOR_CSS)
+    {
+        $cartProductPrice = $this->_rootElement->find($priceType, $strategy);
+        return $cartProductPrice->isVisible()
+            ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
+            : null;
     }
 }

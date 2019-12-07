@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
             <field name="title" xsi:type="string">page-%isolation%</field>
             <field name="identifier" xsi:type="string">page-%isolation%</field>
             <field name="store_id" xsi:type="string">All Store Views</field>
-            <field name="is_active" xsi:type="string">Enabled</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="content" xsi:type="array">
                 <item name="content" xsi:type="string">Test Content</item>
             </field>
@@ -23,7 +23,7 @@
             <field name="title" xsi:type="string">404 Not Found 1 Test%isolation%</field>
             <field name="identifier" xsi:type="string">home</field>
             <field name="store_id" xsi:type="string">All Store Views</field>
-            <field name="is_active" xsi:type="string">Enabled</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="content" xsi:type="array">
                 <item name="content" xsi:type="string">Test Content</item>
             </field>
@@ -35,7 +35,7 @@
             <field name="title" xsi:type="string">page-compare-%isolation%</field>
             <field name="identifier" xsi:type="string">page-compare-%isolation%</field>
             <field name="store_id" xsi:type="string">All Store Views</field>
-            <field name="is_active" xsi:type="string">Enabled</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="content" xsi:type="array">
                 <item name="content" xsi:type="string">Test Content</item>
             </field>
@@ -46,7 +46,7 @@
             <field name="title" xsi:type="string">page_%isolation%</field>
             <field name="identifier" xsi:type="string">page_%isolation%</field>
             <field name="store_id" xsi:type="string">All Store Views</field>
-            <field name="is_active" xsi:type="string">Enabled</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="content" xsi:type="array">
                 <item name="content" xsi:type="string">Test Content</item>
             </field>

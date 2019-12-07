@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Edit;
@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Block\Catalog\Edit;
  * Test for \Magento\UrlRewrite\Block\Catalog\Edit\Form
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -31,11 +31,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = $this->objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\UrlRewrite\Block\Catalog\Edit\Form */
         $block = $layout->createBlock(
-            'Magento\UrlRewrite\Block\Catalog\Edit\Form',
+            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
             'block',
             ['data' => $args]
         );
@@ -64,13 +64,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $args = [];
         if ($productData) {
             $args['product'] = $this->objectManager->create(
-                'Magento\Catalog\Model\Product',
+                \Magento\Catalog\Model\Product::class,
                 ['data' => $productData]
             );
         }
         if ($categoryData) {
             $args['category'] = $this->objectManager->create(
-                'Magento\Catalog\Model\Category',
+                \Magento\Catalog\Model\Category::class,
                 ['data' => $categoryData]
             );
         }
@@ -99,13 +99,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $args = [];
         if ($productData) {
             $args['product'] = $this->objectManager->create(
-                'Magento\Catalog\Model\Product',
+                \Magento\Catalog\Model\Product::class,
                 ['data' => $productData]
             );
         }
         if ($categoryData) {
             $args['category'] = $this->objectManager->create(
-                'Magento\Catalog\Model\Category',
+                \Magento\Catalog\Model\Category::class,
                 ['data' => $categoryData]
             );
         }
@@ -123,8 +123,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $args = [
             'product' => $this->objectManager->create(
-                'Magento\Catalog\Model\Product',
-                ['data' => ['entity_id' => 1]]
+                \Magento\Catalog\Model\Product::class,
+                ['data' => ['entity_id' => 1, 'name' => 'product1', 'url_key' => 'product2']]
             ),
         ];
         $form = $this->_getFormInstance($args);
@@ -146,12 +146,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $args = [
             'product' => $this->objectManager->create(
-                'Magento\Catalog\Model\Product',
-                ['data' => ['entity_id' => 1, 'store_ids' => [1]]]
+                \Magento\Catalog\Model\Product::class,
+                ['data' => ['entity_id' => 1, 'name' => 'product1', 'url_key' => 'product1', 'store_ids' => [1]]]
             ),
             'category' => $this->objectManager->create(
-                'Magento\Catalog\Model\Category',
-                ['data' => ['entity_id' => 1, 'store_ids' => [3]]]
+                \Magento\Catalog\Model\Category::class,
+                ['data' => ['entity_id' => 1, 'name' => 'category1', 'url_key' => 'category1', 'store_ids' => [3]]]
             ),
         ];
         $form = $this->_getFormInstance($args);
@@ -171,8 +171,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityStoresCategoryStoresException()
     {
         $args = ['category' => $this->objectManager->create(
-            'Magento\Catalog\Model\Category',
-            ['data' => ['entity_id' => 1, 'initial_setup_flag' => true]]
+            \Magento\Catalog\Model\Category::class,
+            ['data' => ['entity_id' => 1, 'name' => 'product1', 'url_key' => 'product', 'initial_setup_flag' => true]]
         )];
         $form = $this->_getFormInstance($args);
         $this->assertEquals([], $form->getElement('store_id')->getValues());
@@ -190,6 +190,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @static
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function formPostInitDataProvider()
     {
@@ -209,7 +210,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'catalog/product/view/id/2'
             ],
             [
-                ['entity_id' => 2, 'name' => 'product', 'store_id' => 1],
+                ['entity_id' => 2, 'name' => 'product', 'url_key' => 'product', 'store_id' => 1],
                 ['entity_id' => 3, 'parent_id' => 2, 'level' => 2, 'url_key' => 'category', 'store_id' => 1],
                 'product/2/category/3',
                 'category/product.html',
@@ -226,6 +227,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @static
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getEntityStoresDataProvider()
     {
@@ -234,32 +236,35 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 null,
                 ['entity_id' => 3, 'store_ids' => [1]],
                 [
-                    ['label' => 'Main Website', 'value' => []],
+                    ['label' => 'Main Website', 'value' => [], '__disableTmpl' => true],
                     [
                         'label' => '    Main Website Store',
-                        'value' => [['label' => '    Default Store View', 'value' => 1]]
+                        'value' => [['label' => '    Default Store View', 'value' => 1]],
+                        '__disableTmpl' => true
                     ]
                 ],
             ],
             [
-                ['entity_id' => 2, 'store_ids' => [1]],
+                ['entity_id' => 2, 'name' => 'product2', 'url_key' => 'product2', 'store_ids' => [1]],
                 null,
                 [
-                    ['label' => 'Main Website', 'value' => []],
+                    ['label' => 'Main Website', 'value' => [], '__disableTmpl' => true],
                     [
                         'label' => '    Main Website Store',
-                        'value' => [['label' => '    Default Store View', 'value' => 1]]
+                        'value' => [['label' => '    Default Store View', 'value' => 1]],
+                        '__disableTmpl' => true
                     ]
                 ]
             ],
             [
-                ['entity_id' => 2, 'store_ids' => [1]],
-                ['entity_id' => 3, 'store_ids' => [1]],
+                ['entity_id' => 2, 'name' => 'product2', 'url_key' => 'product2', 'store_ids' => [1]],
+                ['entity_id' => 3, 'name' => 'product3', 'url_key' => 'product3', 'store_ids' => [1]],
                 [
-                    ['label' => 'Main Website', 'value' => []],
+                    ['label' => 'Main Website', 'value' => [], '__disableTmpl' => true],
                     [
                         'label' => '    Main Website Store',
-                        'value' => [['label' => '    Default Store View', 'value' => 1]]
+                        'value' => [['label' => '    Default Store View', 'value' => 1]],
+                        '__disableTmpl' => true
                     ]
                 ]
             ]

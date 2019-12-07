@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Filters\Type;
@@ -8,7 +8,8 @@ namespace Magento\Ui\Component\Filters\Type;
 use Magento\Ui\Component\Form\Element\Input as ElementInput;
 
 /**
- * Class Input
+ * @api
+ * @since 100.0.2
  */
 class Input extends AbstractFilter
 {
@@ -28,7 +29,7 @@ class Input extends AbstractFilter
      *
      * @return void
      */
-    public function prepare()
+    public function prepare(): void
     {
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
@@ -61,12 +62,12 @@ class Input extends AbstractFilter
      *
      * @return void
      */
-    protected function applyFilter()
+    protected function applyFilter(): void
     {
         if (isset($this->filterData[$this->getName()])) {
-            $value = $this->filterData[$this->getName()];
+            $value = str_replace(['%', '_'], ['\%', '\_'], $this->filterData[$this->getName()]);
 
-            if (!empty($value)) {
+            if ($value || $value === '0') {
                 $filter = $this->filterBuilder->setConditionType('like')
                     ->setField($this->getName())
                     ->setValue(sprintf('%%%s%%', $value))

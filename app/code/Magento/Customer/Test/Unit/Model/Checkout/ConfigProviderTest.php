@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Checkout;
@@ -14,7 +14,7 @@ use Magento\Customer\Model\Url;
 use Magento\Customer\Model\Form;
 use Magento\Store\Model\ScopeInterface;
 
-class ConfigProviderTest extends \PHPUnit_Framework_TestCase
+class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigProvider
@@ -41,28 +41,35 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $store;
 
-    public function setUp()
+    /**
+     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerUrl;
+
+    protected function setUp()
     {
         $this->storeManager = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             '',
             false
         );
+
         $this->urlBuilder = $this->getMockForAbstractClass(
-            'Magento\Framework\UrlInterface',
+            \Magento\Framework\UrlInterface::class,
             [],
             '',
             false
         );
+
         $this->scopeConfig = $this->getMockForAbstractClass(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             '',
             false
         );
         $this->store = $this->getMockForAbstractClass(
-            'Magento\Store\Api\Data\StoreInterface',
+            \Magento\Store\Api\Data\StoreInterface::class,
             [],
             '',
             false,
@@ -71,10 +78,13 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             ['getBaseUrl']
         );
 
+        $this->customerUrl = $this->createMock(\Magento\Customer\Model\Url::class);
+
         $this->provider = new ConfigProvider(
             $this->urlBuilder,
             $this->storeManager,
-            $this->scopeConfig
+            $this->scopeConfig,
+            $this->customerUrl
         );
     }
 
@@ -83,9 +93,8 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
         $loginUrl = 'http://url.test/customer/login';
         $baseUrl = 'http://base-url.test';
 
-        $this->urlBuilder->expects($this->exactly(2))
-            ->method('getUrl')
-            ->with(Url::ROUTE_ACCOUNT_LOGIN)
+        $this->customerUrl->expects($this->exactly(2))
+            ->method('getLoginUrl')
             ->willReturn($loginUrl);
         $this->storeManager->expects($this->once())
             ->method('getStore')
@@ -112,9 +121,8 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
         $loginUrl = 'http://base-url.test/customer/login';
         $baseUrl = 'http://base-url.test';
 
-        $this->urlBuilder->expects($this->exactly(2))
-            ->method('getUrl')
-            ->with(Url::ROUTE_ACCOUNT_LOGIN)
+        $this->customerUrl->expects($this->exactly(2))
+            ->method('getLoginUrl')
             ->willReturn($loginUrl);
         $this->storeManager->expects($this->once())
             ->method('getStore')

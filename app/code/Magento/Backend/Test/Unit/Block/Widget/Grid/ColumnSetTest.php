@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
-class ColumnSetTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ColumnSetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\ColumnSet
@@ -47,14 +48,11 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_columnMock = $this->getMock(
-            'Magento\Backend\Block\Widget\Grid\Column',
-            ['setSortable', 'setRendererType', 'setFilterType'],
-            [],
-            '',
-            false
+        $this->_columnMock = $this->createPartialMock(
+            \Magento\Backend\Block\Widget\Grid\Column::class,
+            ['setSortable', 'setRendererType', 'setFilterType']
         );
-        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->_layoutMock->expects(
             $this->any()
         )->method(
@@ -62,23 +60,11 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(['column' => $this->_columnMock])
         );
-        $this->_factoryMock = $this->getMock(
-            'Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_factoryMock = $this->createMock(\Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory::class);
 
-        $this->_subtotalsMock = $this->getMock(
-            'Magento\Backend\Model\Widget\Grid\SubTotals',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_subtotalsMock = $this->createMock(\Magento\Backend\Model\Widget\Grid\SubTotals::class);
 
-        $this->_totalsMock = $this->getMock('Magento\Backend\Model\Widget\Grid\Totals', [], [], '', false);
+        $this->_totalsMock = $this->createMock(\Magento\Backend\Model\Widget\Grid\Totals::class);
 
         $arguments = [
             'layout' => $this->_layoutMock,
@@ -88,7 +74,10 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\ColumnSet', $arguments);
+        $this->_block = $objectManagerHelper->getObject(
+            \Magento\Backend\Block\Widget\Grid\ColumnSet::class,
+            $arguments
+        );
         $this->_block->setNameInLayout('grid.columnSet');
     }
 
@@ -128,22 +117,17 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRowUrlIfUrlPathNotSet()
     {
-        $this->assertEquals('#', $this->_block->getRowUrl(new \StdClass()));
+        $this->assertEquals('#', $this->_block->getRowUrl(new \stdClass()));
     }
 
     public function testGetRowUrl()
     {
-        $generatorClass = 'Magento\Backend\Model\Widget\Grid\Row\UrlGenerator';
+        $generatorClass = \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator::class;
 
-        $itemMock = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $itemMock = $this->createMock(\Magento\Framework\DataObject::class);
 
-        $rowUrlGenerator = $this->getMock(
-            'Magento\Backend\Model\Widget\Grid\Row\UrlGenerator',
-            ['getUrl'],
-            [],
-            '',
-            false
-        );
+        $rowUrlGenerator =
+            $this->createPartialMock(\Magento\Backend\Model\Widget\Grid\Row\UrlGenerator::class, ['getUrl']);
         $rowUrlGenerator->expects(
             $this->once()
         )->method(
@@ -154,12 +138,9 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('http://localhost/mng/item/edit')
         );
 
-        $factoryMock = $this->getMock(
-            'Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory',
-            ['createUrlGenerator'],
-            [],
-            '',
-            false
+        $factoryMock = $this->createPartialMock(
+            \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory::class,
+            ['createUrlGenerator']
         );
         $factoryMock->expects(
             $this->once()
@@ -182,7 +163,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var $model \Magento\Backend\Block\Widget\Grid\ColumnSet */
-        $model = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\ColumnSet', $arguments);
+        $model = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\ColumnSet::class, $arguments);
 
         $url = $model->getRowUrl($itemMock);
         $this->assertEquals('http://localhost/mng/item/edit', $url);
@@ -193,7 +174,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         $item = new \Magento\Framework\DataObject();
         // prepare sub-collection
         $subCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']));
         $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '2', 'test5' => '2']));
@@ -215,7 +196,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         $this->_prepareLayoutWithGrid(
             $this->_prepareGridMock(
                 new \Magento\Framework\Data\Collection(
-                    $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+                    $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
                 )
             )
         );
@@ -247,7 +228,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         $item = new \Magento\Framework\DataObject();
         // prepare sub-collection
         $subCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']));
         $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '2', 'test5' => '2']));
@@ -262,7 +243,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         $item = new \Magento\Framework\DataObject(['test1' => '1']);
         // prepare sub-collection
         $subCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']));
         $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '2', 'test5' => '2']));
@@ -280,7 +261,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
     {
         // prepare sub-collection
         $subCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         $subCollection->addItem(new \Magento\Framework\DataObject(['column' => '1']));
         $subCollection->addItem(new \Magento\Framework\DataObject(['column' => '1']));
@@ -318,7 +299,8 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            new \Magento\Framework\DataObject(['test1' => '3', 'test2' => '2']), $this->_block->getTotals()
+            new \Magento\Framework\DataObject(['test1' => '3', 'test2' => '2']),
+            $this->_block->getTotals()
         );
     }
 
@@ -331,7 +313,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
     protected function _prepareGridMock($collection)
     {
         // prepare block grid
-        $gridMock = $this->getMock('Magento\Backend\Model\Widget\Grid', ['getCollection'], [], '', true);
+        $gridMock = $this->createPartialMock(\Magento\Backend\Block\Widget\Grid::class, ['getCollection']);
         $gridMock->expects($this->any())->method('getCollection')->will($this->returnValue($collection));
 
         return $gridMock;
@@ -345,7 +327,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
     protected function _getTestCollection()
     {
         $collection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         $items = [
             new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2']),

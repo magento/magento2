@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,7 +38,7 @@ class SwaggerUiPage
      *
      * @var string
      */
-    protected $titleSelector = '.info_title';
+    protected $titleSelector = '.title';
 
     /**
      * Constructor
@@ -60,7 +60,7 @@ class SwaggerUiPage
      */
     public function open()
     {
-        $this->browser->open($this->url);
+        $this->openSwaggerUrl();
         $this->waitForPageToLoad();
     }
 
@@ -97,14 +97,14 @@ class SwaggerUiPage
         /**
          * Selector for service
          */
-        $serviceSelector = 'a#endpointListTogger_%s';
+        $serviceSelector = '#operations-tag-%s';
         /**
          * Selector for endpoint
          */
-        $endpointSelector = 'ul#%s_endpoint_list';
+        $endpointSelector = '//H4[@id=\'operations-tag-%s\']/following-sibling::DIV';
         $serviceSelector = sprintf($serviceSelector, $serviceName);
         $endpointSelector = sprintf($endpointSelector, $serviceName);
-        if (!$this->isElementVisible($endpointSelector)) {
+        if (!$this->isElementVisible($endpointSelector, Locator::SELECTOR_XPATH)) {
             $this->browser->find($serviceSelector, Locator::SELECTOR_CSS)->click();
         }
     }
@@ -120,16 +120,12 @@ class SwaggerUiPage
         /**
          * Selector for service
          */
-        $serviceSelector = 'a#endpointListTogger_%s';
+        $serviceSelector = '#operations-tag-%s';
         /**
          * Selector for endpoint
          */
-        $endpointSelector = 'ul#%s_endpoint_list';
         $serviceSelector = sprintf($serviceSelector, $serviceName);
-        $endpointSelector = sprintf($endpointSelector, $serviceName);
-        if ($this->isElementVisible($endpointSelector)) {
-            $this->browser->find($serviceSelector, Locator::SELECTOR_CSS)->click();
-        }
+        $this->browser->find($serviceSelector, Locator::SELECTOR_CSS)->click();
     }
 
     /**
@@ -145,16 +141,12 @@ class SwaggerUiPage
         /**
          * Selector for endpoint href
          */
-        $endpointRefSelector = 'a[href$="%s%s"]';
+        $endpointRefSelector = '#operations-%s-%s%s > div';
         /**
          * Selector for operation
          */
-        $operationSelector = 'div[id$="%s%s_content"]';
-        $endpointRefSelector = sprintf($endpointRefSelector, $serviceName, $endpoint);
-        $operationSelector = sprintf($operationSelector, $serviceName, $endpoint);
-        if (!$this->isElementVisible($operationSelector)) {
-            $this->browser->find($endpointRefSelector, Locator::SELECTOR_CSS)->click();
-        }
+        $endpointRefSelector = sprintf($endpointRefSelector, $serviceName, $serviceName, $endpoint);
+        $this->browser->find($endpointRefSelector, Locator::SELECTOR_CSS)->click();
     }
 
     /**
@@ -167,19 +159,17 @@ class SwaggerUiPage
     public function closeEndpointContent($serviceName, $endpoint)
     {
         $this->expandServiceContent($serviceName);
+
         /**
          * Selector for endpoint href
          */
-        $endpointRefSelector = 'a[href$="%s%s"]';
+        $endpointRefSelector = '#operations-%s-%s%s > div';
+
         /**
          * Selector for operation
          */
-        $operationSelector = 'div[id$="%s%s_content"]';
-        $endpointRefSelector = sprintf($endpointRefSelector, $serviceName, $endpoint);
-        $operationSelector = sprintf($operationSelector, $serviceName, $endpoint);
-        if ($this->isElementVisible($operationSelector)) {
-            $this->browser->find($endpointRefSelector, Locator::SELECTOR_CSS)->click();
-        }
+        $endpointRefSelector = sprintf($endpointRefSelector, $serviceName, $serviceName, $endpoint);
+        $this->browser->find($endpointRefSelector, Locator::SELECTOR_CSS)->click();
     }
 
     /**
@@ -206,6 +196,31 @@ class SwaggerUiPage
             function () use ($browser, $selector, $strategy) {
                 $element = $browser->find($selector, $strategy);
                 return $element->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait to open swagger url
+     *
+     * This is to work around an issue with selenium web driver randomly returns browser url as "about:blank"
+     * when open swagger page
+     *
+     * @return bool|null
+     */
+    private function openSwaggerUrl()
+    {
+        $browser = $this->browser;
+        $pattern = self::MCA;
+        return $browser->waitUntil(
+            function () use ($browser, $pattern) {
+                try {
+                    $url = $_ENV['app_frontend_url'] . $pattern;
+                    $browser->open($url);
+                    return true;
+                } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+                    return false;
+                }
             }
         );
     }

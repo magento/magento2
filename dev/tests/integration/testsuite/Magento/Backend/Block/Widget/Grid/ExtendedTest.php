@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget\Grid;
 /**
  * @magentoAppArea adminhtml
  */
-class ExtendedTest extends \PHPUnit_Framework_TestCase
+class ExtendedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Extended
@@ -25,14 +25,14 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->_layoutMock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Backend\Block\Template\Context',
+            \Magento\Backend\Block\Template\Context::class,
             ['layout' => $this->_layoutMock]
         );
         $this->_block = $this->_layoutMock->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Extended',
+            \Magento\Backend\Block\Widget\Grid\Extended::class,
             'grid',
             ['context' => $context]
         );
@@ -47,7 +47,7 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
     public function testAddColumnAddsChildToColumnSet()
     {
         $this->assertInstanceOf(
-            'Magento\Backend\Block\Widget\Grid\Column',
+            \Magento\Backend\Block\Widget\Grid\Column::class,
             $this->_block->getColumnSet()->getChildBlock('column1')
         );
         $this->assertCount(2, $this->_block->getColumnSet()->getChildNames());

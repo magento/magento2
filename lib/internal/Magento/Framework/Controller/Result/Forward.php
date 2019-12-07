@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Controller\Result;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 
 class Forward extends AbstractResult
@@ -99,7 +99,7 @@ class Forward extends AbstractResult
     /**
      * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
         return $this;
     }

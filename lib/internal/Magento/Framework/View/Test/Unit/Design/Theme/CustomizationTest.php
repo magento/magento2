@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
 use \Magento\Framework\View\Design\Theme\Customization;
 
-class CustomizationTest extends \PHPUnit_Framework_TestCase
+class CustomizationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Customization
@@ -35,35 +35,14 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileProvider = $this->getMock(
-            'Magento\Framework\View\Design\Theme\FileProviderInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $collectionFactory = $this->getMock(
-            'Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->fileProvider = $this->createMock(\Magento\Framework\View\Design\Theme\FileProviderInterface::class);
+        $collectionFactory = $this->createPartialMock(
+            \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory::class,
+            ['create']
         );
         $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->fileProvider));
-        $this->customizationPath = $this->getMock(
-            'Magento\Framework\View\Design\Theme\Customization\Path',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->theme = $this->getMock(
-            'Magento\Theme\Model\Theme',
-            ['__wakeup', 'save', 'load'],
-            [],
-            '',
-            false
-        );
+        $this->customizationPath = $this->createMock(\Magento\Framework\View\Design\Theme\Customization\Path::class);
+        $this->theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'save', 'load']);
 
         $this->model = new Customization($this->fileProvider, $this->customizationPath, $this->theme);
     }
@@ -118,7 +97,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerationOfFileInfo()
     {
-        $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'getFileInfo'], [], '', false);
+        $file = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'getFileInfo']);
         $file->expects($this->once())->method('getFileInfo')->will($this->returnValue(['sample-generation']));
         $this->assertEquals([['sample-generation']], $this->model->generateFileInfo([$file]));
     }
@@ -199,7 +178,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         $files = [];
         $type = 'sample-type';
         foreach ($filesContent as $fileContent) {
-            $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'save'], [], '', false);
+            $file = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'save']);
             $file->expects($fileContent['isCalled'])->method('save')->will($this->returnSelf());
             $file->setData($fileContent['content']);
             $files[] = $file;
@@ -215,7 +194,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($files)
         );
         $this->assertInstanceOf(
-            'Magento\Framework\View\Design\Theme\CustomizationInterface',
+            \Magento\Framework\View\Design\Theme\CustomizationInterface::class,
             $this->model->reorder($type, $sequence)
         );
     }
@@ -271,7 +250,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'delete'], [], '', false);
+        $file = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']);
         $file->expects($this->once())->method('delete')->will($this->returnSelf());
         $file->setData(
             [
@@ -293,7 +272,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'Magento\Framework\View\Design\Theme\CustomizationInterface',
+            \Magento\Framework\View\Design\Theme\CustomizationInterface::class,
             $this->model->delete([1])
         );
     }

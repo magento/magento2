@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Model\Config\Backend;
@@ -10,7 +10,9 @@ namespace Magento\Cookie\Model\Config\Backend;
  */
 class Lifetime extends \Magento\Framework\App\Config\Value
 {
-    /** @var  \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator */
+    /**
+     * @var \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator
+     */
     protected $configValidator;
 
     /**
@@ -49,7 +51,7 @@ class Lifetime extends \Magento\Framework\App\Config\Value
         $value = $this->getValue();
 
         if (!empty($value) && !$this->configValidator->isValid($value)) {
-            $msg = __('Invalid cookie lifetime: ' . join('; ', $this->configValidator->getMessages()));
+            $msg = __('Invalid cookie lifetime: %1', join('; ', $this->configValidator->getMessages()));
             throw new \Magento\Framework\Exception\LocalizedException($msg);
         }
         return parent::beforeSave();

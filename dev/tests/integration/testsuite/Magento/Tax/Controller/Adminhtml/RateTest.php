@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Tax\Controller\Adminhtml;
 
 /**
@@ -16,13 +17,13 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testAjaxSaveAction($postData, $expectedData)
     {
-        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setPostValue($postData)->setMethod('POST');
 
         $this->dispatch('backend/tax/rate/ajaxSave');
 
         $jsonBody = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );
@@ -32,7 +33,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $rateId = $result['tax_calculation_rate_id'];
         /** @var $rate \Magento\Tax\Model\Calculation\Rate */
         $rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Tax\Model\Calculation\Rate'
+            \Magento\Tax\Model\Calculation\Rate::class
         )->load(
             $rateId,
             'tax_calculation_rate_id'
@@ -84,13 +85,13 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testAjaxSaveActionInvalidData($postData, $expectedData)
     {
-        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setPostValue($postData)->setMethod('POST');
 
         $this->dispatch('backend/tax/rate/ajaxSave');
 
         $jsonBody = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );
@@ -109,7 +110,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $expectedData = [
             'success' => false,
-            'error_message' => 'Make sure all required information is valid.',
+            'error_message' => 'The required information is invalid. Verify the information and try again.',
         ];
         return [
             [
@@ -145,20 +146,6 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 [
                     'rate' => rand(1, 10000),
                     'tax_country_id' => '',
-                    'tax_region_id' => '0',
-                    'code' => 'Rate ' . uniqid(),
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
-                    'tax_postcode' => '*',
-                ],
-                $expectedData
-            ],
-            // Rate empty
-            [
-                [
-                    'rate' => '',
-                    'tax_country_id' => 'US',
                     'tax_region_id' => '0',
                     'code' => 'Rate ' . uniqid(),
                     'zip_is_range' => '0',
@@ -210,7 +197,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory $rateClassFactory */
         $rateClassFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Tax\Api\Data\TaxRateInterfaceFactory'
+            \Magento\Tax\Api\Data\TaxRateInterfaceFactory::class
         );
 
         $rateClass = $rateClassFactory->create();
@@ -229,7 +216,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $rateClassId=$rateClass->getTaxCalculationRateId();
         /** @var $class \Magento\Tax\Model\Calculation\Rate */
         $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Tax\Model\Calculation\Rate')
+            ->create(\Magento\Tax\Model\Calculation\Rate::class)
             ->load($rateClassId, 'tax_calculation_rate_id');
 
         $this->assertEquals($rateClassData['tax_country_id'], $class->getTaxCountryId());
@@ -248,7 +235,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $jsonBody = $this->getResponse()->getBody();
 
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );
@@ -284,7 +271,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $jsonBody = $this->getResponse()->getBody();
 
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );

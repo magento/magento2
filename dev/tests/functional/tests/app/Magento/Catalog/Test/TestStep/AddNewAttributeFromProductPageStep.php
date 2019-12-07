@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,21 +22,12 @@ class AddNewAttributeFromProductPageStep implements TestStepInterface
     protected $catalogProductEdit;
 
     /**
-     * Tab name for adding attribute.
-     *
-     * @var string
-     */
-    protected $tabName;
-
-    /**
      * @constructor
      * @param CatalogProductEdit $catalogProductEdit
-     * @param string $tabName
      */
-    public function __construct(CatalogProductEdit $catalogProductEdit, $tabName)
+    public function __construct(CatalogProductEdit $catalogProductEdit)
     {
         $this->catalogProductEdit = $catalogProductEdit;
-        $this->tabName = $tabName;
     }
 
     /**
@@ -46,7 +37,8 @@ class AddNewAttributeFromProductPageStep implements TestStepInterface
      */
     public function run()
     {
-        $productForm = $this->catalogProductEdit->getProductForm();
-        $productForm->addNewAttribute($this->tabName);
+        $productForm = $this->catalogProductEdit->getFormPageActions();
+        $productForm->addNewAttribute();
+        $this->catalogProductEdit->getAddAttributeModal()->createNewAttribute();
     }
 }

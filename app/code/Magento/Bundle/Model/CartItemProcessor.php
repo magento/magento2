@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model;
@@ -84,26 +84,28 @@ class CartItemProcessor implements CartItemProcessorInterface
         $productOptions = [];
         $bundleOptions = $cartItem->getBuyRequest()->getBundleOption();
         $bundleOptionsQty = $cartItem->getBuyRequest()->getBundleOptionQty();
-        foreach ($bundleOptions as $optionId => $optionSelections) {
-            if (empty($optionSelections)) {
-                continue;
+        if (is_array($bundleOptions)) {
+            foreach ($bundleOptions as $optionId => $optionSelections) {
+                if (empty($optionSelections)) {
+                    continue;
+                }
+                $optionSelections = is_array($optionSelections) ? $optionSelections : [$optionSelections];
+                $optionQty = isset($bundleOptionsQty[$optionId]) ? $bundleOptionsQty[$optionId] : 1;
+
+                /** @var \Magento\Bundle\Api\Data\BundleOptionInterface $productOption */
+                $productOption = $this->bundleOptionFactory->create();
+                $productOption->setOptionId($optionId);
+                $productOption->setOptionSelections($optionSelections);
+                $productOption->setOptionQty($optionQty);
+                $productOptions[] = $productOption;
             }
-            $optionSelections = is_array($optionSelections) ? $optionSelections : [$optionSelections];
-            $optionQty = isset($bundleOptionsQty[$optionId]) ? $bundleOptionsQty[$optionId] : 1;
 
-            /** @var \Magento\Bundle\Api\Data\BundleOptionInterface $productOption */
-            $productOption = $this->bundleOptionFactory->create();
-            $productOption->setOptionId($optionId);
-            $productOption->setOptionSelections($optionSelections);
-            $productOption->setOptionQty($optionQty);
-            $productOptions[] = $productOption;
+            $extension = $this->productOptionExtensionFactory->create()->setBundleOptions($productOptions);
+            if (!$cartItem->getProductOption()) {
+                $cartItem->setProductOption($this->productOptionFactory->create());
+            }
+            $cartItem->getProductOption()->setExtensionAttributes($extension);
         }
-
-        $extension = $this->productOptionExtensionFactory->create()->setBundleOptions($productOptions);
-        if (!$cartItem->getProductOption()) {
-            $cartItem->setProductOption($this->productOptionFactory->create());
-        }
-        $cartItem->getProductOption()->setExtensionAttributes($extension);
         return $cartItem;
     }
 }

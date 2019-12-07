@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Hosted\Pro;
@@ -15,5 +15,5 @@ class Form extends \Magento\Payment\Block\Form
     /**
      * @var string
      */
-    protected $_template = 'hss/info.phtml';
+    protected $_template = 'Magento_Paypal::hss/info.phtml';
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save Store" button
  * 6. Perform all assertions
  *
- * @group Store_Management_(PS)
+ * @group Store_Management
  * @ZephyrId MAGETWO-27568
  */
 class UpdateStoreGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**
@@ -71,10 +71,12 @@ class UpdateStoreGroupEntityTest extends Injectable
      *
      * @param StoreGroup $storeGroupOrigin
      * @param StoreGroup $storeGroup
+     * @param string $acceptAlert
      * @return void
      */
-    public function test(StoreGroup $storeGroupOrigin, StoreGroup $storeGroup)
+    public function test(StoreGroup $storeGroupOrigin, StoreGroup $storeGroup, $acceptAlert)
     {
+
         //Preconditions
         $storeGroupOrigin->persist();
 
@@ -83,5 +85,8 @@ class UpdateStoreGroupEntityTest extends Injectable
         $this->storeIndex->getStoreGrid()->searchAndOpenStoreGroup($storeGroupOrigin);
         $this->editGroup->getEditFormGroup()->fill($storeGroup);
         $this->editGroup->getFormPageActions()->save();
+        if ($acceptAlert) {
+            $this->editGroup->getModalBlock()->acceptAlert();
+        }
     }
 }

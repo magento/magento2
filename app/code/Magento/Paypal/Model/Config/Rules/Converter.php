@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Config\Rules;
@@ -63,6 +63,7 @@ class Converter implements ConverterInterface
             if ($this->hasNodeElement($child)) {
                 $result[$child->getAttribute('name')] = [
                     'value' => $child->getAttribute('value'),
+                    'include' => $child->getAttribute('include'),
                     'predicate' => $this->createPredicate($child),
                 ];
             }

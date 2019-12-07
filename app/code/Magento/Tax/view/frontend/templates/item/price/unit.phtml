@@ -1,29 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /** @var $block \Magento\Tax\Block\Item\Price\Renderer */
 
 $_item = $block->getItem();
 ?>
-
-<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
-    <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax')); ?>">
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
+    <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
         <?php $_incl = $_item->getPriceInclTax(); ?>
         <span class="cart-price">
-            <?php /* @escapeNotVerified */ echo $block->formatPrice($_incl) ?>
+            <?= /* @noEscape */ $block->formatPrice($_incl) ?>
         </span>
     </span>
 <?php endif; ?>
 
-<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
-    <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>">
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
+    <span class="price-excluding-tax" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
         <span class="cart-price">
-            <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getItemDisplayPriceExclTax()) ?>
+            <?= /* @noEscape */ $block->formatPrice($block->getItemDisplayPriceExclTax()) ?>
         </span>
     </span>
 <?php endif; ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,6 +43,14 @@ class CustomerGrid extends DataGrid
         ],
         'entity_id_to' => [
             'selector' => '[name="entity_id[to]"]',
+        ],
+        'dob_from' => [
+            'selector' => '[name="dob[from]"]',
+            'input' => 'datepicker',
+        ],
+        'dob_to' => [
+            'selector' => '[name="dob[to]"]',
+            'input' => 'datepicker',
         ],
     ];
 }

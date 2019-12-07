@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Tax::sales_tax" title="Taxes" module="Magento_Tax" sortOrder="20" parent="Magento_Backend::stores" resource="Magento_Tax::manage_tax"/>
-        <add id="Magento_Tax::sales_tax_rules" title="Tax Rules" module="Magento_Tax" sortOrder="10" parent="Magento_Tax::sales_tax" action="tax/rule" resource="Magento_Tax::manage_tax"/>
-        <add id="Magento_Tax::sales_tax_rates" title="Tax Zones and Rates" module="Magento_Tax" sortOrder="20" parent="Magento_Tax::sales_tax" action="tax/rate" resource="Magento_Tax::manage_tax"/>
+        <add id="Magento_Tax::sales_tax" title="Taxes" translate="title" module="Magento_Tax" sortOrder="20" parent="Magento_Backend::stores" resource="Magento_Tax::manage_tax"/>
+        <add id="Magento_Tax::sales_tax_rules" title="Tax Rules" translate="title" module="Magento_Tax" sortOrder="10" parent="Magento_Tax::sales_tax" action="tax/rule" resource="Magento_Tax::manage_tax"/>
+        <add id="Magento_Tax::sales_tax_rates" title="Tax Zones and Rates" translate="title" module="Magento_Tax" sortOrder="20" parent="Magento_Tax::sales_tax" action="tax/rate" resource="Magento_Tax::manage_tax"/>
     </menu>
 </config>

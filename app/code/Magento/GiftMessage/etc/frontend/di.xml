@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -42,5 +42,8 @@
                 <item name="itemIdProcessor" xsi:type="object">Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Processor">
+        <plugin name="mergeQuoteItems" type="Magento\GiftMessage\Model\Plugin\MergeQuoteItems"/>
     </type>
 </config>

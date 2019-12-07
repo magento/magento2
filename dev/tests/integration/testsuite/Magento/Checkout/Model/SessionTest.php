@@ -1,23 +1,57 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Catalog\Api\Data\ProductTierPriceInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SessionTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class SessionTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_checkoutSession;
+    private $objectManager;
 
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * @var CustomerSession
+     */
+    private $customerSession;
+
+    /**
+     * @var Session
+     */
+    private $checkoutSession;
+
+    /**
+     * @return void
+     */
     protected function setUp()
     {
-        $this->_checkoutSession = Bootstrap::getObjectManager()->create('Magento\Checkout\Model\Session');
-        parent::setUp();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
+        $this->customerSession = $this->objectManager->get(CustomerSession::class);
+        $this->checkoutSession = $this->objectManager->create(Session::class);
     }
 
     /**
@@ -29,15 +63,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQuoteNotInitializedCustomerSet()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
-        $customer = $customerRepository->getById(1);
-        $this->_checkoutSession->setCustomerData($customer);
+        $customer = $this->customerRepository->getById(1);
+        $this->checkoutSession->setCustomerData($customer);
 
         /** Execute SUT */
-        $quote = $this->_checkoutSession->getQuote();
+        $quote = $this->checkoutSession->getQuote();
         $this->_validateCustomerDataInQuote($quote);
     }
 
@@ -51,18 +81,32 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQuoteNotInitializedCustomerLoggedIn()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
-        $customer = $customerRepository->getById(1);
-        /** @var \Magento\Customer\Model\Session $customerSession */
-        $customerSession = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
-        $customerSession->setCustomerDataObject($customer);
+        $customer = $this->customerRepository->getById(1);
+        $this->customerSession->setCustomerDataObject($customer);
 
         /** Execute SUT */
-        $quote = $this->_checkoutSession->getQuote();
+        $quote = $this->checkoutSession->getQuote();
         $this->_validateCustomerDataInQuote($quote);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGetQuoteWithMismatchingSession()
+    {
+        /** @var Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create(Quote::class);
+        /** @var \Magento\Quote\Model\ResourceModel\Quote $quoteResource */
+        $quoteResource = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\ResourceModel\Quote::class);
+        $quoteResource->load($quote, 'test01', 'reserved_order_id');
+
+        // Customer on quote is not logged in
+        $this->checkoutSession->setQuoteId($quote->getId());
+
+        $sessionQuote = $this->checkoutSession->getQuote();
+        $this->assertEmpty($sessionQuote->getCustomerId());
+        $this->assertNotEquals($quote->getId(), $sessionQuote->getId());
     }
 
     /**
@@ -80,27 +124,84 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadCustomerQuoteCustomerWithoutQuote()
     {
-        $quote = $this->_checkoutSession->getQuote();
+        $quote = $this->checkoutSession->getQuote();
         $this->assertEmpty($quote->getCustomerId(), 'Precondition failed: Customer data must not be set to quote');
         $this->assertEmpty($quote->getCustomerEmail(), 'Precondition failed: Customer data must not be set to quote');
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
-        $customer = $customerRepository->getById(1);
-        /** @var \Magento\Customer\Model\Session $customerSession */
-        $customerSession = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
-        $customerSession->setCustomerDataObject($customer);
+        $customer = $this->customerRepository->getById(1);
+        $this->customerSession->setCustomerDataObject($customer);
 
         /** Ensure that customer data is still unavailable before SUT invocation */
-        $quote = $this->_checkoutSession->getQuote();
+        $quote = $this->checkoutSession->getQuote();
         $this->assertEmpty($quote->getCustomerEmail(), 'Precondition failed: Customer data must not be set to quote');
 
         /** Execute SUT */
-        $this->_checkoutSession->loadCustomerQuote();
-        $quote = $this->_checkoutSession->getQuote();
+        $this->checkoutSession->loadCustomerQuote();
+        $quote = $this->checkoutSession->getQuote();
         $this->_validateCustomerDataInQuote($quote);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     */
+    public function testGetQuoteWithProductWithTierPrice()
+    {
+        $reservedOrderId = 'test01';
+        $customerGroupId = 1;
+        $tierPriceQty = 1;
+        $tierPriceValue = 9;
+
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple');
+        $tierPrice = $this->objectManager->create(ProductTierPriceInterface::class)
+            ->setCustomerGroupId($customerGroupId)
+            ->setQty($tierPriceQty)
+            ->setValue($tierPriceValue);
+        $product->setTierPrices([$tierPrice]);
+        $productRepository->save($product);
+
+        $quote = $this->getQuote($reservedOrderId);
+        $this->checkoutSession->setQuoteId($quote->getId());
+
+        $quote = $this->checkoutSession->getQuote();
+        $item = $quote->getItems()[0];
+        /** @var \Magento\Catalog\Model\Product $quoteProduct */
+        $quoteProduct = $item->getProduct();
+        $this->assertEquals(10, $quoteProduct->getTierPrice($tierPriceQty));
+
+        $customer = $this->customerRepository->getById(1);
+        $this->customerSession->setCustomerDataAsLoggedIn($customer);
+
+        $quote = $this->checkoutSession->getQuote();
+        $item = $quote->getItems()[0];
+        /** @var \Magento\Catalog\Model\Product $quoteProduct */
+        $quoteProduct = $item->getProduct();
+        $this->assertEquals($tierPriceValue, $quoteProduct->getTierPrice(1));
+    }
+
+    /**
+     * Returns quote by reserved order id.
+     *
+     * @param string $reservedOrderId
+     * @return CartInterface
+     */
+    private function getQuote(string $reservedOrderId): CartInterface
+    {
+        $filterBuilder = $this->objectManager->create(FilterBuilder::class);
+        $filter = $filterBuilder->setField('reserved_order_id')
+            ->setConditionType('=')
+            ->setValue($reservedOrderId)
+            ->create();
+        $searchCriteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilters([$filter])
+            ->create();
+        $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $searchResult = $quoteRepository->getList($searchCriteria);
+        /** @var CartInterface[] $items */
+        $items = $searchResult->getItems();
+
+        return \array_values($items)[0];
     }
 
     /**

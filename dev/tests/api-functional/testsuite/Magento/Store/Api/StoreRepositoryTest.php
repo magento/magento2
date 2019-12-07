@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Store\Api;
 
@@ -40,7 +38,7 @@ class StoreRepositoryTest extends WebapiAbstract
         $storeViews = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotNull($storeViews);
         $this->assertGreaterThan(1, count($storeViews));
-        $keys = ['id', 'code', 'name', 'website_id', 'store_group_id'];
+        $keys = ['id', 'code', 'name', 'website_id', 'store_group_id', 'is_active'];
         $this->assertEquals($keys, array_keys($storeViews[0]));
     }
 }

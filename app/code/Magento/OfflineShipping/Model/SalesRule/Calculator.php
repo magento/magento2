@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,10 @@ namespace Magento\OfflineShipping\Model\SalesRule;
 
 use Magento\SalesRule\Model\Validator;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Calculator extends Validator
 {
     /**
@@ -28,7 +32,7 @@ class Calculator extends Validator
         $address = $item->getAddress();
         $item->setFreeShipping(false);
 
-        foreach ($this->_getRules() as $rule) {
+        foreach ($this->_getRules($address) as $rule) {
             /* @var $rule \Magento\SalesRule\Model\Rule */
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -105,9 +105,7 @@ class Base implements AmountInterface
      */
     public function getAdjustmentAmount($adjustmentCode)
     {
-        return isset($this->adjustmentAmounts[$adjustmentCode])
-            ? $this->adjustmentAmounts[$adjustmentCode]
-            : false;
+        return $this->adjustmentAmounts[$adjustmentCode] ?? false;
     }
 
     /**

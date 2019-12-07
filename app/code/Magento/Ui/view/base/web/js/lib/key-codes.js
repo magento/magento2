@@ -1,8 +1,11 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([], function () {
     'use strict';
 
@@ -17,6 +20,9 @@ define([], function () {
         39: 'pageRightKey',
         17: 'ctrlKey',
         18: 'altKey',
-        16: 'shiftKey'
+        16: 'shiftKey',
+        66: 'bKey',
+        73: 'iKey',
+        85: 'uKey'
     };
 });

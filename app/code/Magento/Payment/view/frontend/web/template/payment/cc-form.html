@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -121,68 +121,6 @@
                      data-target="dropdown"
                      data-bind="html: getCvvImageHtml()"></div>
             </div>
-        </div>
-    </div>
-    <!-- /ko -->
-    <!-- ko if: (hasSsCardType())-->
-    <div class="field switch solo required" data-bind="attr: {id: getCode() + '_cc_type_ss_div'}">
-        <div class="nested">
-            <div class="field switch-solo required">
-                <label data-bind="attr: {for: getCode() + '_cc_issue'}" class="label">
-                    <span><!-- ko i18n: 'Switch/Solo/Maestro Only'--><!-- /ko --></span>
-                </label>
-            </div>
-            <div class="field number required">
-                <label data-bind="attr: {for: getCode() + '_cc_issue'}" class="label">
-                    <span><!-- ko i18n: 'Issue Number'--><!-- /ko --></span>
-                </label>
-                <div class="control">
-                    <input type="number" name="payment[cc_ss_issue]"
-                           value=""
-                           class="input-text cvv"
-                           data-bind="attr: {id: getCode() + '_cc_issue', title: $t('Issue Number'), 'data-container': getCode() + '-cc-issue', 'data-validate': JSON.stringify({'validate-cc-ukss':true})}, enable: isActive($parents)"/>
-                </div>
-            </div>
-
-            <div class="field date required">
-                <label data-bind="attr: {for: getCode() + '_start_month'}" class="label">
-                    <span><!-- ko i18n: 'Start Date'--><!-- /ko --></span>
-                </label>
-                <div class="control">
-                    <div class="fields group group-2">
-                        <div class="field no-label month">
-                            <div class="control">
-                                <select name="payment[cc_ss_start_month]"
-                                        class="select select-month"
-                                        data-bind="attr: {id: getCode() + '_start_month', 'data-container': getCode() + '-cc-start-month', 'data-validate': JSON.stringify({'validate-cc-ukss':true})},
-                                                  enable: isActive($parents),
-                                                  options: getCcMonthsValues(),
-                                                  optionsValue: 'value',
-                                                  optionsText: 'month',
-                                                  optionsCaption: $t('Month'),
-                                                  value: creditCardSsStartMonth">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field no-label year">
-                            <div class="control">
-                                <select name="payment[cc_ss_start_year]"
-                                        class="select select-year"
-                                        data-bind="attr: {id: getCode() + '_start_year', 'data-container': getCode() + '-cc-start-year',
-                                        'data-validate': JSON.stringify({'validate-cc-ukss':true})},
-                                        enable: isActive($parents),
-                                        options: getSsStartYearsValues(),
-                                        optionsValue: 'value',
-                                        optionsText: 'year',
-                                        optionsCaption: $t('Year'),
-                                        value: creditCardSsStartYear">
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="adv container" data-validation-msg="validate-cc-ukss">&nbsp;</div>
         </div>
     </div>
     <!-- /ko -->

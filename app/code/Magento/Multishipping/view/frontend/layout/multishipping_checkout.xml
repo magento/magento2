@@ -1,32 +1,10 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
-    <body>
-        <referenceBlock name="authentication-popup">
-            <arguments>
-                <argument name="jsLayout" xsi:type="array">
-                    <item name="components" xsi:type="array">
-                        <item name="authenticationPopup" xsi:type="array">
-                            <item name="children" xsi:type="array">
-                                <item name="captcha" xsi:type="array">
-                                    <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
-                                    <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
-                                    <item name="formId" xsi:type="string">user_login</item>
-                                    <item name="configSource" xsi:type="string">authenticationPopup</item>
-                                </item>
-                            </item>
-                        </item>
-                    </item>
-                </argument>
-            </arguments>
-        </referenceBlock>
-        <referenceContainer name="sidebar.main">
-            <block class="Magento\Multishipping\Block\Checkout\State" name="checkout_state" template="checkout/state.phtml" cacheable="false"/>
-        </referenceContainer>
-    </body>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
+    <body/>
 </page>

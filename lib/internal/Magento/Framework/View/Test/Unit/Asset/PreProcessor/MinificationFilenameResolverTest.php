@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver;
+use Magento\Framework\View\Asset\PreProcessor\MinificationConfigProvider;
 
 /**
  * Class MinificationFilenameResolverTest
  *
  * @see \Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver
  */
-class MinificationFilenameResolverTest extends \PHPUnit_Framework_TestCase
+class MinificationFilenameResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Run test for resolve method
@@ -29,13 +30,15 @@ class MinificationFilenameResolverTest extends \PHPUnit_Framework_TestCase
         $minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $minificationMock->expects(self::once())
-            ->method('isEnabled')
-            ->with('ext')
+        $minificationConfigMock = $this->getMockBuilder(MinificationConfigProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $minificationConfigMock->expects(self::once())
+            ->method('isMinificationEnabled')
+            ->with($input)
             ->willReturn($isMin);
 
-        $resolver = new MinificationFilenameResolver($minificationMock);
+        $resolver = new MinificationFilenameResolver($minificationMock, $minificationConfigMock);
 
         self::assertEquals($expected, $resolver->resolve($input));
     }

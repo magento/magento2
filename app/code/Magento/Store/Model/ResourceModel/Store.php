@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\ResourceModel;
 
 /**
  * Store Resource Model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -153,6 +156,26 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
         }
         return $this;
+    }
+
+    /**
+     * Read information about all stores
+     *
+     * @return array
+     * @since 100.1.3
+     */
+    public function readAllStores()
+    {
+        $stores = [];
+        if ($this->getConnection()->isTableExists($this->getMainTable())) {
+            $select = $this->getConnection()
+                ->select()
+                ->from($this->getTable($this->getMainTable()));
+
+            $stores = $this->getConnection()->fetchAll($select);
+        }
+
+        return $stores;
     }
 
     /**

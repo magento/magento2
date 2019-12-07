@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api\Data;
@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface AddressInterface
  * @api
+ * @since 100.0.2
  */
 interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
@@ -370,7 +371,7 @@ interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     /**
      * Set customer address id
      *
-     * @param int $customerAddressId
+     * @param int|null $customerAddressId
      * @return $this
      */
     public function setCustomerAddressId($customerAddressId);

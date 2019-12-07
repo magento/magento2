@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -10,14 +10,18 @@
 & when (@media-common = true) {
     .pages {
         .lib-pager();
+
         .action {
             @_shadow: inset 0 1px 0 0 @color-white, inset 0 -1px 0 0 fade(@border-color__base, 30);
+
             .lib-css(box-shadow, @_shadow);
             border-radius: 3px;
             padding: 0 8px;
+
             &.previous {
                 margin-right: 8px;
             }
+
             &.next {
                 margin-left: 8px;
             }
@@ -38,12 +42,14 @@
             white-space: normal;
             z-index: 1;
         }
+
         &-item-previous {
             left: 0;
             position: absolute;
             top: 0;
             z-index: 1;
         }
+
         &-item-next {
             position: absolute;
             right: 0;

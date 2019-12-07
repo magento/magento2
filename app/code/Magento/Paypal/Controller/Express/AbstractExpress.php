@@ -1,18 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Express;
 
 use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 use Magento\Framework\App\Action\Action as AppAction;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Abstract Express Checkout Controller
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractExpress extends AppAction implements RedirectLoginInterface
+abstract class AbstractExpress extends AppAction implements
+    RedirectLoginInterface,
+    HttpGetActionInterface,
+    HttpPostActionInterface
 {
     /**
      * @var \Magento\Paypal\Model\Express\Checkout
@@ -93,6 +101,11 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
     protected $_customerUrl;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -101,6 +114,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
      * @param \Magento\Framework\Session\Generic $paypalSession
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -110,7 +124,8 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
         \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Framework\Url\Helper\Data $urlHelper,
-        \Magento\Customer\Model\Url $customerUrl
+        \Magento\Customer\Model\Url $customerUrl,
+        CartRepositoryInterface $quoteRepository = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession;
@@ -122,20 +137,31 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
         parent::__construct($context);
         $parameters = ['params' => [$this->_configMethod]];
         $this->_config = $this->_objectManager->create($this->_configType, $parameters);
+        $this->quoteRepository = $quoteRepository ?: ObjectManager::getInstance()->get(CartRepositoryInterface::class);
     }
 
     /**
      * Instantiate quote and checkout
      *
+     * @param CartInterface|null $quoteObject
+     *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _initCheckout()
+    protected function _initCheckout(CartInterface $quoteObject = null)
     {
-        $quote = $this->_getQuote();
+        $quote = $quoteObject ? $quoteObject : $this->_getQuote();
         if (!$quote->hasItems() || $quote->getHasError()) {
             $this->getResponse()->setStatusHeader(403, '1.1', 'Forbidden');
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t initialize Express Checkout.'));
+        }
+        if (!(float)$quote->getGrandTotal()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'PayPal can\'t process orders with a zero balance due. '
+                    . 'To finish your purchase, please go through the standard checkout process.'
+                )
+            );
         }
         if (!isset($this->_checkoutTypes[$this->_checkoutType])) {
             $parameters = [
@@ -151,6 +177,8 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
     }
 
     /**
+     * Get Proper Checkout Token
+     *
      * Search for proper checkout token in request or session or (un)set specified one
      * Combined getter/setter
      *
@@ -215,23 +243,26 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
     protected function _getQuote()
     {
         if (!$this->_quote) {
-            $this->_quote = $this->_getCheckoutSession()->getQuote();
+            if ($this->_getSession()->getQuoteId()) {
+                $this->_quote = $this->quoteRepository->get($this->_getSession()->getQuoteId());
+                $this->_getCheckoutSession()->replaceQuote($this->_quote);
+            } else {
+                $this->_quote = $this->_getCheckoutSession()->getQuote();
+            }
         }
         return $this->_quote;
     }
 
     /**
-     * Returns before_auth_url redirect parameter for customer session
-     * @return null
+     * @inheritdoc
      */
     public function getCustomerBeforeAuthUrl()
     {
-        return;
+        return null;
     }
 
     /**
-     * Returns a list of action flags [flag_key] => boolean
-     * @return array
+     * @inheritdoc
      */
     public function getActionFlagList()
     {
@@ -240,6 +271,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
 
     /**
      * Returns login url parameter for redirect
+     *
      * @return string
      */
     public function getLoginUrl()
@@ -249,6 +281,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
 
     /**
      * Returns action name which requires redirect
+     *
      * @return string
      */
     public function getRedirectActionName()
@@ -269,4 +302,9 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
             $this->_urlHelper->addRequestParam($this->_customerUrl->getLoginUrl(), ['context' => 'checkout'])
         );
     }
+
+    /**
+     * @inheritdoc
+     */
+    abstract public function execute();
 }

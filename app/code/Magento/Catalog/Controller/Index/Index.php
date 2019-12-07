@@ -1,16 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Index;
 
-class Index extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+/**
+ * Catalog index page controller.
+ */
+class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * Index action
      *
-     * @return $this
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {

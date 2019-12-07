@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,6 +12,12 @@
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute" />
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionValueInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue" />
     <preference for="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" type="Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider" />
+    <preference for="Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface" type="Magento\ConfigurableProduct\Model\AttributeOptionProvider" />
+    <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder" />
+
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
     </type>
@@ -23,6 +29,9 @@
     </type>
     <type name="Magento\Catalog\Helper\Product\Configuration">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
+        <plugin name="ConfigurableProduct::skipValidation" type="Magento\ConfigurableProduct\Plugin\Model\Attribute\Backend\AttributeValidation"/>
     </type>
     <type name="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin" sortOrder="50" />
@@ -56,14 +65,28 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="configurableProductSaveOptions" sortOrder="10" type="Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave"/>
+    </type>
     <type name="Magento\Catalog\Model\Product\Type">
         <plugin name="configurable_output" type="Magento\ConfigurableProduct\Model\Product\Type\Plugin" />
     </type>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="configurableProductSaveOptions" type="\Magento\ConfigurableProduct\Model\Plugin\AroundProductRepositorySave"/>
-    </type>
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="configurableProductLoadAfter" type="\Magento\ConfigurableProduct\Model\Plugin\AfterProductLoad"/>
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="create" xsi:type="array">
+                        <item name="create_configurable_options" xsi:type="string">Magento\ConfigurableProduct\Model\Product\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="update_configurable_options" xsi:type="string">Magento\ConfigurableProduct\Model\Product\SaveHandler</item>
+                    </item>
+                    <item name="read" xsi:type="array">
+                        <item name="read_configurable_options" xsi:type="string">Magento\ConfigurableProduct\Model\Product\ReadHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
     </type>
     <virtualType name="Magento\ConfigurableProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
         <arguments>
@@ -92,11 +115,18 @@
     <type name="Magento\Quote\Model\Quote\Item\Repository">
         <arguments>
             <argument name="cartItemProcessors" xsi:type="array">
-                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor</item>
+                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor\Proxy</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
         <arguments>
             <argument name="processorPool" xsi:type="array">
                 <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\ProductOptionProcessor</item>
@@ -125,5 +155,113 @@
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Plugin\PriceBackend" sortOrder="100" />
+    </type>
+    <type name="Magento\ProductVideo\Block\Product\View\Gallery">
+        <plugin name="product_video_gallery" type="Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery" />
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable">
+        <arguments>
+            <argument name="attributeOptionProvider" xsi:type="object">Magento\ConfigurableProduct\Model\AttributeOptionProvider\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="select" xsi:type="string">select</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
+        <arguments>
+            <argument name="estimators" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement</item>
+            </argument>
+            <argument name="batchSizeAdjusters" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeAdjuster</item>
+            </argument>
+            <!--
+            real batch size will be smaller.
+            It depends on amount configurable product variations.
+            E.g for 100 variations real batch size will be 50000/100=500
+            -->
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="configurable" xsi:type="number">50000</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable">
+        <arguments>
+            <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product">
+        <arguments>
+            <argument name="productIndexer" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Full</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider">
+        <arguments>
+            <argument name="linkedProductSelectBuilder" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder">
+        <arguments>
+            <argument name="baseSelectProcessor" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</argument>
+            <argument name="linkedProductSelectBuilder" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver">
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Pricing\Renderer\SalableResolver" />
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="product_identities_extender" type="Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array">
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Quote\ChildrenValidationLocator">
+        <arguments>
+            <argument name="productTypeChildrenValidationMap" xsi:type="array">
+                <item name="configurable" xsi:type="boolean">false</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Rule\Condition\Product">
+        <plugin name="apply_rule_on_configurable_children" type="Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition\Product" />
+    </type>
+    <type name="Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector">
+        <plugin name="apply_tax_class_id" type="Magento\ConfigurableProduct\Plugin\Tax\Model\Sales\Total\Quote\CommonTaxCollector" />
+    </type>
+    <type name="Magento\Eav\Model\Entity\Attribute\Group">
+        <arguments>
+            <argument name="reservedSystemNames" xsi:type="array">
+                <item name="configurable" xsi:type="string">configurable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="configurable" xsi:type="object"> Magento\ConfigurableProduct\Model\Inventory\ParentItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsCache">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
+        </arguments>
     </type>
 </config>

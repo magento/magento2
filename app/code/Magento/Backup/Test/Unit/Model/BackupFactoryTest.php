@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Test\Unit\Model;
 
-class BackupFactoryTest extends \PHPUnit_Framework_TestCase
+class BackupFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backup\Model\BackupFactory
@@ -41,7 +41,7 @@ class BackupFactoryTest extends \PHPUnit_Framework_TestCase
             'name' => '',
             'type' => 'snapshot',
         ];
-        $this->_fsCollection = $this->getMock('Magento\Backup\Model\Fs\Collection', [], [], '', false);
+        $this->_fsCollection = $this->createMock(\Magento\Backup\Model\Fs\Collection::class);
         $this->_fsCollection->expects(
             $this->at(0)
         )->method(
@@ -50,24 +50,24 @@ class BackupFactoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(new \ArrayIterator([new \Magento\Framework\DataObject($this->_data)]))
         );
 
-        $this->_backupModel = $this->getMock('Magento\Backup\Model\Backup', [], [], '', false);
+        $this->_backupModel = $this->createMock(\Magento\Backup\Model\Backup::class);
 
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->at(0)
         )->method(
-            'get'
+            'create'
         )->with(
-            'Magento\Backup\Model\Fs\Collection'
+            \Magento\Backup\Model\Fs\Collection::class
         )->will(
             $this->returnValue($this->_fsCollection)
         );
         $this->_objectManager->expects(
             $this->at(1)
         )->method(
-            'get'
+            'create'
         )->with(
-            'Magento\Backup\Model\Backup'
+            \Magento\Backup\Model\Backup::class
         )->will(
             $this->returnValue($this->_backupModel)
         );
@@ -77,42 +77,29 @@ class BackupFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $this->_backupModel->expects(
-            $this->once()
-        )->method(
-            'setType'
-        )->with(
-            $this->_data['type']
-        )->will(
-            $this->returnSelf()
-        );
-        $this->_backupModel->expects(
-            $this->once()
-        )->method(
-            'setTime'
-        )->with(
-            $this->_data['time']
-        )->will(
-            $this->returnSelf()
-        );
-        $this->_backupModel->expects(
-            $this->once()
-        )->method(
-            'setName'
-        )->with(
-            $this->_data['name']
-        )->will(
-            $this->returnSelf()
-        );
-        $this->_backupModel->expects(
-            $this->once()
-        )->method(
-            'setPath'
-        )->with(
-            $this->_data['path']
-        )->will(
-            $this->returnSelf()
-        );
+        $this->_backupModel->expects($this->once())
+            ->method('setType')
+            ->with($this->_data['type'])
+            ->will($this->returnSelf());
+
+        $this->_backupModel->expects($this->once())
+            ->method('setTime')
+            ->with($this->_data['time'])
+            ->will($this->returnSelf());
+
+        $this->_backupModel->expects($this->once())
+            ->method('setName')
+            ->with($this->_data['name'])
+            ->will($this->returnSelf());
+
+        $this->_backupModel->expects($this->once())
+            ->method('setPath')
+            ->with($this->_data['path'])
+            ->will($this->returnSelf());
+
+        $this->_backupModel->expects($this->once())
+            ->method('setData')
+            ->will($this->returnSelf());
 
         $this->_instance->create('1385661590', 'snapshot');
     }

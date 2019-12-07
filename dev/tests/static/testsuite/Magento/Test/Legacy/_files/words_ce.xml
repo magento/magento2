@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -33,10 +33,16 @@
             <path>CHANGELOG.md</path>
         </item>
         <item>
+            <path>composer.lock</path>
+        </item>
+        <item>
             <path>dev/build/publication/extra_files/ce/CHANGELOG.md</path>
         </item>
         <item>
             <path>lib/internal/Zend</path>
+        </item>
+        <item>
+            <path>dev/tests/static/testsuite/Magento/Test/_files</path>
         </item>
         <item>
             <path>dev/tests/static/testsuite/Magento/Test/Legacy/_files/obsolete_constants.php</path>
@@ -45,6 +51,27 @@
         <item>
             <path>dev/tests/api-functional/testsuite/Magento/Webapi/Routing/RequestIdOverrideTest.php</path>
             <word>overriden</word>
+        </item>
+        <item>
+            <path>dev/composer.lock</path>
+        </item>
+        <item>
+            <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
+            <word>twig</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/jsoneditor.min.js</path>
+            <word>twig</word>
+        </item>
+        <item>
+            <path>dev/tests/acceptance/composer.lock</path>
+        </item>
+        <item>
+            <path>dev/build/publication/sanity/ce.xml</path>
+        </item>
+        <item>
+            <path>app/design/adminhtml/Magento/backend/Magento_Rma/web/css/source/_module.less</path>
+            <word>rma</word>
         </item>
     </whitelist>
 </config>

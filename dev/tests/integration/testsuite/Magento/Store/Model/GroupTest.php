@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Store
@@ -16,13 +16,13 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
+        $this->_model = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Group::class);
     }
 
     public function testSetGetWebsite()
     {
         $this->assertFalse($this->_model->getWebsite());
-        $website = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')->getWebsite();
+        $website = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->getWebsite();
         $this->_model->setWebsite($website);
         $actualResult = $this->_model->getWebsite();
         $this->assertSame($website, $actualResult);
@@ -34,7 +34,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testGetWebsiteDefault()
     {
         $this->assertFalse($this->_model->getWebsite());
-        $website = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')->getWebsite();
+        $website = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->getWebsite();
         $this->_model->setWebsite($website);
         // Empty string should get treated like no parameter
         $actualResult = $this->_model->getWebsite('');

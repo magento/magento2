@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -32,7 +32,7 @@
         <field name="custom_design_from" is_required="0" />
         <field name="custom_design_to" is_required="0" />
         <field name="custom_layout_update" is_required="0" />
-        <field name="description" is_required="0" group="product-details" />
+        <field name="description" is_required="0" group="content" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
         <field name="has_options" is_required="0" />
@@ -54,11 +54,11 @@
         <field name="related_tgtr_position_behavior" is_required="0" />
         <field name="related_tgtr_position_limit" is_required="0" />
         <field name="required_options" is_required="0" />
-        <field name="short_description" is_required="0" group="autosettings" />
+        <field name="short_description" is_required="0" group="content" />
         <field name="sku" is_required="1" group="product-details" />
         <field name="small_image" is_required="0" />
         <field name="small_image_label" is_required="0" />
-        <field name="status" is_required="0" />
+        <field name="status" is_required="0" group="product-details" />
         <field name="thumbnail" is_required="0" />
         <field name="thumbnail_label" is_required="0" />
         <field name="updated_at" is_required="1" />
@@ -66,11 +66,11 @@
         <field name="upsell_tgtr_position_limit" is_required="0" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
-        <field name="visibility" is_required="0" />
+        <field name="visibility" is_required="0" group="product-details" />
         <field name="id" />
         <field name="type_id" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="price" source="Magento\Catalog\Test\Fixture\Product\Price" repository="Magento\GroupedProduct\Test\Repository\GroupedProduct\Price" />
         <field name="checkout_data" group="null" repository="Magento\GroupedProduct\Test\Repository\GroupedProduct\CheckoutData" />
         <field name="tax_class" />

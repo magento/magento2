@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template\Config;
@@ -10,7 +10,7 @@ use Magento\Email\Model\Template\Config\FileIterator;
 /**
  * Class FileIteratorTest
  */
-class FileIteratorTest extends \PHPUnit_Framework_TestCase
+class FileIteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FileIterator
@@ -42,15 +42,9 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filePaths = ['directory/path/file1', 'directory/path/file2'];
-        $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
-        $this->fileRead = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
-        $this->moduleDirResolverMock = $this->getMock(
-            'Magento\Framework\Module\Dir\ReverseResolver',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
+        $this->fileRead = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
+        $this->moduleDirResolverMock = $this->createMock(\Magento\Framework\Module\Dir\ReverseResolver::class);
 
         $this->fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
             $this->fileReadFactory,
@@ -99,10 +93,8 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = $this->filePaths[0];
 
-        $this->setExpectedException(
-            'UnexpectedValueException',
-            sprintf("Unable to determine a module, file '%s' belongs to.", $filePath)
-        );
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage(sprintf("Unable to determine a module, file '%s' belongs to.", $filePath));
 
         $this->moduleDirResolverMock->expects($this->at(0))
             ->method('getModuleName')

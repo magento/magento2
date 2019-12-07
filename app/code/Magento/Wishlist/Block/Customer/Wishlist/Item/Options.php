@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,9 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
 /**
  * Wishlist block customer items
  *
+ * @api
  * @method \Magento\Wishlist\Model\Item getItem()
+ * @since 100.0.2
  */
 class Options extends \Magento\Wishlist\Block\AbstractBlock
 {
@@ -25,7 +27,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected $_optionsCfg = [
         'default' => [
-            'helper' => 'Magento\Catalog\Helper\Product\Configuration',
+            'helper' => \Magento\Catalog\Helper\Product\Configuration::class,
             'template' => 'Magento_Wishlist::options_list.phtml',
         ],
     ];
@@ -103,7 +105,23 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
         $data = $this->getOptionsRenderCfg($item->getProduct()->getTypeId());
         $helper = $this->_helperPool->get($data['helper']);
 
-        return $helper->getOptions($item);
+        $options = $helper->getOptions($item);
+        foreach ($options as $index => $option) {
+            if (is_array($option) && array_key_exists('value', $option)) {
+                if (!(array_key_exists('has_html', $option) && $option['has_html'] === true)) {
+                    if (is_array($option['value'])) {
+                        foreach ($option['value'] as $key => $value) {
+                            $option['value'][$key] = $this->escapeHtml($value);
+                        }
+                    } else {
+                        $option['value'] = $this->escapeHtml($option['value'], ["a"]);
+                    }
+                }
+                $options[$index]['value'] = $option['value'];
+            }
+        }
+
+        return $options;
     }
 
     /**

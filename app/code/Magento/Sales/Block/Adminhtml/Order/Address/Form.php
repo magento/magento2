@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Address;
@@ -19,7 +19,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      *
      * @var string
      */
-    protected $_template = 'order/address/form.phtml';
+    protected $_template = 'Magento_Sales::order/address/form.phtml';
 
     /**
      * Core registry
@@ -113,6 +113,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
             $this->getUrl('sales/*/addressSave', ['address_id' => $this->_getAddress()->getId()])
         );
         $this->_form->setUseContainer(true);
+
         return $this;
     }
 
@@ -134,5 +135,13 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     public function getFormValues()
     {
         return $this->_getAddress()->getData();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getAddressStoreId()
+    {
+        return $this->_getAddress()->getOrder()->getStoreId();
     }
 }

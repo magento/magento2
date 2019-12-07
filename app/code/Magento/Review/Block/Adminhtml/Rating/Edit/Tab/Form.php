@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
 
+/**
+ * Class Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -17,7 +22,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var string
      */
-    protected $_template = 'rating/form.phtml';
+    protected $_template = 'Magento_Review::rating/form.phtml';
 
     /**
      * Session
@@ -106,13 +111,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        foreach ($this->systemStore->getStoreCollection() as $store) {
-            $this->getFieldset('rating_form')->addField(
-                'rating_code_' . $store->getId(),
-                'text',
-                ['label' => $store->getName(), 'name' => 'rating_codes[' . $store->getId() . ']']
-            );
+        if (!$this->_storeManager->isSingleStoreMode()) {
+            foreach ($this->systemStore->getStoreCollection() as $store) {
+                $this->getFieldset('rating_form')->addField(
+                    'rating_code_' . $store->getId(),
+                    'text',
+                    ['label' => $store->getName(), 'name' => 'rating_codes[' . $store->getId() . ']']
+                );
+            }
         }
+
         $this->setRatingData();
     }
 
@@ -212,7 +220,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
             if ($this->_coreRegistry->registry('rating_data')) {
@@ -227,7 +235,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['label' => __('Is Active'), 'name' => 'is_active', 'value' => 1]
         );
         $this->getFieldset('visibility_form')
-            ->addField('position', 'text', ['label' => __('Sort Order'), 'name' => 'position']);
+            ->addField(
+                'position',
+                'text',
+                [
+                    'label' => __('Sort Order'),
+                    'name' => 'position',
+                    'class' => 'validate-not-negative-number'
+                ]
+            );
     }
 
     /**
@@ -242,7 +258,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (!isset($this->fieldset[$formId])) {
             if (!$this->getForm()->getElement($formId)) {
                 $this->fieldset[$formId] = $this->getForm()->addFieldset($formId, $config);
-            } elseif ($this->getForm()->getElement($formId));
+            }
         }
     }
 

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\Escaper;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -13,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class OrdersTest extends \PHPUnit_Framework_TestCase
+class OrdersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The orders block under test.
@@ -30,24 +31,30 @@ class OrdersTest extends \PHPUnit_Framework_TestCase
     private $coreRegistry;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * Execute per test initialization.
      */
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('adminhtml');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
 
-        $this->coreRegistry = $objectManager->get('Magento\Framework\Registry');
+        $this->coreRegistry = $objectManager->get(\Magento\Framework\Registry::class);
         $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
 
         $this->block = $objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\Orders',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\Orders::class,
             '',
             ['coreRegistry' => $this->coreRegistry]
         );
         $this->block->getPreparedCollection();
+        $this->escaper = $objectManager->get(Escaper::class);
     }
 
     /**
@@ -81,6 +88,9 @@ class OrdersTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        $this->assertContains("We couldn't find any records.", $this->block->toHtml());
+        $this->assertContains(
+            $this->escaper->escapeHtml("We couldn't find any records."),
+            $this->block->toHtml()
+        );
     }
 }

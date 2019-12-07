@@ -2,20 +2,61 @@
 /**
  * Catalog entity setup
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
 
+use Magento\Catalog\Block\Adminhtml\Category\Helper\Pricestep;
+use Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\Available;
+use Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\DefaultSortby;
+use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category as CategoryFormHelper;
+use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight as WeightFormHelper;
+use Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate;
+use Magento\Catalog\Model\Attribute\Backend\Startdate;
+use Magento\Catalog\Model\Category\Attribute\Backend\Image;
+use Magento\Catalog\Model\Category\Attribute\Backend\Sortby as SortbyBackendModel;
+use Magento\Catalog\Model\Category\Attribute\Source\Layout;
+use Magento\Catalog\Model\Category\Attribute\Source\Mode;
+use Magento\Catalog\Model\Category\Attribute\Source\Page;
+use Magento\Catalog\Model\Category\Attribute\Source\Sortby;
 use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Entity\Product\Attribute\Design\Options\Container;
+use Magento\Catalog\Model\Product\Attribute\Backend\Category as CategoryBackendAttribute;
+use Magento\Catalog\Model\Product\Attribute\Backend\Price;
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
+use Magento\Catalog\Model\Product\Attribute\Backend\Stock;
+use Magento\Catalog\Model\Product\Attribute\Backend\Tierprice;
+use Magento\Catalog\Model\Product\Attribute\Backend\Weight;
+use Magento\Catalog\Model\Product\Attribute\Frontend\Image as ImageFrontendModel;
+use Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture;
+use Magento\Catalog\Model\Product\Attribute\Source\Layout as LayoutModel;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock as StockField;
+use Magento\CatalogInventory\Model\Source\Stock as StockSourceModel;
+use Magento\CatalogInventory\Model\Stock as StockModel;
+use Magento\Eav\Model\Entity\Attribute\Backend\Datetime;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Catalog\Model\Product\Type;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Theme\Model\Theme\Source\Theme;
 
+/**
+ * Setup category with default entities.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategorySetup extends EavSetup
 {
     /**
@@ -24,6 +65,16 @@ class CategorySetup extends EavSetup
      * @var CategoryFactory
      */
     private $categoryFactory;
+
+    /**
+     * This should be set explicitly
+     */
+    const CATEGORY_ENTITY_TYPE_ID = 3;
+
+    /**
+     * This should be set explicitly
+     */
+    const CATALOG_PRODUCT_ENTITY_TYPE_ID = 4;
 
     /**
      * Init
@@ -67,27 +118,29 @@ class CategorySetup extends EavSetup
     {
         return [
             'catalog_category' => [
-                'entity_model' => 'Magento\Catalog\Model\ResourceModel\Category',
-                'attribute_model' => 'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+                'entity_type_id' => self::CATEGORY_ENTITY_TYPE_ID,
+                'entity_model' => Category::class,
+                'attribute_model' => Attribute::class,
                 'table' => 'catalog_category_entity',
                 'additional_attribute_table' => 'catalog_eav_attribute',
-                'entity_attribute_collection' => 'Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection',
+                'entity_attribute_collection' =>
+                    Collection::class,
                 'attributes' => [
                     'name' => [
                         'type' => 'varchar',
                         'label' => 'Name',
                         'input' => 'text',
                         'sort_order' => 1,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'General Information',
                     ],
                     'is_active' => [
                         'type' => 'int',
                         'label' => 'Is Active',
                         'input' => 'select',
-                        'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                        'source' => Boolean::class,
                         'sort_order' => 2,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'General Information',
                     ],
                     'description' => [
@@ -96,7 +149,7 @@ class CategorySetup extends EavSetup
                         'input' => 'textarea',
                         'required' => false,
                         'sort_order' => 4,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'wysiwyg_enabled' => true,
                         'is_html_allowed_on_front' => true,
                         'group' => 'General Information',
@@ -105,10 +158,10 @@ class CategorySetup extends EavSetup
                         'type' => 'varchar',
                         'label' => 'Image',
                         'input' => 'image',
-                        'backend' => 'Magento\Catalog\Model\Category\Attribute\Backend\Image',
+                        'backend' => Image::class,
                         'required' => false,
                         'sort_order' => 5,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'General Information',
                     ],
                     'meta_title' => [
@@ -117,7 +170,7 @@ class CategorySetup extends EavSetup
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 6,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'General Information',
                     ],
                     'meta_keywords' => [
@@ -126,7 +179,7 @@ class CategorySetup extends EavSetup
                         'input' => 'textarea',
                         'required' => false,
                         'sort_order' => 7,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'General Information',
                     ],
                     'meta_description' => [
@@ -135,34 +188,34 @@ class CategorySetup extends EavSetup
                         'input' => 'textarea',
                         'required' => false,
                         'sort_order' => 8,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'General Information',
                     ],
                     'display_mode' => [
                         'type' => 'varchar',
                         'label' => 'Display Mode',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Category\Attribute\Source\Mode',
+                        'source' => Mode::class,
                         'required' => false,
                         'sort_order' => 10,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Display Settings',
                     ],
                     'landing_page' => [
                         'type' => 'int',
                         'label' => 'CMS Block',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Category\Attribute\Source\Page',
+                        'source' => Page::class,
                         'required' => false,
                         'sort_order' => 20,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Display Settings',
                     ],
                     'is_anchor' => [
                         'type' => 'int',
                         'label' => 'Is Anchor',
                         'input' => 'select',
-                        'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                        'source' => Boolean::class,
                         'required' => false,
                         'sort_order' => 30,
                         'group' => 'Display Settings',
@@ -208,50 +261,50 @@ class CategorySetup extends EavSetup
                         'type' => 'varchar',
                         'label' => 'Custom Design',
                         'input' => 'select',
-                        'source' => 'Magento\Theme\Model\Theme\Source\Theme',
+                        'source' => Theme::class,
                         'required' => false,
                         'sort_order' => 10,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Custom Design',
                     ],
                     'custom_design_from' => [
                         'type' => 'datetime',
                         'label' => 'Active From',
                         'input' => 'date',
-                        'backend' => 'Magento\Catalog\Model\Attribute\Backend\Startdate',
+                        'backend' => Startdate::class,
                         'required' => false,
                         'sort_order' => 30,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Custom Design',
                     ],
                     'custom_design_to' => [
                         'type' => 'datetime',
                         'label' => 'Active To',
                         'input' => 'date',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
+                        'backend' => Datetime::class,
                         'required' => false,
                         'sort_order' => 40,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Custom Design',
                     ],
                     'page_layout' => [
                         'type' => 'varchar',
                         'label' => 'Page Layout',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Category\Attribute\Source\Layout',
+                        'source' => Layout::class,
                         'required' => false,
                         'sort_order' => 50,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Custom Design',
                     ],
                     'custom_layout_update' => [
                         'type' => 'text',
                         'label' => 'Custom Layout Update',
                         'input' => 'textarea',
-                        'backend' => 'Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate',
+                        'backend' => Customlayoutupdate::class,
                         'required' => false,
                         'sort_order' => 60,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Custom Design',
                     ],
                     'level' => [
@@ -274,52 +327,53 @@ class CategorySetup extends EavSetup
                         'type' => 'text',
                         'label' => 'Available Product Listing Sort By',
                         'input' => 'multiselect',
-                        'source' => 'Magento\Catalog\Model\Category\Attribute\Source\Sortby',
-                        'backend' => 'Magento\Catalog\Model\Category\Attribute\Backend\Sortby',
+                        'source' => Sortby::class,
+                        'backend' => SortbyBackendModel::class,
                         'sort_order' => 40,
-                        'input_renderer' => 'Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\Available',
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'input_renderer' => Available::class,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Display Settings',
                     ],
                     'default_sort_by' => [
                         'type' => 'varchar',
                         'label' => 'Default Product Listing Sort By',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Category\Attribute\Source\Sortby',
-                        'backend' => 'Magento\Catalog\Model\Category\Attribute\Backend\Sortby',
+                        'source' => Sortby::class,
+                        'backend' => SortbyBackendModel::class,
                         'sort_order' => 50,
-                        'input_renderer' => 'Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\DefaultSortby',
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'input_renderer' =>
+                            DefaultSortby::class,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Display Settings',
                     ],
                     'include_in_menu' => [
                         'type' => 'int',
                         'label' => 'Include in Navigation Menu',
                         'input' => 'select',
-                        'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                        'source' => Boolean::class,
                         'default' => '1',
                         'sort_order' => 10,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'General Information',
                     ],
                     'custom_use_parent_settings' => [
                         'type' => 'int',
                         'label' => 'Use Parent Category Settings',
                         'input' => 'select',
-                        'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                        'source' => Boolean::class,
                         'required' => false,
                         'sort_order' => 5,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Custom Design',
                     ],
                     'custom_apply_to_products' => [
                         'type' => 'int',
                         'label' => 'Apply To Products',
                         'input' => 'select',
-                        'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                        'source' => Boolean::class,
                         'required' => false,
                         'sort_order' => 6,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Custom Design',
                     ],
                     'filter_price_range' => [
@@ -328,18 +382,20 @@ class CategorySetup extends EavSetup
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 51,
-                        'input_renderer' => 'Magento\Catalog\Block\Adminhtml\Category\Helper\Pricestep',
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'input_renderer' => Pricestep::class,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Display Settings',
                     ],
                 ],
             ],
             'catalog_product' => [
-                'entity_model' => 'Magento\Catalog\Model\ResourceModel\Product',
-                'attribute_model' => 'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+                'entity_type_id' => self::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+                'entity_model' => Product::class,
+                'attribute_model' => Attribute::class,
                 'table' => 'catalog_product_entity',
                 'additional_attribute_table' => 'catalog_eav_attribute',
-                'entity_attribute_collection' => 'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
+                'entity_attribute_collection' =>
+                    Product\Attribute\Collection::class,
                 'attributes' => [
                     'name' => [
                         'type' => 'varchar',
@@ -347,7 +403,7 @@ class CategorySetup extends EavSetup
                         'input' => 'text',
                         'frontend_class' => 'validate-length maximum-length-255',
                         'sort_order' => 1,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'searchable' => true,
                         'visible_in_advanced_search' => true,
                         'used_in_product_listing' => true,
@@ -358,7 +414,7 @@ class CategorySetup extends EavSetup
                         'label' => 'SKU',
                         'input' => 'text',
                         'frontend_class' => 'validate-length maximum-length-64',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Sku',
+                        'backend' => Sku::class,
                         'unique' => true,
                         'sort_order' => 2,
                         'searchable' => true,
@@ -370,7 +426,7 @@ class CategorySetup extends EavSetup
                         'label' => 'Description',
                         'input' => 'textarea',
                         'sort_order' => 3,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'searchable' => true,
                         'comparable' => true,
                         'wysiwyg_enabled' => true,
@@ -382,7 +438,7 @@ class CategorySetup extends EavSetup
                         'label' => 'Short Description',
                         'input' => 'textarea',
                         'sort_order' => 4,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'searchable' => true,
                         'comparable' => true,
                         'wysiwyg_enabled' => true,
@@ -397,9 +453,9 @@ class CategorySetup extends EavSetup
                         'type' => 'decimal',
                         'label' => 'Price',
                         'input' => 'price',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Price',
+                        'backend' => Price::class,
                         'sort_order' => 1,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'searchable' => true,
                         'filterable' => true,
                         'visible_in_advanced_search' => true,
@@ -412,10 +468,10 @@ class CategorySetup extends EavSetup
                         'type' => 'decimal',
                         'label' => 'Special Price',
                         'input' => 'price',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Price',
+                        'backend' => Price::class,
                         'required' => false,
                         'sort_order' => 3,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'used_in_product_listing' => true,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
@@ -427,10 +483,10 @@ class CategorySetup extends EavSetup
                         'type' => 'datetime',
                         'label' => 'Special Price From Date',
                         'input' => 'date',
-                        'backend' => 'Magento\Catalog\Model\Attribute\Backend\Startdate',
+                        'backend' => Startdate::class,
                         'required' => false,
                         'sort_order' => 4,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'used_in_product_listing' => true,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
@@ -442,10 +498,10 @@ class CategorySetup extends EavSetup
                         'type' => 'datetime',
                         'label' => 'Special Price To Date',
                         'input' => 'date',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
+                        'backend' => Datetime::class,
                         'required' => false,
                         'sort_order' => 5,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'used_in_product_listing' => true,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
@@ -457,11 +513,11 @@ class CategorySetup extends EavSetup
                         'type' => 'decimal',
                         'label' => 'Cost',
                         'input' => 'price',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Price',
+                        'backend' => Price::class,
                         'required' => false,
                         'user_defined' => true,
                         'sort_order' => 6,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
                         'is_used_in_grid' => true,
@@ -472,8 +528,8 @@ class CategorySetup extends EavSetup
                         'type' => 'decimal',
                         'label' => 'Weight',
                         'input' => 'weight',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Weight',
-                        'input_renderer' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
+                        'backend' => Weight::class,
+                        'input_renderer' => WeightFormHelper::class,
                         'sort_order' => 5,
                         'apply_to' => 'simple,virtual',
                         'is_used_in_grid' => true,
@@ -501,7 +557,7 @@ class CategorySetup extends EavSetup
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 20,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Meta Information',
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -513,7 +569,7 @@ class CategorySetup extends EavSetup
                         'input' => 'textarea',
                         'required' => false,
                         'sort_order' => 30,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Meta Information',
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -527,7 +583,7 @@ class CategorySetup extends EavSetup
                         'note' => 'Maximum 255 chars',
                         'class' => 'validate-length maximum-length-255',
                         'sort_order' => 40,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Meta Information',
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -537,11 +593,10 @@ class CategorySetup extends EavSetup
                         'type' => 'varchar',
                         'label' => 'Base Image',
                         'input' => 'media_image',
-                        'frontend' => 'Magento\Catalog\Model\Product\Attribute\Frontend\Image',
-                        'input_renderer' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\BaseImage',
+                        'frontend' => ImageFrontendModel::class,
                         'required' => false,
                         'sort_order' => 0,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'used_in_product_listing' => true,
                         'group' => 'General',
                     ],
@@ -549,10 +604,10 @@ class CategorySetup extends EavSetup
                         'type' => 'varchar',
                         'label' => 'Small Image',
                         'input' => 'media_image',
-                        'frontend' => 'Magento\Catalog\Model\Product\Attribute\Frontend\Image',
+                        'frontend' => ImageFrontendModel::class,
                         'required' => false,
                         'sort_order' => 2,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'used_in_product_listing' => true,
                         'group' => 'Images',
                     ],
@@ -560,10 +615,10 @@ class CategorySetup extends EavSetup
                         'type' => 'varchar',
                         'label' => 'Thumbnail',
                         'input' => 'media_image',
-                        'frontend' => 'Magento\Catalog\Model\Product\Attribute\Frontend\Image',
+                        'frontend' => ImageFrontendModel::class,
                         'required' => false,
                         'sort_order' => 3,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'used_in_product_listing' => true,
                         'group' => 'Images',
                     ],
@@ -571,7 +626,6 @@ class CategorySetup extends EavSetup
                         'type' => 'varchar',
                         'label' => 'Media Gallery',
                         'input' => 'gallery',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Media',
                         'required' => false,
                         'sort_order' => 4,
                         'group' => 'Images',
@@ -581,10 +635,10 @@ class CategorySetup extends EavSetup
                         'type' => 'decimal',
                         'label' => 'Tier Price',
                         'input' => 'text',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Tierprice',
+                        'backend' => Tierprice::class,
                         'required' => false,
                         'sort_order' => 7,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
                     ],
@@ -598,7 +652,7 @@ class CategorySetup extends EavSetup
                         'filterable' => true,
                         'comparable' => true,
                         'visible_in_advanced_search' => true,
-                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL, Configurable::TYPE_CODE]),
+                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL]),
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => true,
@@ -607,10 +661,10 @@ class CategorySetup extends EavSetup
                         'type' => 'datetime',
                         'label' => 'Set Product as New from Date',
                         'input' => 'date',
-                        'backend' => 'Magento\Catalog\Model\Attribute\Backend\Startdate',
+                        'backend' => Startdate::class,
                         'required' => false,
                         'sort_order' => 7,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'used_in_product_listing' => true,
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -620,10 +674,10 @@ class CategorySetup extends EavSetup
                         'type' => 'datetime',
                         'label' => 'Set Product as New to Date',
                         'input' => 'date',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
+                        'backend' => Datetime::class,
                         'required' => false,
                         'sort_order' => 8,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'used_in_product_listing' => true,
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -641,9 +695,9 @@ class CategorySetup extends EavSetup
                         'type' => 'int',
                         'label' => 'Status',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Product\Attribute\Source\Status',
+                        'source' => Status::class,
                         'sort_order' => 9,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'searchable' => true,
                         'used_in_product_listing' => true,
                     ],
@@ -653,7 +707,7 @@ class CategorySetup extends EavSetup
                         'input' => 'price',
                         'required' => false,
                         'sort_order' => 8,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'visible' => false,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
@@ -662,19 +716,19 @@ class CategorySetup extends EavSetup
                         'type' => 'int',
                         'label' => 'Visibility',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Product\Visibility',
+                        'source' => Visibility::class,
                         'default' => '4',
                         'sort_order' => 12,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                     ],
                     'custom_design' => [
                         'type' => 'varchar',
                         'label' => 'Custom Design',
                         'input' => 'select',
-                        'source' => 'Magento\Theme\Model\Theme\Source\Theme',
+                        'source' => Theme::class,
                         'required' => false,
                         'sort_order' => 1,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Design',
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -684,10 +738,10 @@ class CategorySetup extends EavSetup
                         'type' => 'datetime',
                         'label' => 'Active From',
                         'input' => 'date',
-                        'backend' => 'Magento\Catalog\Model\Attribute\Backend\Startdate',
+                        'backend' => Startdate::class,
                         'required' => false,
                         'sort_order' => 2,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Design',
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -697,10 +751,10 @@ class CategorySetup extends EavSetup
                         'type' => 'datetime',
                         'label' => 'Active To',
                         'input' => 'date',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
+                        'backend' => Datetime::class,
                         'required' => false,
                         'sort_order' => 3,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Design',
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -710,20 +764,20 @@ class CategorySetup extends EavSetup
                         'type' => 'text',
                         'label' => 'Custom Layout Update',
                         'input' => 'textarea',
-                        'backend' => 'Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate',
+                        'backend' => Customlayoutupdate::class,
                         'required' => false,
                         'sort_order' => 4,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Design',
                     ],
                     'page_layout' => [
                         'type' => 'varchar',
                         'label' => 'Page Layout',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Product\Attribute\Source\Layout',
+                        'source' => LayoutModel::class,
                         'required' => false,
                         'sort_order' => 5,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Design',
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
@@ -732,23 +786,26 @@ class CategorySetup extends EavSetup
                     'category_ids' => [
                         'type' => 'static',
                         'label' => 'Categories',
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Category',
-                        'input_renderer' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
+                        'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
+                        'backend' => CategoryBackendAttribute::class,
+                        'input_renderer' => CategoryFormHelper::class,
                         'required' => false,
                         'sort_order' => 9,
                         'visible' => true,
                         'group' => 'General',
+                        'is_used_in_grid' => false,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'options_container' => [
                         'type' => 'varchar',
                         'label' => 'Display Product Options In',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Entity\Product\Attribute\Design\Options\Container',
+                        'source' => Container::class,
                         'required' => false,
                         'default' => 'container2',
                         'sort_order' => 6,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Design',
                     ],
                     'required_options' => [
@@ -772,7 +829,7 @@ class CategorySetup extends EavSetup
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 16,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'visible' => false,
                         'used_in_product_listing' => true,
                     ],
@@ -782,7 +839,7 @@ class CategorySetup extends EavSetup
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 17,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'visible' => false,
                         'used_in_product_listing' => true,
                     ],
@@ -792,7 +849,7 @@ class CategorySetup extends EavSetup
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 18,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                        'global' => ScopedAttributeInterface::SCOPE_STORE,
                         'visible' => false,
                         'used_in_product_listing' => true,
                     ],
@@ -812,9 +869,9 @@ class CategorySetup extends EavSetup
                         'type' => 'varchar',
                         'label' => 'Country of Manufacture',
                         'input' => 'select',
-                        'source' => 'Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture',
+                        'source' => Countryofmanufacture::class,
                         'required' => false,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                        'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                         'visible' => true,
                         'user_defined' => false,
                         'searchable' => false,
@@ -831,13 +888,13 @@ class CategorySetup extends EavSetup
                     'quantity_and_stock_status' => [
                         'group' => 'General',
                         'type' => 'int',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Stock',
+                        'backend' => Stock::class,
                         'label' => 'Quantity',
                         'input' => 'select',
-                        'input_renderer' => 'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
-                        'source' => 'Magento\CatalogInventory\Model\Source\Stock',
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
-                        'default' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK,
+                        'input_renderer' => StockField::class,
+                        'source' => StockSourceModel::class,
+                        'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
+                        'default' => StockModel::STOCK_IN_STOCK,
                         'user_defined' => false,
                         'visible' => true,
                         'required' => false,

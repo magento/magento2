@@ -1,29 +1,38 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
 namespace Magento\Framework\Reflection\Test\Unit;
 
+use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Reflection\Test\Unit\Fixture\TSample;
+use Magento\Framework\Reflection\Test\Unit\Fixture\TSampleInterface;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleOne;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleOne\SampleThree;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo\SampleFour;
+use Magento\Framework\Reflection\Test\Unit\Fixture\UseSample;
+use Magento\Framework\Reflection\TypeProcessor;
 use Zend\Code\Reflection\ClassReflection;
 
 /**
- * Type processor Test
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TypeProcessorTest extends \PHPUnit_Framework_TestCase
+class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
-    protected $_typeProcessor;
+    private $typeProcessor;
 
     /**
      * Set up helper.
      */
     protected function setUp()
     {
-        $this->_typeProcessor = new \Magento\Framework\Reflection\TypeProcessor();
+        $this->typeProcessor = new TypeProcessor();
     }
 
     /**
@@ -31,11 +40,11 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTypesData()
     {
-        $this->_typeProcessor->setTypeData('typeA', ['dataA']);
-        $this->_typeProcessor->setTypeData('typeB', ['dataB']);
+        $this->typeProcessor->setTypeData('typeA', ['dataA']);
+        $this->typeProcessor->setTypeData('typeB', ['dataB']);
         $this->assertEquals(
             ['typeA' => ['dataA'], 'typeB' => ['dataB']],
-            $this->_typeProcessor->getTypesData()
+            $this->typeProcessor->getTypesData()
         );
     }
 
@@ -44,20 +53,20 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTypesData()
     {
-        $this->_typeProcessor->setTypeData('typeC', ['dataC']);
-        $this->assertEquals(['typeC' => ['dataC']], $this->_typeProcessor->getTypesData());
+        $this->typeProcessor->setTypeData('typeC', ['dataC']);
+        $this->assertEquals(['typeC' => ['dataC']], $this->typeProcessor->getTypesData());
         $typeData = ['typeA' => ['dataA'], 'typeB' => ['dataB']];
-        $this->_typeProcessor->setTypesData($typeData);
-        $this->assertEquals($typeData, $this->_typeProcessor->getTypesData());
+        $this->typeProcessor->setTypesData($typeData);
+        $this->assertEquals($typeData, $this->typeProcessor->getTypesData());
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Data type "NonExistentType" is not declared.
+     * @expectedExceptionMessage The "NonExistentType" data type isn't declared. Verify the type and try again.
      */
     public function testGetTypeDataInvalidArgumentException()
     {
-        $this->_typeProcessor->getTypeData('NonExistentType');
+        $this->typeProcessor->getTypeData('NonExistentType');
     }
 
     /**
@@ -65,8 +74,8 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTypeData()
     {
-        $this->_typeProcessor->setTypeData('typeA', ['dataA']);
-        $this->assertEquals(['dataA'], $this->_typeProcessor->getTypeData('typeA'));
+        $this->typeProcessor->setTypeData('typeA', ['dataA']);
+        $this->assertEquals(['dataA'], $this->typeProcessor->getTypeData('typeA'));
     }
 
     /**
@@ -74,180 +83,462 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTypeDataArrayMerge()
     {
-        $this->_typeProcessor->setTypeData('typeA', ['dataA1']);
-        $this->_typeProcessor->setTypeData('typeA', ['dataA2']);
-        $this->_typeProcessor->setTypeData('typeA', ['dataA3']);
-        $this->_typeProcessor->setTypeData('typeA', [null]);
-        $this->assertEquals(['dataA1', 'dataA2', 'dataA3', null], $this->_typeProcessor->getTypeData('typeA'));
+        $this->typeProcessor->setTypeData('typeA', ['dataA1']);
+        $this->typeProcessor->setTypeData('typeA', ['dataA2']);
+        $this->typeProcessor->setTypeData('typeA', ['dataA3']);
+        $this->typeProcessor->setTypeData('typeA', [null]);
+        $this->assertEquals(
+            ['dataA1', 'dataA2', 'dataA3', null],
+            $this->typeProcessor->getTypeData('typeA')
+        );
     }
 
     public function testNormalizeType()
     {
-        $this->assertEquals('blah', $this->_typeProcessor->normalizeType('blah'));
-        $this->assertEquals('string', $this->_typeProcessor->normalizeType('str'));
-        $this->assertEquals('int', $this->_typeProcessor->normalizeType('integer'));
-        $this->assertEquals('boolean', $this->_typeProcessor->normalizeType('bool'));
-        $this->assertEquals('anyType', $this->_typeProcessor->normalizeType('mixed'));
+        $this->assertEquals('blah', $this->typeProcessor->normalizeType('blah'));
+        $this->assertEquals('string', $this->typeProcessor->normalizeType('str'));
+        $this->assertEquals('int', $this->typeProcessor->normalizeType('integer'));
+        $this->assertEquals('boolean', $this->typeProcessor->normalizeType('bool'));
+        $this->assertEquals('anyType', $this->typeProcessor->normalizeType('mixed'));
     }
 
     public function testIsTypeSimple()
     {
-        $this->assertTrue($this->_typeProcessor->isTypeSimple('string'));
-        $this->assertTrue($this->_typeProcessor->isTypeSimple('string[]'));
-        $this->assertTrue($this->_typeProcessor->isTypeSimple('int'));
-        $this->assertTrue($this->_typeProcessor->isTypeSimple('float'));
-        $this->assertTrue($this->_typeProcessor->isTypeSimple('double'));
-        $this->assertTrue($this->_typeProcessor->isTypeSimple('boolean'));
-        $this->assertFalse($this->_typeProcessor->isTypeSimple('blah'));
+        $this->assertTrue($this->typeProcessor->isTypeSimple('string'));
+        $this->assertTrue($this->typeProcessor->isTypeSimple('string[]'));
+        $this->assertTrue($this->typeProcessor->isTypeSimple('int'));
+        $this->assertTrue($this->typeProcessor->isTypeSimple('float'));
+        $this->assertTrue($this->typeProcessor->isTypeSimple('double'));
+        $this->assertTrue($this->typeProcessor->isTypeSimple('boolean'));
+        $this->assertFalse($this->typeProcessor->isTypeSimple('blah'));
     }
 
     public function testIsTypeAny()
     {
-        $this->assertTrue($this->_typeProcessor->isTypeAny('mixed'));
-        $this->assertTrue($this->_typeProcessor->isTypeAny('mixed[]'));
-        $this->assertFalse($this->_typeProcessor->isTypeAny('int'));
-        $this->assertFalse($this->_typeProcessor->isTypeAny('int[]'));
+        $this->assertTrue($this->typeProcessor->isTypeAny('mixed'));
+        $this->assertTrue($this->typeProcessor->isTypeAny('mixed[]'));
+        $this->assertFalse($this->typeProcessor->isTypeAny('int'));
+        $this->assertFalse($this->typeProcessor->isTypeAny('int[]'));
     }
 
     public function testIsArrayType()
     {
-        $this->assertFalse($this->_typeProcessor->isArrayType('string'));
-        $this->assertTrue($this->_typeProcessor->isArrayType('string[]'));
+        $this->assertFalse($this->typeProcessor->isArrayType('string'));
+        $this->assertTrue($this->typeProcessor->isArrayType('string[]'));
+    }
+
+    public function testIsValidTypeDeclaration()
+    {
+        $this->assertTrue($this->typeProcessor->isValidTypeDeclaration('Traversable')); // Interface
+        $this->assertTrue($this->typeProcessor->isValidTypeDeclaration('stdObj')); // Class
+        $this->assertTrue($this->typeProcessor->isValidTypeDeclaration('array'));
+        $this->assertTrue($this->typeProcessor->isValidTypeDeclaration('callable'));
+        $this->assertTrue($this->typeProcessor->isValidTypeDeclaration('self'));
+        $this->assertTrue($this->typeProcessor->isValidTypeDeclaration('self'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('string'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('string[]'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('int'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('float'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('double'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('boolean'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('[]'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('mixed[]'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('stdObj[]'));
+        $this->assertFalse($this->typeProcessor->isValidTypeDeclaration('Traversable[]'));
     }
 
     public function getArrayItemType()
     {
-        $this->assertEquals('string', $this->_typeProcessor->getArrayItemType('str[]'));
-        $this->assertEquals('string', $this->_typeProcessor->getArrayItemType('string[]'));
-        $this->assertEquals('integer', $this->_typeProcessor->getArrayItemType('int[]'));
-        $this->assertEquals('boolean', $this->_typeProcessor->getArrayItemType('bool[]'));
-        $this->assertEquals('any', $this->_typeProcessor->getArrayItemType('mixed[]'));
+        $this->assertEquals('string', $this->typeProcessor->getArrayItemType('str[]'));
+        $this->assertEquals('string', $this->typeProcessor->getArrayItemType('string[]'));
+        $this->assertEquals('integer', $this->typeProcessor->getArrayItemType('int[]'));
+        $this->assertEquals('boolean', $this->typeProcessor->getArrayItemType('bool[]'));
+        $this->assertEquals('any', $this->typeProcessor->getArrayItemType('mixed[]'));
     }
 
     public function testTranslateTypeName()
     {
         $this->assertEquals(
             'TestModule1V1EntityItem',
-            $this->_typeProcessor->translateTypeName('\Magento\TestModule1\Service\V1\Entity\Item')
+            $this->typeProcessor->translateTypeName(\Magento\TestModule1\Service\V1\Entity\Item::class)
         );
         $this->assertEquals(
             'TestModule3V1EntityParameter[]',
-            $this->_typeProcessor->translateTypeName('\Magento\TestModule3\Service\V1\Entity\Parameter[]')
+            $this->typeProcessor->translateTypeName('\Magento\TestModule3\Service\V1\Entity\Parameter[]')
         );
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid parameter type "\Magento\TestModule3\V1\Parameter[]".
+     * @expectedExceptionMessage The "\Magento\TestModule3\V1\Parameter[]" parameter type is invalid. Verify the parameter and try again.
      */
     public function testTranslateTypeNameInvalidArgumentException()
     {
-        $this->_typeProcessor->translateTypeName('\Magento\TestModule3\V1\Parameter[]');
+        $this->typeProcessor->translateTypeName('\Magento\TestModule3\V1\Parameter[]');
     }
 
     public function testTranslateArrayTypeName()
     {
-        $this->assertEquals('ArrayOfComplexType', $this->_typeProcessor->translateArrayTypeName('complexType'));
+        $this->assertEquals('ArrayOfComplexType', $this->typeProcessor->translateArrayTypeName('complexType'));
     }
 
     public function testProcessSimpleTypeIntToString()
     {
         $value = 1;
         $type = 'string';
-        $this->assertSame('1', $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+        $this->assertSame('1', $this->typeProcessor->processSimpleAndAnyType($value, $type));
     }
 
     public function testProcessSimpleTypeStringToInt()
     {
         $value = '1';
         $type = 'int';
-        $this->assertSame(1, $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+        $this->assertSame(1, $this->typeProcessor->processSimpleAndAnyType($value, $type));
     }
 
     public function testProcessSimpleTypeMixed()
     {
         $value = 1;
         $type = 'mixed';
-        $this->assertSame(1, $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+        $this->assertSame(1, $this->typeProcessor->processSimpleAndAnyType($value, $type));
     }
 
     public function testProcessSimpleTypeIntArrayToStringArray()
     {
         $value = [1, 2, 3, 4, 5];
         $type = 'string[]';
-        $this->assertSame(['1', '2', '3', '4', '5'], $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+        $this->assertSame(['1', '2', '3', '4', '5'], $this->typeProcessor->processSimpleAndAnyType($value, $type));
     }
 
     public function testProcessSimpleTypeStringArrayToIntArray()
     {
         $value = ['1', '2', '3', '4', '5'];
         $type = 'int[]';
-        $this->assertSame([1, 2, 3, 4, 5], $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+        $this->assertSame([1, 2, 3, 4, 5], $this->typeProcessor->processSimpleAndAnyType($value, $type));
+    }
+
+    /**
+     * @dataProvider processSimpleTypeExceptionProvider
+     */
+    public function testProcessSimpleTypeException($value, $type)
+    {
+        $this->expectException(
+            SerializationException::class,
+            'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+        );
+        $this->typeProcessor->processSimpleAndAnyType($value, $type);
+    }
+
+    /**
+     * @return array
+     */
+    public static function processSimpleTypeExceptionProvider()
+    {
+        return [
+            "int type, string value" => ['test', 'int'],
+            "float type, string value" => ['test', 'float'],
+        ];
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\SerializationException
-     * @expectedExceptionMessage Invalid type for value: "integer". Expected Type: "int[]".
+     * @expectedExceptionMessage The "integer" value's type is invalid. The "int[]" type was expected. Verify and try again.
      */
     public function testProcessSimpleTypeInvalidType()
     {
         $value = 1;
         $type = 'int[]';
-        $this->_typeProcessor->processSimpleAndAnyType($value, $type);
-    }
-
-    public function testFindSetterMethodName()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $setterName = $this->_typeProcessor->findSetterMethodName($class, 'AttrName');
-        $this->assertEquals("setAttrName", $setterName);
-
-        $booleanSetterName = $this->_typeProcessor->findSetterMethodName($class, 'Active');
-        $this->assertEquals("setIsActive", $booleanSetterName);
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
-     */
-    public function testFindSetterMethodNameInvalidAttribute()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $this->_typeProcessor->findSetterMethodName($class, 'InvalidAttribute');
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
-     */
-    public function testFindSetterMethodNameWrongCamelCasedAttribute()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $this->_typeProcessor->findSetterMethodName($class, 'ActivE');
+        $this->typeProcessor->processSimpleAndAnyType($value, $type);
     }
 
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessageRegExp /@param annotation is incorrect for the parameter "name" \w+/
      */
-    public function testGetParamType()
+    public function testGetParamTypeWithIncorrectAnnotation()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(DataObject::class);
         $methodReflection = $class->getMethod('setName');
         $paramsReflection = $methodReflection->getParameters();
-        $this->_typeProcessor->getParamType($paramsReflection[0]);
+        $this->typeProcessor->getParamType($paramsReflection[0]);
     }
 
-    public function testGetParameterDescription()
+    /**
+     * Checks a case for different array param types.
+     *
+     * @param string $methodName
+     * @param string $type
+     * @dataProvider arrayParamTypeDataProvider
+     */
+    public function testGetArrayParamType(string $methodName, string $type)
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $methodReflection = $class->getMethod('setName');
+        $class = new ClassReflection(DataObject::class);
+        $methodReflection = $class->getMethod($methodName);
+        $params = $methodReflection->getParameters();
+        $this->assertEquals($type, $this->typeProcessor->getParamType(array_pop($params)));
+    }
+
+    /**
+     * Get list of methods with expected param types.
+     *
+     * @return array
+     */
+    public function arrayParamTypeDataProvider()
+    {
+        return [
+            ['method name' => 'addData', 'type' => 'array[]'],
+            ['method name' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
+        ];
+    }
+
+    /**
+     * Checks a case when method param has additional description.
+     *
+     * @param string $methodName
+     * @param array $descriptions
+     * @dataProvider methodParamsDataProvider
+     */
+    public function testGetParameterDescription(string $methodName, array $descriptions)
+    {
+        $class = new ClassReflection(DataObject::class);
+        $methodReflection = $class->getMethod($methodName);
         $paramsReflection = $methodReflection->getParameters();
-        $this->assertEquals('Name of the attribute', $this->_typeProcessor->getParamDescription($paramsReflection[0]));
+        foreach ($paramsReflection as $paramReflection) {
+            $description = array_shift($descriptions);
+            $this->assertEquals(
+                $description,
+                $this->typeProcessor->getParamDescription($paramReflection)
+            );
+        }
+    }
+
+    /**
+     * Gets list of method names with params and their descriptions.
+     *
+     * @return array
+     */
+    public function methodParamsDataProvider()
+    {
+        return [
+            ['method name' => 'setName', 'descriptions' => ['Name of the attribute']],
+            ['method name' => 'setData', 'descriptions' => ['Key is used as index', null]],
+        ];
     }
 
     public function testGetOperationName()
     {
-        $this->assertEquals("resNameMethodName", $this->_typeProcessor->getOperationName("resName", "methodName"));
+        $this->assertEquals(
+            "resNameMethodName",
+            $this->typeProcessor->getOperationName("resName", "methodName")
+        );
+    }
+
+    /**
+     * Checks a case when method has only `@inheritdoc` annotation.
+     */
+    public function testGetReturnTypeWithInheritDocBlock()
+    {
+        $expected = [
+            'type' => 'string',
+            'isRequired' => true,
+            'description' => null,
+            'parameterCount' => 0
+        ];
+
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getPropertyName');
+
+        self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
+    }
+
+    /**
+     * Checks a case when method and parent interface don't have `@return` annotation.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Method's return type must be specified using @return annotation. See Magento\Framework\Reflection\Test\Unit\Fixture\TSample::getName()
+     */
+    public function testGetReturnTypeWithoutReturnTag()
+    {
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getName');
+        $this->typeProcessor->getGetterReturnType($methodReflection);
+    }
+
+    /**
+     * Simple and complex data provider
+     *
+     * @return array
+     */
+    public function simpleAndComplexDataProvider(): array
+    {
+        return [
+            ['string', true],
+            ['array', true],
+            ['int', true],
+            ['SomeClass', false],
+            ['\\My\\Namespace\\Model\\Class', false],
+            ['Some\\Other\\Class', false],
+        ];
+    }
+
+    /**
+     * Test simple type detection method
+     *
+     * @dataProvider simpleAndComplexDataProvider
+     * @param string $type
+     * @param bool $expectedValue
+     */
+    public function testIsSimpleType(string $type, bool $expectedValue)
+    {
+        self::assertEquals($expectedValue, $this->typeProcessor->isSimpleType($type));
+    }
+
+    /**
+     * Simple and complex data provider
+     *
+     * @return array
+     */
+    public function basicClassNameProvider(): array
+    {
+        return [
+            ['SomeClass[]', 'SomeClass'],
+            ['\\My\\Namespace\\Model\\Class[]', '\\My\\Namespace\\Model\\Class'],
+            ['Some\\Other\\Class[]', 'Some\\Other\\Class'],
+            ['SomeClass', 'SomeClass'],
+            ['\\My\\Namespace\\Model\\Class', '\\My\\Namespace\\Model\\Class'],
+            ['Some\\Other\\Class', 'Some\\Other\\Class'],
+        ];
+    }
+
+    /**
+     * Extract basic class name
+     *
+     * @dataProvider basicClassNameProvider
+     * @param string $type
+     * @param string $expectedValue
+     */
+    public function testBasicClassName(string $type, string $expectedValue)
+    {
+        self::assertEquals($expectedValue, $this->typeProcessor->getBasicClassName($type));
+    }
+
+    /**
+     * Fully qualified class names data provider
+     *
+     * @return array
+     */
+    public function isFullyQualifiedClassNamesDataProvider(): array
+    {
+        return [
+            ['SomeClass', false],
+            ['\\My\\Namespace\\Model\\Class', true],
+            ['Some\\Other\\Class', false],
+        ];
+    }
+
+    /**
+     * Test fully qualified class name detector
+     *
+     * @dataProvider isFullyQualifiedClassNamesDataProvider
+     * @param string $type
+     * @param bool $expectedValue
+     */
+    public function testIsFullyQualifiedClassName(string $type, bool $expectedValue)
+    {
+        self::assertEquals($expectedValue, $this->typeProcessor->isFullyQualifiedClassName($type));
+    }
+
+    /**
+     * Test alias mapping
+     */
+    public function testGetAliasMapping()
+    {
+        $sourceClass = new ClassReflection(UseSample::class);
+        $aliasMap = $this->typeProcessor->getAliasMapping($sourceClass);
+
+        self::assertEquals([
+            'SampleOne' => SampleOne::class,
+            'Sample2' => SampleTwo::class,
+        ], $aliasMap);
+    }
+
+    /**
+     * Resolve fully qualified class names data provider
+     *
+     * @return array
+     */
+    public function resolveFullyQualifiedClassNamesDataProvider(): array
+    {
+        return [
+            [UseSample::class, 'string', 'string'],
+            [UseSample::class, 'string[]', 'string[]'],
+
+            [UseSample::class, 'SampleOne', '\\' . SampleOne::class],
+            [UseSample::class, 'Sample2', '\\' . SampleTwo::class],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\SampleOne',
+                '\\' . SampleOne::class
+            ],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\SampleTwo',
+                '\\' . SampleTwo::class
+            ],
+            [UseSample::class, 'UseClasses\\SampleOne', '\\' . SampleOne::class],
+            [UseSample::class, 'UseClasses\\SampleTwo', '\\' . SampleTwo::class],
+
+            [UseSample::class, 'SampleOne[]', '\\' . SampleOne::class . '[]'],
+            [UseSample::class, 'Sample2[]', '\\' . SampleTwo::class . '[]'],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\SampleOne[]',
+                '\\' . SampleOne::class . '[]'
+            ],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\SampleTwo[]',
+                '\\' . SampleTwo::class . '[]'
+            ],
+            [UseSample::class, 'UseClasses\\SampleOne[]', '\\' . SampleOne::class . '[]'],
+            [UseSample::class, 'UseClasses\\SampleTwo[]', '\\' . SampleTwo::class . '[]'],
+
+            [UseSample::class, 'SampleOne\SampleThree', '\\' . SampleThree::class],
+            [UseSample::class, 'SampleOne\SampleThree[]', '\\' . SampleThree::class . '[]'],
+
+            [UseSample::class, 'Sample2\SampleFour', '\\' . SampleFour::class],
+            [UseSample::class, 'Sample2\SampleFour[]', '\\' . SampleFour::class . '[]'],
+
+            [UseSample::class, 'Sample2\NotExisting', 'Sample2\NotExisting'],
+            [UseSample::class, 'Sample2\NotExisting[]', 'Sample2\NotExisting[]'],
+
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\NotExisting',
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\NotExisting'
+            ],
+            [
+                UseSample::class,
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\NotExisting[]',
+                '\\Magento\\Framework\\Reflection\\Test\\Unit\\Fixture\\UseClasses\\NotExisting[]'
+            ],
+        ];
+    }
+
+    /**
+     * Resolve fully qualified class names
+     *
+     * @dataProvider resolveFullyQualifiedClassNamesDataProvider
+     * @param string $className
+     * @param string $type
+     * @param string $expectedValue
+     * @throws \ReflectionException
+     */
+    public function testResolveFullyQualifiedClassNames(string $className, string $type, string $expectedValue)
+    {
+        $sourceClass = new ClassReflection($className);
+        $fullyQualified = $this->typeProcessor->resolveFullyQualifiedClassName($sourceClass, $type);
+
+        self::assertEquals($expectedValue, $fullyQualified);
     }
 }

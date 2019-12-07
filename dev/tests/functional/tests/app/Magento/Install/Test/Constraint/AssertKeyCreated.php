@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class AssertKeyCreated extends AbstractConstraint
      */
     public function processAssert(Install $installPage, InstallConfig $installConfig)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $installConfig->getKeyValue(),
             $installPage->getInstallBlock()->getAdminInfo()['encryption_key'],
             'Selected encryption key on install page not equals to data from fixture.'

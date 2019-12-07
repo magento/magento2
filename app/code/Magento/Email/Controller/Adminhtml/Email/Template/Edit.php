@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
-class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template implements HttpGetActionInterface
 {
     /**
      * Edit transactional email action
@@ -32,8 +34,13 @@ class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template
 
         $this->_addContent(
             $this->_view->getLayout()->createBlock(
-                'Magento\Email\Block\Adminhtml\Template\Edit',
-                'template_edit'
+                \Magento\Email\Block\Adminhtml\Template\Edit::class,
+                'template_edit',
+                [
+                    'data' => [
+                        'email_template' => $template
+                    ]
+                ]
             )->setEditMode(
                 (bool)$this->getRequest()->getParam('id')
             )

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Reports\Block\Adminhtml;
 /**
  * Adminhtml wishlist report page content block
  *
+ * @deprecated
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Wishlist extends \Magento\Backend\Block\Template
@@ -18,7 +19,7 @@ class Wishlist extends \Magento\Backend\Block\Template
      *
      * @var string
      */
-    protected $_template = 'report/wishlist.phtml';
+    protected $_template = 'Magento_Reports::report/wishlist.phtml';
 
     /**
      * Reports wishlist collection factory
@@ -44,13 +45,13 @@ class Wishlist extends \Magento\Backend\Block\Template
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _beforeToHtml()
     {
         $this->setChild(
             'grid',
-            $this->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Wishlist\Grid', 'report.grid')
+            $this->getLayout()->createBlock(\Magento\Reports\Block\Adminhtml\Wishlist\Grid::class, 'report.grid')
         );
 
         $collection = $this->_wishlistFactory->create();

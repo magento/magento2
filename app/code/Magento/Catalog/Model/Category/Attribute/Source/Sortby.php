@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category\Attribute\Source;
@@ -40,7 +40,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllOptions()
     {
@@ -49,7 +49,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             foreach ($this->_getCatalogConfig()->getAttributesUsedForSortBy() as $attribute) {
                 $this->_options[] = [
                     'label' => __($attribute['frontend_label']),
-                    'value' => $attribute['attribute_code'],
+                    'value' => $attribute['attribute_code']
                 ];
             }
         }

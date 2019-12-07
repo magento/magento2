@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
@@ -16,8 +16,9 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  - original_price - product price before any calculations
  *  - calculation_price - prices for item totals calculation
  *  - custom_price - new price that can be declared by user and recalculated during calculation process
- *  - original_custom_price - original defined value of custom price without any convertion
+ *  - original_custom_price - original defined value of custom price without any conversion
  *
+ * @api
  * @method float getDiscountAmount()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountAmount(float $amount)
  * @method float getBaseDiscountAmount()
@@ -44,6 +45,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method float getRowTotal()
  * @method float getPriceInclTax()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
@@ -416,6 +418,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
     /**
      * Get item price used for quote calculation process.
+     *
      * This method get custom price (if it is defined) or original product final price
      *
      * @return float
@@ -436,6 +439,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
     /**
      * Get item price used for quote calculation process.
+     *
      * This method get original custom price applied before tax calculation
      *
      * @return float
@@ -500,6 +504,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
     /**
      * Get original price (retrieved from product) for item.
+     *
      * Original price value is in quote selected currency
      *
      * @return float
@@ -517,8 +522,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Set original price to item (calculation price will be refreshed too)
      *
-     * @param   float $price
-     * @return  \Magento\Quote\Model\Quote\Item\AbstractItem
+     * @param float $price
+     * @return \Magento\Quote\Model\Quote\Item\AbstractItem
      */
     public function setOriginalPrice($price)
     {
@@ -536,10 +541,10 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     }
 
     /**
-     * Specify custom item price (used in case whe we have apply not product price to item)
+     * Specify custom item price (used in case when we have apply not product price to item)
      *
-     * @param   float $value
-     * @return  \Magento\Quote\Model\Quote\Item\AbstractItem
+     * @param float $value
+     * @return \Magento\Quote\Model\Quote\Item\AbstractItem
      */
     public function setCustomPrice($value)
     {
@@ -561,8 +566,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Specify item price (base calculation price and converted price will be refreshed too)
      *
-     * @param   float $value
-     * @return  $this
+     * @param float $value
+     * @return $this
      */
     public function setPrice($value)
     {
@@ -573,6 +578,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
     /**
      * Get item price converted to quote currency
+     *
      * @return float
      */
     public function getConvertedPrice()
@@ -587,6 +593,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
     /**
      * Set new value for converted price
+     *
      * @param float $value
      * @return $this
      */
@@ -612,8 +619,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     }
 
     /**
-     * Checking if there children calculated or parent item
-     * when we have parent quote item and its children
+     * Checking if there children calculated or parent item when we have parent quote item and its children
      *
      * @return bool
      */
@@ -634,6 +640,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     }
 
     /**
+     * Checking can we ship product separately
+     *
      * Checking can we ship product separately (each child separately)
      * or each parent product item can be shipped only like one item
      *
@@ -656,8 +664,9 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     }
 
     /**
-     * Returns the total discount amounts of all the child items.  If there are no children, returns the discount
-     * amount of this item.
+     * Returns the total discount amounts of all the child items.
+     *
+     * If there are no children, returns the discount amount of this item.
      *
      * @return float
      */

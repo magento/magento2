@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Observer;
@@ -8,13 +8,22 @@ namespace Magento\Payment\Observer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 
+/**
+ * Class AbstractDataAssignObserver
+ * @package Magento\Payment\Observer
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractDataAssignObserver implements ObserverInterface
 {
     const METHOD_CODE = 'method';
 
     const DATA_CODE = 'data';
+
+    const MODEL_CODE = 'payment_model';
 
     /**
      * Reads method argument
@@ -25,6 +34,18 @@ abstract class AbstractDataAssignObserver implements ObserverInterface
     protected function readMethodArgument(Observer $observer)
     {
         return $this->readArgument($observer, static::METHOD_CODE, MethodInterface::class);
+    }
+
+    /**
+     * Reads payment model argument
+     *
+     * @param Observer $observer
+     * @return InfoInterface
+     * @since 100.1.0
+     */
+    protected function readPaymentModelArgument(Observer $observer)
+    {
+        return $this->readArgument($observer, static::MODEL_CODE, InfoInterface::class);
     }
 
     /**

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CustomerImportExport\Test\TestCase\ImportCustomerAddressTest" summary="Import customer address">
+        <variation name="ImportCustomerAddressesVariation1" ticketId="MAGETWO-46175" summary="Delete Customer Address">
+            <data name="import/data" xsi:type="array">
+                <item name="entity" xsi:type="string">Customer Addresses</item>
+                <item name="behavior" xsi:type="string">Delete Entities</item>
+                <item name="validation_strategy" xsi:type="string">Stop on Error</item>
+                <item name="allowed_error_count" xsi:type="string">10</item>
+                <item name="import_field_separator" xsi:type="string">,</item>
+                <item name="import_multiple_value_separator" xsi:type="string">,</item>
+                <item name="import_file" xsi:type="array">
+                    <item name="entities" xsi:type="array">
+                        <item name="0" xsi:type="string">customer::johndoe_with_addresses</item>
+                    </item>
+                    <item name="template" xsi:type="array">
+                        <item name="filename" xsi:type="string">Magento/CustomerImportExport/Test/_files/template/address/customer_addresses_variation_1</item>
+                        <item name="count" xsi:type="number">1</item>
+                    </item>
+                </item>
+            </data>
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
+            <constraint name="Magento\CustomerImportExport\Test\Constraint\AssertImportCustomerAddresses" />
+        </variation>
+        <variation name="ImportCustomerAddressesVariation2" ticketId="MAGETWO-46176" summary="Add/Update Customer Addresses">
+            <data name="import/data" xsi:type="array">
+                <item name="entity" xsi:type="string">Customer Addresses</item>
+                <item name="behavior" xsi:type="string">Add/Update Complex Data</item>
+                <item name="validation_strategy" xsi:type="string">Stop on Error</item>
+                <item name="allowed_error_count" xsi:type="string">10</item>
+                <item name="import_field_separator" xsi:type="string">,</item>
+                <item name="import_multiple_value_separator" xsi:type="string">,</item>
+                <item name="import_file" xsi:type="array">
+                    <item name="entities" xsi:type="array">
+                        <item name="0" xsi:type="string">customer::default</item>
+                        <item name="1" xsi:type="string">customer::default</item>
+                    </item>
+                    <item name="template" xsi:type="array">
+                        <item name="filename" xsi:type="string">Magento/CustomerImportExport/Test/_files/template/address/customer_addresses_variation_2</item>
+                        <item name="count" xsi:type="number">2</item>
+                    </item>
+                </item>
+            </data>
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
+            <constraint name="Magento\CustomerImportExport\Test\Constraint\AssertImportCustomerAddresses" />
+        </variation>
+    </testCase>
+</config>

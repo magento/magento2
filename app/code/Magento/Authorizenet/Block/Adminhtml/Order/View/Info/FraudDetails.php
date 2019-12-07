@@ -1,12 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Block\Adminhtml\Order\View\Info;
 
 use Magento\Authorizenet\Model\Directpost;
 
+/**
+ * Fraud information block for Authorize.net payment method
+ *
+ * @api
+ * @since 100.0.2
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ */
 class FraudDetails extends \Magento\Backend\Block\Template
 {
     /**
@@ -29,6 +38,8 @@ class FraudDetails extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return payment method model
+     *
      * @return \Magento\Sales\Model\Order\Payment
      */
     public function getPayment()
@@ -38,6 +49,8 @@ class FraudDetails extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Produce and return the block's HTML output
+     *
      * @return string
      */
     protected function _toHtml()

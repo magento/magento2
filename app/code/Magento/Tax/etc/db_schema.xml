@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="tax_class" resource="default" engine="innodb" comment="Tax Class">
+        <column xsi:type="smallint" name="class_id" padding="6" unsigned="false" nullable="false" identity="true"
+                comment="Class ID"/>
+        <column xsi:type="varchar" name="class_name" nullable="false" length="255" comment="Class Name"/>
+        <column xsi:type="varchar" name="class_type" nullable="false" length="8" default="CUSTOMER"
+                comment="Class Type"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="class_id"/>
+        </constraint>
+    </table>
+    <table name="tax_calculation_rule" resource="default" engine="innodb" comment="Tax Calculation Rule">
+        <column xsi:type="int" name="tax_calculation_rule_id" padding="11" unsigned="false" nullable="false"
+                identity="true" comment="Tax Calculation Rule ID"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
+        <column xsi:type="int" name="priority" padding="11" unsigned="false" nullable="false" identity="false"
+                comment="Priority"/>
+        <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false"
+                comment="Position"/>
+        <column xsi:type="int" name="calculate_subtotal" padding="11" unsigned="false" nullable="false" identity="false"
+                comment="Calculate off subtotal option"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="tax_calculation_rule_id"/>
+        </constraint>
+        <index referenceId="TAX_CALCULATION_RULE_PRIORITY_POSITION" indexType="btree">
+            <column name="priority"/>
+            <column name="position"/>
+        </index>
+        <index referenceId="TAX_CALCULATION_RULE_CODE" indexType="btree">
+            <column name="code"/>
+        </index>
+    </table>
+    <table name="tax_calculation_rate" resource="default" engine="innodb" comment="Tax Calculation Rate">
+        <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false"
+                identity="true" comment="Tax Calculation Rate ID"/>
+        <column xsi:type="varchar" name="tax_country_id" nullable="false" length="2" comment="Tax Country ID"/>
+        <column xsi:type="int" name="tax_region_id" padding="11" unsigned="false" nullable="false" identity="false"
+                comment="Tax Region ID"/>
+        <column xsi:type="varchar" name="tax_postcode" nullable="true" length="21" comment="Tax Postcode"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
+        <column xsi:type="decimal" name="rate" scale="4" precision="12" unsigned="false" nullable="false"
+                comment="Rate"/>
+        <column xsi:type="smallint" name="zip_is_range" padding="6" unsigned="false" nullable="true" identity="false"
+                comment="Zip Is Range"/>
+        <column xsi:type="int" name="zip_from" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Zip From"/>
+        <column xsi:type="int" name="zip_to" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Zip To"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="tax_calculation_rate_id"/>
+        </constraint>
+        <index referenceId="TAX_CALCULATION_RATE_TAX_COUNTRY_ID_TAX_REGION_ID_TAX_POSTCODE" indexType="btree">
+            <column name="tax_country_id"/>
+            <column name="tax_region_id"/>
+            <column name="tax_postcode"/>
+        </index>
+        <index referenceId="TAX_CALCULATION_RATE_CODE" indexType="btree">
+            <column name="code"/>
+        </index>
+        <index referenceId="IDX_CA799F1E2CB843495F601E56C84A626D" indexType="btree">
+            <column name="tax_calculation_rate_id"/>
+            <column name="tax_country_id"/>
+            <column name="tax_region_id"/>
+            <column name="zip_is_range"/>
+            <column name="tax_postcode"/>
+        </index>
+    </table>
+    <table name="tax_calculation" resource="default" engine="innodb" comment="Tax Calculation">
+        <column xsi:type="int" name="tax_calculation_id" padding="11" unsigned="false" nullable="false" identity="true"
+                comment="Tax Calculation ID"/>
+        <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false"
+                identity="false" comment="Tax Calculation Rate ID"/>
+        <column xsi:type="int" name="tax_calculation_rule_id" padding="11" unsigned="false" nullable="false"
+                identity="false" comment="Tax Calculation Rule ID"/>
+        <column xsi:type="smallint" name="customer_tax_class_id" padding="6" unsigned="false" nullable="false"
+                identity="false" comment="Customer Tax Class ID"/>
+        <column xsi:type="smallint" name="product_tax_class_id" padding="6" unsigned="false" nullable="false"
+                identity="false" comment="Product Tax Class ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="tax_calculation_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="TAX_CALCULATION_PRODUCT_TAX_CLASS_ID_TAX_CLASS_CLASS_ID"
+                    table="tax_calculation" column="product_tax_class_id" referenceTable="tax_class"
+                    referenceColumn="class_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID_TAX_CLASS_CLASS_ID"
+                    table="tax_calculation" column="customer_tax_class_id" referenceTable="tax_class"
+                    referenceColumn="class_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="TAX_CALC_TAX_CALC_RATE_ID_TAX_CALC_RATE_TAX_CALC_RATE_ID"
+                    table="tax_calculation" column="tax_calculation_rate_id" referenceTable="tax_calculation_rate"
+                    referenceColumn="tax_calculation_rate_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="TAX_CALC_TAX_CALC_RULE_ID_TAX_CALC_RULE_TAX_CALC_RULE_ID"
+                    table="tax_calculation" column="tax_calculation_rule_id" referenceTable="tax_calculation_rule"
+                    referenceColumn="tax_calculation_rule_id" onDelete="CASCADE"/>
+        <index referenceId="TAX_CALCULATION_TAX_CALCULATION_RULE_ID" indexType="btree">
+            <column name="tax_calculation_rule_id"/>
+        </index>
+        <index referenceId="TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID" indexType="btree">
+            <column name="customer_tax_class_id"/>
+        </index>
+        <index referenceId="TAX_CALCULATION_PRODUCT_TAX_CLASS_ID" indexType="btree">
+            <column name="product_tax_class_id"/>
+        </index>
+        <index referenceId="TAX_CALC_TAX_CALC_RATE_ID_CSTR_TAX_CLASS_ID_PRD_TAX_CLASS_ID" indexType="btree">
+            <column name="tax_calculation_rate_id"/>
+            <column name="customer_tax_class_id"/>
+            <column name="product_tax_class_id"/>
+        </index>
+    </table>
+    <table name="tax_calculation_rate_title" resource="default" engine="innodb" comment="Tax Calculation Rate Title">
+        <column xsi:type="int" name="tax_calculation_rate_title_id" padding="11" unsigned="false" nullable="false"
+                identity="true" comment="Tax Calculation Rate Title ID"/>
+        <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false"
+                identity="false" comment="Tax Calculation Rate ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store ID"/>
+        <column xsi:type="varchar" name="value" nullable="false" length="255" comment="Value"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="tax_calculation_rate_title_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="TAX_CALCULATION_RATE_TITLE_STORE_ID_STORE_STORE_ID"
+                    table="tax_calculation_rate_title" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_37FB965F786AD5897BB3AE90470C42AB" table="tax_calculation_rate_title"
+                    column="tax_calculation_rate_id" referenceTable="tax_calculation_rate"
+                    referenceColumn="tax_calculation_rate_id" onDelete="CASCADE"/>
+        <index referenceId="TAX_CALCULATION_RATE_TITLE_TAX_CALCULATION_RATE_ID_STORE_ID" indexType="btree">
+            <column name="tax_calculation_rate_id"/>
+            <column name="store_id"/>
+        </index>
+        <index referenceId="TAX_CALCULATION_RATE_TITLE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="tax_order_aggregated_created" resource="sales" engine="innodb" comment="Tax Order Aggregation">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="date" name="period" comment="Period"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store ID"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
+        <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
+        <column xsi:type="float" name="percent" unsigned="false" nullable="true" comment="Percent"/>
+        <column xsi:type="int" name="orders_count" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Orders Count"/>
+        <column xsi:type="float" name="tax_base_amount_sum" unsigned="false" nullable="true"
+                comment="Tax Base Amount Sum"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="TAX_ORDER_AGGREGATED_CREATED_STORE_ID_STORE_STORE_ID"
+                    table="tax_order_aggregated_created" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="TAX_ORDER_AGGRED_CREATED_PERIOD_STORE_ID_CODE_PERCENT_ORDER_STS">
+            <column name="period"/>
+            <column name="store_id"/>
+            <column name="code"/>
+            <column name="percent"/>
+            <column name="order_status"/>
+        </constraint>
+        <index referenceId="TAX_ORDER_AGGREGATED_CREATED_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="tax_order_aggregated_updated" resource="sales" engine="innodb"
+           comment="Tax Order Aggregated Updated">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="date" name="period" comment="Period"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store ID"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
+        <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
+        <column xsi:type="float" name="percent" unsigned="false" nullable="true" comment="Percent"/>
+        <column xsi:type="int" name="orders_count" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Orders Count"/>
+        <column xsi:type="float" name="tax_base_amount_sum" unsigned="false" nullable="true"
+                comment="Tax Base Amount Sum"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="TAX_ORDER_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID"
+                    table="tax_order_aggregated_updated" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="TAX_ORDER_AGGRED_UPDATED_PERIOD_STORE_ID_CODE_PERCENT_ORDER_STS">
+            <column name="period"/>
+            <column name="store_id"/>
+            <column name="code"/>
+            <column name="percent"/>
+            <column name="order_status"/>
+        </constraint>
+        <index referenceId="TAX_ORDER_AGGREGATED_UPDATED_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+</schema>

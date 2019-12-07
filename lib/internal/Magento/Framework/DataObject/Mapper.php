@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Utility class for mapping data between objects or arrays
- */
 namespace Magento\Framework\DataObject;
 
 /**
+ * Utility class for mapping data between objects or arrays
+ *
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
  */
@@ -36,8 +35,8 @@ class Mapper
      *     <\Magento\Framework\DataObject> => $from->setData($key, <from>)
      *     array(<\Magento\Framework\DataObject>, <method>) => $from->$method($key, <from>)
      *
-     * @param array|\Magento\Framework\DataObject|callback $from
-     * @param array|\Magento\Framework\DataObject|callback $to
+     * @param array|\Magento\Framework\DataObject|callable $from
+     * @param array|\Magento\Framework\DataObject|callable $to
      * @param array $map
      * @param array $defaults
      * @return array|object

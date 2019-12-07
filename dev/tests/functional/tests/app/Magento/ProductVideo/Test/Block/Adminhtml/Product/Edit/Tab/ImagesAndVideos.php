@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,6 @@ namespace Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Product images tab.
@@ -16,11 +15,18 @@ use Magento\Mtf\Client\Locator;
 class ImagesAndVideos extends Tab
 {
     /**
+     * Order Id of first video
+     *
+     * @var int
+     */
+    private $firstVideoId = 0;
+
+    /**
      * Add video button CSS locator.
      *
      * @var string
      */
-    protected $addVideoButton = '#product_info_tabs_image-management_content #add_video_button';
+    protected $addVideoButton = '[data-role="add-video-button"]';
 
     /**
      * Video dialog CSS locator.
@@ -45,7 +51,7 @@ class ImagesAndVideos extends Tab
     {
         $this->waitForElementVisible($this->newVideoDialog);
         return $this->blockFactory->create(
-            'Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab\Images\VideoDialog',
+            \Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab\Images\VideoDialog::class,
             ['element' => $this->browser->find($this->newVideoDialog)]
         );
     }
@@ -68,7 +74,7 @@ class ImagesAndVideos extends Tab
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         if (!array_key_exists('images', $fields['media_gallery']['value'])) {
             return $this;
@@ -142,7 +148,7 @@ class ImagesAndVideos extends Tab
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($tabFields = null, SimpleElement $element = null)
+    public function getFieldsData($tabFields = null, SimpleElement $element = null)
     {
         $fields = reset($tabFields);
         $name = key($tabFields);
@@ -190,7 +196,7 @@ class ImagesAndVideos extends Tab
     protected function getImageSelector($id)
     {
         ++$id;
-        return $this->imageItem . ':nth-child(' . $id . ') .draggable-handle';
+        return $this->imageItem . ':nth-child(' . $id . ') .product-image-wrapper';
     }
 
     /**
@@ -222,7 +228,17 @@ class ImagesAndVideos extends Tab
      */
     public function clickFirstVideo()
     {
-        $this->_rootElement->find($this->getImageSelector(0))->click();
+        $this->_rootElement->find($this->getImageSelector($this->firstVideoId))->click();
         return $this;
+    }
+
+    /**
+     * Delete first video in a product
+     *
+     * @return void
+     */
+    public function deleteFirstVideo()
+    {
+        $this->deleteVideo($this->firstVideoId);
     }
 }

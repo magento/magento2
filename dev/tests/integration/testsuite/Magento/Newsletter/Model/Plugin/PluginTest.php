@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model\Plugin;
@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppIsolation enabled
  */
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Customer Account Service
@@ -27,10 +27,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\AccountManagementInterface'
+            \Magento\Customer\Api\AccountManagementInterface::class
         );
         $this->customerRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
     }
 
@@ -38,7 +38,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\CustomerRegistry');
+            ->get(\Magento\Customer\Model\CustomerRegistry::class);
         //Cleanup customer from registry
         $customerRegistry->remove(1);
     }
@@ -52,13 +52,13 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->create('Magento\Newsletter\Model\Subscriber');
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->loadByEmail('customer_two@example.com');
         $this->assertTrue($subscriber->isSubscribed());
         $this->assertEquals(0, (int)$subscriber->getCustomerId());
 
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
-        $customerFactory = $objectManager->get('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        $customerFactory = $objectManager->get(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
         $customerDataObject = $customerFactory->create()
             ->setFirstname('Firstname')
             ->setLastname('Lastname')
@@ -83,7 +83,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
-        $customerFactory = $objectManager->get('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        $customerFactory = $objectManager->get(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
         $customerDataObject = $customerFactory->create()
             ->setFirstname('Firstname')
             ->setLastname('Lastname')
@@ -102,7 +102,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->create('Magento\Newsletter\Model\Subscriber');
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->loadByEmail('customer@example.com');
         $this->assertTrue($subscriber->isSubscribed());
         $this->assertEquals(1, (int)$subscriber->getCustomerId());
@@ -125,7 +125,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->create('Magento\Newsletter\Model\Subscriber');
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->loadByEmail('customer@example.com');
         $this->assertTrue($subscriber->isSubscribed());
 
@@ -143,7 +143,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $customer = $this->customerRepository->getById(1);
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->create('Magento\Newsletter\Model\Subscriber');
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->loadByEmail('customer@example.com');
         $this->assertTrue($subscriber->isSubscribed());
         $this->customerRepository->delete($customer);
@@ -161,10 +161,48 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->create('Magento\Newsletter\Model\Subscriber');
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->loadByEmail($email);
         $this->assertFalse($subscriber->isSubscribed());
         $this->assertEquals(0, (int)$subscriber->getId());
         return $subscriber;
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     */
+    public function testCustomerWithZeroStoreIdIsSubscribed()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+
+        $currentStore = $objectManager->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        )->getStore()->getId();
+
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber->setStoreId($currentStore)
+            ->setCustomerId(0)
+            ->setSubscriberEmail('customer@example.com')
+            ->setSubscriberStatus(\Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED)
+            ->save();
+
+        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        $customerFactory = $objectManager->get(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
+        $customerDataObject = $customerFactory->create()
+            ->setFirstname('Firstname')
+            ->setLastname('Lastname')
+            ->setStoreId(0)
+            ->setEmail('customer@example.com');
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->accountManagement->createAccount($customerDataObject);
+
+        $this->customerRepository->save($customer);
+
+        $subscriber->loadByEmail('customer@example.com');
+
+        $this->assertEquals($customer->getId(), (int)$subscriber->getCustomerId());
+        $this->assertEquals($currentStore, (int)$subscriber->getStoreId());
     }
 }

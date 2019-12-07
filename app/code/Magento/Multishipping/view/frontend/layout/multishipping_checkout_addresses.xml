@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,7 +15,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Multishipping\Block\Checkout\Addresses" name="checkout_addresses" template="checkout/addresses.phtml" cacheable="false">
+            <block class="Magento\Multishipping\Block\Checkout\Addresses" name="checkout_addresses" template="Magento_Multishipping::checkout/addresses.phtml" cacheable="false">
                 <arguments>
                     <argument name="renderer_template" xsi:type="string">Magento_Multishipping::checkout/item/default.phtml</argument>
                 </arguments>

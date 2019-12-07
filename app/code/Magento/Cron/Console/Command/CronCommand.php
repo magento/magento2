@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Cron\Observer\ProcessCronQueueObserver;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Shell\ComplexParameter;
 
@@ -35,13 +37,24 @@ class CronCommand extends Command
     private $objectManagerFactory;
 
     /**
-     * Constructor
+     * Application deployment configuration
      *
-     * @param ObjectManagerFactory $objectManagerFactory
+     * @var DeploymentConfig
      */
-    public function __construct(ObjectManagerFactory $objectManagerFactory)
-    {
+    private $deploymentConfig;
+
+    /**
+     * @param ObjectManagerFactory $objectManagerFactory
+     * @param DeploymentConfig $deploymentConfig Application deployment configuration
+     */
+    public function __construct(
+        ObjectManagerFactory $objectManagerFactory,
+        DeploymentConfig $deploymentConfig = null
+    ) {
         $this->objectManagerFactory = $objectManagerFactory;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(
+            DeploymentConfig::class
+        );
         parent::__construct();
     }
 
@@ -71,10 +84,16 @@ class CronCommand extends Command
     }
 
     /**
+     * Runs cron jobs if cron is not disabled in Magento configurations
+     *
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->deploymentConfig->get('cron/enabled', 1)) {
+            $output->writeln('<info>' . 'Cron is disabled. Jobs were not run.' . '</info>');
+            return;
+        }
         $omParams = $_SERVER;
         $omParams[StoreManager::PARAM_RUN_CODE] = 'admin';
         $omParams[Store::CUSTOM_ENTRY_POINT_PARAM] = true;
@@ -94,7 +113,7 @@ class CronCommand extends Command
             }
         }
         /** @var \Magento\Framework\App\Cron $cronObserver */
-        $cronObserver = $objectManager->create('Magento\Framework\App\Cron', ['parameters' => $params]);
+        $cronObserver = $objectManager->create(\Magento\Framework\App\Cron::class, ['parameters' => $params]);
         $cronObserver->launch();
         $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
     }

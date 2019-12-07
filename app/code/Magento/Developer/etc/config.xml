@@ -1,13 +1,17 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <dev>
+            <debug>
+                <template_hints_storefront_show_with_parameter>0</template_hints_storefront_show_with_parameter>
+                <template_hints_parameter_value>magento</template_hints_parameter_value>
+            </debug>
             <restrict>
                 <allow_ips />
             </restrict>

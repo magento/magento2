@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,8 +10,8 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
-                    <resource id="Magento_CatalogRule::promo" title="Promotions" sortOrder="10">
-                        <resource id="Magento_CatalogRule::promo_catalog" title="Catalog Price Rule" sortOrder="10" />
+                    <resource id="Magento_CatalogRule::promo" title="Promotions" translate="title" sortOrder="10">
+                        <resource id="Magento_CatalogRule::promo_catalog" title="Catalog Price Rule" translate="title" sortOrder="10" />
                     </resource>
                 </resource>
             </resource>

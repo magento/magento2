@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Zend\Stdlib\JsonSerializable;
 
 /**
  * Class Action
@@ -16,7 +15,7 @@ class Action extends AbstractComponent
     const NAME = 'action';
 
     /**
-     * @var array|JsonSerializable
+     * @var array|\JsonSerializable
      */
     protected $actions;
 
@@ -24,7 +23,7 @@ class Action extends AbstractComponent
      * @param ContextInterface $context
      * @param array $components
      * @param array $data
-     * @param array|JsonSerializable $actions
+     * @param array|\JsonSerializable $actions
      */
     public function __construct(
         ContextInterface $context,
@@ -47,7 +46,6 @@ class Action extends AbstractComponent
 
         parent::prepare();
     }
-
 
     /**
      * Get component name

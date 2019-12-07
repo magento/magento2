@@ -1,11 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Api;
-
-// @codingStandardsIgnoreFile
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -33,16 +31,16 @@ class GuestItemRepositoryTest extends WebapiAbstract
     public function testGet()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_message', 'reserved_order_id');
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($product->getIdBySku('simple_with_message'));
         $itemId = $quote->getItemByProduct($product)->getId();
         /** @var  \Magento\Catalog\Model\Product $product */
         $cartId = $quote->getId();
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -83,15 +81,15 @@ class GuestItemRepositoryTest extends WebapiAbstract
         // @todo remove next statement when \Magento\TestFramework\TestCase\WebapiAbstract::_updateAppConfig is fixed
         $this->markTestIncomplete('This test relies on system configuration state.');
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_message', 'reserved_order_id');
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($product->getIdBySku('simple_with_message'));
         $itemId = $quote->getItemByProduct($product)->getId();
         $cartId = $quote->getId();
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -119,10 +117,9 @@ class GuestItemRepositoryTest extends WebapiAbstract
             ],
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
-//        $quote->load('test_order_item_with_message', 'reserved_order_id');
         $messageId = $quote->getItemByProduct($product)->getGiftMessageId();
         /** @var  \Magento\GiftMessage\Model\Message $message */
-        $message = $this->objectManager->create('Magento\GiftMessage\Model\Message')->load($messageId);
+        $message = $this->objectManager->create(\Magento\GiftMessage\Model\Message::class)->load($messageId);
         $this->assertEquals('John Doe', $message->getRecipient());
         $this->assertEquals('Jane Roe', $message->getSender());
         $this->assertEquals('Gift Message Text New', $message->getMessage());

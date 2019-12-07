@@ -1,24 +1,35 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\Context;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Framework\Exception\State\InvalidTransitionException;
 
-class Confirmation extends \Magento\Customer\Controller\AbstractAccount
+/**
+ * Class Confirmation. Send confirmation link to specified email
+ */
+class Confirmation extends AbstractAccount implements HttpGetActionInterface, HttpPostActionInterface
 {
-    /** @var StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var AccountManagementInterface  */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $customerAccountManagement;
 
     /**
@@ -32,23 +43,31 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
     protected $resultPageFactory;
 
     /**
+     * @var Url
+     */
+    private $customerUrl;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
+     * @param Url $customerUrl
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
-        AccountManagementInterface $customerAccountManagement
+        AccountManagementInterface $customerAccountManagement,
+        Url $customerUrl = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
+        $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
         parent::__construct($context);
     }
 
@@ -77,11 +96,11 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
                     $email,
                     $this->storeManager->getStore()->getWebsiteId()
                 );
-                $this->messageManager->addSuccess(__('Please check your email for confirmation key.'));
+                $this->messageManager->addSuccessMessage(__('Please check your email for confirmation key.'));
             } catch (InvalidTransitionException $e) {
-                $this->messageManager->addSuccess(__('This email does not require confirmation.'));
+                $this->messageManager->addSuccessMessage(__('This email does not require confirmation.'));
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Wrong email.'));
+                $this->messageManager->addExceptionMessage($e, __('Wrong email.'));
                 $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
                 return $resultRedirect;
             }
@@ -94,6 +113,8 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getLayout()->getBlock('accountConfirmation')->setEmail(
             $this->getRequest()->getParam('email', $email)
+        )->setLoginUrl(
+            $this->customerUrl->getLoginUrl()
         );
         return $resultPage;
     }

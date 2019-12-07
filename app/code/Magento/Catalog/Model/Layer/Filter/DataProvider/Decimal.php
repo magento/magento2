@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\DataProvider;
@@ -56,7 +56,7 @@ class Decimal
             $index = 1;
             do {
                 $range = pow(10, strlen(floor($maxValue)) - $index);
-                $items = $this->getRangeItemCounts($range, $filter);
+                $items = $this->getRangeItemCounts($range, $filter) ?: [];
                 $index++;
             } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
             $this->range = $range;
@@ -109,7 +109,7 @@ class Decimal
      *
      * @param int $range
      * @param FilterInterface $filter
-     * @return mixed
+     * @return array
      */
     public function getRangeItemCounts($range, FilterInterface $filter)
     {

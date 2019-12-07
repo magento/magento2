@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Oauth\Consumer\Validator;
@@ -39,7 +39,7 @@ class KeyLength extends \Zend_Validate_StringLength
      * Default encoding is set to utf-8 if none provided
      * New option name added to allow adding key name in validation error messages
      *
-     * @param  integer|array|\Zend_Config $options
+     * @inheritdoc
      */
     public function __construct($options = [])
     {

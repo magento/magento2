@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Hostedpro;
@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -32,14 +32,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\Resolver')
+        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->taxData = $this->helper->getObject('Magento\Tax\Helper\Data');
+        $this->taxData = $this->helper->getObject(\Magento\Tax\Helper\Data::class);
 
         $this->_model = $this->helper->getObject(
-            'Magento\Paypal\Model\Hostedpro\Request',
+            \Magento\Paypal\Model\Hostedpro\Request::class,
             [
                 'localeResolver' => $this->localeResolverMock,
                 'taxData' => $this->taxData
@@ -144,7 +144,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'showCardInfo' => 'true',
             'showHostedThankyouPage' => 'false'
         ];
-        $paymentMethodMock = $this->getMockBuilder('Magento\Paypal\Model\Hostedpro')
+        $paymentMethodMock = $this->getMockBuilder(\Magento\Paypal\Model\Hostedpro::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -171,7 +171,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'buyer_email' => 'buyer@email.com',
         ];
 
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -250,22 +250,79 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Paypal\Model\Hostedpro\Request::setAmount()
+     * @param $total
+     * @param $subtotal
+     * @param $tax
+     * @param $shipping
+     * @param $discount
+     * @dataProvider amountWithoutTaxZeroSubtotalDataProvider
+     */
+    public function testSetAmountWithoutTaxZeroSubtotal($total, $subtotal, $tax, $shipping, $discount)
+    {
+        $expectation = [
+            'subtotal' => $total,
+            'total' => $total,
+            'tax' => $tax,
+            'shipping' => $shipping,
+            'discount' => abs($discount)
+        ];
+
+        static::assertFalse($this->taxData->priceIncludesTax());
+
+        $payment = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $payment->expects(static::exactly(2))
+            ->method('getBaseAmountAuthorized')
+            ->willReturn($total);
+
+        $order->expects(static::exactly(2))
+            ->method('getPayment')
+            ->willReturn($payment);
+
+        $order->expects(static::once())
+            ->method('getBaseDiscountAmount')
+            ->willReturn($discount);
+
+        $order->expects(static::once())
+            ->method('getBaseTaxAmount')
+            ->willReturn($tax);
+
+        $order->expects(static::once())
+            ->method('getBaseShippingAmount')
+            ->willReturn($shipping);
+
+        $order->expects(static::once())
+            ->method('getBaseSubtotal')
+            ->willReturn($subtotal);
+        $this->_model->setAmount($order);
+
+        static::assertEquals($expectation, $this->_model->getData());
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Hostedpro\Request::setAmount()
      */
     public function testSetAmountWithIncludedTax()
     {
         /** @var \Magento\Tax\Model\Config  $config */
-        $config = $this->helper->getObject('Magento\Tax\Model\Config');
+        $config = $this->helper->getObject(\Magento\Tax\Model\Config::class);
         $config->setPriceIncludesTax(true);
 
         $this->taxData = $this->helper->getObject(
-            'Magento\Tax\Helper\Data',
+            \Magento\Tax\Helper\Data::class,
             [
                 'taxConfig' => $config
             ]
         );
 
         $this->_model = $this->helper->getObject(
-            'Magento\Paypal\Model\Hostedpro\Request',
+            \Magento\Paypal\Model\Hostedpro\Request::class,
             [
                 'localeResolver' => $this->localeResolverMock,
                 'taxData' => $this->taxData
@@ -281,11 +338,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'subtotal' => $amount
         ];
 
-        $payment = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
+        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -311,6 +368,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         return [
             ['total' => 31.00, 'subtotal' => 10.00, 'tax' => 1.00, 'shipping' => 20.00, 'discount' => 0.00],
             ['total' => 5.00, 'subtotal' => 10.00, 'tax' => 0.00, 'shipping' => 20.00, 'discount' => -25.00],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function amountWithoutTaxZeroSubtotalDataProvider()
+    {
+        return [
+            ['total' => 10.00, 'subtotal' => 0.00, 'tax' => 0.00, 'shipping' => 20.00, 'discount' => 0.00],
         ];
     }
 }

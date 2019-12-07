@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App;
 
@@ -10,10 +11,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Profiler;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem\DriverPool;
+use Psr\Log\LoggerInterface;
 
 /**
  * A bootstrap of Magento application
@@ -21,6 +21,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
  * Performs basic initialization root function: injects init parameters and creates object manager
  * Can create/run applications
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bootstrap
@@ -135,7 +136,7 @@ class Bootstrap
     {
         $dirList = self::createFilesystemDirectoryList($rootDir, $initParams);
         $autoloadWrapper = AutoloaderRegistry::getAutoloader();
-        Populator::populateMappings($autoloadWrapper, $dirList, new ComponentRegistrar());
+        Populator::populateMappings($autoloadWrapper, $dirList);
     }
 
     /**
@@ -180,7 +181,7 @@ class Bootstrap
         $extraDrivers = [];
         if (isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS])) {
             $extraDrivers = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS];
-        };
+        }
         return new DriverPool($extraDrivers);
     }
 
@@ -206,6 +207,7 @@ class Bootstrap
         $this->factory = $factory;
         $this->rootDir = $rootDir;
         $this->server = $initParams;
+        $this->objectManager = $this->factory->create($this->server);
     }
 
     /**
@@ -229,7 +231,6 @@ class Bootstrap
     public function createApplication($type, $arguments = [])
     {
         try {
-            $this->initObjectManager();
             $application = $this->objectManager->create($type, $arguments);
             if (!($application instanceof AppInterface)) {
                 throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
@@ -245,6 +246,8 @@ class Bootstrap
      *
      * @param \Magento\Framework\AppInterface $application
      * @return void
+     *
+     * phpcs:disable Magento2.Exceptions,Squiz.Commenting.FunctionCommentThrowTag
      */
     public function run(AppInterface $application)
     {
@@ -252,7 +255,6 @@ class Bootstrap
             try {
                 \Magento\Framework\Profiler::start('magento');
                 $this->initErrorHandler();
-                $this->initObjectManager();
                 $this->assertMaintenance();
                 $this->assertInstalled();
                 $response = $application->launch();
@@ -260,6 +262,7 @@ class Bootstrap
                 \Magento\Framework\Profiler::stop('magento');
             } catch (\Exception $e) {
                 \Magento\Framework\Profiler::stop('magento');
+                $this->objectManager->get(LoggerInterface::class)->error($e->getMessage());
                 if (!$application->catchException($this, $e)) {
                     throw $e;
                 }
@@ -267,13 +270,15 @@ class Bootstrap
         } catch (\Exception $e) {
             $this->terminate($e);
         }
-    }
+    } // phpcs:enable
 
     /**
      * Asserts maintenance mode
      *
      * @return void
      * @throws \Exception
+     *
+     * phpcs:disable Magento2.Exceptions
      */
     protected function assertMaintenance()
     {
@@ -281,10 +286,16 @@ class Bootstrap
         if (null === $isExpected) {
             return;
         }
-        $this->initObjectManager();
         /** @var \Magento\Framework\App\MaintenanceMode $maintenance */
-        $this->maintenance = $this->objectManager->get('Magento\Framework\App\MaintenanceMode');
-        $isOn = $this->maintenance->isOn(isset($this->server['REMOTE_ADDR']) ? $this->server['REMOTE_ADDR'] : '');
+        $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
+
+        /** @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $phpRemoteAddressEnvironment */
+        $phpRemoteAddressEnvironment = $this->objectManager->get(
+            \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class
+        );
+        $remoteAddress = $phpRemoteAddressEnvironment->getRemoteAddress();
+        $isOn = $this->maintenance->isOn($remoteAddress ? $remoteAddress : '');
+
         if ($isOn && !$isExpected) {
             $this->errorCode = self::ERR_MAINTENANCE;
             throw new \Exception('Unable to proceed: the maintenance mode is enabled. ');
@@ -293,7 +304,7 @@ class Bootstrap
             $this->errorCode = self::ERR_MAINTENANCE;
             throw new \Exception('Unable to proceed: the maintenance mode must be enabled first. ');
         }
-    }
+    } // phpcs:enable
 
     /**
      * Asserts whether application is installed
@@ -307,14 +318,15 @@ class Bootstrap
         if (null === $isExpected) {
             return;
         }
-        $this->initObjectManager();
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Error: Application is not installed yet. ');
         }
         if ($isInstalled && !$isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Error: Application is already installed. ');
         }
     }
@@ -332,7 +344,7 @@ class Bootstrap
     {
         if (array_key_exists($key, $this->server)) {
             if (isset($this->server[$key])) {
-                return (bool)(int)$this->server[$key];
+                return (bool) (int) $this->server[$key];
             }
             return null;
         }
@@ -346,9 +358,8 @@ class Bootstrap
      */
     private function isInstalled()
     {
-        $this->initObjectManager();
         /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
-        $deploymentConfig = $this->objectManager->get('Magento\Framework\App\DeploymentConfig');
+        $deploymentConfig = $this->objectManager->get(\Magento\Framework\App\DeploymentConfig::class);
         return $deploymentConfig->isAvailable();
     }
 
@@ -359,7 +370,6 @@ class Bootstrap
      */
     public function getObjectManager()
     {
-        $this->initObjectManager();
         return $this->objectManager;
     }
 
@@ -373,20 +383,7 @@ class Bootstrap
         $handler = new ErrorHandler();
         set_error_handler([$handler, 'handler']);
     }
-
-    /**
-     * Initializes object manager
-     *
-     * @return void
-     */
-    private function initObjectManager()
-    {
-        if (!$this->objectManager) {
-            $this->objectManager = $this->factory->create($this->server);
-            $this->maintenance = $this->objectManager->get('Magento\Framework\App\MaintenanceMode');
-        }
-    }
-
+    
     /**
      * Getter for error code
      *
@@ -404,15 +401,18 @@ class Bootstrap
      */
     public function isDeveloperMode()
     {
-        if (isset($this->server[State::PARAM_MODE]) && $this->server[State::PARAM_MODE] == State::MODE_DEVELOPER) {
-            return true;
+        $mode = 'default';
+        if (isset($this->server[State::PARAM_MODE])) {
+            $mode = $this->server[State::PARAM_MODE];
+        } else {
+            $deploymentConfig = $this->getObjectManager()->get(DeploymentConfig::class);
+            $configMode = $deploymentConfig->get(State::PARAM_MODE);
+            if ($configMode) {
+                $mode = $configMode;
+            }
         }
-        /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
-        $deploymentConfig = $this->getObjectManager()->get('Magento\Framework\App\DeploymentConfig');
-        if ($deploymentConfig->get(State::PARAM_MODE) == State::MODE_DEVELOPER) {
-            return true;
-        }
-        return false;
+
+        return $mode == State::MODE_DEVELOPER;
     }
 
     /**
@@ -420,10 +420,12 @@ class Bootstrap
      *
      * @param \Exception $e
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * phpcs:disable Magento2.Security.LanguageConstruct, Squiz.Commenting.FunctionCommentThrowTag
      */
     protected function terminate(\Exception $e)
     {
+
         if ($this->isDeveloperMode()) {
             echo $e;
         } else {
@@ -432,7 +434,7 @@ class Bootstrap
                 if (!$this->objectManager) {
                     throw new \DomainException();
                 }
-                $this->objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->objectManager->get(LoggerInterface::class)->critical($e);
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }
@@ -440,4 +442,5 @@ class Bootstrap
         }
         exit(1);
     }
+    // phpcs:enable
 }

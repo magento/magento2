@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
@@ -35,6 +35,6 @@ class CollectionFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\Message\Collection', $data);
+        return $this->objectManager->create(\Magento\Framework\Message\Collection::class, $data);
     }
 }

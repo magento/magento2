@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Model\Config\Backend;
@@ -10,7 +10,9 @@ namespace Magento\Cookie\Model\Config\Backend;
  */
 class Domain extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\Framework\Session\Config\Validator\CookieDomainValidator */
+    /**
+     * @var \Magento\Framework\Session\Config\Validator\CookieDomainValidator
+     */
     protected $configValidator;
 
     /**
@@ -50,7 +52,7 @@ class Domain extends \Magento\Framework\App\Config\Value
 
         // Empty value is treated valid and will be handled when read the value out
         if (!empty($value) && !$this->configValidator->isValid($value)) {
-            $msg = __('Invalid domain name: ' . join('; ', $this->configValidator->getMessages()));
+            $msg = __('Invalid domain name: %1', join('; ', $this->configValidator->getMessages()));
             throw new \Magento\Framework\Exception\LocalizedException($msg);
         }
     }

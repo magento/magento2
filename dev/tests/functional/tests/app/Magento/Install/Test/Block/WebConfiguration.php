@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class WebConfiguration extends Form
      *
      * @var string
      */
-    protected $next = "[ng-click*='next']";
+    protected $next = "[ng-click*='validateUrl']";
 
     /**
      * 'Advanced Options' locator.
@@ -36,6 +36,13 @@ class WebConfiguration extends Form
      * @var string
      */
     protected $adminUriCheck = '#admin';
+
+    /**
+     * 'Advanced Options' block locator.
+     *
+     * @var string
+     */
+    protected $extendedConfig = '[ng-show="config.advanced.expanded"]';
 
     /**
      * Fill web configuration form.
@@ -76,7 +83,9 @@ class WebConfiguration extends Form
      */
     public function clickAdvancedOptions()
     {
-        $this->_rootElement->find($this->advancedOptions)->click();
+        if (!$this->_rootElement->find($this->extendedConfig)->isVisible()) {
+            $this->_rootElement->find($this->advancedOptions)->click();
+        }
     }
 
     public function getAdminUriCheck()

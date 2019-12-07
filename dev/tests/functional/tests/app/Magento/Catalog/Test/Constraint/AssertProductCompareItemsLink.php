@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,14 +26,14 @@ class AssertProductCompareItemsLink extends AbstractConstraint
         $productQty = count($products);
         $qtyOnPage = $cmsIndex->getCompareLinkBlock()->getQtyInCompareList();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $productQty,
             $qtyOnPage,
             'Qty is not correct in "Compare Products" link.'
         );
 
         $compareProductUrl = '/catalog/product_compare/';
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             strpos($cmsIndex->getLinksBlock()->getLinkUrl('Compare Products'), $compareProductUrl) !== false,
             'Compare product link isn\'t lead to Compare Product Page.'
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Html;
@@ -14,6 +14,7 @@ class Date extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _toHtml()
     {
@@ -21,6 +22,12 @@ class Date extends \Magento\Framework\View\Element\Template
         $html .= 'value="' . $this->escapeHtml($this->getValue()) . '" ';
         $html .= 'class="' . $this->getClass() . '" ' . $this->getExtraParams() . '/> ';
         $calendarYearsRange = $this->getYearsRange();
+        $changeMonth = $this->getChangeMonth();
+        $changeYear = $this->getChangeYear();
+        $maxDate = $this->getMaxDate();
+        $showOn = $this->getShowOn();
+        $firstDay = $this->getFirstDay();
+
         $html .= '<script type="text/javascript">
             require(["jquery", "mage/calendar"], function($){
                     $("#' .
@@ -49,8 +56,12 @@ class Date extends \Magento\Framework\View\Element\Template
             (string)new \Magento\Framework\Phrase(
                 'Select Date'
             ) .
-            '"
-                    })
+            '"' . ($maxDate ? ', maxDate: "' . $maxDate . '"' : '') .
+            ($changeMonth === null ? '' : ', changeMonth: ' . $changeMonth) .
+            ($changeYear === null ? '' : ', changeYear: ' . $changeYear) .
+            ($showOn ? ', showOn: "' . $showOn . '"' : '') .
+            ($firstDay ? ', firstDay: ' . $firstDay : '') .
+            '})
             });
             </script>';
 
@@ -67,7 +78,7 @@ class Date extends \Magento\Framework\View\Element\Template
         if ($this->getFormat() && $this->getValue()) {
             return strftime($this->getFormat(), strtotime($this->getValue()));
         }
-        return htmlspecialchars($this->getValue());
+        return $this->escapeHtml($this->getValue());
     }
 
     /**

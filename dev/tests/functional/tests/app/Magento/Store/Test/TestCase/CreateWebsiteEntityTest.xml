@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\CreateWebsiteEntityTest" summary="Create Website" ticketId="MAGETWO-27665">
         <variation name="CreateWebsiteEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S1, mftf_migrated:yes</data>
             <data name="website/data/name" xsi:type="string">website_%isolation%</data>
             <data name="website/data/code" xsi:type="string">code_%isolation%</data>
             <constraint name="Magento\Store\Test\Constraint\AssertWebsiteSuccessSaveMessage" />

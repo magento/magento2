@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
@@ -28,24 +28,15 @@ class MassDisableTest extends AbstractMassActionTest
     {
         parent::setUp();
 
-        $this->collectionFactoryMock = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Page\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->collectionFactoryMock = $this->createPartialMock(
+            \Magento\Cms\Model\ResourceModel\Page\CollectionFactory::class,
+            ['create']
         );
 
-        $this->pageCollectionMock = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Page\Collection',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->pageCollectionMock = $this->createMock(\Magento\Cms\Model\ResourceModel\Page\Collection::class);
 
         $this->massDisableController = $this->objectManager->getObject(
-            'Magento\Cms\Controller\Adminhtml\Page\MassDisable',
+            \Magento\Cms\Controller\Adminhtml\Page\MassDisable::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
@@ -76,9 +67,9 @@ class MassDisableTest extends AbstractMassActionTest
             ->willReturn(new \ArrayIterator($collection));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('A total of %1 record(s) have been disabled.', $disabledPagesCount));
-        $this->messageManagerMock->expects($this->never())->method('addError');
+        $this->messageManagerMock->expects($this->never())->method('addErrorMessage');
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
@@ -95,12 +86,9 @@ class MassDisableTest extends AbstractMassActionTest
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Page\Collection',
-            ['setIsActive', 'save'],
-            [],
-            '',
-            false
+        $pageMock = $this->createPartialMock(
+            \Magento\Cms\Model\ResourceModel\Page\Collection::class,
+            ['setIsActive', 'save']
         );
         $pageMock->expects($this->once())->method('setIsActive')->with(false)->willReturn(true);
         $pageMock->expects($this->once())->method('save')->willReturn(true);

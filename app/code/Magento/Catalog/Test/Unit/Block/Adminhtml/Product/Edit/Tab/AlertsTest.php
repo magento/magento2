@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Tab;
 
-class AlertsTest extends \PHPUnit_Framework_TestCase
+class AlertsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts
@@ -20,10 +20,10 @@ class AlertsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->alerts = $helper->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts',
+            \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts::class,
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }
@@ -55,6 +55,9 @@ class AlertsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($canShowTab, $this->alerts->canShowTab());
     }
 
+    /**
+     * @return array
+     */
     public function canShowTabDataProvider()
     {
         return [

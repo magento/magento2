@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Helper;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+use Magento\Catalog\Helper\Image;
+
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var Image
      */
     protected $helper;
 
@@ -28,6 +31,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $assetRepository;
 
     /**
+     * @var \Magento\Framework\Config\View|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $configView;
+
+    /**
      * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewConfig;
@@ -42,33 +50,47 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
+    /**
+     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $placeholderFactory;
+
     protected function setUp()
     {
         $this->mockContext();
         $this->mockImage();
 
-        $this->assetRepository = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+        $this->assetRepository = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->viewConfig = $this->getMockBuilder('Magento\Framework\View\ConfigInterface')
+        $this->configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\ConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->helper = new \Magento\Catalog\Helper\Image(
+        $this->placeholderFactory = $this->getMockBuilder(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->helper = new Image(
             $this->context,
             $this->imageFactory,
             $this->assetRepository,
-            $this->viewConfig
+            $this->viewConfig,
+            $this->placeholderFactory
         );
     }
 
     protected function mockContext()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();
         $this->context->expects($this->any())
             ->method('getScopeConfig')
@@ -77,12 +99,12 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     protected function mockImage()
     {
-        $this->imageFactory = $this->getMockBuilder('Magento\Catalog\Model\Product\ImageFactory')
+        $this->imageFactory = $this->getMockBuilder(\Magento\Catalog\Model\Product\ImageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->image = $this->getMockBuilder('Magento\Catalog\Model\Product\Image')
+        $this->image = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->imageFactory->expects($this->any())
@@ -99,7 +121,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,7 +130,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->prepareWatermarkProperties($data);
 
         $this->assertInstanceOf(
-            'Magento\Catalog\Helper\Image',
+            Image::class,
             $this->helper->init($productMock, $imageId, $attributes)
         );
     }
@@ -140,22 +162,88 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $data - optional 'frame' key
+     * @param bool $whiteBorders view config
+     * @param bool $expectedKeepFrame
+     * @dataProvider initKeepFrameDataProvider
+     */
+    public function testInitKeepFrame($data, $whiteBorders, $expectedKeepFrame)
+    {
+        $imageId = 'test_image_id';
+        $attributes = [];
+
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->prepareAttributes($data, $imageId);
+
+        $this->configView->expects(isset($data['frame']) ? $this->never() : $this->once())
+            ->method('getVarValue')
+            ->with('Magento_Catalog', 'product_image_white_borders')
+            ->willReturn($whiteBorders);
+
+        $this->viewConfig->expects($this->once())
+            ->method('getViewConfig')
+            ->willReturn($this->configView);
+
+        $this->image->expects($this->once())
+            ->method('setKeepFrame')
+            ->with($expectedKeepFrame)
+            ->willReturnSelf();
+
+        $this->helper->init($productMock, $imageId, $attributes);
+    }
+
+    /**
+     * @return array
+     */
+    public function initKeepFrameDataProvider()
+    {
+        return [
+            // when frame defined explicitly, it wins
+            [
+                'mediaImage' => [
+                    'frame' => 1,
+                ],
+                'whiteBorders' => true,
+                'expected' => true,
+            ],
+            [
+                'mediaImage' => [
+                    'frame' => 0,
+                ],
+                'whiteBorders' => true,
+                'expected' => false,
+            ],
+            // when frame is not defined, var is used
+            [
+                'mediaImage' => [],
+                'whiteBorders' => true,
+                'expected' => true,
+            ],
+            [
+                'mediaImage' => [],
+                'whiteBorders' => false,
+                'expected' => false,
+            ],
+        ];
+    }
+
+    /**
      * @param $data
      * @param $imageId
      */
     protected function prepareAttributes($data, $imageId)
     {
-        $configViewMock = $this->getMockBuilder('Magento\Framework\Config\View')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configViewMock->expects($this->once())
+        $this->configView->expects($this->once())
             ->method('getMediaAttributes')
-            ->with('Magento_Catalog', 'images', $imageId)
+            ->with('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId)
             ->willReturn($data);
 
         $this->viewConfig->expects($this->once())
             ->method('getViewConfig')
-            ->willReturn($configViewMock);
+            ->willReturn($this->configView);
     }
 
     /**
@@ -208,32 +296,34 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->willReturnMap([
+            ->willReturnMap(
                 [
-                    'design/watermark/' . $data['type'] . '_image',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_imageOpacity',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_opacity']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_position',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_position']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_size',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_size']
-                ],
-            ]);
+                    [
+                        'design/watermark/' . $data['type'] . '_image',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_imageOpacity',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_opacity']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_position',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_position']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_size',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_size']
+                    ],
+                ]
+            );
 
         $this->image->expects($this->any())
             ->method('setWatermarkFile')
@@ -262,7 +352,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             'type' => 'image',
         ];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -281,7 +371,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             'width' => 100,
         ];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -300,7 +390,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -342,7 +432,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -379,7 +469,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -424,7 +514,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      * @param string $imageId
      * @param string $imageFile
      * @param string $baseFile
-     * @param string $newFile
      * @param string $destination
      * @param boolean $setImageFile
      * @param boolean $isCached
@@ -436,14 +525,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageId,
         $imageFile,
         $baseFile,
-        $newFile,
         $destination,
         $setImageFile,
         $isCached,
         $isBaseFilePlaceholder,
         $resizedImageInfo
     ) {
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -477,9 +565,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->image->expects($this->any())
             ->method('isBaseFilePlaceholder')
             ->willReturn($isBaseFilePlaceholder);
-        $this->image->expects($this->any())
-            ->method('getNewFile')
-            ->willReturn($newFile);
 
         $this->prepareAttributes([], $imageId);
 
@@ -502,7 +587,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => '/path/to/base_image.png',
-                'new_file' => '/path/to/base_image.png',
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,
@@ -516,7 +600,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
-                'new_file' => true,
                 'destination' => 'small_image',
                 'set_image_file' => false,
                 'is_cached' => false,
@@ -530,7 +613,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
-                'new_file' => false,
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,
@@ -544,7 +626,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
-                'new_file' => true,
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,
@@ -558,7 +639,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
-                'new_file' => '/path/to/test_image_id.png',
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,

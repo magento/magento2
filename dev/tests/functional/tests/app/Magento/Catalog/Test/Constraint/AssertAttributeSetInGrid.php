@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class AssertAttributeSetInGrid extends AbstractConstraint
         ];
 
         $productSetPage->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $productSetPage->getGrid()->isRowVisible($filterAttributeSet),
             'Attribute Set \'' . $filterAttributeSet['set_name'] . '\' is absent in Attribute Set grid.'
         );

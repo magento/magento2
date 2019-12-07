@@ -1,16 +1,26 @@
 <?php
 /**
- * Backend block context
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+
 /**
- * Backend block context
+ * Constructor modification point for Magento\Backend\Block\AbstractBlock.
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * All context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
+ * the classes they were introduced for.
+ *
+ * @api
+ * @SuppressWarnings(PHPMD)
+ * @since 100.0.2
  */
 class Context extends \Magento\Framework\View\Element\Context
 {
@@ -36,8 +46,9 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -59,7 +70,8 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\AuthorizationInterface $authorization
+        \Magento\Framework\AuthorizationInterface $authorization,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_authorization = $authorization;
         parent::__construct(
@@ -79,7 +91,8 @@ class Context extends \Magento\Framework\View\Element\Context
             $escaper,
             $filterManager,
             $localeDate,
-            $inlineTranslation
+            $inlineTranslation,
+            $lockQuery
         );
     }
 

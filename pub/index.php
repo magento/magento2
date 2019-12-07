@@ -2,7 +2,7 @@
 /**
  * Public alias for the application entry point
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,13 +25,16 @@ HTML;
 }
 
 $params = $_SERVER;
-$params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
-    DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
-    DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
-    DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
-    DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
-];
+$params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = array_replace_recursive(
+    $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] ?? [],
+    [
+        DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+        DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
+        DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
+        DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
+    ]
+);
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
 /** @var \Magento\Framework\App\Http $app */
-$app = $bootstrap->createApplication('Magento\Framework\App\Http');
+$app = $bootstrap->createApplication(\Magento\Framework\App\Http::class);
 $bootstrap->run($app);

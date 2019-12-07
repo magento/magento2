@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
@@ -14,7 +14,7 @@ use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 class Payment extends SalesResource
 {
     /**
-     * Serializeable field: additional_information
+     * Serializable field: additional_information
      *
      * @var array
      */

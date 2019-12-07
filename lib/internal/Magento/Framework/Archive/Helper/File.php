@@ -1,18 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
-* Helper class that simplifies files stream reading and writing
-*/
+ * Helper class that simplifies files stream reading and writing
+ */
 namespace Magento\Framework\Archive\Helper;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
 
 class File
 {
@@ -91,21 +88,24 @@ class File
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function open($mode = 'w+', $chmod = DriverInterface::WRITEABLE_FILE_MODE)
+    public function open($mode = 'w+', $chmod = null)
     {
         $this->_isInWriteMode = $this->_isWritableMode($mode);
 
         if ($this->_isInWriteMode) {
             if (!is_writable($this->_fileLocation)) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('Permission denied to write to %1', [$this->_fileLocation])
+                    new \Magento\Framework\Phrase(
+                        'You don\'t have permissions to write to the "%1" file.',
+                        [$this->_fileLocation]
+                    )
                 );
             }
 
             if (is_file($this->_filePath) && !is_writable($this->_filePath)) {
                 throw new LocalizedException(
                     new \Magento\Framework\Phrase(
-                        "Can't open file %1 for writing. Permission denied.",
+                        'You don\'t have the permissions to open the "%1" file for writing access.',
                         [$this->_fileName]
                     )
                 );
@@ -115,13 +115,19 @@ class File
         if ($this->_isReadableMode($mode) && (!is_file($this->_filePath) || !is_readable($this->_filePath))) {
             if (!is_file($this->_filePath)) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('File %1 does not exist', [$this->_filePath])
+                    new \Magento\Framework\Phrase(
+                        'The "%1" file doesn\'t exist. Verify the file and try again.',
+                        [$this->_filePath]
+                    )
                 );
             }
 
             if (!is_readable($this->_filePath)) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('Permission denied to read file %1', [$this->_filePath])
+                    new \Magento\Framework\Phrase(
+                        'You don\'t have permissions to read the "%1" file.',
+                        [$this->_filePath]
+                    )
                 );
             }
         }
@@ -182,7 +188,7 @@ class File
         $this->_close();
         $this->_fileHandler = false;
 
-        if ($this->_isInWriteMode) {
+        if ($this->_isInWriteMode && isset($this->_chmod)) {
             @chmod($this->_filePath, $this->_chmod);
         }
     }
@@ -199,7 +205,9 @@ class File
         $this->_fileHandler = @fopen($this->_filePath, $mode);
 
         if (false === $this->_fileHandler) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath]));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('The "%1" file failed to open.', [$this->_filePath])
+            );
         }
     }
 
@@ -215,7 +223,9 @@ class File
         $result = @fwrite($this->_fileHandler, $data);
 
         if (false === $result) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath]));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('The data failed to write to "%1".', [$this->_filePath])
+            );
         }
     }
 

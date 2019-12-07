@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
 use Magento\Framework\Phrase;
@@ -36,7 +37,7 @@ class TemplateFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\View\TemplateEngine\Xhtml\Template'
+        $instanceName = \Magento\Framework\View\TemplateEngine\Xhtml\Template::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
@@ -54,7 +55,9 @@ class TemplateFactory
         $object = $this->objectManager->create($this->instanceName, $arguments);
 
         if (!($object instanceof Template)) {
-            throw new LocalizedException(new Phrase('This class must inherit from a class "Template"'));
+            throw new LocalizedException(
+                new Phrase('This class needs to inherit from a class "Template". Verify the class and try again.')
+            );
         }
 
         return $object;

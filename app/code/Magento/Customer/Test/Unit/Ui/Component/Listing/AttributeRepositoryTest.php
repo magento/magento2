@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
 
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 
-class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test AttributeRepository Class
+ */
+class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\CustomerMetadataManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerMetadataManagement;
@@ -33,41 +36,41 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var AttributeRepository */
     protected $component;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerMetadataManagement = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\CustomerMetadataManagementInterface',
+            \Magento\Customer\Api\CustomerMetadataManagementInterface::class,
             [],
             '',
             false
         );
         $this->addressMetadataManagement = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AddressMetadataManagementInterface',
+            \Magento\Customer\Api\AddressMetadataManagementInterface::class,
             [],
             '',
             false
         );
         $this->customerMetadata = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\CustomerMetadataInterface',
+            \Magento\Customer\Api\CustomerMetadataInterface::class,
             [],
             '',
             false
         );
         $this->addressMetadata = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AddressMetadataInterface',
+            \Magento\Customer\Api\AddressMetadataInterface::class,
             [],
             '',
             false
         );
         $this->attribute = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AttributeMetadataInterface',
+            \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
             [],
             '',
             false
         );
-        $this->option = $this->getMock('Magento\Customer\Api\Data\OptionInterface', [], [], '', false);
+        $this->option = $this->createMock(\Magento\Customer\Api\Data\OptionInterface::class);
 
-        $this->attributeFilter = $this->getMock('Magento\Customer\Model\Indexer\Attribute\Filter', [], [], '', false);
+        $this->attributeFilter = $this->createMock(\Magento\Customer\Model\Indexer\Attribute\Filter::class);
 
         $this->component = new AttributeRepository(
             $this->customerMetadataManagement,
@@ -144,7 +147,8 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                     'options' => [
                         [
                             'label' => 'Label',
-                            'value' => 'Value'
+                            'value' => 'Value',
+                            '__disableTmpl' => true
                         ]
                     ],
                     'is_used_in_grid' => true,

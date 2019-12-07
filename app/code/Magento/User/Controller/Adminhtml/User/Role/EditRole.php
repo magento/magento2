@@ -1,11 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+/**
+ * Class EditRole
+ */
 class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**
@@ -15,7 +18,12 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
      */
     public function execute()
     {
+        $this->restoreResourcesDataFromSession();
+        $this->restoreUsersDataFromSession();
+
         $role = $this->_initRole();
+        $this->restoreFormDataFromSession($role);
+
         $this->_initAction();
 
         if ($role->getId()) {
@@ -42,5 +50,55 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
         );
 
         $this->_view->renderLayout();
+    }
+
+    /**
+     * Restore Users Form Data from Session and save one in Registry
+     *
+     * @return void
+     */
+    protected function restoreUsersDataFromSession()
+    {
+        $this->_coreRegistry->register(
+            SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY,
+            $this->_session->getData(SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY, true)
+        );
+        $this->_coreRegistry->register(
+            SaveRole::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY,
+            $this->_session->getData(SaveRole::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY, true)
+        );
+    }
+
+    /**
+     * Restore Resources Form Data from Session and save one in Registry
+     *
+     * @return void
+     */
+    protected function restoreResourcesDataFromSession()
+    {
+        $this->_coreRegistry->register(
+            SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY,
+            $this->_session->getData(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY, true)
+        );
+        $this->_coreRegistry->register(
+            SaveRole::RESOURCE_FORM_DATA_SESSION_KEY,
+            $this->_session->getData(SaveRole::RESOURCE_FORM_DATA_SESSION_KEY, true)
+        );
+    }
+
+    /**
+     * Restore general information Form Data from Session and save one in Registry
+     *
+     * @param \Magento\Authorization\Model\Role $role
+     * @return $this
+     */
+    protected function restoreFormDataFromSession(\Magento\Authorization\Model\Role $role)
+    {
+        $data = $this->_getSession()->getData(SaveRole::ROLE_EDIT_FORM_DATA_SESSION_KEY, true);
+        if (!empty($data['rolename'])) {
+            $role->setRoleName($data['rolename']);
+        }
+
+        return $this;
     }
 }

@@ -1,15 +1,15 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @data-grid-sticky-header__background-color: @color-white-fog;
 @data-grid-sticky-header__border-color: @color-gray89;
-@data-grid-sticky-header__box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.25);
+@data-grid-sticky-header__box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25);
 
 @data-grid-sticky-header-actions__background-color: @color-white;
 @data-grid-sticky-header-actions__border-color: @action__border-color;
@@ -27,10 +27,10 @@
     border-bottom: 1px solid @data-grid-sticky-header__border-color;
     box-shadow: @data-grid-sticky-header__box-shadow;
     left: @page-wrapper__indent-left;
-    right: 0;
     margin-top: -1px;
     padding: @indent__xs @indent__l 0;
     position: fixed;
+    right: 0;
     top: 77px;
     z-index: @data-grid-sticky-header__z-index;
 
@@ -43,6 +43,7 @@
     .admin__data-grid-header-row {
         position: relative;
         text-align: right;
+
         &:last-child {
             margin: 0;
         }
@@ -74,6 +75,7 @@
     .data-grid-search-control-wrap {
         margin: @data-grid-sticky-header-actions__margin;
         width: auto;
+
         .data-grid-search-label {
             box-sizing: border-box;
             cursor: pointer;
@@ -82,6 +84,7 @@
             padding: 1.2rem @data-grid-sticky-header-actions__padding 1.7rem;
             position: relative;
             text-align: center;
+
             &:before {
                 &:extend(.abs-icon all);
                 color: @action-dropdown__color;
@@ -89,11 +92,13 @@
                 font-size: @data-grid-search-action__size;
                 transition: @smooth__color;
             }
+
             &:hover {
                 &:before {
                     color: @action-dropdown__hover__color;
                 }
             }
+
             span {
                 display: none;
             }
@@ -105,6 +110,7 @@
         margin: @data-grid-sticky-header-actions__margin;
         padding-left: 0;
         position: relative;
+
         .action-default {
             background-color: transparent;
             border: 1px solid transparent;
@@ -113,18 +119,24 @@
             padding: 1.2rem @data-grid-sticky-header-actions__padding 1.7rem;
             text-align: center;
             transition: all @appearing__transition-duration @apperaing__transition-timing-function;
+
             span {
                 display: none;
             }
+
             &:before {
                 margin: 0;
             }
+
             &._active {
                 background-color: @data-grid-sticky-header-actions__background-color;
-                border-color: @data-grid-sticky-header-actions__border-color;
                 border-bottom-color: @data-grid-sticky-header-actions__background-color;
-                box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+                border-left-color: @data-grid-sticky-header-actions__border-color;
+                border-right-color: @data-grid-sticky-header-actions__border-color;
+                border-top-color: @data-grid-sticky-header-actions__border-color;
+                box-shadow: 1px 1px 5px rgba(0, 0, 0, .5);
                 z-index: @data-grid-sticky-header-actions__z-index;
+
                 &:after {
                     background-color: @data-grid-sticky-header-actions__background-color;
                     content: '';
@@ -175,9 +187,10 @@
         right: -7px;
         top: 0;
         z-index: @data-grid-sticky-header-actions__z-index + 1;
+
         &:empty {
-            padding-top: 0;
             padding-bottom: 0;
+            padding-top: 0;
         }
     }
 
@@ -185,6 +198,7 @@
     .admin__data-grid-actions-wrap {
         margin: @data-grid-sticky-header-actions__margin;
         padding-right: .3rem;
+
         .admin__action-dropdown {
             background-color: transparent;
             box-sizing: border-box;
@@ -192,25 +206,30 @@
             padding-left: @data-grid-sticky-header-actions__padding;
             padding-right: @data-grid-sticky-header-actions__padding;
             text-align: center;
+
             .admin__action-dropdown-text {
                 display: inline-block;
-                min-width: 0;
                 max-width: 0;
+                min-width: 0;
                 overflow: hidden;
             }
+
             &:before {
                 margin: 0;
             }
         }
+
         .admin__action-dropdown-wrap {
             margin-right: 1.1rem;
         }
+
         .admin__action-dropdown-wrap,
         .admin__action-dropdown {
             &:after {
                 display: none;
             }
         }
+
         ._active {
             .admin__action-dropdown {
                 background-color: @color-white;
@@ -228,8 +247,8 @@
     }
 
     .admin__data-grid-filters-current {
-        border-top: 0;
         border-bottom: 0;
+        border-top: 0;
         margin-bottom: 0;
         padding-bottom: 0;
         padding-top: 0;
@@ -264,8 +283,4 @@
 
 .data-grid-cap-left {
     left: 0;
-}
-
-.data-grid-cap-right {
-    right: 0;
 }

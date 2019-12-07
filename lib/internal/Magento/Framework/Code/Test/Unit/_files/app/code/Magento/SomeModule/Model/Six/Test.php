@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SomeModule\Model\Six;
@@ -15,6 +15,11 @@ class Test extends \Magento\SomeModule\Model\One\Test
      */
     protected $_factory;
 
+    /**
+     * Test constructor.
+     * @param \Magento\SomeModule\Model\Proxy $proxy
+     * @param \Magento\SomeModule\Model\ElementFactory $factory
+     */
     public function __construct(
         \Magento\SomeModule\Model\Proxy $proxy,
         \Magento\SomeModule\Model\ElementFactory $factory

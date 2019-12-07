@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Setup\CategorySetup::class
+);
 
 $attributesData = [
     [
@@ -23,7 +25,7 @@ foreach ($attributesData as $data) {
 
     /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
     $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-        'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
     );
     $attributeData = array_merge(
         [
@@ -59,7 +61,6 @@ foreach ($attributesData as $data) {
     $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
 }
 
-
 /** @var \Magento\Eav\Model\Config $eavConfig */
-$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 $eavConfig->clear();

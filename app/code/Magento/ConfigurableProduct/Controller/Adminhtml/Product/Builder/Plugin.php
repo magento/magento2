@@ -1,13 +1,16 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder;
 
 use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Model\Product\Type;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder as CatalogProductBuilder;
+use Magento\Framework\App\RequestInterface;
 
 class Plugin
 {
@@ -32,26 +35,22 @@ class Plugin
     }
 
     /**
-     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $subject
-     * @param callable $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
+     * Set type and data to configurable product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @param CatalogProductBuilder $subject
+     * @param Product $product
+     * @param RequestInterface $request
+     * @return Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function aroundBuild(
-        \Magento\Catalog\Controller\Adminhtml\Product\Builder $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
-        $product = $proceed($request);
-
+    public function afterBuild(CatalogProductBuilder $subject, Product $product, RequestInterface $request)
+    {
         if ($request->has('attributes')) {
             $attributes = $request->getParam('attributes');
             if (!empty($attributes)) {
                 $product->setTypeId(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
-                $this->configurableType->setUsedProductAttributeIds($attributes, $product);
+                $this->configurableType->setUsedProductAttributes($product, $attributes);
             } else {
                 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
             }
@@ -73,10 +72,12 @@ class Plugin
             && $request->getParam('id', false) === false
         ) {
             $configProduct = $this->productFactory->create();
-            $configProduct->setStoreId(0)->load($request->getParam('product'))->setTypeId($request->getParam('type'));
+            $configProduct->setStoreId(0)
+                ->load($request->getParam('product'))
+                ->setTypeId($request->getParam('type'));
 
             $data = [];
-            foreach ($configProduct->getTypeInstance()->getEditableAttributes($configProduct) as $attribute) {
+            foreach ($configProduct->getTypeInstance()->getSetAttributes($configProduct) as $attribute) {
                 /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 if (!$attribute->getIsUnique() &&
                     $attribute->getFrontend()->getInputType() != 'gallery' &&

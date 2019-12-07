@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\App\Language;
@@ -52,7 +52,7 @@ class TranslationFilesTest extends TranslationFiles
         $parser = $this->prepareParser();
 
         $optionResolverFactory = new ResolverFactory();
-        $optionResolver = $optionResolverFactory->create(Files::init()->getPathToSource(), true);
+        $optionResolver = $optionResolverFactory->create(BP, true);
 
         $parser->parse($optionResolver->getOptions());
 
@@ -80,8 +80,7 @@ class TranslationFilesTest extends TranslationFiles
     protected function buildFilePath($phrase, $context)
     {
         $path = $this->getContext()->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
-        $sourcePath = Files::init()->getPathToSource();
-        return $sourcePath . '/' . $path . Locale::DEFAULT_SYSTEM_LOCALE . '.' . Csv::FILE_EXTENSION;
+        return $path . Locale::DEFAULT_SYSTEM_LOCALE . '.' . Csv::FILE_EXTENSION;
     }
 
     /**

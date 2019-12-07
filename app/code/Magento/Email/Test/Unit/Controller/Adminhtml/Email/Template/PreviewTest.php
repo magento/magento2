@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
@@ -9,16 +9,15 @@ use Magento\Email\Controller\Adminhtml\Email\Template\Preview;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\View;
-use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 
 /**
- * Preview Test
+ * Preview Test.
  */
-class PreviewTest extends \PHPUnit_Framework_TestCase
+class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Preview
@@ -29,11 +28,6 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
      * @var Context
      */
     protected $context;
-
-    /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $coreRegistryMock;
 
     /**
      * @var View|\PHPUnit_Framework_MockObject_MockObject
@@ -64,35 +58,40 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->coreRegistryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->getMockBuilder('Magento\Framework\App\View')
+        $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMock();
-        $this->pageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->pageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConfig'])
             ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->setMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->setMethods(['prepend'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $objectManager->getObject('Magento\Backend\App\Action\Context', [
-            'request' => $this->requestMock,
-            'view' => $this->viewMock
-        ]);
-        $this->object = $objectManager->getObject('Magento\Email\Controller\Adminhtml\Email\Template\Preview', [
-            'context' => $this->context,
-            'coreRegistry' => $this->coreRegistryMock,
-        ]);
+        $this->context = $objectManager->getObject(
+            \Magento\Backend\App\Action\Context::class,
+            [
+                'request' => $this->requestMock,
+                'view' => $this->viewMock
+            ]
+        );
+        $this->object = $objectManager->getObject(
+            \Magento\Email\Controller\Adminhtml\Email\Template\Preview::class,
+            [
+                'context' => $this->context,
+            ]
+        );
     }
 
     public function testExecute()

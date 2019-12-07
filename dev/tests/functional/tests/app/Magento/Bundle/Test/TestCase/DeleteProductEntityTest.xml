@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\DeleteProductEntityTest">
         <variation name="DeleteProductEntityTestVariation4">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <data name="isRequired" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />
@@ -15,6 +16,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
         </variation>
         <variation name="DeleteProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="isRequired" xsi:type="string">No</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />

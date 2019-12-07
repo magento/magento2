@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Framework\Data;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $name
@@ -18,7 +18,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
         return $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Dependency\Report\Framework\Data\Module',
+            \Magento\Setup\Module\Dependency\Report\Framework\Data\Module::class,
             ['name' => $name, 'dependencies' => $dependencies]
         );
     }

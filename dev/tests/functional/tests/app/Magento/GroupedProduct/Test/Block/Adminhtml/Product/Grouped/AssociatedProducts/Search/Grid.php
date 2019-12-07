@@ -1,25 +1,31 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts\Search;
 
-use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Class Grid
- * 'Add Products to Grouped product list' grid
+ * 'Add Products to Grouped product list' grid.
  */
-class Grid extends GridInterface
+class Grid extends DataGrid
 {
     /**
      * 'Add Selected Products' button
      *
      * @var string
      */
-    protected $addProducts = 'button.action-add';
+    protected $addProducts = '.action-primary[data-role="action"]';
+
+    /**
+     * Grid selector.
+     *
+     * @var string
+     */
+    private $gridSelector = '[data-role="grid-wrapper"]';
 
     /**
      * Filters array mapping
@@ -28,16 +34,9 @@ class Grid extends GridInterface
      */
     protected $filters = [
         'name' => [
-            'selector' => '#grouped_grid_popup_filter_name',
+            'selector' => '[name="name"]',
         ],
     ];
-
-    /**
-     * An element locator which allows to select entities in grid
-     *
-     * @var string
-     */
-    protected $selectItem = '[data-column=entity_ids] input';
 
     /**
      * Press 'Add Selected Products' button
@@ -47,5 +46,60 @@ class Grid extends GridInterface
     public function addProducts()
     {
         $this->_rootElement->find($this->addProducts)->click();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function searchAndSelect(array $filter)
+    {
+        $this->waitGridVisible();
+        $this->waitLoader();
+        parent::searchAndSelect($filter);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function waitLoader()
+    {
+        parent::waitLoader();
+        $this->waitGridLoaderInvisible();
+    }
+
+    /**
+     * Wait for grid to appear.
+     *
+     * @return void
+     */
+    private function waitGridVisible()
+    {
+        $browser = $this->_rootElement;
+        $selector = $this->gridSelector;
+
+        return $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for grid spinner disappear.
+     *
+     * @return void
+     */
+    private function waitGridLoaderInvisible()
+    {
+        $browser = $this->_rootElement;
+        $selector = $this->loader;
+
+        return $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isVisible() === false ? true : null;
+            }
+        );
     }
 }

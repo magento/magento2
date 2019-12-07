@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment;
 
-class TrackTest extends \PHPUnit_Framework_TestCase
+class TrackTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Shipment\Track
@@ -16,16 +16,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
-            'shipmentRepository' => $this->getMock(
-                'Magento\Sales\Model\Order\ShipmentRepository',
-                [],
-                [],
-                '',
-                false
-            ),
+            'shipmentRepository' => $this->createMock(\Magento\Sales\Model\Order\ShipmentRepository::class),
         ];
 
-        $this->_model = $objectManagerHelper->getObject('Magento\Sales\Model\Order\Shipment\Track', $arguments);
+        $this->_model = $objectManagerHelper->getObject(\Magento\Sales\Model\Order\Shipment\Track::class, $arguments);
     }
 
     public function testAddData()
@@ -43,13 +37,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         $storeId = 10;
         $storeObject = new \Magento\Framework\DataObject(['id' => $storeId]);
 
-        $shipmentMock = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
-            ['getStore', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $shipmentMock = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getStore', '__wakeup']);
         $shipmentMock->expects($this->once())->method('getStore')->will($this->returnValue($storeObject));
 
         $this->_model->setShipment($shipmentMock);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class AssertSearchTermReportForm extends AbstractAssertForm
 
         $dataDiff = $this->verifyData($filter, $catalogSearchEdit->getForm()->getData());
 
-        \PHPUnit_Framework_Assert::assertEmpty($dataDiff, $dataDiff);
+        \PHPUnit\Framework\Assert::assertEmpty($dataDiff, $dataDiff);
     }
 
     /**

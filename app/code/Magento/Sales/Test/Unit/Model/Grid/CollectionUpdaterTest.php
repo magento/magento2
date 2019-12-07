@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\Grid;
 
-class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
+class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Grid\CollectionUpdater
@@ -22,7 +20,7 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
 
         $this->collectionUpdater = new \Magento\Sales\Model\Grid\CollectionUpdater(
             $this->registryMock
@@ -31,8 +29,8 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateIfOrderNotExists()
     {
-        $collectionMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection', [], [], '', false
+        $collectionMock = $this->createMock(
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class
         );
         $this->registryMock
             ->expects($this->once())
@@ -50,10 +48,10 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateIfOrderExists()
     {
-        $collectionMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection', [], [], '', false
+        $collectionMock = $this->createMock(
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class
         );
-        $orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->registryMock
             ->expects($this->once())
             ->method('registry')

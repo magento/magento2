@@ -1,24 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * Top menu for store
  *
- * @see \Magento\Theme\Block\Html\Topmenu
+ * @var $block \Magento\Theme\Block\Html\Topmenu
  */
-?>
-<?php $columnsLimit = $block->getColumnsLimit() ?: 0; ?>
-<?php $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit) ?>
 
-<nav class="navigation" role="navigation">
+$columnsLimit = $block->getColumnsLimit() ?: 0;
+$_menuHtml = $block->getHtml('level-top', 'submenu', $columnsLimit)
+?>
+
+<nav class="navigation" data-action="navigation">
     <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
-        <?php /* @escapeNotVerified */ echo $_menu; ?>
+        <?= /* @noEscape */ $_menuHtml?>
+        <?= $block->getChildHtml() ?>
     </ul>
 </nav>

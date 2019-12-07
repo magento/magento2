@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @var string
      */
-    protected $_template = 'system/config/payflowlink/info.phtml';
+    protected $_template = 'Magento_Paypal::system/config/payflowlink/info.phtml';
 
     /**
      * Render fieldset html

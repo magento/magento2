@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -38,7 +39,7 @@ abstract class Validator
         \Magento\Framework\File\Size $fileSize
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->fileSize = $fileSize;
     }
 
@@ -100,6 +101,17 @@ abstract class Validator
                         $this->fileSize->getMaxFileSizeInMb()
                     );
                     break;
+                case \Zend_Validate_File_ImageSize::NOT_DETECTED:
+                    $result[] = __(
+                        'The file "%1" is empty. Select another file and try again.',
+                        $fileInfo['title']
+                    );
+                    break;
+                default:
+                    $result[] = __(
+                        "The file '%1' is invalid. Please choose another one",
+                        $fileInfo['title']
+                    );
             }
         }
         return $result;

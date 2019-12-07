@@ -1,20 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Helper;
 
-use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
+use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Stock
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
 class Stock
 {
@@ -48,6 +55,11 @@ class Stock
     private $stockRegistryProvider;
 
     /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param StatusFactory $stockStatusFactory
@@ -69,14 +81,14 @@ class Stock
      * Assign stock status information to product
      *
      * @param Product $product
-     * @param int $stockStatus
+     * @param int $status
      * @return void
      */
-    public function assignStatusToProduct(Product $product, $stockStatus = null)
+    public function assignStatusToProduct(Product $product, $status = null)
     {
-        if ($stockStatus === null) {
-            $websiteId = $product->getStore()->getWebsiteId();
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
+        if ($status === null) {
+            $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $scopeId);
             $status = $stockStatus->getStockStatus();
         }
         $product->setIsSalable($status);
@@ -86,14 +98,15 @@ class Stock
      * Add stock status information to products
      *
      * @param AbstractCollection $productCollection
+     * @deprecated 100.1.0 Use Stock::addIsInStockFilterToCollection instead
      * @return void
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)
     {
-        $websiteId = $this->storeManager->getStore($productCollection->getStoreId())->getWebsiteId();
+        $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
         foreach ($productCollection as $product) {
             $productId = $product->getId();
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $websiteId);
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
             $status = $stockStatus->getStockStatus();
             $product->setIsSalable($status);
         }
@@ -139,8 +152,19 @@ class Stock
      */
     public function addIsInStockFilterToCollection($collection)
     {
-        $resource = $this->getStockStatusResource();
-        $resource->addIsInStockFilterToCollection($collection);
+        $stockFlag = 'has_stock_status_filter';
+        if (!$collection->hasFlag($stockFlag)) {
+            $isShowOutOfStock = $this->scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            $resource = $this->getStockStatusResource();
+            $resource->addStockDataToCollection(
+                $collection,
+                !$isShowOutOfStock
+            );
+            $collection->setFlag($stockFlag, true);
+        }
     }
 
     /**
@@ -152,5 +176,19 @@ class Stock
             $this->stockStatusResource = $this->stockStatusFactory->create();
         }
         return $this->stockStatusResource;
+    }
+
+    /**
+     * @return StockConfigurationInterface
+     *
+     * @deprecated 100.1.0
+     */
+    private function getStockConfiguration()
+    {
+        if ($this->stockConfiguration === null) {
+            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
+        }
+        return $this->stockConfiguration;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Test\Unit\Controller\Adminhtml\System\Currencysymbol;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class SaveTest
  */
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Save
@@ -57,45 +57,33 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $filterManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
-        $this->helperMock = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
+        $this->helperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
 
-        $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface', [], [], '', false);
+        $this->redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
 
-        $this->responseMock = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
+        $this->responseMock = $this->createPartialMock(
+            \Magento\Framework\App\ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
         );
 
-        $this->currencySymbolMock = $this->getMock(
-            'Magento\CurrencySymbol\Model\System\Currencysymbol',
-            [],
-            [],
-            '',
-            false
+        $this->currencySymbolMock = $this->createMock(\Magento\CurrencySymbol\Model\System\Currencysymbol::class);
+
+        $this->filterManagerMock = $this->createPartialMock(
+            \Magento\Framework\Filter\FilterManager::class,
+            ['stripTags']
         );
 
-        $this->filterManagerMock = $this->getMock(
-            'Magento\Framework\Filter\FilterManager',
-            ['stripTags'],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-
-        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->action = $objectManager->getObject(
-            'Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Save',
+            \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Save::class,
             [
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
@@ -131,16 +119,16 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\CurrencySymbol\Model\System\Currencysymbol')
+            ->with(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
             ->willReturn($this->currencySymbolMock);
 
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Filter\FilterManager')
+            ->with(\Magento\Framework\Filter\FilterManager::class)
             ->willReturn($this->filterManagerMock);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You applied the custom currency symbols.'));
 
         $this->action->execute();

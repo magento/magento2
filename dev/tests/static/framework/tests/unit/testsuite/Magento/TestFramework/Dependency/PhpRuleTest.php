@@ -1,17 +1,33 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Dependency;
 
-class PhpRuleTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\TestFramework\Exception\NoSuchActionException;
+
+/**
+ * Test for PhpRule dependency check
+ */
+class PhpRuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PhpRule
      */
     protected $model;
 
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
+
+    /**
+     * @inheritDoc
+     * @throws \Exception
+     */
     protected function setUp()
     {
         $mapRoutes = ['someModule' => ['Magento\SomeModule'], 'anotherModule' => ['Magento\OneModule']];
@@ -20,9 +36,23 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
             'Magento\Module1\Plugin1' => 'Magento\Module1\Subject',
             'Magento\Module1\Plugin2' => 'Magento\Module2\Subject',
         ];
-        $this->model = new PhpRule($mapRoutes, $mapLayoutBlocks, $pluginMap);
+        $whitelist = [];
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $this->objectManagerHelper->getObject(
+            PhpRule::class,
+            [
+                'mapRouters' => $mapRoutes,
+                'mapLayoutBlocks' => $mapLayoutBlocks,
+                'pluginMap' => $pluginMap,
+                'whitelists' => $whitelist,
+            ]
+        );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testNonPhpGetDependencyInfo()
     {
         $content = 'any content';
@@ -34,6 +64,7 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
      * @param string $content
      * @param array $expected
      * @dataProvider getDependencyInfoDataProvider
+     * @throws \Exception
      */
     public function testGetDependencyInfo($class, $content, array $expected)
     {
@@ -93,22 +124,6 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
                         'module' => 'Magento\SomeModule',
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento\SomeModule\Any\ClassName',
-                    ]
-                ]
-            ],
-            'getUrl from same module' => [
-                'Magento\SomeModule\SomeClass',
-                '$this->getUrl("someModule")',
-                []
-            ],
-            'getUrl from another module' => [
-                'Magento\SomeModule\SomeClass',
-                '$this->getUrl("anotherModule")',
-                [
-                    [
-                        'module' => 'Magento\OneModule',
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'getUrl("anotherModule"',
                     ]
                 ]
             ],
@@ -174,10 +189,87 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $class
+     * @param string $content
+     * @param array $expected
+     * @throws \Exception
+     * @dataProvider getDependencyInfoDataCaseGetUrlDataProvider
+     */
+    public function testGetDependencyInfoCaseGetUrl(
+        string $class,
+        string $content,
+        array $expected
+    ) {
+        $file = $this->makeMockFilepath($class);
+        $module = $this->getModuleFromClass($class);
+
+        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $file, $content));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDependencyInfoDataCaseGetUrlDataProvider()
+    {
+        return [
+            'getUrl from same module' => [
+                'Magento\Cms\SomeClass',
+                '$this->getUrl("cms/index/index")',
+                []
+            ],
+            'getUrl from another module' => [
+                'Magento\SomeModule\SomeClass',
+                '$this->getUrl("cms/index/index")',
+                [
+                    [
+                        'module' => 'Magento\Cms',
+                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'source' => 'getUrl("cms/index/index"',
+                    ]
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @param string $class
+     * @param string $content
+     * @param \Exception $expected
+     * @throws \Exception
+     * @dataProvider getDependencyInfoDataCaseGetUrlExceptionDataProvider
+     */
+    public function testGetDependencyInfoCaseGetUrlException(
+        string $class,
+        string $content,
+        \Exception $expected
+    ) {
+        $file = $this->makeMockFilepath($class);
+        $module = $this->getModuleFromClass($class);
+        $this->expectExceptionObject($expected);
+
+        $this->model->getDependencyInfo($module, 'php', $file, $content);
+    }
+
+    /**
+     * @return array
+     */
+    public function getDependencyInfoDataCaseGetUrlExceptionDataProvider()
+    {
+        return [
+            'getUrl from same module' => [
+                'Magento\SomeModule\SomeClass',
+                '$this->getUrl("someModule")',
+                new LocalizedException(__('Invalid URL path: %1', 'somemodule/index/index')),
+            ],
+        ];
+    }
+
+    /**
      * @param string $module
      * @param string $content
      * @param array $expected
      * @dataProvider getDefaultModelDependencyDataProvider
+     * @throws \Exception
      */
     public function testGetDefaultModelDependency($module, $content, array $expected)
     {
@@ -192,6 +284,9 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'template', 'any', $content));
     }
 
+    /**
+     * @return array
+     */
     public function getDefaultModelDependencyDataProvider()
     {
         return [
@@ -208,7 +303,6 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-
 
     /**
      * Make some fake filepath to correspond to the class name

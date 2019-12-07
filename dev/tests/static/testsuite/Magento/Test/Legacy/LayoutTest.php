@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Coverage of obsolete nodes in layout
- */
 namespace Magento\Test\Legacy;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class LayoutTest extends \PHPUnit_Framework_TestCase
+/**
+ * Coverage of obsolete nodes in layout
+ */
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * List of obsolete nodes
@@ -85,6 +86,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         ],
     ];
 
+    /**
+     * @throws \Exception
+     */
     public function testLayoutFile()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
@@ -141,6 +145,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Shipping')
                     . '/view/adminhtml/layout/adminhtml_order'
                 )
+                    || false !== strpos(
+                        $layoutFile,
+                        $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Catalog')
+                        . '/view/adminhtml/layout/catalog_product_grid.xml'
+                    )
                 ) {
                     $this->markTestIncomplete(
                         "The file {$layoutFile} has to use \\Magento\\Core\\Block\\Text\\List, \n" .
@@ -204,6 +213,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testActionNodeMethods()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
@@ -355,7 +367,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'unsetChild',
             'unsetChildren',
             'updateButton',
-            'setIsProductListingContext'
+            'setIsProductListingContext',
         ];
     }
 }

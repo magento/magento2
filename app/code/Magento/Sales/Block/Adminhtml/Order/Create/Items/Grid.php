@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
@@ -14,7 +14,9 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Adminhtml sales order create items grid block
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -425,6 +427,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     *
+     * @deprecated 100.2.0
      */
     public function getCustomOptions(Item $item)
     {
@@ -544,7 +548,9 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $options['title'] = __('This product does not have any configurable options');
         }
 
-        return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData($options)->toHtml();
+        return $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Widget\Button::class
+        )->setData($options)->toHtml();
     }
 
     /**

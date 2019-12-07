@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productIds = range(10, 12, 1);
 foreach ($productIds as $productId) {
     /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-    $stockItem = $objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
+    $stockItem = $objectManager->create(\Magento\CatalogInventory\Model\Stock\Item::class);
     $stockItem->load($productId, 'product_id');
 
     if (!$stockItem->getProductId()) {
@@ -25,7 +25,7 @@ foreach ($productIds as $productId) {
 }
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setId(3)
     ->setAttributeSetId(4)
@@ -38,6 +38,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setPriceView(1)
     ->setPriceType(1)
     ->setPrice(10.0)
+    ->setShipmentType(0)
     ->setBundleOptionsData(
         [
             // Required "Drop-down" option
@@ -46,6 +47,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 1',
                 'type' => 'select',
                 'required' => 1,
+                'position' => 1,
                 'delete' => '',
             ],
             // Required "Radio Buttons" option
@@ -54,6 +56,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 2',
                 'type' => 'radio',
                 'required' => 1,
+                'position' => 2,
                 'delete' => '',
             ],
             // Required "Checkbox" option
@@ -62,6 +65,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 3',
                 'type' => 'checkbox',
                 'required' => 1,
+                'position' => 3,
                 'delete' => '',
             ],
             // Required "Multiple Select" option
@@ -70,6 +74,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 4',
                 'type' => 'multi',
                 'required' => 1,
+                'position' => 4,
                 'delete' => '',
             ],
             // Non-required "Multiple Select" option
@@ -78,6 +83,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 5',
                 'type' => 'multi',
                 'required' => 0,
+                'position' => 5,
                 'delete' => '',
             ]
         ]
@@ -158,4 +164,38 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 ]
             ]
         ]
-    )->save();
+    );
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
+if ($product->getBundleOptionsData()) {
+    $options = [];
+    foreach ($product->getBundleOptionsData() as $key => $optionData) {
+        if (!(bool)$optionData['delete']) {
+            $option = $objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
+                ->create(['data' => $optionData]);
+            $option->setSku($product->getSku());
+            $option->setOptionId(null);
+
+            $links = [];
+            $bundleLinks = $product->getBundleSelectionsData();
+            if (!empty($bundleLinks[$key])) {
+                foreach ($bundleLinks[$key] as $linkData) {
+                    if (!(bool)$linkData['delete']) {
+                        $link = $objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
+                            ->create(['data' => $linkData]);
+                        $linkProduct = $productRepository->getById($linkData['product_id']);
+                        $link->setSku($linkProduct->getSku());
+                        $link->setQty($linkData['selection_qty']);
+                        $links[] = $link;
+                    }
+                }
+                $option->setProductLinks($links);
+                $options[] = $option;
+            }
+        }
+    }
+    $extension = $product->getExtensionAttributes();
+    $extension->setBundleProductOptions($options);
+    $product->setExtensionAttributes($extension);
+}
+$product->save();

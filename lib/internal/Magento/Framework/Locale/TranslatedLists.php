@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Locale;
 
@@ -13,6 +11,9 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 
+/**
+ * Translated lists.
+ */
 class TranslatedLists implements ListsInterface
 {
     /**
@@ -26,6 +27,7 @@ class TranslatedLists implements ListsInterface
     protected $localeResolver;
 
     /**
+     * @param \Magento\Framework\Locale\ConfigInterface $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $locale
      */
@@ -79,17 +81,23 @@ class TranslatedLists implements ListsInterface
             }
             $language = \Locale::getPrimaryLanguage($locale);
             $country = \Locale::getRegion($locale);
+            $script = \Locale::getScript($locale);
+            $scriptTranslated = '';
             if (!$languages[$language] || !$countries[$country]) {
                 continue;
             }
+            if ($script !== '') {
+                $script = \Locale::getDisplayScript($locale) . ', ';
+                $scriptTranslated = \Locale::getDisplayScript($locale, $locale) . ', ';
+            }
             if ($translatedName) {
                 $label = ucwords(\Locale::getDisplayLanguage($locale, $locale))
-                    . ' (' . \Locale::getDisplayRegion($locale, $locale) . ') / '
+                    . ' (' . $scriptTranslated . \Locale::getDisplayRegion($locale, $locale) . ') / '
                     . $languages[$language]
-                    . ' (' . $countries[$country] . ')';
+                    . ' (' . $script . $countries[$country] . ')';
             } else {
                 $label = $languages[$language]
-                    . ' (' . $countries[$country] . ')';
+                    . ' (' . $script . $countries[$country] . ')';
             }
             $options[] = ['value' => $locale, 'label' => $label];
         }
@@ -106,11 +114,8 @@ class TranslatedLists implements ListsInterface
         $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL) ?: [];
         foreach ($zones as $code) {
             $options[] = [
-                'label' => \IntlTimeZone::createTimeZone($code)->getDisplayName(
-                        false,
-                        \IntlTimeZone::DISPLAY_LONG,
-                        $locale
-                    ) . ' (' . $code . ')',
+                'label' => \IntlTimeZone::createTimeZone($code)
+                    ->getDisplayName(false, \IntlTimeZone::DISPLAY_LONG, $locale) . ' (' . $code . ')',
                 'value' => $code,
             ];
         }
@@ -180,6 +185,8 @@ class TranslatedLists implements ListsInterface
     }
 
     /**
+     * Sort option array.
+     *
      * @param array $option
      * @return array
      */
@@ -203,9 +210,11 @@ class TranslatedLists implements ListsInterface
     public function getCountryTranslation($value, $locale = null)
     {
         if ($locale == null) {
-            return (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'][$value];
-        } else {
-            return (new RegionBundle())->get($locale)['Countries'][$value];
+            $locale = $this->localeResolver->getLocale();
         }
+
+        $translation = (new RegionBundle())->get($locale)['Countries'][$value];
+
+        return $translation ? (string)__($translation) : $translation;
     }
 }

@@ -1,13 +1,54 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
 
-class UpdatePost extends \Magento\Checkout\Controller\Cart
+use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+/**
+ * Post update shopping cart.
+ */
+class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpGetActionInterface, HttpPostActionInterface
 {
+    /**
+     * @var RequestQuantityProcessor
+     */
+    private $quantityProcessor;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param \Magento\Checkout\Model\Cart $cart
+     * @param RequestQuantityProcessor $quantityProcessor
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        \Magento\Checkout\Model\Cart $cart,
+        RequestQuantityProcessor $quantityProcessor = null
+    ) {
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $checkoutSession,
+            $storeManager,
+            $formKeyValidator,
+            $cart
+        );
+
+        $this->quantityProcessor = $quantityProcessor ?: $this->_objectManager->get(RequestQuantityProcessor::class);
+    }
+
     /**
      * Empty customer's shopping cart
      *
@@ -18,9 +59,9 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
         try {
             $this->cart->truncate()->save();
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-            $this->messageManager->addError($exception->getMessage());
+            $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Exception $exception) {
-            $this->messageManager->addException($exception, __('We can\'t update the shopping cart.'));
+            $this->messageManager->addExceptionMessage($exception, __('We can\'t update the shopping cart.'));
         }
     }
 
@@ -34,28 +75,20 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
         try {
             $cartData = $this->getRequest()->getParam('cart');
             if (is_array($cartData)) {
-                $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocale()]
-                );
-                foreach ($cartData as $index => $data) {
-                    if (isset($data['qty'])) {
-                        $cartData[$index]['qty'] = $filter->filter(trim($data['qty']));
-                    }
-                }
                 if (!$this->cart->getCustomerSession()->getCustomerId() && $this->cart->getQuote()->getCustomerId()) {
                     $this->cart->getQuote()->setCustomerId(null);
                 }
-
+                $cartData = $this->quantityProcessor->process($cartData);
                 $cartData = $this->cart->suggestItemsQty($cartData);
                 $this->cart->updateItems($cartData)->save();
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError(
-                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
+            $this->messageManager->addErrorMessage(
+                $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
             );
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the shopping cart.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update the shopping cart.'));
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
     }
 

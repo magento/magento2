@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Model\Layout\Update;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Config\DomFactory;
+use Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Validator for custom layout update
@@ -15,6 +19,8 @@ use Magento\Framework\Config\Dom\UrnResolver;
 class Validator extends \Zend_Validate_Abstract
 {
     const XML_INVALID = 'invalidXml';
+
+    const XSD_INVALID = 'invalidXsd';
 
     const HELPER_ARGUMENT_TYPE = 'helperArgumentType';
 
@@ -51,17 +57,24 @@ class Validator extends \Zend_Validate_Abstract
     protected $_xsdSchemas;
 
     /**
-     * @var \Magento\Framework\Config\DomFactory
+     * @var DomFactory
      */
     protected $_domConfigFactory;
 
     /**
-     * @param \Magento\Framework\Config\DomFactory $domConfigFactory
+     * @var ValidationStateInterface
+     */
+    private $validationState;
+
+    /**
+     * @param DomFactory $domConfigFactory
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @param ValidationStateInterface $validationState
      */
     public function __construct(
-        \Magento\Framework\Config\DomFactory $domConfigFactory,
-        UrnResolver $urnResolver
+        DomFactory $domConfigFactory,
+        UrnResolver $urnResolver,
+        ValidationStateInterface $validationState = null
     ) {
         $this->_domConfigFactory = $domConfigFactory;
         $this->_initMessageTemplates();
@@ -73,6 +86,8 @@ class Validator extends \Zend_Validate_Abstract
                 'urn:magento:framework:View/Layout/etc/layout_merged.xsd'
             ),
         ];
+        $this->validationState = $validationState
+            ?: ObjectManager::getInstance()->get(ValidationStateInterface::class);
     }
 
     /**
@@ -93,6 +108,9 @@ class Validator extends \Zend_Validate_Abstract
                 self::XML_INVALID => (string)new \Magento\Framework\Phrase(
                     'Please correct the XML data and try again. %value%'
                 ),
+                self::XSD_INVALID => (string)new \Magento\Framework\Phrase(
+                    'Please correct the XSD data and try again. %value%'
+                ),
             ];
         }
         return $this;
@@ -101,7 +119,7 @@ class Validator extends \Zend_Validate_Abstract
     /**
      * Returns true if and only if $value meets the validation requirements
      *
-     * If $value fails validation, then this method returns false, and
+     * If $value fails validation, then this method throws exception, and
      * getMessages() will return an array of messages that explain why the
      * validation failed.
      *
@@ -109,13 +127,20 @@ class Validator extends \Zend_Validate_Abstract
      * @param string $schema
      * @param bool $isSecurityCheck
      * @return bool
+     * @throws \Exception
      */
     public function isValid($value, $schema = self::LAYOUT_SCHEMA_PAGE_HANDLE, $isSecurityCheck = true)
     {
         try {
             //wrap XML value in the "layout" and "handle" tags to make it validatable
             $value = '<layout xmlns:xsi="' . self::XML_NAMESPACE_XSI . '">' . $value . '</layout>';
-            $this->_domConfigFactory->createDom(['xml' => $value, 'schemaFile' => $this->_xsdSchemas[$schema]]);
+            $this->_domConfigFactory->createDom(
+                [
+                    'xml' => $value,
+                    'schemaFile' => $this->_xsdSchemas[$schema],
+                    'validationState' => $this->validationState,
+                ]
+            );
 
             if ($isSecurityCheck) {
                 $value = new \Magento\Framework\Simplexml\Element($value);
@@ -132,10 +157,13 @@ class Validator extends \Zend_Validate_Abstract
             }
         } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
             $this->_error(self::XML_INVALID, $e->getMessage());
-            return false;
+            throw $e;
+        } catch (ValidationSchemaException $e) {
+            $this->_error(self::XSD_INVALID, $e->getMessage());
+            throw $e;
         } catch (\Exception $e) {
             $this->_error(self::XML_INVALID);
-            return false;
+            throw $e;
         }
         return true;
     }

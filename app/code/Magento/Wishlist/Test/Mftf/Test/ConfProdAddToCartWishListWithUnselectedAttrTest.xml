@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ConfProdAddToCartWishListWithUnselectedAttrTest">
+        <annotations>
+            <stories value="Wishlist"/>
+            <group value="wishlist"/>
+            <title value="Adding configurable product to Cart from Wish List with unselected attributes"/>
+            <description value="Verify adding configurable product to Cart from Wish List when attributes is unselected"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-95897"/>
+            <useCaseId value="MAGETWO-95837"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!--Create Configurable product-->
+            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete the first simple product -->
+            <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
+                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForLogin"/>
+
+        <!--Go To Created Product Page-->
+        <amOnPage stepKey="goToCreatedProductPage" url="{{_defaultProduct.urlKey}}.html"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="checkDropDownProductOption"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <selectOption userInput="{{colorProductAttribute2.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption2"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="clickDropDownProductOption"/>
+
+        <!--Click Add to Wish List link-->
+        <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstPnroductToWishlist"/>
+
+        <waitForPageLoad stepKey="waitForLoading"/>
+
+        <!--Click "Add All to Cart" button-->
+        <click selector="{{StorefrontCustomerWishlistProductSection.ProductAddAllToCart}}" stepKey="addAllToCart"/>
+        <waitForElementVisible stepKey="waitForErrorAppears" selector="{{StorefrontMessagesSection.error}}"/>
+
+        <!--Assert Correct Error Message-->
+        <see userInput="You need to choose options for your item for" stepKey="assertCorrectErrorMessage"/>
+        <dontSee userInput="1 product(s) have been added to shopping cart" stepKey="dontSeeSuccessMessage"/>
+    </test>
+</tests>

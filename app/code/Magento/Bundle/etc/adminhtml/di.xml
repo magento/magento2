@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,10 +12,40 @@
     <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar">
         <plugin name="Bundle" type="Magento\Bundle\Block\Adminhtml\Order\Create\Sidebar" sortOrder="200"/>
     </type>
+    <type name="Magento\Bundle\Model\ResourceModel\Selection\Collection">
+        <plugin name="Bundle" type="Magento\Bundle\Model\ResourceModel\Selection\Plugin\Collection" sortOrder="60" />
+    </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <arguments>
             <argument name="constructors" xsi:type="array">
                 <item name="bundle" xsi:type="string">Magento\Bundle\Model\Product\CopyConstructor\Bundle</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="bundle" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\Composite</item>
+                    <item name="sortOrder" xsi:type="number">180</item>
+                </item>
+                <item name="bundle_stock_data" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\StockData</item>
+                    <item name="sortOrder" xsi:type="number">190</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\Composite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="bundleSku" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleSku</item>
+                <item name="bundlePrice" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePrice</item>
+                <item name="bundleWeight" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleWeight</item>
+                <item name="bundleQuantity" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleQuantity</item>
+                <item name="bundleAdvancedPricing" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleAdvancedPricing</item>
+                <item name="bundlePanel" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePanel</item>
+                <item name="bundleCustomOptions" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleCustomOptions</item>
             </argument>
         </arguments>
     </type>

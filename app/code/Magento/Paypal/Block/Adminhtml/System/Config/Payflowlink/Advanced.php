@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,5 +16,5 @@ class Advanced extends \Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink
      *
      * @var string
      */
-    protected $_template = 'system/config/payflowlink/advanced.phtml';
+    protected $_template = 'Magento_Paypal::system/config/payflowlink/advanced.phtml';
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Block\Cms\Page;
  * Test for \Magento\UrlRewrite\Block\Cms\Page\Edit
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test prepare layout
@@ -25,12 +25,12 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
 
         /** @var $block \Magento\UrlRewrite\Block\Cms\Page\Edit */
         $block = $layout->createBlock(
-            'Magento\UrlRewrite\Block\Cms\Page\Edit',
+            \Magento\UrlRewrite\Block\Cms\Page\Edit::class,
             '',
             ['data' => $blockAttributes]
         );
@@ -58,7 +58,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['selector']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Selector',
+                \Magento\UrlRewrite\Block\Selector::class,
                 $selectorBlock,
                 'Child block with entity selector is invalid'
             );
@@ -83,7 +83,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['cms_page_link']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Link',
+                \Magento\UrlRewrite\Block\Link::class,
                 $cmsPageLinkBlock,
                 'Child block with CMS page link is invalid'
             );
@@ -123,74 +123,92 @@ class EditTest extends \PHPUnit_Framework_TestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getCmsPage()->getId()) {
-                    $this->assertSelectCount(
-                        'button.back[onclick~="\/cms_page"]',
+                    $this->assertEquals(
                         1,
-                        $buttonsHtml,
+                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                            '//button[contains(@class, "back") and contains(@onclick, "/cms_page")]',
+                            $buttonsHtml
+                        ),
                         'Back button is not present in CMS page URL rewrite edit block'
                     );
                 } else {
-                    $this->assertSelectCount(
-                        'button.back',
+                    $this->assertEquals(
                         1,
-                        $buttonsHtml,
+                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                            '//button[contains(@class,"back")]',
+                            $buttonsHtml
+                        ),
                         'Back button is not present in CMS page URL rewrite edit block'
                     );
                 }
             } else {
-                $this->assertSelectCount(
-                    'button.back',
+                $this->assertEquals(
                     0,
-                    $buttonsHtml,
+                    \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                        '//button[contains(@class,"back")]',
+                        $buttonsHtml
+                    ),
                     'Back button should not present in CMS page URL rewrite edit block'
                 );
             }
         }
 
         if ($expected['save_button']) {
-            $this->assertSelectCount(
-                'button.save',
+            $this->assertEquals(
                 1,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"save")]',
+                    $buttonsHtml
+                ),
                 'Save button is not present in CMS page URL rewrite edit block'
             );
         } else {
-            $this->assertSelectCount(
-                'button.save',
+            $this->assertEquals(
                 0,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"save")]',
+                    $buttonsHtml
+                ),
                 'Save button should not present in CMS page URL rewrite edit block'
             );
         }
 
         if ($expected['reset_button']) {
-            $this->assertSelectCount(
-                'button[title="Reset"]',
+            $this->assertEquals(
                 1,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[@title="Reset"]',
+                    $buttonsHtml
+                ),
                 'Reset button is not present in CMS page URL rewrite edit block'
             );
         } else {
-            $this->assertSelectCount(
-                'button[title="Reset"]',
+            $this->assertEquals(
                 0,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[@title="Reset"]',
+                    $buttonsHtml
+                ),
                 'Reset button should not present in CMS page URL rewrite edit block'
             );
         }
 
         if ($expected['delete_button']) {
-            $this->assertSelectCount(
-                'button.delete',
+            $this->assertEquals(
                 1,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"delete")]',
+                    $buttonsHtml
+                ),
                 'Delete button is not present in CMS page URL rewrite edit block'
             );
         } else {
-            $this->assertSelectCount(
-                'button.delete',
+            $this->assertEquals(
                 0,
-                $buttonsHtml,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                    '//button[contains(@class,"delete")]',
+                    $buttonsHtml
+                ),
                 'Delete button should not present in CMS page URL rewrite edit block'
             );
         }
@@ -212,7 +230,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['form']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Cms\Page\Edit\Form',
+                \Magento\UrlRewrite\Block\Cms\Page\Edit\Form::class,
                 $formBlock,
                 'Child block with form is invalid'
             );
@@ -249,7 +267,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['cms_pages_grid']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Cms\Page\Grid',
+                \Magento\UrlRewrite\Block\Cms\Page\Grid::class,
                 $gridBlock,
                 'Child block with CMS pages grid is invalid'
             );
@@ -267,16 +285,16 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\UrlRewrite\Model\UrlRewrite'
+            \Magento\UrlRewrite\Model\UrlRewrite::class
         );
         /** @var $cmsPage \Magento\Cms\Model\Page */
         $cmsPage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Cms\Model\Page',
+            \Magento\Cms\Model\Page::class,
             ['data' => ['page_id' => 1, 'title' => 'Test CMS Page']]
         );
         /** @var $existingUrlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $existingUrlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\UrlRewrite\Model\UrlRewrite',
+            \Magento\UrlRewrite\Model\UrlRewrite::class,
             ['data' => ['url_rewrite_id' => 1]]
         );
 

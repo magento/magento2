@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class AssertUserSuccessLogOut extends AbstractConstraint
     ) {
         $dashboard->getAdminPanelHeader()->logOut();
         $isLoginBlockVisible = $adminAuth->getLoginBlock()->isVisible();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $isLoginBlockVisible,
             'Admin user was not logged out.'
         );

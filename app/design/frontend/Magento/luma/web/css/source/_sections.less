@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -14,6 +14,7 @@
         margin-bottom: @indent__base;
         margin-left: -@layout__width-xs-indent;
         margin-right: -@layout__width-xs-indent;
+
         .item.title {
             a {
                 position: relative;
@@ -29,19 +30,27 @@
                     @_icon-font-position: after,
                     @_icon-font-display: false
                 );
+
                 &:after {
                     position: absolute;
                     right: @accordion-control__padding-right;
                     top: @accordion-control__padding-top;
                 }
             }
-            &.active a:after {
-                content: @icon-up;
+
+            &.active a {
+                &:after {
+                    content: @icon-up;
+                }
             }
         }
-        .value p:last-child {
-            margin-bottom: 0;
+
+        .value p {
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
+
         .table-wrapper {
             margin: 0;
         }
@@ -58,8 +67,25 @@
         border-bottom: 0;
         margin-left: 0;
         margin-right: 0;
-        .item.title a:after {
-            display: none;
+
+        .item.title a {
+            &:after {
+                display: none;
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .product.data.items {
+        .item.title {
+            > .switch {
+                padding: 1px 15px 1px;
+            }
+        }
+
+        > .item.content {
+            padding: 10px 15px 30px;
         }
     }
 }

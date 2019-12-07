@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,9 +11,6 @@
             <block class="Magento\Backend\Block\Store\Switcher" name="adminhtml.report.grid.store_switcher" as="store_switcher">
                 <arguments>
                     <argument name="use_confirm" xsi:type="string">0</argument>
-                    <argument name="switch_url" xsi:type="url" path="*/*/*">
-                        <param name="store">null</param>
-                    </argument>
                     <argument name="switch_websites" xsi:type="string">1</argument>
                     <argument name="switch_store_groups" xsi:type="string">1</argument>
                     <argument name="switch_store_views" xsi:type="string">1</argument>
@@ -27,7 +24,7 @@
                     <argument name="use_ajax" xsi:type="string">0</argument>
                     <argument name="pager_visibility" xsi:type="string">0</argument>
                     <argument name="id" xsi:type="string">gridReport</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Reports\Model\ResourceModel\Report\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Reports\Model\ResourceModel\Report\Collection</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.report.grid.export" as="grid.export">
                     <arguments>
@@ -49,7 +46,7 @@
                         <argument name="empty_text" xsi:type="string" translate="true">We can't find records for this period.</argument>
                         <argument name="empty_cell_label" xsi:type="string" translate="true">We can't find records for this period.</argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="period">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.report.grid.columnSet.period" as="period">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Interval</argument>
                             <argument name="sortable" xsi:type="string">0</argument>

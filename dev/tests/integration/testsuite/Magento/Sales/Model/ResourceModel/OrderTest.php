@@ -1,11 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\ResourceModel;
 
-class OrderTest extends \PHPUnit_Framework_TestCase
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class OrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order
@@ -22,26 +32,47 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resourceModel = $this->objectManager->create('Magento\Sales\Model\ResourceModel\Order');
+        $this->resourceModel = $this->objectManager->create(\Magento\Sales\Model\ResourceModel\Order::class);
         $this->orderIncrementId = '100000001';
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
-        $registry = $this->objectManager->get('Magento\Framework\Registry');
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
 
-        /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
-        $order->loadByIncrementId($this->orderIncrementId);
-        $order->delete();
+        $orderCollection = $this->objectManager->create(OrderCollectionFactory::class)->create();
+        foreach ($orderCollection as $order) {
+            $order->delete();
+        }
 
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
+
+        $defaultStore = $this->storeRepository->get('default');
+        $this->storeManager->setCurrentStore($defaultStore->getId());
 
         parent::tearDown();
     }
@@ -63,17 +94,20 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             'country_id' => 'US'
         ];
 
-        $billingAddress = $this->objectManager->create('Magento\Sales\Model\Order\Address', ['data' => $addressData]);
+        $billingAddress = $this->objectManager->create(
+            \Magento\Sales\Model\Order\Address::class,
+            ['data' => $addressData]
+        );
         $billingAddress->setAddressType('billing');
 
         $shippingAddress = clone $billingAddress;
         $shippingAddress->setId(null)->setAddressType('shipping');
 
-        $payment = $this->objectManager->create('Magento\Sales\Model\Order\Payment');
+        $payment = $this->objectManager->create(\Magento\Sales\Model\Order\Payment::class);
         $payment->setMethod('checkmo');
 
         /** @var \Magento\Sales\Model\Order\Item $orderItem */
-        $orderItem = $this->objectManager->create('Magento\Sales\Model\Order\Item');
+        $orderItem = $this->objectManager->create(\Magento\Sales\Model\Order\Item::class);
         $orderItem->setProductId(1)
             ->setQtyOrdered(2)
             ->setBasePrice(10)
@@ -81,7 +115,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->setRowTotal(10);
 
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->setIncrementId($this->orderIncrementId)
             ->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
             ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING))
@@ -94,7 +128,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->setShippingAddress($shippingAddress)
             ->setStoreId(
                 $this->objectManager
-                    ->get('Magento\Store\Model\StoreManagerInterface')
+                    ->get(\Magento\Store\Model\StoreManagerInterface::class)
                     ->getStore()
                     ->getId()
             )
@@ -104,5 +138,30 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->resourceModel->save($order);
         $this->assertNotNull($order->getCreatedAt());
         $this->assertNotNull($order->getUpdatedAt());
+    }
+
+    /**
+     * Check that store name with length within 255 chars can be saved in table sales_order
+     *
+     * @magentoDataFixture Magento/Store/_files/store_with_long_name.php
+     * @magentoDbIsolation disabled
+     * @return void
+     */
+    public function testSaveStoreName()
+    {
+        $store = $this->storeRepository->get('test_2');
+        $this->storeManager->setCurrentStore($store->getId());
+        $eventManager = $this->objectManager->get(ManagerInterface::class);
+        $eventManager->dispatch('store_add', ['store' => $store]);
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
+        $payment = $this->objectManager->create(\Magento\Sales\Model\Order\Payment::class);
+        $payment->setMethod('checkmo');
+        $order->setStoreId($store->getId())->setPayment($payment);
+        $this->resourceModel->save($order);
+        $orderRepository = $this->objectManager->create(\Magento\Sales\Api\OrderRepositoryInterface::class);
+        $order = $orderRepository->get($order->getId());
+        $this->assertEquals(255, strlen($order->getStoreName()));
+        $this->assertContains($store->getWebsite()->getName(), $order->getStoreName());
+        $this->assertContains($store->getGroup()->getName(), $order->getStoreName());
     }
 }

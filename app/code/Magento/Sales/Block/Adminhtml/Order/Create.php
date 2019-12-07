@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
@@ -8,7 +8,9 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 /**
  * Adminhtml sales order create
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -90,7 +92,9 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _prepareLayout()
     {
-        $pageTitle = $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\Create\Header')->toHtml();
+        $pageTitle = $this->getLayout()->createBlock(
+            \Magento\Sales\Block\Adminhtml\Order\Create\Header::class
+        )->toHtml();
         if (is_object($this->getLayout()->getBlock('page.title'))) {
             $this->getLayout()->getBlock('page.title')->setPageTitle($pageTitle);
         }
@@ -105,7 +109,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderHtml()
     {
         $out = '<div id="order-header">' . $this->getLayout()->createBlock(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Header'
+            \Magento\Sales\Block\Adminhtml\Order\Create\Header::class
         )->toHtml() . '</div>';
         return $out;
     }

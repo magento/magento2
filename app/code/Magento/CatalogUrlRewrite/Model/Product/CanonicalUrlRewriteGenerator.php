@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
@@ -13,10 +13,14 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 class CanonicalUrlRewriteGenerator
 {
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
     /**
@@ -30,7 +34,7 @@ class CanonicalUrlRewriteGenerator
     }
 
     /**
-     * Generate list based on store view
+     * Generate product rewrites without categories
      *
      * @param int $storeId
      * @param Product $product

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class AssertTaxInShoppingCart extends AbstractConstraint
 
         $fixtureTaxAmount = number_format((float)$cart->getTaxAmount(), 2);
         $pageTaxAmount = $checkoutCart->getTotalsBlock()->getTax();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $fixtureTaxAmount,
             $pageTaxAmount,
             'Tax amount in the shopping cart not equals to tax amount from fixture.'

@@ -1,18 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Manages locale config information.
+ */
 class Resolver implements ResolverInterface
 {
     /**
      * Default locale
      */
     const DEFAULT_LOCALE = 'en_US';
+
     /**
      * Default locale code
      *
@@ -47,25 +53,38 @@ class Resolver implements ResolverInterface
     protected $emulatedLocales = [];
 
     /**
+     * @var string
+     */
+    private $defaultLocalePath;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param string $defaultLocalePath
      * @param string $scopeType
      * @param mixed $locale
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         $defaultLocalePath,
         $scopeType,
-        $locale = null
+        $locale = null,
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->defaultLocalePath = $defaultLocalePath;
         $this->scopeType = $scopeType;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->create(DeploymentConfig::class);
         $this->setLocale($locale);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultLocalePath()
     {
@@ -73,7 +92,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDefaultLocale($locale)
     {
@@ -82,12 +101,15 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultLocale()
     {
         if (!$this->defaultLocale) {
-            $locale = $this->scopeConfig->getValue($this->getDefaultLocalePath(), $this->scopeType);
+            $locale = false;
+            if ($this->deploymentConfig->isAvailable() && $this->deploymentConfig->isDbAvailable()) {
+                $locale = $this->scopeConfig->getValue($this->getDefaultLocalePath(), $this->scopeType);
+            }
             if (!$locale) {
                 $locale = self::DEFAULT_LOCALE;
             }
@@ -97,7 +119,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLocale($locale = null)
     {
@@ -110,7 +132,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLocale()
     {
@@ -121,7 +143,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function emulate($scopeId)
     {
@@ -141,7 +163,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function revert()
     {

@@ -1,13 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\OfflineShipping\Model\Carrier;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 
+/**
+ * Table rate shipping model
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -54,6 +61,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
      * @param \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
@@ -75,6 +83,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Collect rates.
+     *
      * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -107,8 +117,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
 
         // Free shipping by qty
         $freeQty = 0;
+        $freePackageValue = 0;
+
         if ($request->getAllItems()) {
-            $freePackageValue = 0;
             foreach ($request->getAllItems() as $item) {
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     continue;
@@ -121,8 +132,10 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                             $freeQty += $item->getQty() * ($child->getQty() - $freeShipping);
                         }
                     }
-                } elseif ($item->getFreeShipping()) {
-                    $freeShipping = is_numeric($item->getFreeShipping()) ? $item->getFreeShipping() : 0;
+                } elseif ($item->getFreeShipping() || $item->getAddress()->getFreeShipping()) {
+                    $freeShipping = $item->getFreeShipping() ?
+                        $item->getFreeShipping() : $item->getAddress()->getFreeShipping();
+                    $freeShipping = is_numeric($freeShipping) ? $freeShipping : 0;
                     $freeQty += $item->getQty() - $freeShipping;
                     $freePackageValue += $item->getBaseRowTotal();
                 }
@@ -151,25 +164,28 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $request->setPackageQty($oldQty);
 
         if (!empty($rate) && $rate['price'] >= 0) {
-            /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
-            $method = $this->_resultMethodFactory->create();
-
-            $method->setCarrier('tablerate');
-            $method->setCarrierTitle($this->getConfigData('title'));
-
-            $method->setMethod('bestway');
-            $method->setMethodTitle($this->getConfigData('name'));
-
-            if ($request->getFreeShipping() === true || $request->getPackageQty() == $freeQty) {
+            if ($request->getPackageQty() == $freeQty) {
                 $shippingPrice = 0;
             } else {
                 $shippingPrice = $this->getFinalPriceWithHandlingFee($rate['price']);
             }
-
-            $method->setPrice($shippingPrice);
-            $method->setCost($rate['cost']);
-
+            $method = $this->createShippingMethod($shippingPrice, $rate['cost']);
             $result->append($method);
+        } elseif ($request->getPackageQty() == $freeQty) {
+
+            /**
+             * Promotion rule was applied for the whole cart.
+             *  In this case all other shipping methods could be omitted
+             * Table rate shipping method with 0$ price must be shown if grand total is more than minimal value.
+             * Free package weight has been already taken into account.
+             */
+            $request->setPackageValue($freePackageValue);
+            $request->setPackageQty($freeQty);
+            $rate = $this->getRate($request);
+            if (!empty($rate) && $rate['price'] >= 0) {
+                $method = $this->createShippingMethod(0, 0);
+                $result->append($method);
+            }
         } else {
             /** @var \Magento\Quote\Model\Quote\Address\RateResult\Error $error */
             $error = $this->_rateErrorFactory->create(
@@ -188,6 +204,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Get rate.
+     *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array|bool
      */
@@ -197,6 +215,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Get code.
+     *
      * @param string $type
      * @param string $code
      * @return array
@@ -207,18 +227,20 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $codes = [
             'condition_name' => [
                 'package_weight' => __('Weight vs. Destination'),
-                'package_value' => __('Price vs. Destination'),
+                'package_value_with_discount' => __('Price vs. Destination'),
                 'package_qty' => __('# of Items vs. Destination'),
             ],
             'condition_name_short' => [
                 'package_weight' => __('Weight (and above)'),
-                'package_value' => __('Order Subtotal (and above)'),
+                'package_value_with_discount' => __('Order Subtotal (and above)'),
                 'package_qty' => __('# of Items (and above)'),
             ],
         ];
 
         if (!isset($codes[$type])) {
-            throw new LocalizedException(__('Please correct Table Rate code type: %1.', $type));
+            throw new LocalizedException(
+                __('The "%1" code type for Table Rate is incorrect. Verify the type and try again.', $type)
+            );
         }
 
         if ('' === $code) {
@@ -226,7 +248,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         }
 
         if (!isset($codes[$type][$code])) {
-            throw new LocalizedException(__('Please correct Table Rate code for type %1: %2.', $type, $code));
+            throw new LocalizedException(
+                __('The "%1: %2" code type for Table Rate is incorrect. Verify the type and try again.', $type, $code)
+            );
         }
 
         return $codes[$type][$code];
@@ -240,5 +264,28 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     public function getAllowedMethods()
     {
         return ['bestway' => $this->getConfigData('name')];
+    }
+
+    /**
+     * Get the method object based on the shipping price and cost
+     *
+     * @param float $shippingPrice
+     * @param float $cost
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
+     */
+    private function createShippingMethod($shippingPrice, $cost)
+    {
+        /** @var  \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
+        $method = $this->_resultMethodFactory->create();
+
+        $method->setCarrier($this->getCarrierCode());
+        $method->setCarrierTitle($this->getConfigData('title'));
+
+        $method->setMethod('bestway');
+        $method->setMethodTitle($this->getConfigData('name'));
+
+        $method->setPrice($shippingPrice);
+        $method->setCost($cost);
+        return $method;
     }
 }

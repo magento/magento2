@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,22 +104,14 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             ],
         ];
 
-        $expectedException = new AuthorizationException(
-            __(
-                AuthorizationException::NOT_AUTHORIZED,
-                ['resources' => 'Magento_TestModule3::resource1, Magento_TestModule3::resource2']
-            )
-        );
-
         try {
             $this->_webApiCall($serviceInfo);
             $this->fail("SoapFault was not raised as expected.");
         } catch (\SoapFault $e) {
             $this->checkSoapFault(
                 $e,
-                $expectedException->getRawMessage(),
-                'env:Sender',
-                $expectedException->getParameters() // expected error parameters
+                "The consumer isn't authorized to access %resources.",
+                'env:Sender'
             );
         }
     }
@@ -136,7 +128,7 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         $expectedException = new \Magento\Framework\Exception\InputException();
         foreach ($parameters as $error) {
             $expectedException->addError(
-                __(\Magento\Framework\Exception\InputException::INVALID_FIELD_VALUE, $error)
+                __('Invalid value of "%value" provided for the %fieldName field.', $error)
             );
         }
 

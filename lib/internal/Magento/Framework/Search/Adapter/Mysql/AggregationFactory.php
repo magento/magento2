@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
 /**
  * Aggregation Factory
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class AggregationFactory
 {
@@ -37,14 +40,17 @@ class AggregationFactory
         foreach ($rawAggregation as $rawBucketName => $rawBucket) {
             /** @var \Magento\Framework\Search\Response\Bucket[] $buckets */
             $buckets[$rawBucketName] = $this->objectManager->create(
-                'Magento\Framework\Search\Response\Bucket',
+                \Magento\Framework\Search\Response\Bucket::class,
                 [
                     'name' => $rawBucketName,
                     'values' => $this->prepareValues((array)$rawBucket)
                 ]
             );
         }
-        return $this->objectManager->create('Magento\Framework\Search\Response\Aggregation', ['buckets' => $buckets]);
+        return $this->objectManager->create(
+            \Magento\Framework\Search\Response\Aggregation::class,
+            ['buckets' => $buckets]
+        );
     }
 
     /**
@@ -58,7 +64,7 @@ class AggregationFactory
         $valuesObjects = [];
         foreach ($values as $name => $value) {
             $valuesObjects[] = $this->objectManager->create(
-                'Magento\Framework\Search\Response\Aggregation\Value',
+                \Magento\Framework\Search\Response\Aggregation\Value::class,
                 [
                     'value' => $name,
                     'metrics' => $value,

@@ -2,7 +2,7 @@
 /**
  * The list of all expected soap fault XMLs.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -26,6 +26,10 @@ return [
                             <m:GenericFaultParameter>
                                 <m:key>key2</m:key>
                                 <m:value>value2</m:value>
+                            </m:GenericFaultParameter>
+                            <m:GenericFaultParameter>
+                                <m:key>1</m:key>
+                                <m:value>value3</m:value>
                             </m:GenericFaultParameter>
                         </m:Parameters>
                         <m:Trace>Trace</m:Trace>

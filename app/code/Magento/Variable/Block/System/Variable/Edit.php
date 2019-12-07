@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Block\System\Variable;
 
 /**
  * Custom Variable Edit Container
+ *
+ * @api
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -87,11 +90,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getFormHtml()
     {
-        $formHtml = parent::getFormHtml();
-        if (!$this->_storeManager->isSingleStoreMode() && $this->getVariable()->getId()) {
-            $formHtml = $formHtml;
-        }
-        return $formHtml;
+        return parent::getFormHtml();
     }
 
     /**

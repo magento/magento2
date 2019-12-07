@@ -1,18 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php if (count($block->getCollection()->getItems()) > 0): ?>
+<?php if (count($block->getCollection()->getItems()) > 0) : ?>
     <div class="searches-results">
-        <?php foreach ($block->getCollection()->getItems() as $item): ?>
-        <span><?php /* @escapeNotVerified */ echo $item->getQueryText() ?></span><br />
+        <?php foreach ($block->getCollection()->getItems() as $item) : ?>
+        <span><?= $block->escapeHtml($item->getQueryText()) ?></span><br />
         <?php endforeach; ?>
     </div>
-<?php else: ?>
-    <div class="empty-text"><?php /* @escapeNotVerified */ echo __('There are no search keywords.') ?></div>
+<?php else : ?>
+    <div class="empty-text"><?= $block->escapeHtml(__('There are no search keywords.')) ?></div>
 <?php endif; ?>

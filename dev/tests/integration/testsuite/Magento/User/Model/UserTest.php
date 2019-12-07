@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\User\Model;
+
+use Magento\Framework\Encryption\Encryptor;
 
 /**
  * @magentoAppArea adminhtml
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\User\Model\User
@@ -28,11 +28,21 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_newRole;
 
+    /**
+     * @var Encryptor
+     */
+    private $encryptor;
+
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        );
         $this->_dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Stdlib\DateTime'
+            \Magento\Framework\Stdlib\DateTime::class
+        );
+        $this->encryptor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            Encryptor::class
         );
     }
 
@@ -94,10 +104,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('admin_role', $this->_model->getRole()->getRoleName());
     }
 
+    /**
+     * phpcs:disable Magento2.Functions.StaticFunction
+     */
     public static function roleDataFixture()
     {
         self::$_newRole = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Authorization\Model\Role'
+            \Magento\Authorization\Model\Role::class
         );
         self::$_newRole->setName('admin_role')->setRoleType('G')->setPid('1');
         self::$_newRole->save();
@@ -111,7 +124,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->_model->saveExtra(['test' => 'val']);
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $extra = unserialize($this->_model->getExtra());
+        $extra = $this->_model->getExtra();
         $this->assertEquals($extra['test'], 'val');
     }
 
@@ -123,7 +136,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $roles = $this->_model->getRoles();
         $this->assertEquals(1, count($roles));
-        $this->assertEquals(1, $roles[0]);
+        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $roles = $this->_model->getRoles();
         $this->assertEquals(1, count($roles));
@@ -137,8 +150,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $role = $this->_model->getRole();
-        $this->assertInstanceOf('Magento\Authorization\Model\Role', $role);
-        $this->assertEquals(1, $role->getId());
+        $this->assertInstanceOf(\Magento\Authorization\Model\Role::class, $role);
+        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $role = $this->_model->getRole();
         $this->assertEquals(self::$_newRole->getId(), $role->getId());
@@ -150,7 +163,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testDeleteFromRole()
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->_model->setRoleId(1)->deleteFromRole();
+        $roles = $this->_model->getRoles();
+        $this->_model->setRoleId(reset($roles))->deleteFromRole();
         $role = $this->_model->getRole();
         $this->assertNull($role->getId());
     }
@@ -158,16 +172,19 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testRoleUserExists()
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->_model->setRoleId(1);
+        $role = $this->_model->getRole();
+        $this->_model->setRoleId($role->getId());
         $this->assertTrue($this->_model->roleUserExists());
-        $this->_model->setRoleId(2);
+        $this->_model->setRoleId(100);
         $this->assertFalse($this->_model->roleUserExists());
     }
 
     public function testGetCollection()
     {
-        $this->assertInstanceOf('Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
-            $this->_model->getCollection());
+        $this->assertInstanceOf(
+            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
+            $this->_model->getCollection()
+        );
     }
 
     public function testGetName()
@@ -181,13 +198,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUninitializedAclRole()
     {
-        $newuser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
+        $newuser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $newuser->setUserId(10);
         $this->assertNull($newuser->getAclRole(), "User role was not initialized and is expected to be empty.");
     }
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      * @magentoAdminConfigFixture admin/security/use_case_sensitive_login 1
      */
     public function testAuthenticate()
@@ -203,6 +221,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      * @magentoConfigFixture current_store admin/security/use_case_sensitive_login 0
      */
     public function testAuthenticateCaseInsensitive()
@@ -217,6 +236,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedException \Magento\Framework\Exception\AuthenticationException
      * @magentoDbIsolation enabled
      */
@@ -236,8 +256,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuthenticateUserWithoutRole()
     {
-        $this->_model->load(1);
-        $this->_model->setRoleId(1)->deleteFromRole();
+        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $roles = $this->_model->getRoles();
+        $this->_model->setRoleId(reset($roles))->deleteFromRole();
         $this->_model->authenticate(
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
@@ -246,6 +267,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDbIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      */
     public function testLoginsAreLogged()
     {
@@ -290,17 +312,18 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $role = $this->_model->hasAssigned2Role($this->_model);
         $this->assertEquals(1, count($role));
         $this->assertArrayHasKey('role_id', $role[0]);
-        $this->_model->setRoleId(1)->deleteFromRole();
+        $roles = $this->_model->getRoles();
+        $this->_model->setRoleId(reset($roles))->deleteFromRole();
         $this->assertEmpty($this->_model->hasAssigned2Role($this->_model));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage User Name is a required field.
-     * @expectedExceptionMessage First Name is a required field.
-     * @expectedExceptionMessage Last Name is a required field.
+     * @expectedExceptionMessage "User Name" is required. Enter and try again.
+     * @expectedExceptionMessage "First Name" is required. Enter and try again.
+     * @expectedExceptionMessage "Last Name" is required. Enter and try again.
      * @expectedExceptionMessage Please enter a valid email.
-     * @expectedExceptionMessage Password is required field.
+     * @expectedExceptionMessage "Password" is required. Enter and try again.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSaveRequiredFieldsValidation()
@@ -315,6 +338,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSavePasswordHash()
     {
+        $pattern = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
+            '/^[0-9a-f]+:[0-9a-zA-Z]{16}:[0-9]+$/' :
+            '/^[0-9a-f]+:[0-9a-zA-Z]{32}:[0-9]+$/';
         $this->_model->setUsername(
             'john.doe'
         )->setFirstname(
@@ -329,13 +355,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->save();
         $this->assertNotContains('123123q', $this->_model->getPassword(), 'Password is expected to be hashed');
         $this->assertRegExp(
-            '/^[0-9a-f]+:[0-9a-zA-Z]{32}:[0-9]+$/',
+            $pattern,
             $this->_model->getPassword(),
             'Salt is expected to be saved along with the password'
         );
 
         /** @var \Magento\User\Model\User $model */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $model->load($this->_model->getId());
         $this->assertEquals(
             $this->_model->getPassword(),
@@ -435,7 +461,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/admin/emails/password_reset_link_expiration_period 10
+     * @magentoConfigFixture default/admin/emails/password_reset_link_expiration_period 2
      */
     public function testIsResetPasswordLinkTokenExpired()
     {
@@ -445,10 +471,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->save();
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->assertFalse($this->_model->isResetPasswordLinkTokenExpired());
-        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 24 * 10 + 10));
+        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 2 + 2));
         $this->assertFalse($this->_model->isResetPasswordLinkTokenExpired());
 
-        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 24 * 10 - 10));
+        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 2 - 1));
         $this->assertTrue($this->_model->isResetPasswordLinkTokenExpired());
     }
 
@@ -459,5 +485,51 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setHasAvailableResources(false);
         $this->assertFalse($this->_model->hasAvailableResources());
+    }
+
+    /**
+     * Here we test if admin identity check executed successfully
+     *
+     * @magentoDataFixture Magento/User/_files/user_with_role.php
+     */
+    public function testPerformIdentityCheck()
+    {
+        $this->_model->loadByUsername('adminUser');
+        $passwordString = \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD;
+        $this->_model->performIdentityCheck($passwordString);
+    }
+
+    /**
+     * Here we check for a wrong password
+     *
+     * @magentoDataFixture Magento/User/_files/user_with_role.php
+     * @expectedException \Magento\Framework\Exception\AuthenticationException
+     */
+    public function testPerformIdentityCheckWrongPassword()
+    {
+        $this->_model->loadByUsername('adminUser');
+        $passwordString = 'wrongPassword';
+        $this->_model->performIdentityCheck($passwordString);
+
+        $this->expectExceptionMessage(
+            'The password entered for the current user is invalid. Verify the password and try again.'
+        );
+    }
+
+    /**
+     * Here we check for a locked user
+     *
+     * @magentoDataFixture Magento/User/_files/locked_users.php
+     * @expectedException \Magento\Framework\Exception\State\UserLockedException
+     */
+    public function testPerformIdentityCheckLockExpires()
+    {
+        $this->_model->loadByUsername('adminUser2');
+        $this->_model->performIdentityCheck(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.'
+        );
     }
 }

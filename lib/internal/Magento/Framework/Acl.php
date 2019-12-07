@@ -1,12 +1,15 @@
 <?php
 /**
- * ACL. Can be queried for relations between roles and resources.
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
+/**
+ * ACL. Can be queried for relations between roles and resources.
+ *
+ * @api
+ */
 class Acl extends \Zend_Acl
 {
     /**

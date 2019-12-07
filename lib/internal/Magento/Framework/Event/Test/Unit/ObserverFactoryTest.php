@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use \Magento\Framework\Event\ObserverFactory;
  *
  * @package Magento\Framework\Event
  */
-class ObserverFactoryTest extends \PHPUnit_Framework_TestCase
+class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -25,15 +25,11 @@ class ObserverFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $observerFactory;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
-            ['get', 'create'],
-            [],
-            '',
-            false,
-            false
+        $this->objectManagerMock = $this->createPartialMock(
+            \Magento\Framework\ObjectManager\ObjectManager::class,
+            ['get', 'create']
         );
         $this->observerFactory = new ObserverFactory($this->objectManagerMock);
     }
@@ -41,7 +37,7 @@ class ObserverFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $className = 'Magento\Class';
-        $observerMock = $this->getMock('Magento\Observer', [], [], '', false, false);
+        $observerMock = $this->getMockBuilder('Observer')->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($className)
@@ -54,7 +50,7 @@ class ObserverFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $className = 'Magento\Class';
-        $observerMock = $this->getMock('Magento\Observer', [], [], '', false, false);
+        $observerMock =  $this->getMockBuilder('Observer')->getMock();
         $arguments = ['arg1', 'arg2'];
 
         $this->objectManagerMock->expects($this->once())

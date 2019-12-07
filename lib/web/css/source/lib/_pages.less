@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -119,25 +119,35 @@
     ._lib-pager-label-display(  // To hide or to display label
         @_pager-label-display: @_pager-label-display,
         @_pager-font-size: @_pager-font-size,
+        @_pager-font-weight: @_pager-font-weight,
         @_pager-line-height: @_pager-line-height
     );
+
     .items {
-        ._lib-pager-inline-block-spaces-container();
+        ._lib-pager-inline-block-spaces-container(
+            @_pager-reset-spaces,
+            @_pager-item-display
+        );
         .lib-list-reset-styles();
         .lib-css(display, @_pager-item-display);
         .lib-css(font-weight, @_pager-font-weight);
     }
+
     .item {
         ._lib-pager-inline-block-spaces-item(
-            @_pager-font-size: @_pager-font-size,
-            @_pager-line-height: @_pager-line-height
+            @_pager-reset-spaces,
+            @_pager-item-display,
+            @_pager-font-size,
+            @_pager-line-height
         );
         .lib-css(margin, @_pager-item-margin);
         .lib-css(display, @_pager-item-display);
+
         .label {
             .lib-visually-hidden();
         }
     }
+
     a.page {
         .lib-css(background, @_pager-background);
         .lib-background-gradient(
@@ -189,6 +199,7 @@
             .lib-css(color, @_pager-color-active);
         }
     }
+
     strong.page {
         .lib-css(background, @_pager-current-background);
         .lib-background-gradient(
@@ -199,14 +210,17 @@
         );
         .lib-css(border, @_pager-current-border);
         ._lib-pager-inline-block-spaces-item(
-            @_pager-font-size: @_pager-font-size,
-            @_pager-line-height: @_pager-line-height
+            @_pager-reset-spaces,
+            @_pager-item-display,
+            @_pager-font-size,
+            @_pager-line-height
         );
         .lib-css(color, @_pager-current-color);
         .lib-css(display, @_pager-item-display);
         .lib-css(font-weight, @_pager-current-font-weight);
         .lib-css(padding, @_pager-item-padding);
     }
+
     .action {
         .lib-css(background, @_pager-action-background);
         .lib-background-gradient(
@@ -260,12 +274,13 @@
 
         &.next {
             ._lib-pager-icon (
-                @_pager-icon-use: @_pager-icon-use,
                 @_icon-font-content: @_pager-icon-next-content,
+                @_pager-icon-use: @_pager-icon-use,
                 @_icon-font: @_pager-icon-font,
                 @_icon-font-size: @_pager-icon-font-size,
                 @_icon-font-line-height: @_pager-icon-font-line-height,
                 @_icon-font-color: @_pager-action-color,
+                @_icon-font-color-visited: @_pager-action-color-visited,
                 @_icon-font-color-hover: @_pager-action-color-hover,
                 @_icon-font-color-active: @_pager-action-color-active,
                 @_icon-font-margin: @_pager-icon-font-margin,
@@ -274,14 +289,16 @@
                 @_icon-font-text-hide: @_pager-icon-font-text-hide
             );
         }
+
         &.previous {
             ._lib-pager-icon (
-                @_pager-icon-use: @_pager-icon-use,
                 @_icon-font-content: @_pager-icon-previous-content,
+                @_pager-icon-use: @_pager-icon-use,
                 @_icon-font: @_pager-icon-font,
                 @_icon-font-size: @_pager-icon-font-size,
                 @_icon-font-line-height: @_pager-icon-font-line-height,
                 @_icon-font-color: @_pager-action-color,
+                @_icon-font-color-visited: @_pager-action-color-visited,
                 @_icon-font-color-hover: @_pager-action-color-hover,
                 @_icon-font-color-active: @_pager-action-color-active,
                 @_icon-font-margin: @_pager-icon-font-margin,
@@ -294,14 +311,19 @@
 }
 
 //  Delete spaces between elements when pager items have display: inline-block
-._lib-pager-inline-block-spaces-container() when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
+._lib-pager-inline-block-spaces-container(
+    @_pager-reset-spaces,
+    @_pager-item-display
+) when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
     .lib-inline-block-space-container();
     white-space: nowrap;
 }
 
 ._lib-pager-inline-block-spaces-item(
-    @_pager-font-size: @_pager-font-size,
-    @_pager-line-height: @_pager-line-height
+    @_pager-reset-spaces,
+    @_pager-item-display,
+    @_pager-font-size,
+    @_pager-line-height
 ) when (@_pager-reset-spaces = true) and (@_pager-item-display = inline-block) {
     .lib-inline-block-space-item(
         @_font-size: @_pager-font-size,
@@ -311,10 +333,10 @@
 
 // Display or hide "page" label
 ._lib-pager-label-display(
-    @_pager-label-display: @_pager-label-display,
-    @_pager-font-size: @_pager-font-size,
-    @_pager-font-weight: @_pager-font-weight,
-    @_pager-line-height: @_pager-line-height
+    @_pager-label-display,
+    @_pager-font-size,
+    @_pager-font-weight,
+    @_pager-line-height
 ) when not (@_pager-label-display = none){
     > .label {
         .lib-css(display, @_pager-label-display);
@@ -323,6 +345,7 @@
             @_font-size: @_pager-font-size,
             @_line-height: @_pager-line-height
         );
+
         &:after {
             content: ': ';
         }
@@ -330,10 +353,10 @@
 }
 
 ._lib-pager-label-display(
-    @_pager-label-display: @_pager-label-display,
-    @_pager-font-size: @_pager-font-size,
-    @_pager-font-weight: @_pager-font-weight,
-    @_pager-line-height: @_pager-line-height
+    @_pager-label-display,
+    @_pager-font-size,
+    @_pager-font-weight,
+    @_pager-line-height
 ) when (@_pager-label-display = none) {
     > .label {
         .lib-visually-hidden();
@@ -341,10 +364,10 @@
 }
 
 ._lib-pager-label-display(
-    @_pager-label-display: @_pager-label-display,
-    @_pager-font-size: @_pager-font-size,
-    @_pager-font-weight: @_pager-font-weight,
-    @_pager-line-height: @_pager-line-height
+    @_pager-label-display,
+    @_pager-font-size,
+    @_pager-font-weight,
+    @_pager-line-height
 ) when (@_pager-label-display = false) {
     > .label {
         .lib-visually-hidden();
@@ -352,30 +375,32 @@
 }
 
 ._lib-pager-icon (
-    @_pager-icon-use: @_pager-icon-use,
+    @_pager-icon-use,
     @_icon-font-content,
-    @_icon-font: @_pager-icon-font,
-    @_icon-font-size: @_pager-icon-font-size,
-    @_icon-font-line-height: @_pager-icon-font-line-height,
-    @_icon-font-color: @_pager-action-color,
-    @_icon-font-color-visited: @_pager-action-color-visited,
-    @_icon-font-color-hover: @_pager-action-color-hover,
-    @_icon-font-color-active: @_pager-action-color-active,
-    @_icon-font-margin: @_pager-icon-font-margin,
-    @_icon-font-vertical-align: @_pager-icon-font-vertical-align,
-    @_icon-font-position: @_pager-icon-font-position,
-    @_icon-font-text-hide: @_pager-icon-font-text-hide
+    @_icon-font,
+    @_icon-font-size,
+    @_icon-font-line-height,
+    @_icon-font-color,
+    @_icon-font-color-visited,
+    @_icon-font-color-hover,
+    @_icon-font-color-active,
+    @_icon-font-margin,
+    @_icon-font-vertical-align,
+    @_icon-font-position,
+    @_icon-font-text-hide
 ) when (@_pager-icon-use = true) and (@_icon-font-position = before) {
     &:visited {
         &:before {
             .lib-css(color, @_icon-font-color-visited);
         }
     }
+
     &:active {
         &:before {
             .lib-css(color, @_icon-font-color-active);
         }
     }
+
     .lib-icon-font(
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
@@ -392,19 +417,19 @@
 }
 
 ._lib-pager-icon (
-    @_pager-icon-use: @_pager-icon-use,
     @_icon-font-content,
-    @_icon-font: @_pager-icon-font,
-    @_icon-font-size: @_pager-icon-font-size,
-    @_icon-font-line-height: @_pager-icon-font-line-height,
-    @_icon-font-color: @_pager-action-color,
-    @_icon-font-color-visited: @_pager-action-color-visited,
-    @_icon-font-color-hover: @_pager-action-color-hover,
-    @_icon-font-color-active: @_pager-action-color-active,
-    @_icon-font-margin: @_pager-icon-font-margin,
-    @_icon-font-vertical-align: @_pager-icon-font-vertical-align,
-    @_icon-font-position: @_pager-icon-font-position,
-    @_icon-font-text-hide: @_pager-icon-font-text-hide
+    @_pager-icon-use,
+    @_icon-font,
+    @_icon-font-size,
+    @_icon-font-line-height,
+    @_icon-font-color,
+    @_icon-font-color-visited,
+    @_icon-font-color-hover,
+    @_icon-font-color-active,
+    @_icon-font-margin,
+    @_icon-font-vertical-align,
+    @_icon-font-position,
+    @_icon-font-text-hide
 ) when (@_pager-icon-use = true) and (@_icon-font-position = after) {
     .lib-icon-font(
         @_icon-font-content: @_icon-font-content,
@@ -419,9 +444,11 @@
         @_icon-font-position: @_icon-font-position,
         @_icon-font-text-hide: @_icon-font-text-hide
     );
+
     &:visited:after {
         .lib-css(color, @_icon-font-color-visited);
     }
+
     &:active:after {
         .lib-css(color, @_icon-font-color-active);
     }

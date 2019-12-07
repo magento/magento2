@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,22 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+use Magento\Framework\Escaper;
+
+/**
+ * Class Edit
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit.phtml';
 
     /**
      * Core registry
@@ -47,6 +57,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
@@ -55,16 +66,20 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Product $productHelper,
+        Escaper $escaper,
         array $data = []
     ) {
         $this->_productHelper = $productHelper;
         $this->_attributeSetFactory = $attributeSetFactory;
         $this->_coreRegistry = $registry;
         $this->jsonEncoder = $jsonEncoder;
+        $this->escaper = $escaper;
         parent::__construct($context, $data);
     }
 
     /**
+     * Edit Product constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -95,7 +110,7 @@ class Edit extends \Magento\Backend\Block\Widget
             if ($this->getToolbar()) {
                 $this->getToolbar()->addChild(
                     'back_button',
-                    'Magento\Backend\Block\Widget\Button',
+                    \Magento\Backend\Block\Widget\Button::class,
                     [
                         'label' => __('Back'),
                         'title' => __('Back'),
@@ -110,7 +125,7 @@ class Edit extends \Magento\Backend\Block\Widget
         } else {
             $this->addChild(
                 'back_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 ['label' => __('Close Window'), 'onclick' => 'window.close()', 'class' => 'cancel']
             );
         }
@@ -118,7 +133,7 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->getProduct()->isReadonly()) {
             $this->addChild(
                 'reset_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Reset'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', ['_current' => true]) . '\')'
@@ -129,11 +144,11 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->getProduct()->isReadonly() && $this->getToolbar()) {
             $this->getToolbar()->addChild(
                 'save-split-button',
-                'Magento\Backend\Block\Widget\Button\SplitButton',
+                \Magento\Backend\Block\Widget\Button\SplitButton::class,
                 [
                     'id' => 'save-split-button',
                     'label' => __('Save'),
-                    'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
+                    'class_name' => \Magento\Backend\Block\Widget\Button\SplitButton::class,
                     'button_class' => 'widget-button-save',
                     'options' => $this->_getSaveSplitButtonOptions()
                 ]
@@ -144,6 +159,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve back button html
+     *
      * @return string
      */
     public function getBackButtonHtml()
@@ -152,6 +169,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve cancel button html
+     *
      * @return string
      */
     public function getCancelButtonHtml()
@@ -160,6 +179,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save button html
+     *
      * @return string
      */
     public function getSaveButtonHtml()
@@ -168,6 +189,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save and edit button html
+     *
      * @return string
      */
     public function getSaveAndEditButtonHtml()
@@ -176,6 +199,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve delete button html
+     *
      * @return string
      */
     public function getDeleteButtonHtml()
@@ -194,6 +219,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve validation url
+     *
      * @return string
      */
     public function getValidationUrl()
@@ -202,6 +229,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save url
+     *
      * @return string
      */
     public function getSaveUrl()
@@ -210,6 +239,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save and continue url
+     *
      * @return string
      */
     public function getSaveAndContinueUrl()
@@ -221,6 +252,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve product id
+     *
      * @return mixed
      */
     public function getProductId()
@@ -229,6 +262,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve product set id
+     *
      * @return mixed
      */
     public function getProductSetId()
@@ -241,6 +276,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve duplicate url
+     *
      * @return string
      */
     public function getDuplicateUrl()
@@ -249,6 +286,9 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve product header
+     *
+     * @deprecated 101.1.0
      * @return string
      */
     public function getHeader()
@@ -262,6 +302,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get product attribute set name
+     *
      * @return string
      */
     public function getAttributeSetName()
@@ -274,11 +316,14 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve id of selected tab
+     *
      * @return string
      */
     public function getSelectedTabId()
     {
-        return addslashes(htmlspecialchars($this->getRequest()->getParam('tab')));
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return addslashes($this->escaper->escapeHtml($this->getRequest()->getParam('tab')));
     }
 
     /**

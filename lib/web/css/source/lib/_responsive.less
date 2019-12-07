@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -27,20 +27,24 @@
 
 & when (@media-target = 'mobile'), (@media-target = 'all') {
 
-    @media only screen and (max-width: (@screen__xs - 1)) {
-        .media-width('max', @screen__xs);
-    }
-
-    @media only screen and (max-width: (@screen__s - 1)) {
-        .media-width('max', @screen__s);
+    @media only screen and (max-width: @screen__m) {
+        .media-width('max', (@screen__m + 1));
     }
 
     @media only screen and (max-width: (@screen__m - 1)) {
         .media-width('max', @screen__m);
     }
 
-    @media only screen and (max-width: @screen__m) {
-        .media-width('max', (@screen__m + 1));
+    @media only screen and (max-width: (@screen__s - 1)) {
+        .media-width('max', @screen__s);
+    }
+
+    @media only screen and (max-width: (@screen__xs - 1)) {
+        .media-width('max', @screen__xs);
+    }
+
+    @media only screen and (max-width: (@screen__xxs - 1)) {
+        .media-width('max', @screen__xxs);
     }
 
     @media all and (min-width: @screen__s) {

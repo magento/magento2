@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 use Magento\Paypal\Model\Info;
 
@@ -78,7 +76,7 @@ return [
             ],
             'last_trans_id' => [
                 'label' => 'Last Transaction ID',
-                'value' => NULL,
+                'value' => null,
             ]
         ],
     ],
@@ -147,7 +145,7 @@ return [
             ],
             'last_trans_id' => [
                 'label' => 'Last Transaction ID',
-                'value' => NULL,
+                'value' => null,
             ]
         ]
     ]

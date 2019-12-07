@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model;
 
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Widget
@@ -15,7 +15,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Widget'
+            \Magento\Widget\Model\Widget::class
         );
     }
 
@@ -45,7 +45,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento/backend');
+        $objectManager->get(\Magento\Framework\View\DesignInterface::class)->setDesignTheme('Magento/backend');
         $expectedFilePath = "/adminhtml/Magento/backend/en_US/{$expectedFile}";
 
         $url = $this->_model->getPlaceholderImageUrl($type);
@@ -58,11 +58,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function getPlaceholderImageUrlDataProvider()
     {
         return [
-            'custom image' => [
-                'Magento\Catalog\Block\Product\Widget\NewWidget',
+            'custom image' => [\Magento\Catalog\Block\Product\Widget\NewWidget::class,
                 'Magento_Catalog/images/product_widget_new.png',
             ],
-            'default image' => ['non_existing_widget_type', 'Magento_Widget/placeholder.gif']
+            'default image' => ['non_existing_widget_type', 'Magento_Widget/placeholder.png']
         ];
     }
 }

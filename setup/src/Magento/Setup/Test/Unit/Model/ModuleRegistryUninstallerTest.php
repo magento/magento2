@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
@@ -9,7 +9,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Setup\Model\ModuleRegistryUninstaller;
 
-class ModuleRegistryUninstallerTest extends \PHPUnit_Framework_TestCase
+class ModuleRegistryUninstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
@@ -43,13 +43,13 @@ class ModuleRegistryUninstallerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
-        $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $this->dataSetup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
-        $dataSetupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
+        $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
+        $this->dataSetup = $this->createMock(\Magento\Setup\Module\DataSetup::class);
+        $dataSetupFactory = $this->createMock(\Magento\Setup\Module\DataSetupFactory::class);
         $dataSetupFactory->expects($this->any())->method('create')->willReturn($this->dataSetup);
-        $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
+        $this->output = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
         $this->moduleRegistryUninstaller = new ModuleRegistryUninstaller(
             $dataSetupFactory,
             $this->deploymentConfig,

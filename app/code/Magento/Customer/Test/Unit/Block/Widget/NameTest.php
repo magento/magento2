@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
@@ -14,8 +12,10 @@ use Magento\Customer\Block\Widget\Name;
 
 /**
  * Test class for \Magento\Customer\Block\Widget\Name.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NameTest extends \PHPUnit_Framework_TestCase
+class NameTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Constant values used throughout the various unit tests.
@@ -42,7 +42,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     const INVALID_ATTRIBUTE_CODE = 'invalid attribute code';
 
-    const PREFIX_STORE_LABEL = 'Prefix';
+    const PREFIX_STORE_LABEL = 'Name Prefix';
 
     /**#@-*/
 
@@ -69,20 +69,20 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_escaper = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $this->_escaper = $this->createMock(\Magento\Framework\Escaper::class);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->_escaper));
 
-        $addressHelper = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
+        $addressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
 
-        $this->_options = $this->getMock('Magento\Customer\Model\Options', [], [], '', false);
+        $this->_options = $this->createMock(\Magento\Customer\Model\Options::class);
 
-        $this->attribute = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
-        $this->customerMetadata = $this->getMockBuilder('\Magento\Customer\Api\CustomerMetadataInterface')
+        $this->customerMetadata = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
@@ -92,7 +92,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomAttributesMetadata')
             ->will($this->returnValue([]));
 
-        $this->addressMetadata = $this->getMockBuilder('\Magento\Customer\Api\AddressMetadataInterface')
+        $this->addressMetadata = $this->getMockBuilder(\Magento\Customer\Api\AddressMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->addressMetadata->expects($this->any())
             ->method('getAttributeMetadata')
@@ -128,7 +128,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -149,7 +149,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -157,6 +157,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_block->{$method}());
     }
 
+    /**
+     * @return array
+     */
     public function methodDataProvider()
     {
         return [
@@ -208,7 +211,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
          * Added some padding so that the trim() call on Customer::getPrefix() will remove it. Also added
          * special characters so that the escapeHtml() method returns a htmlspecialchars translated value.
          */
-        $customer = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerInterface')->getMockForAbstractClass();
+        $customer = $this->getMockBuilder(
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $customer->expects($this->once())->method('getPrefix')->willReturn('  <' . self::PREFIX . '>  ');
 
         $this->_block->setObject($customer);
@@ -233,7 +238,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPrefixOptionsEmpty()
     {
-        $customer = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerInterface')->getMockForAbstractClass();
+        $customer = $this->getMockBuilder(
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
         $this->_options->expects(
@@ -253,7 +260,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
          * Added padding and special characters to show that trim() works on Customer::getSuffix() and that
          * a properly htmlspecialchars translated value is returned.
          */
-        $customer = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerInterface')->getMockForAbstractClass();
+        $customer = $this->getMockBuilder(
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $customer->expects($this->once())->method('getSuffix')->willReturn('  <' . self::SUFFIX . '>  ');
         $this->_block->setObject($customer);
 
@@ -277,7 +286,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuffixOptionsEmpty()
     {
-        $customer = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerInterface')->getMockForAbstractClass();
+        $customer = $this->getMockBuilder(
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
         $this->_options->expects(
@@ -398,7 +409,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -414,7 +425,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     private function _setUpShowAttribute(array $data)
     {
-        $customer = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerInterface')
+        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
 
         /**

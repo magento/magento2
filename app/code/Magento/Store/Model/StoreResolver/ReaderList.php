@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\StoreResolver;
@@ -20,6 +20,7 @@ class ReaderList
     protected $resolverMap;
 
     // @codingStandardsIgnoreStart
+
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $resolverMap
@@ -27,14 +28,15 @@ class ReaderList
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         $resolverMap = [
-            ScopeInterface::SCOPE_WEBSITE => '\Magento\Store\Model\StoreResolver\Website',
-            ScopeInterface::SCOPE_GROUP => '\Magento\Store\Model\StoreResolver\Group',
-            ScopeInterface::SCOPE_STORE => '\Magento\Store\Model\StoreResolver\Store',
+            ScopeInterface::SCOPE_WEBSITE => \Magento\Store\Model\StoreResolver\Website::class,
+            ScopeInterface::SCOPE_GROUP => \Magento\Store\Model\StoreResolver\Group::class,
+            ScopeInterface::SCOPE_STORE => \Magento\Store\Model\StoreResolver\Store::class,
         ]
     ) {
         $this->resolverMap = $resolverMap;
         $this->objectManager = $objectManager;
     }
+
     // @codingStandardsIgnoreEnd
 
     /**

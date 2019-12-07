@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account\Dashboard;
 
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Account\Dashboard\Info
@@ -15,16 +15,16 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Account\Dashboard\Info'
+            \Magento\Customer\Block\Account\Dashboard\Info::class
         );
     }
 
     public function testGetSubscriptionObject()
     {
         $object = $this->_block->getSubscriptionObject();
-        $this->assertInstanceOf('Magento\Newsletter\Model\Subscriber', $object);
+        $this->assertInstanceOf(\Magento\Newsletter\Model\Subscriber::class, $object);
 
         $object2 = $this->_block->getSubscriptionObject();
         $this->assertSame($object, $object2);

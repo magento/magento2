@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModule1\Controller;
@@ -42,7 +42,7 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
         CookieMetadataFactory $cookieMetadataFactory
     ) {
         $this->cookieManager = $cookieManager;
-        $this->cookieMetadataFacory = $cookieMetadataFactory;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->_response = $context->getResponse();
         $this->request = $context->getRequest();
     }
@@ -52,7 +52,7 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
      */
     protected function getCookieMetadataFactory()
     {
-        return $this->cookieMetadataFacory;
+        return $this->cookieMetadataFactory;
     }
 
     /**

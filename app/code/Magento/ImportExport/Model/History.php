@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model;
@@ -8,10 +8,10 @@ namespace Magento\ImportExport\Model;
 /**
  * Import history model
  *
- * @method \Magento\ImportExport\Model\ResourceModel\History _getResource()
- * @method \Magento\ImportExport\Model\ResourceModel\History getResource()
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\Model\AbstractModel
 {
@@ -41,6 +41,11 @@ class History extends \Magento\Framework\Model\AbstractModel
      * @var \Magento\ImportExport\Helper\Report
      */
     protected $reportHelper;
+
+    /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    protected $session;
 
     /**
      * Class constructor
@@ -75,7 +80,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ImportExport\Model\ResourceModel\History');
+        $this->_init(\Magento\ImportExport\Model\ResourceModel\History::class);
     }
 
     /**
@@ -269,6 +274,7 @@ class History extends \Magento\Framework\Model\AbstractModel
     {
         return $this->setData(self::ERROR_FILE, $errorFile);
     }
+
     /**
      * Set Execution Time
      *
@@ -292,6 +298,8 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load the last inserted item
+     *
      * @return $this
      */
     public function loadLastInsertItem()

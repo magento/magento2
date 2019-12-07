@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation;
@@ -12,6 +12,11 @@ use Magento\Framework\View\Page\Config;
  */
 class Renderer extends Config\Renderer
 {
+    /**
+     * @var array
+     */
+    private static $processingTypes = ['css', 'less'];
+
     /**
      * @var \Magento\Framework\View\Asset\Repository
      */
@@ -54,13 +59,19 @@ class Renderer extends Config\Renderer
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
+        $rel = '';
         switch ($contentType) {
-            case 'css':
-                return ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
+            case 'less':
+                $rel = 'stylesheet/less';
                 break;
-
+            case 'css':
+                $rel = 'stylesheet';
+                break;
         }
 
+        if ($rel) {
+            return ' rel="' . $rel . '" type="text/css" ' . ($attributes ?: ' media="all"');
+        }
         return parent::addDefaultAttributes($contentType, $attributes);
     }
 
@@ -95,32 +106,16 @@ class Renderer extends Config\Renderer
     }
 
     /**
-     * Render HTML tags referencing corresponding URLs
+     * Get asset content type
      *
-     * @param string $template
-     * @param array $assets
+     * @param \Magento\Framework\View\Asset\AssetInterface|\Magento\Framework\View\Asset\File $asset
      * @return string
      */
-    protected function renderAssetHtml($template, $assets)
+    protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
     {
-        $result = '';
-        try {
-            foreach ($assets as $asset) {
-                /** @var $asset \Magento\Framework\View\Asset\File */
-                if ($asset instanceof \Magento\Framework\View\Asset\File
-                    && $asset->getSourceUrl() != $asset->getUrl()
-                ) {
-                    $attributes = $this->addDefaultAttributes('less', []);
-                    $groupTemplate = $this->getAssetTemplate($asset->getContentType(), $attributes);
-                    $result .= sprintf($groupTemplate, $asset->getSourceUrl());
-                } else {
-                    $result .= sprintf($template, $asset->getUrl());
-                }
-            }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->logger->critical($e);
-            $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
+        if (!in_array($asset->getContentType(), self::$processingTypes)) {
+            return parent::getAssetContentType($asset);
         }
-        return $result;
+        return $asset->getSourceContentType();
     }
 }

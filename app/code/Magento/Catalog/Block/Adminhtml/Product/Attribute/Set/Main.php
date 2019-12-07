@@ -1,23 +1,28 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 
 /**
- * Adminhtml Catalog Attribute Set Main Block
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 
+/**
+ * Adminhtml Catalog Attribute Set Main Block.
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
+ */
 class Main extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/set/main.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/set/main.phtml';
 
     /**
      * Core registry
@@ -89,25 +94,25 @@ class Main extends \Magento\Backend\Block\Template
     {
         $setId = $this->_getSetId();
 
-        $this->addChild('group_tree', 'Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Tree\Group');
+        $this->addChild('group_tree', \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Tree\Group::class);
 
-        $this->addChild('edit_set_form', 'Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formset');
+        $this->addChild('edit_set_form', \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formset::class);
 
         $this->addChild(
             'delete_group_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Delete Selected Group'), 'onclick' => 'editSet.submit();', 'class' => 'delete']
         );
 
         $this->addChild(
             'add_group_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Add New'), 'onclick' => 'editSet.addGroup();', 'class' => 'add']
         );
 
         $this->getToolbar()->addChild(
             'back_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Back'),
                 'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/') . '\')',
@@ -117,17 +122,17 @@ class Main extends \Magento\Backend\Block\Template
 
         $this->getToolbar()->addChild(
             'reset_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset']
         );
 
         if (!$this->getIsCurrentSetDefault()) {
             $this->getToolbar()->addChild(
                 'delete_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Delete'),
-                    'onclick' => 'deleteConfirm(\'' . $this->escapeJsQuote(
+                    'onclick' => 'deleteConfirm(\'' . $this->escapeJs(
                         __(
                             'You are about to delete all products in this attribute set. '
                             . 'Are you sure you want to do that?'
@@ -135,7 +140,7 @@ class Main extends \Magento\Backend\Block\Template
                     ) . '\', \'' . $this->getUrl(
                         'catalog/*/delete',
                         ['id' => $setId]
-                    ) . '\')',
+                    ) . '\',{data: {}})',
                     'class' => 'delete'
                 ]
             );
@@ -143,7 +148,7 @@ class Main extends \Magento\Backend\Block\Template
 
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save'),
                 'onclick' => 'editSet.save();',
@@ -153,7 +158,7 @@ class Main extends \Magento\Backend\Block\Template
 
         $this->addChild(
             'rename_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('New Set Name'), 'onclick' => 'editSet.rename()']
         );
 
@@ -228,7 +233,7 @@ class Main extends \Magento\Backend\Block\Template
         /* @var $node \Magento\Eav\Model\Entity\Attribute\Group */
         foreach ($groups as $node) {
             $item = [];
-            $item['text'] = $node->getAttributeGroupName();
+            $item['text'] = $this->escapeHtml($node->getAttributeGroupName());
             $item['id'] = $node->getAttributeGroupId();
             $item['cls'] = 'folder';
             $item['allowDrop'] = true;
@@ -275,7 +280,7 @@ class Main extends \Magento\Backend\Block\Template
 
         foreach ($attributes as $child) {
             $attr = [
-                'text' => $child->getAttributeCode(),
+                'text' => $this->escapeHtml($child->getAttributeCode()),
                 'id' => $child->getAttributeId(),
                 'cls' => 'leaf',
                 'allowDrop' => false,

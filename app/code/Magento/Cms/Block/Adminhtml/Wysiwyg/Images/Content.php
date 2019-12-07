@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
+declare(strict_types=1);
 
+namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 
 /**
  * Wysiwyg Images content block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Content extends \Magento\Backend\Block\Widget\Container
 {
@@ -42,8 +46,13 @@ class Content extends \Magento\Backend\Block\Widget\Container
         $this->buttonList->remove('back');
         $this->buttonList->remove('edit');
         $this->buttonList->add(
-            'new_folder',
-            ['class' => 'save', 'label' => __('Create Folder...'), 'type' => 'button'],
+            'cancel',
+            [
+                'class' => 'cancel action-quaternary',
+                'label' => __('Cancel'),
+                'type' => 'button',
+                'onclick' => 'MediabrowserUtility.closeDialog();'
+            ],
             0,
             0,
             'header'
@@ -51,7 +60,11 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
         $this->buttonList->add(
             'delete_folder',
-            ['class' => 'delete no-display', 'label' => __('Delete Folder'), 'type' => 'button'],
+            [
+                'class' => 'delete no-display action-quaternary',
+                'label' => __('Delete Folder'),
+                'type' => 'button'
+            ],
             0,
             0,
             'header'
@@ -59,7 +72,23 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
         $this->buttonList->add(
             'delete_files',
-            ['class' => 'delete no-display', 'label' => __('Delete File'), 'type' => 'button'],
+            [
+                'class' => 'delete no-display action-quaternary',
+                'label' => __('Delete Selected'),
+                'type' => 'button'
+            ],
+            0,
+            0,
+            'header'
+        );
+
+        $this->buttonList->add(
+            'new_folder',
+            [
+                'class' => 'save new_folder',
+                'label' => __('Create Folder'),
+                'type' => 'button'
+            ],
             0,
             0,
             'header'
@@ -67,7 +96,11 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
         $this->buttonList->add(
             'insert_files',
-            ['class' => 'save no-display primary', 'label' => __('Insert File'), 'type' => 'button'],
+            [
+                'class' => 'save no-display action-primary',
+                'label' => __('Add Selected'),
+                'type' => 'button'
+            ],
             0,
             0,
             'header'

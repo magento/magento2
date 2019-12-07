@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext;
@@ -11,6 +11,9 @@ use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Catalog search indexer plugin for store.
+ */
 class Store implements ObserverInterface
 {
     /**
@@ -44,6 +47,8 @@ class Store implements ObserverInterface
     }
 
     /**
+     * Reindex catalog search.
+     *
      * @param \Magento\Store\Model\Store $store
      * @return void
      */
@@ -59,6 +64,8 @@ class Store implements ObserverInterface
     }
 
     /**
+     * Reindex catalog search on store modification.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */

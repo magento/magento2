@@ -2,12 +2,17 @@
 /**
  * \Magento\Widget\Model\Widget\Instance
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\Widget;
 
-class InstanceTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Serialize\Serializer\Json;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class InstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Config\Data|PHPUnit_Framework_MockObject_MockObject
@@ -40,30 +45,27 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     protected $_directoryMock;
 
-    public function setUp()
+    /** @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit_Framework_MockObject_MockObject */
+    private $serializer;
+
+    protected function setUp()
     {
         $this->_widgetModelMock = $this->getMockBuilder(
-            'Magento\Widget\Model\Widget'
+            \Magento\Widget\Model\Widget::class
         )->disableOriginalConstructor()->getMock();
         $this->_viewFileSystemMock = $this->getMockBuilder(
-            'Magento\Framework\View\FileSystem'
+            \Magento\Framework\View\FileSystem::class
         )->disableOriginalConstructor()->getMock();
         $this->_namespaceResolver = $this->getMockBuilder(
-            '\Magento\Widget\Model\NamespaceResolver'
+            \Magento\Widget\Model\NamespaceResolver::class
         )->disableOriginalConstructor()->getMock();
-        $this->_cacheTypesListMock = $this->getMock('Magento\Framework\App\Cache\TypeListInterface');
+        $this->_cacheTypesListMock = $this->createMock(\Magento\Framework\App\Cache\TypeListInterface::class);
         $this->_readerMock = $this->getMockBuilder(
-            'Magento\Widget\Model\Config\Reader'
+            \Magento\Widget\Model\Config\Reader::class
         )->disableOriginalConstructor()->getMock();
 
-        $filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $this->_directoryMock = $this->getMock(
-            '\Magento\Framework\Filesystem\Directory\Read',
-            [],
-            [],
-            '',
-            false
-        );
+        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $filesystemMock->expects(
             $this->any()
         )->method(
@@ -74,25 +76,31 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $this->_directoryMock->expects($this->any())->method('isReadable')->will($this->returnArgument(0));
         $this->_directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->serializer = $this->createMock(Json::class);
         $args = $objectManagerHelper->getConstructArguments(
-            'Magento\Widget\Model\Widget\Instance',
+            \Magento\Widget\Model\Widget\Instance::class,
             [
                 'filesystem' => $filesystemMock,
                 'viewFileSystem' => $this->_viewFileSystemMock,
                 'cacheTypeList' => $this->_cacheTypesListMock,
                 'reader' => $this->_readerMock,
                 'widgetModel' => $this->_widgetModelMock,
-                'namespaceResolver' => $this->_namespaceResolver
+                'namespaceResolver' => $this->_namespaceResolver,
+                'serializer' => $this->serializer,
             ]
         );
+
         /** @var \Magento\Widget\Model\Widget\Instance _model */
-        $this->_model = $this->getMock('Magento\Widget\Model\Widget\Instance', ['_construct'], $args, '', true);
+        $this->_model = $this->getMockBuilder(\Magento\Widget\Model\Widget\Instance::class)
+            ->setMethods(['_construct'])
+            ->setConstructorArgs($args)
+            ->getMock();
     }
 
     public function testGetWidgetConfigAsArray()
     {
         $widget = [
-            '@' => ['type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'],
+            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -102,7 +110,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
                     '@' => ['type' => 'complex'],
                     'type' => 'label',
                     'helper_block' => [
-                        'type' => 'Magento\Cms\Block\Adminhtml\Page\Widget\Chooser',
+                        'type' => \Magento\Cms\Block\Adminhtml\Page\Widget\Chooser::class,
                         'data' => ['button' => ['open' => 'Select Page...']],
                     ],
                     'visible' => 'true',
@@ -168,7 +176,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     public function testGetWidgetTemplatesValueOnly()
     {
         $widget = [
-            '@' => ['type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'],
+            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -202,7 +210,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     public function testGetWidgetTemplatesNoTemplate()
     {
         $widget = [
-            '@' => ['type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'],
+            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -240,7 +248,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     public function testGetWidgetSupportedContainersNoContainer()
     {
         $widget = [
-            '@' => ['type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'],
+            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -298,7 +306,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     public function testGetWidgetSupportedTemplatesByContainersNoSupportedContainersSpecified()
     {
         $widget = [
-            '@' => ['type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'],
+            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -343,5 +351,34 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [];
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('unknown'));
+    }
+
+    public function testGetWidgetParameters()
+    {
+        $serializedArray = '{"anchor_text":"232323232323232323","title":"232323232323232","page_id":"2"}';
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->willReturn(json_decode($serializedArray, true));
+
+        $this->_model->setData('widget_parameters', $serializedArray);
+        $this->assertEquals(
+            json_decode($serializedArray, true),
+            $this->_model->getWidgetParameters()
+        );
+    }
+
+    public function testBeforeSave()
+    {
+        $widgetParameters = [
+            'anchor_text' => 'Test',
+            'title' => 'Test',
+            'page_id' => '2'
+        ];
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->willReturn(json_encode($widgetParameters));
+
+        $this->_model->setData('widget_parameters', $widgetParameters);
+        $this->_model->beforeSave();
     }
 }

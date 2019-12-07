@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,16 @@ namespace Magento\Webapi\Test\Unit\Controller;
 
 use Magento\Store\Model\Store;
 
-class PathProcessorTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for Magento\Webapi\Controller\PathProcessor class.
+ */
+class PathProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface */
     private $storeManagerMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface */
+    private $localeResolverMock;
 
     /** @var \Magento\Webapi\Controller\PathProcessor */
     private $model;
@@ -22,15 +28,24 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     private $endpointPath = '/V1/path/of/endpoint';
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStores')
-            ->willReturn([$this->arbitraryStoreCode => 'store object', 'default' => 'default store object']);
-        $this->model = new \Magento\Webapi\Controller\PathProcessor($this->storeManagerMock);
+        $store = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $store->method('getId')->willReturn(2);
+
+        $this->storeManagerMock = $this->createConfiguredMock(
+            \Magento\Store\Model\StoreManagerInterface::class,
+            [
+                'getStores' => [$this->arbitraryStoreCode => 'store object', 'default' => 'default store object'],
+                'getStore'  => $store,
+            ]
+        );
+        $this->storeManagerMock->expects($this->once())->method('getStores');
+
+        $this->localeResolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->localeResolverMock->method('emulate')->with(2);
+
+        $this->model = new \Magento\Webapi\Controller\PathProcessor($this->storeManagerMock, $this->localeResolverMock);
     }
 
     /**
@@ -47,17 +62,24 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->exactly($setCurrentStoreCallCtr))
             ->method('setCurrentStore')
             ->with($storeCodeSet);
+        if ($setCurrentStoreCallCtr > 0) {
+            $this->localeResolverMock->expects($this->once())
+                ->method('emulate');
+        }
         $result = $this->model->process($inPath);
         $this->assertSame($this->endpointPath, $result);
     }
 
+    /**
+     * @return array
+     */
     public function processPathDataProvider()
     {
         return [
             'All store code' => ['all', Store::ADMIN_CODE],
             'Default store code' => ['', 'default', 0],
             'Arbitrary store code' => [$this->arbitraryStoreCode, $this->arbitraryStoreCode],
-            'Explicit default store code' => ['default', 'default']
+            'Explicit default store code' => ['default', 'default'],
         ];
     }
 }

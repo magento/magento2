@@ -1,24 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin;
+
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments;
 
 class IncompatibleArgumentsType
 {
     /**
-     * @param \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject
+     * @param ItemWithArguments $subject
      * @param array $names
      * @return int
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject, array $names
+        ItemWithArguments $subject,
+        array $names
     ) {
         return count($names);
     }

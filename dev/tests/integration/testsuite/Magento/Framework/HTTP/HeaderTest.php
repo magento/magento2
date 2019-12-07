@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP;
 
 use Zend\Stdlib\Parameters;
 
-class HeaderTest extends \PHPUnit_Framework_TestCase
+class HeaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\HTTP\Header
@@ -17,10 +17,10 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_header = $objectManager->get('Magento\Framework\HTTP\Header');
+        $this->_header = $objectManager->get(\Magento\Framework\HTTP\Header::class);
 
         /** @var \Magento\TestFramework\Request $request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setServer(new Parameters(['HTTP_HOST' => 'localhost']));
     }
 

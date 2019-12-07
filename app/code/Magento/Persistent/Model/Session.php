@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model;
@@ -8,8 +8,11 @@ namespace Magento\Persistent\Model;
 /**
  * Persistent Session Model
  *
+ * @api
  * @method int getCustomerId()
  * @method Session setCustomerId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\Model\AbstractModel
 {
@@ -95,6 +98,13 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $sessionConfig;
 
     /**
+     * Request
+     *
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -146,7 +156,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Persistent\Model\ResourceModel\Session');
+        $this->_init(\Magento\Persistent\Model\ResourceModel\Session::class);
     }
 
     /**
@@ -187,6 +197,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Serialize info for Resource Model to save
+     *
      * For new model check and set available cookie key
      *
      * @return $this
@@ -289,7 +300,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      */
     public function removePersistentCookie()
     {
-        $cookieMetadata = $this->_cookieMetadataFactory->createCookieMetadata()
+        $cookieMetadata = $this->_cookieMetadataFactory->createSensitiveCookieMetadata()
             ->setPath($this->sessionConfig->getCookiePath());
         $this->_cookieManager->deleteCookie(self::COOKIE_NAME, $cookieMetadata);
         return $this;
@@ -344,7 +355,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         $lifetime = $this->_coreConfig->getValue(
             \Magento\Persistent\Helper\Data::XML_PATH_LIFE_TIME,
             'website',
-            intval($websiteId)
+            (int)$websiteId
         );
 
         if ($lifetime) {
@@ -379,11 +390,39 @@ class Session extends \Magento\Framework\Model\AbstractModel
         $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
             ->setDuration($duration)
             ->setPath($path)
+            ->setSecure($this->getRequest()->isSecure())
             ->setHttpOnly(true);
         $this->_cookieManager->setPublicCookie(
             self::COOKIE_NAME,
             $value,
             $publicCookieMetadata
         );
+    }
+
+    /**
+     * Get request object
+     *
+     * @return \Magento\Framework\App\Request\Http
+     * @deprecated 100.1.0
+     */
+    private function getRequest()
+    {
+        if ($this->request == null) {
+            $this->request = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\Request\Http::class);
+        }
+        return $this->request;
+    }
+
+    /**
+     * Set `updated_at` to be always changed
+     *
+     * @return $this
+     * @since 100.1.0
+     */
+    public function save()
+    {
+        $this->setUpdatedAt(gmdate('Y-m-d H:i:s'));
+        return parent::save();
     }
 }

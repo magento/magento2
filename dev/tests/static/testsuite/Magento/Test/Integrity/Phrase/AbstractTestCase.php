@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,10 @@
  */
 namespace Magento\Test\Integrity\Phrase;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\FilesCollector;
 
-class AbstractTestCase extends \PHPUnit_Framework_TestCase
+class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $phrase
@@ -36,10 +37,14 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function _getFiles()
     {
-        $filesCollector = new \Magento\Setup\Module\I18n\FilesCollector();
-
+        $filesCollector = new FilesCollector();
+        $componentRegistrar = new ComponentRegistrar();
+        $paths = array_merge(
+            $componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+            $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY)
+        );
         return $filesCollector->getFiles(
-            [\Magento\Framework\App\Utility\Files::init()->getPathToSource()],
+            $paths,
             '/\.(php|phtml)$/'
         );
     }

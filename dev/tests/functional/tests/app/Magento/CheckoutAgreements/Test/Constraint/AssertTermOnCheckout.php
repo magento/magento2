@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,15 +56,26 @@ class AssertTermOnCheckout extends AbstractConstraint
         $shippingMethodData = ['shipping' => $shipping];
         $paymentData = ['payment' => $payment];
 
-        $products = $objectManager->create('Magento\Catalog\Test\TestStep\CreateProductsStep', $productsData)->run();
-        $objectManager->create('Magento\Checkout\Test\TestStep\AddProductsToTheCartStep', $products)->run();
-        $objectManager->create('Magento\Checkout\Test\TestStep\ProceedToCheckoutStep')->run();
-        $objectManager->create('Magento\Checkout\Test\TestStep\FillShippingAddressStep', $shippingAddressData)->run();
-        $objectManager->create('Magento\Checkout\Test\TestStep\FillShippingMethodStep', $shippingMethodData)->run();
-        $objectManager->create('Magento\Checkout\Test\TestStep\SelectPaymentMethodStep', $paymentData)->run();
+        $products = $objectManager->create(
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
+            $productsData
+        )->run();
+        $objectManager->create(\Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class, $products)->run();
+        $objectManager->create(
+            \Magento\Checkout\Test\TestStep\ProceedToCheckoutStep::class
+        )->run();
+        $objectManager->create(
+            \Magento\Checkout\Test\TestStep\FillShippingAddressStep::class,
+            $shippingAddressData
+        )->run();
+        $objectManager->create(
+            \Magento\Checkout\Test\TestStep\FillShippingMethodStep::class,
+            $shippingMethodData
+        )->run();
+        $objectManager->create(\Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class, $paymentData)->run();
 
         $paymentBlock->getSelectedPaymentMethodBlock()->clickPlaceOrder();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::NOTIFICATION_MESSAGE,
             $checkoutOnepage->getAgreementReview()->getNotificationMassage(),
             'Notification required message of Terms and Conditions is absent.'

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Customer\Api;
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class CustomerMetadataTest
@@ -18,6 +19,19 @@ class CustomerMetadataTest extends WebapiAbstract
     const SERVICE_NAME = "customerCustomerMetadataV1";
     const SERVICE_VERSION = "V1";
     const RESOURCE_PATH = "/V1/attributeMetadata/customer";
+
+    /**
+     * @var CustomerMetadataInterface
+     */
+    private $customerMetadata;
+
+    /**
+     * Execute per test initialization.
+     */
+    public function setUp()
+    {
+        $this->customerMetadata = Bootstrap::getObjectManager()->create(CustomerMetadataInterface::class);
+    }
 
     /**
      * Test retrieval of attribute metadata for the customer entity type.
@@ -63,7 +77,7 @@ class CustomerMetadataTest extends WebapiAbstract
                 Customer::FIRSTNAME,
                 [
                     AttributeMetadata::FRONTEND_INPUT   => 'text',
-                    AttributeMetadata::INPUT_FILTER     => '',
+                    AttributeMetadata::INPUT_FILTER     => 'trim',
                     AttributeMetadata::STORE_LABEL      => 'First Name',
                     AttributeMetadata::MULTILINE_COUNT  => 0,
                     AttributeMetadata::VALIDATION_RULES => [
@@ -74,7 +88,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::REQUIRED         => true,
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [],
-                    AttributeMetadata::FRONTEND_CLASS   => ' required-entry',
+                    AttributeMetadata::FRONTEND_CLASS   => 'required-entry',
                     AttributeMetadata::USER_DEFINED     => false,
                     AttributeMetadata::SORT_ORDER       => 40,
                     AttributeMetadata::FRONTEND_LABEL   => 'First Name',
@@ -101,7 +115,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::REQUIRED         => false,
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [
-                        ['label' => '', 'value' => ''],
+                        ['label' => ' ', 'value' => ''],
                         ['label' => 'Male', 'value' => '1'],
                         ['label' => 'Female', 'value' => '2'],
                         ['label' => 'Not Specified', 'value' => '3']
@@ -134,7 +148,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::OPTIONS          => [
                         ['label' => 'Main Website', 'value' => '1'],
                     ],
-                    AttributeMetadata::FRONTEND_CLASS   => ' required-entry',
+                    AttributeMetadata::FRONTEND_CLASS   => 'required-entry',
                     AttributeMetadata::USER_DEFINED     => false,
                     AttributeMetadata::SORT_ORDER       => 10,
                     AttributeMetadata::FRONTEND_LABEL   => 'Associate to Website',
@@ -200,8 +214,7 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
 
-        // There are no default custom attributes.
-        $this->assertCount(0, $attributeMetadata);
+        $this->assertCount(count($this->customerMetadata->getCustomAttributesMetadata()), $attributeMetadata);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Ui\Component\Listing\Column;
@@ -49,9 +49,7 @@ class Address extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->escaper->escapeHtml(
-                    str_replace("\n", '<br/>', $item[$this->getData('name')])
-                );
+                $item[$this->getData('name')] = nl2br($this->escaper->escapeHtml($item[$this->getData('name')]));
             }
         }
 

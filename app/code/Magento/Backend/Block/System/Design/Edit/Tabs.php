@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Design\Edit;
@@ -28,7 +28,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             [
                 'label' => __('General'),
                 'content' => $this->getLayout()->createBlock(
-                    'Magento\Backend\Block\System\Design\Edit\Tab\General'
+                    \Magento\Backend\Block\System\Design\Edit\Tab\General::class
                 )->toHtml()
             ]
         );

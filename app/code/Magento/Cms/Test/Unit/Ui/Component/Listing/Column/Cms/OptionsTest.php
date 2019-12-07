@@ -1,11 +1,11 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing\Column\Cms;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Ui\Component\Listing\Column\Cms\Options
@@ -41,26 +41,20 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->systemStoreMock = $this->getMockBuilder('Magento\Store\Model\System\Store')
+        $this->systemStoreMock = $this->getMockBuilder(\Magento\Store\Model\System\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->websiteMock = $this->getMock(
-            'Magento\Store\Model\Website',
-            ['getId', 'getName'],
-            [],
-            '',
-            false
-        );
+        $this->websiteMock = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', 'getName']);
 
-        $this->groupMock = $this->getMock('Magento\Store\Model\Group', [], [], '', false);
+        $this->groupMock = $this->createMock(\Magento\Store\Model\Group::class);
 
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
-        $this->escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
 
         $this->options = $objectManager->getObject(
-            'Magento\Cms\Ui\Component\Listing\Column\Cms\Options',
+            \Magento\Cms\Ui\Component\Listing\Column\Cms\Options::class,
             [
                 'systemStore' => $this->systemStoreMock,
                 'escaper' => $this->escaperMock

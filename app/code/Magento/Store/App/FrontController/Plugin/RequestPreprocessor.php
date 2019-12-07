@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
+/**
+ * Class RequestPreprocessor
+ */
 class RequestPreprocessor
 {
     /**
@@ -28,6 +31,11 @@ class RequestPreprocessor
     protected $_storeManager;
 
     /**
+     * @var \Magento\Store\Model\BaseUrlChecker
+     */
+    private $baseUrlChecker;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -47,6 +55,7 @@ class RequestPreprocessor
 
     /**
      * Auto-redirect to base url (without SID) if the requested url doesn't match it.
+     *
      * By default this feature is enabled in configuration.
      *
      * @param \Magento\Framework\App\FrontController $subject
@@ -61,16 +70,17 @@ class RequestPreprocessor
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$request->isPost() && $this->_isBaseUrlCheckEnabled()) {
+        if ($this->isHttpsRedirect($request) || (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled())) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()
             );
             if ($baseUrl) {
+                // phpcs:disable Magento2.Functions.DiscouragedFunction
                 $uri = parse_url($baseUrl);
-                if (!$this->_isBaseUrlCorrect($uri, $request)) {
+                if (!$this->getBaseUrlChecker()->execute($uri, $request)) {
                     $redirectUrl = $this->_url->getRedirectUrl(
-                        $this->_url->getUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
+                        $this->_url->getDirectUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
                     );
                     $redirectCode = (int)$this->_scopeConfig->getValue(
                         'web/url/redirect_to_base',
@@ -90,37 +100,35 @@ class RequestPreprocessor
     }
 
     /**
-     * Is base url check enabled
+     * Gets base URL checker.
      *
-     * @return bool
+     * @return \Magento\Store\Model\BaseUrlChecker
+     * @deprecated 100.1.0
      */
-    protected function _isBaseUrlCheckEnabled()
+    private function getBaseUrlChecker()
     {
-        return (bool)$this->_scopeConfig->getValue(
-            'web/url/redirect_to_base',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        if ($this->baseUrlChecker === null) {
+            $this->baseUrlChecker = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Store\Model\BaseUrlChecker::class
+            );
+        }
+
+        return $this->baseUrlChecker;
     }
 
     /**
-     * Check if base url enabled
+     * Check is request should be redirected, if https enabled.
      *
-     * @param array $uri
-     * @param \Magento\Framework\App\Request\Http $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      */
-    protected function _isBaseUrlCorrect($uri, $request)
+    private function isHttpsRedirect(\Magento\Framework\App\RequestInterface $request)
     {
-        $requestUri = $request->getRequestUri() ? $request->getRequestUri() : '/';
-        return (!isset(
-            $uri['scheme']
-        ) || $uri['scheme'] === $request->getScheme()) && (!isset(
-            $uri['host']
-        ) || $uri['host'] === $request->getHttpHost()) && (!isset(
-            $uri['path']
-        ) || strpos(
-            $requestUri,
-            $uri['path']
-        ) !== false);
+        $result = false;
+        if ($this->getBaseUrlChecker()->isFrontendSecure() && $request->isPost() && !$request->isSecure()) {
+            $result = true;
+        }
+
+        return $result;
     }
 }

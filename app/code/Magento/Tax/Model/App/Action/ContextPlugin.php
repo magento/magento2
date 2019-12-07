@@ -1,13 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Model\App\Action;
-
-use Magento\Customer\Model\Context;
-use Magento\Customer\Model\GroupManagement;
 
 /**
  * Class ContextPlugin
@@ -59,7 +56,7 @@ class ContextPlugin
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Tax\Model\Calculation\Proxy $calculation,
+        \Magento\Tax\Model\Calculation\Proxy $calculation, //phpcs:ignore Magento2.Classes.DiscouragedDependencies
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\PageCache\Model\Config $cacheConfig
@@ -73,22 +70,22 @@ class ContextPlugin
     }
 
     /**
+     * Before dispatch.
+     *
      * @param \Magento\Framework\App\ActionInterface $subject
-     * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
+    public function beforeDispatch(
         \Magento\Framework\App\ActionInterface $subject,
-        \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
         if (!$this->customerSession->isLoggedIn() ||
             !$this->moduleManager->isEnabled('Magento_PageCache') ||
             !$this->cacheConfig->isEnabled() ||
             !$this->taxHelper->isCatalogPriceDisplayAffectedByTax()) {
-            return $proceed($request);
+            return;
         }
 
         $defaultBillingAddress = $this->customerSession->getDefaultTaxBillingAddress();
@@ -107,6 +104,5 @@ class ContextPlugin
                 0
             );
         }
-        return $proceed($request);
     }
 }

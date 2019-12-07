@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Profiler;
@@ -9,7 +9,7 @@ namespace Magento\Test\Profiler;
  * Test class for \Magento\TestFramework\Profiler\OutputBamboo.
  */
 require_once __DIR__ . '/OutputBambooTestFilter.php';
-class OutputBambooTest extends \PHPUnit_Framework_TestCase
+class OutputBambooTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Profiler\OutputBamboo
@@ -18,7 +18,7 @@ class OutputBambooTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        stream_filter_register('dataCollectorFilter', 'Magento\Test\Profiler\OutputBambooTestFilter');
+        stream_filter_register('dataCollectorFilter', \Magento\Test\Profiler\OutputBambooTestFilter::class);
     }
 
     /**

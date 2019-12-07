@@ -1,31 +1,35 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Credit memo for your {{var store.getFrontendName()}} order @-->
+<!--@subject {{trans "Credit memo for your %store_name order" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"var comment":"Credit Memo Comment",
+"var comment|escape|nl2br":"Credit Memo Comment",
 "var creditmemo.increment_id":"Credit Memo Id",
 "layout handle=\"sales_email_order_creditmemo_items\" creditmemo=$creditmemo order=$order":"Credit Memo Items Grid",
-"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
-"var order.getCustomerName()":"Customer Name",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL",
+"var order_data.customer_name":"Customer Name",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
-"var order.getShippingDescription()":"Shipping Description",
-"var order.shipping_description":"Shipping Description"
+"var order.shipping_description":"Shipping Description",
+"var store.frontend_name":"Store Frontend Name",
+"var store_email":"Store Email",
+"var creditmemo":"Credit Memo",
+"var order":"Order",
+"var order_data.is_not_virtual":"Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
 
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
-                {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
+                {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
                 {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}
             </p>
             <p>
@@ -55,7 +59,7 @@
                         <h3>{{trans "Billing Info"}}</h3>
                         <p>{{var formattedBillingAddress|raw}}</p>
                     </td>
-                    {{depend order.getIsNotVirtual()}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="address-details">
                         <h3>{{trans "Shipping Info"}}</h3>
                         <p>{{var formattedShippingAddress|raw}}</p>
@@ -67,10 +71,10 @@
                         <h3>{{trans "Payment Method"}}</h3>
                         {{var payment_html|raw}}
                     </td>
-                    {{depend order.getIsNotVirtual()}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="method-info">
                         <h3>{{trans "Shipping Method"}}</h3>
-                        <p>{{var order.getShippingDescription()}}</p>
+                        <p>{{var order.shipping_description}}</p>
                     </td>
                     {{/depend}}
                 </tr>

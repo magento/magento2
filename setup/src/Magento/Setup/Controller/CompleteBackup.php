@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -18,8 +18,8 @@ class CompleteBackup extends AbstractActionController
     public function indexAction()
     {
         $view = new ViewModel;
-        $view->setTerminal(true);
-        $view->setTemplate('/magento/setup/complete-backup.phtml');
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;
     }
 

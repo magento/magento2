@@ -1,13 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Block\Widget;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Constructor modification point for Magento\Backend\Block\Widget.
+ *
+ * All context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
+ * the classes they were introduced for.
+ *
+ * @api
+ * @SuppressWarnings(PHPMD)
+ * @since 100.0.2
  */
 class Context extends \Magento\Backend\Block\Template\Context
 {
@@ -59,6 +72,7 @@ class Context extends \Magento\Backend\Block\Template\Context
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @param Button\ToolbarInterface $toolbar
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -94,7 +108,8 @@ class Context extends \Magento\Backend\Block\Template\Context
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
         Button\ButtonList $buttonList,
-        Button\ToolbarInterface $toolbar
+        Button\ToolbarInterface $toolbar,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         parent::__construct(
             $request,
@@ -126,7 +141,8 @@ class Context extends \Magento\Backend\Block\Template\Context
             $backendSession,
             $mathRandom,
             $formKey,
-            $nameBuilder
+            $nameBuilder,
+            $lockQuery
         );
 
         $this->buttonList = $buttonList;

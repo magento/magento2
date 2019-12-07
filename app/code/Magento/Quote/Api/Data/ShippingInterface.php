@@ -1,11 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface ShippingInterface
+ * @api
+ * @since 100.0.2
+ */
 interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
@@ -22,7 +27,6 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return void
      */
     public function setAddress(\Magento\Quote\Api\Data\AddressInterface $value);
-
 
     /**
      * Get shipping method

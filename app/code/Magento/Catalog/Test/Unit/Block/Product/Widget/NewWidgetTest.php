@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\Widget;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Block\Product\Widget\NewWidget;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewWidgetTest extends \PHPUnit_Framework_TestCase
+class NewWidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\Widget\NewWidget|\PHPUnit_Framework_MockObject_MockObject
@@ -52,23 +52,26 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $productCollection;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', ['dispatch'], [], '', false, false);
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', ['getValue'], [], '', false, false);
-        $this->cacheState = $this->getMock('Magento\Framework\App\Cache\State', ['isEnabled'], [], '', false, false);
-        $this->localDate = $this->getMock('Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false, false);
-        $this->catalogConfig = $this->getMockBuilder('Magento\Catalog\Model\Config')
+        $this->eventManager = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config::class);
+        $this->cacheState = $this->createPartialMock(\Magento\Framework\App\Cache\State::class, ['isEnabled']);
+        $this->localDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
+        $this->catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
             ->setMethods(['getProductAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->layout = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Catalog\Block\Product\Context')
+        $this->context = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
             ->setMethods(
                 [
                     'getEventManager', 'getScopeConfig', 'getLayout',
@@ -88,13 +91,16 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->requestMock);
 
         $this->block = $this->objectManager->getObject(
-            'Magento\Catalog\Block\Product\Widget\NewWidget',
+            \Magento\Catalog\Block\Product\Widget\NewWidget::class,
             [
                 'context' => $this->context
             ]
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         $this->block = null;
@@ -110,7 +116,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             </span>
         </div>';
         $type = 'widget-new-list';
-        $productMock = $this->getMock('Magento\Catalog\Model\Product', ['getId'], [], '', false, false);
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId']);
         $productMock->expects($this->once())
             ->method('getId')
             ->willReturn($id);
@@ -121,7 +127,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
         ];
 
-        $priceBoxMock = $this->getMock('Magento\Framework\Pricing\Render', ['render'], [], '', false, false);
+        $priceBoxMock = $this->createPartialMock(\Magento\Framework\Pricing\Render::class, ['render']);
 
         $this->layout->expects($this->once())
             ->method('getBlock')
@@ -144,14 +150,19 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrentPage($pageNumber, $expectedResult)
     {
+        $this->block->setData('page_var_name', 'page_number');
+
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->with(\Magento\Catalog\Block\Product\Widget\NewWidget::PAGE_VAR_NAME)
+            ->with('page_number')
             ->willReturn($pageNumber);
 
         $this->assertEquals($expectedResult, $this->block->getCurrentPage());
     }
 
+    /**
+     * @return array
+     */
     public function getCurrentPageDataProvider()
     {
         return [
@@ -168,9 +179,12 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->block->getProductsCount());
     }
 
+    /**
+     * @return void
+     */
     protected function generalGetProductCollection()
     {
-        $this->eventManager->expects($this->once())->method('dispatch')
+        $this->eventManager->expects($this->exactly(2))->method('dispatch')
             ->will($this->returnValue(true));
         $this->scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
             ->willReturn(false);
@@ -187,7 +201,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())->method('getCatalogConfig')->willReturn($this->catalogConfig);
         $this->context->expects($this->once())->method('getLocaleDate')->willReturn($this->localDate);
 
-        $this->productCollection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
+        $this->productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->setMethods(
                 [
                     'setVisibility', 'addMinimalPrice', 'addFinalPrice',
@@ -228,19 +242,15 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
      */
     protected function startTestGetProductCollection($displayType, $pagerEnable, $productsCount, $productsPerPage)
     {
-        $productCollectionFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false,
-            false
+        $productCollectionFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+            ['create']
         );
         $productCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($this->productCollection);
 
         $this->block = $this->objectManager->getObject(
-            'Magento\Catalog\Block\Product\Widget\NewWidget',
+            \Magento\Catalog\Block\Product\Widget\NewWidget::class,
             [
                 'context' => $this->context,
                 'productCollectionFactory' => $productCollectionFactory
@@ -313,6 +323,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getProductCollectionDataProvider()
     {
         return [

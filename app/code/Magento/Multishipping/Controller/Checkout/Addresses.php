@@ -1,14 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
-class Addresses extends \Magento\Multishipping\Controller\Checkout
+class Addresses extends \Magento\Multishipping\Controller\Checkout implements HttpGetActionInterface
 {
     /**
      * Multishipping checkout select address page

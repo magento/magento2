@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio;
 
-class RadioTest extends \PHPUnit_Framework_TestCase
+class RadioTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Radio
@@ -26,20 +26,14 @@ class RadioTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMock('\Magento\Backend\Block\Context', [], [], '', false);
-        $this->_converter = $this->getMock(
-            '\Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter',
-            ['toFlatArray'],
-            [],
-            '',
-            false
+        $context = $this->createMock(\Magento\Backend\Block\Context::class);
+        $this->_converter = $this->createPartialMock(
+            \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter::class,
+            ['toFlatArray']
         );
-        $this->_column = $this->getMock(
-            'Magento\Backend\Block\Widget\Grid\Column',
-            ['getValues', 'getIndex', 'getHtmlName'],
-            [],
-            '',
-            false
+        $this->_column = $this->createPartialMock(
+            \Magento\Backend\Block\Widget\Grid\Column::class,
+            ['getValues', 'getIndex', 'getHtmlName']
         );
         $this->_object = new \Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio($context, $this->_converter);
         $this->_object->setColumn($this->_column);
@@ -69,6 +63,9 @@ class RadioTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return [

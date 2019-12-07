@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Mtf\ObjectManagerFactory;
  * Class InjectableTests
  *
  */
-class InjectableTests extends \PHPUnit_Framework_TestSuite
+class InjectableTests extends \PHPUnit\Framework\TestSuite
 {
     /**
      * @var ObjectManager
@@ -21,35 +21,25 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_TestSuite
+     * @var \PHPUnit\Framework\TestSuite
      */
     protected $suite;
 
     /**
-     * @var \PHPUnit_Framework_TestResult
+     * @var \PHPUnit\Framework\TestResult
      */
     protected $result;
 
     /**
      * Run collected tests
      *
-     * @param \PHPUnit_Framework_TestResult $result
-     * @param bool $filter
-     * @param array $groups
-     * @param array $excludeGroups
-     * @param bool $processIsolation
-     *
-     * @return \PHPUnit_Framework_TestResult|void
+     * @param \PHPUnit\Framework\TestResult $result
+     * @return \PHPUnit\Framework\TestResult|void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function run(
-        \PHPUnit_Framework_TestResult $result = null,
-        $filter = false,
-        array $groups = [],
-        array $excludeGroups = [],
-        $processIsolation = false
-    ) {
+    public function run(\PHPUnit\Framework\TestResult $result = null)
+    {
         if ($result === null) {
             $this->result = $this->createResult();
         }
@@ -74,7 +64,7 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
     public function prepareSuite()
     {
         $this->init();
-        return $this->objectManager->create('Magento\Mtf\TestSuite\AppState');
+        return $this->objectManager->create(\Magento\Mtf\TestSuite\AppState::class);
     }
 
     /**
@@ -97,11 +87,20 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
             $configFilePath = realpath(MTF_BP . '/testsuites/' . $_ENV['testsuite_rule_path']);
 
             /** @var \Magento\Mtf\Config\DataInterface $configData */
-            $configData = $objectManagerFactory->getObjectManager()->create('Magento\Mtf\Config\TestRunner');
-            $configData->setFileName($configFileName . '.xml')->load($configFilePath);
-
+            $configData = $objectManagerFactory->getObjectManager()->create(\Magento\Mtf\Config\TestRunner::class);
+            $filter = getopt('', ['filter:']);
+            if (!isset($filter['filter'])) {
+                $configData->setFileName($configFileName . '.xml')->load($configFilePath);
+            } else {
+                $isValid = preg_match('`variation::(.*?)$`', $filter['filter'], $variation);
+                if ($isValid === 1) {
+                    $configData->setFileName($configFileName . '.xml')->load($configFilePath);
+                    $data['rule']['variation']['allow'][0]['name'][0]['value'] = $variation[1];
+                    $configData->merge($data);
+                }
+            }
             $this->objectManager = $objectManagerFactory->create(
-                ['Magento\Mtf\Config\TestRunner' => $configData]
+                [\Magento\Mtf\Config\TestRunner::class => $configData]
             );
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
@@ -8,15 +8,15 @@ namespace Magento\Backend\Block\Widget\Grid;
 /**
  * @magentoAppArea adminhtml
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
     public function testPseudoConstruct()
     {
         /** @var $block \Magento\Backend\Block\Widget\Grid\Container */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Container',
+            \Magento\Backend\Block\Widget\Grid\Container::class,
             '',
             [
                 'data' => [
@@ -30,7 +30,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertStringEndsWith('widget', $block->getHeaderCssClass());
         $this->assertContains('two', $block->getHeaderText());
-        $this->assertInstanceOf('Magento\Backend\Block\Widget\Grid', $block->getChildBlock('grid'));
+        $this->assertInstanceOf(\Magento\Backend\Block\Widget\Grid::class, $block->getChildBlock('grid'));
         $this->assertEquals('four', $block->getAddButtonLabel());
         $this->assertEquals('five', $block->getBackButtonLabel());
     }

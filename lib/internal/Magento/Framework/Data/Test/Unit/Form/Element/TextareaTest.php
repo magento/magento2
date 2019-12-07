@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Tests for \Magento\Framework\Data\Form\Element\Textarea
- */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class TextareaTest extends \PHPUnit_Framework_TestCase
+/**
+ * Tests for \Magento\Framework\Data\Form\Element\Textarea class.
+ */
+class TextareaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -23,15 +23,9 @@ class TextareaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $collectionFactoryMock = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
+        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
+        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->_model = new \Magento\Framework\Data\Form\Element\Textarea(
             $factoryMock,
             $collectionFactoryMock,
@@ -82,6 +76,7 @@ class TextareaTest extends \PHPUnit_Framework_TestCase
                     'rows',
                     'cols',
                     'readonly',
+                    'maxlength',
                     'disabled',
                     'onkeyup',
                     'tabindex',

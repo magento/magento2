@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@ namespace Magento\Customer\Api;
 
 /**
  * Interface for retrieval information about customer attributes metadata.
+ * @api
+ * @since 100.0.2
  */
 interface CustomerMetadataInterface extends MetadataInterface
 {
@@ -15,5 +17,5 @@ interface CustomerMetadataInterface extends MetadataInterface
 
     const ENTITY_TYPE_CUSTOMER = 'customer';
 
-    const DATA_INTERFACE_NAME = 'Magento\Customer\Api\Data\CustomerInterface';
+    const DATA_INTERFACE_NAME = \Magento\Customer\Api\Data\CustomerInterface::class;
 }

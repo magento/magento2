@@ -1,0 +1,9 @@
+{
+  "test_table": {
+    "column": {
+      "page_id": true,
+      "email": true,
+      "title": true
+    }
+  }
+}

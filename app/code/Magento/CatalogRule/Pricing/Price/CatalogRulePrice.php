@@ -1,22 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\ResourceModel\RuleFactory;
+use Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Pricing\Adjustment\Calculator;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class CatalogRulePrice
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterface
 {
@@ -26,50 +30,50 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
     const PRICE_CODE = 'catalog_rule_price';
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Store\Model\StoreManager
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
+     * @var Rule
      */
-    protected $resourceRuleFactory;
+    private $ruleResource;
 
     /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param Calculator $calculator
-     * @param RuleFactory $catalogRuleResourceFactory
+     * @param PriceCurrencyInterface $priceCurrency
      * @param TimezoneInterface $dateTime
-     * @param StoreManager $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param Session $customerSession
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param Rule $ruleResource
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         Calculator $calculator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        PriceCurrencyInterface $priceCurrency,
         TimezoneInterface $dateTime,
-        StoreManager $storeManager,
+        StoreManagerInterface $storeManager,
         Session $customerSession,
-        RuleFactory $catalogRuleResourceFactory
+        Rule $ruleResource
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->dateTime = $dateTime;
         $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
-        $this->resourceRuleFactory = $catalogRuleResourceFactory;
+        $this->ruleResource = $ruleResource;
     }
 
     /**
@@ -80,18 +84,23 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
     public function getValue()
     {
         if (null === $this->value) {
-            $this->value = $this->resourceRuleFactory->create()
-                ->getRulePrice(
+            if ($this->product->hasData(self::PRICE_CODE)) {
+                $value = $this->product->getData(self::PRICE_CODE);
+                $this->value = $value ? (float)$value : false;
+            } else {
+                $this->value = $this->ruleResource->getRulePrice(
                     $this->dateTime->scopeDate($this->storeManager->getStore()->getId()),
                     $this->storeManager->getStore()->getWebsiteId(),
                     $this->customerSession->getCustomerGroupId(),
                     $this->product->getId()
                 );
-            $this->value = $this->value ? floatval($this->value) : false;
+                $this->value = $this->value ? (float)$this->value : false;
+            }
             if ($this->value) {
                 $this->value = $this->priceCurrency->convertAndRound($this->value);
             }
         }
+
         return $this->value;
     }
 }

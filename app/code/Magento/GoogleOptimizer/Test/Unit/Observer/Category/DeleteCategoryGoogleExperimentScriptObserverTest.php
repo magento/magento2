@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Category;
 
-class DeleteCategoryGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
+class DeleteCategoryGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -29,16 +29,16 @@ class DeleteCategoryGoogleExperimentScriptObserverTest extends \PHPUnit_Framewor
 
     protected function setUp()
     {
-        $this->_codeMock = $this->getMock('Magento\GoogleOptimizer\Model\Code', [], [], '', false);
-        $this->_category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
-        $event = $this->getMock('Magento\Framework\Event', ['getCategory'], [], '', false);
+        $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
+        $this->_category = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getCategory']);
         $event->expects($this->once())->method('getCategory')->will($this->returnValue($this->_category));
-        $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
-            'Magento\GoogleOptimizer\Observer\Category\DeleteCategoryGoogleExperimentScriptObserver',
+            \Magento\GoogleOptimizer\Observer\Category\DeleteCategoryGoogleExperimentScriptObserver::class,
             ['modelCode' => $this->_codeMock]
         );
     }

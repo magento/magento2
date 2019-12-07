@@ -2,14 +2,22 @@
 /**
  * Rule for searching php file dependency
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\TestFramework\Dependency;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\TestFramework\Dependency\RuleInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\UrlInterface;
+use Magento\TestFramework\Dependency\Route\RouteMapper;
+use Magento\TestFramework\Exception\NoSuchActionException;
 
+/**
+ * Rule to check the dependencies between modules based on references, getUrl and layout blocks
+ */
 class PhpRule implements RuleInterface
 {
     /**
@@ -35,7 +43,7 @@ class PhpRule implements RuleInterface
      *
      * @var array
      */
-    protected $_mapRouters = [];
+    private $_mapRouters = [];
 
     /**
      * List of layout blocks
@@ -60,18 +68,36 @@ class PhpRule implements RuleInterface
     ];
 
     /**
-     * Constructor
+     * @var RouteMapper
+     */
+    private $routeMapper;
+
+    /**
+     * Whitelists for dependency check
      *
+     * @var array
+     */
+    private $whitelists;
+
+    /**
      * @param array $mapRouters
      * @param array $mapLayoutBlocks
      * @param array $pluginMap
+     * @param array $whitelists
+     * @throws \Exception
      */
-    public function __construct(array $mapRouters, array $mapLayoutBlocks, array $pluginMap = [])
-    {
+    public function __construct(
+        array $mapRouters,
+        array $mapLayoutBlocks,
+        array $pluginMap = [],
+        array $whitelists = []
+    ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
         $this->_namespaces = implode('|', \Magento\Framework\App\Utility\Files::init()->getNamespaces());
         $this->pluginMap = $pluginMap ?: null;
+        $this->routeMapper = new RouteMapper();
+        $this->whitelists = $whitelists;
     }
 
     /**
@@ -82,6 +108,7 @@ class PhpRule implements RuleInterface
      * @param string $file
      * @param string $contents
      * @return array
+     * @throws \Exception
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
@@ -89,39 +116,78 @@ class PhpRule implements RuleInterface
             return [];
         }
 
-        $pattern = '~\b(?<class>(?<module>(' . implode(
-            '_|',
-            Files::init()->getNamespaces()
-        ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
+        $dependenciesInfo = [];
+        $dependenciesInfo = $this->considerCaseDependencies(
+            $dependenciesInfo,
+            $this->caseClassesAndIdentifiers($currentModule, $file, $contents)
+        );
+        $dependenciesInfo = $this->considerCaseDependencies(
+            $dependenciesInfo,
+            $this->_caseGetUrl($currentModule, $contents)
+        );
+        $dependenciesInfo = $this->considerCaseDependencies(
+            $dependenciesInfo,
+            $this->_caseLayoutBlock($currentModule, $fileType, $file, $contents)
+        );
+        return $dependenciesInfo;
+    }
+
+    /**
+     * Get routes whitelist
+     *
+     * @return array
+     */
+    private function getRoutesWhitelist(): array
+    {
+        return $this->whitelists['routes'] ?? [];
+    }
+
+    /**
+     * Check references to classes and identifiers defined in other modules
+     *
+     * @param string $currentModule
+     * @param string $file
+     * @param string $contents
+     * @return array
+     * @throws \Exception
+     */
+    private function caseClassesAndIdentifiers($currentModule, $file, &$contents)
+    {
+        $pattern = '~\b(?<class>(?<module>('
+            . implode(
+                '[_\\\\]|',
+                Files::init()->getNamespaces()
+            )
+            . '[_\\\\])[a-zA-Z0-9]+)'
+            . '(?<class_inside_module>[a-zA-Z0-9_\\\\]*))\b(?:::(?<module_scoped_key>[a-z0-9_]+)[\'"])?~';
+
+        if (!preg_match_all($pattern, $contents, $matches)) {
+            return [];
+        }
 
         $dependenciesInfo = [];
-        if (preg_match_all($pattern, $contents, $matches)) {
-            $matches['module'] = array_unique($matches['module']);
-            foreach ($matches['module'] as $i => $referenceModule) {
-                $referenceModule = str_replace('_', '\\', $referenceModule);
-                if ($currentModule == $referenceModule) {
-                    continue;
-                }
-                $dependencyClass = trim($matches['class'][$i]);
+        $matches['module'] = array_unique($matches['module']);
+        foreach ($matches['module'] as $i => $referenceModule) {
+            $referenceModule = str_replace('_', '\\', $referenceModule);
+            if ($currentModule == $referenceModule) {
+                continue;
+            }
+
+            $dependencyClass = trim($matches['class'][$i]);
+            if (empty($matches['class_inside_module'][$i]) && !empty($matches['module_scoped_key'][$i])) {
+                $dependencyType = RuleInterface::TYPE_SOFT;
+            } else {
                 $currentClass = $this->getClassFromFilepath($file, $currentModule);
                 $dependencyType = $this->isPluginDependency($currentClass, $dependencyClass)
                     ? RuleInterface::TYPE_SOFT
                     : RuleInterface::TYPE_HARD;
-
-                $dependenciesInfo[] = [
-                    'module' => $referenceModule,
-                    'type' => $dependencyType,
-                    'source' => $dependencyClass,
-                ];
             }
-        }
-        $result = $this->_caseGetUrl($currentModule, $contents);
-        if (count($result)) {
-            $dependenciesInfo = array_merge($dependenciesInfo, $result);
-        }
-        $result = $this->_caseLayoutBlock($currentModule, $fileType, $file, $contents);
-        if (count($result)) {
-            $dependenciesInfo = array_merge($dependenciesInfo, $result);
+
+            $dependenciesInfo[] = [
+                'module' => $referenceModule,
+                'type' => $dependencyType,
+                'source' => $dependencyClass,
+            ];
         }
 
         return $dependenciesInfo;
@@ -142,6 +208,8 @@ class PhpRule implements RuleInterface
     }
 
     /**
+     * Load DI configuration files
+     *
      * @return array
      * @throws \Exception
      */
@@ -157,12 +225,14 @@ class PhpRule implements RuleInterface
      * Generate an array of plugin info
      *
      * @return array
+     * @throws \Exception
      */
     private function loadPluginMap()
     {
         if (!$this->pluginMap) {
             foreach ($this->loadDiFiles() as $filepath) {
                 $dom = new \DOMDocument();
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $dom->loadXML(file_get_contents($filepath));
                 $typeNodes = $dom->getElementsByTagName('type');
                 /** @var \DOMElement $type */
@@ -187,6 +257,7 @@ class PhpRule implements RuleInterface
      * @param string $dependent
      * @param string $dependency
      * @return bool
+     * @throws \Exception
      */
     private function isPluginDependency($dependent, $dependency)
     {
@@ -196,7 +267,7 @@ class PhpRule implements RuleInterface
             : null;
         if ($subject === $dependency) {
             return true;
-        } else if ($subject) {
+        } elseif ($subject) {
             $subjectModule = substr($subject, 0, strpos($subject, '\\', 9)); // (strlen('Magento\\') + 1) === 9
             return strpos($dependency, $subjectModule) === 0;
         } else {
@@ -204,53 +275,77 @@ class PhpRule implements RuleInterface
         }
     }
 
-
     /**
      * Check get URL method
      *
      * Ex.: getUrl('{path}')
      *
-     * @param $currentModule
-     * @param $contents
+     * @param string $currentModule
+     * @param string $contents
      * @return array
+     * @throws LocalizedException
+     * @throws \Exception
+     * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
-    protected function _caseGetUrl($currentModule, &$contents)
+    protected function _caseGetUrl(string $currentModule, string &$contents): array
     {
-        $pattern = '/[\->:]+(?<source>getUrl\([\'"](?<router>[\w\/*]+)[\'"])/';
+        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<route_id>[a-z0-9\-_]{3,}|\*)'
+            .'(/(?<controller_name>[a-z0-9\-_]+|\*))?(/(?<action_name>[a-z0-9\-_]+|\*))?\3)#i';
 
         $dependencies = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
             return $dependencies;
         }
 
-        foreach ($matches as $item) {
-            $router = str_replace('/', '\\', $item['router']);
-            if (isset($this->_mapRouters[$router])) {
-                $modules = $this->_mapRouters[$router];
+        try {
+            foreach ($matches as $item) {
+                $routeId = $item['route_id'];
+                $controllerName = $item['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
+                $actionName = $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
+
+                // skip rest
+                if ($routeId === "rest") { //MC-19890
+                    continue;
+                }
+                // skip wildcards
+                if ($routeId === "*" || $controllerName === "*" || $actionName === "*") { //MC-19890
+                    continue;
+                }
+                $modules = $this->routeMapper->getDependencyByRoutePath(
+                    $routeId,
+                    $controllerName,
+                    $actionName
+                );
                 if (!in_array($currentModule, $modules)) {
-                    foreach ($modules as $module) {
-                        $dependencies[] = [
-                            'module' => $module,
-                            'type' => RuleInterface::TYPE_HARD,
-                            'source' => $item['source'],
-                        ];
+                    if (count($modules) === 1) {
+                        $modules = reset($modules);
                     }
+                    $dependencies[] = [
+                        'module' => $modules,
+                        'type' => RuleInterface::TYPE_HARD,
+                        'source' => $item['source'],
+                    ];
                 }
             }
+        } catch (NoSuchActionException $e) {
+            if (array_search($e->getMessage(), $this->getRoutesWhitelist()) === false) {
+                throw new LocalizedException(__('Invalid URL path: %1', $e->getMessage()), $e);
+            }
         }
+
         return $dependencies;
     }
 
     /**
      * Check layout blocks
      *
-     * @param $currentModule
-     * @param $fileType
-     * @param $file
-     * @param $contents
+     * @param string $currentModule
+     * @param string $fileType
+     * @param string $file
+     * @param string $contents
      * @return array
      */
-    protected function _caseLayoutBlock($currentModule, $fileType, $file, &$contents)
+    protected function _caseLayoutBlock(string $currentModule, string $fileType, string $file, string &$contents): array
     {
         $pattern = '/[\->:]+(?<source>(?:getBlock|getBlockHtml)\([\'"](?<block>[\w\.\-]+)[\'"]\))/';
 
@@ -280,11 +375,11 @@ class PhpRule implements RuleInterface
     /**
      * Get area from file path
      *
-     * @param $file
-     * @param $fileType
+     * @param string $file
+     * @param string $fileType
      * @return string|null
      */
-    protected function _getAreaByFile($file, $fileType)
+    protected function _getAreaByFile(string $file, string $fileType): ?string
     {
         if ($fileType == 'php') {
             return null;
@@ -304,12 +399,12 @@ class PhpRule implements RuleInterface
      *  'source'  // source text
      * )
      *
-     * @param $currentModule
-     * @param $area
-     * @param $block
+     * @param string $currentModule
+     * @param string|null $area
+     * @param string $block
      * @return array
      */
-    protected function _checkDependencyLayoutBlock($currentModule, $area, $block)
+    protected function _checkDependencyLayoutBlock(string $currentModule, ?string $area, string $block): array
     {
         if (isset($this->_mapLayoutBlocks[$area][$block]) || $area === null) {
             // CASE 1: No dependencies
@@ -367,5 +462,17 @@ class PhpRule implements RuleInterface
             $result[] = ['module' => $module, 'type' => $value['type'], 'source' => $value['source']];
         }
         return $result;
+    }
+
+    /**
+     * Merge dependencies
+     *
+     * @param array $known
+     * @param array $new
+     * @return array
+     */
+    private function considerCaseDependencies($known, $new)
+    {
+        return array_merge($known, $new);
     }
 }

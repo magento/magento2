@@ -2,13 +2,16 @@
 /**
  * Associated products collection
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
 /**
+ * Associated products collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
 {
@@ -18,7 +21,6 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
-
     /**
      * Product types config
      *
@@ -27,6 +29,8 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
     protected $_config;
 
     /**
+     * AssociatedProductsCollection constructor.
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -48,7 +52,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

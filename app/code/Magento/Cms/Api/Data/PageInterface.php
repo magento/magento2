@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Api\Data;
@@ -8,6 +8,7 @@ namespace Magento\Cms\Api\Data;
 /**
  * CMS page interface.
  * @api
+ * @since 100.0.2
  */
 interface PageInterface
 {
@@ -18,6 +19,7 @@ interface PageInterface
     const IDENTIFIER               = 'identifier';
     const TITLE                    = 'title';
     const PAGE_LAYOUT              = 'page_layout';
+    const META_TITLE               = 'meta_title';
     const META_KEYWORDS            = 'meta_keywords';
     const META_DESCRIPTION         = 'meta_description';
     const CONTENT_HEADING          = 'content_heading';
@@ -61,6 +63,14 @@ interface PageInterface
      * @return string|null
      */
     public function getPageLayout();
+
+    /**
+     * Get meta title
+     *
+     * @return string|null
+     * @since 101.0.0
+     */
+    public function getMetaTitle();
 
     /**
      * Get meta keywords
@@ -115,6 +125,7 @@ interface PageInterface
      * Get layout update xml
      *
      * @return string|null
+     * @deprecated Existing updates are applied, new are not accepted.
      */
     public function getLayoutUpdateXml();
 
@@ -135,6 +146,8 @@ interface PageInterface
     /**
      * Get custom layout update xml
      *
+     * @deprecated Existing updates are applied, new are not accepted.
+     * @see \Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelectedInterface
      * @return string|null
      */
     public function getCustomLayoutUpdateXml();
@@ -191,6 +204,15 @@ interface PageInterface
      * @return \Magento\Cms\Api\Data\PageInterface
      */
     public function setPageLayout($pageLayout);
+
+    /**
+     * Set meta title
+     *
+     * @param string $metaTitle
+     * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 101.0.0
+     */
+    public function setMetaTitle($metaTitle);
 
     /**
      * Set meta keywords
@@ -253,6 +275,7 @@ interface PageInterface
      *
      * @param string $layoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @deprecated Existing updates are applied, new are not accepted.
      */
     public function setLayoutUpdateXml($layoutUpdateXml);
 
@@ -277,6 +300,8 @@ interface PageInterface
      *
      * @param string $customLayoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @deprecated Existing updates are applied, new are not accepted.
+     * @see \Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelectedInterface
      */
     public function setCustomLayoutUpdateXml($customLayoutUpdateXml);
 

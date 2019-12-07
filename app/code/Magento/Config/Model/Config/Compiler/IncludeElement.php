@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Model\Config\Compiler;
 
 use Magento\Framework\DataObject;
@@ -15,6 +16,8 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterfac
 
 /**
  * Class IncludeElement
+ * @api
+ * @since 100.0.2
  */
 class IncludeElement implements ElementInterface
 {
@@ -112,6 +115,6 @@ class IncludeElement implements ElementInterface
             return $directoryRead->readFile($path);
         }
 
-        throw new LocalizedException(__('The file "' . $path . '" does not exist'));
+        throw new LocalizedException(__('The "%1" file doesn\'t exist.', $path));
     }
 }

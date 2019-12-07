@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,19 +13,22 @@ define([
     'jquery/ui',
     'prototype',
     'form',
-    'validation'
+    'validation',
+    'mage/translate'
 ], function (jQuery, mageTemplate, rg) {
     'use strict';
 
     return function (config) {
-        var optionDefaultInputType = 'radio',
+        var optionPanel = jQuery('#manage-options-panel'),
+            editForm = jQuery('#edit_form'),
             attributeOption = {
                 table: $('attribute-options-table'),
                 itemCount: 0,
                 totalItems: 0,
                 rendered: 0,
                 template: mageTemplate('#row-template'),
-                isReadOnly: config.idReadOnly,
+                newOptionClass: 'new-option',
+                isReadOnly: config.isReadOnly,
                 add: function (data, render) {
                     var isNewOption = false,
                         element;
@@ -33,18 +36,16 @@ define([
                     if (typeof data.id == 'undefined') {
                         data = {
                             'id': 'option_' + this.itemCount,
-                            'sort_order': this.itemCount + 1
+                            'sort_order': this.itemCount + 1,
+                            'rowClasses': this.newOptionClass
                         };
                         isNewOption = true;
                     }
 
                     if (!data.intype) {
-                        data.intype = optionDefaultInputType;
+                        data.intype = this.getOptionInputType();
                     }
 
-                    if (!this.totalItems) {
-                        data.checked = 'checked';
-                    }
                     element = this.template({
                         data: data
                     });
@@ -58,6 +59,7 @@ define([
 
                     if (render) {
                         this.render();
+                        this.updateItemsCountField();
                     }
                 },
                 remove: function (event) {
@@ -86,6 +88,10 @@ define([
                         element.hide();
                         this.totalItems--;
                         this.updateItemsCountField();
+                    }
+
+                    if (element.hasClassName(this.newOptionClass)) {
+                        element.remove();
                     }
                 },
                 updateItemsCountField: function () {
@@ -128,18 +134,28 @@ define([
                         '.ignore-validate textarea';
 
                     jQuery('#edit_form').data('validator').settings.forceIgnore = ignore;
+                },
+                getOptionInputType: function () {
+                    var optionDefaultInputType = 'radio';
+
+                    if ($('frontend_input') && $('frontend_input').value === 'multiselect') {
+                        optionDefaultInputType = 'checkbox';
+                    }
+
+                    return optionDefaultInputType;
                 }
-            };
+            },
+            tableBody = jQuery(),
+            activePanelClass = 'selected-type-options';
 
         if ($('add_new_option_button')) {
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
         }
-
         $('manage-options-panel').on('click', '.delete-option', function (event) {
             attributeOption.remove(event);
         });
 
-        jQuery('#manage-options-panel').on('render', function () {
+        optionPanel.on('render', function () {
             attributeOption.ignoreValidate();
 
             if (attributeOption.rendered) {
@@ -165,9 +181,35 @@ define([
                 });
             });
         }
+        editForm.on('beforeSubmit', function () {
+            var optionContainer = optionPanel.find('table tbody'),
+                optionsValues;
 
+            if (optionPanel.hasClass(activePanelClass)) {
+                optionsValues = jQuery.map(
+                    optionContainer.find('tr'),
+                    function (row) {
+                        return jQuery(row).find('input, select, textarea').serialize();
+                    }
+                );
+                jQuery('<input>')
+                    .attr({
+                        type: 'hidden',
+                        name: 'serialized_options'
+                    })
+                    .val(JSON.stringify(optionsValues))
+                    .prependTo(editForm);
+            }
+            tableBody = optionContainer.detach();
+        });
+        editForm.on('afterValidate.error highlight.validate', function () {
+            if (optionPanel.hasClass(activePanelClass)) {
+                optionPanel.find('table').append(tableBody);
+                jQuery('input[name="serialized_options"]').remove();
+            }
+        });
         window.attributeOption = attributeOption;
-        window.optionDefaultInputType = optionDefaultInputType;
+        window.optionDefaultInputType = attributeOption.getOptionInputType();
 
         rg.set('manage-options-panel', attributeOption);
     };

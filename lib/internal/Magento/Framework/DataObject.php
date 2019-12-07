@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -8,7 +8,7 @@ namespace Magento\Framework;
 /**
  * Universal data container with array access implementation
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class DataObject implements \ArrayAccess
@@ -64,8 +64,8 @@ class DataObject implements \ArrayAccess
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
-     * @param string|array  $key
-     * @param mixed         $value
+     * @param string|array $key
+     * @param mixed $value
      * @return $this
      */
     public function setData($key, $value = null)
@@ -111,11 +111,10 @@ class DataObject implements \ArrayAccess
      * and retrieve corresponding member. If data is the string - it will be explode
      * by new line character and converted to array.
      *
-     * @param string     $key
+     * @param string $key
      * @param string|int $index
      * @return mixed
      */
-
     public function getData($key = '', $index = null)
     {
         if ('' === $key) {
@@ -123,7 +122,7 @@ class DataObject implements \ArrayAccess
         }
 
         /* process a/b/c key as ['a']['b']['c'] */
-        if (strpos($key, '/')) {
+        if (strpos($key, '/') !== false) {
             $data = $this->getDataByPath($key);
         } else {
             $data = $this->_getData($key);
@@ -203,7 +202,7 @@ class DataObject implements \ArrayAccess
      */
     public function setDataUsingMethod($key, $args = [])
     {
-        $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+        $method = 'set' . str_replace('_', '', ucwords($key, '_'));
         $this->{$method}($args);
         return $this;
     }
@@ -217,12 +216,13 @@ class DataObject implements \ArrayAccess
      */
     public function getDataUsingMethod($key, $args = null)
     {
-        $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+        $method = 'get' . str_replace('_', '', ucwords($key, '_'));
         return $this->{$method}($args);
     }
 
     /**
      * If $key is empty, checks whether there's any data in the object
+     *
      * Otherwise checks if the specified attribute is set.
      *
      * @param string $key
@@ -273,8 +273,8 @@ class DataObject implements \ArrayAccess
     /**
      * Convert object data into XML string
      *
-     * @param array   $keys array of keys that must be represented
-     * @param string  $rootName root node name
+     * @param array $keys array of keys that must be represented
+     * @param string $rootName root node name
      * @param bool $addOpenTag flag that allow to add initial xml node
      * @param bool $addCdata flag that require wrap all values in CDATA
      * @return string
@@ -326,19 +326,21 @@ class DataObject implements \ArrayAccess
      * Convert object data to JSON
      *
      * @param array $keys array of required keys
-     * @return string
+     * @return bool|string
+     * @throws \InvalidArgumentException
      */
     public function toJson(array $keys = [])
     {
         $data = $this->toArray($keys);
-        return \Zend_Json::encode($data);
+        return \Magento\Framework\Serialize\JsonConverter::convert($data);
     }
 
     /**
      * The "__" style wrapper for toJson
      *
-     * @param  array $keys
-     * @return string
+     * @param array $keys
+     * @return bool|string
+     * @throws \InvalidArgumentException
      */
     public function convertToJson(array $keys = [])
     {
@@ -394,7 +396,7 @@ class DataObject implements \ArrayAccess
                 return isset($this->_data[$key]);
         }
         throw new \Magento\Framework\Exception\LocalizedException(
-            new \Magento\Framework\Phrase('Invalid method %1::%2(%3)', [get_class($this), $method, print_r($args, 1)])
+            new \Magento\Framework\Phrase('Invalid method %1::%2', [get_class($this), $method])
         );
     }
 
@@ -435,7 +437,7 @@ class DataObject implements \ArrayAccess
      *
      * Example: key1="value1" key2="value2" ...
      *
-     * @param   array  $keys array of accepted keys
+     * @param   array $keys array of accepted keys
      * @param   string $valueSeparator separator between key and value
      * @param   string $fieldSeparator separator between key/value pairs
      * @param   string $quote quoting sign

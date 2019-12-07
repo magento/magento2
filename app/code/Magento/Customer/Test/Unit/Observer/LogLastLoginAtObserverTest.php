@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Observer;
@@ -13,7 +13,7 @@ use Magento\Customer\Observer\LogLastLoginAtObserver;
 /**
  * Class LogLastLoginAtObserverTest
  */
-class LogLastLoginAtObserverTest extends \PHPUnit_Framework_TestCase
+class LogLastLoginAtObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LogLastLoginAtObserver
@@ -28,9 +28,9 @@ class LogLastLoginAtObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->loggerMock = $this->getMock('Magento\Customer\Model\Logger', [], [], '', false);
+        $this->loggerMock = $this->createMock(\Magento\Customer\Model\Logger::class);
         $this->logLastLoginAtObserver = new LogLastLoginAtObserver($this->loggerMock);
     }
 
@@ -41,9 +41,9 @@ class LogLastLoginAtObserverTest extends \PHPUnit_Framework_TestCase
     {
         $id = 1;
 
-        $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $eventMock = $this->getMock('Magento\Framework\Event', ['getCustomer'], [], '', false);
-        $customerMock = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
+        $observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getCustomer']);
+        $customerMock = $this->createMock(\Magento\Customer\Model\Customer::class);
 
         $observerMock->expects($this->once())
             ->method('getEvent')

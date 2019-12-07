@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
@@ -13,7 +13,7 @@ use Magento\Framework\App\TemplateTypesInterface;
  * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var string[] */
     protected $expectedFields;
@@ -23,9 +23,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
-
-    /** @var \Magento\Framework\Registry */
-    protected $registry;
 
     /** @var \Magento\Email\Block\Adminhtml\Template\Edit\Form */
     protected $block;
@@ -48,16 +45,20 @@ class FormTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->template = $this->objectManager->get('Magento\Email\Model\Template')
+        $this->template = $this->objectManager->get(\Magento\Email\Model\Template::class)
             ->setId(1)
             ->setTemplateType(TemplateTypesInterface::TYPE_HTML);
-        $this->registry = $this->objectManager->get('Magento\Framework\Registry');
-        if ($this->registry->registry('current_email_template') == null) {
-            $this->registry->register('current_email_template', $this->template);
-        }
-        $this->block = $this->objectManager->create('Magento\Email\Block\Adminhtml\Template\Edit\Form');
+
+        $this->block = $this->objectManager->create(
+            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
+            [
+                'data' => [
+                    'email_template' => $this->template
+                ]
+            ]
+        );
         $this->prepareFormMethod = new \ReflectionMethod(
-            'Magento\Email\Block\Adminhtml\Template\Edit\Form',
+            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
             '_prepareForm'
         );
         $this->prepareFormMethod->setAccessible(true);

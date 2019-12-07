@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
 
+use Magento\Framework\View\Layout\Condition\ConditionFactory;
 
 /**
  * Pool of generators for structural elements
+ * @api
  */
 class GeneratorPool
 {
@@ -22,37 +24,29 @@ class GeneratorPool
     protected $generators = [];
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\ScopeResolverInterface
-     */
-    protected $scopeResolver;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
+     * @var \Magento\Framework\View\Layout\Condition\ConditionFactory
+     */
+    private $conditionFactory;
+
+    /**
      * @param ScheduledStructure\Helper $helper
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param ConditionFactory $conditionFactory
      * @param \Psr\Log\LoggerInterface $logger
-     * @param array $generators
+     * @param array|null $generators
      */
     public function __construct(
         ScheduledStructure\Helper $helper,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        ConditionFactory $conditionFactory,
         \Psr\Log\LoggerInterface $logger,
         array $generators = null
     ) {
         $this->helper = $helper;
-        $this->scopeConfig = $scopeConfig;
-        $this->scopeResolver = $scopeResolver;
+        $this->conditionFactory = $conditionFactory;
         $this->logger = $logger;
         $this->addGenerators($generators);
     }
@@ -73,7 +67,7 @@ class GeneratorPool
     }
 
     /**
-     * Traverse through all generators and generate all scheduled elements
+     * Traverse through all generators and generate all scheduled elements.
      *
      * @param Reader\Context $readerContext
      * @param Generator\Context $generatorContext
@@ -92,11 +86,17 @@ class GeneratorPool
      * Add generators to pool
      *
      * @param GeneratorInterface[] $generators
+     *
      * @return void
      */
     protected function addGenerators(array $generators)
     {
         foreach ($generators as $generator) {
+            if (!$generator instanceof GeneratorInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf('Generator class must be an instance of %s', GeneratorInterface::class)
+                );
+            }
             $this->generators[$generator->getType()] = $generator;
         }
     }
@@ -124,21 +124,22 @@ class GeneratorPool
         foreach ($scheduledStructure->getListToRemove() as $elementToRemove) {
             $this->removeElement($scheduledStructure, $structure, $elementToRemove);
         }
-        foreach ($scheduledStructure->getIfconfigList() as $elementToCheckConfig) {
-            list($configPath, $scopeType) = $scheduledStructure->getIfconfigElement($elementToCheckConfig);
-            if (!empty($configPath)
-                && !$this->scopeConfig->isSetFlag($configPath, $scopeType, $this->scopeResolver->getScope())
-            ) {
-                $this->removeIfConfigElement($scheduledStructure, $structure, $elementToCheckConfig);
+        foreach ($scheduledStructure->getElements() as $name => $data) {
+            list(, $data) = $data;
+            if ($this->visibilityConditionsExistsIn($data)) {
+                $condition = $this->conditionFactory->create($data['attributes']['visibilityConditions']);
+                if (!$condition->isVisible($data['attributes']['visibilityConditions'])) {
+                    $this->removeElement($scheduledStructure, $structure, $name);
+                }
             }
         }
         return $this;
     }
 
     /**
-     * Reorder a child of a specified element
+     * Reorder a child of a specified element.
      *
-     * @param ScheduledStructure $scheduledStructure,
+     * @param ScheduledStructure $scheduledStructure
      * @param Data\Structure $structure
      * @param string $elementName
      * @return void
@@ -156,8 +157,7 @@ class GeneratorPool
                 $element[ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING]
             );
 
-            if (
-                isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
+            if (isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
                     && $structure->hasElement($siblingElement[ScheduledStructure::ELEMENT_NAME])
             ) {
                 $this->reorderElements(
@@ -204,33 +204,6 @@ class GeneratorPool
     }
 
     /**
-     * Remove scheduled element if config isn't true
-     *
-     * @param ScheduledStructure $scheduledStructure
-     * @param Data\Structure $structure
-     * @param string $elementName
-     * @param bool $isChild
-     * @return $this
-     */
-    protected function removeIfConfigElement(
-        ScheduledStructure $scheduledStructure,
-        Data\Structure $structure,
-        $elementName,
-        $isChild = false
-    ) {
-        $elementsToRemove = array_keys($structure->getChildren($elementName));
-        $scheduledStructure->unsetElement($elementName);
-        foreach ($elementsToRemove as $element) {
-            $this->removeIfConfigElement($scheduledStructure, $structure, $element, true);
-        }
-        if (!$isChild) {
-            $structure->unsetElement($elementName);
-            $scheduledStructure->unsetElementFromIfconfigList($elementName);
-        }
-        return $this;
-    }
-
-    /**
      * Move element in scheduled structure
      *
      * @param ScheduledStructure $scheduledStructure
@@ -253,9 +226,24 @@ class GeneratorPool
             $structure->setAsChild($element, $destination, $alias);
             $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
         } catch (\OutOfBoundsException $e) {
-            $this->logger->critical('Broken reference: '. $e->getMessage());
+            $this->logger->warning('Broken reference: ' . $e->getMessage());
         }
         $scheduledStructure->unsetElementFromBrokenParentList($element);
         return $this;
+    }
+
+    /**
+     * Check visibility conditions exists in data.
+     *
+     * @param array $data
+     *
+     * @return bool
+     * @since 100.2.0
+     */
+    protected function visibilityConditionsExistsIn(array $data)
+    {
+        return isset($data['attributes']) &&
+            array_key_exists('visibilityConditions', $data['attributes']) &&
+            !empty($data['attributes']['visibilityConditions']);
     }
 }

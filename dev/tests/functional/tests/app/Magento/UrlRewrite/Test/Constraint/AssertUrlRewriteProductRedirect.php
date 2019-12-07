@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class AssertUrlRewriteProductRedirect extends AbstractConstraint
         if ($product === null) {
             $product = $urlRewrite->getDataFieldConfig('target_path')['source']->getEntity();
         }
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $catalogProductView->getTitleBlock()->getTitle(),
             $product->getName(),
             'URL rewrite product redirect false.'

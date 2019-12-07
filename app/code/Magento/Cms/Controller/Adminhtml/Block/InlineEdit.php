@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
@@ -12,10 +12,21 @@ use Magento\Cms\Api\Data\BlockInterface;
 
 class InlineEdit extends \Magento\Backend\App\Action
 {
-    /** @var BlockRepository  */
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::block';
+
+    /**
+     * @var \Magento\Cms\Api\BlockRepositoryInterface
+     */
     protected $blockRepository;
 
-    /** @var JsonFactory  */
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
     protected $jsonFactory;
 
     /**
@@ -35,6 +46,7 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {

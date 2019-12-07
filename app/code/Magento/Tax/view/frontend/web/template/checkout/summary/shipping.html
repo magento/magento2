@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,6 +9,9 @@
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
             <span class="label" data-bind="text: title+ ' ' + excludingTaxMessage"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
@@ -25,6 +28,9 @@
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
             <span class="label" data-bind="text: title + ' ' + includingTaxMessage"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
@@ -42,7 +48,10 @@
     <!-- ko if: isIncludingDisplayed() -->
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: title"></span>
+            <span class="label" data-bind="i18n: title"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
@@ -60,7 +69,10 @@
     <!-- ko if: isExcludingDisplayed() -->
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: title"></span>
+            <span class="label" data-bind="i18n: title"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">

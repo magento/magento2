@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit;
 
-class NameBuilderTest extends \PHPUnit_Framework_TestCase
+class NameBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Code\NameBuilder
@@ -15,7 +15,7 @@ class NameBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $nelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->nameBuilder = $nelper->getObject('Magento\Framework\Code\NameBuilder');
+        $this->nameBuilder = $nelper->getObject(\Magento\Framework\Code\NameBuilder::class);
     }
 
     /**
@@ -29,14 +29,16 @@ class NameBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->nameBuilder->buildClassName($parts));
     }
 
+    /**
+     * @return array
+     */
     public function buildClassNameDataProvider()
     {
         return [
             [['Checkout', 'Controller', 'Index'], 'Checkout\Controller\Index'],
             [['checkout', 'controller', 'index'], 'Checkout\Controller\Index'],
             [
-                ['magento_backend', 'block', 'system', 'store', 'edit'],
-                'Magento\Backend\Block\System\Store\Edit'
+                ['magento_backend', 'block', 'system', 'store', 'edit'], \Magento\Backend\Block\System\Store\Edit::class
             ],
             [['MyNamespace', 'MyModule'], 'MyNamespace\MyModule'],
             [['uc', 'words', 'test'], 'Uc\Words\Test'],

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Test\Unit;
 
 use \Magento\Framework\Mview\View;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Mview\View
@@ -42,7 +42,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Mview\ConfigInterface',
+            \Magento\Framework\Mview\ConfigInterface::class,
             [],
             '',
             false,
@@ -50,16 +50,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             true,
             ['getView']
         );
-        $this->actionFactoryMock = $this->getMock(
-            'Magento\Framework\Mview\ActionFactory',
-            ['get'],
-            [],
-            '',
-            false
-        );
-        $this->stateMock = $this->getMock(
-            'Magento\Indexer\Model\Mview\View\State',
-            ['getViewId',
+        $this->actionFactoryMock = $this->createPartialMock(\Magento\Framework\Mview\ActionFactory::class, ['get']);
+        $this->stateMock = $this->createPartialMock(
+            \Magento\Indexer\Model\Mview\View\State::class,
+            [
+                'getViewId',
                 'loadByView',
                 'getVersionId',
                 'setVersionId',
@@ -70,24 +65,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                 'setMode',
                 'save',
                 '__wakeup',
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->changelogMock = $this->getMock(
-            'Magento\Framework\Mview\View\Changelog',
-            ['getViewId', 'setViewId', 'create', 'drop', 'getVersion', 'getList', 'clear'],
-            [],
-            '',
-            false
+        $this->changelogMock = $this->createPartialMock(
+            \Magento\Framework\Mview\View\Changelog::class,
+            ['getViewId', 'setViewId', 'create', 'drop', 'getVersion', 'getList', 'clear']
         );
-        $this->subscriptionFactoryMock = $this->getMock(
-            'Magento\Framework\Mview\View\SubscriptionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->subscriptionFactoryMock = $this->createPartialMock(
+            \Magento\Framework\Mview\View\SubscriptionFactory::class,
+            ['create']
         );
         $this->model = new View(
             $this->configMock,
@@ -128,7 +114,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->getViewData())
         );
-        $this->assertInstanceOf('Magento\Framework\Mview\View', $this->model->load($viewId));
+        $this->assertInstanceOf(\Magento\Framework\Mview\View::class, $this->model->load($viewId));
     }
 
     /**
@@ -161,13 +147,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->changelogMock->expects($this->once())
             ->method('create');
-        $subscriptionMock = $this->getMock(
-            'Magento\Framework\Mview\View\Subscription',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $subscriptionMock = $this->createPartialMock(\Magento\Framework\Mview\View\Subscription::class, ['create']);
         $subscriptionMock->expects($this->exactly(1))->method('create');
         $this->subscriptionFactoryMock->expects(
             $this->exactly(1)
@@ -206,11 +186,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->changelogMock->expects($this->once())
             ->method('create')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function () {
                     throw new \Exception();
                 }
-            ));
+            );
 
         $this->loadView();
         $this->model->subscribe();
@@ -222,22 +202,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
         $this->stateMock->expects($this->once())
-            ->method('setVersionId')
-            ->with(null)
-            ->will($this->returnSelf());
-        $this->stateMock->expects($this->once())
             ->method('setMode')
             ->with(\Magento\Framework\Mview\View\StateInterface::MODE_DISABLED)
             ->will($this->returnSelf());
-        $this->changelogMock->expects($this->once())
+        $this->changelogMock->expects($this->never())
             ->method('drop');
-        $subscriptionMock = $this->getMock(
-            'Magento\Framework\Mview\View\Subscription',
-            ['remove'],
-            [],
-            '',
-            false
-        );
+        $subscriptionMock = $this->createPartialMock(\Magento\Framework\Mview\View\Subscription::class, ['remove']);
         $subscriptionMock->expects($this->exactly(1))->method('remove');
         $this->subscriptionFactoryMock->expects(
             $this->exactly(1)
@@ -276,20 +246,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
 
-        $subscriptionMock = $this->getMock(
-            'Magento\Framework\Mview\View\Subscription',
-            ['remove'],
-            [],
-            '',
-            false
-        );
+        $subscriptionMock = $this->createPartialMock(\Magento\Framework\Mview\View\Subscription::class, ['remove']);
         $subscriptionMock->expects($this->exactly(1))
             ->method('remove')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function () {
                     throw new \Exception();
                 }
-            ));
+            );
         $this->subscriptionFactoryMock->expects($this->exactly(1))
             ->method('create')
             ->will($this->returnValue($subscriptionMock));
@@ -303,6 +267,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
+
         $this->stateMock->expects($this->any())
             ->method('getViewId')
             ->will($this->returnValue(1));
@@ -312,9 +277,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->stateMock->expects($this->once())
             ->method('setVersionId')
             ->will($this->returnSelf());
-        $this->stateMock->expects($this->once())
+        $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
+            ->willReturn(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED);
         $this->stateMock->expects($this->exactly(2))
             ->method('getStatus')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::STATUS_IDLE));
@@ -343,7 +308,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($listId)
         );
 
-        $actionMock = $this->getMock('Magento\Framework\Mview\Action', ['execute'], [], '', false);
+        $actionMock = $this->createMock(\Magento\Framework\Mview\ActionInterface::class);
         $actionMock->expects($this->once())->method('execute')->with($listId)->will($this->returnSelf());
         $this->actionFactoryMock->expects(
             $this->once()
@@ -368,6 +333,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
+
         $this->stateMock->expects($this->any())
             ->method('getViewId')
             ->will($this->returnValue(1));
@@ -376,9 +342,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($lastVersionId));
         $this->stateMock->expects($this->never())
             ->method('setVersionId');
-        $this->stateMock->expects($this->once())
+        $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
+            ->willReturn(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED);
         $this->stateMock->expects($this->exactly(2))
             ->method('getStatus')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::STATUS_IDLE));
@@ -407,7 +373,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($listId)
         );
 
-        $actionMock = $this->getMock('Magento\Framework\Mview\Action', ['execute'], [], '', false);
+        $actionMock = $this->createPartialMock(\Magento\Framework\Mview\ActionInterface::class, ['execute']);
         $actionMock->expects($this->once())->method('execute')->with($listId)->will(
             $this->returnCallback(
                 function () {
@@ -508,6 +474,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->model->resume();
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderResumeNotSuspended()
     {
         return [
@@ -564,6 +533,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->model->isEnabled());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsEnabled()
     {
         return [
@@ -585,6 +557,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->model->isIdle());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsIdle()
     {
         return [
@@ -607,6 +582,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->model->isWorking());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsWorking()
     {
         return [
@@ -629,6 +607,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->model->isSuspended());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsSuspended()
     {
         return [
@@ -661,6 +642,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->model->load($viewId);
     }
 
+    /**
+     * @return array
+     */
     protected function getViewData()
     {
         return [

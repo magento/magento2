@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -40,6 +40,15 @@
         </type>
         <type id="MD" order="100">
             <label>Maestro Domestic</label>
+        </type>
+        <type id="HC" order="110">
+            <label>Hipercard</label>
+        </type>
+        <type id="ELO" order="120">
+            <label>Elo</label>
+        </type>
+        <type id="AU" order="130">
+            <label>Aura</label>
         </type>
     </credit_cards>
 </payment>

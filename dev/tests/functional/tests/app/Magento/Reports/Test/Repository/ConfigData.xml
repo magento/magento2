@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -25,6 +25,27 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="number">12</item>
+            </field>
+        </dataset>
+
+        <dataset name="website_with_custom_timezone">
+            <field name="general/locale/timezone" xsi:type="array">
+                <item name="label" xsi:type="string">Timezone</item>
+                <item name="value" xsi:type="string">Australia/Sydney</item>
+            </field>
+            <field name="scope" xsi:type="array">
+                <item name="scope_type" xsi:type="string">store</item>
+                <item name="set_level" xsi:type="string">website</item>
+                <item name="dataset" xsi:type="string">custom_store</item>
+            </field>
+        </dataset>
+
+        <dataset name="notify_stock_quantity_2">
+            <field name="cataloginventory/item_options/notify_stock_qty" xsi:type="array">
+                <item name="scope" xsi:type="string">catalog</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">2</item>
             </field>
         </dataset>
     </repository>

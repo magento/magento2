@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model\Report;
 
+use DateTime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
@@ -17,8 +16,6 @@ use Magento\Framework\Filesystem\DirectoryList;
  * Perform fetching reports from remote servers with following saving them to database
  * Prepare report rows for \Magento\Paypal\Model\Report\Settlement\Row model
  *
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement _getResource()
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement getResource()
  * @method string getReportDate()
  * @method \Magento\Paypal\Model\Report\Settlement setReportDate(string $value)
  * @method string getAccountId()
@@ -163,15 +160,35 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
-    * @param \Magento\Framework\Model\Context $context
-    * @param \Magento\Framework\Registry $registry
-    * @param \Magento\Framework\Filesystem $filesystem
-    * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-    * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-    * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-    * @param array $data
-    */
+     * Columns with DateTime data type
+     *
+     * @var array
+     */
+    private $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
+
+    /**
+     * Columns with amount type
+     *
+     * @var array
+     */
+    private $amountColumns = ['gross_transaction_amount', 'fee_amount'];
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -180,12 +197,15 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $this->_storeManager = $storeManager;
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -195,7 +215,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\ResourceModel\Report\Settlement');
+        $this->_init(\Magento\Paypal\Model\ResourceModel\Report\Settlement::class);
     }
 
     /**
@@ -217,6 +237,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Goes to specified host/path and fetches reports from there.
+     *
      * Save reports to database.
      *
      * @param \Magento\Framework\Filesystem\Io\Sftp $connection
@@ -249,7 +270,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
                 // Set last modified date, this value will be overwritten during parsing
                 if (isset($attributes['mtime'])) {
-                    $lastModified = new \DateTime($attributes['mtime']);
+                    $date = new \DateTime();
+                    $lastModified = $date->setTimestamp($attributes['mtime']);
                     $this->setReportLastModified(
                         $lastModified->format('Y-m-d H:i:s')
                     );
@@ -288,15 +310,10 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      */
     public static function createConnection(array $config)
     {
-        if (!isset(
-            $config['hostname']
-        ) || !isset(
-            $config['username']
-        ) || !isset(
-            $config['password']
-        ) || !isset(
-            $config['path']
-        )
+        if (!isset($config['hostname'])
+            || !isset($config['username'])
+            || !isset($config['password'])
+            || !isset($config['path'])
         ) {
             throw new \InvalidArgumentException('Required config elements: hostname, username, password, path');
         }
@@ -324,7 +341,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         $rowMap = $this->_csvColumns[$format]['rowmap'];
 
         $flippedSectionColumns = array_flip($sectionColumns);
-        $stream = $this->_tmpDirectory->openFile($localCsv);
+        $stream = $this->_tmpDirectory->openFile($localCsv, 'r');
         while ($line = $stream->readCsv()) {
             if (empty($line)) {
                 // The line was empty, so skip it.
@@ -353,18 +370,15 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                     // Section columns.
                     // In case ever the column order is changed, we will have the items recorded properly
                     // anyway. We have named, not numbered columns.
-                    for ($i = 1; $i < count($line); $i++) {
+                    $count = count($line);
+                    for ($i = 1; $i < $count; $i++) {
                         $sectionColumns[$line[$i]] = $i;
                     }
                     $flippedSectionColumns = array_flip($sectionColumns);
                     break;
                 case 'SB':
                     // Section body.
-                    $bodyItem = [];
-                    for ($i = 1; $i < count($line); $i++) {
-                        $bodyItem[$rowMap[$flippedSectionColumns[$i]]] = $line[$i];
-                    }
-                    $this->_rows[] = $bodyItem;
+                    $this->_rows[] = $this->getBodyItems($line, $flippedSectionColumns, $rowMap);
                     break;
                 case 'SC':
                     // Section records count.
@@ -386,7 +400,58 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Load report by unique key (accoutn + report date)
+     * Parse columns from line of csv file
+     *
+     * @param array $line
+     * @param array $sectionColumns
+     * @param array $rowMap
+     * @return array
+     */
+    private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
+    {
+        $bodyItem = [];
+        for ($i = 1, $count = count($line); $i < $count; $i++) {
+            if (isset($rowMap[$sectionColumns[$i]])) {
+                if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
+                    $line[$i] = $this->formatDateTimeColumns($line[$i]);
+                }
+                if (in_array($rowMap[$sectionColumns[$i]], $this->amountColumns)) {
+                    $line[$i] = $this->formatAmountColumn($line[$i]);
+                }
+                $bodyItem[$rowMap[$sectionColumns[$i]]] = $line[$i];
+            }
+        }
+        return $bodyItem;
+    }
+
+    /**
+     * Format date columns in UTC
+     *
+     * @param string $lineItem
+     * @return string
+     */
+    private function formatDateTimeColumns($lineItem)
+    {
+        /** @var DateTime $date */
+        $date = new DateTime($lineItem, new \DateTimeZone('UTC'));
+        return $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+    }
+
+    /**
+     * Format amount columns
+     *
+     * PayPal api returns amounts in cents, hence the values need to be divided by 100
+     *
+     * @param string $lineItem
+     * @return float
+     */
+    private function formatAmountColumn($lineItem)
+    {
+        return (int)$lineItem / 100;
+    }
+
+    /**
+     * Load report by unique key (account + report date)
      *
      * @return $this
      */
@@ -453,6 +518,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Iterate through website configurations and collect all SFTP configurations
+     *
      * Filter config values if necessary
      *
      * @param bool $automaticMode Whether to skip settings with disabled Automatic Fetching or not
@@ -511,10 +577,10 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                 $cfg['path'] = self::REPORTS_PATH;
             }
             // avoid duplicates
-            if (in_array(serialize($cfg), $uniques)) {
+            if (in_array($this->serializer->serialize($cfg), $uniques)) {
                 continue;
             }
-            $uniques[] = serialize($cfg);
+            $uniques[] = $this->serializer->serialize($cfg);
             $configs[] = $cfg;
         }
         return $configs;

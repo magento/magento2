@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Theme\Grid;
 
 /**
  * Theme grid collection
+ * @deprecated
+ * @see \Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult
  */
 class Collection extends \Magento\Theme\Model\ResourceModel\Theme\Collection
 {
     /**
      * Add area filter
      *
-     * @return \Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @return $this
      */
     protected function _initSelect()
     {

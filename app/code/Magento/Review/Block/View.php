@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block;
@@ -8,7 +8,9 @@ namespace Magento\Review\Block;
 /**
  * Review detailed view block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -17,7 +19,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @var string
      */
-    protected $_template = 'view.phtml';
+    protected $_template = 'Magento_Review::view.phtml';
 
     /**
      * Rating option model
@@ -117,6 +119,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve rating summary for current product
      *
+     * @deprecated
      * @return string
      */
     public function getRatingSummary()
@@ -157,24 +160,5 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     public function dateFormat($date)
     {
         return $this->formatDate($date, \IntlDateFormatter::LONG);
-    }
-
-    /**
-     * Get product reviews summary
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param bool $templateType
-     * @param bool $displayIfNoReviews
-     * @return string
-     */
-    public function getReviewsSummaryHtml(
-        \Magento\Catalog\Model\Product $product,
-        $templateType = false,
-        $displayIfNoReviews = false
-    ) {
-        if (!$product->getRatingSummary()) {
-            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
-        }
-        return parent::getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
     }
 }

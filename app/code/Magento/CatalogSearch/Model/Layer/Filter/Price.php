@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
@@ -11,6 +13,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
  * Layer price filter based on Search API
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Price extends AbstractFilter
 {
@@ -86,6 +89,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get resource model.
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     public function getResource()
@@ -136,7 +141,7 @@ class Price extends AbstractFilter
         list($from, $to) = $filter;
 
         $this->getLayer()->getProductCollection()->addFieldToFilter(
-            'price',
+            $this->getAttributeModel()->getAttributeCode(),
             ['from' => $from, 'to' =>  empty($to) || $from == $to ? $to : $to - self::PRICE_DELTA]
         );
 
@@ -175,6 +180,9 @@ class Price extends AbstractFilter
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
+        $fromPrice = empty($fromPrice) ? 0 : $fromPrice * $this->getCurrencyRate();
+        $toPrice = empty($toPrice) ? $toPrice : $toPrice * $this->getCurrencyRate();
+
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
         if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
@@ -220,6 +228,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get 'to' part of the filter.
+     *
      * @param float $from
      * @return float
      */
@@ -234,6 +244,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get 'from' part of the filter.
+     *
      * @param float $from
      * @return float
      */
@@ -248,6 +260,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Prepare filter data.
+     *
      * @param string $key
      * @param int $count
      * @return array
@@ -261,10 +275,7 @@ class Price extends AbstractFilter
         if ($to == '*') {
             $to = $this->getTo($to);
         }
-        $label = $this->_renderRangeLabel(
-            empty($from) ? 0 : $from * $this->getCurrencyRate(),
-            empty($to) ? $to : $to * $this->getCurrencyRate()
-        );
+        $label = $this->_renderRangeLabel($from, $to);
         $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
 
         $data = [

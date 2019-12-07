@@ -2,16 +2,20 @@
 /**
  * Object manager configuration schema locator
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config;
 
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     */
     protected $urnResolver;
 
+    /**
+     */
     public function __construct()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();

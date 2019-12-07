@@ -2,17 +2,21 @@
 /**
  * Web API REST response.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Rest;
 
 class Response extends \Magento\Framework\Webapi\Response
 {
-    /** @var \Magento\Framework\Webapi\ErrorProcessor */
+    /**
+     * @var \Magento\Framework\Webapi\ErrorProcessor
+     */
     protected $_errorProcessor;
 
-    /** @var \Magento\Framework\Webapi\Rest\Response\RendererInterface */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Response\RendererInterface
+     */
     protected $_renderer;
 
     /**

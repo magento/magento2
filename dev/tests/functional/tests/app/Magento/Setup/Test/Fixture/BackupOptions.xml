@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="backupOptions"
+             module="Magento_Setup"
+             type="virtual"
+             entity_type="backup_options"
+             class="Magento\Setup\Test\Fixture\BackupOptions"
+             repository_class="Magento\Setup\Test\Repository\BackupOptions">
+        <field name="optionsCode" />
+        <field name="optionsMedia" />
+        <field name="optionsDb" />
+    </fixture>
+</config>

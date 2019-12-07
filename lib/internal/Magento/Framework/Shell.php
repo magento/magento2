@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework;
 
 use Magento\Framework\Shell\CommandRendererInterface;
@@ -15,7 +16,7 @@ class Shell implements ShellInterface
     /**
      * Logger instance
      *
-     * @var \Zend_Log
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -26,11 +27,11 @@ class Shell implements ShellInterface
 
     /**
      * @param CommandRendererInterface $commandRenderer
-     * @param \Zend_Log $logger Logger instance to be used to log commands and their output
+     * @param \Psr\Log\LoggerInterface $logger Logger instance to be used to log commands and their output
      */
     public function __construct(
         CommandRendererInterface $commandRenderer,
-        \Zend_Log $logger = null
+        \Psr\Log\LoggerInterface $logger = null
     ) {
         $this->logger = $logger;
         $this->commandRenderer = $commandRenderer;
@@ -51,12 +52,13 @@ class Shell implements ShellInterface
 
         $disabled = explode(',', str_replace(' ', ',', ini_get('disable_functions')));
         if (in_array('exec', $disabled)) {
-            throw new Exception\LocalizedException(new \Magento\Framework\Phrase("exec function is disabled."));
+            throw new Exception\LocalizedException(new \Magento\Framework\Phrase('The exec function is disabled.'));
         }
 
         exec($command, $output, $exitCode);
         $output = implode(PHP_EOL, $output);
         $this->log($output);
+
         if ($exitCode) {
             $commandError = new \Exception($output, $exitCode);
             throw new Exception\LocalizedException(
@@ -76,7 +78,7 @@ class Shell implements ShellInterface
     protected function log($message)
     {
         if ($this->logger) {
-            $this->logger->log($message, \Zend_Log::INFO);
+            $this->logger->info($message);
         }
     }
 }

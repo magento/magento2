@@ -1,11 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\Locks;
 
-class GridTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+use Magento\TestFramework\TestCase\AbstractBackendController;
+
+/**
+ * Testing the list of locked users.
+ *
+ * @magentoAppArea adminhtml
+ */
+class GridTest extends AbstractBackendController
 {
     /**
      * Test index action
@@ -24,11 +31,11 @@ class GridTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertContains('data-column="failures_num"', $body);
         $this->assertContains('data-column="lock_expires"', $body);
         $this->assertRegExp(
-            '/<td data-column\="username"\s*class\="\s*col-name\s*col-username\s*"\s*>\s*adminUser1\s*<\/td>/',
+            '/<td data-column\="username"\s*class\="[^"]*col-name[^"]*col-username[^"]*"\s*>\s*adminUser1\s*<\/td>/',
             $body
         );
         $this->assertRegExp(
-            '/<td data-column\="username"\s*class\="\s*col-name\s*col-username\s*"\s*>\s*adminUser2\s*<\/td>/',
+            '/<td data-column\="username"\s*class\="[^"]*col-name[^"]*col-username[^"]*"\s*>\s*adminUser2\s*<\/td>/',
             $body
         );
     }

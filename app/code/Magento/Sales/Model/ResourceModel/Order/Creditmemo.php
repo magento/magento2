@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
@@ -48,6 +48,10 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
         if (!$object->getOrderId() && $object->getOrder()) {
             $object->setOrderId($object->getOrder()->getId());
             $object->setBillingAddressId($object->getOrder()->getBillingAddress()->getId());
+        }
+
+        if (!$object->getInvoiceId() && $object->getInvoice()) {
+            $object->setInvoiceId($object->getInvoice()->getId());
         }
 
         return parent::_beforeSave($object);

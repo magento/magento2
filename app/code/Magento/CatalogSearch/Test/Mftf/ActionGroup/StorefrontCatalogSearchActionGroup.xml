@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Quick search the phrase and check if the result page contains correct information -->
+    <actionGroup name="StorefrontCheckQuickSearchActionGroup">
+        <annotations>
+            <description>Submits Form POST for the Storefront Search feature. Validates that the URL is correct. Validates that the Title is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="phrase"/>
+        </arguments>
+
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{phrase}}]" stepKey="fillQuickSearch"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
+        <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
+        <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
+        <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
+    </actionGroup>
+
+    <!-- Quick search the phrase and check if the result page contains correct information, usable with type="string" -->
+    <actionGroup name="StorefrontCheckQuickSearchStringActionGroup">
+        <annotations>
+            <description>Fill the Storefront Search field. Submits the Form. Validates that the provided Search Phrase is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="phrase" type="string"/>
+        </arguments>
+
+        <fillField stepKey="fillInput" selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{phrase}}"/>
+        <submitForm selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" parameterArray="[]" stepKey="submitQuickSearch"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
+        <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
+        <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
+        <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchTooShortStringActionGroup" extends="StorefrontCheckQuickSearchStringActionGroup">
+        <annotations>
+            <description>Fill the Storefront Search field. Submits the Form. Validates that 'Minimum Search query length' warning appears.</description>
+        </annotations>
+        <arguments>
+            <argument name="minQueryLength" type="string"/>
+        </arguments>
+
+        <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="Minimum Search query length is {{minQueryLength}}" stepKey="assertQuickSearchNeedThreeOrMoreChars"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchRelatedSearchTermsAppearsActionGroup">
+        <arguments>
+            <argument name="term" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontCatalogSearchMainSection.relatedSearchTermsTitle}}" stepKey="waitMessageAppears"/>
+        <see selector="{{StorefrontCatalogSearchMainSection.relatedSearchTermsTitle}}" userInput="Related search terms" stepKey="checkRelatedTermsTitle"/>
+        <see selector="{{StorefrontCatalogSearchMainSection.relatedSearchTerm}}" userInput="{{term}}" stepKey="checkRelatedTermExists"/>
+    </actionGroup>
+
+    <!-- Opens product from QuickSearch and performs assertions-->
+    <actionGroup name="StorefrontOpenProductFromQuickSearch">
+        <annotations>
+            <description>Clicks on the provided Product Name from the Storefront Quick Search Results page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productUrlKey" type="string"/>
+        </arguments>
+
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" stepKey="scrollToProduct"/>
+        <click stepKey="openProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
+        <waitForPageLoad stepKey="waitForProductLoad"/>
+        <seeInCurrentUrl url="{{productUrlKey}}" stepKey="checkUrl"/>
+        <see stepKey="checkName" selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{productName}}"/>
+    </actionGroup>
+
+    <!-- Adds product from Quick Search page and perform assertions-->
+    <actionGroup name="StorefrontAddToCartFromQuickSearch">
+        <annotations>
+            <description>Adds the provided Product Name to the Shopping Cart from the Storefront Quick Search Results page. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" stepKey="scrollToProduct"/>
+        <moveMouseOver stepKey="hoverOverProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}} {{StorefrontQuickSearchResultsSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchCheckProductNameInGrid">
+        <annotations>
+            <description>Validates that the provided Product Name appears at the correct index on the Storefront Quick Search page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="index" type="string"/>
+        </arguments>
+
+        <see selector="{{StorefrontQuickSearchResultsSection.productByIndex(index)}}" userInput="{{productName}}" stepKey="seeProductName"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchSeeProductByName">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <see selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" userInput="{{productName}}" stepKey="seeProductName"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchCheckProductNameNotInGrid">
+        <annotations>
+            <description>Validates that the provided Product Name does NOT appear on the Storefront Quick Search page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+
+        <dontSee selector="{{StorefrontQuickSearchResultsSection.allResults}}" userInput="{{productName}}" stepKey="dontSeeProductName"/>
+    </actionGroup>
+
+    <!-- Open advanced search page -->
+    <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">
+        <annotations>
+            <description>Clicks on 'Advanced Search' in the Storefront Footer. Validates that the URL and Title are present and correct.</description>
+        </annotations>
+
+        <click selector="{{StorefrontFooterSection.AdvancedSearch}}" stepKey="clickAdvancedSearchLink"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="checkUrl"/>
+        <seeInTitle userInput="Advanced Search" stepKey="assertAdvancedSearchTitle1"/>
+        <see userInput="Advanced Search" selector="{{StorefrontCatalogSearchAdvancedFormSection.SearchTitle}}" stepKey="assertAdvancedSearchTitle2"/>
+    </actionGroup>
+
+    <!-- Check that Advanced Search result page contains correct information -->
+    <actionGroup name="StorefrontCheckAdvancedSearchResultActionGroup">
+        <annotations>
+            <description>Validates that the URL and Title are present and correct on the Storefront Advanced Search Results page.</description>
+        </annotations>
+
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchAdvancedResultPage.url}}" stepKey="checkUrl"/>
+        <seeInTitle userInput="Advanced Search Results" stepKey="assertAdvancedSearchTitle"/>
+        <see userInput="Catalog Advanced Search" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertAdvancedSearchName"/>
+    </actionGroup>
+
+    <!-- Select the category in the filter -->
+    <actionGroup name="StorefrontSelectSearchFilterCategoryActionGroup">
+        <annotations>
+            <description>Clicks on Category Filter. Clicks on the provided Category.</description>
+        </annotations>
+        <arguments>
+            <argument name="category"/>
+        </arguments>
+
+        <click selector="{{StorefrontCategoryFilterSection.CategoryFilter}}" stepKey="clickCategoryFilterTitle"/>
+        <scrollTo selector="{{StorefrontCategoryFilterSection.CategoryByName(category.name)}}" stepKey="scrollToClickCategoryFilter"/>
+        <click selector="{{StorefrontCategoryFilterSection.CategoryByName(category.name)}}" stepKey="clickCategoryFilter"/>
+    </actionGroup>
+
+    <!-- Go to store's advanced catalog search page -->
+    <actionGroup name="GoToStoreViewAdvancedCatalogSearchActionGroup">
+        <annotations>
+            <description>Goes to the Storefront 'Advanced Search' page.</description>
+        </annotations>
+
+        <amOnPage url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <waitForPageLoad time="90" stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Storefront advanced catalog search by product name -->
+    <actionGroup name="StorefrontAdvancedCatalogSearchByProductNameActionGroup">
+        <annotations>
+            <description>Fills the Product Name field on the Storefront 'Advanced Search' page. Clicks on the Submit button.</description>
+        </annotations>
+        <arguments>
+            <argument name="name" type="string"/>
+        </arguments>
+
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ProductName}}" userInput="{{name}}" stepKey="fill"/>
+        <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Storefront advanced catalog search by product sku -->
+    <actionGroup name="StorefrontAdvancedCatalogSearchByProductSkuActionGroup">
+        <annotations>
+            <description>Fills the Product SKU field on the Storefront 'Advanced Search' page. Clicks on the Submit button.</description>
+        </annotations>
+        <arguments>
+            <argument name="sku" type="string"/>
+        </arguments>
+
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.SKU}}" userInput="{{sku}}" stepKey="fill"/>
+        <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Storefront advanced catalog search by product description -->
+    <actionGroup name="StorefrontAdvancedCatalogSearchByDescriptionActionGroup">
+        <annotations>
+            <description>Fills the Product Description field on the Storefront 'Advanced Search' page. Clicks on the Submit button.</description>
+        </annotations>
+        <arguments>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.Description}}" userInput="{{description}}" stepKey="fill"/>
+        <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Storefront advanced catalog search by product short description -->
+    <actionGroup name="StorefrontAdvancedCatalogSearchByShortDescriptionActionGroup">
+        <annotations>
+            <description>Fills the Product Short Description field on the Storefront 'Advanced Search' page. Clicks on the Submit button.</description>
+        </annotations>
+        <arguments>
+            <argument name="shortDescription" type="string"/>
+        </arguments>
+
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ShortDescription}}" userInput="{{shortDescription}}" stepKey="fill"/>
+        <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Storefront advanced catalog search by product name and price -->
+    <actionGroup name="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup">
+        <annotations>
+            <description>Fills the Product Name, Price From and Price To fields on the Storefront 'Advanced Search' page. Clicks on the Submit button.</description>
+        </annotations>
+        <arguments>
+            <argument name="name" type="string"/>
+            <argument name="priceFrom" type="string"/>
+            <argument name="priceTo" type="string"/>
+        </arguments>
+
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ProductName}}" userInput="{{name}}" stepKey="fillName"/>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceFrom}}" userInput="{{priceFrom}}" stepKey="fillPriceFrom"/>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceTo}}" userInput="{{priceTo}}" stepKey="fillPriceTo"/>
+        <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Storefront advanced catalog search by product name and description -->
+    <actionGroup name="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup">
+        <annotations>
+            <description>Fills the Product Name and Description fields on the Storefront 'Advanced Search' page. Clicks on the Submit button.</description>
+        </annotations>
+        <arguments>
+            <argument name="name" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ProductName}}" userInput="{{name}}" stepKey="fillName"/>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.Description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Asserts that search results do not contain any results-->
+    <actionGroup name="StorefrontCheckSearchIsEmpty">
+        <annotations>
+            <description>Validates that the 'No Results' message is present and correct on the Storefront Search Results page. PLEASE NOTE: The expected message is Hardcoded.</description>
+        </annotations>
+
+        <see stepKey="checkEmpty" selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="Your search returned no results"/>
+    </actionGroup>
+</actionGroups>

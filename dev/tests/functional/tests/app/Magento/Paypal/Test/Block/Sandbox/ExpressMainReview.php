@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,13 +21,6 @@ class ExpressMainReview extends Block
     protected $expressReview = '#memberReview';
 
     /**
-     * Old Express Review Block selector.
-     *
-     * @var string
-     */
-    protected $expressOldReview = '#stdpage';
-
-    /**
      * Determines whether new review block or old is shown.
      *
      * @return \Magento\Paypal\Test\Block\Sandbox\ExpressReview|\Magento\Paypal\Test\Block\Sandbox\ExpressOldReview
@@ -36,13 +29,13 @@ class ExpressMainReview extends Block
     {
         if ($this->_rootElement->find($this->expressReview)->isVisible()) {
             return $this->blockFactory->create(
-                'Magento\Paypal\Test\Block\Sandbox\ExpressReview',
-                ['element' => $this->_rootElement->find($this->expressReview)]
+                \Magento\Paypal\Test\Block\Sandbox\ExpressReview::class,
+                ['element' => $this->_rootElement]
             );
         }
         return $this->blockFactory->create(
-            'Magento\Paypal\Test\Block\Sandbox\ExpressOldReview',
-            ['element' => $this->_rootElement->find($this->expressOldReview)]
+            \Magento\Paypal\Test\Block\Sandbox\ExpressOldReview::class,
+            ['element' => $this->_rootElement]
         );
     }
 }

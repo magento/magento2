@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order\Grid\Massaction;
 
-class ItemsUpdaterTest extends \PHPUnit_Framework_TestCase
+class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater
@@ -18,9 +18,9 @@ class ItemsUpdaterTest extends \PHPUnit_Framework_TestCase
      */
     protected $authorizationMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->authorizationMock = $this->getMock('Magento\Framework\Authorization', [], [], '', false);
+        $this->authorizationMock = $this->createMock(\Magento\Framework\Authorization::class);
         $this->itemUpdater = new \Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater(
             $this->authorizationMock
         );

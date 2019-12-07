@@ -1,17 +1,50 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Adminhtml sales order item renderer
+ *
+ * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
+    /**
+     * Serializer
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
+     * @param \Magento\Framework\Registry $registry
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
+        \Magento\Framework\Registry $registry,
+        array $data = [],
+        Json $serializer = null
+    ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Json::class);
+
+        parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
+    }
+
     /**
      * Truncate string
      *
@@ -62,12 +95,13 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
 
         if (isset($itemsArray[$item->getOrderItem()->getId()])) {
             return $itemsArray[$item->getOrderItem()->getId()];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
+     * Check if item can be shipped separately
+     *
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -104,6 +138,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Check if child items calculated
+     *
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -142,6 +178,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Retrieve selection attributes values
+     *
      * @param mixed $item
      * @return mixed|null
      */
@@ -153,12 +191,14 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
             $options = $item->getOrderItem()->getProductOptions();
         }
         if (isset($options['bundle_selection_attributes'])) {
-            return unserialize($options['bundle_selection_attributes']);
+            return $this->serializer->unserialize($options['bundle_selection_attributes']);
         }
         return null;
     }
 
     /**
+     * Retrieve order item options array
+     *
      * @return array
      */
     public function getOrderOptions()
@@ -180,18 +220,21 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Retrieve order item
+     *
      * @return mixed
      */
     public function getOrderItem()
     {
         if ($this->getItem() instanceof \Magento\Sales\Model\Order\Item) {
             return $this->getItem();
-        } else {
-            return $this->getItem()->getOrderItem();
         }
+        return $this->getItem()->getOrderItem();
     }
 
     /**
+     * Get html info for item
+     *
      * @param mixed $item
      * @return string
      */
@@ -214,6 +257,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Check if we can show price info for this item
+     *
      * @param object $item
      * @return bool
      */

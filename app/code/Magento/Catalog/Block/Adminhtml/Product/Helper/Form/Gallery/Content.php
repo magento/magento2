@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,15 +13,23 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
+/**
+ * Block for gallery content.
+ */
 class Content extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/helper/gallery.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/helper/gallery.phtml';
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
@@ -34,28 +42,57 @@ class Content extends \Magento\Backend\Block\Widget
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    private $imageHelper;
+
+    /**
+     * @var ImageUploadConfigDataProvider
+     */
+    private $imageUploadConfigDataProvider;
+
+    /**
+     * @var Database
+     */
+    private $fileStorageDatabase;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $data
+     * @param ImageUploadConfigDataProvider $imageUploadConfigDataProvider
+     * @param Database $fileStorageDatabase
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        array $data = []
+        array $data = [],
+        ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null,
+        Database $fileStorageDatabase = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
         parent::__construct($context, $data);
+        $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider
+            ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);
+        $this->fileStorageDatabase = $fileStorageDatabase
+            ?: ObjectManager::getInstance()->get(Database::class);
     }
 
     /**
+     * Prepare layout.
+     *
      * @return AbstractBlock
      */
     protected function _prepareLayout()
     {
-        $this->addChild('uploader', 'Magento\Backend\Block\Media\Uploader');
+        $this->addChild(
+            'uploader',
+            \Magento\Backend\Block\Media\Uploader::class,
+            ['image_upload_config_data' => $this->imageUploadConfigDataProvider]
+        );
 
         $this->getUploader()->getConfig()->setUrl(
             $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')
@@ -96,6 +133,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns js object name
+     *
      * @return string
      */
     public function getJsObjectName()
@@ -104,6 +143,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns buttons for add image action.
+     *
      * @return string
      */
     public function getAddImagesButton()
@@ -117,23 +158,65 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns image json
+     *
      * @return string
      */
     public function getImagesJson()
     {
-        if (is_array($this->getElement()->getValue())) {
-            $value = $this->getElement()->getValue();
-            if (is_array($value['images']) && count($value['images']) > 0) {
-                foreach ($value['images'] as &$image) {
-                    $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+        $value = $this->getElement()->getImages();
+        if (is_array($value) &&
+            array_key_exists('images', $value) &&
+            is_array($value['images']) &&
+            count($value['images'])
+        ) {
+            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $images = $this->sortImagesByPosition($value['images']);
+            foreach ($images as &$image) {
+                $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+                if ($this->fileStorageDatabase->checkDbUsage() &&
+                    !$mediaDir->isFile($this->_mediaConfig->getMediaPath($image['file']))
+                ) {
+                    $this->fileStorageDatabase->saveFileToFilesystem(
+                        $this->_mediaConfig->getMediaPath($image['file'])
+                    );
                 }
-                return $this->_jsonEncoder->encode($value['images']);
+                try {
+                    $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
+                    $image['size'] = $fileHandler['size'];
+                } catch (FileSystemException $e) {
+                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('small_image');
+                    $image['size'] = 0;
+                    $this->_logger->warning($e);
+                }
             }
+            return $this->_jsonEncoder->encode($images);
         }
         return '[]';
     }
 
     /**
+     * Sort images array by position key
+     *
+     * @param array $images
+     * @return array
+     */
+    private function sortImagesByPosition($images)
+    {
+        if (is_array($images)) {
+            usort(
+                $images,
+                function ($imageA, $imageB) {
+                    return ($imageA['position'] < $imageB['position']) ? -1 : 1;
+                }
+            );
+        }
+        return $images;
+    }
+
+    /**
+     * Returns image values json
+     *
      * @return string
      */
     public function getImagesValuesJson()
@@ -158,9 +241,11 @@ class Content extends \Magento\Backend\Block\Widget
         $imageTypes = [];
         foreach ($this->getMediaAttributes() as $attribute) {
             /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            $value = $this->getElement()->getDataObject()->getData($attribute->getAttributeCode())
+                ?: $this->getElement()->getImageValue($attribute->getAttributeCode());
             $imageTypes[$attribute->getAttributeCode()] = [
                 'code' => $attribute->getAttributeCode(),
-                'value' => $this->getElement()->getDataObject()->getData($attribute->getAttributeCode()),
+                'value' => $value,
                 'label' => $attribute->getFrontend()->getLabel(),
                 'scope' => __($this->getElement()->getScopeLabel($attribute)),
                 'name' => $this->getElement()->getAttributeFieldName($attribute),
@@ -170,6 +255,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve default state allowance
+     *
      * @return bool
      */
     public function hasUseDefault()
@@ -184,7 +271,7 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Enter description here...
+     * Retrieve media attributes
      *
      * @return array
      */
@@ -194,10 +281,27 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve JSON data
+     *
      * @return string
      */
     public function getImageTypesJson()
     {
         return $this->_jsonEncoder->encode($this->getImageTypes());
+    }
+
+    /**
+     * Returns image helper object.
+     *
+     * @return \Magento\Catalog\Helper\Image
+     * @deprecated 101.0.3
+     */
+    private function getImageHelper()
+    {
+        if ($this->imageHelper === null) {
+            $this->imageHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Helper\Image::class);
+        }
+        return $this->imageHelper;
     }
 }

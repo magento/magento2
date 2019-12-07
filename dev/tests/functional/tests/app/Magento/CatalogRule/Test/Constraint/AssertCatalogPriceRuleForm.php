@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,13 +42,13 @@ class AssertCatalogPriceRuleForm extends AbstractConstraint
         $fixtureData = $catalogPriceRule->getData();
         //convert discount_amount to float to compare
         if (isset($formData['discount_amount'])) {
-            $formData['discount_amount'] = floatval($formData['discount_amount']);
+            $formData['discount_amount'] = (float)$formData['discount_amount'];
         }
         if (isset($fixtureData['discount_amount'])) {
-            $fixtureData['discount_amount'] = floatval($fixtureData['discount_amount']);
+            $fixtureData['discount_amount'] = (float)$fixtureData['discount_amount'];
         }
         $diff = $this->verifyData($formData, $fixtureData);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             empty($diff),
             implode(' ', $diff)
         );

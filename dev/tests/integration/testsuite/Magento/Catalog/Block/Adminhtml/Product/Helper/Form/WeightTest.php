@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-class WeightTest extends \PHPUnit_Framework_TestCase
+class WeightTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -20,7 +20,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_formFactory = $this->_objectManager->create('Magento\Framework\Data\FormFactory');
+        $this->_formFactory = $this->_objectManager->create(\Magento\Framework\Data\FormFactory::class);
     }
 
     /**
@@ -30,10 +30,10 @@ class WeightTest extends \PHPUnit_Framework_TestCase
     public function testProductWithoutWeight($type)
     {
         /** @var $currentProduct \Magento\Catalog\Model\Product */
-        $currentProduct = $this->_objectManager->create('Magento\Catalog\Model\Product');
+        $currentProduct = $this->_objectManager->create(\Magento\Catalog\Model\Product::class);
         $currentProduct->setTypeInstance($this->_objectManager->create($type));
         /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight */
-        $block = $this->_objectManager->create('Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight');
+        $block = $this->_objectManager->create(\Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::class);
         $form = $this->_formFactory->create();
         $form->setDataObject($currentProduct);
         $block->setForm($form);
@@ -51,8 +51,8 @@ class WeightTest extends \PHPUnit_Framework_TestCase
     public static function virtualTypesDataProvider()
     {
         return [
-            ['Magento\Catalog\Model\Product\Type\Virtual'],
-            ['Magento\Downloadable\Model\Product\Type']
+            [\Magento\Catalog\Model\Product\Type\Virtual::class],
+            [\Magento\Downloadable\Model\Product\Type::class]
         ];
     }
 
@@ -63,11 +63,11 @@ class WeightTest extends \PHPUnit_Framework_TestCase
     public function testProductHasWeight($type)
     {
         /** @var $currentProduct \Magento\Catalog\Model\Product */
-        $currentProduct = $this->_objectManager->create('Magento\Catalog\Model\Product');
+        $currentProduct = $this->_objectManager->create(\Magento\Catalog\Model\Product::class);
         $currentProduct->setTypeInstance($this->_objectManager->create($type));
 
         /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight */
-        $block = $this->_objectManager->create('Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight');
+        $block = $this->_objectManager->create(\Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::class);
         $form = $this->_formFactory->create();
         $form->setDataObject($currentProduct);
         $block->setForm($form);
@@ -83,6 +83,6 @@ class WeightTest extends \PHPUnit_Framework_TestCase
      */
     public static function physicalTypesDataProvider()
     {
-        return [['Magento\Catalog\Model\Product\Type\Simple'], ['Magento\Bundle\Model\Product\Type']];
+        return [[\Magento\Catalog\Model\Product\Type\Simple::class], [\Magento\Bundle\Model\Product\Type::class]];
     }
 }

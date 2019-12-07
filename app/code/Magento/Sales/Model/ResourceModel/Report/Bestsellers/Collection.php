@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
 
@@ -255,8 +253,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
             $selectUnions = [];
 
             // apply date boundaries (before calling $this->_applyDateRangeFilter())
-            $periodFrom = !is_null($this->_from) ? new \DateTime($this->_from) : null;
-            $periodTo = !is_null($this->_to) ? new \DateTime($this->_to) : null;
+            $periodFrom = $this->_from !== null ? new \DateTime($this->_from) : null;
+            $periodTo = $this->_to !== null ? new \DateTime($this->_to) : null;
             if ('year' == $this->_period) {
                 if ($periodFrom) {
                     // not the first day of the year

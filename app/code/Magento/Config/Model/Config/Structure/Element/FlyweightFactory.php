@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure\Element;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class FlyweightFactory
 {
     /**
@@ -18,9 +22,9 @@ class FlyweightFactory
      * @var array
      */
     protected $_flyweightMap = [
-        'section' => 'Magento\Config\Model\Config\Structure\Element\Section',
-        'group' => 'Magento\Config\Model\Config\Structure\Element\Group',
-        'field' => 'Magento\Config\Model\Config\Structure\Element\Field',
+        'section' => \Magento\Config\Model\Config\Structure\Element\Section::class,
+        'group' => \Magento\Config\Model\Config\Structure\Element\Group::class,
+        'field' => \Magento\Config\Model\Config\Structure\Element\Field::class,
     ];
 
     /**

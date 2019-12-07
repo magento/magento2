@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,14 +10,15 @@
  */
 namespace Magento\Test\Legacy;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Utility\ChangedFiles;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
+class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**@#+
      * Lists of obsolete entities from fixtures
@@ -108,7 +109,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     public function testPhpFiles()
     {
         $invoker = new AggregateInvoker($this);
-        $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*');
+        $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/../_files/changed_files*');
         $blacklistFiles = $this->getBlacklistFiles();
         foreach ($blacklistFiles as $blacklistFile) {
             unset($changedFiles[$blacklistFile]);
@@ -183,6 +184,14 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             function ($file) {
                 $content = file_get_contents($file);
                 $this->_testObsoletePropertySkipCalculate($content);
+                if (strpos($file, 'requirejs-config.js') === false
+                    && (
+                        strpos($file, '/view/frontend/web/') !== false
+                        || strpos($file, '/view/base/web/') !== false
+                    )
+                ) {
+                    $this->_testJqueryUiLibraryIsNotUsedInJs($content);
+                }
             },
             Files::init()->getJsFiles()
         );
@@ -195,10 +204,11 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testObsoleteClasses($content)
     {
+        /* avoid collision between obsolete class name and valid namespace and package tag */
+        $content = preg_replace('/namespace[^;]+;/', '', $content);
+        $content = preg_replace('/\@package\s[a-zA-Z0-9\\\_]+/', '', $content);
         foreach (self::$_classes as $row) {
             list($class, , $replacement) = $row;
-            /* avoid collision between obsolete class name and valid namespace */
-            $content = preg_replace('/namespace[^;]+;/', '', $content);
             $this->_assertNotRegExp(
                 '/[^a-z\d_]' . preg_quote($class, '/') . '[^a-z\d_\\\\]/iS',
                 $content,
@@ -289,7 +299,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that obsolete pathes are not used in the content
+     * Assert that obsolete paths are not used in the content
      *
      * This method will search the content for references to class
      * that start with obsolete namespace
@@ -300,7 +310,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         foreach (self::$_paths as $row) {
             list($obsoletePath, , $replacementPath) = $row;
-            $relativePath = str_replace(Files::init()->getPathToSource(), "", $file);
+            $relativePath = str_replace(BP, '', $file);
             $message = $this->_suggestReplacement(
                 "Path '{$obsoletePath}' is obsolete.",
                 $replacementPath
@@ -324,13 +334,16 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testGetChildSpecialCase($content, $file)
     {
-        if (0 === strpos($file, Files::init()->getPathToSource() . '/app/')) {
-            $this->_assertNotRegexp(
-                '/[^a-z\d_]getChild\s*\(/iS',
-                $content,
-                'Block method getChild() is obsolete. ' .
-                'Replacement suggestion: \Magento\Framework\View\Element\AbstractBlock::getChildBlock()'
-            );
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
+            if (0 === strpos($file, $modulePath)) {
+                $this->_assertNotRegexp(
+                    '/[^a-z\d_]getChild\s*\(/iS',
+                    $content,
+                    'Block method getChild() is obsolete. ' .
+                    'Replacement suggestion: \Magento\Framework\View\Element\AbstractBlock::getChildBlock()'
+                );
+            }
         }
     }
 
@@ -496,8 +509,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         $classPathParts = explode('\\', $class);
         $classPartialPath = '';
-        for ($i = count($classPathParts) - 1; $i >= 0; $i--) {
-            if ($i === (count($classPathParts) - 1)) {
+        for ($count = count($classPathParts), $i = $count - 1; $i >= 0; $i--) {
+            if ($i === ($count - 1)) {
                 $classPartialPath = $classPathParts[$i] . $classPartialPath;
             } else {
                 $classPartialPath = $classPathParts[$i] . '\\' . $classPartialPath;
@@ -579,7 +592,6 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                             break;
                         }
                     }
-
                 }
             } else {
                 $result = 1;
@@ -699,14 +711,16 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         }
         $pathWithConstParts = explode('\\', $pathWithConst);
         $pathInUseNamespace = trim($matchClassString['classPath'], '\\');
-        $pathInUseNamespaceTruncated = trim(trim(
-            preg_replace(
-                '/' . preg_quote($pathWithConstParts[0]) . '$/',
-                '',
-                $pathInUseNamespace
-            ),
-            '\\'
-        ));
+        $pathInUseNamespaceTruncated = trim(
+            trim(
+                preg_replace(
+                    '/' . preg_quote($pathWithConstParts[0]) . '$/',
+                    '',
+                    $pathInUseNamespace
+                ),
+                '\\'
+            )
+        );
         if ($this->_checkClasspathProperDivisionNoConstantPath(
             $pathInUseNamespaceTruncated,
             $pathInUseNamespace,
@@ -916,7 +930,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
         $fileSet = glob($appPath . DIRECTORY_SEPARATOR . $pattern, GLOB_NOSORT);
         foreach ($fileSet as $file) {
-            $files[] = substr($file, $relativePathStart);
+            $files[] = ltrim(substr($file, $relativePathStart), '/');
         }
 
         return $files;
@@ -933,7 +947,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
         $ignored = [];
-        $appPath = Files::init()->getPathToSource();
+        $appPath = BP;
         foreach ($blackList as $file) {
             if ($absolutePath) {
                 $ignored = array_merge($ignored, glob($appPath . DIRECTORY_SEPARATOR . $file, GLOB_NOSORT));
@@ -942,5 +956,22 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             }
         }
         return $ignored;
+    }
+
+    /**
+     * Assert that jquery/ui library is not used in JS content.
+     *
+     * @param string $fileContent
+     */
+    private function _testJqueryUiLibraryIsNotUsedInJs($fileContent)
+    {
+        $this->_assertNotRegexp(
+            '/(["\'])jquery\/ui\1/',
+            $fileContent,
+            $this->_suggestReplacement(
+                sprintf("Dependency '%s' is redundant.", 'jquery/ui'),
+                'Use separate jquery ui widget instead of all library.'
+            )
+        );
     }
 }

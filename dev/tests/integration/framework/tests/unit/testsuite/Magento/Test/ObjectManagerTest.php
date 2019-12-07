@@ -1,98 +1,216 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Test class for \Magento\Framework\ObjectManager\Test
  */
 namespace Magento\Test;
 
-class ObjectManagerTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ResourceConnection\ConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
+use Magento\Framework\ObjectManager\FactoryInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\ObjectManager\Config;
+
+class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Expected instance manager parametrized cache after clear
-     *
-     * @var array
+     * @var array Instances that shouldn't be destroyed by clearing cache.
      */
-    protected $_instanceCache = ['hashShort' => [], 'hashLong' => []];
+    private static $persistedInstances = [
+        ResourceConnection::class,
+        \Magento\Framework\Config\Scope::class,
+        \Magento\Framework\ObjectManager\RelationsInterface::class,
+        \Magento\Framework\ObjectManager\ConfigInterface::class,
+        \Magento\Framework\Interception\DefinitionInterface::class,
+        \Magento\Framework\ObjectManager\DefinitionInterface::class,
+        \Magento\Framework\Session\Config::class,
+        \Magento\Framework\ObjectManager\Config\Mapper\Dom::class
+    ];
 
-    public function testClearCache()
+    /**
+     * @var string Instance that should be destroyed by clearing cache.
+     */
+    private static $notPersistedInstance = CacheInterface::class;
+
+    /**
+     * Tests that the scope of persisted instances doesn't clear after Object Manager cache clearing.
+     *
+     * @covers \Magento\TestFramework\ObjectManager::clearCache()
+     */
+    public function testInstancePersistingAfterClearCache()
     {
-        $resource = new \stdClass();
+        foreach (self::$persistedInstances as $className) {
+            $sharedInstances[$className] = $this->createInstanceMock($className);
+        }
 
-        $configMock = $this->getMockBuilder('Magento\TestFramework\ObjectManager\Config')
+        $config = $this->getObjectManagerConfigMock();
+        $factory = $this->getObjectManagerFactoryMock();
+
+        $objectManager = new ObjectManager($factory, $config, $sharedInstances);
+        $objectManager->clearCache();
+
+        $this->assertSame(
+            $objectManager,
+            $objectManager->get(ObjectManagerInterface::class),
+            "Object manager instance should be the same after cache clearing."
+        );
+        $this->assertSame(
+            $objectManager,
+            $objectManager->get(\Magento\Framework\App\ObjectManager::class),
+            "Object manager instance should be the same after cache clearing."
+        );
+        foreach (self::$persistedInstances as $className) {
+            $this->assertSame(
+                $sharedInstances[$className],
+                $objectManager->get($className),
+                "Instance of {$className} should be the same after cache clearing."
+            );
+        }
+    }
+
+    /**
+     * Tests that instance is destroyed after Object Manager cache clearing.
+     *
+     * @covers \Magento\TestFramework\ObjectManager::clearCache()
+     */
+    public function testInstanceDestroyingAfterClearCache()
+    {
+        $sharedInstances[self::$notPersistedInstance] = $this->createInstanceMock(self::$notPersistedInstance);
+        $config = $this->getObjectManagerConfigMock();
+        $factory = $this->getObjectManagerFactoryMock();
+
+        $objectManager = new ObjectManager($factory, $config, $sharedInstances);
+        $objectManager->clearCache();
+
+        $this->assertNull(
+            $objectManager->get(self::$notPersistedInstance),
+            'Instance of ' . self::$notPersistedInstance . ' should be destroyed after cache clearing.'
+        );
+    }
+
+    /**
+     * Tests that instance is recreated after Object Manager cache clearing.
+     *
+     * @covers \Magento\TestFramework\ObjectManager::clearCache()
+     */
+    public function testInstanceRecreatingAfterClearCache()
+    {
+        $config = $this->getObjectManagerConfigMock();
+        $factory = $this->getObjectManagerFactoryMock();
+
+        $objectManager = new ObjectManager($factory, $config);
+        $instance = $objectManager->get(DataObject::class);
+
+        $this->assertSame($instance, $objectManager->get(DataObject::class));
+        $objectManager->clearCache();
+        $this->assertNotSame(
+            $instance,
+            $objectManager->get(DataObject::class),
+            'Instance ' . DataObject::class . ' should be recreated after cache clearing.'
+        );
+    }
+
+    /**
+     * Tests that mapped table names list is empty after Object Manager cache clearing.
+     *
+     * @covers \Magento\TestFramework\ObjectManager::clearCache()
+     */
+    public function testIsEmptyMappedTableNamesAfterClearCache()
+    {
+        $config = $this->getObjectManagerConfigMock();
+        $factory = $this->getObjectManagerFactoryMock();
+
+        $objectManager = new ObjectManager($factory, $config);
+
+        $resourceConnection = $this->getResourceConnection();
+        $resourceConnection->setMappedTableName('tableName', 'mappedTableName');
+        $objectManager->addSharedInstance(
+            $resourceConnection,
+            ResourceConnection::class
+        );
+        $objectManager->clearCache();
+
+        $this->assertFalse(
+            $objectManager->get(ResourceConnection::class)->getMappedTableName('tableName'),
+            'Mapped table names list is not empty after Object Manager cache clearing.'
+        );
+    }
+
+    /**
+     * @return Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getObjectManagerConfigMock()
+    {
+        $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPreference', 'clean'])
             ->getMock();
-
-        $configMock->expects($this->atLeastOnce())
-            ->method('getPreference')
-            ->will($this->returnCallback(
+        $configMock->method('getPreference')
+            ->willReturnCallback(
                 function ($className) {
                     return $className;
                 }
-            ));
+            );
 
-        $cache = $this->getMock('Magento\Framework\App\CacheInterface');
-        $configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
-        $configCache = $this->getMock('Magento\Framework\App\ObjectManager\ConfigCache', [], [], '', false);
-        $primaryLoaderMock = $this->getMock(
-            'Magento\Framework\App\ObjectManager\ConfigLoader\Primary',
-            [],
-            [],
-            '',
-            false
-        );
-        $factory = $this->getMock('Magento\Framework\ObjectManager\FactoryInterface');
-        $factory->expects($this->exactly(2))->method('create')->will(
-            $this->returnCallback(
-                function ($className) {
-                    if ($className === 'Magento\Framework\DataObject') {
-                        return $this->getMock('Magento\Framework\DataObject', [], [], '', false);
-                    }
+        return $configMock;
+    }
+
+    /**
+     * @return FactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getObjectManagerFactoryMock()
+    {
+        $factory = $this->getMockForAbstractClass(FactoryInterface::class);
+        $factory->method('create')->willReturnCallback(
+            function ($className) {
+                if ($className === DataObject::class) {
+                    return $this->getMockBuilder(DataObject::class)
+                        ->disableOriginalConstructor()
+                        ->getMock();
                 }
-            )
+            }
         );
 
-        $connectionMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        return $factory;
+    }
+
+    /**
+     * Returns mock of instance.
+     *
+     * @param string $className
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createInstanceMock($className)
+    {
+        return $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
+    }
+
+    /**
+     * Returns ResourceConnection.
+     *
+     * @return ResourceConnection
+     */
+    private function getResourceConnection()
+    {
+        $configInterface = $this->getMockForAbstractClass(
+            ConfigInterface::class
+        );
+        $connectionFactory = $this->getMockForAbstractClass(
+            ConnectionFactoryInterface::class
+        );
+        $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $sharedInstances = [
-            'Magento\Framework\App\Cache\Type\Config' => $cache,
-            'Magento\Framework\App\ObjectManager\ConfigLoader' => $configLoader,
-            'Magento\Framework\App\ObjectManager\ConfigCache' => $configCache,
-            'Magento\Framework\Config\ReaderInterface' => $this->getMock(
-                'Magento\Framework\Config\ReaderInterface'
-            ),
-            'Magento\Framework\Config\ScopeInterface' => $this->getMock('Magento\Framework\Config\ScopeInterface'),
-            'Magento\Framework\Config\CacheInterface' => $this->getMock('Magento\Framework\Config\CacheInterface'),
-            'Magento\Framework\Cache\FrontendInterface' =>
-                $this->getMock('Magento\Framework\Cache\FrontendInterface'),
-            'Magento\Framework\App\ResourceConnection' => $connectionMock,
-            'Magento\Framework\App\ResourceConnection\Config' => $this->getMock(
-                'Magento\Framework\App\ResourceConnection\Config',
-                [],
-                [],
-                '',
-                false
-            )
-        ];
-        $model = new \Magento\TestFramework\ObjectManager(
-            $factory,
-            $configMock,
-            $sharedInstances,
-            $primaryLoaderMock
+        $resourceConnection = new ResourceConnection(
+            $configInterface,
+            $connectionFactory,
+            $deploymentConfig
         );
 
-        $model->addSharedInstance($resource, 'Magento\Framework\App\ResourceConnection');
-        $instance1 = $model->get('Magento\Framework\DataObject');
-
-        $this->assertSame($instance1, $model->get('Magento\Framework\DataObject'));
-        $this->assertSame($model, $model->clearCache());
-        $this->assertSame($model, $model->get('Magento\Framework\ObjectManagerInterface'));
-        $this->assertSame($resource, $model->get('Magento\Framework\App\ResourceConnection'));
-        $this->assertNotSame($instance1, $model->get('Magento\Framework\DataObject'));
+        return $resourceConnection;
     }
 }

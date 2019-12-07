@@ -1,0 +1,3 @@
+sku,product_type,name,price,attribute_set_code,categories,additional_attributes
+simple1,simple,"simple 1",25,Default,"Default Category/Category 1","text_attribute=""'"""", =|"",multiselect_attribute=""Option 3 """"!@#$%^&*, """"|""""""|""Opt||,ion 2"""
+simple2,simple,"simple 2",34,Default,"Default Category/Category 1","multiselect_attribute=""Opt|,=ion 1""|""Opt||,ion 2"",text_attribute="""""

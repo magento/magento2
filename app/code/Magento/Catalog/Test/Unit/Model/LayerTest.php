@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class LayerTest extends \PHPUnit_Framework_TestCase
+class LayerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Layer
@@ -98,53 +98,53 @@ class LayerTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->category = $this->getMockBuilder('Magento\Catalog\Model\Category')
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->setMethods(['getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->setMethods(['registry'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->setMethods(['getRootCategoryId', 'getFilters', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())->method('getStore')
             ->will($this->returnValue($this->store));
 
-        $this->stateKeyGenerator = $this->getMockBuilder('Magento\Catalog\Model\Layer\Category\StateKey')
+        $this->stateKeyGenerator = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Category\StateKey::class)
             ->setMethods(['toString'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->collectionFilter = $this->getMockBuilder('Magento\Catalog\Model\Layer\Category\CollectionFilter')
+        $this->collectionFilter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Category\CollectionFilter::class)
             ->setMethods(['filter'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->collectionProvider = $this->getMockBuilder('Magento\Catalog\Model\Layer\ItemCollectionProviderInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->collectionProvider = $this->getMockBuilder(
+            \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface::class
+        )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->filter = $this->getMockBuilder('Magento\Catalog\Model\Layer\Filter\Item')
+        $this->filter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item::class)
             ->setMethods(['getFilter', 'getValueString'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->abstractFilter = $this->getMockBuilder('Magento\Catalog\Model\Layer\Filter\AbstractFilter')
+        $this->abstractFilter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\AbstractFilter::class)
             ->setMethods(['getRequestVar'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Catalog\Model\Layer\ContextInterface')
+        $this->context = $this->getMockBuilder(\Magento\Catalog\Model\Layer\ContextInterface::class)
             ->setMethods(['getStateKey', 'getCollectionFilter'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -155,25 +155,28 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getCollectionProvider')
             ->will($this->returnValue($this->collectionProvider));
 
-        $this->state = $this->getMockBuilder('Magento\Catalog\Model\Layer\State')
+        $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stateFactory = $this->getMockBuilder('Magento\Catalog\Model\Layer\StateFactory')
+        $this->stateFactory = $this->getMockBuilder(\Magento\Catalog\Model\Layer\StateFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stateFactory->expects($this->any())->method('create')->will($this->returnValue($this->state));
 
-        $this->collection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
+        $this->collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
-        $this->currentCategory = $this->getMock('Magento\Catalog\Model\Category', ['getId', '__wakeup'], [], '', false);
+        $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $this->currentCategory = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getId', '__wakeup']
+        );
 
         $this->model = $helper->getObject(
-            'Magento\Catalog\Model\Layer',
+            \Magento\Catalog\Model\Layer::class,
             [
                 'registry' => $this->registry,
                 'storeManager' => $this->storeManager,
@@ -186,7 +189,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetState()
     {
-        $this->assertInstanceOf('\Magento\Catalog\Model\Layer\State', $this->model->getState());
+        $this->assertInstanceOf(\Magento\Catalog\Model\Layer\State::class, $this->model->getState());
     }
 
     public function testGetStateKey()
@@ -217,9 +220,9 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->collection));
 
         $result = $this->model->getProductCollection();
-        $this->assertInstanceOf('\Magento\Catalog\Model\ResourceModel\Product\Collection', $result);
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $result);
         $result = $this->model->getProductCollection();
-        $this->assertInstanceOf('\Magento\Catalog\Model\ResourceModel\Product\Collection', $result);
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $result);
     }
 
     public function testApply()
@@ -240,7 +243,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         $this->abstractFilter->expects($this->once())->method('getRequestVar')->will($this->returnValue('t'));
 
         $result = $this->model->apply();
-        $this->assertInstanceOf('\Magento\Catalog\Model\Layer', $result);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $result);
     }
 
     public function testPrepareProductCollection()
@@ -252,12 +255,12 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->collection), $this->equalTo($this->category));
 
         $result = $this->model->prepareProductCollection($this->collection);
-        $this->assertInstanceOf('\Magento\Catalog\Model\Layer', $result);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $result);
     }
 
     public function testGetCurrentStore()
     {
-        $this->assertInstanceOf('\Magento\Store\Model\Store', $this->model->getCurrentStore());
+        $this->assertInstanceOf(\Magento\Store\Model\Store::class, $this->model->getCurrentStore());
     }
 
     public function testSetNewCurrentCategoryIfCurrentCategoryIsAnother()
@@ -267,13 +270,13 @@ class LayerTest extends \PHPUnit_Framework_TestCase
 
         $this->category->expects($this->any())->method('getId')->will($this->returnValue($categoryId));
         $this->categoryRepository->expects($this->once())->method('get')->with($categoryId)
-            ->willReturn($this->category);
+            ->willReturn($this->currentCategory);
 
         $this->currentCategory->expects($this->any())->method('getId')->willReturn($currentCategoryId);
         $this->registry->expects($this->once())->method('registry')->with('current_category')
             ->willReturn($this->currentCategory);
 
-        $this->assertInstanceOf('\Magento\Catalog\Model\Layer', $this->model->setCurrentCategory($categoryId));
+        $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $this->model->setCurrentCategory($categoryId));
         $this->assertEquals($this->currentCategory, $this->model->getData('current_category'));
     }
 
@@ -288,7 +291,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         $this->registry->expects($this->once())->method('registry')->with('current_category')
             ->willReturn($this->category);
 
-        $this->assertInstanceOf('\Magento\Catalog\Model\Layer', $this->model->setCurrentCategory($categoryId));
+        $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $this->model->setCurrentCategory($categoryId));
         $this->assertEquals($this->category, $this->model->getData('current_category'));
     }
 
@@ -343,7 +346,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
             ->willReturn(null);
         $this->categoryRepository->expects($this->once())->method('get')->with($rootCategoryId)
-            ->willReturn($this->category);
+            ->willReturn($this->currentCategory);
         $this->store->expects($this->any())->method('getRootCategoryId')
             ->will($this->returnValue($rootCategoryId));
 

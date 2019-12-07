@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -57,6 +57,26 @@
             </field>
             <field name="link_type">
                 <aspect name="to_purchased" />
+            </field>
+        </fieldset>
+        <fieldset id="downloadable_data">
+            <field name="link_id">
+                <aspect name="to_link" targetField="id"/>
+            </field>
+            <field name="sample_id">
+                <aspect name="to_sample" targetField="id"/>
+            </field>
+            <field name="type">
+                <aspect name="to_link" targetField="link_type"/>
+                <aspect name="to_sample" targetField="sample_type"/>
+            </field>
+        </fieldset>
+        <fieldset id="downloadable_link_sample_data">
+            <field name="url">
+                <aspect name="to_link_sample" targetField="sample_url"/>
+            </field>
+            <field name="type">
+                <aspect name="to_link_sample" targetField="sample_type"/>
             </field>
         </fieldset>
     </scope>

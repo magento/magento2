@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
-class MviewStateTest extends \PHPUnit_Framework_TestCase
+class MviewStateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return array
      */
-    public function testAfterSetStatusSuspendDataProvider()
+    public function afterSetStatusSuspendDataProvider()
     {
         return [['suspended', 'idle'], ['suspended', 'working']];
     }
@@ -18,7 +18,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider testAfterSetStatusSuspendDataProvider
+     * @dataProvider afterSetStatusSuspendDataProvider
      */
     public function testAfterSetStatusSuspend($stateStatus, $relatedStatus)
     {
@@ -27,7 +27,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $relatedVersion = 'related_version';
 
         $state = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\StateInterface'
+            \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $state->expects($this->exactly(2))->method('getViewId')->will($this->returnValue($stateViewId));
@@ -35,7 +35,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $state->expects($this->any())->method('getStatus')->will($this->returnValue($stateStatus));
 
         $relatedViewState = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\StateInterface'
+            \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $relatedViewState->expects(
@@ -75,7 +75,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         );
 
         $relatedViewChangelog = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\ChangelogInterface'
+            \Magento\Framework\Mview\View\ChangelogInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $relatedViewChangelog->expects(
@@ -94,13 +94,13 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
             $relatedViewState,
             $relatedViewChangelog
         );
-        $this->assertInstanceOf('\Magento\Framework\Mview\View\StateInterface', $model->afterSetStatus($state));
+        $this->assertInstanceOf(\Magento\Framework\Mview\View\StateInterface::class, $model->afterSetStatus($state));
     }
 
     /**
      * @return array
      */
-    public function testAfterSetStatusResumeDataProvider()
+    public function afterSetStatusResumeDataProvider()
     {
         return [['idle', 'suspended'], ['working', 'suspended']];
     }
@@ -108,7 +108,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider testAfterSetStatusResumeDataProvider
+     * @dataProvider afterSetStatusResumeDataProvider
      */
     public function testAfterSetStatusResume($stateStatus, $relatedStatus)
     {
@@ -116,7 +116,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $relatedViewId = \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
 
         $state = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\StateInterface'
+            \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $state->expects($this->exactly(2))->method('getViewId')->will($this->returnValue($stateViewId));
@@ -124,7 +124,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $state->expects($this->any())->method('getStatus')->will($this->returnValue($stateStatus));
 
         $relatedViewState = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\StateInterface'
+            \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $relatedViewState->expects(
@@ -156,20 +156,20 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         );
 
         $relatedViewChangelog = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\ChangelogInterface'
+            \Magento\Framework\Mview\View\ChangelogInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $model = new \Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState(
             $relatedViewState,
             $relatedViewChangelog
         );
-        $this->assertInstanceOf('\Magento\Framework\Mview\View\StateInterface', $model->afterSetStatus($state));
+        $this->assertInstanceOf(\Magento\Framework\Mview\View\StateInterface::class, $model->afterSetStatus($state));
     }
 
     /**
      * @return array
      */
-    public function testAfterSetStatusSkipDataProvider()
+    public function afterSetStatusSkipDataProvider()
     {
         return [
             ['idle', 'idle'],
@@ -183,7 +183,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider testAfterSetStatusSkipDataProvider
+     * @dataProvider afterSetStatusSkipDataProvider
      */
     public function testAfterSetStatusSkip($stateStatus, $relatedStatus)
     {
@@ -191,7 +191,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $relatedViewId = \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
 
         $state = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\StateInterface'
+            \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $state->expects($this->exactly(2))->method('getViewId')->will($this->returnValue($stateViewId));
@@ -199,7 +199,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $state->expects($this->any())->method('getStatus')->will($this->returnValue($stateStatus));
 
         $relatedViewState = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\StateInterface'
+            \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $relatedViewState->expects(
@@ -223,27 +223,27 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $relatedViewState->expects($this->never())->method('setStatus');
 
         $relatedViewChangelog = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\ChangelogInterface'
+            \Magento\Framework\Mview\View\ChangelogInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $model = new \Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState(
             $relatedViewState,
             $relatedViewChangelog
         );
-        $this->assertInstanceOf('\Magento\Framework\Mview\View\StateInterface', $model->afterSetStatus($state));
+        $this->assertInstanceOf(\Magento\Framework\Mview\View\StateInterface::class, $model->afterSetStatus($state));
     }
 
     /**
      * @return array
      */
-    public function testAfterSetStatusDisabledDataProvider()
+    public function afterSetStatusDisabledDataProvider()
     {
         return [['idle'], ['working'], ['suspended']];
     }
 
     /**
      * @param string $stateStatus
-     * @dataProvider testAfterSetStatusDisabledDataProvider
+     * @dataProvider afterSetStatusDisabledDataProvider
      */
     public function testAfterSetStatusDisabled($stateStatus)
     {
@@ -251,7 +251,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $relatedViewId = \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
 
         $state = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\StateInterface'
+            \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $state->expects($this->exactly(2))->method('getViewId')->will($this->returnValue($stateViewId));
@@ -259,7 +259,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $state->expects($this->any())->method('getStatus')->will($this->returnValue($stateStatus));
 
         $relatedViewState = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\StateInterface'
+            \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $relatedViewState->expects(
@@ -283,13 +283,13 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
         $relatedViewState->expects($this->never())->method('setStatus');
 
         $relatedViewChangelog = $this->getMockBuilder(
-            'Magento\Framework\Mview\View\ChangelogInterface'
+            \Magento\Framework\Mview\View\ChangelogInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $model = new \Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState(
             $relatedViewState,
             $relatedViewChangelog
         );
-        $this->assertInstanceOf('\Magento\Framework\Mview\View\StateInterface', $model->afterSetStatus($state));
+        $this->assertInstanceOf(\Magento\Framework\Mview\View\StateInterface::class, $model->afterSetStatus($state));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Library\PhpParser;
@@ -9,7 +9,7 @@ use Magento\TestFramework\Integrity\Library\PhpParser\Throws;
 
 /**
  */
-class ThrowsTest extends \PHPUnit_Framework_TestCase
+class ThrowsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Throws
@@ -27,7 +27,7 @@ class ThrowsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->tokens = $this->getMockBuilder(
-            'Magento\TestFramework\Integrity\Library\PhpParser\Tokens'
+            \Magento\TestFramework\Integrity\Library\PhpParser\Tokens::class
         )->disableOriginalConstructor()->getMock();
     }
 
@@ -70,7 +70,7 @@ class ThrowsTest extends \PHPUnit_Framework_TestCase
         }
 
         $uses = $this->getMockBuilder(
-            'Magento\TestFramework\Integrity\Library\PhpParser\Uses'
+            \Magento\TestFramework\Integrity\Library\PhpParser\Uses::class
         )->disableOriginalConstructor()->getMock();
 
         $uses->expects($this->once())->method('hasUses')->will($this->returnValue(true));

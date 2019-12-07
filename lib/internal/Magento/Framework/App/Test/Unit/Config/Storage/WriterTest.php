@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config\Storage;
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Config\Storage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeInterface;
 
-class WriterTest extends \PHPUnit_Framework_TestCase
+class WriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -28,11 +28,11 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Config\ConfigResource\ConfigInterface')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\Config\ConfigResource\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
-            'Magento\Framework\App\Config\Storage\Writer',
+            \Magento\Framework\App\Config\Storage\Writer::class,
             ['resource' => $this->resource]
         );
     }

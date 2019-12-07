@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
@@ -8,19 +8,19 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
 /**
  * Bundle option multi select type renderer
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi
 {
     /**
      * @var string
      */
-    protected $_template = 'product/composite/fieldset/options/type/multi.phtml';
+    protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/multi.phtml';
 
     /**
-     * @param  string $elementId
-     * @param  string $containerId
-     * @return string
+     * @inheritdoc
      */
     public function setValidationContainer($elementId, $containerId)
     {
@@ -31,5 +31,16 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
             $containerId .
             '\';
             </script>';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSelectionPrice($selection)
+    {
+        $price = parent::getSelectionPrice($selection);
+        $qty = $selection->getSelectionQty();
+
+        return $price * $qty;
     }
 }

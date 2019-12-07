@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\ErrorHandler;
 
-class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
+class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ErrorHandler
@@ -32,6 +32,9 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->object->handler($errorNo, $errorStr, $errorFile, 11));
     }
 
+    /**
+     * @return array
+     */
     public function handlerProvider()
     {
         return [
@@ -53,12 +56,16 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $errorFile = 'test_file';
         $errorLine = 'test_error_line';
 
-        $exceptedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
-        $this->setExpectedException('Exception', $exceptedExceptionMessage);
+        $expectedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($expectedExceptionMessage);
 
         $this->object->handler($errorNo, $errorStr, $errorFile, $errorLine);
     }
 
+    /**
+     * @return array
+     */
     public function handlerProviderException()
     {
         return [

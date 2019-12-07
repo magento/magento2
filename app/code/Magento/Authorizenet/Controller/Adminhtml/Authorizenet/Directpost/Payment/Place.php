@@ -1,21 +1,28 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
-use Magento\Framework\Escaper;
-use Magento\Catalog\Helper\Product;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Authorizenet\Helper\Backend\Data as DataHelper;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Create;
 
 /**
  * Class Place
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
+class Place extends Create implements HttpPostActionInterface
 {
     /**
      * @var DataHelper
@@ -89,11 +96,11 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
 
                 $payment = $order->getPayment();
                 if ($payment && $payment->getMethod() == $this->_objectManager->create(
-                    'Magento\Authorizenet\Model\Directpost'
+                    \Magento\Authorizenet\Model\Directpost::class
                 )->getCode()
                 ) {
                     //return json with data.
-                    $session = $this->_objectManager->get('Magento\Authorizenet\Model\Directpost\Session');
+                    $session = $this->_objectManager->get(\Magento\Authorizenet\Model\Directpost\Session::class);
                     $session->addCheckoutOrderIncrementId($order->getIncrementId());
                     $session->setLastOrderIncrementId($order->getIncrementId());
 
@@ -105,7 +112,7 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
                     $requestToAuthorizenet->setOrderSendConfirmation($sendConfirmationFlag);
                     $requestToAuthorizenet->setStoreId($this->_getOrderCreateModel()->getQuote()->getStoreId());
 
-                    $adminUrl = $this->_objectManager->get('Magento\Backend\Model\UrlInterface');
+                    $adminUrl = $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class);
                     if ($adminUrl->useSecretKey()) {
                         $requestToAuthorizenet->setKey(
                             $adminUrl->getSecretKey('adminhtml', 'authorizenet_directpost_payment', 'redirect')
@@ -131,19 +138,19 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
                 $result['success'] = 0;
                 $result['error'] = 1;
                 $result['redirect'] = $this->_objectManager->get(
-                    'Magento\Backend\Model\UrlInterface'
+                    \Magento\Backend\Model\UrlInterface::class
                 )->getUrl(
                     'sales/order_create/'
                 );
             }
 
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
             );
         } else {
             $result = ['error_messages' => __('Please choose a payment method.')];
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
             );
         }
     }

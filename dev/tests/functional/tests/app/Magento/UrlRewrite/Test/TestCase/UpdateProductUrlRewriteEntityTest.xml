@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\UrlRewrite\Test\TestCase\UpdateProductUrlRewriteEntityTest" summary="Update Product URL Rewrites" ticketId="MAGETWO-24819">
         <variation name="UpdateProductUrlRewriteEntityTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">product/%catalogProductSimple::product_100_dollar%</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>

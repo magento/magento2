@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -87,7 +91,7 @@ define([
         },
 
         /**
-         * Returnes true if current set of items differ from initial one,
+         * Returns true if current set of items differ from initial one,
          * or if some child has been changed.
          *
          * @returns {Boolean}
@@ -149,9 +153,7 @@ define([
          * Creates function that removes element
          * from collection using '_removeChild' method.
          * @param  {Object} elem - Element that should be removed.
-         * @returns {Function}
-         *      Since this method is used by 'click' binding,
-         *      it requires function to invoke.
+         * @deprecated Not used anymore
          */
         removeAddress: function (elem) {
             var self = this;
@@ -159,15 +161,16 @@ define([
             confirm({
                 content: this.removeMessage,
                 actions: {
+                    /** @inheritdoc */
                     confirm: function () {
-                        self._removeAddress(elem)
+                        self._removeAddress(elem);
                     }
                 }
             });
         },
 
         /**
-         * Removes elememt from both collection and data storage,
+         * Removes element from both collection and data storage,
          * activates first element if removed one was active,
          * triggers 'update' event.
          *

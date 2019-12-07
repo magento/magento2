@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Unit\Observer;
 
-class CleanThemeRelatedContentObserverTest extends \PHPUnit_Framework_TestCase
+class CleanThemeRelatedContentObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Config\Customization|\PHPUnit_Framework_MockObject_MockObject
@@ -30,23 +30,24 @@ class CleanThemeRelatedContentObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->themeConfig = $this->getMockBuilder('Magento\Theme\Model\Config\Customization')
+        $this->themeConfig = $this->getMockBuilder(\Magento\Theme\Model\Config\Customization::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themeImageFactory = $this->getMockBuilder('Magento\Framework\View\Design\Theme\ImageFactory')
+        $this->themeImageFactory = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\ImageFactory::class)
             ->setMethods(['create', 'removePreviewImage'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->updateCollection = $this->getMockBuilder('Magento\Widget\Model\ResourceModel\Layout\Update\Collection')
-            ->setMethods(['addThemeFilter', 'delete'])
+        $this->updateCollection = $this->getMockBuilder(
+            \Magento\Widget\Model\ResourceModel\Layout\Update\Collection::class
+        )->setMethods(['addThemeFilter', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->themeObserver = $objectManagerHelper->getObject(
-            'Magento\Theme\Observer\CleanThemeRelatedContentObserver',
+            \Magento\Theme\Observer\CleanThemeRelatedContentObserver::class,
             [
                 'themeConfig' => $this->themeConfig,
                 'themeImageFactory' => $this->themeImageFactory,
@@ -57,12 +58,14 @@ class CleanThemeRelatedContentObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanThemeRelatedContent()
     {
-        $themeMock = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')->getMockForAbstractClass();
+        $themeMock = $this->getMockBuilder(
+            \Magento\Framework\View\Design\ThemeInterface::class
+        )->getMockForAbstractClass();
 
-        $eventMock = $this->getMockBuilder('Magento\Framework\Event')->disableOriginalConstructor()->getMock();
+        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)->disableOriginalConstructor()->getMock();
         $eventMock->expects($this->any())->method('getData')->with('theme')->willReturn($themeMock);
 
-        $observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
@@ -88,29 +91,31 @@ class CleanThemeRelatedContentObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanThemeRelatedContentException()
     {
-        $themeMock = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')->getMockForAbstractClass();
+        $themeMock = $this->getMockBuilder(
+            \Magento\Framework\View\Design\ThemeInterface::class
+        )->getMockForAbstractClass();
 
-        $eventMock = $this->getMockBuilder('Magento\Framework\Event')->disableOriginalConstructor()->getMock();
+        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)->disableOriginalConstructor()->getMock();
         $eventMock->expects($this->any())->method('getData')->with('theme')->willReturn($themeMock);
 
-        $observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
 
         $this->themeConfig->expects($this->any())->method('isThemeAssignedToStore')->with($themeMock)->willReturn(true);
 
-
-        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', 'Theme isn\'t deletable.');
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Theme isn\'t deletable.');
         $this->themeObserver->execute($observerMock);
     }
 
     public function testCleanThemeRelatedContentNonObjectTheme()
     {
-        $eventMock = $this->getMockBuilder('Magento\Framework\Event')->disableOriginalConstructor()->getMock();
+        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)->disableOriginalConstructor()->getMock();
         $eventMock->expects($this->any())->method('getData')->with('theme')->willReturn('Theme as a string');
 
-        $observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);

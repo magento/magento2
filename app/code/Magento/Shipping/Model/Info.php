@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Shipping\Model;
 
@@ -116,7 +114,7 @@ class Info extends \Magento\Framework\DataObject
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->_orderFactory->create()->load($this->getOrderId());
 
-        if (!$order->getId() || $this->getProtectCode() != $order->getProtectCode()) {
+        if (!$order->getId() || $this->getProtectCode() !== $order->getProtectCode()) {
             return false;
         }
 
@@ -132,7 +130,7 @@ class Info extends \Magento\Framework\DataObject
     {
         /* @var $model Shipment */
         $ship = $this->shipmentRepository->get($this->getShipId());
-        if (!$ship->getEntityId() || $this->getProtectCode() != $ship->getProtectCode()) {
+        if (!$ship->getEntityId() || $this->getProtectCode() !== $ship->getProtectCode()) {
             return false;
         }
 
@@ -197,7 +195,7 @@ class Info extends \Magento\Framework\DataObject
     {
         /** @var \Magento\Shipping\Model\Order\Track $track */
         $track = $this->_trackFactory->create()->load($this->getTrackId());
-        if ($track->getId() && $this->getProtectCode() == $track->getProtectCode()) {
+        if ($track->getId() && $this->getProtectCode() === $track->getProtectCode()) {
             $this->_trackingInfo = [[$track->getNumberDetail()]];
         }
         return $this->_trackingInfo;

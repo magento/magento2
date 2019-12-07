@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ /**
+  * Custom payment method might adds a block in payment_method_list e.g.
+  *      <payment_method name="custom_payment_method">
+  *         <magento_code>custom_payment_method</magento_code>
+  *         <signifyd_code>PAYMENT_CARD</signifyd_code>
+  *     </payment_method>
+  *  Appropriate value for the <signifyd_code> tag from Signifyd documentation:
+  *  @see https://www.signifyd.com/docs/api/#/reference/webhooks/manage-single-webhooks/create-a-case
+  *  Create a Case -> Request -> ATTRIBUTES -> paymentMethod
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Signifyd:etc/signifyd_payment_mapping.xsd">
+    <payment_method_list>
+        <payment_method name="braintree">
+            <magento_code>braintree</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="braintree_paypal">
+            <magento_code>braintree_paypal</magento_code>
+            <signifyd_code>PAYPAL_ACCOUNT</signifyd_code>
+        </payment_method>
+        <payment_method name="paypal_express">
+            <magento_code>paypal_express</magento_code>
+            <signifyd_code>PAYPAL_ACCOUNT</signifyd_code>
+        </payment_method>
+        <payment_method name="paypal_express_bml">
+            <magento_code>paypal_express_bml</magento_code>
+            <signifyd_code>PAYPAL_ACCOUNT</signifyd_code>
+        </payment_method>
+        <payment_method name="payflow_express">
+            <magento_code>payflow_express</magento_code>
+            <signifyd_code>PAYPAL_ACCOUNT</signifyd_code>
+        </payment_method>
+        <payment_method name="payflow_express_bml">
+            <magento_code>payflow_express_bml</magento_code>
+            <signifyd_code>PAYPAL_ACCOUNT</signifyd_code>
+        </payment_method>
+        <payment_method name="payflowpro">
+            <magento_code>payflowpro</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="payflow_link">
+            <magento_code>payflow_link</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="payflow_advanced">
+            <magento_code>payflow_advanced</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="hosted_pro">
+            <magento_code>hosted_pro</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="authorizenet_directpost">
+            <magento_code>authorizenet_directpost</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="worldpay">
+            <magento_code>worldpay</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="eway">
+            <magento_code>eway</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="cybersource">
+            <magento_code>cybersource</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method name="free">
+            <magento_code>free</magento_code>
+            <signifyd_code>FREE</signifyd_code>
+        </payment_method>
+    </payment_method_list>
+</config>

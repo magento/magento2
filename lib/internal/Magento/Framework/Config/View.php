@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * View configuration files handler
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Config\Dom\UrnResolver;
-
+/**
+ * View configuration files handler
+ *
+ * @api
+ */
 class View extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
@@ -43,7 +42,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         ValidationStateInterface $validationState,
         $fileName,
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global',
         $xpath = []
     ) {
@@ -72,7 +71,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getVars($module)
     {
         $this->initData();
-        return isset($this->data['vars'][$module]) ? $this->data['vars'][$module] : [];
+        return $this->data['vars'][$module] ?? [];
     }
 
     /**
@@ -111,7 +110,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getMediaEntities($module, $mediaType)
     {
         $this->initData();
-        return isset($this->data['media'][$module][$mediaType]) ? $this->data['media'][$module][$mediaType] : [];
+        return $this->data['media'][$module][$mediaType] ?? [];
     }
 
     /**
@@ -125,19 +124,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getMediaAttributes($module, $mediaType, $mediaId)
     {
         $this->initData();
-        return isset($this->data['media'][$module][$mediaType][$mediaId])
-            ? $this->data['media'][$module][$mediaType][$mediaId]
-            : [];
-    }
-
-    /**
-     * Return copy of DOM
-     *
-     * @return \Magento\Framework\Config\Dom
-     */
-    public function getDomConfigCopy()
-    {
-        return clone $this->_getDomConfigModel();
+        return $this->data['media'][$module][$mediaType][$mediaId] ?? [];
     }
 
     /**
@@ -149,7 +136,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     {
         $idAttributes = [
             '/view/vars' => 'module',
-            '/view/vars/var' => 'name',
+            '/view/vars/(var/)*var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
         ];
         foreach ($this->xpath as $attribute) {
@@ -174,7 +161,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getExcludedFiles()
     {
         $items = $this->getItems();
-        return isset($items['file']) ? $items['file'] : [];
+        return $items['file'] ?? [];
     }
 
     /**
@@ -185,7 +172,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getExcludedDir()
     {
         $items = $this->getItems();
-        return isset($items['directory']) ? $items['directory'] : [];
+        return $items['directory'] ?? [];
     }
 
     /**
@@ -196,7 +183,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     protected function getItems()
     {
         $this->initData();
-        return isset($this->data['exclude']) ? $this->data['exclude'] : [];
+        return $this->data['exclude'] ?? [];
     }
 
     /**
@@ -209,5 +196,25 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         if ($this->data === null) {
             $this->data = $this->read();
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     * @since 100.1.0
+     */
+    public function read($scope = null)
+    {
+        $scope = $scope ?: $this->_defaultScope;
+        $result = [];
+
+        $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
+        // Sort parents desc
+        krsort($parents);
+
+        foreach ($parents as $parent) {
+            $result = array_replace_recursive($result, $this->_readFiles([$parent]));
+        }
+
+        return array_replace_recursive($result, parent::read($scope));
     }
 }

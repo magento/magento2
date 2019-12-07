@@ -1,144 +1,127 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Shipment;
+
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\Comment as CommentEntity;
+use Magento\Sales\Model\Order\Shipment\Item as ItemEntity;
+use Magento\Sales\Model\Order\Shipment\Track as TrackEntity;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Item;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Relation;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Track;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class RelationTest
  */
-class RelationTest extends \PHPUnit_Framework_TestCase
+class RelationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Relation
+     * @var Relation
      */
-    protected $relationProcessor;
+    private $relationProcessor;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
-    protected $itemResourceMock;
+    private $itemResource;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track|\PHPUnit_Framework_MockObject_MockObject
+     * @var Track|MockObject
      */
-    protected $trackResourceMock;
+    private $trackResource;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|MockObject
      */
-    protected $commentResourceMock;
+    private $commentResource;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommentEntity|MockObject
      */
-    protected $commentMock;
+    private $comment;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit_Framework_MockObject_MockObject
+     * @var TrackEntity|MockObject
      */
-    protected $trackMock;
+    private $track;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Shipment|MockObject
      */
-    protected $shipmentMock;
+    private $shipment;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemEntity|MockObject
      */
-    protected $itemMock;
+    private $item;
 
-    public function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->itemResourceMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Shipment\Item')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'save'
-                ]
-            )
-            ->getMock();
-        $this->commentResourceMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Shipment\Comment')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'save'
-                ]
-            )
-            ->getMock();
-        $this->trackResourceMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Shipment\Track')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'save'
-                ]
-            )
-            ->getMock();
-        $this->shipmentMock = $this->getMockBuilder('Magento\Sales\Model\Order\Shipment')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getId',
-                    'getItems',
-                    'getTracks',
-                    'getComments'
-                ]
-            )
-            ->getMock();
-        $this->itemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setParentId'
-                ]
-            )
-            ->getMock();
-        $this->trackMock = $this->getMockBuilder('Magento\Sales\Model\Order\Shipment\Track')
+        $this->itemResource = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->commentMock = $this->getMockBuilder('Magento\Sales\Model\Order\Shipment')
+        $this->commentResource = $this->getMockBuilder(Comment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->relationProcessor = new \Magento\Sales\Model\ResourceModel\Order\Shipment\Relation(
-            $this->itemResourceMock,
-            $this->trackResourceMock,
-            $this->commentResourceMock
+        $this->trackResource = $this->getMockBuilder(Track::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shipment = $this->getMockBuilder(Shipment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->item = $this->getMockBuilder(ItemEntity::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->track = $this->getMockBuilder(TrackEntity::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->comment = $this->getMockBuilder(Shipment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->relationProcessor = new Relation(
+            $this->itemResource,
+            $this->trackResource,
+            $this->commentResource
         );
     }
 
-    public function testProcessRelations()
+    /**
+     * Checks saving shipment relations.
+     *
+     * @throws \Exception
+     */
+    public function testProcessRelations(): void
     {
-        $this->shipmentMock->expects($this->once())
-            ->method('getId')
+        $this->shipment->method('getId')
             ->willReturn('shipment-id-value');
-        $this->shipmentMock->expects($this->exactly(2))
-            ->method('getItems')
-            ->willReturn([$this->itemMock]);
-        $this->shipmentMock->expects($this->exactly(2))
-            ->method('getComments')
-            ->willReturn([$this->commentMock]);
-        $this->shipmentMock->expects($this->exactly(2))
-            ->method('getTracks')
-            ->willReturn([$this->trackMock]);
-        $this->itemMock->expects($this->once())
-            ->method('setParentId')
+        $this->shipment->method('getItems')
+            ->willReturn([$this->item]);
+        $this->shipment->method('getComments')
+            ->willReturn([$this->comment]);
+        $this->shipment->method('getTracks')
+            ->willReturn([$this->track]);
+        $this->item->method('setParentId')
             ->with('shipment-id-value')
             ->willReturnSelf();
-        $this->itemResourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->itemMock)
+        $this->itemResource->method('save')
+            ->with($this->item)
             ->willReturnSelf();
-        $this->commentResourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->commentMock)
+        $this->commentResource->method('save')
+            ->with($this->comment)
             ->willReturnSelf();
-        $this->trackResourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->trackMock)
+        $this->trackResource->method('save')
+            ->with($this->track)
             ->willReturnSelf();
-        $this->relationProcessor->processRelation($this->shipmentMock);
+        $this->relationProcessor->processRelation($this->shipment);
     }
 }

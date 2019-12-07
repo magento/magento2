@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,17 +11,15 @@ namespace Magento\Framework\Api;
  */
 class Uploader extends \Magento\Framework\File\Uploader
 {
-
     /**
      * Avoid running the default constructor specific to FILE upload
      */
     public function __construct()
     {
-
     }
 
     /**
-     * Explicitly set the the file attributes instead of setting it via constructor
+     * Explicitly set the file attributes instead of setting it via constructor
      *
      * @param array $fileAttributes
      * @return void

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular\Magento\Email;
 
-class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
+class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test that email template configuration file matches the format
@@ -17,7 +17,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Email:etc/email_templates.xsd');
-        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $dom = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);
@@ -43,7 +43,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Email\Model\Template\Config $emailConfig */
         $emailConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Email\Model\Template\Config'
+            \Magento\Email\Model\Template\Config::class
         );
 
         $parts = $emailConfig->parseTemplateIdParts($templateId);
@@ -67,7 +67,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
         $data = [];
         /** @var \Magento\Email\Model\Template\Config $emailConfig */
         $emailConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Email\Model\Template\Config'
+            \Magento\Email\Model\Template\Config::class
         );
         foreach ($emailConfig->getAvailableTemplates() as $template) {
             $data[$template['value']] = [$template['value']];
@@ -80,11 +80,11 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergedFormat()
     {
-        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
+        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationState->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
         /** @var \Magento\Email\Model\Template\Config\Reader $reader */
         $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Email\Model\Template\Config\Reader',
+            \Magento\Email\Model\Template\Config\Reader::class,
             ['validationState' => $validationState]
         );
         try {

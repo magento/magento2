@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\Product\Index;
@@ -8,8 +8,6 @@ namespace Magento\Reports\Model\Product\Index;
 /**
  * Catalog Compared Product Index Model
  *
- * @method \Magento\Reports\Model\ResourceModel\Product\Index\Compared _getResource()
- * @method \Magento\Reports\Model\ResourceModel\Product\Index\Compared getResource()
  * @method \Magento\Reports\Model\Product\Index\Compared setVisitorId(int $value)
  * @method \Magento\Reports\Model\Product\Index\Compared setCustomerId(int $value)
  * @method int getProductId()
@@ -19,6 +17,8 @@ namespace Magento\Reports\Model\Product\Index;
  * @method \Magento\Reports\Model\Product\Index\Compared setAddedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {
@@ -88,7 +88,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\ResourceModel\Product\Index\Compared');
+        $this->_init(\Magento\Reports\Model\ResourceModel\Product\Index\Compared::class);
     }
 
     /**

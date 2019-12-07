@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Model\Layout;
 
-class LayoutPluginTest extends \PHPUnit_Framework_TestCase
+class LayoutPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\PageCache\Model\Layout\LayoutPlugin
@@ -27,10 +27,10 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $configMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->layoutMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             [],
             '',
             false,
@@ -38,8 +38,8 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
             true,
             ['isCacheable', 'getAllBlocks']
         );
-        $this->responseMock = $this->getMock('\Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->configMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->configMock = $this->createMock(\Magento\PageCache\Model\Config::class);
 
         $this->model = new \Magento\PageCache\Model\Layout\LayoutPlugin(
             $this->responseMock,
@@ -70,6 +70,9 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $output);
     }
 
+    /**
+     * @return array
+     */
     public function afterGenerateXmlDataProvider()
     {
         return [
@@ -92,8 +95,12 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
     {
         $html = 'html';
         $this->configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
-        $blockStub = $this->getMock('Magento\PageCache\Test\Unit\Block\Controller\StubBlock', null, [], '', false);
+        $blockStub = $this->createPartialMock(
+            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
+            ['getIdentities']
+        );
         $blockStub->setTtl($ttl);
+        $blockStub->expects($this->any())->method('getIdentities')->willReturn(['identity1', 'identity2']);
         $this->layoutMock->expects($this->once())->method('isCacheable')->will($this->returnValue($layoutIsCacheable));
         $this->layoutMock->expects($this->any())->method('getAllBlocks')->will($this->returnValue([$blockStub]));
 
@@ -108,6 +115,9 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($output, $html);
     }
 
+    /**
+     * @return array
+     */
     public function afterGetOutputDataProvider()
     {
         $tags = 'identity1,identity2';

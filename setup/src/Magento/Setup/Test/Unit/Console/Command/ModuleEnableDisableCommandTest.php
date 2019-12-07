@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -9,51 +9,66 @@ use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $objectManagerProvider;
+    private $objectManagerProviderMock;
 
     /**
      * @var \Magento\Framework\Module\Status|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $status;
+    private $statusMock;
 
     /**
      * @var \Magento\Framework\App\Cache|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cache;
+    private $cacheMock;
 
     /**
      * @var \Magento\Framework\App\State\CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cleanupFiles;
+    private $cleanupFilesMock;
 
     /**
      * @var \Magento\Framework\Module\FullModuleList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $fullModuleList;
+    private $fullModuleListMock;
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
+     * @var \Magento\Framework\Code\GeneratedFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $generatedFiles;
 
     protected function setUp()
     {
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->objectManagerProvider->expects($this->any())
+        $this->objectManagerProviderMock = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerProviderMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue($objectManager));
-        $this->status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
-        $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
-        $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
-        $this->fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $this->statusMock = $this->createMock(\Magento\Framework\Module\Status::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache::class);
+        $this->cleanupFilesMock = $this->createMock(\Magento\Framework\App\State\CleanupFiles::class);
+        $this->fullModuleListMock = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
+        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->generatedFiles = $this->createMock(\Magento\Framework\Code\GeneratedFiles::class);
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
-                ['Magento\Framework\Module\Status', $this->status],
-                ['Magento\Framework\App\Cache', $this->cache],
-                ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFiles],
-                ['Magento\Framework\Module\FullModuleList', $this->fullModuleList],
+                [\Magento\Framework\Module\Status::class, $this->statusMock],
+                [\Magento\Framework\App\Cache::class, $this->cacheMock],
+                [\Magento\Framework\App\State\CleanupFiles::class, $this->cleanupFilesMock],
+                [\Magento\Framework\Module\FullModuleList::class, $this->fullModuleListMock],
             ]));
     }
 
@@ -66,35 +81,30 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($isEnable, $clearStaticContent, $expectedMessage)
     {
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('getModulesToChange')
             ->with($isEnable, ['Magento_Module1', 'Magento_Module2'])
             ->will($this->returnValue(['Magento_Module1']));
-
-        $this->status->expects($this->any())
+        $this->statusMock->expects($this->any())
             ->method('checkConstraints')
             ->will($this->returnValue([]));
-
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('setIsEnabled')
             ->with($isEnable, ['Magento_Module1']);
-
-        $this->cache->expects($this->once())
+        $this->cacheMock->expects($this->once())
             ->method('clean');
-        $this->cleanupFiles->expects($this->once())
+        $this->cleanupFilesMock->expects($this->once())
             ->method('clearCodeGeneratedClasses');
-        $this->cleanupFiles->expects($clearStaticContent ? $this->once() : $this->never())
+        $this->cleanupFilesMock->expects($clearStaticContent ? $this->once() : $this->never())
             ->method('clearMaterializedViewFiles');
-
-        $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        $commandTester = $this->getCommandTester($isEnable);
         $input = ['module' => ['Magento_Module1', 'Magento_Module2']];
         if ($clearStaticContent) {
             $input['--clear-static-content'] = true;
         }
         $commandTester->execute($input);
-        $this->assertStringMatchesFormat($expectedMessage, $commandTester->getDisplay());
+        $display = $commandTester->getDisplay();
+        $this->assertStringMatchesFormat($expectedMessage, $display);
     }
 
     /**
@@ -106,14 +116,16 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             'enable, do not clear static content' => [
                 true,
                 false,
-                '%amodules have been enabled%aMagento_Module1%a' .
-                'Info: Some modules might require static view files to be cleared.%a'
+                '%amodules have been enabled%aMagento_Module1%a'
+                    . "Info: Some modules might require static view files to be cleared. To do this, run "
+                    . "'module:enable' with the --clear-static-content%a"
             ],
             'disable, do not clear static content' => [
                 false,
                 false,
-                '%amodules have been disabled%aMagento_Module1%a' .
-                'Info: Some modules might require static view files to be cleared.%a'
+                '%amodules have been disabled%aMagento_Module1%a'
+                    . "Info: Some modules might require static view files to be cleared. To do this, run "
+                    . "'module:disable' with the --clear-static-content%a"
             ],
             'enable, clear static content' => [
                 true,
@@ -124,17 +136,17 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
                 false,
                 true,
                 '%amodules have been disabled%aMagento_Module1%aGenerated static view files cleared%a'
-            ],
+            ]
         ];
     }
 
     public function testExecuteEnableInvalidModule()
     {
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('getModulesToChange')
             ->with(true, ['invalid'])
             ->willThrowException(new \LogicException('Unknown module(s): invalid'));
-        $commandTester = new CommandTester(new ModuleEnableCommand($this->objectManagerProvider));
+        $commandTester = $this->getCommandTester(true);
         $input = ['module' => ['invalid']];
         $commandTester->execute($input);
         $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
@@ -142,11 +154,11 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteDisableInvalidModule()
     {
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('getModulesToChange')
             ->with(false, ['invalid'])
             ->willThrowException(new \LogicException('Unknown module(s): invalid'));
-        $commandTester = new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        $commandTester = $this->getCommandTester(false);
         $input = ['module' => ['invalid']];
         $commandTester->execute($input);
         $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
@@ -160,29 +172,38 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteAll($isEnable, $expectedMessage)
     {
-        $this->fullModuleList->expects($this->once())
+        $setupUpgradeMessage = 'To make sure that the enabled modules are properly registered, run \'setup:upgrade\'.';
+        $this->fullModuleListMock->expects($this->once())
             ->method('getNames')
             ->will($this->returnValue(['Magento_Module1', 'Magento_Module2']));
-
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('getModulesToChange')
             ->with($isEnable, ['Magento_Module1', 'Magento_Module2'])
             ->will($this->returnValue(['Magento_Module1']));
-
-        $this->status->expects($this->any())
+        $this->statusMock->expects($this->any())
             ->method('checkConstraints')
             ->will($this->returnValue([]));
-
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('setIsEnabled')
             ->with($isEnable, ['Magento_Module1']);
-
-        $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        if ($isEnable) {
+            $this->deploymentConfigMock->expects($this->once())
+                ->method('isAvailable')
+                ->willReturn(['Magento_Module1']);
+        } else {
+            $this->deploymentConfigMock->expects($this->never())
+                ->method('isAvailable');
+        }
+        $commandTester = $this->getCommandTester($isEnable);
         $input = ['--all' => true];
         $commandTester->execute($input);
-        $this->assertStringMatchesFormat($expectedMessage, $commandTester->getDisplay());
+        $output = $commandTester->getDisplay();
+        $this->assertStringMatchesFormat($expectedMessage, $output);
+        if ($isEnable) {
+            $this->assertContains($setupUpgradeMessage, $output);
+        } else {
+            $this->assertNotContains($setupUpgradeMessage, $output);
+        }
     }
 
     /**
@@ -203,21 +224,16 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithConstraints($isEnable)
     {
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('getModulesToChange')
             ->with($isEnable, ['Magento_Module1', 'Magento_Module2'])
             ->will($this->returnValue(['Magento_Module1']));
-
-        $this->status->expects($this->any())
+        $this->statusMock->expects($this->any())
             ->method('checkConstraints')
             ->will($this->returnValue(['constraint1', 'constraint2']));
-
-        $this->status->expects($this->never())
+        $this->statusMock->expects($this->never())
             ->method('setIsEnabled');
-
-        $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        $commandTester = $this->getCommandTester($isEnable);
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2']]);
         $this->assertStringMatchesFormat(
             'Unable to change status of modules%aconstraint1%aconstraint2%a',
@@ -244,21 +260,16 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteForce($isEnable, $expectedMessage)
     {
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('getModulesToChange')
             ->with($isEnable, ['Magento_Module1', 'Magento_Module2'])
             ->will($this->returnValue(['Magento_Module1']));
-
-        $this->status->expects($this->never())
+        $this->statusMock->expects($this->never())
             ->method('checkConstraints');
-
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('setIsEnabled')
             ->with($isEnable, ['Magento_Module1']);
-
-        $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        $commandTester = $this->getCommandTester($isEnable);
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2'], '--force' => true]);
         $this->assertStringMatchesFormat(
             $expectedMessage . '%amodules might not function properly%a',
@@ -284,21 +295,34 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteNoChanges($isEnable)
     {
-        $this->status->expects($this->once())
+        $this->statusMock->expects($this->once())
             ->method('getModulesToChange')
             ->with($isEnable, ['Magento_Module1', 'Magento_Module2'])
             ->will($this->returnValue([]));
-
-        $this->status->expects($this->never())
+        $this->statusMock->expects($this->never())
             ->method('setIsEnabled');
-
-        $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        $commandTester = $this->getCommandTester($isEnable);
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2']]);
         $this->assertStringMatchesFormat(
             'No modules were changed%a',
             $commandTester->getDisplay()
         );
+    }
+
+    /**
+     * @param bool $isEnable
+     * @return CommandTester
+     */
+    private function getCommandTester($isEnable)
+    {
+        $class = $isEnable ? ModuleEnableCommand::class : ModuleDisableCommand::class;
+        $command = new $class($this->objectManagerProviderMock);
+        $deploymentConfigProperty = new \ReflectionProperty($class, 'deploymentConfig');
+        $deploymentConfigProperty->setAccessible(true);
+        $deploymentConfigProperty->setValue($command, $this->deploymentConfigMock);
+        $deploymentConfigProperty = new \ReflectionProperty($class, 'generatedFiles');
+        $deploymentConfigProperty->setAccessible(true);
+        $deploymentConfigProperty->setValue($command, $this->generatedFiles);
+        return new CommandTester($command);
     }
 }

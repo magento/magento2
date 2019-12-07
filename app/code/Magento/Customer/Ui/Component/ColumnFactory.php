@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component;
@@ -9,22 +9,33 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * Class ColumnFactory. Responsible for the column object generation
+ */
 class ColumnFactory
 {
-    /** @var \Magento\Framework\View\Element\UiComponentFactory  */
+    /**
+     * @var \Magento\Framework\View\Element\UiComponentFactory
+     */
     protected $componentFactory;
 
-    /** @var InlineEditUpdater */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
+     */
     protected $inlineEditUpdater;
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
         'select' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     protected $dataTypeMap = [
         'default' => 'text',
         'text' => 'text',
@@ -47,6 +58,8 @@ class ColumnFactory
     }
 
     /**
+     * Creates column object for grid ui component
+     *
      * @param array $attributeData
      * @param string $columnName
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
@@ -55,13 +68,19 @@ class ColumnFactory
      */
     public function create(array $attributeData, $columnName, $context, array $config = [])
     {
-        $config = array_merge([
-            'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
-            'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
-            'align' => 'left',
-            'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
-            'component' => $this->getJsComponent($this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])),
-        ], $config);
+        $config = array_merge(
+            [
+                'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
+                'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
+                'align' => 'left',
+                'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
+                'component' => $this->getJsComponent(
+                    $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])
+                ),
+                '__disableTmpl' => 'true'
+            ],
+            $config
+        );
         if ($attributeData[AttributeMetadata::FRONTEND_INPUT] == 'date') {
             $config['dateFormat'] = 'MMM d, y';
             $config['timezone'] = false;
@@ -93,6 +112,8 @@ class ColumnFactory
     }
 
     /**
+     * Returns component map
+     *
      * @param string $dataType
      * @return string
      */
@@ -102,6 +123,8 @@ class ColumnFactory
     }
 
     /**
+     * Returns component map depends on data type
+     *
      * @param string $frontendType
      * @return string
      */

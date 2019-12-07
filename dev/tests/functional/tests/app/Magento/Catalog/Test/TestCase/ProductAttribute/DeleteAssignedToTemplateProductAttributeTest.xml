@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteAssignedToTemplateProductAttributeTest" summary="Delete Assigned to Template Product Attribute" ticketId="MAGETWO-26011">
         <variation name="DeleteAssignedToTemplateProductAttributeTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="attributeSet/data/assigned_attributes/dataset" xsi:type="string">attribute_type_dropdown</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage" />
@@ -16,6 +17,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInUnassignedAttributes" />
         </variation>
         <variation name="DeleteAssignedToTemplateProductAttributeTestVariation2">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">default</data>
             <data name="attributeSet/data/assigned_attributes/dataset" xsi:type="string">attribute_type_text_field</data>
             <data name="assertProduct/data/name" xsi:type="string">Product name</data>

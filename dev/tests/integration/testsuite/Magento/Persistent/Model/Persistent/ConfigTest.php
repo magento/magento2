@@ -2,14 +2,14 @@
 /**
  * \Magento\Persistent\Model\Persistent\Config
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model\Persistent;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Model\Persistent\Config
@@ -22,17 +22,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Filesystem\DirectoryList',
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
             ['root' => DirectoryList::ROOT]
         );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['directoryList' => $directoryList]
         );
 
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->create(
-            'Magento\Persistent\Model\Persistent\Config',
+            \Magento\Persistent\Model\Persistent\Config::class,
             ['filesystem' => $filesystem]
         );
     }
@@ -48,7 +48,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetBlockConfigInfo()
     {
         $this->_model->setConfigFilePath(__DIR__ . '/_files/persistent.xml');
-        $blocks = $this->_model->getBlockConfigInfo('Magento\Sales\Block\Reorder\Sidebar');
+        $blocks = $this->_model->getBlockConfigInfo(\Magento\Sales\Block\Reorder\Sidebar::class);
         $expected = include '_files/expectedBlocksArray.php';
         $this->assertEquals($expected, $blocks);
     }
@@ -56,7 +56,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetBlockConfigInfoNotConfigured()
     {
         $this->_model->setConfigFilePath(__DIR__ . '/_files/persistent.xml');
-        $blocks = $this->_model->getBlockConfigInfo('Magento\Catalog\Block\Product\Compare\ListCompare');
+        $blocks = $this->_model->getBlockConfigInfo(\Magento\Catalog\Block\Product\Compare\ListCompare::class);
         $this->assertEquals([], $blocks);
     }
 }

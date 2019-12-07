@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,17 @@
  */
 namespace Magento\Config\Block\System\Config;
 
+use \Magento\Framework\App\ObjectManager;
+use \Magento\Framework\Serialize\Serializer\Json;
+
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
-    const DEFAULT_SECTION_BLOCK = 'Magento\Config\Block\System\Config\Form';
+    const DEFAULT_SECTION_BLOCK = \Magento\Config\Block\System\Config\Form::class;
 
     /**
      * Form block class name
@@ -40,16 +45,24 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $_configStructure;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $jsonSerializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param array $data
+     * @param Json|null $jsonSerializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
-        array $data = []
+        array $data = [],
+        Json $jsonSerializer = null
     ) {
         $this->_configStructure = $configStructure;
+        $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $data);
     }
 
@@ -71,7 +84,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'id' => 'save',
                 'label' => __('Save Config'),
@@ -104,5 +117,23 @@ class Edit extends \Magento\Backend\Block\Widget
     public function getSaveUrl()
     {
         return $this->getUrl('*/system_config/save', ['_current' => true]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfigSearchParamsJson()
+    {
+        $params = [];
+        if ($this->getRequest()->getParam('section')) {
+            $params['section'] = $this->getRequest()->getParam('section');
+        }
+        if ($this->getRequest()->getParam('group')) {
+            $params['group'] = $this->getRequest()->getParam('group');
+        }
+        if ($this->getRequest()->getParam('field')) {
+            $params['field'] = $this->getRequest()->getParam('field');
+        }
+        return $this->jsonSerializer->serialize($params);
     }
 }

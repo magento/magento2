@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -11,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Class Status
  *
  * @method string getStatus()
+ * @method $this setStatus(string $status)
  * @method string getLabel()
  */
 class Status extends \Magento\Sales\Model\AbstractModel
@@ -52,13 +54,12 @@ class Status extends \Magento\Sales\Model\AbstractModel
         $this->_storeManager = $storeManager;
     }
 
-
     /**
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Status');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Status::class);
     }
 
     /**
@@ -93,10 +94,14 @@ class Status extends \Magento\Sales\Model\AbstractModel
     protected function validateBeforeUnassign($state)
     {
         if ($this->getResource()->checkIsStateLast($state)) {
-            throw new LocalizedException(__('The last status can\'t be unassigned from its current state.'));
+            throw new LocalizedException(
+                __("The last status can't be changed and needs to stay assigned to its current state.")
+            );
         }
         if ($this->getResource()->checkIsStatusUsed($this->getStatus())) {
-            throw new LocalizedException(__('Status can\'t be unassigned, because it is used by existing order(s).'));
+            throw new LocalizedException(
+                __("The status can't be unassigned because the status is currently used by an order.")
+            );
         }
     }
 

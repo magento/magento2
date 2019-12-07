@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -8,8 +8,6 @@ namespace Magento\Newsletter\Model;
 /**
  * Newsletter problem model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Problem _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Problem getResource()
  * @method int getSubscriberId()
  * @method \Magento\Newsletter\Model\Problem setSubscriberId(int $value)
  * @method int getQueueId()
@@ -20,6 +18,9 @@ namespace Magento\Newsletter\Model;
  * @method \Magento\Newsletter\Model\Problem setProblemErrorText(string $value)
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
 class Problem extends \Magento\Framework\Model\AbstractModel
 {
@@ -66,7 +67,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\ResourceModel\Problem');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Problem::class);
     }
 
     /**

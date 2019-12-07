@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Payflow\Link;
@@ -15,7 +15,7 @@ class Form extends \Magento\Payment\Block\Form
     /**
      * @var string
      */
-    protected $_template = 'payflowlink/info.phtml';
+    protected $_template = 'Magento_Paypal::payflowlink/info.phtml';
 
     /**
      * Get frame action URL

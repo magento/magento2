@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api;
@@ -10,16 +10,17 @@ namespace Magento\Sales\Api;
  *
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
+ * @since 100.0.2
  */
 interface InvoiceItemRepositoryInterface
 {
     /**
      * Lists the invoice items that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Sales\Api\Data\InvoiceItemSearchResultInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Loads a specified invoice item.
@@ -34,6 +35,7 @@ interface InvoiceItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface $entity The invoice item.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\InvoiceItemInterface $entity);
 
@@ -42,6 +44,7 @@ interface InvoiceItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface $entity The invoice item.
      * @return \Magento\Sales\Api\Data\InvoiceItemInterface Invoice item interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\InvoiceItemInterface $entity);
 }

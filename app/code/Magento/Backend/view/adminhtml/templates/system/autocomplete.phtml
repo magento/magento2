@@ -1,18 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <ul class="dropdown-menu">
-    <?php foreach ($items as $item): ?>
-    <li id="<?php /* @escapeNotVerified */ echo $item['id'] ?>" class="item">
-        <a href="<?php /* @escapeNotVerified */ echo $item['url'] ?>" class="title"><?php echo $block->escapeHtml($item['name']) ?></a>
-        <div class="type"><?php /* @escapeNotVerified */ echo $item['type'] ?></div>
-        <?php echo $block->escapeHtml($item['description']) ?>
+    <?php foreach ($items as $item) : ?>
+    <li id="<?= $block->escapeHtmlAttr($item['id']) ?>" class="item">
+        <a href="<?= $block->escapeUrl($item['url']) ?>" class="title"><?= $block->escapeHtml($item['name']) ?></a>
+        <div class="type"><?= $block->escapeHtml($item['type']) ?></div>
+        <?= $block->escapeHtml($item['description']) ?>
     </li>
     <?php endforeach ?>
 </ul>

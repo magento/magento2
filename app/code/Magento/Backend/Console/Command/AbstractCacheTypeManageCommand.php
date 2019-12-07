@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,9 +11,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache\Manager;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
-    /** @var EventManagerInterface */
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
     protected $eventManager;
 
     /**

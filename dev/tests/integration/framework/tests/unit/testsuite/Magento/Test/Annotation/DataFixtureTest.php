@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Annotation;
+
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Test class for \Magento\TestFramework\Annotation\DataFixture.
  *
  * @magentoDataFixture sampleFixtureOne
  */
-class DataFixtureTest extends \PHPUnit_Framework_TestCase
+class DataFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Annotation\DataFixture|\PHPUnit_Framework_MockObject_MockObject
@@ -19,11 +21,10 @@ class DataFixtureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_object = $this->getMock(
-            'Magento\TestFramework\Annotation\DataFixture',
-            ['_applyOneFixture'],
-            [__DIR__ . '/_files']
-        );
+        $this->_object = $this->getMockBuilder(\Magento\TestFramework\Annotation\DataFixture::class)
+            ->setMethods(['_applyOneFixture'])
+            ->setConstructorArgs([__DIR__ . '/_files'])
+            ->getMock();
     }
 
     public static function sampleFixtureOne()
@@ -178,5 +179,17 @@ class DataFixtureTest extends \PHPUnit_Framework_TestCase
             $this->stringEndsWith('sample_fixture_two_rollback.php')
         );
         $this->_object->rollbackTransaction();
+    }
+
+    /**
+     * @magentoDataFixture Foo_DataFixtureDummy::Test/Integration/foo.php
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    public function testModuleDataFixture()
+    {
+        ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Foo_DataFixtureDummy', __DIR__);
+        $this->_object->expects($this->once())->method('_applyOneFixture')
+            ->with(__DIR__ . '/Test/Integration/foo.php');
+        $this->_object->startTransaction($this);
     }
 }

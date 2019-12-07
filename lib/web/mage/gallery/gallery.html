@@ -1,41 +1,42 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<div class="fotorama-item" data-gallery-role="gallery" tabindex="0">
-    <div data-gallery-role="fotorama__focusable-start" tabindex="0"></div>
+<div class="fotorama-item" data-gallery-role="gallery">
+    <div data-gallery-role="fotorama__focusable-start" tabindex="-1"></div>
     <div class="fotorama__wrap fotorama__wrap--css3 fotorama__wrap--slide fotorama__wrap--toggle-arrows">
-        <div class="fotorama__stage">
-            <div class="fotorama__arr fotorama__arr--prev" tabindex="0" role="button" aria-label="Previos">
-                <div class="fotorama__arr__arr" data-gallery-role="arrow"></div>
+        <div class="fotorama__stage" data-fotorama-stage="fotorama__stage">
+            <div class="fotorama__arr fotorama__arr--prev" tabindex="0" role="button" aria-label="Previous" data-gallery-role="arrow">
+                <div class="fotorama__arr__arr"></div>
             </div>
             <div class="fotorama__stage__shaft" tabindex="0" data-gallery-role="stage-shaft">
             </div>
             <div class="fotorama__arr fotorama__arr--next fotorama__arr--disabled" tabindex="-1" role="button"
-                 aria-label="Next">
-                <div class="fotorama__arr__arr" data-gallery-role="arrow"></div>
+                 aria-label="Next" data-gallery-role="arrow">
+                <div class="fotorama__arr__arr"></div>
             </div>
             <div class="fotorama__video-close"></div>
-            <div class="fotorama__zoom-in"></div>
-            <div class="fotorama__zoom-out"></div>
+            <div class="fotorama__zoom-in" data-gallery-role="fotorama__zoom-in" aria-label="Zoom in" role="button" tabindex="0"></div>
+            <div class="fotorama__zoom-out" data-gallery-role="fotorama__zoom-out" aria-label="Zoom out" role="button" tabindex="0"></div>
+            <div class="fotorama__spinner"></div>
         </div>
         <div class="fotorama__nav-wrap" data-gallery-role="nav-wrap">
             <div class="fotorama__nav fotorama__nav--thumbs">
-                <div class="fotorama__fullscreen-icon" data-gallery-role="fotorama__fullscreen-icon" tabindex="0" role="button"></div>
-                <div class="fotorama__thumb__arr--left" tabindex="0" role="button" aria-label="<%= previous %>">
-                    <div class="fotorama__thumb__arr" data-gallery-role="arrow"></div>
+                <div class="fotorama__fullscreen-icon" data-gallery-role="fotorama__fullscreen-icon" tabindex="0" aria-label="Exit fullscreen" role="button"></div>
+                <div class="fotorama__thumb__arr fotorama__thumb__arr--left" role="button" aria-label="Previous" data-gallery-role="arrow" tabindex = "-1">
+                    <div class="fotorama__thumb--icon"></div>
                 </div>
                 <div class="fotorama__nav__shaft">
                     <div class="fotorama__thumb-border"></div>
                 </div>
-                <div class="fotorama__thumb__arr--right" tabindex="0" role="button" aria-label="<%= next %>">
-                    <div class="fotorama__thumb__arr" data-gallery-role="arrow"></div>
+                <div class="fotorama__thumb__arr fotorama__thumb__arr--right" role="button" aria-label="Next" data-gallery-role="arrow" tabindex = "-1">
+                    <div class="fotorama__thumb--icon"></div>
                 </div>
             </div>
         </div>
     </div>
-    <div data-gallery-role="fotorama__focusable-end" tabindex="0"></div>
+    <div data-gallery-role="fotorama__focusable-end" tabindex="-1"></div>
 </div>
 <div class="magnifier-preview" data-gallery-role="magnifier" id="preview"></div>

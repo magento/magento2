@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Locale\Test\Unit;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     private static $allAllowedLocales = [
         'af_ZA', 'ar_DZ', 'ar_EG', 'ar_KW', 'ar_MA', 'ar_SA', 'az_Latn_AZ', 'be_BY', 'bg_BG', 'bn_BD',
@@ -17,7 +15,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         'es_MX', 'eu_ES', 'es_PE', 'et_EE', 'fa_IR', 'fi_FI', 'fil_PH', 'fr_CA', 'fr_FR', 'gu_IN',
         'he_IL', 'hi_IN', 'hr_HR', 'hu_HU', 'id_ID', 'is_IS', 'it_CH', 'it_IT', 'ja_JP', 'ka_GE',
         'km_KH', 'ko_KR', 'lo_LA', 'lt_LT', 'lv_LV', 'mk_MK', 'mn_Cyrl_MN', 'ms_Latn_MY', 'nl_NL', 'nb_NO',
-        'nn_NO', 'pl_PL', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'sk_SK', 'sl_SI', 'sq_AL', 'sr_Cyrl_RS',
+        'nn_NO', 'pl_PL', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'sk_SK', 'sl_SI', 'sq_AL', 'sr_Cyrl_RS', 'sr_Latn_RS',
         'sv_SE', 'sw_KE', 'th_TH', 'tr_TR', 'uk_UA', 'vi_VN', 'zh_Hans_CN', 'zh_Hant_HK', 'zh_Hant_TW', 'es_CL',
         'lo_LA', 'es_VE', 'en_IE',
     ];
@@ -43,9 +41,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     ];
 
     private static $samplePresentLocales = [
-         'en_US', 'lv_LV', 'pt_BR', 'it_IT', 'ar_EG', 'bg_BG', 'en_IE', 'es_ES',
-         'en_AU', 'pt_PT', 'ru_RU', 'en_CA', 'vi_VN', 'ja_JP', 'en_GB', 'zh_CN',
-         'zh_TW', 'fr_FR', 'ar_KW', 'pl_PL', 'ko_KR', 'sk_SK', 'el_GR', 'hi_IN',
+        'en_US', 'lv_LV', 'pt_BR', 'it_IT', 'ar_EG', 'bg_BG', 'en_IE', 'es_ES',
+        'en_AU', 'pt_PT', 'ru_RU', 'en_CA', 'vi_VN', 'ja_JP', 'en_GB', 'zh_CN',
+        'zh_TW', 'fr_FR', 'ar_KW', 'pl_PL', 'ko_KR', 'sk_SK', 'el_GR', 'hi_IN',
     ];
 
     private static $sampleAbsentLocales = [
@@ -75,7 +73,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowedLocalesNoDataArray()
     {
         $this->configObject = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\Locale\Config');
+            ->getObject(\Magento\Framework\Locale\Config::class);
 
         $retrievedLocales = $this->configObject->getAllowedLocales();
 
@@ -91,7 +89,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowedLocalesGivenDataArray()
     {
         $this->configObject = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\Locale\Config',
+            ->getObject(
+                \Magento\Framework\Locale\Config::class,
                 [
                     'data' => [
                         'allowedLocales' => $this::$sampleAdditionalLocales,
@@ -116,7 +115,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowedLocalesGivenRedundantDataArray()
     {
         $this->configObject = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\Locale\Config',
+            ->getObject(
+                \Magento\Framework\Locale\Config::class,
                 [
                     'data' => [
                         'allowedLocales' => $this::$samplePresentLocales,
@@ -141,7 +141,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowedCurrenciesNoDataArray()
     {
         $this->configObject = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\Locale\Config');
+            ->getObject(\Magento\Framework\Locale\Config::class);
 
         $retrievedCurrencies = $this->configObject->getAllowedCurrencies();
 
@@ -157,7 +157,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowedCurrenciesGivenDataArray()
     {
         $this->configObject = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\Locale\Config',
+            ->getObject(
+                \Magento\Framework\Locale\Config::class,
                 [
                     'data' => [
                         'allowedCurrencies' => $this::$sampleAdditionalCurrencies,
@@ -182,7 +183,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowedCurrenciesGivenRedundantDataArray()
     {
         $this->configObject = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\Locale\Config',
+            ->getObject(
+                \Magento\Framework\Locale\Config::class,
                 [
                     'data' => [
                         'allowedCurrencies' => $this::$samplePresentCurrencies,

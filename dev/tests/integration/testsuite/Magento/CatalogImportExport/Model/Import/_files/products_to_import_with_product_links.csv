@@ -1,0 +1,5 @@
+sku,product_type,store_view_code,name,price,qty,attribute_set_code,related_skus,related_position,crosssell_skus,crosssell_position,upsell_skus,upsell_position
+simple1,simple,,simple 1,25,10,Default,,,,,,
+simple2,simple,,simple 2,34,10,Default,,,,,,
+simple3,simple,,simple 3,58,10,Default,,,,,,
+simple4,simple,,simple 4,67,10,Default,"simple1,simple2","2,1","simple2,simple3","1,2","simple1,simple3","3,1"

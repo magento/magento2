@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Source\Locale;
 
-class TimezoneTest extends \PHPUnit_Framework_TestCase
+class TimezoneTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -19,7 +19,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->listMock = $this->getMockBuilder('Magento\Framework\Locale\TranslatedLists')
+        $this->listMock = $this->getMockBuilder(\Magento\Framework\Locale\TranslatedLists::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new \Magento\Config\Model\Config\Source\Locale\Timezone($this->listMock);

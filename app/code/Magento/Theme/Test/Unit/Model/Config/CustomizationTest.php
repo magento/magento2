@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Theme\Test\Unit\Model\Config;
 
 use Magento\Framework\App\Area;
 
-class CustomizationTest extends \PHPUnit_Framework_TestCase
+class CustomizationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -34,26 +34,26 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockBuilder
+     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit\Framework\MockObject_MockBuilder
      */
     protected $themeProviderMock;
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
-        $this->designPackage = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
-        $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Collection')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
+        $this->designPackage = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
+        $this->themeCollection = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $collectionFactory = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\CollectionFactory')
+        $collectionFactory = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->themeCollection));
 
-        $this->themeProviderMock = $this->getMockBuilder('\Magento\Theme\Model\Theme\ThemeProvider')
+        $this->themeProviderMock = $this->getMockBuilder(\Magento\Theme\Model\Theme\ThemeProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['getThemeCustomizations', 'getThemeByFullPath'])
             ->getMock();

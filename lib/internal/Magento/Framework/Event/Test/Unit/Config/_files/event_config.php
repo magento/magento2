@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -15,5 +15,8 @@ return [
             'shared' => false,
             'name' => 'observer_2',
         ],
+    ],
+    'some_eventname' => [
+        'observer_3' => ['instance' => 'instance_3', 'name' => 'observer_3'],
     ]
 ];

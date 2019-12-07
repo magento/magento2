@@ -1,16 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /* @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element */
 $element = $block->getElement();
-$note = $element->getNote() ? '<div class="note" id="' . $element->getId() . '-note">' . $element->getNote() . '</div>' : '';
+$note = $element->getNote() ? '<div class="note admin__field-note" id="' . $element->getId() . '-note">' . $element->getNote() . '</div>' : '';
 $elementBeforeLabel = $element->getExtType() == 'checkbox admin__control-checkbox' || $element->getExtType() == 'radio admin__control-radio';
 $addOn = ($element->getBeforeElementHtml() || $element->getAfterElementHtml()) && !$element->getNoWrapAsAddon();
 $fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
@@ -26,26 +23,22 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     . ($element->getFieldExtraAttributes() ? ' ' . $element->getFieldExtraAttributes() : '');
 ?>
 
-<?php if (!$element->getNoDisplay()): ?>
-    <?php if ($element->getType() == 'hidden'): ?>
-        <?php echo $element->getElementHtml() ?>
-    <?php else: ?>
-    <div<?php /* @escapeNotVerified */ echo $fieldAttributes ?>>
-        <?php if ($elementBeforeLabel): ?>
-            <?php echo $element->getElementHtml() ?>
-            <?php echo $element->getLabelHtml() ?>
-            <?php /* @escapeNotVerified */ echo $note ?>
-        <?php else: ?>
-            <?php echo $element->getLabelHtml() ?>
+<?php if (!$element->getNoDisplay()) : ?>
+    <?php if ($element->getType() == 'hidden') : ?>
+        <?= $element->getElementHtml() ?>
+    <?php else : ?>
+    <div<?= /* @noEscape */ $fieldAttributes ?>>
+        <?php if ($elementBeforeLabel) : ?>
+            <?= $element->getElementHtml() ?>
+            <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
+            <?= /* @noEscape */ $note ?>
+        <?php else : ?>
+            <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <div class="admin__field-control control">
-                <?php /* @escapeNotVerified */ echo($addOn) ? '<div class="admin__field">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
-                <?php /* @escapeNotVerified */ echo $note ?>
+                <?= /* @noEscape */ ($addOn) ? '<div class="admin__field">' . $element->getElementHtml() . '</div>' : $element->getElementHtml() ?>
+                <?= /* @noEscape */ $note ?>
             </div>
         <?php endif; ?>
-        <?php if ($element->getScopeLabel()): ?>
-            <div class="field-service" value-scope="<?php /* @escapeNotVerified */ echo $element->getScopeLabel()?>">
-            </div>
-        <?php endif;?>
     </div>
     <?php endif; ?>
 <?php endif; ?>

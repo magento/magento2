@@ -1,30 +1,36 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Invoice for your {{var store.getFrontendName()}} order @-->
+<!--@subject {{trans "Invoice for your %store_name order" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"var billing.getName()":"Guest Customer Name",
-"var comment":"Invoice Comment",
+"var billing.name":"Guest Customer Name",
+"var comment|escape|nl2br":"Invoice Comment",
 "var invoice.increment_id":"Invoice Id",
 "layout handle=\"sales_email_order_invoice_items\" invoice=$invoice order=$order":"Invoice Items Grid",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
-"var order.getShippingDescription()":"Shipping Description",
-"var order.shipping_description":"Shipping Description"
+"var order.shipping_description":"Shipping Description",
+"var store.frontend_name":"Store Frontend Name",
+"var store_phone":"Store Phone",
+"var store_email":"Store Email",
+"var store_hours":"Store Hours",
+"var invoice": "Invoice",
+"var order": "Order",
+"var order_data.is_not_virtual": "Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
 
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$billing.getName()}}</p>
+            <p class="greeting">{{trans "%name," name=$billing.name}}</p>
             <p>
-                {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
+                {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
                 {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
                 {{depend store_hours}}
                     {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
@@ -54,7 +60,7 @@
                         <h3>{{trans "Billing Info"}}</h3>
                         <p>{{var formattedBillingAddress|raw}}</p>
                     </td>
-                    {{depend order.getIsNotVirtual()}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="address-details">
                         <h3>{{trans "Shipping Info"}}</h3>
                         <p>{{var formattedShippingAddress|raw}}</p>
@@ -66,10 +72,10 @@
                         <h3>{{trans "Payment Method"}}</h3>
                         {{var payment_html|raw}}
                     </td>
-                    {{depend order.getIsNotVirtual()}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="method-info">
                         <h3>{{trans "Shipping Method"}}</h3>
-                        <p>{{var order.getShippingDescription()}}</p>
+                        <p>{{var order.shipping_description}}</p>
                     </td>
                     {{/depend}}
                 </tr>

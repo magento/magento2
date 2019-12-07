@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -8,11 +8,18 @@ namespace Magento\Paypal\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Paypal\Helper\Data as PaypalHelper;
 
+/**
+ * Class ExpressConfigProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ExpressConfigProvider implements ConfigProviderInterface
 {
+    const IN_CONTEXT_BUTTON_ID = 'paypal-express-in-context-button';
+
     /**
      * @var ResolverInterface
      */
@@ -54,24 +61,42 @@ class ExpressConfigProvider implements ConfigProviderInterface
     protected $paymentHelper;
 
     /**
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
+     * @var SmartButtonConfig
+     */
+    private $smartButtonConfig;
+
+    /**
+     * ExpressConfigProvider constructor.
      * @param ConfigFactory $configFactory
      * @param ResolverInterface $localeResolver
      * @param CurrentCustomer $currentCustomer
      * @param PaypalHelper $paypalHelper
      * @param PaymentHelper $paymentHelper
+     * @param UrlInterface $urlBuilder
+     * @param SmartButtonConfig|null $smartButtonConfig
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         ConfigFactory $configFactory,
         ResolverInterface $localeResolver,
         CurrentCustomer $currentCustomer,
         PaypalHelper $paypalHelper,
-        PaymentHelper $paymentHelper
+        PaymentHelper $paymentHelper,
+        UrlInterface $urlBuilder,
+        SmartButtonConfig $smartButtonConfig
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->currentCustomer = $currentCustomer;
         $this->paypalHelper = $paypalHelper;
         $this->paymentHelper = $paymentHelper;
+        $this->urlBuilder = $urlBuilder;
+        $this->smartButtonConfig = $smartButtonConfig;
 
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $this->paymentHelper->getMethodInstance($code);
@@ -79,10 +104,12 @@ class ExpressConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
+        $locale = $this->localeResolver->getLocale();
+
         $config = [
             'payment' => [
                 'paypalExpress' => [
@@ -90,11 +117,33 @@ class ExpressConfigProvider implements ConfigProviderInterface
                         $this->localeResolver
                     ),
                     'paymentAcceptanceMarkSrc' => $this->config->getPaymentMarkImageUrl(
-                        $this->localeResolver->getLocale()
+                        $locale
                     ),
+                    'isContextCheckout' => false,
+                    'inContextConfig' => []
                 ]
             ]
         ];
+
+        $isInContext = $this->isInContextCheckout();
+        if ($isInContext) {
+            $config['payment']['paypalExpress']['isContextCheckout'] = $isInContext;
+            $config['payment']['paypalExpress']['inContextConfig'] = [
+                'inContextId' => self::IN_CONTEXT_BUTTON_ID,
+                'merchantId' => $this->config->getValue('merchant_id'),
+            ];
+            $clientConfig = [
+                'button' => [
+                    self::IN_CONTEXT_BUTTON_ID
+                ],
+                'getTokenUrl' => $this->urlBuilder->getUrl('paypal/express/getTokenData'),
+                'onAuthorizeUrl' => $this->urlBuilder->getUrl('paypal/express/onAuthorization'),
+                'onCancelUrl' => $this->urlBuilder->getUrl('paypal/express/cancel')
+            ];
+            $clientConfig = array_replace_recursive($clientConfig, $this->smartButtonConfig->getConfig('checkout'));
+            $config['payment']['paypalExpress']['inContextConfig']['clientConfig'] = $clientConfig;
+        }
+
         foreach ($this->methodCodes as $code) {
             if ($this->methods[$code]->isAvailable()) {
                 $config['payment']['paypalExpress']['redirectUrl'][$code] = $this->getMethodRedirectUrl($code);
@@ -102,7 +151,20 @@ class ExpressConfigProvider implements ConfigProviderInterface
                     $this->getBillingAgreementCode($code);
             }
         }
+
         return $config;
+    }
+
+    /**
+     * Return setting value for in context checkout
+     *
+     * @return bool
+     */
+    protected function isInContextCheckout()
+    {
+        $this->config->setMethod(Config::METHOD_EXPRESS);
+
+        return (bool)(int) $this->config->getValue('in_context');
     }
 
     /**

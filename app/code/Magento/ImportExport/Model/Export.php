@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\ImportExport\Model;
 
 /**
  * Export model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
+ * @deprecated
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {
@@ -21,9 +22,16 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     const FILTER_ELEMENT_SKIP = 'skip_attr';
 
     /**
+     * Allow multiple values wrapping in double quotes for additional attributes.
+     */
+    const FIELDS_ENCLOSURE = 'fields_enclosure';
+
+    /**
      * Filter fields types.
      */
     const FILTER_TYPE_SELECT = 'select';
+
+    const FILTER_TYPE_MULTISELECT = 'multiselect';
 
     const FILTER_TYPE_INPUT = 'input';
 
@@ -61,6 +69,17 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     protected $_exportAdapterFac;
 
     /**
+     * @var array
+     */
+    private static $backendTypeToFilterMapper = [
+        'datetime' => self::FILTER_TYPE_DATE,
+        'decimal' => self::FILTER_TYPE_NUMBER,
+        'int' => self::FILTER_TYPE_NUMBER,
+        'varchar' => self::FILTER_TYPE_INPUT,
+        'text' => self::FILTER_TYPE_INPUT
+    ];
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
@@ -85,7 +104,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Create instance of entity adapter and return it
      *
-     * @return \Magento\ImportExport\Model\Export\Entity\AbstractEntity|\Magento\ImportExport\Model\Export\AbstractEntity
+     * @return \Magento\ImportExport\Model\Export\Entity\AbstractEntity
+     * |\Magento\ImportExport\Model\Export\AbstractEntity
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getEntityAdapter()
@@ -108,8 +128,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
                             'The entity adapter object must be an instance of %1 or %2.',
-                            'Magento\ImportExport\Model\Export\Entity\AbstractEntity',
-                            'Magento\ImportExport\Model\Export\AbstractEntity'
+                            \Magento\ImportExport\Model\Export\Entity\AbstractEntity::class,
+                            \Magento\ImportExport\Model\Export\AbstractEntity::class
                         )
                     );
                 }
@@ -152,7 +172,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
                             'The adapter object must be an instance of %1.',
-                            'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter'
+                            \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class
                         )
                     );
                 }
@@ -209,20 +229,21 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     public static function getAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
         if ($attribute->usesSource() || $attribute->getFilterOptions()) {
-            return self::FILTER_TYPE_SELECT;
-        } elseif ('datetime' == $attribute->getBackendType()) {
-            return self::FILTER_TYPE_DATE;
-        } elseif ('decimal' == $attribute->getBackendType() || 'int' == $attribute->getBackendType()) {
-            return self::FILTER_TYPE_NUMBER;
-        } elseif ('varchar' == $attribute->getBackendType() || 'text' == $attribute->getBackendType()) {
-            return self::FILTER_TYPE_INPUT;
-        } elseif ($attribute->isStatic()) {
-            return self::getStaticAttributeFilterType($attribute);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We can\'t determine the attribute filter type.')
-            );
+            return 'multiselect' == $attribute->getFrontendInput() ?
+                self::FILTER_TYPE_MULTISELECT : self::FILTER_TYPE_SELECT;
         }
+
+        if (isset(self::$backendTypeToFilterMapper[$attribute->getBackendType()])) {
+            return self::$backendTypeToFilterMapper[$attribute->getBackendType()];
+        }
+
+        if ($attribute->isStatic()) {
+            return self::getStaticAttributeFilterType($attribute);
+        }
+
+        throw new \Magento\Framework\Exception\LocalizedException(
+            __('We can\'t determine the attribute filter type.')
+        );
     }
 
     /**
@@ -234,10 +255,13 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     public static function getStaticAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
-        if ($attribute->getAttributeCode() == 'category_ids') {
+        if (in_array($attribute->getAttributeCode(), ['category_ids', 'media_gallery'])) {
             return self::FILTER_TYPE_INPUT;
         }
         $columns = $attribute->getFlatColumns();
+        if (empty($columns)) {
+            return self::FILTER_TYPE_INPUT;
+        }
         switch ($columns[$attribute->getAttributeCode()]['type']) {
             case \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER:
             case \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT:

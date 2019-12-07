@@ -1,0 +1,29 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface ProductInterface {
+    swatch_image: String @doc(description: "The file name of a swatch image")
+}
+
+input ProductFilterInput {
+    swatch_image: FilterTypeInput @doc(description: "The file name of a swatch image")
+}
+
+input ProductSortInput {
+    swatch_image: SortEnum @doc(description: "The file name of a swatch image")
+}
+
+interface SwatchLayerFilterItemInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\SwatchLayerFilterItemResolver")
+{
+    swatch_data: SwatchData @doc(description: "Data required to render swatch filter item")
+}
+
+type SwatchLayerFilterItem implements LayerFilterItemInterface, SwatchLayerFilterItemInterface
+{
+
+}
+
+type SwatchData {
+    type: String @doc(description: "Type of swatch filter item: 1 - text, 2 - image")
+    value: String @doc(description: "Value for swatch item (text or image link)")
+}

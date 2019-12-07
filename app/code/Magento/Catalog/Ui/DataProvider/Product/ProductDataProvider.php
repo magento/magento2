@@ -1,14 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * Class ProductDataProvider
+ *
+ * @api
+ * @since 100.0.2
  */
 class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -30,8 +37,11 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $addFilterStrategies;
 
     /**
-     * Construct
-     *
+     * @var PoolInterface
+     */
+    private $modifiersPool;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -40,6 +50,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $modifiersPool
      */
     public function __construct(
         $name,
@@ -49,12 +60,15 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
         array $meta = [],
-        array $data = []
+        array $data = [],
+        PoolInterface $modifiersPool = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
+        $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
+        $this->collection->setStoreId(Store::DEFAULT_STORE_ID);
     }
 
     /**
@@ -69,10 +83,16 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
         $items = $this->getCollection()->toArray();
 
-        return [
+        $data = [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $data = $modifier->modifyData($data);
+        }
+        return $data;
     }
 
     /**
@@ -92,7 +112,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
@@ -106,5 +126,20 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         } else {
             parent::addFilter($filter);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMeta()
+    {
+        $meta = parent::getMeta();
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $meta = $modifier->modifyMeta($meta);
+        }
+
+        return $meta;
     }
 }

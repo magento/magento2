@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\System\Config\Backend;
@@ -58,7 +58,7 @@ class Varnish extends \Magento\Framework\App\Config\Value
         $currentValue = $this->getValue();
         if (!$currentValue) {
             foreach ($data as $field => $value) {
-                if (strstr($this->getPath(), $field)) {
+                if (strstr($this->getPath(), (string) $field)) {
                     $this->setValue($value);
                     $this->save();
                     break;

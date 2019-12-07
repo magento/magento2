@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model\Cron;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\Cron\ReadinessCheck;
 
-class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
+class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Validator\DbValidator
@@ -41,14 +41,24 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private $readinessCheck;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\BasePackageInfo
+     */
+    private $basePackageInfo;
+
+    /**
      * @var array
      */
     private $expected;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     */
+    private $status;
+
     public function setUp()
     {
-        $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->deploymentConfig->expects($this->once())
             ->method('get')
             ->willReturn(
@@ -59,23 +69,37 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                     ConfigOptionsListConstants::KEY_PASSWORD => 'password'
                 ]
             );
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->write = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->write = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
-        $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
+        $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
+        $this->basePackageInfo = $this->createMock(\Magento\Setup\Model\BasePackageInfo::class);
+        $this->basePackageInfo->expects($this->once())->method('getPaths')->willReturn([__FILE__]);
+        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
         $this->readinessCheck = new ReadinessCheck(
             $this->dbValidator,
             $this->deploymentConfig,
             $this->filesystem,
-            $this->phpReadinessCheck
+            $this->phpReadinessCheck,
+            $this->basePackageInfo,
+            $this->status
         );
-        $this->phpReadinessCheck->expects($this->once())->method('checkPhpVersion')->willReturn(['success' => true]);
-        $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(['success' => true]);
-        $this->phpReadinessCheck->expects($this->once())->method('checkPhpSettings')->willReturn(['success' => true]);
+        $this->phpReadinessCheck
+            ->expects($this->once())
+            ->method('checkPhpVersion')
+            ->willReturn(['responseType' => 'success']);
+        $this->phpReadinessCheck
+            ->expects($this->once())
+            ->method('checkPhpExtensions')
+            ->willReturn(['responseType' => 'success']);
+        $this->phpReadinessCheck
+            ->expects($this->once())
+            ->method('checkPhpCronSettings')
+            ->willReturn(['responseType' => 'success']);
         $this->expected = [
-            ReadinessCheck::KEY_PHP_VERSION_VERIFIED => ['success' => true],
-            ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED => ['success' => true],
-            ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED => ['success' => true],
+            ReadinessCheck::KEY_PHP_VERSION_VERIFIED => ['responseType' => 'success'],
+            ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED => ['responseType' => 'success'],
+            ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED => ['responseType' => 'success']
         ];
     }
 
@@ -84,7 +108,6 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator->expects($this->once())
             ->method('checkDatabaseConnection')
             ->willThrowException(new \Magento\Setup\Exception('Connection failure'));
-        $this->dbValidator->expects($this->never())->method('checkDatabaseWrite');
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [
@@ -93,6 +116,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'error' => 'Connection failure'
             ],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
+            ReadinessCheck::KEY_FILE_PATHS => [
+                ReadinessCheck::KEY_LIST => [__FILE__],
+                ReadinessCheck::KEY_ERROR => ""
+            ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -115,6 +142,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'error' => 'Database user username does not have write access.'
             ],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
+            ReadinessCheck::KEY_FILE_PATHS => [
+                ReadinessCheck::KEY_LIST => [__FILE__],
+                ReadinessCheck::KEY_ERROR => ""
+            ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -132,6 +163,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
+            ReadinessCheck::KEY_FILE_PATHS => [
+                ReadinessCheck::KEY_LIST => [__FILE__],
+                ReadinessCheck::KEY_ERROR => ""
+            ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -149,6 +184,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
+            ReadinessCheck::KEY_FILE_PATHS => [
+                ReadinessCheck::KEY_LIST => [__FILE__],
+                ReadinessCheck::KEY_ERROR => ""
+            ],
             ReadinessCheck::KEY_LAST_TIMESTAMP => 50,
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100,
         ];
@@ -162,6 +201,9 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
 namespace Magento\Setup\Model\Cron;
 
+/**
+ * @return int
+ */
 function time()
 {
     return 100;

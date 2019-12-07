@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
  * Test for \Magento\UrlRewrite\Block\Cms\Page\Edit\FormTest
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Get form instance
@@ -21,11 +21,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\UrlRewrite\Block\Cms\Page\Edit\Form */
         $block = $layout->createBlock(
-            'Magento\UrlRewrite\Block\Cms\Page\Edit\Form',
+            \Magento\UrlRewrite\Block\Cms\Page\Edit\Form::class,
             'block',
             ['data' => $args]
         );
@@ -53,7 +53,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $args = [];
         if ($cmsPageData) {
             $args['cms_page'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Cms\Model\Page',
+                \Magento\Cms\Model\Page::class,
                 ['data' => $cmsPageData]
             );
         }
@@ -78,10 +78,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $form = $this->_getFormInstance($args);
 
         $expectedStores = [
-            ['label' => 'Main Website', 'value' => []],
+            ['label' => 'Main Website', 'value' => [], '__disableTmpl' => true],
             [
                 'label' => '    Main Website Store',
-                'value' => [['label' => '    Default Store View', 'value' => 1]]
+                'value' => [['label' => '    Default Store View', 'value' => 1]],
+                '__disableTmpl' => true
             ],
         ];
         $this->assertEquals($expectedStores, $form->getElement('store_id')->getValues());
@@ -110,6 +111,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @static
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function formPostInitDataProvider()
     {
@@ -132,14 +134,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function _getCmsPageWithStoresMock($stores)
     {
         $resourceMock = $this->getMockBuilder(
-            'Magento\Cms\Model\ResourceModel\Page'
+            \Magento\Cms\Model\ResourceModel\Page::class
         )->setMethods(
             ['lookupStoreIds']
         )->disableOriginalConstructor()->getMock();
         $resourceMock->expects($this->any())->method('lookupStoreIds')->will($this->returnValue($stores));
 
         $cmsPageMock = $this->getMockBuilder(
-            'Magento\Cms\Model\Page'
+            \Magento\Cms\Model\Page::class
         )->setMethods(
             ['getResource', 'getId']
         )->disableOriginalConstructor()->getMock();

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\DependencyReadinessCheck;
 
-class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
+class DependencyReadinessCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerJsonFinder
@@ -36,20 +36,17 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerJsonFinder = $this->getMock('Magento\Framework\Composer\ComposerJsonFinder', [], [], '', false);
+        $this->composerJsonFinder =
+            $this->createMock(\Magento\Framework\Composer\ComposerJsonFinder::class);
         $this->composerJsonFinder->expects($this->once())->method('findComposerJson')->willReturn('composer.json');
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $this->directoryList =
+            $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         $this->directoryList->expects($this->exactly(2))->method('getPath')->willReturn('var');
-        $this->reqUpdDryRunCommand = $this->getMock('Magento\Composer\RequireUpdateDryRunCommand', [], [], '', false);
-        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->reqUpdDryRunCommand =
+            $this->createMock(\Magento\Composer\RequireUpdateDryRunCommand::class);
+        $this->file = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
         $this->file->expects($this->once())->method('copy')->with('composer.json', 'var/composer.json');
-        $composerAppFactory = $this->getMock(
-            'Magento\Framework\Composer\MagentoComposerApplicationFactory',
-            [],
-            [],
-            '',
-            false
-        );
+        $composerAppFactory = $this->createMock(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $composerAppFactory->expects($this->once())
             ->method('createRequireUpdateDryRunCommand')
             ->willReturn($this->reqUpdDryRunCommand);

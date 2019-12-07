@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Layout;
 
-class UpdateTest extends \PHPUnit_Framework_TestCase
+class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Layout\Update
@@ -15,16 +15,19 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Layout\Update'
+            \Magento\Widget\Model\Layout\Update::class
         );
     }
 
     public function testConstructor()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Layout\Update'
+            \Magento\Widget\Model\Layout\Update::class
         );
-        $this->assertInstanceOf('Magento\Widget\Model\ResourceModel\Layout\Update', $this->_model->getResource());
+        $this->assertInstanceOf(
+            \Magento\Widget\Model\ResourceModel\Layout\Update::class,
+            $this->_model->getResource()
+        );
     }
 
     /**

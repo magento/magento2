@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\Config\Backend;
 
 /**
  * Backend model for validating ip addresses entered in Developer Client Restrictions
- *
- * Class AllowedIps
  */
 class AllowedIps extends \Magento\Framework\App\Config\Value
 {

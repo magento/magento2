@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
         <referenceBlock name="adminhtml.report.grid">
             <arguments>
                 <argument name="id" xsi:type="string">gridTotalsCustomer</argument>
-                <argument name="dataSource" xsi:type="object">Magento\Reports\Model\ResourceModel\Customer\Totals\Collection\Initial</argument>
+                <argument name="dataSource" xsi:type="object" shared="false">Magento\Reports\Model\ResourceModel\Customer\Totals\Collection\Initial</argument>
             </arguments>
         </referenceBlock>
         <referenceBlock name="adminhtml.report.grid.export">

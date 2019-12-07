@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,14 +21,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Navigate to: Reports > Search Terms.
  * 4. Perform appropriate assertions.
  *
- * @group Search_Terms_(MX)
+ * @group Search_Terms
  * @ZephyrId MAGETWO-27106
  */
 class SearchTermsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -97,7 +96,7 @@ class SearchTermsReportEntityTest extends Injectable
      */
     protected function createProducts($product, $countProduct)
     {
-        $name = 'simpleProductName' . mt_rand();
+        $name = 'simpleProductName' . random_int(0, PHP_INT_MAX);
         for ($i = 0; $i < $countProduct; $i++) {
             $productFixture = $this->fixtureFactory->createByCode(
                 'catalogProductSimple',

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Go to storefront category product page by given parameters -->
+    <actionGroup name="GoToStorefrontCategoryPageByParameters">
+        <annotations>
+            <description>Goes to the Storefront Category page using URI Search Parameters.</description>
+        </annotations>
+        <arguments>
+            <argument name="category" type="string"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+            <argument name="sort" type="string" defaultValue="asc"/>
+        </arguments>
+
+        <!-- Go to storefront category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_limit={{numOfProductsPerPage}}&amp;product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="VerifyCategoryPageParameters">
+        <annotations>
+            <description>Validate that the Category Page parameters are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="category"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{mode}}" selector="{{StorefrontCategoryMainSection.modeGridIsActive}}" stepKey="assertViewMode"/>
+        <see userInput="{{numOfProductsPerPage}}" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="assertNumberOfProductsPerPage"/>
+        <see userInput="{{sortBy}}" selector="{{StorefrontCategoryMainSection.sortedBy}}" stepKey="assertSortedBy"/>
+    </actionGroup>
+
+    <!-- Check the category page -->
+    <actionGroup name="StorefrontCheckCategoryActionGroup">
+        <annotations>
+            <description>Validate that the Storefront Category is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="category"/>
+            <argument name="productCount" type="string"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{productCount}}" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
+    </actionGroup>
+
+    <!-- Check simple product on the category page -->
+    <actionGroup name="StorefrontCheckCategorySimpleProduct">
+        <annotations>
+            <description>Validate that the provided Simple Product is present and correct on a Category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
+        <see userInput="${{product.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
+        <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
+        <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart"/>
+    </actionGroup>
+
+    <actionGroup name="AssertProductOnCategoryPageActionGroup" extends="StorefrontCheckCategorySimpleProduct">
+        <annotations>
+            <description>EXTENDS:StorefrontCheckCategorySimpleProduct. Removes 'AssertProductPrice', 'moveMouseOverProduct', 'AssertAddToCart'</description>
+        </annotations>
+        <remove keyForRemoval="AssertProductPrice"/>
+        <remove keyForRemoval="moveMouseOverProduct"/>
+        <remove keyForRemoval="AssertAddToCart"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontCheckAddToCartButtonAbsence">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="checkAddToCartButtonAbsence"/>
+    </actionGroup>
+    <actionGroup name="StorefrontSwitchCategoryViewToListMode">
+        <annotations>
+            <description>Switch the Storefront Category view to List.</description>
+        </annotations>
+
+        <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="switchCategoryViewToListMode"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.CategoryTitle}}" time="30" stepKey="waitForCategoryReload"/>
+    </actionGroup>
+
+    <actionGroup name="GoToSubCategoryPage">
+        <annotations>
+            <description>Goes to the Storefront page. Open the Parent Category menu in the Top Nav Menu. Click on a Subcategory. Validate that the Subcategory is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="parentCategory"/>
+            <argument name="subCategory"/>
+            <argument name="urlPath" type="string"/>
+        </arguments>
+
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName(parentCategory.name)}}" stepKey="moveMouseOnMainCategory"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategory.name)}}" stepKey="waitForSubCategoryVisible"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategory.name)}}" stepKey="goToCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInCurrentUrl url="{{urlPath}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{subCategory.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{subCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+    </actionGroup>
+</actionGroups>

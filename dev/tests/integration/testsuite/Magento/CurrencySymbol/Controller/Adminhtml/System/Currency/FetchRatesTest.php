@@ -1,16 +1,41 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
+use Magento\Framework\Escaper;
+
+/**
+ * Fetch Rates Test
+ */
 class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * Test fetch action without service
+     * @var Escaper
      */
-    public function testFetchRatesActionWithoutService()
+    private $escaper;
+
+    /**
+     * Initial setup
+     */
+    protected function setUp()
+    {
+        $this->escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            Escaper::class
+        );
+
+        parent::setUp();
+    }
+
+    /**
+     * Test fetch action without service
+     *
+     * @return void
+     */
+    public function testFetchRatesActionWithoutService(): void
     {
         $request = $this->getRequest();
         $request->setParam(
@@ -20,15 +45,17 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains('Please specify a correct Import Service.'),
+            $this->contains('The Import Service is incorrect. Verify the service and try again.'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
 
     /**
      * Test save action with nonexistent service
+     *
+     * @return void
      */
-    public function testFetchRatesActionWithNonexistentService()
+    public function testFetchRatesActionWithNonexistentService(): void
     {
         $request = $this->getRequest();
         $request->setParam(
@@ -38,89 +65,12 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains('We can\'t initialize the import model.'),
+            $this->contains(
+                $this->escaper->escapeHtml(
+                    "The import model can't be initialized. Verify the model and try again."
+                )
+            ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
-    }
-
-    /**
-     * Test save action with nonexistent service
-     */
-    public function testFetchRatesActionWithServiceErrors()
-    {
-        $this->runActionWithMockedImportService(['We can\'t retrieve a rate from url']);
-
-        $this->assertSessionMessages(
-            $this->contains('Click "Save" to apply the rates we found.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_WARNING
-        );
-    }
-
-    /**
-     * Test save action with nonexistent service
-     */
-    public function testFetchRatesActionWithoutServiceErrors()
-    {
-        $this->runActionWithMockedImportService();
-
-        $this->assertSessionMessages(
-            $this->contains('Click "Save" to apply the rates we found.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-    }
-
-    /**
-     * Run fetchRates with mocked external import service
-     *
-     * @param array $messages messages from external import service
-     */
-    protected function runActionWithMockedImportService(array $messages = [])
-    {
-        $importServiceMock = $this->getMockBuilder('\Magento\Directory\Model\Currency\Import\Webservicex')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $importServiceMock->method('fetchRates')
-            ->willReturn(['USD' => ['USD' => 1]]);
-
-        $importServiceMock->method('getMessages')
-            ->willReturn($messages);
-
-        $backendSessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $importServiceFactoryMock = $this->getMockBuilder('\Magento\Directory\Model\Currency\Import\Factory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $importServiceFactoryMock->method('create')
-            ->willReturn($importServiceMock);
-
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $objectManagerMap = [
-            ['Magento\Directory\Model\Currency\Import\Factory', $importServiceFactoryMock],
-            ['Magento\Backend\Model\Session', $backendSessionMock]
-        ];
-
-        $objectManagerMock->method('get')
-            ->will($this->returnValueMap($objectManagerMap));
-
-        $context =  $this->_objectManager->create(
-            'Magento\Backend\App\Action\Context',
-            ["objectManager" => $objectManagerMock]
-        );
-        $registry =  $this->_objectManager->get('Magento\Framework\Registry');
-
-        $this->getRequest()->setParam('rate_services', 'webservicex');
-
-        $action = new \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency\FetchRates(
-            $context,
-            $registry
-        );
-        $action->execute();
     }
 }

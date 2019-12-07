@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\ResourceModel\Entity;
 
-class TableTest extends \PHPUnit_Framework_TestCase
+class TableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Entity\Table
@@ -21,7 +21,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
         // @codingStandardsIgnoreEnd
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Model\ResourceModel\Entity\Table', ['config' => $config]);
+            ->create(\Magento\Framework\Model\ResourceModel\Entity\Table::class, ['config' => $config]);
     }
 
     public function testGetTable()
@@ -31,7 +31,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $this->assertInstanceOf('Magento\Framework\Simplexml\Config', $this->_model->getConfig());
+        $this->assertInstanceOf(\Magento\Framework\Simplexml\Config::class, $this->_model->getConfig());
         $this->assertEquals('test', $this->_model->getConfig('test_key'));
         $this->assertFalse($this->_model->getConfig('some_key'));
     }

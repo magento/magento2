@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rating\Edit\Tab;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Review\Model\Rating
@@ -95,38 +95,31 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ratingOptionCollection = $this->getMock(
-            '\Magento\Review\Model\ResourceModel\Rating\Option\Collection',
-            [],
-            [],
-            '',
-            false
+        $this->ratingOptionCollection = $this->createMock(
+            \Magento\Review\Model\ResourceModel\Rating\Option\Collection::class
         );
-        $this->element = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\Text',
-            ['setValue', 'setIsChecked'],
-            [],
-            '',
-            false
+        $this->element = $this->createPartialMock(
+            \Magento\Framework\Data\Form\Element\Text::class,
+            ['setValue', 'setIsChecked']
         );
-        $this->session = $this->getMock(
-            '\Magento\Framework\Session\Generic',
-            ['getRatingData', 'setRatingData'],
-            [],
-            '',
-            false
+        $this->session = $this->createPartialMock(
+            \Magento\Framework\Session\Generic::class,
+            ['getRatingData', 'setRatingData']
         );
-        $this->rating = $this->getMock('\Magento\Review\Model\Rating', ['getId', 'getRatingCodes'], [], '', false);
-        $this->optionRating = $this->getMock('\Magento\Review\Model\Rating\Option', [], [], '', false);
-        $this->store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->form = $this->getMock('\Magento\Framework\Data\Form', [], [], '', false);
-        $this->directoryReadInterface = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $this->registry = $this->getMock('\Magento\Framework\Registry');
-        $this->formFactory = $this->getMock('\Magento\Framework\Data\FormFactory', [], [], '', false);
-        $this->optionFactory = $this->getMock('\Magento\Review\Model\Rating\OptionFactory', ['create'], [], '', false);
-        $this->systemStore = $this->getMock('\Magento\Store\Model\System\Store', [], [], '', false);
-        $this->viewFileSystem = $this->getMock('\Magento\Framework\View\FileSystem', [], [], '', false);
-        $this->fileSystem = $this->getMock('\Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false);
+        $this->rating = $this->createPartialMock(\Magento\Review\Model\Rating::class, ['getId', 'getRatingCodes']);
+        $this->optionRating = $this->createMock(\Magento\Review\Model\Rating\Option::class);
+        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->form = $this->createPartialMock(
+            \Magento\Framework\Data\Form::class,
+            ['setForm', 'addFieldset', 'addField', 'setRenderer', 'getElement', 'setValues']
+        );
+        $this->directoryReadInterface = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->formFactory = $this->createMock(\Magento\Framework\Data\FormFactory::class);
+        $this->optionFactory = $this->createPartialMock(\Magento\Review\Model\Rating\OptionFactory::class, ['create']);
+        $this->systemStore = $this->createMock(\Magento\Store\Model\System\Store::class);
+        $this->viewFileSystem = $this->createMock(\Magento\Framework\View\FileSystem::class);
+        $this->fileSystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead']);
 
         $this->rating->expects($this->any())->method('getId')->will($this->returnValue('1'));
         $this->ratingOptionCollection->expects($this->any())->method('addRatingFilter')->will($this->returnSelf());
@@ -143,6 +136,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->any())->method('addFieldset')->will($this->returnSelf());
         $this->form->expects($this->any())->method('addField')->will($this->returnSelf());
         $this->form->expects($this->any())->method('setRenderer')->will($this->returnSelf());
+        $this->form->expects($this->any())->method('setValues')->will($this->returnSelf());
         $this->optionFactory->expects($this->any())->method('create')->will($this->returnValue($this->optionRating));
         $this->systemStore->expects($this->any())->method('getStoreCollection')
             ->will($this->returnValue(['0' => $this->store]));
@@ -154,7 +148,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
-            'Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form',
+            \Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form::class,
             [
                 'registry' => $this->registry,
                 'formFactory' => $this->formFactory,
@@ -170,10 +164,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlSessionRatingData()
     {
         $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->rating));
-        $this->form->expects($this->at(7))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(13))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(16))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(17))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(5))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(11))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(14))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(15))->method('getElement')->will($this->returnValue($this->element));
         $this->form->expects($this->any())->method('getElement')->will($this->returnValue(false));
         $ratingCodes = ['rating_codes' => ['0' => 'rating_code']];
         $this->session->expects($this->any())->method('getRatingData')->will($this->returnValue($ratingCodes));
@@ -184,10 +178,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlCoreRegistryRatingData()
     {
         $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->rating));
-        $this->form->expects($this->at(7))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(13))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(16))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(17))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(5))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(11))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(14))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(15))->method('getElement')->will($this->returnValue($this->element));
         $this->form->expects($this->any())->method('getElement')->will($this->returnValue(false));
         $this->session->expects($this->any())->method('getRatingData')->will($this->returnValue(false));
         $ratingCodes = ['rating_codes' => ['0' => 'rating_code']];
@@ -198,7 +192,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlWithoutRatingData()
     {
         $this->registry->expects($this->any())->method('registry')->will($this->returnValue(false));
-        $this->systemStore->expects($this->any())->method('getStoreCollection')
+        $this->systemStore->expects($this->atLeastOnce())->method('getStoreCollection')
             ->will($this->returnValue(['0' => $this->store]));
         $this->formFactory->expects($this->any())->method('create')->will($this->returnValue($this->form));
         $this->viewFileSystem->expects($this->any())->method('getTemplateFileName')

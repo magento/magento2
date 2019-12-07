@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
-use Magento\Quote\Model\ResourceModel\Quote\Item;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\ResourceModel\Quote\Item;
 
 /**
  * Class ItemTest
@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Item
@@ -55,13 +55,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock class dependencies
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            [
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $this->connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [
                 'describeTable',
                 'insert',
                 'lastInsertId',
@@ -70,33 +68,17 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'commit',
                 'quoteInto',
                 'update'
-            ],
-            [],
-            '',
-            false
+            ]);
+        $this->entitySnapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
         );
-        $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
-            [],
-            [],
-            '',
-            false
+        $this->relationCompositeMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class
         );
-        $this->relationCompositeMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
-            [],
-            [],
-            '',
-            false
+        $this->objectRelationProcessorMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
         );
-        $this->objectRelationProcessorMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
-            [],
-            [],
-            '',
-            false
-        );
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $contextMock->expects($this->once())
             ->method('getObjectRelationProcessor')
@@ -104,7 +86,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\ResourceModel\Quote\Item',
+            \Magento\Quote\Model\ResourceModel\Quote\Item::class,
             [
                 'context' => $contextMock,
                 'entitySnapshot' => $this->entitySnapshotMock,
@@ -115,7 +97,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOf()
     {
-        $this->assertInstanceOf('Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb', $this->model);
+        $this->assertInstanceOf(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb::class,
+            $this->model
+        );
     }
 
     public function testSaveNotModifiedItem()

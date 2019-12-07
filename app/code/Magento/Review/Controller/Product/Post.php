@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
-class Post extends ProductController
+/**
+ * Class Post
+ */
+class Post extends ProductController implements HttpPostActionInterface
 {
     /**
      * Submit new review action
@@ -37,10 +41,10 @@ class Post extends ProductController
             $data = $this->getRequest()->getPostValue();
             $rating = $this->getRequest()->getParam('ratings', []);
         }
-
         if (($product = $this->initProduct()) && !empty($data)) {
             /** @var \Magento\Review\Model\Review $review */
             $review = $this->reviewFactory->create()->setData($data);
+            $review->unsetData('review_id');
 
             $validate = $review->validate();
             if ($validate === true) {
@@ -62,19 +66,19 @@ class Post extends ProductController
                     }
 
                     $review->aggregate();
-                    $this->messageManager->addSuccess(__('You submitted your review for moderation.'));
+                    $this->messageManager->addSuccessMessage(__('You submitted your review for moderation.'));
                 } catch (\Exception $e) {
                     $this->reviewSession->setFormData($data);
-                    $this->messageManager->addError(__('We can\'t post your review right now.'));
+                    $this->messageManager->addErrorMessage(__('We can\'t post your review right now.'));
                 }
             } else {
                 $this->reviewSession->setFormData($data);
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
-                        $this->messageManager->addError($errorMessage);
+                        $this->messageManager->addErrorMessage($errorMessage);
                     }
                 } else {
-                    $this->messageManager->addError(__('We can\'t post your review right now.'));
+                    $this->messageManager->addErrorMessage(__('We can\'t post your review right now.'));
                 }
             }
         }

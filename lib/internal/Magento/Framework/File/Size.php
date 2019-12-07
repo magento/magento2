@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,18 @@
  */
 namespace Magento\Framework\File;
 
+/**
+ * @api
+ */
 class Size
 {
+    /**
+     * Data size converter
+     *
+     * @var \Magento\Framework\Convert\DataSize
+     */
+    private $dataSize;
+
     /**
      * Maximum file size for MAX_FILE_SIZE attribute of a form
      *
@@ -46,7 +56,7 @@ class Size
      * @param int $mode
      * @return float
      */
-    public function getMaxFileSizeInMb($precision = 0, $mode = PHP_ROUND_HALF_DOWN)
+    public function getMaxFileSizeInMb($precision = 0, $mode = \PHP_ROUND_HALF_DOWN)
     {
         return $this->getFileSizeInMb($this->getMaxFileSize(), $precision, $mode);
     }
@@ -59,7 +69,7 @@ class Size
      * @param int $mode
      * @return float
      */
-    public function getFileSizeInMb($fileSize, $precision = 0, $mode = PHP_ROUND_HALF_DOWN)
+    public function getFileSizeInMb($fileSize, $precision = 0, $mode = \PHP_ROUND_HALF_DOWN)
     {
         return round($fileSize / (1024 * 1024), $precision, $mode);
     }
@@ -72,8 +82,8 @@ class Size
     public function getMaxFileSize()
     {
         if (self::$_maxFileSize < 0) {
-            $postMaxSize = $this->convertSizeToInteger($this->getPostMaxSize());
-            $uploadMaxSize = $this->convertSizeToInteger($this->getUploadMaxSize());
+            $postMaxSize = $this->getDataSize()->convertSizeToBytes($this->getPostMaxSize());
+            $uploadMaxSize = $this->getDataSize()->convertSizeToBytes($this->getUploadMaxSize());
             $min = max($postMaxSize, $uploadMaxSize);
 
             if ($postMaxSize > 0) {
@@ -93,33 +103,14 @@ class Size
     /**
      * Converts a ini setting to a integer value
      *
+     * @deprecated 100.1.0 Please use \Magento\Framework\Convert\DataSize
+     *
      * @param string $size
      * @return integer
      */
     public function convertSizeToInteger($size)
     {
-        if (!is_numeric($size)) {
-            $type = strtoupper(substr($size, -1));
-            $size = (int)$size;
-
-            switch ($type) {
-                case 'K':
-                    $size *= 1024;
-                    break;
-
-                case 'M':
-                    $size *= 1024 * 1024;
-                    break;
-
-                case 'G':
-                    $size *= 1024 * 1024 * 1024;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        return (int)$size;
+        return $this->getDataSize()->convertSizeToBytes($size);
     }
 
     /**
@@ -132,5 +123,22 @@ class Size
     protected function _iniGet($param)
     {
         return trim(ini_get($param));
+    }
+
+    /**
+     * The getter function to get the new dependency for real application code
+     *
+     * @return \Magento\Framework\Convert\DataSize
+     *
+     * @deprecated 100.1.0
+     */
+    private function getDataSize()
+    {
+        if ($this->dataSize === null) {
+            $this->dataSize =
+                \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Convert\DataSize::class);
+        }
+
+        return $this->dataSize;
     }
 }

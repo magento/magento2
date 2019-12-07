@@ -3,7 +3,7 @@
  * Event manager
  * Used to dispatch global events
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event;
@@ -53,6 +53,7 @@ class Manager implements ManagerInterface
      */
     public function dispatch($eventName, array $data = [])
     {
+        $eventName = mb_strtolower($eventName);
         \Magento\Framework\Profiler::start('EVENT:' . $eventName, ['group' => 'EVENT', 'name' => $eventName]);
         foreach ($this->_eventConfig->getObservers($eventName) as $observerConfig) {
             $event = new \Magento\Framework\Event($data);

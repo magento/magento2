@@ -1,12 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Model\Layout;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Abstract totals processor.
+ *
+ * Can be used to process totals information that will be rendered during checkout.
+ * Abstract class provides sorting routing to sort total information based on configuration settings.
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
+ */
 abstract class AbstractTotalsProcessor
 {
     /**
@@ -27,12 +38,14 @@ abstract class AbstractTotalsProcessor
     }
 
     /**
+     * Sort total information based on configuration settings.
+     *
      * @param array $totals
      * @return array
      */
     public function sortTotals($totals)
     {
-        $configData = $this->scopeConfig->getValue('sales/totals_sort');
+        $configData = $this->scopeConfig->getValue('sales/totals_sort', ScopeInterface::SCOPE_STORES);
         foreach ($totals as $code => &$total) {
             //convert JS naming style to config naming style
             $code = str_replace('-', '_', $code);

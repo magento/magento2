@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,7 +104,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             throw new LocalizedException(
-                __('Sorry, something went wrong granting permissions. You can find out more in the exceptions log.')
+                __('An error occurred during the attempt to grant permissions. For details, see the exceptions log.')
             );
         }
     }

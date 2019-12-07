@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateVisualSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create/configure swatches"/>
+            <title value="Admin can create product attribute with picked color swatch"/>
+            <description value="Admin can create product attribute with picked color swatch"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3080"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Clean up our modifications to the existing color attribute -->
+            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+            <waitForPageLoad stepKey="waitForProductAttributes"/>
+            <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
+            <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+            <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
+            <click selector="{{AdminManageSwatchSection.nthDelete('1')}}" stepKey="deleteSwatch1"/>
+            <click selector="{{AdminManageSwatchSection.nthDelete('2')}}" stepKey="deleteSwatch2"/>
+            <click selector="{{AdminManageSwatchSection.nthDelete('3')}}" stepKey="deleteSwatch3"/>
+            <waitForPageLoad stepKey="waitToClickSave"/>
+            <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
+            <!-- Logout -->
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Go to the edit page for the "color" attribute -->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+        <waitForPageLoad stepKey="waitForProductAttributes"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
+
+        <!-- Change to visual swatches -->
+        <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="swatch_visual" stepKey="selectVisualSwatch"/>
+
+        <!-- Set swatch #1 using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch1">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor1"/>
+        <actionGroup ref="setColorPickerByHex" stepKey="fillHex1">
+            <argument name="nthColorPicker" value="1"/>
+            <argument name="hexColor" value="e74c3c"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="red" stepKey="fillAdmin1"/>
+        <!-- Set swatch #2 using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch2">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="clickChooseColor2"/>
+        <actionGroup ref="setColorPickerByHex" stepKey="fillHex2">
+            <argument name="nthColorPicker" value="2"/>
+            <argument name="hexColor" value="2ecc71"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="green" stepKey="fillAdmin2"/>
+        <!-- Set swatch #3 using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch3">
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor('3')}}" stepKey="clickChooseColor3"/>
+        <actionGroup ref="setColorPickerByHex" stepKey="fillHex3">
+            <argument name="nthColorPicker" value="3"/>
+            <argument name="hexColor" value="3498db"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('2')}}" userInput="blue" stepKey="fillAdmin3"/>
+        <waitForPageLoad stepKey="waitToClickSave"/>
+
+        <!-- Save -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
+
+        <!-- Assert that the Save was successful after round trip to server -->
+        <actionGroup ref="assertSwatchColor" stepKey="assertSwatch1">
+            <argument name="nthSwatch" value="1"/>
+            <argument name="expectedStyle" value="background: rgb(231, 77, 60);"/>
+        </actionGroup>
+        <actionGroup ref="assertSwatchColor" stepKey="assertSwatch2">
+            <argument name="nthSwatch" value="2"/>
+            <argument name="expectedStyle" value="background: rgb(46, 204, 112);"/>
+        </actionGroup>
+        <actionGroup ref="assertSwatchColor" stepKey="assertSwatch3">
+            <argument name="nthSwatch" value="3"/>
+            <argument name="expectedStyle" value="background: rgb(52, 152, 219);"/>
+        </actionGroup>
+
+        <!-- Create a configurable product to verify the storefront with -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGridPage"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+
+        <!-- Create configurations based off the Text Swatch we created earlier -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="color" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesByAttributeToEachSku}}" stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
+        <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectAttribute}}" userInput="Color" stepKey="selectAttributes"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute1}}" userInput="10" stepKey="fillAttributePrice1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute2}}" userInput="20" stepKey="fillAttributePrice2"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute3}}" userInput="30" stepKey="fillAttributePrice3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="99" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <!-- conditionalClick is necessary because this popup appears in Jenkins but not locally. I cannot figure out why. -->
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+        <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="seeProductNameInTitle"/>
+
+        <!-- Go to the product page and see text swatch options -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+
+        <!-- Verify that the storefront shows the swatches too -->
+        <actionGroup ref="assertStorefrontSwatchColor" stepKey="assertSwatch4">
+            <argument name="nthSwatch" value="1"/>
+            <argument name="expectedRgb" value="rgb(231, 77, 60)"/>
+        </actionGroup>
+        <actionGroup ref="assertStorefrontSwatchColor" stepKey="assertSwatch5">
+            <argument name="nthSwatch" value="2"/>
+            <argument name="expectedRgb" value="rgb(46, 204, 112)"/>
+        </actionGroup>
+        <actionGroup ref="assertStorefrontSwatchColor" stepKey="assertSwatch6">
+            <argument name="nthSwatch" value="3"/>
+            <argument name="expectedRgb" value="rgb(52, 152, 219)"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="catalog_product_upsell">
         <observer name="bundle_observer" instance="Magento\Bundle\Observer\AppendUpsellProductsObserver"/>
-    </event>
-    <event name="catalog_product_collection_load_after">
-        <observer name="bundle_observer" instance="Magento\Bundle\Observer\LoadProductOptionsObserver"/>
     </event>
     <event name="product_option_renderer_init">
         <observer name="bundle_observer" instance="Magento\Bundle\Observer\InitOptionRendererObserver"/>

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -48,180 +48,216 @@
     right: 0;
     top: 0;
     visibility: hidden;
+    opacity: 0;
+    -webkit-transition: visibility 0s .3s, opacity .3s ease;
+            transition: visibility 0s .3s, opacity .3s ease;
+
     &._show {
         visibility: visible;
+        opacity: 1;
+        -webkit-transition: opacity .3s ease;
+                transition: opacity .3s ease;
+
         .modal-inner-wrap {
             -webkit-transform: translate(0, 0);
                     transform: translate(0, 0);
         }
     }
+
     .modal-inner-wrap {
-        background-color: @modal__background-color;
-        box-shadow: @modal__box-shadow;
+        .lib-css(background-color, @modal__background-color);
+        .lib-css(box-shadow, @modal__box-shadow);
         opacity: 1;
         pointer-events: auto;
     }
 }
 
 .lib-modal-slide() {
-    left: @modal-slide__first__indent-left;
-    z-index: @modal-slide__z-index;
+    .lib-css(left, @modal-slide__first__indent-left);
+    .lib-css(z-index, @modal-slide__z-index);
+
     &._show {
         .modal-inner-wrap {
             -webkit-transform: translateX(0);
                     transform: translateX(0);
         }
     }
+
     .modal-inner-wrap {
         height: 100%;
         overflow-y: auto;
         position: static;
         -webkit-transform: translateX(100%);
                 transform: translateX(100%);
-        transition-duration: .3s;
-        -webkit-transition-property: -webkit-transform, visibility;
-                transition-property:         transform, visibility;
-        transition-timing-function: ease-in-out;
+        -webkit-transition: -webkit-transform .3s ease-in-out;
+                transition:         transform .3s ease-in-out;
         width: auto;
     }
 }
 
 .lib-modal-popup() {
+    .lib-css(z-index, @modal-popup__z-index);
     left: 0;
     overflow-y: auto;
-    z-index: @modal-popup__z-index;
+
+    &.confirm {
+        .modal-inner-wrap {
+            .lib-css(max-width, @modal-popup-confirm__width);
+
+            .modal-content {
+                padding-right: 7rem;
+            }
+        }
+    }
+
     &._show {
         .modal-inner-wrap {
             -webkit-transform: translateY(0);
                     transform: translateY(0);
         }
     }
+
     .modal-inner-wrap {
+        .lib-css(margin, @modal-popup__indent-vertical auto);
+        .lib-css(width, @modal-popup__width);
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
         box-sizing: border-box;
         height: auto;
         left: 0;
-        margin: @modal-popup__indent-vertical auto;
         position: absolute;
         right: 0;
         -webkit-transform: translateY(-200%);
                 transform: translateY(-200%);
-        transition-duration: .2s;
-        -webkit-transition-property: -webkit-transform, visibility;
-                transition-property:         transform, visibility;
-        transition-timing-function: ease;
-        .lib-vendor-prefix-display(flex);
-        .lib-vendor-prefix-flex-direction(column);
-        width: @modal-popup__width;
+        -webkit-transition: -webkit-transform .2s ease;
+                transition:         transform .2s ease;
+
     }
 }
 
 //
+//  Common
+//  _____________________________________________
 
-body {
-    &._has-modal {
-        height: 100%;
-        overflow: hidden;
-        width: 100%;
-    }
-}
-
-//  Modals overlay
-
-.modals-overlay {
-    &:extend(.abs-modal-overlay all);
-    z-index: @overlay__z-index;
-}
-
-.modal-slide,
-.modal-popup {
-    .lib-modal();
-}
-
-.modal-slide {
-    .lib-modal-slide();
-    &._inner-scroll {
-        .modal-inner-wrap {
-            overflow-y: visible;
-            .lib-vendor-prefix-display(flex);
-            .lib-vendor-prefix-flex-direction(column);
+& when (@media-common = true) {
+    body {
+        &._has-modal {
+            height: 100%;
+            overflow: hidden;
+            width: 100%;
         }
+    }
+
+    //  Modals overlay
+    .modals-overlay {
+        .lib-css(z-index, @overlay__z-index);
+    }
+
+    .modal-slide,
+    .modal-popup {
+        .lib-modal();
+    }
+
+    .modal-slide {
+        .lib-modal-slide();
+        &._inner-scroll {
+            .modal-inner-wrap {
+                overflow-y: visible;
+                .lib-vendor-prefix-display(flex);
+                .lib-vendor-prefix-flex-direction(column);
+            }
+
+            .modal-header,
+            .modal-footer {
+                .lib-vendor-prefix-flex-grow(0);
+                .lib-vendor-prefix-flex-shrink(0);
+            }
+
+            .modal-content {
+                overflow-y: auto;
+            }
+
+            .modal-footer {
+                margin-top: auto;
+            }
+        }
+
+        .modal-header,
+        .modal-content,
+        .modal-footer {
+            .lib-css(padding, 0 @modal-slide__padding @modal-slide__padding);
+        }
+
+        .modal-header {
+            .lib-css(padding-bottom, @modal-slide-header__padding-vertical);
+            .lib-css(padding-top, @modal-slide-header__padding-vertical);
+        }
+    }
+
+    .modal-popup {
+        .lib-modal-popup();
+
+        //  If applied, switching outer popup scroll to inner
+        &._inner-scroll {
+            overflow-y: visible;
+
+            .ie11 & {
+                overflow-y: auto;
+            }
+
+            .modal-inner-wrap {
+                max-height: 90%;
+
+                .ie11 & {
+                    max-height: none;
+                }
+            }
+
+            .modal-content {
+                overflow-y: auto;
+            }
+        }
+
+        .modal-header,
+        .modal-content,
+        .modal-footer {
+            .lib-css(padding-left, @modal-popup__padding);
+            .lib-css(padding-right, @modal-popup__padding);
+        }
+
         .modal-header,
         .modal-footer {
             .lib-vendor-prefix-flex-grow(0);
             .lib-vendor-prefix-flex-shrink(0);
         }
-        .modal-content {
-            overflow-y: auto;
+
+        .modal-header {
+            .lib-css(padding-bottom, @modal-popup__padding / 2.5);
+            .lib-css(padding-top, @modal-popup__padding);
         }
+
         .modal-footer {
             margin-top: auto;
+            .lib-css(padding-bottom, @modal-popup__padding);
+            .lib-css(padding-top, @modal-popup__padding);
         }
-    }
-    .modal-header,
-    .modal-content,
-    .modal-footer {
-        padding: 0 @modal-slide__padding @modal-slide__padding;
-    }
-    .modal-header {
-        padding-bottom: @modal-slide-header__padding-vertical;
-        padding-top: @modal-slide-header__padding-vertical;
-    }
-}
 
-.modal-popup {
-    .lib-modal-popup();
-    //  If applied, switching outer popup scroll to inner
-    &._inner-scroll {
-        overflow-y: visible;
-        .ie10 &,
-        .ie9 & {
-            overflow-y: auto;
+        .modal-footer-actions {
+            text-align: right;
         }
-        .modal-inner-wrap {
-            max-height: 90%;
-            .ie10 &,
-            .ie9 & {
-                max-height: none;
-            }
-        }
-        .modal-content {
-            overflow-y: auto;
-        }
-    }
-    .modal-header,
-    .modal-content,
-    .modal-footer {
-        padding-left: @modal-popup__padding;
-        padding-right: @modal-popup__padding;
-    }
-    .modal-header,
-    .modal-footer {
-        .lib-vendor-prefix-flex-grow(0);
-        .lib-vendor-prefix-flex-shrink(0);
-    }
-    .modal-header {
-        padding-bottom: @modal-popup__padding / 2.5;
-        padding-top: @modal-popup__padding;
-    }
-    .modal-footer {
-        margin-top: auto;
-        padding-bottom: @modal-popup__padding;
-        padding-top: @modal-popup__padding;
-    }
-    .modal-footer-actions {
-        text-align: right;
     }
 }
 
 //
 //  Mobile
-//  ---------------------------------------------
+//  _____________________________________________
 
 //  Mobile transform to modal-slide
-@media (max-width: @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .modal-popup {
         &.modal-slide {
             .lib-modal-slide();
+
             .modal-inner-wrap {
                 margin: 0;
                 max-height: none;

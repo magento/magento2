@@ -1,24 +1,50 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /*eslint max-nested-callbacks: 0*/
-
 define([
-    'uiRegistry',
-    'Magento_Ui/js/form/element/region'
-], function (registry, RegionElement) {
+    'squire'
+], function (Squire) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/region', function () {
-        var params, model;
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            model,
+            dataScope = 'dataScope';
 
-        beforeEach(function () {
-            params = {
-                dataScope: 'region'
-            };
-            model = new RegionElement(params);
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/region',
+                'knockoutjs/knockout-es5',
+                'Magento_Ui/js/lib/knockout/extender/observable_array'
+            ], function (Constr) {
+                model = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope
+                });
+
+                done();
+            });
         });
 
         describe('update method', function () {
@@ -32,9 +58,9 @@ define([
                         }
                     };
 
-                spyOn(registry, 'get').and.returnValue(country);
+                spyOn(mocks['Magento_Ui/js/lib/registry/registry'], 'get').and.returnValue(country);
                 model.update(value);
-                expect(registry.get).toHaveBeenCalled();
+                expect(mocks['Magento_Ui/js/lib/registry/registry'].get).toHaveBeenCalled();
                 expect(model.error()).toEqual(false);
                 expect(model.required()).toEqual(false);
             });

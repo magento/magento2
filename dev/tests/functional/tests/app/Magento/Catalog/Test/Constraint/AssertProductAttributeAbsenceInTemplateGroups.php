@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class AssertProductAttributeAbsenceInTemplateGroups extends AbstractConstraint
             ->getAttributes()[0]
             ->getAttributeCode();
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $productSetEdit->getAttributeSetEditBlock()->checkProductAttribute($attributeCode),
             "Attribute " . $attributeCode . " is present in Attribute set's Groups section."
         );

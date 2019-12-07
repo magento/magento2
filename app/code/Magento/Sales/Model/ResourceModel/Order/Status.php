@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\ResourceModel\Order;
 
 use Magento\Framework\App\ResourceConnection;
@@ -17,7 +18,7 @@ use \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Status extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb
+class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Status labels table
@@ -187,7 +188,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Ab
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollBack();
-            throw new LocalizedException(__('Cannot unassign status from state'));
+            throw new LocalizedException(__('The status needs to remain assigned to its state.'));
         }
 
         return $this;

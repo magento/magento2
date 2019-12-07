@@ -2,17 +2,26 @@
 /**
  * Catalog super product configurable part block
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\Format;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
+ * Confugurable product view type
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -26,6 +35,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Current customer
      *
+     * @deprecated 100.2.0, as unused property
      * @var CurrentCustomer
      */
     protected $currentCustomer;
@@ -58,6 +68,21 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $configurableAttributeData;
 
     /**
+     * @var Format
+     */
+    private $localeFormat;
+
+    /**
+     * @var Session
+     */
+    private $customerSession;
+
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices
+     */
+    private $variationPrices;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -67,6 +92,10 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param PriceCurrencyInterface $priceCurrency
      * @param ConfigurableAttributeData $configurableAttributeData
      * @param array $data
+     * @param Format|null $localeFormat
+     * @param Session|null $customerSession
+     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -77,7 +106,10 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         CurrentCustomer $currentCustomer,
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
-        array $data = []
+        array $data = [],
+        Format $localeFormat = null,
+        Session $customerSession = null,
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -85,11 +117,31 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->catalogProduct = $catalogProduct;
         $this->currentCustomer = $currentCustomer;
         $this->configurableAttributeData = $configurableAttributeData;
+        $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(Format::class);
+        $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
+        $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
+        );
+
         parent::__construct(
             $context,
             $arrayUtils,
             $data
         );
+    }
+
+    /**
+     * Get cache key informative items.
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    public function getCacheKeyInfo()
+    {
+        $parentData = parent::getCacheKeyInfo();
+        $parentData[] = $this->priceCurrency->getCurrency()->getCode();
+        $parentData[] = $this->customerSession->getCustomerGroupId();
+        return $parentData;
     }
 
     /**
@@ -124,16 +176,16 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Get Allowed Products
      *
-     * @return array
+     * @return \Magento\Catalog\Model\Product[]
      */
     public function getAllowProducts()
     {
         if (!$this->hasAllowProducts()) {
             $products = [];
-            $skipSaleableCheck = $this->catalogProduct->getSkipSaleableCheck();
             $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
+            /** @var $product \Magento\Catalog\Model\Product */
             foreach ($allProducts as $product) {
-                if ($product->isSaleable() || $skipSaleableCheck) {
+                if ((int) $product->getStatus() === Status::STATUS_ENABLED) {
                     $products[] = $product;
                 }
             }
@@ -172,32 +224,19 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $store = $this->getCurrentStore();
         $currentProduct = $this->getProduct();
 
-        $regularPrice = $currentProduct->getPriceInfo()->getPrice('regular_price');
-        $finalPrice = $currentProduct->getPriceInfo()->getPrice('final_price');
-
         $options = $this->helper->getOptions($currentProduct, $this->getAllowProducts());
         $attributesData = $this->configurableAttributeData->getAttributesData($currentProduct, $options);
 
         $config = [
             'attributes' => $attributesData['attributes'],
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
+            'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
             'optionPrices' => $this->getOptionPrices(),
-            'prices' => [
-                'oldPrice' => [
-                    'amount' => $this->_registerJsPrice($regularPrice->getAmount()->getValue()),
-                ],
-                'basePrice' => [
-                    'amount' => $this->_registerJsPrice(
-                        $finalPrice->getAmount()->getBaseAmount()
-                    ),
-                ],
-                'finalPrice' => [
-                    'amount' => $this->_registerJsPrice($finalPrice->getAmount()->getValue()),
-                ],
-            ],
+            'priceFormat' => $this->localeFormat->getPriceFormat(),
+            'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
-            'images' => isset($options['images']) ? $options['images'] : [],
+            'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
         ];
 
@@ -211,32 +250,81 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Get product images for configurable variations
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    protected function getOptionImages()
+    {
+        $images = [];
+        foreach ($this->getAllowProducts() as $product) {
+            $productImages = $this->helper->getGalleryImages($product) ?: [];
+            foreach ($productImages as $image) {
+                $images[$product->getId()][] =
+                    [
+                        'thumb' => $image->getData('small_image_url'),
+                        'img' => $image->getData('medium_image_url'),
+                        'full' => $image->getData('large_image_url'),
+                        'caption' => $image->getLabel(),
+                        'position' => $image->getPosition(),
+                        'isMain' => $image->getFile() == $product->getImage(),
+                        'type' => str_replace('external-', '', $image->getMediaType()),
+                        'videoUrl' => $image->getVideoUrl(),
+                    ];
+            }
+        }
+
+        return $images;
+    }
+
+    /**
+     * Collect price options
+     *
      * @return array
      */
     protected function getOptionPrices()
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
+            $tierPrices = [];
             $priceInfo = $product->getPriceInfo();
+            $tierPriceModel =  $priceInfo->getPrice('tier_price');
+            $tierPricesList = $tierPriceModel->getTierPriceList();
+            foreach ($tierPricesList as $tierPrice) {
+                $tierPrices[] = [
+                    'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
+                    'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                    'percentage' => $this->localeFormat->getNumber(
+                        $tierPriceModel->getSavePercent($tierPrice['price'])
+                    ),
+                ];
+            }
 
             $prices[$product->getId()] =
                 [
                     'oldPrice' => [
-                        'amount' => $this->_registerJsPrice(
+                        'amount' => $this->localeFormat->getNumber(
                             $priceInfo->getPrice('regular_price')->getAmount()->getValue()
                         ),
                     ],
                     'basePrice' => [
-                        'amount' => $this->_registerJsPrice(
+                        'amount' => $this->localeFormat->getNumber(
                             $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
                         ),
                     ],
                     'finalPrice' => [
-                        'amount' => $this->_registerJsPrice(
+                        'amount' => $this->localeFormat->getNumber(
                             $priceInfo->getPrice('final_price')->getAmount()->getValue()
                         ),
-                    ]
-                ];
+                    ],
+                    'tierPrices' => $tierPrices,
+                    'msrpPrice' => [
+                        'amount' => $this->localeFormat->getNumber(
+                            $product->getMsrp()
+                        ),
+                    ],
+                 ];
         }
         return $prices;
     }
@@ -244,11 +332,23 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Replace ',' on '.' for js
      *
+     * @deprecated 100.2.0 Will be removed in major release
      * @param float $price
      * @return string
      */
     protected function _registerJsPrice($price)
     {
         return str_replace(',', '.', $price);
+    }
+
+    /**
+     * Should we generate "As low as" block or not
+     *
+     * @return bool
+     * @since 100.2.0
+     */
+    public function showMinimalPrice()
+    {
+        return true;
     }
 }

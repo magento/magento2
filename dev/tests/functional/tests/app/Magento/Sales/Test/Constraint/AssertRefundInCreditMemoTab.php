@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,14 +37,14 @@ class AssertRefundInCreditMemoTab extends AbstractConstraint
         $salesOrderView->getOrderForm()->openTab('creditmemos');
         /** @var Grid $grid */
         $grid = $salesOrderView->getOrderForm()->getTab('creditmemos')->getGridBlock();
-        $amount = $order->getPrice();
+        $amount = $order->getPrice()['refund'];
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
             $filter = [
                 'id' => $creditMemoId,
                 'amount_from' => $amount[$key]['grand_creditmemo_total'],
                 'amount_to' => $amount[$key]['grand_creditmemo_total']
             ];
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $grid->isRowVisible($filter, true, false),
                 'Credit memo is absent on credit memos tab.'
             );

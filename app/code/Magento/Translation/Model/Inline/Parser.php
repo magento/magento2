@@ -1,14 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Translation\Model\Inline;
 
+use Magento\Translation\Model\ResourceModel\StringUtilsFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Translation\Model\Inline\CacheManager;
+
 /**
- * This class is responsible for parsing content and applying necessary html element
- * wrapping and client scripts for inline translation.
+ * Parses content and applies necessary html element wrapping and client scripts for inline translation.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 {
@@ -16,6 +26,11 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * data-translate html element attribute name
      */
     const DATA_TRANSLATE = 'data-translate';
+
+    /**
+     * @var Escaper
+     */
+    private $escaper;
 
     /**
      * Response body or JSON content string
@@ -95,7 +110,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -105,37 +120,68 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_inputFilter;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\Framework\Translate\InlineInterface
+     * @var InlineInterface
      */
     protected $_translateInline;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @var TypeListInterface
      */
     protected $_appCache;
 
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
+     * @var array
+     */
+    private $relatedCacheTypes;
+
+    /**
+     * Return cache manager
+     *
+     * @return CacheManager
+     *
+     * @deprecated 100.1.0
+     */
+    private function getCacheManger()
+    {
+        if (!$this->cacheManager instanceof CacheManager) {
+            $this->cacheManager = ObjectManager::getInstance()->get(
+                CacheManager::class
+            );
+        }
+        return $this->cacheManager;
+    }
+
+    /**
      * Initialize base inline translation model
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource
+     * @param StringUtilsFactory $resource
+     * @param StoreManagerInterface $storeManager
      * @param \Zend_Filter_Interface $inputFilter
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\App\Cache\TypeListInterface $appCache,
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param State $appState
+     * @param TypeListInterface $appCache
+     * @param InlineInterface $translateInline
+     * @param array $relatedCacheTypes
+     * @param Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StringUtilsFactory $resource,
+        StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\App\Cache\TypeListInterface $appCache,
-        \Magento\Framework\Translate\InlineInterface $translateInline
+        State $appState,
+        TypeListInterface $appCache,
+        InlineInterface $translateInline,
+        array $relatedCacheTypes = [],
+        Escaper $escaper = null
     ) {
         $this->_resourceFactory = $resource;
         $this->_storeManager = $storeManager;
@@ -143,20 +189,26 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         $this->_appState = $appState;
         $this->_appCache = $appCache;
         $this->_translateInline = $translateInline;
+        $this->relatedCacheTypes = $relatedCacheTypes;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
     }
 
     /**
      * Parse and save edited translation
      *
      * @param array $translateParams
-     * @return $this
+     * @return array
      */
     public function processAjaxPost(array $translateParams)
     {
         if (!$this->_translateInline->isAllowed()) {
-            return $this;
+            return ['inline' => 'not allowed'];
         }
-        $this->_appCache->invalidate(\Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER);
+        if (!empty($this->relatedCacheTypes)) {
+            $this->_appCache->invalidate($this->relatedCacheTypes);
+        }
 
         $this->_validateTranslationParams($translateParams);
         $this->_filterTranslationParams($translateParams, ['custom']);
@@ -177,9 +229,15 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     $storeId = $validStoreId;
                 }
             }
-            $resource->saveTranslate($param['original'], $param['custom'], null, $storeId);
+            $resource->saveTranslate(
+                $param['original'],
+                $param['custom'],
+                null,
+                $storeId
+            );
         }
-        return $this;
+
+        return $this->getCacheManger()->updateAndGetTranslations();
     }
 
     /**
@@ -203,7 +261,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Apply input filter to values of translation parameters
      *
-     * @param array &$translateParams
+     * @param array $translateParams
      * @param array $fieldNames Names of fields values of which are to be filtered
      * @return void
      */
@@ -311,7 +369,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     {
         $specialTags = $tagHtml . '<span class="translate-inline-' . $tagName . '" ' . $this->_getHtmlAttribute(
             self::DATA_TRANSLATE,
-            '[' . join(',', $trArr) . ']'
+            '[' . $this->escaper->escapeHtml(join(',', $trArr)) . ']'
         );
         $additionalAttr = $this->_getAdditionalHtmlAttribute($tagName);
         if ($additionalAttr !== null) {
@@ -327,7 +385,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * Format translation for simple tags.  Added translate mode attribute for vde requests.
      *
      * @param string $tagHtml
-     * @param string  $tagName
+     * @param string $tagName
      * @param array $trArr
      * @return string
      */
@@ -339,7 +397,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
             strlen($tagName) + 1
         ) . ' ' . $this->_getHtmlAttribute(
             self::DATA_TRANSLATE,
-            htmlspecialchars('[' . join(',', $trArr) . ']')
+            $this->escaper->escapeHtml('[' . join(',', $trArr) . ']')
         );
         $additionalAttr = $this->_getAdditionalHtmlAttribute($tagName);
         if ($additionalAttr !== null) {
@@ -353,12 +411,12 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * Get translate data by regexp
      *
      * @param string $regexp
-     * @param string &$text
-     * @param string|array $locationCallback
+     * @param string $text
+     * @param callable $locationCallback
      * @param array $options
      * @return array
      */
-    private function _getTranslateData($regexp, &$text, $locationCallback, $options = [])
+    private function _getTranslateData(string $regexp, string &$text, callable $locationCallback, array $options = [])
     {
         $trArr = [];
         $next = 0;
@@ -368,7 +426,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     'shown' => htmlspecialchars_decode($matches[1][0]),
                     'translated' => htmlspecialchars_decode($matches[2][0]),
                     'original' => htmlspecialchars_decode($matches[3][0]),
-                    'location' => htmlspecialchars_decode(call_user_func($locationCallback, $matches, $options)),
+                    'location' => htmlspecialchars_decode($locationCallback($matches, $options)),
                 ]
             );
             $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));
@@ -413,12 +471,13 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     $tagHtml = str_replace($matches[0], '', $tagHtml);
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . htmlspecialchars($matches[1]) . ',' . join(',', $trArr) . ']'
+                        '[' . $this->escaper->escapeHtml($matches[1]) . ',' .
+                        str_replace("\"", "'", join(',', $trArr)) . ']'
                     );
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . join(',', $trArr) . ']'
+                        '[' . str_replace("\"", "'", join(',', $trArr)) . ']'
                     );
                 }
                 $trAttr = $this->_addTranslateAttribute($trAttr);
@@ -479,25 +538,39 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      */
     private function _specialTags()
     {
-        $this->_translateTags($this->_content, $this->_allowedTagsGlobal, '_applySpecialTagsFormat');
-        $this->_translateTags($this->_content, $this->_allowedTagsSimple, '_applySimpleTagsFormat');
+        $this->_translateTags(
+            $this->_content,
+            $this->_allowedTagsGlobal,
+            function ($tagHtml, $tagName, $trArr) {
+                return $this->_applySpecialTagsFormat($tagHtml, $tagName, $trArr);
+            }
+        );
+        $this->_translateTags(
+            $this->_content,
+            $this->_allowedTagsSimple,
+            function ($tagHtml, $tagName, $trArr) {
+                return $this->_applySimpleTagsFormat($tagHtml, $tagName, $trArr);
+            }
+        );
     }
 
     /**
      * Prepare simple tags
      *
-     * @param string &$content
+     * @param string $content
      * @param array $tagsList
-     * @param string|array $formatCallback
+     * @param callable $formatCallback
      * @return void
      */
-    private function _translateTags(&$content, $tagsList, $formatCallback)
+    private function _translateTags(string &$content, array $tagsList, callable $formatCallback)
     {
         $nextTag = 0;
+        $tagRegExpBody = '#<(body)(/?>| \s*[^>]*+/?>)#iSU';
 
         $tags = implode('|', array_keys($tagsList));
         $tagRegExp = '#<(' . $tags . ')(/?>| \s*[^>]*+/?>)#iSU';
         $tagMatch = [];
+        $headTranslateTags = '';
         while (preg_match($tagRegExp, $content, $tagMatch, PREG_OFFSET_CAPTURE, $nextTag)) {
             $tagName = strtolower($tagMatch[1][0]);
             if (substr($tagMatch[0][0], -2) == '/>') {
@@ -531,11 +604,35 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 
             if (!empty($trArr)) {
                 $trArr = array_unique($trArr);
-                $tagHtml = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+
+                $tagBodyMatch = [];
+                preg_match($tagRegExpBody, $content, $tagBodyMatch, PREG_OFFSET_CAPTURE);
+                if (!empty($tagBodyMatch)) {
+                    $tagBodyOpenStartPosition = $tagBodyMatch[0][1];
+
+                    if (array_key_exists($tagName, $this->_allowedTagsGlobal)
+                        && $tagBodyOpenStartPosition > $tagMatch[0][1]
+                    ) {
+                        $tagHtmlHead = $formatCallback($tagHtml, $tagName, $trArr);
+                        $headTranslateTags .= substr($tagHtmlHead, strlen($tagHtml));
+                    } else {
+                        $tagHtml = $formatCallback($tagHtml, $tagName, $trArr);
+                    }
+                }
+
                 $tagClosurePos = $tagMatch[0][1] + strlen($tagHtml);
                 $content = substr_replace($content, $tagHtml, $tagMatch[0][1], $tagLength);
             }
             $nextTag = $tagClosurePos;
+        }
+        if ($headTranslateTags) {
+            $tagBodyMatch = [];
+            preg_match($tagRegExpBody, $content, $tagBodyMatch, PREG_OFFSET_CAPTURE);
+            $tagBodyOpenStartPosition = $tagBodyMatch[0][1];
+            $openTagBodyEndPosition = $tagBodyOpenStartPosition + strlen($tagBodyMatch[0][0]);
+            $content = substr($content, 0, $openTagBodyEndPosition)
+                . $headTranslateTags
+                . substr($content, $openTagBodyEndPosition);
         }
     }
 
@@ -555,7 +652,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         $length = $tagLength + 1;
         $end = $from + 1;
         while (substr_count($body, $openTag, $from, $length) !== substr_count($body, $closeTag, $from, $length)) {
-            $end = strpos($body, $closeTag, $end + $tagLength + 1);
+            $end = strpos($body, (string) $closeTag, $end + $tagLength + 1);
             if ($end === false) {
                 return false;
             }
@@ -580,16 +677,17 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         while (preg_match('#' . self::REGEXP_TOKEN . '#', $this->_content, $matches, PREG_OFFSET_CAPTURE, $next)) {
             $translateProperties = json_encode(
                 [
-                    'shown' => htmlspecialchars($matches[1][0]),
-                    'translated' => htmlspecialchars($matches[2][0]),
+                    'shown' => $matches[1][0],
+                    'translated' => $matches[2][0],
                     'original' => $matches[3][0],
                     'location' => 'Text',
-                    'scope' => htmlspecialchars($matches[4][0]),
-                ]
+                    'scope' => $matches[4][0],
+                ],
+                JSON_HEX_QUOT
             );
 
             $spanHtml = $this->_getDataTranslateSpan(
-                '[' . htmlspecialchars($translateProperties) . ']',
+                '[' . $this->escaper->escapeHtmlAttr($translateProperties) . ']',
                 $matches[1][0]
             );
             $this->_content = substr_replace($this->_content, $spanHtml, $matches[0][1], strlen($matches[0][0]));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Legacy;
 
-class ObsoleteMenuTest extends \PHPUnit_Framework_TestCase
+class ObsoleteMenuTest extends \PHPUnit\Framework\TestCase
 {
     public function testMenuDeclaration()
     {

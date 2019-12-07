@@ -1,13 +1,17 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Observer for setting "is_persistent" value to quote
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class SetQuotePersistentDataObserver implements ObserverInterface
 {
     /**
@@ -73,13 +77,13 @@ class SetQuotePersistentDataObserver implements ObserverInterface
         }
 
         if ((
-                ($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn())
-                && !$this->_persistentData->isShoppingCartPersist()
+                ($this->_persistentSession->isPersistent())
+                && $this->_persistentData->isShoppingCartPersist()
             )
             && $this->quoteManager->isPersistent()
         ) {
             //Quote is not actual customer's quote, just persistent
-            $quote->setIsActive(false)->setIsPersistent(true);
+            $quote->setIsPersistent(true);
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,9 @@ namespace Magento\Catalog\Model\Layer\Filter\DataProvider;
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\DataProvider\Price.
  *
- * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
@@ -21,17 +21,20 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $category->load(4);
         $layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Layer\Category');
+            ->get(\Magento\Catalog\Model\Layer\Category::class);
         $layer->setCurrentCategory($category);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\DataProvider\Price', ['layer' => $layer]);
+            ->create(\Magento\Catalog\Model\Layer\Filter\DataProvider\Price::class, ['layer' => $layer]);
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_calculation auto
      */
     public function testGetPriceRangeAuto()
@@ -40,6 +43,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_calculation manual
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_step 1.5
      */
@@ -49,6 +55,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1.5, $this->_model->getPriceRange());
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     */
     public function testGetMaxPriceInt()
     {
         $this->assertEquals(45.00, $this->_model->getMaxPrice());
@@ -68,6 +79,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDbIsolation disabled
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider getRangeItemCountsDataProvider
      */
     public function testGetRangeItemCounts($inputRange, $expectedItemCounts)

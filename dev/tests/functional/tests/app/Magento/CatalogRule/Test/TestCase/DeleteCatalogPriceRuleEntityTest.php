@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,46 +10,47 @@ use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
- * Test Creation for Delete CatalogPriceRuleEntity
+ * Test Creation for Delete CatalogPriceRuleEntity.
  *
  * Test Flow:
  * Preconditions:
  * 1. Catalog Price Rule is created.
+ * 2. Customer is created if needed.
  * Steps:
  * 1. Log in as default admin user.
- * 2. Go to Marketing > Catalog Price Rules
- * 3. Select required catalog price rule from preconditions
- * 4. Click on the "Delete" button
- * 5. Perform all assertions
+ * 2. Go to Marketing > Catalog Price Rules.
+ * 3. Select required catalog price rule from preconditions.
+ * 4. Click on the "Delete" button.
+ * 5. Perform all assertions.
  *
- * @group Catalog_Price_Rules_(MX)
- * @ZephyrId MAGETWO-25211
+ * @group Catalog_Price_Rules
+ * @ZephyrId MAGETWO-25211, MAGETWO-20431
  */
 class DeleteCatalogPriceRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
-     * Page CatalogRuleIndex
+     * Page CatalogRuleIndex.
      *
      * @var CatalogRuleIndex
      */
     protected $catalogRuleIndex;
 
     /**
-     * Page CatalogRuleNew
+     * Page CatalogRuleNew.
      *
      * @var CatalogRuleNew
      */
     protected $catalogRuleNew;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CatalogRuleIndex $catalogRuleIndex
      * @param CatalogRuleNew $catalogRuleNew
@@ -64,15 +65,21 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
     }
 
     /**
-     * Delete Catalog Price Rule test
+     * Delete Catalog Price Rule test.
      *
      * @param CatalogRule $catalogPriceRule
-     * @return void
+     * @param string $product
+     * @param Customer|null $customer
+     * @return array
      */
-    public function testDeleteCatalogPriceRule(CatalogRule $catalogPriceRule)
+    public function test(CatalogRule $catalogPriceRule, $product, Customer $customer = null)
     {
         // Precondition
         $catalogPriceRule->persist();
+
+        if ($customer) {
+            $customer->persist();
+        }
 
         $filter = [
             'name' => $catalogPriceRule->getName(),
@@ -83,5 +90,13 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getFormPageActions()->delete();
         $this->catalogRuleNew->getModalBlock()->acceptAlert();
+        $products = $this->objectManager->create(
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
+            ['products' => $product]
+        )->run();
+
+        return [
+            'products' => $products['products']
+        ];
     }
 }

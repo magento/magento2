@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Controller\Adminhtml;
@@ -20,7 +20,14 @@ class IndexerTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/indexer/indexer/list/');
         $body = $this->getResponse()->getBody();
         $this->assertContains('<h1 class="page-title">Index Management</h1>', $body);
-        $this->assertSelectCount('#gridIndexer_massaction-select', 1, $body, 'Mode selector is not found');
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="gridIndexer_massaction-select"]',
+                $body
+            ),
+            'Mode selector is not found'
+        );
         $this->assertContains('option value="change_mode_onthefly"', $body);
         $this->assertContains('option value="change_mode_changelog"', $body);
     }
@@ -34,10 +41,13 @@ class IndexerTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     {
         $this->dispatch('backend/indexer/indexer/list/');
         $body = $this->getResponse()->getBody();
-        $this->assertSelectCount(
-            '[name="indexer_ids"]',
-            true,
-            $body,
+
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@name="indexer_ids"]',
+                $body
+            ),
             'Indexer list is empty'
         );
     }

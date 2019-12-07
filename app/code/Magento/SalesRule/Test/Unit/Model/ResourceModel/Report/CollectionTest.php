@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Report\Collection
@@ -57,55 +55,25 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactory = $this->getMock(
-            'Magento\Framework\Data\Collection\EntityFactory',
-            [],
-            [],
-            '',
-            false
+        $this->entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+
+        $this->fetchStrategy = $this->createMock(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class);
+
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+
+        $this->reportResource = $this->createPartialMock(
+            \Magento\Sales\Model\ResourceModel\Report::class,
+            ['getConnection', 'getMainTable']
         );
 
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-
-        $this->fetchStrategy = $this->getMock(
-            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
-            [],
-            [],
-            '',
-            false
+        $this->connection = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'getDateFormatSql', 'quoteInto']
         );
 
-        $this->eventManager = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->reportResource = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Report',
-            ['getConnection', 'getMainTable'],
-            [],
-            '',
-            false
-        );
-
-        $this->connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'getDateFormatSql', 'quoteInto'],
-            [],
-            '',
-            false
-        );
-
-        $this->selectMock = $this->getMock(
-            'Magento\Framework\DB\Select',
-            ['from', 'where', 'group'],
-            [],
-            '',
-            false
-        );
+        $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'where', 'group']);
 
         $this->connection->expects($this->any())
             ->method('select')
@@ -118,17 +86,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getMainTable')
             ->will($this->returnValue('test_main_table'));
 
-        $this->ruleFactory = $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Report\RuleFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->ruleFactory = $this->createPartialMock(
+            \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory::class,
+            ['create']
         );
 
         $this->object = new \Magento\SalesRule\Model\ResourceModel\Report\Collection(
-            $this->entityFactory, $this->loggerMock, $this->fetchStrategy,
-            $this->eventManager, $this->reportResource, $this->ruleFactory
+            $this->entityFactory,
+            $this->loggerMock,
+            $this->fetchStrategy,
+            $this->eventManager,
+            $this->reportResource,
+            $this->ruleFactory
         );
     }
 
@@ -218,12 +187,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getRuleMock()
     {
-        return $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule',
-            ['getUniqRulesNamesList'],
-            [],
-            '',
-            false
+        return $this->createPartialMock(
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule::class,
+            ['getUniqRulesNamesList']
         );
     }
 }

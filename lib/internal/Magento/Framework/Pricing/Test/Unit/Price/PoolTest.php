@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Framework\Pricing\Price\Pool;
 /**
  * Test for Pool
  */
-class PoolTest extends \PHPUnit_Framework_TestCase
+class PoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\Price\Pool
@@ -36,7 +36,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->prices = [
             'regular_price' => 'RegularPrice',

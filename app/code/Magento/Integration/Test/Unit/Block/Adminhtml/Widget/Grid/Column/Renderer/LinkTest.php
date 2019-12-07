@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -35,16 +35,13 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->urlBuilderMock->expects($this->once())->method('getUrl')->willReturn('http://magento.loc/linkurl');
-        $this->contextMock = $this->getMock(
-            'Magento\Backend\Block\Context',
-            ['getEscaper', 'getUrlBuilder'],
-            [],
-            '',
-            false
+        $this->contextMock = $this->createPartialMock(
+            \Magento\Backend\Block\Context::class,
+            ['getEscaper', 'getUrlBuilder']
         );
         $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
         $this->contextMock->expects($this->any())
@@ -53,7 +50,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->linkRenderer = $this->objectManagerHelper->getObject(
-            'Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link',
+            \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link::class,
             ['context' => $this->contextMock]
         );
     }
@@ -64,7 +61,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $expectedResult = '<a href="http://magento.loc/linkurl" title="Link Caption">Link Caption</a>';
-        $column = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column')
+        $column = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCaption', 'getId'])
             ->getMock();
@@ -74,6 +71,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $column->expects($this->any())
             ->method('getId')
             ->willReturn('1');
+        $this->escaperMock->expects($this->at(0))->method('escapeHtmlAttr')->willReturn('Link Caption');
         $this->linkRenderer->setColumn($column);
         $object = new \Magento\Framework\DataObject(['id' => '1']);
         $actualResult = $this->linkRenderer->render($object);

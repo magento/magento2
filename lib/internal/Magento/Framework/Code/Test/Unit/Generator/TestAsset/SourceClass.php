@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator\TestAsset;
 
 use Zend\Code\Generator\ClassGenerator;
 
+/**
+ * phpcs:ignoreFile
+ */
 class SourceClass extends ParentClass
 {
     /**
@@ -111,7 +114,7 @@ class SourceClass extends ParentClass
     public static function publicChildStatic()
     {
     }
-
+    
     final public function publicChildFinal()
     {
     }

@@ -1,53 +1,54 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report;
 
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Reports\Model\ResourceModel\Report\Collection;
+use Magento\Reports\Model\ResourceModel\Report\Collection\Factory as ReportCollectionFactory;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class CollectionTest
+ *
+ * @covers \Magento\Reports\Model\ResourceModel\Report\Collection
+ */
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Report\Collection
+     * @var Collection
      */
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $timezoneMock;
 
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $factoryMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Collection\EntityFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
-            ->getMock();
-        $this->factoryMock = $this->getMockBuilder('Magento\Reports\Model\ResourceModel\Report\Collection\Factory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->entityFactoryMock = $this->createMock(EntityFactory::class);
+        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
+        $this->factoryMock = $this->createMock(ReportCollectionFactory::class);
 
-        $this->timezoneMock
-            ->expects($this->any())
-            ->method('formatDateTime')
-            ->will($this->returnCallback([$this, 'formatDateTime']));
+        $this->timezoneMock->method('formatDate')
+            ->will($this->returnCallback([$this, 'formatDate']));
 
         $this->collection = new Collection(
             $this->entityFactoryMock,
@@ -78,8 +79,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $period
-     * @param \DateTime $fromDate
-     * @param \DateTime $toDate
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
      * @param int $size
      * @dataProvider intervalsDataProvider
      * @return void
@@ -104,8 +105,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $period
-     * @param \DateTime $fromDate
-     * @param \DateTime $toDate
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
      * @param int $size
      * @dataProvider intervalsDataProvider
      * @return void
@@ -116,7 +117,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->collection->setInterval($fromDate, $toDate);
         $reports = $this->collection->getReports();
         foreach ($reports as $report) {
-            $this->assertInstanceOf('\Magento\Framework\DataObject', $report);
+            $this->assertInstanceOf(\Magento\Framework\DataObject::class, $report);
             $reportData = $report->getData();
             $this->assertTrue(empty($reportData['children']));
             $this->assertTrue($reportData['is_empty']);
@@ -130,7 +131,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testLoadData()
     {
         $this->assertInstanceOf(
-            '\Magento\Reports\Model\ResourceModel\Report\Collection',
+            Collection::class,
             $this->collection->loadData()
         );
     }
@@ -181,14 +182,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param \DateTimeInterface $dateStart
      * @return string
      */
-    public function formatDateTime()
+    public function formatDate(\DateTimeInterface $dateStart): string
     {
-        $args = func_get_args();
-
-        $dateStart = $args[0];
-
         $formatter = new \IntlDateFormatter(
             "en_US",
             \IntlDateFormatter::SHORT,

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Session\Test\Unit\SaveHandler;
 
-class DbTableTest extends \PHPUnit_Framework_TestCase
+class DbTableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Session table name
@@ -64,13 +65,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckConnection()
     {
-        $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['isTableExists'],
-            [],
-            '',
-            false
-        );
+        $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['isTableExists']);
         $connection->expects(
             $this->atLeastOnce()
         )->method(
@@ -81,61 +76,41 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(true)
         );
 
-        $resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
         $resource->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
-        $method = new \ReflectionMethod('Magento\Framework\Session\SaveHandler\DbTable', 'checkConnection');
+        $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
         $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\SessionException
-     * @expectedExceptionMessage Write DB connection is not available
+     * @expectedExceptionMessage The write connection to the database isn't available. Please try again later.
      */
     public function testCheckConnectionNoConnection()
     {
-        $resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
         $resource->expects($this->once())->method('getConnection')->will($this->returnValue(null));
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
-        $method = new \ReflectionMethod('Magento\Framework\Session\SaveHandler\DbTable', 'checkConnection');
+        $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
         $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\SessionException
-     * @expectedExceptionMessage DB storage table does not exist
+     * @expectedExceptionMessage The database storage table doesn't exist. Verify the table and try again.
      */
     public function testCheckConnectionNoTable()
     {
-        $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['isTableExists'],
-            [],
-            '',
-            false
-        );
+        $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['isTableExists']);
         $connection->expects(
             $this->once()
         )->method(
@@ -146,20 +121,13 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(false)
         );
 
-        $resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
         $resource->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
-        $method = new \ReflectionMethod('Magento\Framework\Session\SaveHandler\DbTable', 'checkConnection');
+        $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
         $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
@@ -183,14 +151,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareResourceMock($connection)
     {
-        $resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
         $resource->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
 
@@ -204,12 +165,9 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareMockForRead($isDataEncoded)
     {
-        $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'from', 'where', 'fetchOne', 'isTableExists'],
-            [],
-            '',
-            false
+        $connection = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'from', 'where', 'fetchOne', 'isTableExists']
         );
 
         $connection->expects($this->once())->method('isTableExists')->will($this->returnValue(true));
@@ -284,12 +242,9 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareMockForWrite($sessionExists)
     {
-        $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'from', 'where', 'fetchOne', 'update', 'insert', 'isTableExists'],
-            [],
-            '',
-            false
+        $connection = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'from', 'where', 'fetchOne', 'update', 'insert', 'isTableExists']
         );
         $connection->expects($this->once())->method('isTableExists')->will($this->returnValue(true));
         $connection->expects($this->once())->method('select')->will($this->returnSelf());

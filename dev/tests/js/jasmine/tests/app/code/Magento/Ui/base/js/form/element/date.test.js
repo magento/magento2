@@ -1,51 +1,60 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/*eslint max-nested-callbacks: 0*/
-
 define([
-    'Magento_Ui/js/form/element/date'
-], function (DateElement) {
+    'squire'
+], function (Squire) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/date', function () {
-        var params, model;
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            model, utils,
+            dataScope = 'abstract';
 
-        beforeEach(function () {
-            params = {
-                dataScope: 'abstract'
-            };
-            model = new DateElement(params);
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/date',
+                'mageUtils',
+                'knockoutjs/knockout-es5'
+            ], function (Constr, mageUtils) {
+                model = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope,
+                    options: {
+                        showsTime: true
+                    }
+                });
+                utils = mageUtils;
+
+                done();
+            });
         });
 
-        describe('getInitialValue method', function () {
-            it('check for default', function () {
-                expect(model.getInitialValue()).toEqual('');
-            });
-            it('check with default value', function () {
-                model.default = 1;
-                expect(model.getInitialValue()).toEqual('01/01/1970');
-            });
-            it('check with value', function () {
-                model.value(1);
-                expect(model.getInitialValue()).toEqual('01/01/1970');
-            });
-            it('check with value and default', function () {
-                model.default = 1;
-                model.value(0);
-                expect(model.getInitialValue()).toEqual(0);
-            });
+        it('Check prepareDateTimeFormats function', function () {
+            spyOn(utils, 'convertToMomentFormat');
+            model.prepareDateTimeFormats();
+            expect(utils.convertToMomentFormat).toHaveBeenCalled();
         });
-        describe('initProperties method', function () {
-            it('check for chainable', function () {
-                expect(model.initProperties()).toEqual(model);
-            });
-            it('check for extend', function () {
-                model.initProperties();
-                expect(model.dateFormat).toBeDefined();
-            });
-        });
+
     });
 });

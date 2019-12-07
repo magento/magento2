@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Fieldset;
@@ -16,7 +16,7 @@ class Factory
     /**
      * @var string
      */
-    protected $className = 'Magento\Ui\Component\Form\Fieldset';
+    protected $className = \Magento\Ui\Component\Form\Fieldset::class;
 
     /**
      * @var ObjectManagerInterface

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
@@ -9,8 +9,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\StringUtils as StdlibString;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Search\Helper\Data;
 
+/**
+ * Search Query Factory
+ *
+ * @api
+ * @since 100.0.2
+ */
 class QueryFactory implements QueryFactoryInterface
 {
     /**
@@ -44,36 +50,43 @@ class QueryFactory implements QueryFactoryInterface
     private $scopeConfig;
 
     /**
+     * @var Data
+     */
+    private $queryHelper;
+
+    /**
      * @param Context $context
      * @param ObjectManagerInterface $objectManager
      * @param StdlibString $string
-     * @param ScopeConfigInterface $scopeConfig
+     * @param Data|null $queryHelper
      */
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,
-        StdlibString $string
+        StdlibString $string,
+        Data $queryHelper = null
     ) {
         $this->request = $context->getRequest();
         $this->objectManager = $objectManager;
         $this->string = $string;
         $this->scopeConfig = $context->getScopeConfig();
+        $this->queryHelper = $queryHelper === null ? $this->objectManager->get(Data::class) : $queryHelper;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get()
     {
         if (!$this->query) {
-            $maxQueryLength = $this->getMaxQueryLength();
+            $maxQueryLength = $this->queryHelper->getMaxQueryLength();
+            $minQueryLength = $this->queryHelper->getMinQueryLength();
             $rawQueryText = $this->getRawQueryText();
             $preparedQueryText = $this->getPreparedQueryText($rawQueryText, $maxQueryLength);
-            $query = $this->create()->loadByQuery($preparedQueryText);
-            if (!$query->getId()) {
-                $query->setQueryText($preparedQueryText);
-            }
+            $query = $this->create()->loadByQueryText($preparedQueryText);
+            $query->setQueryText($preparedQueryText);
             $query->setIsQueryTextExceeded($this->isQueryTooLong($rawQueryText, $maxQueryLength));
+            $query->setIsQueryTextShort($this->isQueryTooShort($rawQueryText, $minQueryLength));
             $this->query = $query;
         }
         return $this->query;
@@ -83,11 +96,11 @@ class QueryFactory implements QueryFactoryInterface
      * Create new instance
      *
      * @param array $data
-     * @return \Magento\Search\Model\Query
+     * @return Query
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Search\Model\Query', $data);
+        return $this->objectManager->create(Query::class, $data);
     }
 
     /**
@@ -104,6 +117,8 @@ class QueryFactory implements QueryFactoryInterface
     }
 
     /**
+     * Prepare query text
+     *
      * @param string $queryText
      * @param int|string $maxQueryLength
      * @return string
@@ -117,21 +132,8 @@ class QueryFactory implements QueryFactoryInterface
     }
 
     /**
-     * Retrieve maximum query length
+     * Check if the provided text exceeds the provided length
      *
-     * @param mixed $store
-     * @return int|string
-     */
-    private function getMaxQueryLength($store = null)
-    {
-        return $this->scopeConfig->getValue(
-            Query::XML_PATH_MAX_QUERY_LENGTH,
-            ScopeInterface::SCOPE_STORE,
-            $store
-        );
-    }
-
-    /**
      * @param string $queryText
      * @param int|string $maxQueryLength
      * @return bool
@@ -139,5 +141,17 @@ class QueryFactory implements QueryFactoryInterface
     private function isQueryTooLong($queryText, $maxQueryLength)
     {
         return ($maxQueryLength !== '' && $this->string->strlen($queryText) > $maxQueryLength);
+    }
+
+    /**
+     * Check if the provided text is shorter than the provided length
+     *
+     * @param string $queryText
+     * @param int|string $minQueryLength
+     * @return bool
+     */
+    private function isQueryTooShort($queryText, $minQueryLength)
+    {
+        return ($this->string->strlen($queryText) < $minQueryLength);
     }
 }

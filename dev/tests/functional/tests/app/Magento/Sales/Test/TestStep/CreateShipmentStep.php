@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,11 @@ use Magento\Mtf\TestStep\TestStepInterface;
  */
 class CreateShipmentStep implements TestStepInterface
 {
+    /**
+     * Shipment column title.
+     */
+    const COLUMN_NAME = 'Shipment';
+
     /**
      * Orders Page.
      *
@@ -94,13 +99,21 @@ class CreateShipmentStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->ship();
-        if (!empty($this->data)) {
-            $this->orderShipmentNew->getFormBlock()->fillData($this->data, $this->order->getEntityId()['products']);
+        $shipmentIds = [];
+        /**
+         * As this step is used in general scenarios and not all test cases has shippable items(ex: virtual product)
+         * we need to check, if it possible to create shipment for given order.
+         */
+        if ($this->salesOrderView->getPageActions()->canShip()) {
+            $this->salesOrderView->getPageActions()->ship();
+            if (!empty($this->data)) {
+                $this->orderShipmentNew->getFormBlock()->fillData($this->data, $this->order->getEntityId()['products']);
+            }
+            $this->orderShipmentNew->getFormBlock()->submit();
+            $shipmentIds = $this->getShipmentIds();
         }
-        $this->orderShipmentNew->getFormBlock()->submit();
 
-        return ['shipmentIds' => $this->getShipmentIds()];
+        return ['shipmentIds' => $shipmentIds];
     }
 
     /**
@@ -111,6 +124,15 @@ class CreateShipmentStep implements TestStepInterface
     public function getShipmentIds()
     {
         $this->salesOrderView->getOrderForm()->openTab('shipments');
-        return $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getIds();
+        $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->resetFilter();
+        $shipmentIds = $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getAllIds();
+        $incrementIds = [];
+        foreach ($shipmentIds as $shipmentId) {
+            $incrementIds[] = $this->salesOrderView->getOrderForm()
+                ->getTab('shipments')
+                ->getGridBlock()
+                ->getColumnValue($shipmentId, self::COLUMN_NAME);
+        }
+        return $incrementIds;
     }
 }

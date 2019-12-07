@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Implementation of the @magentoDataFixture DocBlock annotation
- */
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use PHPUnit\Framework\Exception;
+
+/**
+ * Implementation of the @magentoDataFixtureBeforeTransaction DocBlock annotation
+ */
 class DataFixtureBeforeTransaction
 {
     /**
@@ -42,9 +45,9 @@ class DataFixtureBeforeTransaction
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         if ($this->_getFixtures($test)) {
             $this->_applyFixtures($this->_getFixtures($test));
@@ -54,9 +57,9 @@ class DataFixtureBeforeTransaction
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         /* Isolate other tests from test-specific fixtures */
         if ($this->_appliedFixtures && $this->_getFixtures($test)) {
@@ -67,12 +70,12 @@ class DataFixtureBeforeTransaction
     /**
      * Retrieve fixtures from annotation
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @param string $scope
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getFixtures(\PHPUnit_Framework_TestCase $test, $scope = null)
+    protected function _getFixtures(\PHPUnit\Framework\TestCase $test, $scope = null)
     {
         if ($scope === null) {
             $annotations = $this->getAnnotations($test);
@@ -91,6 +94,8 @@ class DataFixtureBeforeTransaction
                 $fixtureMethod = [get_class($test), $fixture];
                 if (is_callable($fixtureMethod)) {
                     $result[] = $fixtureMethod;
+                } elseif ($this->isModuleAnnotation($fixture)) {
+                    $result[] = $this->getModulePath($fixture);
                 } else {
                     $result[] = $this->_fixtureBaseDir . '/' . $fixture;
                 }
@@ -100,10 +105,46 @@ class DataFixtureBeforeTransaction
     }
 
     /**
-     * @param \PHPUnit_Framework_TestCase $test
+     * Check is the Annotation like Magento_InventoryApi::Test/_files/products.php
+     *
+     * @param string $fixture
+     * @return bool
+     */
+    private function isModuleAnnotation(string $fixture)
+    {
+        return (strpos($fixture, '::') !== false);
+    }
+
+    /**
+     * Resolve the Fixture
+     *
+     * @param string $fixture
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    private function getModulePath(string $fixture)
+    {
+        [$moduleName, $fixtureFile] = explode('::', $fixture, 2);
+
+        $modulePath = (new ComponentRegistrar())->getPath(ComponentRegistrar::MODULE, $moduleName);
+
+        if ($modulePath === null) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Can\'t find registered Module with name %1 .', [$moduleName])
+            );
+        }
+
+        return $modulePath . '/' . ltrim($fixtureFile, '/');
+    }
+
+    /**
+     * Get annotations for test.
+     *
+     * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
-    private function getAnnotations(\PHPUnit_Framework_TestCase $test)
+    private function getAnnotations(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $test->getAnnotations();
         return array_replace($annotations['class'], $annotations['method']);
@@ -112,10 +153,10 @@ class DataFixtureBeforeTransaction
     /**
      * Return is explicit set isolation state
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return bool|null
      */
-    protected function getDbIsolationState(\PHPUnit_Framework_TestCase $test)
+    protected function getDbIsolationState(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $this->getAnnotations($test);
         return isset($annotations[DbIsolation::MAGENTO_DB_ISOLATION])
@@ -138,8 +179,15 @@ class DataFixtureBeforeTransaction
                 require $fixture;
             }
         } catch (\Exception $e) {
-            throw new \Exception(
-                sprintf("Error in fixture: %s.\n %s", json_encode($fixture), (string)$e)
+            throw new Exception(
+                sprintf(
+                    "Error in fixture: %s.\n %s\n %s",
+                    json_encode($fixture),
+                    $e->getMessage(),
+                    $e->getTraceAsString()
+                ),
+                500,
+                $e
             );
         }
     }

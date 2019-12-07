@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rule;
@@ -19,7 +19,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\Calculation\Rule', 'Magento\Tax\Model\ResourceModel\Calculation\Rule');
+        $this->_init(
+            \Magento\Tax\Model\Calculation\Rule::class,
+            \Magento\Tax\Model\ResourceModel\Calculation\Rule::class
+        );
     }
 
     /**
@@ -62,10 +65,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $secondaryJoinField
      * @param string $titleField
      * @param string $dataField
+     * @param string $dataTitleField
      * @return \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection
      */
-    protected function _add($itemTable, $primaryJoinField, $secondaryJoinField, $titleField, $dataField)
-    {
+    protected function _add(
+        $itemTable,
+        $primaryJoinField,
+        $secondaryJoinField,
+        $titleField,
+        $dataField,
+        $dataTitleField = ''
+    ) {
         $children = [];
         foreach ($this as $rule) {
             $children[$rule->getId()] = [];
@@ -95,6 +105,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         foreach ($this as $rule) {
             if (isset($children[$rule->getId()])) {
                 $rule->setData($dataField, array_keys($children[$rule->getId()]));
+                if (!empty($dataTitleField)) {
+                    $rule->setData($dataTitleField, $children[$rule->getId()]);
+                }
             }
         }
 
@@ -133,7 +146,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'tax_calculation_rate_id',
             'tax_calculation_rate_id',
             'code',
-            'tax_rates'
+            'tax_rates',
+            'tax_rates_codes'
         );
     }
 

@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset;
 
 /**
  * Adminhtml block for fieldset of downloadable product
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite
  */
-namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset;
-
 class Downloadable extends \Magento\Downloadable\Block\Catalog\Product\Links
 {
 }

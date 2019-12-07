@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Controller;
@@ -32,8 +32,8 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
     public function setUp()
     {
         parent::setUp();
-        $this->quote = $this->_objectManager->create('Magento\Quote\Model\Quote');
-        $this->checkoutSession = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $this->quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
+        $this->checkoutSession = $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
 
         $this->quote->load('test01', 'reserved_order_id');
         $this->checkoutSession->setQuoteId($this->quote->getId());
@@ -48,13 +48,13 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testOverviewAction()
     {
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
-        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
-        $logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         /** @var \Magento\Customer\Api\AccountManagementInterface $service */
-        $service = $this->_objectManager->create('Magento\Customer\Api\AccountManagementInterface');
+        $service = $this->_objectManager->create(\Magento\Customer\Api\AccountManagementInterface::class);
         $customer = $service->authenticate('customer@example.com', 'password');
         /** @var \Magento\Customer\Model\Session $customerSession */
-        $customerSession = $this->_objectManager->create('Magento\Customer\Model\Session', [$logger]);
+        $customerSession = $this->_objectManager->create(\Magento\Customer\Model\Session::class, [$logger]);
         $customerSession->setCustomerDataAsLoggedIn($customer);
         $this->checkoutSession->setCheckoutState(State::STEP_BILLING);
         $this->getRequest()->setPostValue('payment', ['method' => 'checkmo']);

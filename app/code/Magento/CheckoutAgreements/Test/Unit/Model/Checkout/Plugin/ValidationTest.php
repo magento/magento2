@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\Store\Model\ScopeInterface;
 
-class ValidationTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class ValidationTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation
@@ -43,33 +48,41 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $repositoryMock;
+    protected $scopeConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $scopeConfigMock;
+    private $checkoutAgreementsListMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $agreementsFilterMock;
 
     protected function setUp()
     {
-        $this->agreementsValidatorMock = $this->getMock('\Magento\Checkout\Api\AgreementsValidatorInterface');
-        $this->subjectMock = $this->getMock('\Magento\Checkout\Api\PaymentInformationManagementInterface');
-        $this->paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
-        $this->addressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
-        $this->extensionAttributesMock = $this->getMock(
-            '\Magento\Quote\Api\Data\PaymentExtension',
-            ['getAgreementIds'],
-            [],
-            '',
-            false
+        $this->agreementsValidatorMock = $this->createMock(\Magento\Checkout\Api\AgreementsValidatorInterface::class);
+        $this->subjectMock = $this->createMock(\Magento\Checkout\Api\PaymentInformationManagementInterface::class);
+        $this->paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
+        $this->addressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
+        $this->extensionAttributesMock = $this->createPartialMock(
+            \Magento\Quote\Api\Data\PaymentExtension::class,
+            ['getAgreementIds']
         );
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->repositoryMock = $this->getMock('Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface');
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->checkoutAgreementsListMock = $this->createMock(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
+        );
+        $this->agreementsFilterMock = $this->createMock(
+            \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter::class
+        );
 
         $this->model = new \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation(
             $this->agreementsValidatorMock,
             $this->scopeConfigMock,
-            $this->repositoryMock
+            $this->checkoutAgreementsListMock,
+            $this->agreementsFilterMock
         );
     }
 
@@ -82,10 +95,17 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
+        $this->checkoutAgreementsListMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
-        $this->paymentMock->expects($this->once())
+        $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
@@ -93,7 +113,6 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Please agree to all the terms and conditions before placing the order.
      */
     public function testBeforeSavePaymentInformationAndPlaceOrderIfAgreementsNotValid()
     {
@@ -104,13 +123,24 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
+        $this->checkoutAgreementsListMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
-        $this->paymentMock->expects($this->once())
+        $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
+
+        $this->expectExceptionMessage(
+            "The order wasn't placed. First, agree to the terms and conditions, then try placing your order again."
+        );
     }
 
     public function testBeforeSavePaymentInformation()
@@ -122,10 +152,17 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
+        $this->checkoutAgreementsListMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
-        $this->paymentMock->expects($this->once())
+        $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);

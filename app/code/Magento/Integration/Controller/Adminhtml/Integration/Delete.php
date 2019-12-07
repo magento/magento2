@@ -1,16 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
+class Delete extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpPostActionInterface
 {
     /**
      * Delete the integration.

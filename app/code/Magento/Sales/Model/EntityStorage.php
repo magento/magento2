@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,7 +45,7 @@ class EntityStorage
             throw new \Magento\Framework\Exception\InputException(__('Identifying Fields required'));
         }
         if (!$object->getId()) {
-            throw new \Magento\Framework\Exception\InputException(__('Id required'));
+            throw new \Magento\Framework\Exception\InputException(__('An ID is needed. Set the ID and try again.'));
         }
         $this->storageMapper[$storageName][$this->getHash($identifyingFields)] = $object->getId();
         $this->registry[$object->getId()] = $object;

@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
+use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Tax\Model\Calculation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/SetupUtil.php';
 require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php';
+require_once __DIR__ . '/../../../../_files/full_discount_with_tax.php';
 
 /**
  * Class TaxTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * Utility object for setting up tax rates, tax classes and tax rules
@@ -22,6 +25,24 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      * @var SetupUtil
      */
     protected $setupUtil = null;
+
+    /**
+     * @var TotalsCollector
+     */
+    private $totalsCollector;
+
+    /**
+     * test setup
+     */
+    public function setUp()
+    {
+        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = Bootstrap::getObjectManager();
+        $this->totalsCollector = $objectManager->create(TotalsCollector::class);
+        $this->setupUtil = new SetupUtil($objectManager);
+
+        parent::setUp();
+    }
 
     /**
      * Test taxes collection for quote.
@@ -42,41 +63,40 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         /** Preconditions */
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Tax\Model\ClassModel $customerTaxClass */
-        $customerTaxClass = $objectManager->create('Magento\Tax\Model\ClassModel');
+        $customerTaxClass = $objectManager->create(\Magento\Tax\Model\ClassModel::class);
         $fixtureCustomerTaxClass = 'CustomerTaxClass2';
         $customerTaxClass->load($fixtureCustomerTaxClass, 'class_name');
         $fixtureCustomerId = 1;
         /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($fixtureCustomerId);
+        $customer = $objectManager->create(\Magento\Customer\Model\Customer::class)->load($fixtureCustomerId);
         /** @var \Magento\Customer\Model\Group $customerGroup */
-        $customerGroup = $objectManager->create('Magento\Customer\Model\Group')
+        $customerGroup = $objectManager->create(\Magento\Customer\Model\Group::class)
             ->load('custom_group', 'customer_group_code');
         $customerGroup->setTaxClassId($customerTaxClass->getId())->save();
         $customer->setGroupId($customerGroup->getId())->save();
 
         /** @var \Magento\Tax\Model\ClassModel $productTaxClass */
-        $productTaxClass = $objectManager->create('Magento\Tax\Model\ClassModel');
+        $productTaxClass = $objectManager->create(\Magento\Tax\Model\ClassModel::class);
         $fixtureProductTaxClass = 'ProductTaxClass1';
         $productTaxClass->load($fixtureProductTaxClass, 'class_name');
-        $fixtureProductId = 1;
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $objectManager->create('Magento\Catalog\Model\Product')->load($fixtureProductId);
+        $product = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class)->get('simple');
         $product->setTaxClassId($productTaxClass->getId())->save();
 
         $fixtureCustomerAddressId = 1;
-        $customerAddress = $objectManager->create('Magento\Customer\Model\Address')->load($fixtureCustomerId);
+        $customerAddress = $objectManager->create(\Magento\Customer\Model\Address::class)->load($fixtureCustomerId);
         /** Set data which corresponds tax class fixture */
         $customerAddress->setCountryId('US')->setRegionId(12)->save();
         /** @var \Magento\Quote\Model\Quote\Address $quoteShippingAddress */
-        $quoteShippingAddress = $objectManager->create('Magento\Quote\Model\Quote\Address');
+        $quoteShippingAddress = $objectManager->create(\Magento\Quote\Model\Quote\Address::class);
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
-        $addressRepository = $objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
+        $addressRepository = $objectManager->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $quoteShippingAddress->importCustomerAddressData($addressRepository->getById($fixtureCustomerAddressId));
 
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerRepository = $objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->setStoreId(1)
             ->setIsActive(true)
             ->setIsMultiShipping(false)
@@ -106,6 +126,40 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             $quote->getGrandTotal(),
             'Customer tax was collected by \Magento\Tax\Model\Sales\Total\Quote\Tax::collect incorrectly.'
         );
+    }
+
+    /**
+     * Test taxes collection with full discount for quote.
+     *
+     * Test tax calculation and price when the discount may be bigger than total
+     * This method will test the collector through $quote->collectTotals() method
+     *
+     * @see \Magento\SalesRule\Model\Utility::deltaRoundingFix
+     * @magentoDataFixture Magento/Tax/_files/full_discount_with_tax.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testFullDiscountWithDeltaRoundingFix()
+    {
+        global $fullDiscountIncTax;
+        $configData = $fullDiscountIncTax['config_data'];
+        $quoteData = $fullDiscountIncTax['quote_data'];
+        $expectedResults = $fullDiscountIncTax['expected_result'];
+
+        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = Bootstrap::getObjectManager();
+
+        //Setup tax configurations
+        $this->setupUtil = new SetupUtil($objectManager);
+        $this->setupUtil->setupTax($configData);
+
+        $quote = $this->setupUtil->setupQuote($quoteData);
+
+        $quote->collectTotals();
+
+        $quoteAddress = $quote->getShippingAddress();
+
+        $this->verifyResult($quoteAddress, $expectedResults);
     }
 
     /**
@@ -227,25 +281,26 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      * @param array $configData
      * @param array $quoteData
      * @param array $expectedResults
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @dataProvider taxDataProvider
      * @return void
      */
     public function testTaxCalculation($configData, $quoteData, $expectedResults)
     {
-        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var  \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector */
-        $totalsCollector = $objectManager->create('Magento\Quote\Model\Quote\TotalsCollector');
-
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
         //Setup tax configurations
-        $this->setupUtil = new SetupUtil($objectManager);
         $this->setupUtil->setupTax($configData);
 
         $quote = $this->setupUtil->setupQuote($quoteData);
         $quoteAddress = $quote->getShippingAddress();
-        $totalsCollector->collectAddressTotals($quote, $quoteAddress);
+        $this->totalsCollector->collectAddressTotals($quote, $quoteAddress);
         $this->verifyResult($quoteAddress, $expectedResults);
     }
 

@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Test\Unit\Observer;
 
-class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
+use Magento\GoogleAdwords\Helper\Data;
+
+class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -39,21 +41,15 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperMock = $this->getMock('Magento\GoogleAdwords\Helper\Data', [], [], '', false);
-        $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', true);
-        $this->_collectionMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->_eventMock = $this->getMock('Magento\Framework\Event', ['getOrderIds'], [], '', false);
+        $this->_helperMock = $this->createMock(\Magento\GoogleAdwords\Helper\Data::class);
+        $this->_registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->_collectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
+        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->_eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getOrderIds']);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
-            'Magento\GoogleAdwords\Observer\SetConversionValueObserver',
+            \Magento\GoogleAdwords\Observer\SetConversionValueObserver::class,
             [
                 'helper' => $this->_helperMock,
                 'collection' => $this->_collectionMock,
@@ -62,6 +58,9 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForDisabled()
     {
         return [[false, false], [false, true], [true, false]];
@@ -94,6 +93,9 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->_model, $this->_model->execute($this->_eventObserverMock));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForOrdersIds()
     {
         return [[[]], ['']];
@@ -128,8 +130,11 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
     {
         $ordersIds = [1, 2, 3];
         $conversionValue = 0;
+        $conversionCurrency = 'USD';
         $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->will($this->returnValue(true));
         $this->_helperMock->expects($this->once())->method('isDynamicConversionValue')->will($this->returnValue(true));
+        $this->_helperMock->expects($this->once())->method('hasSendConversionValueCurrency')
+            ->will($this->returnValue(true));
         $this->_eventMock->expects($this->once())->method('getOrderIds')->will($this->returnValue($ordersIds));
         $this->_eventObserverMock->expects(
             $this->once()
@@ -139,7 +144,10 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_eventMock)
         );
 
-        $iteratorMock = $this->getMock('Iterator');
+        $orderMock = $this->createMock(\Magento\Sales\Api\Data\OrderInterface::class);
+        $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn($conversionCurrency);
+
+        $iteratorMock = new \ArrayIterator([$orderMock]);
         $this->_collectionMock->expects($this->any())->method('getIterator')->will($this->returnValue($iteratorMock));
         $this->_collectionMock->expects(
             $this->once()
@@ -150,12 +158,18 @@ class SetConversionValueObserverTest extends \PHPUnit_Framework_TestCase
             ['in' => $ordersIds]
         );
         $this->_registryMock->expects(
-            $this->once()
+            $this->atLeastOnce()
         )->method(
             'register'
-        )->with(
-            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME,
-            $conversionValue
+        )->withConsecutive(
+            [
+                Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
+                $conversionCurrency
+            ],
+            [
+                Data::CONVERSION_VALUE_REGISTRY_NAME,
+                $conversionValue,
+            ]
         );
 
         $this->assertSame($this->_model, $this->_model->execute($this->_eventObserverMock));

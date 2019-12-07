@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme;
@@ -49,8 +49,8 @@ class Registration
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory $collectionFactory
-     * @param \Magento\Theme\Model\Theme\Data\Collection $filesystemCollection
+     * @param \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory  $collectionFactory
+     * @param \Magento\Theme\Model\Theme\Data\Collection                       $filesystemCollection
      */
     public function __construct(
         \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory $collectionFactory,
@@ -68,6 +68,7 @@ class Registration
     public function register()
     {
         $this->_themeCollection->clear();
+
         foreach ($this->_themeCollection as $theme) {
             $this->_registerThemeRecursively($theme);
         }
@@ -79,12 +80,14 @@ class Registration
 
     /**
      * Register theme and recursively all its ascendants
+     *
      * Second param is optional and is used to prevent circular references in inheritance chain
      *
-     * @param ThemeInterface &$theme
-     * @param array $inheritanceChain
-     * @return $this
-     * @throws LocalizedException
+     * @param   ThemeInterface &$theme
+     * @param   array           $inheritanceChain
+     * @return  $this
+     *
+     * @throws  LocalizedException
      */
     protected function _registerThemeRecursively(&$theme, $inheritanceChain = [])
     {
@@ -128,7 +131,7 @@ class Registration
             return $this;
         }
         $imagePath = $themeDirectory . '/' . $theme->getPreviewImage();
-        if (0 === strpos($imagePath, $themeDirectory)) {
+        if (0 === strpos($imagePath, (string) $themeDirectory)) {
             $theme->getThemeImage()->createPreviewImage($imagePath);
         }
         return $this;

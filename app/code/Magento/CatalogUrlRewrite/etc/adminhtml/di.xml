@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,16 +16,23 @@
         <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>
         <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
     </type>
-    <type name="Magento\UrlRewrite\Model\StorageInterface">
-        <plugin name="storage_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage"/>
-    </type>
-    <type name="Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes">
-        <plugin name="category_form_url_key_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab\Attributes"/>
-    </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes">
         <plugin name="product_form_url_key_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes"/>
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <plugin name="product_save_rewrites_history_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper"/>
     </type>
+    <type name="Magento\Catalog\Model\Category\DataProvider">
+        <plugin name="category_ui_form_url_key_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab\Attributes"/>
+    </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="ProductUrlRewrite" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\CatalogUrlRewrite\Ui\DataProvider\Product\Form\Modifier\ProductUrlRewrite</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

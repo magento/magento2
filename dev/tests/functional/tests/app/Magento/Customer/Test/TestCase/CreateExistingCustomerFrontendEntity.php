@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click 'Create account' button.
  * 5. Perform assertions.
  *
- * @group Customer_Account_(CS)
+ * @group Customer_Account
  * @ZephyrId MAGETWO-23545
  */
 class CreateExistingCustomerFrontendEntity extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -97,6 +96,6 @@ class CreateExistingCustomerFrontendEntity extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+        $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
     }
 }

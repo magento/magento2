@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,12 +8,20 @@ namespace Magento\Webapi\Controller;
 
 use Magento\Store\Model\Store;
 
-class PathProcessorTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for Magento\Webapi\Controller\PathProcessor class.
+ */
+class PathProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface::class
+     */
+    private $localeResolver;
 
     /**
      * @var \Magento\Webapi\Controller\PathProcessor
@@ -23,9 +31,10 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManager->reinitStores();
-        $this->pathProcessor = $objectManager->get('Magento\Webapi\Controller\PathProcessor');
+        $this->localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->pathProcessor = $objectManager->get(\Magento\Webapi\Controller\PathProcessor::class);
     }
 
     /**
@@ -51,7 +60,6 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Store::ADMIN_CODE, $this->storeManager->getStore()->getCode());
     }
 
-
     public function testProcessWithoutStoreCode()
     {
         $path = '/V1/customerAccounts/createCustomer';
@@ -59,5 +67,21 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
         $result = $this->pathProcessor->process($uri);
         $this->assertEquals($path, $result);
         $this->assertEquals('default', $this->storeManager->getStore()->getCode());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoConfigFixture default_store general/locale/code en_US
+     * @magentoConfigFixture fixturestore_store general/locale/code de_DE
+     */
+    public function testProcessWithValidStoreCodeApplyLocale()
+    {
+        $locale = 'de_DE';
+        $storeCode = 'fixturestore';
+        $basePath = "rest/{$storeCode}";
+        $path = $basePath . '/V1/customerAccounts/createCustomer';
+        $this->pathProcessor->process($path);
+        $this->assertEquals($locale, $this->localeResolver->getLocale());
+        $this->assertNotEquals('en_US', $this->localeResolver->getLocale());
     }
 }

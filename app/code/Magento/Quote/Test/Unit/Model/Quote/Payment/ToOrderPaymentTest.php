@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
@@ -14,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class ToOrderPaymentTest tests converter to order payment
  */
-class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
+class ToOrderPaymentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Api\OrderPaymentRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -41,27 +39,24 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected $converter;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->paymentMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Payment',
-            ['getCcNumber', 'getCcCid', 'getMethodInstance', 'getAdditionalInformation'],
-            [],
-            '',
-            false
+        $this->paymentMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Payment::class,
+            ['getCcNumber', 'getCcCid', 'getMethodInstance', 'getAdditionalInformation']
         );
-        $this->objectCopyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
+        $this->objectCopyMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
         $this->orderPaymentRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\OrderPaymentRepositoryInterface',
+            \Magento\Sales\Api\OrderPaymentRepositoryInterface::class,
             [],
             '',
             false,
             false
         );
-        $this->dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
-            'Magento\Quote\Model\Quote\Payment\ToOrderPayment',
+            \Magento\Quote\Model\Quote\Payment\ToOrderPayment::class,
             [
                 'orderPaymentRepository' => $this->orderPaymentRepositoryMock,
                 'objectCopyService' => $this->objectCopyMock,
@@ -75,7 +70,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
-        $methodInterface = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
+        $methodInterface = $this->getMockForAbstractClass(\Magento\Payment\Model\MethodInterface::class);
 
         $paymentData = ['test' => 'test2'];
         $data = ['some_id' => 1];
@@ -103,7 +98,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn($ccCid);
 
         $orderPayment = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderPaymentInterface',
+            \Magento\Sales\Api\Data\OrderPaymentInterface::class,
             [],
             '',
             false,
@@ -125,7 +120,11 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
         $this->orderPaymentRepositoryMock->expects($this->once())->method('create')->willReturn($orderPayment);
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($orderPayment, array_merge($paymentData, $data), '\Magento\Sales\Api\Data\OrderPaymentInterface')
+            ->with(
+                $orderPayment,
+                array_merge($paymentData, $data),
+                \Magento\Sales\Api\Data\OrderPaymentInterface::class
+            )
             ->willReturnSelf();
 
         $this->assertSame($orderPayment, $this->converter->convert($this->paymentMock, $data));

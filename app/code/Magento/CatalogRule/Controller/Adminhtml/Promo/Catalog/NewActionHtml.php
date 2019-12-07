@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
@@ -19,17 +19,12 @@ class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Cata
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
-        $model = $this->_objectManager->create(
-            $type
-        )->setId(
-            $id
-        )->setType(
-            $type
-        )->setRule(
-            $this->_objectManager->create('Magento\CatalogRule\Model\Rule')
-        )->setPrefix(
-            'actions'
-        );
+        $model = $this->_objectManager->create($type)
+            ->setId($id)
+            ->setType($type)
+            ->setRule($this->_objectManager->create(\Magento\CatalogRule\Model\Rule::class))
+            ->setPrefix('actions');
+
         if (!empty($typeArr[1])) {
             $model->setAttribute($typeArr[1]);
         }

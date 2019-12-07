@@ -1,18 +1,22 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="payments_pro_hosted_solution" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
         <label>Website Payments Pro Hosted Solution</label>
-        <fieldset_css>pp-method-general</fieldset_css>
+        <fieldset_css>paypal-other-section</fieldset_css>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
         <attribute type="activity_path">payment/hosted_pro/active</attribute>
-        <comment>Accept payments with a PCI compliant checkout that keeps customers on your site.</comment>
+        <comment><![CDATA[Accept payments with a PCI compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="paypal_ec_separate">1</attribute>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-pro.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
         <group id="pphs_required_settings" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -42,10 +46,10 @@
                 <frontend_class>paypal-enabler paypal-ec-separate</frontend_class>
             </field>
 
-            <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="21">
+            <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="21" showInDefault="1" showInWebsite="1">
                 <comment><![CDATA[Payments Pro Hosted Solution lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
-                        <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                        <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
                 </comment>
                 <requires>
                     <field id="pphs_enable"/>
@@ -54,12 +58,12 @@
             <group id="pphs_advertise_bml"  translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="22">
                 <label>Advertise PayPal Credit</label>
                 <comment>
-                    <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                    <![CDATA[<a href="https://financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
                             <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
                             from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
                             Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
                             The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                            or more. <a href="https:/financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                            or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
                 </comment>
                 <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
                 <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />

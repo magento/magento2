@@ -1,10 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Block\Sales\Order;
 
+/**
+ * Wee tax total column block
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Totals extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -48,19 +54,23 @@ class Totals extends \Magento\Framework\View\Element\Template
         $store = $this->getSource()->getStore();
 
         $weeeTotal = $this->weeeData->getTotalAmounts($items, $store);
+        $weeeBaseTotal = $this->weeeData->getBaseTotalAmounts($items, $store);
         if ($weeeTotal) {
+            $totals = $this->getParentBlock()->getTotals();
+
             // Add our total information to the set of other totals
             $total = new \Magento\Framework\DataObject(
                 [
                     'code' => $this->getNameInLayout(),
                     'label' => __('FPT'),
                     'value' => $weeeTotal,
+                    'base_value' => $weeeBaseTotal
                 ]
             );
-            if ($this->getBeforeCondition()) {
-                $this->getParentBlock()->addTotalBefore($total, $this->getBeforeCondition());
+            if (isset($totals['grand_total_incl'])) {
+                $this->getParentBlock()->addTotalBefore($total, 'grand_total');
             } else {
-                $this->getParentBlock()->addTotal($total, $this->getAfterCondition());
+                $this->getParentBlock()->addTotalBefore($total, $this->getBeforeCondition());
             }
         }
         return $this;

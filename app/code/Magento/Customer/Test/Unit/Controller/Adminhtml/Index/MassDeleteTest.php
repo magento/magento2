@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class MassDeleteTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassDeleteTest extends \PHPUnit_Framework_TestCase
+class MassDeleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Controller\Adminhtml\Index\MassDelete
@@ -70,42 +70,33 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerRepositoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
-        $resultRedirectFactory = $this->getMock(
-            'Magento\Backend\Model\View\Result\RedirectFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->responseMock = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $resultRedirectFactory = $this->createMock(\Magento\Backend\Model\View\Result\RedirectFactory::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
-            ['create'],
-            [],
-            '',
-            false
+        $this->objectManagerMock = $this->createPartialMock(
+            \Magento\Framework\ObjectManager\ObjectManager::class,
+            ['create']
         );
-        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
         $this->customerCollectionMock =
-            $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+            $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionFactoryMock =
-            $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory')
+            $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['create'])
                 ->getMock();
-        $redirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $redirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultFactoryMock->expects($this->any())
@@ -113,7 +104,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($redirectMock);
 
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -130,7 +121,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
 
-        $this->filterMock = $this->getMock('Magento\Ui\Component\MassAction\Filter', [], [], '', false);
+        $this->filterMock = $this->createMock(\Magento\Ui\Component\MassAction\Filter::class);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
             ->with($this->customerCollectionMock)
@@ -138,10 +129,10 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
         $this->customerCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->customerCollectionMock);
-        $this->customerRepositoryMock = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
+        $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
         $this->massAction = $objectManagerHelper->getObject(
-            'Magento\Customer\Controller\Adminhtml\Index\MassDelete',
+            \Magento\Customer\Controller\Adminhtml\Index\MassDelete::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
@@ -164,7 +155,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([[10, true], [11, true], [12, true]]);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('A total of %1 record(s) were deleted.', count($customersIds)));
 
         $this->resultRedirectMock->expects($this->any())
@@ -188,7 +179,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('Some message.'));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Some message.');
 
         $this->massAction->execute();

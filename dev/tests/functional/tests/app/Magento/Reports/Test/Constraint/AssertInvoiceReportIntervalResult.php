@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class AssertInvoiceReportIntervalResult extends AbstractAssertInvoiceReportResul
         $this->searchInInvoiceReportGrid($invoiceReport);
         $invoiceResult = $this->salesInvoiceReport->getGridBlock()->getLastResult();
         $prepareInitialResult = $this->prepareExpectedResult($initialInvoiceResult);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $invoiceResult,
             "Invoice report interval result not contains actual data."

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\MediaStorage\Model\File\Validator;
 
@@ -99,7 +97,11 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      */
     public function getProtectedFileExtensions($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_PROTECTED_FILE_EXTENSIONS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_PROTECTED_FILE_EXTENSIONS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * Product Media Attribute
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api\Data;
@@ -11,6 +11,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInterface
 {
@@ -74,7 +75,7 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * @return int
      */
     public function getPosition();
-    
+
     /**
      * Set gallery entry position (sort order)
      *
@@ -127,19 +128,19 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * @return $this
      */
     public function setFile($file);
-    
+
     /**
      * Get media gallery content
      *
      * @return \Magento\Framework\Api\Data\ImageContentInterface|null
      */
     public function getContent();
-    
+
     /**
      * Set media gallery content
      *
-     * @param $content \Magento\Framework\Api\Data\ImageContentInterface
-     * @return $this 
+     * @param \Magento\Framework\Api\Data\ImageContentInterface $content
+     * @return $this
      */
     public function setContent($content);
 

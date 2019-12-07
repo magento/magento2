@@ -1,18 +1,19 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
 use Magento\Multishipping\Block\Checkout\Overview;
 use Magento\Quote\Model\Quote\Address;
 
-class OverviewTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class OverviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Overview
@@ -49,44 +50,47 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
      */
     protected $quoteMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlBuilderMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->addressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
-            [
+        $this->addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
                 'getShippingMethod',
                 'getShippingRateByCode',
                 'getAllVisibleItems',
                 'getTotals',
                 'getAddressType',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false);
+            ]);
 
         $this->priceCurrencyMock =
-            $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface', [], [], '', false);
-        $this->totalsReaderMock = $this->getMock('Magento\Quote\Model\Quote\TotalsReader', [], [], '', false);
-        $this->totalsCollectorMock = $this->getMock('Magento\Quote\Model\Quote\TotalsCollector', [], [], '', false);
+            $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->totalsReaderMock = $this->createMock(\Magento\Quote\Model\Quote\TotalsReader::class);
+        $this->totalsCollectorMock = $this->createMock(\Magento\Quote\Model\Quote\TotalsCollector::class);
         $this->checkoutMock =
-            $this->getMock('Magento\Multishipping\Model\Checkout\Type\Multishipping', [], [], '', false);
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $this->model = $objectManager->getObject('Magento\Multishipping\Block\Checkout\Overview',
+            $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class);
+        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->model = $objectManager->getObject(
+            \Magento\Multishipping\Block\Checkout\Overview::class,
             [
                 'priceCurrency' => $this->priceCurrencyMock,
                 'totalsCollector' => $this->totalsCollectorMock,
                 'totalsReader' => $this->totalsReaderMock,
-                'multishipping' => $this->checkoutMock
+                'multishipping' => $this->checkoutMock,
+                'urlBuilder' => $this->urlBuilderMock
             ]
         );
     }
 
     public function testGetShippingRateByCode()
     {
-        $rateMock = $this->getMock('Magento\Quote\Model\Quote\Address\Rate', [], [], '', false);
+        $rateMock = $this->createMock(\Magento\Quote\Model\Quote\Address\Rate::class);
         $this->addressMock->expects($this->once())
             ->method('getShippingMethod')->will($this->returnValue('shipping method'));
         $this->addressMock->expects($this->once())
@@ -117,11 +121,9 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetShippingAddressTotals()
     {
-        $totalMock = $this->getMock('\Magento\Sales\Model\Order\Total',
-            ['getCode', 'setTitle', '__wakeup'],
-            [],
-            '',
-            false
+        $totalMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Total::class,
+            ['getCode', 'setTitle', '__wakeup']
         );
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
         $this->addressMock->expects($this->once())->method('getAddressType')->willReturn(Address::TYPE_BILLING);
@@ -133,11 +135,9 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetShippingAddressTotalsWithNotBillingAddress()
     {
-        $totalMock = $this->getMock('\Magento\Sales\Model\Order\Total',
-            ['getCode', 'setTitle', '__wakeup'],
-            [],
-            '',
-            false
+        $totalMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Total::class,
+            ['getCode', 'setTitle', '__wakeup']
         );
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
         $this->addressMock->expects($this->once())->method('getAddressType')->willReturn('not billing');
@@ -153,16 +153,12 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTotalsMock($address)
     {
-        $totalMock = $this->getMock('\Magento\Sales\Model\Order\Total',
-            [
+        $totalMock = $this->createPartialMock(\Magento\Sales\Model\Order\Total::class, [
                 'getCode',
                 'setTitle',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false);
-        $totalsAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address\Total', [], [], '', false);
+            ]);
+        $totalsAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address\Total::class);
         $this->checkoutMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $this->totalsCollectorMock
             ->expects($this->once())
@@ -175,5 +171,12 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
             ->with($this->quoteMock, [])
             ->willReturn([$totalMock]);
         return $totalMock;
+    }
+
+    public function testGetVirtualProductEditUrl()
+    {
+        $url = 'http://example.com';
+        $this->urlBuilderMock->expects($this->once())->method('getUrl')->with('checkout/cart', [])->willReturn($url);
+        $this->assertEquals($url, $this->model->getVirtualProductEditUrl());
     }
 }

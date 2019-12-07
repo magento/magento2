@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 class CartItemProcessor implements CartItemProcessorInterface
 {
@@ -31,25 +33,33 @@ class CartItemProcessor implements CartItemProcessorInterface
     protected $itemOptionValueFactory;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\DataObject\Factory $objectFactory
      * @param \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory
      * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
      * @param \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
-        \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
+        \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory,
+        Json $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->itemOptionValueFactory = $itemOptionValueFactory;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -59,7 +69,7 @@ class CartItemProcessor implements CartItemProcessorInterface
             if (is_array($options)) {
                 $requestData = [];
                 foreach ($options as $option) {
-                    $requestData['super_attribute'][$option->getOptionId()] = $option->getOptionValue();
+                    $requestData['super_attribute'][$option->getOptionId()] = (string) $option->getOptionValue();
                 }
                 return $this->objectFactory->create($requestData);
             }
@@ -68,12 +78,12 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function processOptions(CartItemInterface $cartItem)
     {
         $attributesOption = $cartItem->getProduct()->getCustomOption('attributes');
-        $selectedConfigurableOptions = unserialize($attributesOption->getValue());
+        $selectedConfigurableOptions = $this->serializer->unserialize($attributesOption->getValue());
 
         if (is_array($selectedConfigurableOptions)) {
             $configurableOptions = [];

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Controller\Checkout;
@@ -28,7 +28,7 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      */
     protected function _getCheckout()
     {
-        return $this->_objectManager->get('Magento\Multishipping\Model\Checkout\Type\Multishipping');
+        return $this->_objectManager->get(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class);
     }
 
     /**
@@ -38,6 +38,6 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      */
     protected function _getState()
     {
-        return $this->_objectManager->get('Magento\Multishipping\Model\Checkout\Type\Multishipping\State');
+        return $this->_objectManager->get(\Magento\Multishipping\Model\Checkout\Type\Multishipping\State::class);
     }
 }

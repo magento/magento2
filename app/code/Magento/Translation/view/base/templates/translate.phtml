@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+
+/** @var \Magento\Translation\Block\Js $block */
 ?>
-<?php /** @var $block \Magento\Translation\Block\Js */ ?>
-<?php if ($block->dictionaryEnabled()): ?>
+<!--
+    For frontend area dictionary file is inserted into html head in Magento/Translation/view/base/templates/dictionary.phtml
+    Same translation mechanism should be introduced for admin area in 2.4 version.
+-->
+<?php if ($block->dictionaryEnabled()) : ?>
     <script>
         require.config({
             deps: [
@@ -24,10 +28,11 @@
                 $.initNamespaceStorage('mage-translation-file-version');
                 versionObj = $.localStorage.get('mage-translation-file-version');
 
-                if (versionObj.version !== '<?php /* @escapeNotVerified */
-                    echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>') {
+                <?php $version = $block->getTranslationFileVersion(); ?>
+
+                if (versionObj.version !== '<?= $block->escapeJs($version) ?>') {
                     dependencies.push(
-                        'text!<?php /*  @escapeNotVerified */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>'
+                        'text!<?= /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
                     );
 
                 }
@@ -41,8 +46,7 @@
                             $.localStorage.set(
                                 'mage-translation-file-version',
                                 {
-                                    version: '<?php /* @escapeNotVerified */
-                    echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>'
+                                    version: '<?= $block->escapeJs($version) ?>'
                                 }
                             );
                         } else {

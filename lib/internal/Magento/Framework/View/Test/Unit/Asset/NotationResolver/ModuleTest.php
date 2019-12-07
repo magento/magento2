@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
@@ -27,8 +25,11 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
-        $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $this->assetRepo = $this->createPartialMock(
+            \Magento\Framework\View\Asset\Repository::class,
+            ['createUsingContext', 'createSimilar']
+        );
         $this->object = new \Magento\Framework\View\Asset\NotationResolver\Module($this->assetRepo);
     }
 
@@ -51,9 +52,12 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      * @dataProvider convertModuleNotationToPathModularSeparatorDataProvider
      */
     public function testConvertModuleNotationToPathModularSeparator(
-        $assetRelPath, $relatedFieldId, $similarRelPath, $expectedResult
+        $assetRelPath,
+        $relatedFieldId,
+        $similarRelPath,
+        $expectedResult
     ) {
-        $similarAsset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
+        $similarAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $similarAsset->expects($this->any())
             ->method('getPath')
             ->will($this->returnValue($similarRelPath));

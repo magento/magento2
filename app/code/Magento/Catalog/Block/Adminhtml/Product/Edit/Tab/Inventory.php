@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
@@ -15,7 +15,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/tab/inventory.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/tab/inventory.phtml';
 
     /**
      * @var \Magento\Framework\Module\Manager
@@ -79,6 +79,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get backorder option.
+     *
      * @return array
      */
     public function getBackordersOption()
@@ -128,6 +130,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get field value.
+     *
      * @param string $field
      * @return string|null
      */
@@ -145,6 +149,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get config field value.
+     *
      * @param string $field
      * @return string|null
      */
@@ -163,6 +169,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get default config value.
+     *
      * @param string $field
      * @return string|null
      */
@@ -182,6 +190,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Is new.
+     *
      * @return bool
      */
     public function isNew()
@@ -193,6 +203,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get field suffix.
+     *
      * @return string
      */
     public function getFieldSuffix()
@@ -221,6 +233,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Is single store mode enabled.
+     *
      * @return bool
      */
     public function isSingleStoreMode()

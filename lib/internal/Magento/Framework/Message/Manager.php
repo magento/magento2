@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
 
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Debug;
 
 /**
  * Message manager model
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
@@ -55,12 +59,18 @@ class Manager implements ManagerInterface
     protected $hasMessages = false;
 
     /**
+     * @var ExceptionMessageFactoryInterface
+     */
+    private $exceptionMessageFactory;
+
+    /**
      * @param Session $session
      * @param Factory $messageFactory
      * @param CollectionFactory $messagesFactory
      * @param Event\ManagerInterface $eventManager
      * @param LoggerInterface $logger
      * @param string $defaultGroup
+     * @param ExceptionMessageFactoryInterface|null $exceptionMessageFactory
      */
     public function __construct(
         Session $session,
@@ -68,7 +78,8 @@ class Manager implements ManagerInterface
         CollectionFactory $messagesFactory,
         Event\ManagerInterface $eventManager,
         LoggerInterface $logger,
-        $defaultGroup = self::DEFAULT_GROUP
+        $defaultGroup = self::DEFAULT_GROUP,
+        ExceptionMessageFactoryInterface $exceptionMessageFactory = null
     ) {
         $this->session = $session;
         $this->messageFactory = $messageFactory;
@@ -76,10 +87,12 @@ class Manager implements ManagerInterface
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->defaultGroup = $defaultGroup;
+        $this->exceptionMessageFactory = $exceptionMessageFactory ?: ObjectManager::getInstance()
+            ->get(ExceptionMessageLookupFactory::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultGroup()
     {
@@ -100,8 +113,8 @@ class Manager implements ManagerInterface
     /**
      * @inheritdoc
      *
-     * @param string|null $group
      * @param bool $clear
+     * @param string|null $group
      * @return Collection
      */
     public function getMessages($clear = false, $group = null)
@@ -216,7 +229,7 @@ class Manager implements ManagerInterface
         $items = $this->getMessages(false, $group)->getItems();
 
         foreach ($messages as $message) {
-            if ($message instanceof MessageInterface and !in_array($message, $items, false)) {
+            if ($message instanceof MessageInterface && !in_array($message, $items, false)) {
                 $this->addMessage($message, $group);
             }
         }
@@ -232,17 +245,28 @@ class Manager implements ManagerInterface
      * @param string $group
      * @return $this
      */
-    public function addException(\Exception $exception, $alternativeText, $group = null)
+    public function addException(\Exception $exception, $alternativeText = null, $group = null)
     {
         $message = sprintf(
             'Exception message: %s%sTrace: %s',
             $exception->getMessage(),
             "\n",
-            $exception->getTraceAsString()
+            Debug::trace(
+                $exception->getTrace(),
+                true,
+                true,
+                (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
+            )
         );
 
         $this->logger->critical($message);
-        $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
+
+        if ($alternativeText) {
+            $this->addError($alternativeText, $group);
+        } else {
+            $this->addMessage($this->exceptionMessageFactory->createMessage($exception), $group);
+        }
+
         return $this;
     }
 
@@ -264,17 +288,28 @@ class Manager implements ManagerInterface
      * @param string $group
      * @return $this
      */
-    public function addExceptionMessage(\Exception $exception, $alternativeText, $group = null)
+    public function addExceptionMessage(\Exception $exception, $alternativeText = null, $group = null)
     {
         $message = sprintf(
             'Exception message: %s%sTrace: %s',
             $exception->getMessage(),
             "\n",
-            $exception->getTraceAsString()
+            Debug::trace(
+                $exception->getTrace(),
+                true,
+                true,
+                (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
+            )
         );
 
         $this->logger->critical($message);
-        $this->addErrorMessage($alternativeText, $group);
+
+        if ($alternativeText) {
+            $this->addErrorMessage($alternativeText, $group);
+        } else {
+            $this->addMessage($this->exceptionMessageFactory->createMessage($exception), $group);
+        }
+
         return $this;
     }
 

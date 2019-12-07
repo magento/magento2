@@ -1,70 +1,61 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/* @var \Magento\Sales\Block\Adminhtml\Order\Totals $block */
 ?>
-<?php /*$_source = $block->getSource(); ?>
-<?php $block->setPriceDataObject($_source) ?>
-<?php if ($_source): ?>
-<table width="100%">
-    <?php echo $block->getChildHtml('main'); ?>
-    <?php echo $block->getChildHtml('footer'); ?>
-</table>
-<?php endif;*/ ?>
 <table class="data-table admin__table-secondary order-subtotal-table">
-    <?php $_totals = $block->getTotals('footer')?>
+    <?php $_totals = $block->getTotals('footer') ?>
 
-    <?php if ($_totals):?>
+    <?php if ($_totals) : ?>
         <tfoot>
-            <?php foreach ($block->getTotals('footer') as $_code => $_total): ?>
-                <?php if ($_total->getBlockName()): ?>
-                    <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
-                <?php else:?>
-                <tr class="col-<?php /* @escapeNotVerified */ echo $_code?>">
-                    <td <?php /* @escapeNotVerified */ echo $block->getLabelProperties()?> class="label">
-                        <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
+            <?php foreach ($block->getTotals('footer') as $_code => $_total) : ?>
+                <?php if ($_total->getBlockName()) : ?>
+                    <?= $block->getChildHtml($_total->getBlockName(), false) ?>
+                <?php else : ?>
+                <tr class="col-<?= $block->escapeHtmlAttr($_code) ?>">
+                    <td <?= /* @noEscape */ $block->getLabelProperties() ?> class="label">
+                        <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
                     </td>
-                    <td <?php /* @escapeNotVerified */ echo $block->getValueProperties()?>>
-                        <strong><?php /* @escapeNotVerified */ echo $block->formatValue($_total) ?></strong>
+                    <td <?= /* @noEscape */ $block->getValueProperties() ?>>
+                        <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
                     </td>
                 </tr>
-                <?php endif?>
-            <?php endforeach?>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </tfoot>
-    <?php endif?>
+    <?php endif; ?>
 
     <?php $_totals = $block->getTotals('')?>
-    <?php if ($_totals):?>
+    <?php if ($_totals) : ?>
         <tbody>
-            <?php foreach ($_totals as $_code => $_total): ?>
-                <?php if ($_total->getBlockName()): ?>
-                    <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
-                <?php else:?>
-                    <tr class="col-<?php /* @escapeNotVerified */ echo $_code?>">
-                        <td <?php /* @escapeNotVerified */ echo $block->getLabelProperties()?> class="label">
-                            <?php if ($_total->getStrong()):?>
-                            <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
-                            <?php else:?>
-                            <?php echo $block->escapeHtml($_total->getLabel()); ?>
+            <?php foreach ($_totals as $_code => $_total) : ?>
+                <?php if ($_total->getBlockName()) : ?>
+                    <?= $block->getChildHtml($_total->getBlockName(), false) ?>
+                <?php else : ?>
+                    <tr class="col-<?= $block->escapeHtmlAttr($_code) ?>">
+                        <td <?= /* @noEscape */ $block->getLabelProperties() ?> class="label">
+                            <?php if ($_total->getStrong()) : ?>
+                            <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
+                            <?php else : ?>
+                            <?= $block->escapeHtml($_total->getLabel()) ?>
                             <?php endif?>
                         </td>
 
-                        <?php if ($_total->getStrong()):?>
-                            <td <?php /* @escapeNotVerified */ echo $block->getValueProperties()?>>
-                                <strong><?php /* @escapeNotVerified */ echo $block->formatValue($_total) ?></strong>
+                        <?php if ($_total->getStrong()) : ?>
+                            <td <?= /* @noEscape */ $block->getValueProperties() ?>>
+                                <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
                             </td>
-                        <?php else:?>
-                            <td <?php /* @escapeNotVerified */ echo $block->getValueProperties()?>>
-                                <span><?php /* @escapeNotVerified */ echo $block->formatValue($_total) ?></span>
+                        <?php else : ?>
+                            <td <?= /* @noEscape */ $block->getValueProperties() ?>>
+                                <span><?= /* @noEscape */ $block->formatValue($_total) ?></span>
                             </td>
-                        <?php endif?>
+                        <?php endif; ?>
                     </tr>
-                <?php endif?>
-            <?php endforeach?>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </tbody>
-    <?php endif?>
+    <?php endif; ?>
 </table>

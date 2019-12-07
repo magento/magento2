@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Adapter\Mysql\Query\Builder;
 
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
@@ -12,12 +14,23 @@ use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
+/**
+ * MySQL search query match.
+ *
+ * @api
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Match implements QueryInterface
 {
+    /**
+     * @var string
+     */
     const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
 
-    const MINIMAL_CHARACTER_LENGTH = 3;
+    const MINIMAL_CHARACTER_LENGTH = 1;
 
     /**
      * @var string[]
@@ -40,23 +53,32 @@ class Match implements QueryInterface
     private $fulltextSearchMode;
 
     /**
+     * @var PreprocessorInterface[]
+     * @since 100.1.0
+     */
+    protected $preprocessors;
+
+    /**
      * @param ResolverInterface $resolver
      * @param Fulltext $fulltextHelper
      * @param string $fulltextSearchMode
+     * @param PreprocessorInterface[] $preprocessors
      */
     public function __construct(
         ResolverInterface $resolver,
         Fulltext $fulltextHelper,
-        $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN
+        $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN,
+        array $preprocessors = []
     ) {
         $this->resolver = $resolver;
         $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
         $this->fulltextHelper = $fulltextHelper;
         $this->fulltextSearchMode = $fulltextSearchMode;
+        $this->preprocessors = $preprocessors;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(
         ScoreBuilder $scoreBuilder,
@@ -100,6 +122,8 @@ class Match implements QueryInterface
     }
 
     /**
+     * Prepare query value for build function.
+     *
      * @param string $queryValue
      * @param string $conditionType
      * @return string
@@ -107,6 +131,9 @@ class Match implements QueryInterface
     protected function prepareQuery($queryValue, $conditionType)
     {
         $queryValue = str_replace($this->replaceSymbols, ' ', $queryValue);
+        foreach ($this->preprocessors as $preprocessor) {
+            $queryValue = $preprocessor->process($queryValue);
+        }
 
         $stringPrefix = '';
         if ($conditionType === BoolExpression::QUERY_CONDITION_MUST) {

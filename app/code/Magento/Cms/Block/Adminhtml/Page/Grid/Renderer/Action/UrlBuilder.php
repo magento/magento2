@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
 
+/**
+ * Url builder class used to compose dynamic urls.
+ */
 class UrlBuilder
 {
     /**
@@ -30,11 +33,26 @@ class UrlBuilder
      */
     public function getUrl($routePath, $scope, $store)
     {
-        $this->frontendUrlBuilder->setScope($scope);
-        $href = $this->frontendUrlBuilder->getUrl(
-            $routePath,
-            ['_current' => false, '_query' => '___store=' . $store]
-        );
+        if ($scope) {
+            $this->frontendUrlBuilder->setScope($scope);
+            $href = $this->frontendUrlBuilder->getUrl(
+                $routePath,
+                [
+                    '_current' => false,
+                    '_nosid' => true,
+                    '_query' => [\Magento\Store\Model\StoreManagerInterface::PARAM_NAME => $store]
+                ]
+            );
+        } else {
+            $href = $this->frontendUrlBuilder->getUrl(
+                $routePath,
+                [
+                    '_current' => false,
+                    '_nosid' => true
+                ]
+            );
+        }
+
         return $href;
     }
 }

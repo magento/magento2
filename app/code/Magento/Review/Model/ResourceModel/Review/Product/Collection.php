@@ -1,18 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel\Review\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Review Product Collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -59,6 +63,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_voteFactory;
 
     /**
+     * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -80,7 +86,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param MetadataPool|null $metadataPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -106,7 +114,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ProductLimitationFactory $productLimitationFactory = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->_ratingFactory = $ratingFactory;
         $this->_voteFactory = $voteFactory;
@@ -130,7 +140,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $connection
+            $connection,
+            $productLimitationFactory,
+            $metadataPool
         );
     }
 
@@ -141,7 +153,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Product', 'Magento\Catalog\Model\ResourceModel\Product');
+        $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product::class);
         $this->setRowIdFieldName('review_id');
         $this->_reviewStoreTable = $this->_resource->getTableName('review_store');
         $this->_initTables();
@@ -392,12 +404,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function getResultingIds()
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(Select::LIMIT_COUNT);
-        $idsSelect->reset(Select::LIMIT_OFFSET);
-        $idsSelect->reset(Select::COLUMNS);
-        $idsSelect->reset(Select::ORDER);
-        $idsSelect->columns('rt.review_id');
-        return $this->getConnection()->fetchCol($idsSelect);
+        $data = $this->getConnection()
+            ->fetchAll(
+                $idsSelect
+                    ->reset(Select::LIMIT_COUNT)
+                    ->reset(Select::LIMIT_OFFSET)
+                    ->columns('rt.review_id')
+            );
+
+        return array_map(
+            function ($value) {
+                return $value['review_id'];
+            },
+            $data
+        );
     }
 
     /**
@@ -526,6 +546,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($this->_addStoreDataFlag) {
             $this->_addStoreData();
         }
+        return $this;
+    }
+
+    /**
+     * Not add store ids to items
+     *
+     * @return $this
+     */
+    protected function prepareStoreId()
+    {
         return $this;
     }
 

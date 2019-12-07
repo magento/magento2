@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Integration\Test\TestCase\DeleteIntegrationEntityTest" summary="Delete Integration" ticketId="MAGETWO-26058">
         <variation name="DeleteIntegrationEntityTestVariation1">
+            <data name="integration/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessDeleteMessage" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNotInGrid" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>
 </config>

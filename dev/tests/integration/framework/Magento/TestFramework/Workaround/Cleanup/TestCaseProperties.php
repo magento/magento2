@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,9 +14,9 @@ class TestCaseProperties
     /**
      * Clear test method properties after each test suite
      *
-     * @param  \PHPUnit_Framework_TestSuite $suite
+     * @param  \PHPUnit\Framework\TestSuite $suite
      */
-    public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
         $tests = $suite->tests();
 

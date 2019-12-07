@@ -776,18 +776,6 @@
                         "dev/tests/functional/.gitignore"
                     ],
                     [
-                        "dev/tests/js/run_js_tests.php",
-                        "dev/tests/js/run_js_tests.php"
-                    ],
-                    [
-                        "dev/tests/js/jsTestDriverOrder.php",
-                        "dev/tests/js/jsTestDriverOrder.php"
-                    ],
-                    [
-                        "dev/tests/js/jsTestDriver.php.dist",
-                        "dev/tests/js/jsTestDriver.php.dist"
-                    ],
-                    [
                         "dev/tests/js/spec",
                         "dev/tests/js/spec"
                     ],
@@ -914,10 +902,6 @@
                     [
                         "php.ini.sample",
                         "php.ini.sample"
-                    ],
-                    [
-                        "CONTRIBUTOR_LICENSE_AGREEMENT.html",
-                        "CONTRIBUTOR_LICENSE_AGREEMENT.html"
                     ],
                     [
                         "index.php",

@@ -1,8 +1,11 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
@@ -11,7 +14,7 @@ define([
     'text!ui/template/modal/modal-slide.html',
     'text!ui/template/modal/modal-custom.html',
     'Magento_Ui/js/lib/key-codes',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/translate'
 ], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
@@ -42,8 +45,10 @@ define([
      */
     $.widget('mage.modal', {
         options: {
+            id: null,
             type: 'popup',
             title: '',
+            subTitle: '',
             modalClass: '',
             focus: '[data-role="closeBtn"]',
             autoOpen: false,
@@ -56,6 +61,8 @@ define([
             innerScrollClass: '_inner-scroll',
             responsive: false,
             innerScroll: false,
+            modalTitle: '[data-role="title"]',
+            modalSubTitle: '[data-role="subTitle"]',
             modalBlock: '[data-role="modal"]',
             modalCloseBtn: '[data-role="closeBtn"]',
             modalContent: '[data-role="content"]',
@@ -81,28 +88,29 @@ define([
                 click: function (event) {
                     this.closeModal(event);
                 }
-            }]
-        },
-        keyEventHandlers: {
+            }],
+            keyEventHandlers: {
 
-            /**
-             * Tab key press handler,
-             * set focus to elements
-             */
-            tabKey: function () {
-                if (document.activeElement === this.modal[0]) {
-                    this._setFocus('start');
-                }
-            },
+                /**
+                 * Tab key press handler,
+                 * set focus to elements
+                 */
+                tabKey: function () {
+                    if (document.activeElement === this.modal[0]) {
+                        this._setFocus('start');
+                    }
+                },
 
-            /**
-             * Escape key press handler,
-             * close modal window
-             */
-            escapeKey: function () {
-                if (this.options.isOpen && this.modal.find(document.activeElement).length ||
-                    this.options.isOpen && this.modal[0] === document.activeElement) {
-                    this.closeModal();
+                /**
+                 * Escape key press handler,
+                 * close modal window
+                 * @param {Object} event - event
+                 */
+                escapeKey: function (event) {
+                    if (this.options.isOpen && this.modal.find(document.activeElement).length ||
+                        this.options.isOpen && this.modal[0] === document.activeElement) {
+                        this.closeModal(event);
+                    }
                 }
             }
         },
@@ -118,13 +126,17 @@ define([
                 'closeModal'
             );
 
+            this.options.id = this.uuid;
             this.options.transitionEvent = transitionEvent;
             this._createWrapper();
             this._renderModal();
             this._createButtons();
-            $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
+
+            if (this.options.trigger) {
+                $(document).on('click', this.options.trigger, _.bind(this.toggleModal, this));
+            }
             this._on(this.modal.find(this.options.modalCloseBtn), {
-                'click': this.closeModal
+                'click': this.options.modalCloseBtnHandler ? this.options.modalCloseBtnHandler : this.closeModal
             });
             this._on(this.element, {
                 'openModal': this.openModal,
@@ -168,9 +180,32 @@ define([
         keyEventSwitcher: function (event) {
             var key = keyCodes[event.keyCode];
 
-            if (this.keyEventHandlers.hasOwnProperty(key)) {
-                this.keyEventHandlers[key].apply(this, arguments);
+            if (this.options.keyEventHandlers.hasOwnProperty(key)) {
+                this.options.keyEventHandlers[key].apply(this, arguments);
             }
+        },
+
+        /**
+         * Set title for modal.
+         *
+         * @param {String} title
+         */
+        setTitle: function (title) {
+            var $title = $(this.options.modalTitle),
+                $subTitle = this.modal.find(this.options.modalSubTitle);
+
+            $title.text(title);
+            $title.append($subTitle);
+        },
+
+        /**
+         * Set sub title for modal.
+         *
+         * @param {String} subTitle
+         */
+        setSubTitle: function (subTitle) {
+            this.options.subTitle = subTitle;
+            this.modal.find(this.options.modalSubTitle).html(subTitle);
         },
 
         /**
@@ -195,8 +230,8 @@ define([
             this._createOverlay();
             this._setActive();
             this._setKeyListener();
-            this.modal.one(this.options.transitionEvent, _.bind(this._trigger, this, 'opened'));
             this.modal.one(this.options.transitionEvent, _.bind(this._setFocus, this, 'end', 'opened'));
+            this.modal.one(this.options.transitionEvent, _.bind(this._trigger, this, 'opened'));
             this.modal.addClass(this.options.modalVisibleClass);
 
             if (!this.options.transitionEvent) {
@@ -305,11 +340,18 @@ define([
          * Set z-index and margin for modal and overlay.
          */
         _setActive: function () {
-            var zIndex = this.modal.zIndex();
+            var zIndex = this.modal.zIndex(),
+                baseIndex = zIndex + this._getVisibleCount();
 
+            if (this.modal.data('active')) {
+                return;
+            }
+
+            this.modal.data('active', true);
+
+            this.overlay.zIndex(++baseIndex);
             this.prevOverlayIndex = this.overlay.zIndex();
-            this.modal.zIndex(zIndex + this._getVisibleCount());
-            this.overlay.zIndex(zIndex + (this._getVisibleCount() - 1));
+            this.modal.zIndex(this.overlay.zIndex() + 1);
 
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
@@ -321,9 +363,10 @@ define([
          */
         _unsetActive: function () {
             this.modal.removeAttr('style');
+            this.modal.data('active', false);
 
             if (this.overlay) {
-                this.overlay.zIndex(this.prevOverlayIndex);
+                this.overlay.zIndex(this.prevOverlayIndex - 1);
             }
         },
 
@@ -331,7 +374,7 @@ define([
          * Creates wrapper to hold all modals.
          */
         _createWrapper: function () {
-            this.modalWrapper = $('.' + this.options.wrapperClass);
+            this.modalWrapper = $(this.options.appendTo).find('.' + this.options.wrapperClass);
 
             if (!this.modalWrapper.length) {
                 this.modalWrapper = $('<div></div>')
@@ -350,31 +393,42 @@ define([
                     data: this.options
                 })).appendTo(this.modalWrapper);
             this.modal = this.modalWrapper.find(this.options.modalBlock).last();
-            this.element.show().appendTo(this._getElem(this.options.modalContent));
+            this.element.appendTo(this._getElem(this.options.modalContent));
+
+            if (this.element.is(':hidden')) {
+                this.element.show();
+            }
         },
 
         /**
          * Creates buttons pane.
          */
         _createButtons: function () {
-            var that = this;
-
             this.buttons = this._getElem(this.options.modalAction);
             _.each(this.options.buttons, function (btn, key) {
-                var button = that.buttons[key];
+                var button = this.buttons[key];
 
                 if (btn.attr) {
                     $(button).attr(btn.attr);
                 }
-                $(button).on('click', _.bind(btn.click, that));
-            });
+
+                if (btn.class) {
+                    $(button).addClass(btn.class);
+                }
+
+                if (!btn.click) {
+                    btn.click = this.closeModal;
+                }
+                $(button).on('click', _.bind(btn.click, this));
+            }, this);
         },
 
         /**
          * Creates overlay, append it to wrapper, set previous click event on overlay.
          */
         _createOverlay: function () {
-            var events;
+            var events,
+                outerClickHandler = this.options.outerClickHandler || this.closeModal;
 
             this.overlay = $('.' + this.options.overlayClass);
 
@@ -386,7 +440,7 @@ define([
             }
             events = $._data(this.overlay.get(0), 'events');
             events ? this.prevOverlayHandler = events.click[0].handler : false;
-            this.options.clickableOverlay ? this.overlay.unbind().on('click', this.closeModal) : false;
+            this.options.clickableOverlay ? this.overlay.unbind().on('click', outerClickHandler) : false;
         },
 
         /**

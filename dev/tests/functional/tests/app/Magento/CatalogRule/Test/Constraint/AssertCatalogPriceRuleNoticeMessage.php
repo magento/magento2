@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class AssertCatalogPriceRuleNoticeMessage extends AbstractConstraint
         CatalogRuleIndex $pageCatalogRuleIndex
     ) {
         $actualMessage = $pageCatalogRuleIndex->getMessagesBlock()->getNoticeMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::NOTICE_MESSAGE_RULES . self::NOTICE_MESSAGE_APPLY,
             $actualMessage,
             'Wrong notice message is displayed.'

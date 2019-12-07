@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -20,10 +20,12 @@ dl {
 .list {
     margin-bottom: 1em;
     padding-left: 0;
+
     > li {
         display: block;
         margin-bottom: .75em;
         position: relative;
+
         > .icon-success,
         > .icon-failed {
             font-size: 1.6em;
@@ -31,10 +33,11 @@ dl {
             position: absolute;
             top: 0;
         }
+
         > .icon-success {
             color: @color-success;
-
         }
+
         > .icon-failed {
             color: @color-failed;
         }
@@ -49,6 +52,7 @@ dl {
 .list-item-failed,
 .list-item-warning {
     padding-left: @list-item-icon__indent-left;
+
     &:before {
         font-family: @icons__font-family;
         font-size: 1.6em;
@@ -84,10 +88,12 @@ dl {
 .list-definition {
     margin: 0 0 3rem;
     padding: 0;
+
     > dt {
         clear: left;
         float: left;
     }
+
     > dd {
         margin-bottom: 1em;
         margin-left: 20rem;
@@ -103,6 +109,7 @@ dl {
         > dt {
             float: none;
         }
+
         > dd {
             margin-left: 0;
         }

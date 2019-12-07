@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -15,7 +19,7 @@ define([
     };
 
     /**
-     * Parses incoming data and returnes result merged with default preview config
+     * Parses incoming data and returns result merged with default preview config
      *
      * @param  {Object|String} data
      * @return {Object}

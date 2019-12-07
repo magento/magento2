@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const PRIVATE_MAX_AGE_CACHE = 31536000;
 
     /**
+     * @var \Magento\Framework\Session\Config
+     */
+    protected $config;
+
+    /**
+     * @param \Magento\Framework\Session\Config $config
+     */
+    public function __construct(\Magento\Framework\Session\Config $config)
+    {
+        $this->config;
+    }
+
+    /**
      * Retrieve url
      *
      * @param string $route
@@ -30,5 +43,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getUrl($route, array $params = [])
     {
         return $this->_getUrl($route, $params);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDomain()
+    {
+        return $this->config->getValidDomain();
     }
 }

@@ -1,38 +1,41 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/** @var \Magento\Backend\Block\Cache\Permissions|null $permissions */
+$permissions = $block->getData('permissions');
 ?>
-<div class="additional-cache-management">
-    <h2>
-        <span><?php /* @escapeNotVerified */ echo __('Additional Cache Management') ?></span>
-    </h2>
-    <p>
-        <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanImagesUrl() ?>')" type="button">
-            <?php /* @escapeNotVerified */ echo __('Flush Catalog Images Cache') ?>
-        </button>
-        <span><?php /* @escapeNotVerified */ echo __('Pregenerated product images files') ?></span>
-    </p>
-    <p>
-        <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanMediaUrl() ?>')" type="button">
-            <?php /* @escapeNotVerified */ echo __('Flush JavaScript/CSS Cache') ?>
-        </button>
-        <span><?php /* @escapeNotVerified */ echo __('Themes JavaScript and CSS files combined to one file.') ?></span>
-    </p>
-    <?php
-    if (!$block->isInProductionMode()):
-        ?>
-        <p>
-            <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanStaticFilesUrl() ?>')" type="button">
-                <?php /* @escapeNotVerified */ echo __('Flush Static Files Cache') ?>
-            </button>
-            <span><?php /* @escapeNotVerified */ echo __('Preprocessed view files and static files') ?></span>
-        </p>
-    <?php
-    endif;
-    ?>
-    <?php echo $block->getChildHtml(); ?>
-</div>
+<?php if ($permissions && $permissions->hasAccessToAdditionalActions()) : ?>
+    <div class="additional-cache-management">
+        <h2>
+            <span><?= $block->escapeHtml(__('Additional Cache Management')); ?></span>
+        </h2>
+        <?php if ($permissions->hasAccessToFlushCatalogImages()) : ?>
+            <p>
+                <button onclick="setLocation('<?= $block->escapeJs($block->getCleanImagesUrl()); ?>')" type="button">
+                    <?= $block->escapeHtml(__('Flush Catalog Images Cache')); ?>
+                </button>
+                <span><?= $block->escapeHtml(__('Pregenerated product images files')); ?></span>
+            </p>
+        <?php endif; ?>
+        <?php if ($permissions->hasAccessToFlushJsCss()) : ?>
+            <p>
+                <button onclick="setLocation('<?= $block->escapeJs($block->getCleanMediaUrl()); ?>')" type="button">
+                    <?= $block->escapeHtml(__('Flush JavaScript/CSS Cache')); ?>
+                </button>
+                <span><?= $block->escapeHtml(__('Themes JavaScript and CSS files combined to one file')) ?></span>
+            </p>
+        <?php endif; ?>
+        <?php if (!$block->isInProductionMode() && $permissions->hasAccessToFlushStaticFiles()) : ?>
+            <p>
+                <button onclick="setLocation('<?= $block->escapeJs($block->getCleanStaticFilesUrl()); ?>')" type="button">
+                    <?= $block->escapeHtml(__('Flush Static Files Cache')); ?>
+                </button>
+                <span><?= $block->escapeHtml(__('Preprocessed view files and static files')); ?></span>
+            </p>
+        <?php endif; ?>
+        <?= $block->getChildHtml() ?>
+    </div>
+<?php endif; ?>

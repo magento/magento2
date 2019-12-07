@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AbstractElementTest extends \PHPUnit_Framework_TestCase
+class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\AbstractElement
@@ -24,23 +26,35 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
      */
     protected $moduleManagerMock;
 
+    /**
+     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementVisibilityMock;
+
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->moduleManagerMock = $this->getMock(
-            'Magento\Framework\Module\Manager',
-            ['isOutputEnabled'],
-            [],
-            '',
-            false
+        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->moduleManagerMock = $this->createPartialMock(
+            \Magento\Framework\Module\Manager::class,
+            ['isOutputEnabled']
         );
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Config\Model\Config\Structure\AbstractElement',
+            \Magento\Config\Model\Config\Structure\AbstractElement::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'moduleManager' => $this->moduleManagerMock,
             ]
+        );
+
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->_model,
+            'elementVisibility',
+            $this->elementVisibilityMock,
+            \Magento\Config\Model\Config\Structure\AbstractElement::class
         );
     }
 
@@ -127,6 +141,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsTrueForProperScopesDataProvider()
     {
         return [
@@ -156,6 +173,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsFalseForNonProperScopesDataProvider()
     {
         return [
@@ -190,7 +210,14 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             'default'
         );
         $this->assertFalse($this->_model->isVisible());
+    }
 
+    public function testIsVisibleVisibilityIsHiddenTrue()
+    {
+        $this->elementVisibilityMock->expects($this->once())
+            ->method('isHidden')
+            ->willReturn(true);
+        $this->assertFalse($this->_model->isVisible());
     }
 
     public function testGetClass()

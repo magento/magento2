@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Api;
@@ -59,11 +59,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**#@-*/
 
-    /**
-     * Capture type (make authorization close or remain open)
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_captureTypeComplete = 'Y';
 
     /**
@@ -140,6 +136,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'CVV2MATCH' => 'cvv2_check_result',
 
         'USERSELECTEDFUNDINGSOURCE' => 'funding_source',
+
+        'NOSHIPPING' => 'suppress_shipping',
+        'REQBILLINGADDRESS' => 'require_billing_address',
     ];
 
     /**
@@ -252,6 +251,8 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'PAYFLOWCOLOR',
         'LOCALECODE',
         'USERSELECTEDFUNDINGSOURCE',
+        'NOSHIPPING',
+        'REQBILLINGADDRESS',
     ];
 
     /**
@@ -731,6 +732,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**
      * Additional response processing.
+     *
      * Hack to cut off length from API type response params.
      *
      * @param  array $response
@@ -773,11 +775,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
                 Cart::AMOUNT_SHIPPING => 'FREIGHTAMT',
                 'amount'              => 'PAYMENTREQUEST_0_ITEMAMT',
             ];
-            $this->_lineItemExportItemsFormat = [
-                'name'   => 'L_PAYMENTREQUEST_0_NAME%d',
-                'qty'    => 'L_PAYMENTREQUEST_0_QTY%d',
-                'amount' => 'L_PAYMENTREQUEST_0_AMT%d',
-            ];
             $request = $requestBefore;
             $result = parent::_exportLineItems($request, $i);
             /** @var Nvp $paypalNvp */
@@ -793,7 +790,8 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     }
 
     /**
-     * Set specific data when negative line item case
+     * Set specific data when negative line item case.
+     *
      * @return void
      */
     protected function _setSpecificForNegativeLineItems()

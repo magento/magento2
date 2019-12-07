@@ -1,12 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
-class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Save design action.
+ */
+class Save extends \Magento\Backend\Controller\Adminhtml\System\Design implements HttpPostActionInterface
 {
     /**
      * Filtering posted data. Converting localized data if needed
@@ -26,6 +31,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
     }
 
     /**
+     * Save design action.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -38,7 +45,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
             $data['design'] = $this->_filterPostData($data['design']);
             $id = (int)$this->getRequest()->getParam('id');
 
-            $design = $this->_objectManager->create('Magento\Framework\App\DesignInterface');
+            $design = $this->_objectManager->create(\Magento\Framework\App\DesignInterface::class);
             if ($id) {
                 $design->load($id);
             }
@@ -50,14 +57,14 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
             try {
                 $design->save();
                 $this->_eventManager->dispatch('theme_save_after');
-                $this->messageManager->addSuccess(__('You saved the design change.'));
+                $this->messageManager->addSuccessMessage(__('You saved the design change.'));
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setDesignData($data);
-                return $resultRedirect->setPath('adminhtml/*/', ['id' => $design->getId()]);
+                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setDesignData($data);
+                return $resultRedirect->setPath('*/*/edit', ['id' => $design->getId()]);
             }
         }
 
-        return $resultRedirect->setPath('adminhtml/*/');
+        return $resultRedirect->setPath('*/*/');
     }
 }

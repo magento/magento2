@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogSearch\Test\TestCase\SuggestSearchingResultEntityTest" summary="Suggest Searching Results" ticketId="MAGETWO-24671">
-        <variation name="SuggestSearchingResultEntityTestVariation1">
-            <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::name</data>
-            <data name="catalogSearch/data/num_results" xsi:type="string">-</data>
+    <testCase name="Magento\CatalogSearch\Test\TestCase\SuggestSearchingResultEntityTest" summary="Suggest Searching Results" ticketId="MAGETWO-24671, MAGETWO-23186">
+        <variation name="SuggestSearchingResultEntityTestVariation1" summary="Auto-complete search with product name" ticketId="MAGETWO-24671">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::name</data>
+            <data name="searchTerm/data/num_results" xsi:type="string">-</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
         </variation>
-        <variation name="SuggestSearchingResultEntityTestVariation2">
-            <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::sku</data>
-            <data name="catalogSearch/data/num_results" xsi:type="string">1</data>
+        <variation name="SuggestSearchingResultEntityTestVariation2" summary="Auto-complete search with product sku" ticketId="MAGETWO-24671">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::sku</data>
+            <data name="searchTerm/data/num_results" xsi:type="string">1</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
+        </variation>
+        <variation name="SuggestSearchingResultEntityTestVariation3" summary="Auto-complete search with product description" ticketId="MAGETWO-23186">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::abc_dfj_simple_for_advancedsearch::adc_Full</data>
+            <data name="searchTerm/data/num_results" xsi:type="string">1</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid" />
+        </variation>
+        <variation name="SuggestSearchingResultEntityTestVariation4" summary="Auto-complete search with product short description" ticketId="MAGETWO-23186">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::abc_dfj_simple_for_advancedsearch::abc_short</data>
+            <data name="searchTerm/data/num_results" xsi:type="string">1</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
         </variation>
     </testCase>

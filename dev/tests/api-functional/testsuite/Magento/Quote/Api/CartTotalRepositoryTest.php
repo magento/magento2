@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -12,6 +12,8 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
 
 class CartTotalRepositoryTest extends WebapiAbstract
 {
@@ -34,10 +36,10 @@ class CartTotalRepositoryTest extends WebapiAbstract
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
         $this->filterBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
     }
 
@@ -47,43 +49,18 @@ class CartTotalRepositoryTest extends WebapiAbstract
     public function testGetTotals()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
         /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
         $shippingAddress = $quote->getShippingAddress();
 
-        $data = [
-            Totals::KEY_GRAND_TOTAL => $quote->getGrandTotal(),
-            Totals::KEY_BASE_GRAND_TOTAL => $quote->getBaseGrandTotal(),
-            Totals::KEY_SUBTOTAL => $quote->getSubtotal(),
-            Totals::KEY_BASE_SUBTOTAL => $quote->getBaseSubtotal(),
-            Totals::KEY_DISCOUNT_AMOUNT => $shippingAddress->getDiscountAmount(),
-            Totals::KEY_BASE_DISCOUNT_AMOUNT => $shippingAddress->getBaseDiscountAmount(),
-            Totals::KEY_SUBTOTAL_WITH_DISCOUNT => $quote->getSubtotalWithDiscount(),
-            Totals::KEY_BASE_SUBTOTAL_WITH_DISCOUNT => $quote->getBaseSubtotalWithDiscount(),
-            Totals::KEY_SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
-            Totals::KEY_BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
-            Totals::KEY_SHIPPING_DISCOUNT_AMOUNT => $shippingAddress->getShippingDiscountAmount(),
-            Totals::KEY_BASE_SHIPPING_DISCOUNT_AMOUNT => $shippingAddress->getBaseShippingDiscountAmount(),
-            Totals::KEY_TAX_AMOUNT => $shippingAddress->getTaxAmount(),
-            Totals::KEY_BASE_TAX_AMOUNT => $shippingAddress->getBaseTaxAmount(),
-            Totals::KEY_SHIPPING_TAX_AMOUNT => $shippingAddress->getShippingTaxAmount(),
-            Totals::KEY_BASE_SHIPPING_TAX_AMOUNT => $shippingAddress->getBaseShippingTaxAmount(),
-            Totals::KEY_SUBTOTAL_INCL_TAX => $shippingAddress->getSubtotalInclTax(),
-            Totals::KEY_BASE_SUBTOTAL_INCL_TAX => $shippingAddress->getBaseSubtotalTotalInclTax(),
-            Totals::KEY_SHIPPING_INCL_TAX => $shippingAddress->getShippingInclTax(),
-            Totals::KEY_BASE_SHIPPING_INCL_TAX => $shippingAddress->getBaseShippingInclTax(),
-            Totals::KEY_BASE_CURRENCY_CODE => $quote->getBaseCurrencyCode(),
-            Totals::KEY_QUOTE_CURRENCY_CODE => $quote->getQuoteCurrencyCode(),
-            Totals::KEY_ITEMS_QTY => $quote->getItemsQty(),
-            Totals::KEY_ITEMS => [$this->getQuoteItemTotalsData($quote)],
-        ];
+        $data = $this->getData($quote, $shippingAddress);
+        $data = $this->formatTotalsData($data);
 
         $requestData = ['cartId' => $cartId];
 
-        $data = $this->formatTotalsData($data);
         $actual = $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);
         unset($actual['items'][0]['options']);
         unset($actual['weee_tax_applied_amount']);
@@ -102,7 +79,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
      */
     public function testGetTotalsWithAbsentQuote()
     {
-        $cartId = 'unknownCart';
+        $cartId = 9999999999;
         $requestData = ['cartId' => $cartId];
         $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);
     }
@@ -162,22 +139,22 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $item = array_shift($items);
         return [
             ItemTotals::KEY_ITEM_ID => $item->getItemId(),
-            ItemTotals::KEY_PRICE => intval($item->getPrice()),
-            ItemTotals::KEY_BASE_PRICE => intval($item->getBasePrice()),
+            ItemTotals::KEY_PRICE => (int)$item->getPrice(),
+            ItemTotals::KEY_BASE_PRICE => (int)$item->getBasePrice(),
             ItemTotals::KEY_QTY => $item->getQty(),
-            ItemTotals::KEY_ROW_TOTAL => intval($item->getRowTotal()),
-            ItemTotals::KEY_BASE_ROW_TOTAL => intval($item->getBaseRowTotal()),
-            ItemTotals::KEY_ROW_TOTAL_WITH_DISCOUNT => intval($item->getRowTotalWithDiscount()),
-            ItemTotals::KEY_TAX_AMOUNT => intval($item->getTaxAmount()),
-            ItemTotals::KEY_BASE_TAX_AMOUNT => intval($item->getBaseTaxAmount()),
-            ItemTotals::KEY_TAX_PERCENT => intval($item->getTaxPercent()),
-            ItemTotals::KEY_DISCOUNT_AMOUNT => intval($item->getDiscountAmount()),
-            ItemTotals::KEY_BASE_DISCOUNT_AMOUNT => intval($item->getBaseDiscountAmount()),
-            ItemTotals::KEY_DISCOUNT_PERCENT => intval($item->getDiscountPercent()),
-            ItemTotals::KEY_PRICE_INCL_TAX => intval($item->getPriceInclTax()),
-            ItemTotals::KEY_BASE_PRICE_INCL_TAX => intval($item->getBasePriceInclTax()),
-            ItemTotals::KEY_ROW_TOTAL_INCL_TAX => intval($item->getRowTotalInclTax()),
-            ItemTotals::KEY_BASE_ROW_TOTAL_INCL_TAX => intval($item->getBaseRowTotalInclTax()),
+            ItemTotals::KEY_ROW_TOTAL => (int)$item->getRowTotal(),
+            ItemTotals::KEY_BASE_ROW_TOTAL => (int)$item->getBaseRowTotal(),
+            ItemTotals::KEY_ROW_TOTAL_WITH_DISCOUNT => (int)$item->getRowTotalWithDiscount(),
+            ItemTotals::KEY_TAX_AMOUNT => (int)$item->getTaxAmount(),
+            ItemTotals::KEY_BASE_TAX_AMOUNT => (int)$item->getBaseTaxAmount(),
+            ItemTotals::KEY_TAX_PERCENT => (int)$item->getTaxPercent(),
+            ItemTotals::KEY_DISCOUNT_AMOUNT => (int)$item->getDiscountAmount(),
+            ItemTotals::KEY_BASE_DISCOUNT_AMOUNT => (int)$item->getBaseDiscountAmount(),
+            ItemTotals::KEY_DISCOUNT_PERCENT => (int)$item->getDiscountPercent(),
+            ItemTotals::KEY_PRICE_INCL_TAX => (int)$item->getPriceInclTax(),
+            ItemTotals::KEY_BASE_PRICE_INCL_TAX => (int)$item->getBasePriceInclTax(),
+            ItemTotals::KEY_ROW_TOTAL_INCL_TAX => (int)$item->getRowTotalInclTax(),
+            ItemTotals::KEY_BASE_ROW_TOTAL_INCL_TAX => (int)$item->getBaseRowTotalInclTax(),
             ItemTotals::KEY_WEEE_TAX_APPLIED_AMOUNT => $item->getWeeeTaxAppliedAmount(),
             ItemTotals::KEY_WEEE_TAX_APPLIED => $item->getWeeeTaxApplied(),
             ItemTotals::KEY_NAME => $item->getName(),
@@ -194,12 +171,12 @@ class CartTotalRepositoryTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [
@@ -213,7 +190,32 @@ class CartTotalRepositoryTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
         $shippingAddress = $quote->getShippingAddress();
 
-        $data = [
+        $data = $this->getData($quote, $shippingAddress);
+        $data = $this->formatTotalsData($data);
+
+        $actual = $this->_webApiCall($serviceInfo);
+        unset($actual['items'][0]['options']);
+        unset($actual['weee_tax_applied_amount']);
+
+        /** TODO: cover total segments with separate test */
+        unset($actual['total_segments']);
+        if (array_key_exists('extension_attributes', $actual)) {
+            unset($actual['extension_attributes']);
+        }
+        $this->assertEquals($data, $actual);
+    }
+
+    /**
+     * Get expected data.
+     *
+     * @param Quote $quote
+     * @param Address $shippingAddress
+     *
+     * @return array
+     */
+    private function getData(Quote $quote, Address $shippingAddress) : array
+    {
+        return [
             Totals::KEY_GRAND_TOTAL => $quote->getGrandTotal(),
             Totals::KEY_BASE_GRAND_TOTAL => $quote->getBaseGrandTotal(),
             Totals::KEY_SUBTOTAL => $quote->getSubtotal(),
@@ -239,17 +241,5 @@ class CartTotalRepositoryTest extends WebapiAbstract
             Totals::KEY_ITEMS_QTY => $quote->getItemsQty(),
             Totals::KEY_ITEMS => [$this->getQuoteItemTotalsData($quote)],
         ];
-
-        $data = $this->formatTotalsData($data);
-        $actual = $this->_webApiCall($serviceInfo);
-        unset($actual['items'][0]['options']);
-        unset($actual['weee_tax_applied_amount']);
-
-        /** TODO: cover total segments with separate test */
-        unset($actual['total_segments']);
-        if (array_key_exists('extension_attributes', $actual)) {
-            unset($actual['extension_attributes']);
-        }
-        $this->assertEquals($data, $actual);
     }
 }

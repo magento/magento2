@@ -1,44 +1,41 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
-<?php if ($websites = $block->getWebsites()): ?>
+<?php if ($websites = $block->getWebsites()) : ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?php /* @escapeNotVerified */ echo __('Choose Store View:') ?></label>
+    <label class="label" for="store_switcher"><?= $block->escapeHtml(__('Choose Store View:')) ?></label>
     <div class="control">
         <select
             id="store_switcher"
             class="admin__control-select"
             name="store_switcher">
-            <?php foreach ($websites as $website): ?>
+            <?php foreach ($websites as $website) : ?>
                 <?php $showWebsite = false; ?>
-                <?php foreach ($website->getGroups() as $group): ?>
+                <?php foreach ($website->getGroups() as $group) : ?>
                     <?php $showGroup = false; ?>
-                    <?php foreach ($block->getStores($group) as $store): ?>
-                        <?php if ($showWebsite == false): ?>
+                    <?php foreach ($block->getStores($group) as $store) : ?>
+                        <?php if ($showWebsite == false) : ?>
                             <?php $showWebsite = true; ?>
-                            <optgroup label="<?php /* @escapeNotVerified */ echo $website->getName() ?>"></optgroup>
+                            <optgroup label="<?= $block->escapeHtmlAttr($website->getName()) ?>"></optgroup>
                         <?php endif; ?>
-                        <?php if ($showGroup == false): ?>
+                        <?php if ($showGroup == false) : ?>
                             <?php $showGroup = true; ?>
-                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $group->getName() ?>">
+                            <optgroup label="&nbsp;&nbsp;&nbsp;<?= $block->escapeHtmlAttr($group->getName()) ?>">
                         <?php endif; ?>
-                        <option value="<?php /* @escapeNotVerified */ echo $store->getId() ?>"<?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $store->getName() ?></option>
+                        <option value="<?= $block->escapeHtmlAttr($store->getId()) ?>"<?php if ($block->getStoreId() == $store->getId()) : ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($store->getName()) ?></option>
                     <?php endforeach; ?>
-                    <?php if ($showGroup): ?>
+                    <?php if ($showGroup) : ?>
                         </optgroup>
                     <?php endif; ?>
                 <?php endforeach; ?>
             <?php endforeach; ?>
         </select>
     </div>
-    <?php echo $block->getHintHtml() ?>
+    <?= $block->getHintHtml() ?>
 </div>
 <script>
 require(['prototype'], function(){

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class AssertCatalogSearchNoResult extends AbstractConstraint
      */
     public function processAssert(CatalogsearchResult $catalogsearchResult)
     {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $catalogsearchResult->getListProductBlock()->isVisible(),
             'Search result has been found.'
         );

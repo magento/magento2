@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
-class Index extends \Magento\Catalog\Controller\Adminhtml\Product\Set
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

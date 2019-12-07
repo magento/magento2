@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Model\Order\Pdf\Total;
 
@@ -97,7 +95,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
     public function getFullTaxInfo()
     {
         $fontSize = $this->getFontSize() ? $this->getFontSize() : 7;
-        $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($this->getOrder());
+        $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($this->getSource());
         if (!empty($taxClassAmount)) {
             foreach ($taxClassAmount as &$tax) {
                 $percent = $tax['percent'] ? ' (' . $tax['percent'] . '%)' : '';
@@ -165,6 +163,6 @@ class DefaultTotal extends \Magento\Framework\DataObject
      */
     public function getTitleDescription()
     {
-        return $this->getSource()->getDataUsingMethod($this->getTitleSourceField());
+        return $this->getSource()->getOrder()->getData($this->getTitleSourceField());
     }
 }

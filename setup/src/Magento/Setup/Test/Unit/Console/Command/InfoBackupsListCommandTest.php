@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,28 +9,27 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Setup\Console\Command\InfoBackupsListCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class InfoBackupsListCommandTest extends \PHPUnit_Framework_TestCase
+class InfoBackupsListCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecute()
     {
-        $table = $this->getMock('Symfony\Component\Console\Helper\Table', [], [], '', false);
+        $table = $this->createMock(\Symfony\Component\Console\Helper\Table::class);
         $table->expects($this->once())->method('setHeaders')->with(['Backup Filename', 'Backup Type']);
         $table->expects($this->once())->method('addRow')->with(['backupFile_media.tgz', 'media']);
-        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
-        $helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
-        $helperSet->expects($this->once())->method('get')->with('table')->will($this->returnValue($table));
+        /** @var \Symfony\Component\Console\Helper\TableFactory|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        $tableFactoryMock = $this->createMock(\Symfony\Component\Console\Helper\TableFactory::class);
+        $tableFactoryMock->expects($this->once())->method('create')->will($this->returnValue($table));
         /** @var \Magento\Framework\App\Filesystem\DirectoryList
          * |\PHPUnit_Framework_MockObject_MockObject $directoryList
          */
-        $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $directoryList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         /** @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject $file */
-        $file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $file = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
         $file->expects($this->once())->method('isExists')->will($this->returnValue(true));
         $file->expects($this->once())
             ->method('readDirectoryRecursively')
             ->will($this->returnValue(['backupFile_media.tgz']));
-        $command = new InfoBackupsListCommand($directoryList, $file);
-        $command->setHelperSet($helperSet);
+        $command = new InfoBackupsListCommand($directoryList, $file, $tableFactoryMock);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
         $expected = 'Showing backup files in ';

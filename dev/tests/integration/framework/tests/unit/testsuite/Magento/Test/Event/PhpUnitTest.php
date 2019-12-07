@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Event;
 
-class PhpUnitTest extends \PHPUnit_Framework_TestCase
+class PhpUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Event\PhpUnit
@@ -23,11 +23,10 @@ class PhpUnitTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManager = $this->getMock(
-            'Magento\TestFramework\EventManager',
-            ['fireEvent'],
-            [[]]
-        );
+        $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
+            ->setMethods(['fireEvent'])
+            ->setConstructorArgs([[]])
+            ->getMock();
         $this->_object = new \Magento\TestFramework\Event\PhpUnit($this->_eventManager);
     }
 
@@ -58,7 +57,7 @@ class PhpUnitTest extends \PHPUnit_Framework_TestCase
     public function testDoNotFireEvent($method)
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-        $this->_object->{$method}($this, new \PHPUnit_Framework_AssertionFailedError(), 0);
+        $this->_object->{$method}($this, new \PHPUnit\Framework\AssertionFailedError(), 0);
     }
 
     public function doNotFireEventDataProvider()
@@ -74,25 +73,25 @@ class PhpUnitTest extends \PHPUnit_Framework_TestCase
     public function testStartTestSuiteFireEvent()
     {
         $this->_eventManager->expects($this->once())->method('fireEvent')->with('startTestSuite');
-        $this->_object->startTestSuite(new \PHPUnit_Framework_TestSuite());
+        $this->_object->startTestSuite(new \PHPUnit\Framework\TestSuite());
     }
 
     public function testStartTestSuiteDoNotFireEvent()
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-        $this->_object->startTestSuite(new \PHPUnit_Framework_TestSuite_DataProvider());
+        $this->_object->startTestSuite(new \PHPUnit\Framework\DataProviderTestSuite());
     }
 
     public function testEndTestSuiteFireEvent()
     {
         $this->_eventManager->expects($this->once())->method('fireEvent')->with('endTestSuite');
-        $this->_object->endTestSuite(new \PHPUnit_Framework_TestSuite());
+        $this->_object->endTestSuite(new \PHPUnit\Framework\TestSuite());
     }
 
     public function testEndTestSuiteDoNotFireEvent()
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-        $this->_object->endTestSuite(new \PHPUnit_Framework_TestSuite_DataProvider());
+        $this->_object->endTestSuite(new \PHPUnit\Framework\DataProviderTestSuite());
     }
 
     public function testStartTestFireEvent()
@@ -104,8 +103,8 @@ class PhpUnitTest extends \PHPUnit_Framework_TestCase
     public function testStartTestDoNotFireEvent()
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-        $this->_object->startTest(new \PHPUnit_Framework_Warning());
-        $this->_object->startTest($this->getMock('PHPUnit_Framework_Test'));
+     //   $this->_object->startTest(new \PHPUnit\Framework\Warning());
+        $this->_object->startTest($this->createMock(\PHPUnit\Framework\Test::class));
     }
 
     public function testEndTestFireEvent()
@@ -117,7 +116,7 @@ class PhpUnitTest extends \PHPUnit_Framework_TestCase
     public function testEndTestDoNotFireEvent()
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-        $this->_object->endTest(new \PHPUnit_Framework_Warning(), 0);
-        $this->_object->endTest($this->getMock('PHPUnit_Framework_Test'), 0);
+   //     $this->_object->endTest(new \PHPUnit\Framework\Warning(), 0);
+        $this->_object->endTest($this->createMock(\PHPUnit\Framework\Test::class), 0);
     }
 }

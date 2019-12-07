@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**
@@ -12,7 +16,9 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     const DEFAULT_COLUMNS_MAX_ORDER = 100;
 
-    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface
+     */
     protected $attributeRepository;
 
     /**
@@ -74,6 +80,6 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     protected function getFilterType($frontendInput)
     {
-        return isset($this->filterMap[$frontendInput]) ? $this->filterMap[$frontendInput] : $this->filterMap['default'];
+        return $this->filterMap[$frontendInput] ?? $this->filterMap['default'];
     }
 }

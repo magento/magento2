@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
@@ -21,6 +21,13 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
  */
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+
     /**
      * @var FileFactory
      */
@@ -60,14 +67,6 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
-    }
-
-    /**
      * @param AbstractCollection $collection
      * @return ResponseInterface
      * @throws \Exception
@@ -75,9 +74,12 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
      */
     public function massAction(AbstractCollection $collection)
     {
+        $pdf = $this->pdfCreditmemo->getPdf($collection);
+        $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
+
         return $this->fileFactory->create(
             sprintf('creditmemo%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
-            $this->pdfCreditmemo->getPdf($collection)->render(),
+            $fileContent,
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

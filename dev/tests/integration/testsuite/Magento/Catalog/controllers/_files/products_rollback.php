@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,18 +8,22 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Framework\Registry $registry */
-$registry = $objectManager->get('Magento\Framework\Registry');
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-$productIds = [1, 2];
-foreach ($productIds as $productId) {
-    /** @var $product \Magento\Catalog\Model\Product */
-    $product = $objectManager->create('Magento\Catalog\Model\Product');
-    $product->load($productId);
-    if ($product->getId()) {
-        $product->delete();
+$productSkuList = ['simple_product_1', 'simple_product_2'];
+foreach ($productSkuList as $sku) {
+    try {
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku, true);
+        if ($product->getId()) {
+            $productRepository->delete($product);
+        }
+    } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        //Product already removed
     }
 }
 

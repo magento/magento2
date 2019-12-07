@@ -1,93 +1,44 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
-class MessageTest extends \PHPUnit_Framework_TestCase
+/**
+ * test Magento\Framework\Mail\Message
+ */
+class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \Magento\Framework\Mail\Message
      */
-    protected $_messageMock;
+    protected $message;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_messageMock = $this->getMock(
-            '\Magento\Framework\Mail\Message',
-            ['getBodyText', 'getBodyHtml', 'setBodyText', 'setBodyHtml']
-        );
+        $this->message = new \Magento\Framework\Mail\Message();
     }
 
-    /**
-     * @param string $messageType
-     * @param string $method
-     *
-     * @covers \Magento\Framework\Mail\Message::setBody
-     * @covers \Magento\Framework\Mail\Message::setMessageType
-     * @dataProvider setBodyDataProvider
-     */
-    public function testSetBody($messageType, $method)
+    public function testSetBodyHtml()
     {
-        $this->_messageMock->setMessageType($messageType);
+        $this->message->setBodyHtml('body');
 
-        $this->_messageMock->expects($this->once())
-            ->method($method)
-            ->with('body');
-
-        $this->_messageMock->setBody('body');
+        $part = $this->message->getBody()->getParts()[0];
+        $this->assertEquals('text/html', $part->getType());
+        $this->assertEquals('quoted-printable', $part->getEncoding());
+        $this->assertEquals('utf-8', $part->getCharset());
+        $this->assertEquals('body', $part->getContent());
     }
 
-    /**
-     * @return array
-     */
-    public function setBodyDataProvider()
+    public function testSetBodyText()
     {
-        return [
-            [
-                'messageType' => 'text/plain',
-                'method' => 'setBodyText',
-            ],
-            [
-                'messageType' => 'text/html',
-                'method' => 'setBodyHtml'
-            ]
-        ];
-    }
+        $this->message->setBodyText('body');
 
-    /**
-     * @param string $messageType
-     * @param string $method
-     *
-     * @covers \Magento\Framework\Mail\Message::getBody
-     * @covers \Magento\Framework\Mail\Message::setMessageType
-     * @dataProvider getBodyDataProvider
-     */
-    public function testGetBody($messageType, $method)
-    {
-        $this->_messageMock->setMessageType($messageType);
-
-        $this->_messageMock->expects($this->once())
-            ->method($method);
-
-        $this->_messageMock->getBody('body');
-    }
-
-    /**
-     * @return array
-     */
-    public function getBodyDataProvider()
-    {
-        return [
-            [
-                'messageType' => 'text/plain',
-                'method' => 'getBodyText',
-            ],
-            [
-                'messageType' => 'text/html',
-                'method' => 'getBodyHtml'
-            ]
-        ];
+        $part = $this->message->getBody()->getParts()[0];
+        $this->assertEquals('text/plain', $part->getType());
+        $this->assertEquals('quoted-printable', $part->getEncoding());
+        $this->assertEquals('utf-8', $part->getCharset());
+        $this->assertEquals('body', $part->getContent());
     }
 }

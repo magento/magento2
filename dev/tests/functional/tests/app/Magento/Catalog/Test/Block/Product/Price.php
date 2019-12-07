@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,11 +36,17 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
             'selector' => '.price-to .price',
         ],
         'price_excluding_tax' => [
-            'selector' => '.price-excluding-tax .price'
+            'selector' => '.price-excluding-tax .price',
         ],
         'price_including_tax' => [
-            'selector' => '.price-including-tax .price'
-        ]
+            'selector' => '.price-including-tax .price',
+        ],
+        'old_price_from' => [
+            'selector' => '.price-from .old-price .price-wrapper',
+        ],
+        'old_price_to' => [
+            'selector' => '.price-to .old-price .price-wrapper',
+        ],
     ];
 
     /**
@@ -111,6 +117,18 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     }
 
     /**
+     * Get currency symbol from price block on the product page.
+     *
+     * @return string
+     */
+    public function getCurrencySymbol()
+    {
+        $price = $this->getPrice('');
+        preg_match('`(.*?)\d`', $price, $matches);
+        return $matches[1];
+    }
+
+    /**
      * Get price excluding tax.
      *
      * @param string $currency
@@ -130,6 +148,28 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     public function getPriceIncludingTax($currency = '$')
     {
         return $this->getTypePrice('price_including_tax', $currency);
+    }
+
+    /**
+     * Get min old price.
+     *
+     * @param string $currency
+     * @return string|null
+     */
+    public function getOldPriceFrom($currency = '$')
+    {
+        return $this->getTypePrice('old_price_from', $currency);
+    }
+
+    /**
+     * Get max old price.
+     *
+     * @param string $currency
+     * @return string|null
+     */
+    public function getOldPriceTo($currency = '$')
+    {
+        return $this->getTypePrice('old_price_to', $currency);
     }
 
     /**

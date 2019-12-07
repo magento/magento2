@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminImportMainSection">
+        <element name="entityType" type="select" selector="#entity"/>
+        <element name="importBehavior" type="select" selector="#basic_behavior"/>
+        <element name="selectFileToImport" type="input" selector="#import_file"/>
+        <element name="importButton" type="button" selector="#import_validation_container button" timeout="30"/>
+        <element name="messageSuccess" type="text" selector=".messages div.message-success"/>
+        <element name="messageError" type="text" selector=".messages div.message-error"/>
+        <element name="validationStrategy" type="select" selector="#basic_behaviorvalidation_strategy"/>
+        <element name="allowedErrorsCount" type="input" selector="#basic_behavior_allowed_error_count"/>
+    </section>
+</sections>

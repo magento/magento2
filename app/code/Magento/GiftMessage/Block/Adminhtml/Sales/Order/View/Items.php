@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
@@ -8,7 +8,9 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 /**
  * Gift message adminhtml sales order view items
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Items extends \Magento\Backend\Block\Template
 {
@@ -169,7 +171,7 @@ class Items extends \Magento\Backend\Block\Template
     /**
      * Retrieve save url
      *
-     * @return array
+     * @return string
      * @codeCoverageIgnore
      */
     public function getSaveUrl()

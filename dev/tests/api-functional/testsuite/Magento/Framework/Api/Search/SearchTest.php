@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Search;
@@ -38,8 +38,8 @@ class SearchTest extends WebapiAbstract
                         ]
                     ]
                 ],
-                'page_size' => 20000000000000,
-                'current_page' => 1,
+                'page_size' => 999,
+                'current_page' => 0,
             ],
         ];
 
@@ -66,7 +66,15 @@ class SearchTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['id']);
-        $this->assertEquals('score', $response['items'][0]['custom_attributes'][0]['attribute_code']);
+        $this->assertTrue(
+            in_array(
+                $response['items'][0]['custom_attributes'][0]['attribute_code'],
+                [
+                    'score', // mysql
+                    '_score' // elasticsearch score
+                ]
+            )
+        );
         $this->assertTrue($response['items'][0]['custom_attributes'][0]['value'] > 0);
     }
 }

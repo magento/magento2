@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\Role\Tab;
@@ -12,6 +12,11 @@ namespace Magento\User\Block\Role\Tab;
  */
 class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+    /**
+     * Password input filed name
+     */
+    const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password';
+
     /**
      * @return \Magento\Framework\Phrase
      */
@@ -82,7 +87,40 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         $fieldset->addField('in_role_user_old', 'hidden', ['name' => 'in_role_user_old']);
 
-        $form->setValues($this->getRole()->getData());
+        $verificationFieldset = $form->addFieldset(
+            'current_user_verification_fieldset',
+            ['legend' => __('Current User Identity Verification')]
+        );
+        $verificationFieldset->addField(
+            self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+            'password',
+            [
+                'name' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+                'label' => __('Your Password'),
+                'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+                'title' => __('Your Password'),
+                'class' => 'input-text validate-current-password required-entry',
+                'required' => true
+            ]
+        );
+
+        $data =  ['in_role_user_old' => $this->getOldUsers()];
+        if ($this->getRole() && is_array($this->getRole()->getData())) {
+            $data = array_merge($this->getRole()->getData(), $data);
+        }
+        $form->setValues($data);
         $this->setForm($form);
+    }
+
+    /**
+     * Get old Users Form Data
+     *
+     * @return null|string
+     */
+    protected function getOldUsers()
+    {
+        return $this->_coreRegistry->registry(
+            \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY
+        );
     }
 }

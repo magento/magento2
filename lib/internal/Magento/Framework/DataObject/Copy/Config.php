@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DataObject\Copy;
@@ -44,6 +44,6 @@ class Config
         if (empty($fieldsets)) {
             return null;
         }
-        return isset($fieldsets[$name]) ? $fieldsets[$name] : null;
+        return $fieldsets[$name] ?? null;
     }
 }

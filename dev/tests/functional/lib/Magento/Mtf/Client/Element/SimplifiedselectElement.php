@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class SimplifiedselectElement extends SelectElement
     protected $optionGroupValue = ".//*[@data-title='%s' or contains(normalize-space(.), %s)]";
 
     /**
-     * Select value in ropdown which has option groups.
+     * Select value in dropdown which has option groups.
      *
      * @param string $value
      * @return void

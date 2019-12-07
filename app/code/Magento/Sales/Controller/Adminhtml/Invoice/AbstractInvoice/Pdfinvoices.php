@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
@@ -21,6 +21,13 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
  */
 abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
     /**
      * @var FileFactory
      */
@@ -60,14 +67,6 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
-    }
-
-    /**
      * Save collection items to pdf invoices
      *
      * @param AbstractCollection $collection
@@ -76,9 +75,12 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
      */
     public function massAction(AbstractCollection $collection)
     {
+        $pdf = $this->pdfInvoice->getPdf($collection);
+        $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
+
         return $this->fileFactory->create(
             sprintf('invoice%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
-            $this->pdfInvoice->getPdf($collection)->render(),
+            $fileContent,
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertWidgetInGrid
+ * Assert widget is present in widget grid.
  */
 class AssertWidgetInGrid extends AbstractConstraint
 {
@@ -20,7 +20,10 @@ class AssertWidgetInGrid extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert widget availability in widget grid
+     * Assert widget availability in widget grid.
+     * Verifying such fields as:
+     * - title
+     * - theme_id
      *
      * @param Widget $widget
      * @param WidgetInstanceIndex $widgetInstanceIndex
@@ -28,16 +31,16 @@ class AssertWidgetInGrid extends AbstractConstraint
      */
     public function processAssert(Widget $widget, WidgetInstanceIndex $widgetInstanceIndex)
     {
-        $filter = ['title' => $widget->getTitle()];
+        $filter = ['title' => $widget->getTitle(), 'theme_id' => $widget->getThemeId()];
         $widgetInstanceIndex->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $widgetInstanceIndex->getWidgetGrid()->isRowVisible($filter),
             'Widget with title \'' . $widget->getTitle() . '\' is absent in Widget grid.'
         );
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,17 +8,17 @@ namespace Magento\Paypal\Test\Unit\Model\Report\Settlement;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class RowTest extends \PHPUnit_Framework_TestCase
+class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\Report\Settlement\Row
      */
     protected $row;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->row = $objectManagerHelper->getObject('Magento\Paypal\Model\Report\Settlement\Row');
+        $this->row = $objectManagerHelper->getObject(\Magento\Paypal\Model\Report\Settlement\Row::class);
     }
 
     /**
@@ -107,8 +107,8 @@ class RowTest extends \PHPUnit_Framework_TestCase
     public function getCastedAmountDataProvider()
     {
         return [
-            ['fee_amount', ['fee_amount' => 100, 'fee_debit_or_credit' => 'CR'], -1],
-            ['fee_amount', ['fee_amount' => 100, 'fee_debit_or_credit' => 'DB'], 1]
+            ['fee_amount', ['fee_amount' => 1, 'fee_debit_or_credit' => 'CR'], -1],
+            ['fee_amount', ['fee_amount' => 1, 'fee_debit_or_credit' => 'DB'], 1]
         ];
     }
 }

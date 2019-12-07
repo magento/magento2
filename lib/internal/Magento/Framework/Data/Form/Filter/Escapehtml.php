@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,8 +11,30 @@
  */
 namespace Magento\Framework\Data\Form\Filter;
 
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * EscapeHtml Form Filter Data
+ */
 class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param Escaper|null $escaper
+     */
+    public function __construct(
+        Escaper $escaper = null
+    ) {
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
+    }
+
     /**
      * Returns the result of filtering $value
      *
@@ -32,6 +54,6 @@ class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function outputFilter($value)
     {
-        return htmlspecialchars($value);
+        return $this->escaper->escapeHtml($value);
     }
 }

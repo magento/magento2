@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Ui\Component\Listing\Column\Status;
@@ -41,7 +41,16 @@ class Options implements OptionSourceInterface
     public function toOptionArray()
     {
         if ($this->options === null) {
-            $this->options = $this->collectionFactory->create()->toOptionArray();
+            $options = $this->collectionFactory->create()->toOptionArray();
+
+            array_walk(
+                $options,
+                function (&$option) {
+                    $option['__disableTmpl'] = true;
+                }
+            );
+
+            $this->options = $options;
         }
         return $this->options;
     }

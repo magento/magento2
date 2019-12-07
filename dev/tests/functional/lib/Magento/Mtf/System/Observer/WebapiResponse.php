@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,6 +27,9 @@ class WebapiResponse extends AbstractObserver
     public function process(Event $event)
     {
         $directory = $this->createDestinationDirectory('webapi-response');
-        $this->logger->log(json_encode($event->getSubjects()[0]), $directory . '/' . $event->getIdentifier() . '.json');
+        $this->logger->log(
+            json_encode($event->getSubjects()[0]),
+            $directory . '/' . $event->getFileIdentifier() . '.json'
+        );
     }
 }

@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel\Db;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -17,12 +15,15 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ResourceConnection');
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\ResourceConnection::class
+        );
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Model\ResourceModel\Db\Context',
+            \Magento\Framework\Model\ResourceModel\Db\Context::class,
             ['resource' => $resource]
         );
-        $this->_model = $this->getMockForAbstractClass('Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+        $this->_model = $this->getMockForAbstractClass(
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             ['context' => $context]
         );
     }
@@ -31,7 +32,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $resourceProperty = new \ReflectionProperty(get_class($this->_model), '_resources');
         $resourceProperty->setAccessible(true);
-        $this->assertInstanceOf('Magento\Framework\App\ResourceConnection', $resourceProperty->getValue($this->_model));
+        $this->assertInstanceOf(
+            \Magento\Framework\App\ResourceConnection::class,
+            $resourceProperty->getValue($this->_model)
+        );
     }
 
     public function testSetMainTable()
@@ -55,15 +59,16 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $tableNameOrig = 'store_website';
         $tableSuffix = 'suffix';
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             ['tablePrefix' => 'prefix_']
         );
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Model\ResourceModel\Db\Context',
+            \Magento\Framework\Model\ResourceModel\Db\Context::class,
             ['resource' => $resource]
         );
 
-        $model = $this->getMockForAbstractClass('Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+        $model = $this->getMockForAbstractClass(
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             ['context' => $context]
         );
 

@@ -1,12 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use \Magento\Quote\Api\CouponManagementInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -36,7 +37,7 @@ class CouponManagement implements CouponManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function get($cartId)
     {
@@ -46,48 +47,60 @@ class CouponManagement implements CouponManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function set($cartId, $couponCode)
     {
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
-            throw new NoSuchEntityException(__('Cart %1 doesn\'t contain products', $cartId));
+            throw new NoSuchEntityException(__('The "%1" Cart doesn\'t contain products.', $cartId));
+        }
+        if (!$quote->getStoreId()) {
+            throw new NoSuchEntityException(__('Cart isn\'t assigned to correct store'));
         }
         $quote->getShippingAddress()->setCollectShippingRates(true);
 
         try {
             $quote->setCouponCode($couponCode);
             $this->quoteRepository->save($quote->collectTotals());
+        } catch (LocalizedException $e) {
+            throw new CouldNotSaveException(__('The coupon code couldn\'t be applied: ' .$e->getMessage()), $e);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not apply coupon code'));
+            throw new CouldNotSaveException(
+                __("The coupon code couldn't be applied. Verify the coupon code and try again."),
+                $e
+            );
         }
         if ($quote->getCouponCode() != $couponCode) {
-            throw new NoSuchEntityException(__('Coupon code is not valid'));
+            throw new NoSuchEntityException(__("The coupon code isn't valid. Verify the code and try again."));
         }
         return true;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function remove($cartId)
     {
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
-            throw new NoSuchEntityException(__('Cart %1 doesn\'t contain products', $cartId));
+            throw new NoSuchEntityException(__('The "%1" Cart doesn\'t contain products.', $cartId));
         }
         $quote->getShippingAddress()->setCollectShippingRates(true);
         try {
             $quote->setCouponCode('');
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            throw new CouldNotDeleteException(__('Could not delete coupon code'));
+            throw new CouldNotDeleteException(
+                __("The coupon code couldn't be deleted. Verify the coupon code and try again.")
+            );
         }
         if ($quote->getCouponCode() != '') {
-            throw new CouldNotDeleteException(__('Could not delete coupon code'));
+            throw new CouldNotDeleteException(
+                __("The coupon code couldn't be deleted. Verify the coupon code and try again.")
+            );
         }
         return true;
     }

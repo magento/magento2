@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\User\Test\Unit\Model\Plugin;
 /**
  * Test class for \Magento\User\Model\Plugin\AuthorizationRole testing
  */
-class AuthorizationRoleTest extends \PHPUnit_Framework_TestCase
+class AuthorizationRoleTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\Plugin\AuthorizationRole */
     protected $model;
@@ -25,19 +25,19 @@ class AuthorizationRoleTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->userResourceModelMock = $this->getMockBuilder('Magento\User\Model\ResourceModel\User')
+        $this->userResourceModelMock = $this->getMockBuilder(\Magento\User\Model\ResourceModel\User::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->roleMock = $this->getMockBuilder('Magento\Authorization\Model\Role')
+        $this->roleMock = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\User\Model\Plugin\AuthorizationRole',
+            \Magento\User\Model\Plugin\AuthorizationRole::class,
             [
                 'userResourceModel' => $this->userResourceModelMock
             ]
@@ -48,7 +48,7 @@ class AuthorizationRoleTest extends \PHPUnit_Framework_TestCase
     {
         $this->userResourceModelMock->expects($this->once())->method('updateRoleUsersAcl')->with($this->roleMock);
         $this->assertInstanceOf(
-            '\Magento\Authorization\Model\Role',
+            \Magento\Authorization\Model\Role::class,
             $this->model->afterSave($this->roleMock, $this->roleMock)
         );
     }

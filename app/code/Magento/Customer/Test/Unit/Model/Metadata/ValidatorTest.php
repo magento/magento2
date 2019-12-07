@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata;
@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Metadata;
 use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\Customer\Model\Metadata\Validator;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Validator */
     protected $validator;
@@ -19,10 +19,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Metadata\ElementFactory | \PHPUnit_Framework_MockObject_MockObject */
     protected $attrDataFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->attrDataFactoryMock = $this->getMockBuilder(
-            '\Magento\Customer\Model\Metadata\ElementFactory'
+            \Magento\Customer\Model\Metadata\ElementFactory::class
         )->disableOriginalConstructor()->getMock();
 
         $this->validator = new \Magento\Customer\Model\Metadata\Validator($this->attrDataFactoryMock);
@@ -31,7 +31,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateDataWithNoDataModel()
     {
         $attribute = $this->getMockBuilder(
-            '\Magento\Customer\Api\Data\AttributeMetadataInterface'
+            \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
         $this->attrDataFactoryMock->expects($this->never())->method('create');
         $this->assertTrue($this->validator->validateData([], [$attribute], 'ENTITY_TYPE'));
@@ -51,7 +51,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValidWithNoModel()
     {
         $attribute = $this->getMockBuilder(
-            '\Magento\Customer\Api\Data\AttributeMetadataInterface'
+            \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
         $this->attrDataFactoryMock->expects($this->never())->method('create');
         $this->validator->setAttributes([$attribute]);
@@ -79,6 +79,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isValid, $this->validator->isValid(new \Magento\Framework\DataObject($data)));
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];
@@ -90,7 +93,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function getMockAttribute()
     {
         $attribute = $this->getMockBuilder(
-            '\Magento\Customer\Model\Data\AttributeMetadata'
+            \Magento\Customer\Model\Data\AttributeMetadata::class
         )->disableOriginalConstructor()->setMethods(
             ['__wakeup', 'getAttributeCode', 'getDataModel']
         )->getMock();
@@ -107,7 +110,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function mockDataModel($isValid, AttributeMetadata $attribute)
     {
         $dataModel = $this->getMockBuilder(
-            '\Magento\Customer\Model\Metadata\Form\Text'
+            \Magento\Customer\Model\Metadata\Form\Text::class
         )->disableOriginalConstructor()->getMock();
         $dataModel->expects($this->any())->method('validateValue')->will($this->returnValue($isValid));
         $this->attrDataFactoryMock->expects(

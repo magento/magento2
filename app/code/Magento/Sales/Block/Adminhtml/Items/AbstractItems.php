@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Items;
@@ -11,6 +11,8 @@ use Magento\Sales\Model\Order\Creditmemo\Item;
 /**
  * Abstract items renderer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class AbstractItems extends \Magento\Backend\Block\Template
 {
@@ -426,7 +428,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve formated price
+     * Retrieve formatted price
      *
      * @param float $price
      * @return string

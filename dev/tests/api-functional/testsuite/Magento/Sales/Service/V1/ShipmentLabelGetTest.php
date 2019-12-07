@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -32,7 +32,9 @@ class ShipmentLabelGetTest extends WebapiAbstract
     public function testShipmentGet()
     {
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
+        $shipmentCollection = $this->objectManager->get(
+            \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class
+        );
         $shipment = $shipmentCollection->getFirstItem();
         $shipment->setShippingLabel('test_shipping_label');
         $shipment->save();
@@ -48,6 +50,6 @@ class ShipmentLabelGetTest extends WebapiAbstract
             ],
         ];
         $result = $this->_webApiCall($serviceInfo, ['id' => $shipment->getId()]);
-        $this->assertEquals($result, 'test_shipping_label');
+        $this->assertEquals($result, base64_encode('test_shipping_label'));
     }
 }

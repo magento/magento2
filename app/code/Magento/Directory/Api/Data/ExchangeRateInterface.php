@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Api\Data;
@@ -9,6 +9,7 @@ namespace Magento\Directory\Api\Data;
  * Exchange Rate interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 /**
  * Class AbstractSenderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit_Framework_MockObject_MockObject
@@ -74,89 +76,58 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
 
     public function stepMockSetup()
     {
-        $this->senderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
-            ['send', 'sendCopyTo'],
-            [],
-            '',
-            false
+        $this->senderMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Email\Sender::class,
+            ['send', 'sendCopyTo']
         );
 
-        $this->senderBuilderFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\SenderBuilderFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->senderBuilderFactoryMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Email\SenderBuilderFactory::class,
+            ['create']
         );
-        $this->templateContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\Template',
-            ['setTemplateVars'],
-            [],
-            '',
-            false
+        $this->templateContainerMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Email\Container\Template::class,
+            ['setTemplateVars']
         );
 
-        $this->storeMock = $this->getMock(
-            '\Magento\Store\Model\Store',
-            ['getStoreId', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getStoreId', '__wakeup']);
 
-        $this->orderMock = $this->getMock(
-            '\Magento\Sales\Model\Order',
+        $this->orderMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
             [
                 'getStore', 'getBillingAddress', 'getPayment',
                 '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
                 'getCustomerEmail', 'getShippingAddress', 'setSendEmail',
-                'setEmailSent'
-            ],
-            [],
-            '',
-            false
+                'setEmailSent', 'getCreatedAtFormatted', 'getIsNotVirtual',
+                'getEmailCustomerNote', 'getFrontendStatusLabel'
+            ]
         );
         $this->orderMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
-        $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
-            [],
-            [],
-            '',
-            false
-        );
+        $paymentInfoMock = $this->createMock(\Magento\Payment\Model\Info::class);
         $this->orderMock->expects($this->any())
             ->method('getPayment')
             ->will($this->returnValue($paymentInfoMock));
 
-        $this->addressRenderer = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
-        $this->addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
+        $this->addressRenderer = $this->createMock(\Magento\Sales\Model\Order\Address\Renderer::class);
+        $this->addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
 
-        $this->paymentHelper = $this->getMock('\Magento\Payment\Helper\Data', ['getInfoBlockHtml'], [], '', false);
+        $this->paymentHelper = $this->createPartialMock(\Magento\Payment\Helper\Data::class, ['getInfoBlockHtml']);
         $this->paymentHelper->expects($this->any())
             ->method('getInfoBlockHtml')
             ->will($this->returnValue('payment'));
 
-        $this->globalConfig = $this->getMock(
-            'Magento\Framework\App\Config',
-            ['getValue'],
-            [],
-            '',
-            false
-        );
+        $this->globalConfig = $this->createPartialMock(\Magento\Framework\App\Config::class, ['getValue']);
 
-        $this->loggerMock = $this->getMock(
-            '\Psr\Log\LoggerInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
+    /**
+     * @param $billingAddress
+     * @param bool $isVirtual
+     */
     public function stepAddressFormat($billingAddress, $isVirtual = false)
     {
         $this->orderMock->expects($this->any())
@@ -170,7 +141,6 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
                 ->method('getShippingAddress')
                 ->will($this->returnValue($billingAddress));
         }
-
     }
 
     public function stepSendWithoutSendCopy()
@@ -183,31 +153,29 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         $this->stepSend($this->never(), $this->once());
     }
 
+    /**
+     * @param $identityMockClassName
+     */
     public function stepIdentityContainerInit($identityMockClassName)
     {
-        $this->identityContainerMock = $this->getMock(
+        $this->identityContainerMock = $this->createPartialMock(
             $identityMockClassName,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
-            [],
-            '',
-            false
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
+     */
     protected function stepSend(
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendExpects,
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendCopyToExpects
     ) {
-        $senderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
-            ['send', 'sendCopyTo'],
-            [],
-            '',
-            false
-        );
+        $senderMock = $this->createPartialMock(\Magento\Sales\Model\Order\Email\Sender::class, ['send', 'sendCopyTo']);
         $senderMock->expects($sendExpects)
             ->method('send');
         $senderMock->expects($sendCopyToExpects)

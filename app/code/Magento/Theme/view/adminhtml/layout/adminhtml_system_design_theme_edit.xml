@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,8 +18,8 @@
         </referenceContainer>
         <referenceContainer name="left">
             <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tabs" name="theme_edit_tabs">
-                <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css" template="tabs/css.phtml" name="theme_edit_tabs_tab_css_tab"/>
-                <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js" template="tabs/js.phtml" name="theme_edit_tabs_tab_js_tab">
+                <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css" template="Magento_Theme::tabs/css.phtml" name="theme_edit_tabs_tab_css_tab"/>
+                <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js" template="Magento_Theme::tabs/js.phtml" name="theme_edit_tabs_tab_js_tab">
                     <block class="Magento\Backend\Block\Widget\Form\Renderer\Fieldset" template="Magento_Theme::tabs/fieldset/js.phtml" name="theme_edit_tabs_tab_js_tab_content"/>
                 </block>
                 <action method="addTab">

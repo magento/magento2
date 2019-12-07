@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Catalog product upsell items block
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
-class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
+class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var int
@@ -91,11 +91,13 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     }
 
     /**
+     * Prepare data
+     *
      * @return $this
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
         $this->_itemCollection = $product->getUpSellProductCollection()->setPositionOrder()->addStoreFilter();
         if ($this->moduleManager->isEnabled('Magento_Checkout')) {
@@ -121,6 +123,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     }
 
     /**
+     * Before to html handler
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -130,25 +134,38 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     }
 
     /**
+     * Get items collection
+     *
      * @return Collection
      */
     public function getItemCollection()
     {
+        /**
+         * getIdentities() depends on _itemCollection populated, but it can be empty if the block is hidden
+         * @see https://github.com/magento/magento2/issues/5897
+         */
+        if ($this->_itemCollection === null) {
+            $this->_prepareData();
+        }
         return $this->_itemCollection;
     }
 
     /**
+     * Get collection items
+     *
      * @return \Magento\Framework\DataObject[]
      */
     public function getItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = $this->getItemCollection()->getItems();
         }
         return $this->_items;
     }
 
     /**
+     * Get row count
+     *
      * @return float
      */
     public function getRowCount()
@@ -157,18 +174,22 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     }
 
     /**
+     * Set column count
+     *
      * @param string $columns
      * @return $this
      */
     public function setColumnCount($columns)
     {
-        if (intval($columns) > 0) {
-            $this->_columnCount = intval($columns);
+        if ((int) $columns > 0) {
+            $this->_columnCount = (int) $columns;
         }
         return $this;
     }
 
     /**
+     * Get column count
+     *
      * @return int
      */
     public function getColumnCount()
@@ -177,6 +198,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     }
 
     /**
+     * Reset items iterator
+     *
      * @return void
      */
     public function resetItemsIterator()
@@ -186,6 +209,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     }
 
     /**
+     * Get iterable item
+     *
      * @return mixed
      */
     public function getIterableItem()
@@ -197,6 +222,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
 
     /**
      * Set how many items we need to show in upsell block
+     *
      * Notice: this parameter will be also applied
      *
      * @param string $type
@@ -205,13 +231,15 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      */
     public function setItemLimit($type, $limit)
     {
-        if (intval($limit) > 0) {
-            $this->_itemLimits[$type] = intval($limit);
+        if ((int) $limit > 0) {
+            $this->_itemLimits[$type] = (int) $limit;
         }
         return $this;
     }
 
     /**
+     * Get item limit
+     *
      * @param string $type
      * @return array|int
      */
@@ -236,6 +264,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     {
         $identities = [];
         foreach ($this->getItems() as $item) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;

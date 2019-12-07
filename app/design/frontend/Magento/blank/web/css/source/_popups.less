@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -15,7 +15,7 @@
 
 & when (@media-common = true) {
 
-//  Popup working with dropdown dialog
+    //  Popup working with dropdown dialog
     .ui-dialog {
         &.popup {
             .action {
@@ -28,7 +28,7 @@
                     top: 0;
                     width: 40px;
                     z-index: 1001;
-                    ._lib-popup-button-close-icon(
+                    .lib-popup-button-close-icon(
                     @popup-button-close__icon,
                     @popup-icon-font__content,
                     @popup-icon-font,
@@ -65,7 +65,7 @@
 }
 
 //
-//    Desktop
+//  Desktop
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {

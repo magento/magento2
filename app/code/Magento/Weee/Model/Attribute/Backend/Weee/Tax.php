@@ -1,12 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Model\Attribute\Backend\Weee;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
+/**
+ * Class with fixed product taxes.
+ */
 class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 {
     /**
@@ -25,6 +31,8 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     protected $_directoryHelper;
 
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -32,6 +40,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -40,20 +49,32 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax
+        \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax,
+        ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_directoryHelper = $directoryHelper;
         $this->_storeManager = $storeManager;
         $this->_attributeTax = $attributeTax;
-        parent::__construct($currencyFactory, $storeManager, $catalogData, $config, $localeFormat);
+        parent::__construct(
+            $currencyFactory,
+            $storeManager,
+            $catalogData,
+            $config,
+            $localeFormat,
+            $scopeOverriddenValue
+        );
     }
 
     /**
+     * Get backend model name.
+     *
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getBackendModelName()
     {
-        return 'Magento\Weee\Model\Attribute\Backend\Weee\Tax';
+        // phpcs:enable Magento2.Functions.StaticFunction
+        return \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class;
     }
 
     /**
@@ -70,18 +91,18 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             return $this;
         }
         $dup = [];
-
         foreach ($taxes as $tax) {
             if (!empty($tax['delete'])) {
                 continue;
             }
-
-            $state = isset($tax['state']) ? $tax['state'] : '0';
+            $state = isset($tax['state']) ? ($tax['state'] > 0 ? $tax['state'] : 0) : '0';
             $key1 = implode('-', [$tax['website_id'], $tax['country'], $state]);
-
             if (!empty($dup[$key1])) {
                 throw new LocalizedException(
-                    __('We found a duplicate of website, country and state fields for a fixed product tax')
+                    __(
+                        'Set unique country-state combinations within the same fixed product tax. '
+                        . 'Verify the combinations and try again.'
+                    )
                 );
             }
             $dup[$key1] = 1;
@@ -119,7 +140,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -159,7 +180,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function afterDelete($object)
     {
@@ -168,10 +189,18 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTable()
     {
         return $this->_attributeTax->getTable('weee_tax');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEntityIdField()
+    {
+        return $this->_attributeTax->getIdFieldName();
     }
 }

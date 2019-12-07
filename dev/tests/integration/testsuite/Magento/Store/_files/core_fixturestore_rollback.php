@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,13 +8,13 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Framework\Registry $registry */
-$registry = $objectManager->get('Magento\Framework\Registry');
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var \Magento\Store\Model\Store $store */
-$store = $objectManager->create('Magento\Store\Model\Store');
+$store = $objectManager->create(\Magento\Store\Model\Store::class);
 $storeCode = 'fixturestore';
 $store->load($storeCode);
 if ($store->getId()) {
@@ -23,6 +23,3 @@ if ($store->getId()) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-
-/* Refresh stores memory cache */
-$objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();

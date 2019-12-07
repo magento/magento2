@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Template;
@@ -34,7 +34,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
-     * @param \Magento\Email\Model\Source\Variables $configVariables
+     * @param \Magento\Variable\Model\Source\Variables $configVariables
      * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -52,7 +52,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
-        \Magento\Email\Model\Source\Variables $configVariables,
+        \Magento\Variable\Model\Source\Variables $configVariables,
         \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {
@@ -89,6 +89,10 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         $name = null;
         if (isset($params['name'])) {
             $name = $params['name'];
+        }
+
+        if (isset($this->_storeId) && !isset($params['store_id'])) {
+            $params['store_id'] = $this->_storeId;
         }
 
         // validate required parameter type or id
@@ -136,7 +140,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function mediaDirective($construction)
     {
-        $params = $this->getParameters($construction[2]);
+        $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }

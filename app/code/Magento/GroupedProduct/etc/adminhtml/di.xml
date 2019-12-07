@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,4 +20,22 @@
     <type name="Magento\Sales\Model\AdminOrder\Product\Quote\Initializer">
         <plugin name="sales_adminorder_quote_initializer_plugin" type="Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer" sortOrder="100"/>
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="grouped-custom-options" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\CustomOptions</item>
+                    <item name="sortOrder" xsi:type="number">72</item>
+                </item>
+                <item name="grouped" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\Grouped</item>
+                    <item name="sortOrder" xsi:type="number">120</item>
+                </item>
+                <item name="grouped_stock_data" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\StockData</item>
+                    <item name="sortOrder" xsi:type="number">121</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

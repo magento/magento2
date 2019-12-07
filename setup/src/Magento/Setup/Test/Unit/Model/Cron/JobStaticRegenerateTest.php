@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Framework\App\State;
 
-class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
+class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
@@ -76,7 +76,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
             ->method('getModeObject')
             ->will($this->returnValue($modeObjectMock));
 
-        $statusObject = $this->getStatucObjectMock(['add']);
+        $statusObject = $this->getStatusObjectMock(['add']);
         $statusObject
             ->expects($this->exactly(3))
             ->method('add');
@@ -124,7 +124,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
             ->method('getModeObject')
             ->will($this->returnValue($modeObjectMock));
 
-        $statusObject = $this->getStatucObjectMock(['toggleUpdateError']);
+        $statusObject = $this->getStatusObjectMock(['toggleUpdateError']);
         $statusObject
             ->expects($this->once())
             ->method('toggleUpdateError');
@@ -143,7 +143,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getJobStaticRegenerateMock($methods = null)
     {
-        return $this->getMock('Magento\Setup\Model\Cron\JobStaticRegenerate', $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Setup\Model\Cron\JobStaticRegenerate::class, $methods);
     }
 
     /**
@@ -153,7 +153,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFilesystemObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Deploy\Model\Filesystem', $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Deploy\Model\Filesystem::class, $methods);
     }
 
     /**
@@ -161,9 +161,9 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
      */
-    protected function getStatucObjectMock($methods = null)
+    protected function getStatusObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Setup\Model\Cron\Status', $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Setup\Model\Cron\Status::class, $methods);
     }
 
     /**
@@ -173,7 +173,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCleanFilesObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Framework\App\State\CleanupFiles', $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Framework\App\State\CleanupFiles::class, $methods);
     }
 
     /**
@@ -183,7 +183,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCacheObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Framework\App\State\CleanupFiles', $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Framework\App\State\CleanupFiles::class, $methods);
     }
 
     /**
@@ -193,7 +193,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getOutputObjectMock()
     {
-        return $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface');
+        return $this->getMockForAbstractClass(\Symfony\Component\Console\Output\OutputInterface::class);
     }
 
     /**
@@ -203,6 +203,6 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getModeObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Deploy\Model\Mode', $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Deploy\Model\Mode::class, $methods);
     }
 }

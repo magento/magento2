@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,10 @@ namespace Magento\Customer\Block\Account\Dashboard;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class address test.
+ */
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Account\Dashboard\Address
@@ -20,28 +23,28 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_customerSession;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerSession = $this->objectManager->get('Magento\Customer\Model\Session');
-        $this->_block = $this->objectManager->get('Magento\Framework\View\LayoutInterface')
+        $this->_customerSession = $this->objectManager->get(\Magento\Customer\Model\Session::class);
+        $this->_block = $this->objectManager->get(\Magento\Framework\View\LayoutInterface::class)
             ->createBlock(
-                'Magento\Customer\Block\Account\Dashboard\Address',
+                \Magento\Customer\Block\Account\Dashboard\Address::class,
                 '',
                 ['customerSession' => $this->_customerSession]
             );
-        $this->objectManager->get('Magento\Framework\App\ViewInterface')->setIsLayoutLoaded(true);
+        $this->objectManager->get(\Magento\Framework\App\ViewInterface::class)->setIsLayoutLoaded(true);
     }
 
     protected function tearDown()
     {
         $this->_customerSession->unsCustomerId();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
-        $customerRegistry = $this->objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry = $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
         //Cleanup customer from registry
         $customerRegistry->remove(1);
     }
@@ -52,11 +55,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomer()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
+        $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
         $layout->setIsCacheable(false);
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = $objectManager
-            ->get('Magento\Customer\Api\CustomerRepositoryInterface');
+            ->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->getById(1);
         $this->_customerSession->setCustomerId(1);
         $object = $this->_block->getCustomer();
@@ -66,9 +69,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomerMissingCustomer()
     {
-        $moduleManager = $this->objectManager->get('Magento\Framework\Module\Manager');
+        $moduleManager = $this->objectManager->get(\Magento\Framework\Module\Manager::class);
         if ($moduleManager->isEnabled('Magento_PageCache')) {
-            $customerDataFactory = $this->objectManager->create('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+            $customerDataFactory = $this->objectManager->create(
+                \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            );
             $customerData = $customerDataFactory->create()->setGroupId($this->_customerSession->getCustomerGroupId());
             $this->assertEquals($customerData, $this->_block->getCustomer());
         } else {
@@ -95,8 +100,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getPrimaryShippingAddressHtmlDataProvider()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
-            . "\nUnited States<br/>\nT: 3468676\n\n";
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />"
+            . "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
 
         return [
             '0' => [0, 'You have not set a default shipping address.'],
@@ -122,8 +127,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getPrimaryBillingAddressHtmlDataProvider()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
-            . "\nUnited States<br/>\nT: 3468676\n\n";
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />"
+            . "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         return [
             '0' => [0, 'You have not set a default billing address.'],
             '1' => [1, $expected],

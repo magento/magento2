@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-/**
- * Product attribute add/edit form main tab
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Product attribute add/edit form main tab
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Advanced extends Generic
 {
     /**
@@ -35,6 +36,11 @@ class Advanced extends Generic
      * @var array
      */
     protected $disableScopeChangeList;
+
+    /**
+     * @var PropertyLocker
+     */
+    private $propertyLocker;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -64,6 +70,7 @@ class Advanced extends Generic
      * Adding product form elements for editing attribute
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD)
      */
     protected function _prepareForm()
@@ -154,7 +161,7 @@ class Advanced extends Generic
                 'name' => 'is_unique',
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
-                'note' => __('Not shared with other products'),
+                'note' => __('Not shared with other products.'),
                 'values' => $yesno
             ]
         );
@@ -230,7 +237,7 @@ class Advanced extends Generic
                 'name' => 'is_global',
                 'label' => __('Scope'),
                 'title' => __('Scope'),
-                'note' => __('Declare attribute value saving scope'),
+                'note' => __('Declare attribute value saving scope.'),
                 'values' => $scopes
             ],
             'attribute_code'
@@ -241,11 +248,12 @@ class Advanced extends Generic
             $form->getElement('is_global')->setDisabled(1);
         }
         $this->setForm($form);
+        $this->getPropertyLocker()->lock($form);
         return $this;
     }
 
     /**
-     * Initialize form fileds values
+     * Initialize form fields values
      *
      * @return $this
      */
@@ -263,5 +271,18 @@ class Advanced extends Generic
     private function getAttributeObject()
     {
         return $this->_coreRegistry->registry('entity_attribute');
+    }
+
+    /**
+     * Get property locker
+     *
+     * @return PropertyLocker
+     */
+    private function getPropertyLocker()
+    {
+        if (null === $this->propertyLocker) {
+            $this->propertyLocker = ObjectManager::getInstance()->get(PropertyLocker::class);
+        }
+        return $this->propertyLocker;
     }
 }

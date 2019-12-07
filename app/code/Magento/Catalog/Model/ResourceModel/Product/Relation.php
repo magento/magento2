@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -47,6 +47,23 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->addRelations($parentId, $insert);
         $this->removeRelations($parentId, $delete);
 
+        return $this;
+    }
+
+    /**
+     * Add Relation on duplicate update
+     *
+     * @param int $parentId
+     * @param int $childId
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function addRelation($parentId, $childId)
+    {
+        $this->getConnection()->insertOnDuplicate(
+            $this->getMainTable(),
+            ['parent_id' => $parentId, 'child_id' => $childId]
+        );
         return $this;
     }
 

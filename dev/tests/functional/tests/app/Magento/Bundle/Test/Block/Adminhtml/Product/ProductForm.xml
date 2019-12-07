@@ -1,39 +1,41 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <product-details>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails</class>
-        <selector>#product_info_tabs_product-details</selector>
-        <strategy>css selector</strategy>
-        <wrapper>product</wrapper>
         <fields>
             <shipment_type>
                 <input>select</input>
             </shipment_type>
             <sku_type>
-                <input>select</input>
+                <input>switcher</input>
             </sku_type>
             <price_type>
-                <input>select</input>
+                <input>switcher</input>
             </price_type>
             <weight_type>
-                <input>select</input>
+                <input>switcher</input>
             </weight_type>
         </fields>
     </product-details>
     <bundle>
-        <class>\Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle</class>
-        <selector>#product_info_tabs_product-details</selector>
+        <class>\Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Bundle</class>
+        <selector>[data-index="bundle-items"]</selector>
         <strategy>css selector</strategy>
+        <wrapper>product</wrapper>
+        <fields>
+            <shipment_type>
+                <input>switcher</input>
+            </shipment_type>
+        </fields>
     </bundle>
     <advanced-pricing>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab</class>
-        <selector>#product_info_tabs_advanced-pricing</selector>
+        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing</class>
+        <selector>[data-index="advanced_pricing_button"]</selector>
         <strategy>css selector</strategy>
         <wrapper>product</wrapper>
         <fields>
@@ -42,4 +44,4 @@
             </price_view>
         </fields>
     </advanced-pricing>
-</tabs>
+</sections>

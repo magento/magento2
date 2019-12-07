@@ -1,43 +1,59 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Method;
 
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Payment\Gateway\Command\CommandManagerInterface;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
+use Magento\Payment\Gateway\CommandInterface;
+use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Payment\Gateway\Validator\ResultInterface;
+use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\Adapter;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class AdapterTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ManagerInterface
+     * @var MockObject|ManagerInterface
      */
     private $eventManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ValueHandlerPoolInterface
+     * @var MockObject|ValueHandlerPoolInterface
      */
     private $valueHandlerPool;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ValidatorPoolInterface
+     * @var MockObject|ValidatorPoolInterface
      */
     private $validatorPool;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | CommandPoolInterface
+     * @var MockObject|CommandPoolInterface
      */
     private $commandPool;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | PaymentDataObjectFactory
+     * @var MockObject|PaymentDataObjectFactory
      */
     private $paymentDataObjectFactory;
+
+    /**
+     * @var MockObject
+     */
+    private $logger;
 
     /**
      * @var string
@@ -59,23 +75,13 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->eventManager = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface'
-        );
-        $this->valueHandlerPool = $this->getMock(
-            'Magento\Payment\Gateway\Config\ValueHandlerPoolInterface'
-        );
-        $this->validatorPool = $this->getMock(
-            'Magento\Payment\Gateway\Validator\ValidatorPoolInterface'
-        );
-        $this->commandPool = $this->getMock(
-            'Magento\Payment\Gateway\Command\CommandPoolInterface'
-        );
-        $this->paymentDataObjectFactory = $this->getMockBuilder(
-            'Magento\Payment\Gateway\Data\PaymentDataObjectFactory'
-        )
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->valueHandlerPool = $this->createMock(ValueHandlerPoolInterface::class);
+        $this->validatorPool = $this->createMock(ValidatorPoolInterface::class);
+        $this->commandPool = $this->createMock(CommandPoolInterface::class);
+        $this->paymentDataObjectFactory = $this->getMockBuilder(PaymentDataObjectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -83,6 +89,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->formBlockType = '\FormBlock';
         $this->infoBlockType = '\InfoBlock';
 
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->getMock();
         $this->adapter = new Adapter(
             $this->eventManager,
             $this->valueHandlerPool,
@@ -91,15 +99,56 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             $this->formBlockType,
             $this->infoBlockType,
             $this->commandPool,
-            $this->validatorPool
+            $this->validatorPool,
+            null,
+            $this->logger
         );
     }
 
+    public function testFetchTransactionInfo()
+    {
+        $transactionId = 10555;
+        $transactionInfo = ['test_key' => 'test_value'];
+
+        $valueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
+        $command = $this->getMockForAbstractClass(CommandInterface::class);
+
+        /** @var  InfoInterface|MockObject $paymentInfo */
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+
+        $this->valueHandlerPool->method('get')
+            ->with('can_fetch_transaction_information')
+            ->willReturn($valueHandler);
+        $valueHandler->expects($this->atLeastOnce())
+            ->method('handle')
+            ->with(['field' => 'can_fetch_transaction_information'])
+            ->willReturn(true);
+
+        $this->paymentDataObjectFactory->method('create')
+            ->with($paymentInfo)
+            ->willReturn($paymentDO);
+
+        $this->commandPool->method('get')
+            ->with('fetch_transaction_information')
+            ->willReturn($command);
+        $command->expects($this->atLeastOnce())
+            ->method('execute')
+            ->with(['transactionId' => $transactionId, 'payment' => $paymentDO])
+            ->willReturn($transactionInfo);
+
+        $this->assertEquals(
+            $transactionInfo,
+            $this->adapter->fetchTransactionInfo($paymentInfo, $transactionId)
+        );
+    }
+
+    /**
+     * @covers \Magento\Payment\Model\Method\Adapter::isAvailable
+     */
     public function testIsAvailableNotActive()
     {
-        $activeValueHandler = $this->getMock(
-            'Magento\Payment\Gateway\Config\ValueHandlerInterface'
-        );
+        $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
 
         $this->valueHandlerPool->expects(static::once())
             ->method('get')
@@ -116,17 +165,16 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         static::assertFalse($this->adapter->isAvailable(null));
     }
 
+    /**
+     * @covers \Magento\Payment\Model\Method\Adapter::isAvailable
+     */
     public function testIsAvailableEmptyQuote()
     {
-        $activeValueHandler = $this->getMock(
-            'Magento\Payment\Gateway\Config\ValueHandlerInterface'
-        );
-        $availabilityValidator = $this->getMock(
-            'Magento\Payment\Gateway\Validator\ValidatorInterface'
-        );
-        $paymentDO = $this->getMock('Magento\Payment\Gateway\Data\PaymentDataObjectInterface');
-        $validationResult = $this->getMock('Magento\Payment\Gateway\Validator\ResultInterface');
-        $paymentInfo = $this->getMock('Magento\Payment\Model\InfoInterface');
+        $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
+        $availabilityValidator = $this->createMock(ValidatorInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $validationResult = $this->createMock(ResultInterface::class);
+        $paymentInfo = $this->createMock(InfoInterface::class);
 
         $this->valueHandlerPool->expects(static::once())
             ->method('get')
@@ -157,5 +205,155 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->adapter->setInfoInstance($paymentInfo);
         static::assertTrue($this->adapter->isAvailable(null));
+    }
+
+    /**
+     * @covers \Magento\Payment\Model\Method\Adapter::isAvailable
+     */
+    public function testIsAvailableWithEmptyInfoInstance()
+    {
+        $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
+        $this->valueHandlerPool->expects(static::once())
+            ->method('get')
+            ->with('active')
+            ->willReturn($activeValueHandler);
+        $activeValueHandler->expects(static::once())
+            ->method('handle')
+            ->with(['field' => 'active'])
+            ->willReturn(true);
+
+        $this->validatorPool->expects(static::never())
+            ->method('get')
+            ->with('availability');
+
+        $this->eventManager->expects(static::once())
+            ->method('dispatch');
+
+        static::assertTrue($this->adapter->isAvailable(null));
+    }
+
+    public function testExecuteCommandWithCommandExecutor()
+    {
+        /** @var ManagerInterface|MockObject $eventManager */
+        $eventManager = $this->createMock(
+            ManagerInterface::class
+        );
+
+        /** @var ValueHandlerPoolInterface|MockObject $valueHandlerPool */
+        $valueHandlerPool = $this->createMock(
+            ValueHandlerPoolInterface::class
+        );
+
+        /** @var CommandManagerInterface|MockObject $commandManager */
+        $commandManager = $this->createMock(
+            CommandManagerInterface::class
+        );
+
+        /** @var PaymentDataObjectFactory|MockObject $paymentDataObjectFactory */
+        $paymentDataObjectFactory = $this->getMockBuilder(
+            PaymentDataObjectFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $paymentInfo = $this->createMock(InfoInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+
+        $adapter = new Adapter(
+            $eventManager,
+            $valueHandlerPool,
+            $paymentDataObjectFactory,
+            'CODE',
+            '\FormBlock',
+            '\InfoBlock',
+            null,
+            null,
+            $commandManager,
+            $this->logger
+        );
+
+        $valueHandler = $this->createMock(ValueHandlerInterface::class);
+
+        $valueHandlerPool->expects(static::once())
+            ->method('get')
+            ->with('can_authorize')
+            ->willReturn($valueHandler);
+        $valueHandler->expects(static::once())
+            ->method('handle')
+            ->with(['field' => 'can_authorize'])
+            ->willReturn(true);
+
+        $paymentDataObjectFactory->expects(static::once())
+            ->method('create')
+            ->with($paymentInfo)
+            ->willReturn($paymentDO);
+
+        $commandManager->expects(static::once())
+            ->method('executeByCode')
+            ->with('authorize', $paymentInfo, ['amount' => 10, 'payment' => $paymentDO])
+            ->willReturn(null);
+
+        $adapter->authorize($paymentInfo, 10);
+    }
+
+    public function testExecuteCommandWithCommandPool()
+    {
+        /** @var ManagerInterface|MockObject $eventManager */
+        $eventManager = $this->createMock(ManagerInterface::class);
+
+        /** @var ValueHandlerPoolInterface|MockObject $valueHandlerPool */
+        $valueHandlerPool = $this->createMock(ValueHandlerPoolInterface::class);
+
+        /** @var CommandPoolInterface|MockObject $commandPool */
+        $commandPool = $this->createMock(CommandPoolInterface::class);
+
+        /** @var PaymentDataObjectFactory|MockObject $paymentDataObjectFactory */
+        $paymentDataObjectFactory = $this->getMockBuilder(PaymentDataObjectFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $paymentInfo = $this->createMock(InfoInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+
+        $adapter = new Adapter(
+            $eventManager,
+            $valueHandlerPool,
+            $paymentDataObjectFactory,
+            'CODE',
+            '\FormBlock',
+            '\InfoBlock',
+            $commandPool,
+            null,
+            null,
+            $this->logger
+        );
+
+        $valueHandler = $this->createMock(ValueHandlerInterface::class);
+        $command = $this->createMock(CommandInterface::class);
+
+        $valueHandlerPool->expects(static::once())
+            ->method('get')
+            ->with('can_authorize')
+            ->willReturn($valueHandler);
+        $valueHandler->expects(static::once())
+            ->method('handle')
+            ->with(['field' => 'can_authorize'])
+            ->willReturn(true);
+
+        $paymentDataObjectFactory->expects(static::once())
+            ->method('create')
+            ->with($paymentInfo)
+            ->willReturn($paymentDO);
+
+        $commandPool->expects(static::once())
+            ->method('get')
+            ->with('authorize')
+            ->willReturn($command);
+        $command->expects(static::once())
+            ->method('execute')
+            ->with(['amount' => 10, 'payment' => $paymentDO])
+            ->willReturn(null);
+
+        $adapter->authorize($paymentInfo, 10);
     }
 }

@@ -2,7 +2,7 @@
 /**
  * Application area list
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -88,7 +88,7 @@ class AreaList
      */
     public function getFrontName($areaCode)
     {
-        return isset($this->_areas[$areaCode]['frontName']) ? $this->_areas[$areaCode]['frontName'] : null;
+        return $this->_areas[$areaCode]['frontName'] ?? null;
     }
 
     /**
@@ -111,7 +111,7 @@ class AreaList
      */
     public function getDefaultRouter($areaCode)
     {
-        return isset($this->_areas[$areaCode]['router']) ? $this->_areas[$areaCode]['router'] : null;
+        return $this->_areas[$areaCode]['router'] ?? null;
     }
 
     /**
@@ -124,7 +124,7 @@ class AreaList
     {
         if (!isset($this->_areaInstances[$code])) {
             $this->_areaInstances[$code] = $this->objectManager->create(
-                'Magento\Framework\App\AreaInterface',
+                \Magento\Framework\App\AreaInterface::class,
                 ['areaCode' => $code]
             );
         }

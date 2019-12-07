@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
+/**
+ * @api
+ */
 interface CurrencyInterface
 {
     /**
@@ -232,19 +235,4 @@ interface CurrencyInterface
      * @return boolean
      */
     public function isLess($value, $currency = null);
-
-    /**
-     * Returns the set service class
-     *
-     * @return \Zend_Service
-     */
-    public function getService();
-
-    /**
-     * Sets a new exchange service
-     *
-     * @param string|\Magento\Framework\Locale\CurrencyInterface $service Service class
-     * @return \Magento\Framework\CurrencyInterface
-     */
-    public function setService($service);
 }

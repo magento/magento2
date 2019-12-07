@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
@@ -29,23 +29,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->setFactoryMock = $this->getMock(
-            '\Magento\Eav\Model\Entity\Attribute\SetFactory',
-            ['create', '__wakeup'],
-            [],
-            '',
-            false
+        $this->setFactoryMock = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Attribute\SetFactory::class,
+            ['create', '__wakeup']
         );
-        $this->typeFactoryMock = $this->getMock(
-            '\Magento\Eav\Model\Entity\TypeFactory',
-            ['create', '__wakeup'],
-            [],
-            '',
-            false
+        $this->typeFactoryMock = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\TypeFactory::class,
+            ['create', '__wakeup']
         );
 
         $this->model = $objectManager->getObject(
-            'Magento\Catalog\Model\ResourceModel\Product',
+            \Magento\Catalog\Model\ResourceModel\Product::class,
             [
                 'setFactory' => $this->setFactoryMock,
                 'typeFactory' => $this->typeFactoryMock,
@@ -58,21 +52,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productTypeId = 4;
         $expectedErrorMessage = ['attribute_set' => 'Invalid attribute set entity type'];
 
-        $productMock = $this->getMock(
-            '\Magento\Framework\DataObject',
-            ['getAttributeSetId', '__wakeup'],
-            [],
-            '',
-            false
+        $productMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['getAttributeSetId', '__wakeup']
         );
-        $attributeSetMock = $this->getMock(
-            '\Magento\Eav\Model\Entity\Attribute\Set',
-            ['load', 'getEntityTypeId', '__wakeup'],
-            [],
-            '',
-            false
+        $attributeSetMock = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Attribute\Set::class,
+            ['load', 'getEntityTypeId', '__wakeup']
         );
-        $entityTypeMock = $this->getMock('\Magento\Eav\Model\Entity\Type', [], [], '', false);
+        $entityTypeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
 
         $this->typeFactoryMock->expects($this->once())->method('create')->will($this->returnValue($entityTypeMock));
         $entityTypeMock->expects($this->once())->method('loadByCode')->with('catalog_product')->willReturnSelf();

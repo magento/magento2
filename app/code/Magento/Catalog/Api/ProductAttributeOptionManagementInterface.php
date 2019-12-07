@@ -1,13 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface ProductAttributeOptionManagementInterface
 {
@@ -28,7 +29,7 @@ interface ProductAttributeOptionManagementInterface
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
-     * @return bool
+     * @return string
      */
     public function add($attributeCode, $option);
 

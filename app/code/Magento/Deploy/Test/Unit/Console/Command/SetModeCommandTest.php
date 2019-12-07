@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\SetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\State;
 
 /**
  * @package Magento\Deploy\Test\Unit\Console\Command
  */
-class SetModeCommandTest extends \PHPUnit_Framework_TestCase
+class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Deploy\Model\Mode|\PHPUnit_Framework_MockObject_MockObject
@@ -31,12 +31,12 @@ class SetModeCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->modeMock = $this->getMock('Magento\Deploy\Model\Mode', [], [], '', false);
+        $this->objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+        $this->modeMock = $this->createMock(\Magento\Deploy\Model\Mode::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->command = $objectManager->getObject(
-            'Magento\Deploy\Console\Command\SetModeCommand',
+            \Magento\Deploy\Console\Command\SetModeCommand::class,
             ['objectManager' => $this->objectManagerMock]
         );
 
@@ -67,6 +67,18 @@ class SetModeCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetDefaultMode()
+    {
+        $this->modeMock->expects($this->once())->method('enableDefaultMode');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['mode' => 'default']);
+        $this->assertContains(
+            "default mode",
+            $tester->getDisplay()
+        );
+    }
+
     public function testSetProductionSkipCompilation()
     {
         $this->modeMock->expects($this->once())->method('enableProductionModeMinimal');
@@ -84,7 +96,7 @@ class SetModeCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'invalid-mode']);
         $this->assertContains(
-            "Cannot switch into given mode",
+            'The mode can\'t be switched to "invalid-mode".',
             $tester->getDisplay()
         );
     }

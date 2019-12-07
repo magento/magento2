@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,7 +59,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends Abs
         $prices = $this->preparePrices($prices);
         //Order review prices verification
         $message = 'Prices on order review should be equal to defined in dataset.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, array_filter($actualPrices), $message);
+        \PHPUnit\Framework\Assert::assertEquals($prices, array_filter($actualPrices), $message);
 
         $checkoutOnepage->getPaymentBlock()->placeOrder();
         $checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
@@ -70,6 +70,6 @@ abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends Abs
 
         //Frontend order prices verification
         $message = 'Prices on order view page should be equal to defined in dataset.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, array_filter($actualPrices), $message);
+        \PHPUnit\Framework\Assert::assertEquals($prices, array_filter($actualPrices), $message);
     }
 }

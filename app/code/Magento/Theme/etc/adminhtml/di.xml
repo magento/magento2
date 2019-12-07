@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -30,6 +30,14 @@
                 <item name="default_message_identifier" xsi:type="array">
                     <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\EscapeRenderer::CODE</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Design\Config\Validator">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="header" xsi:type="string">email_header_template</item>
+                <item name="footer" xsi:type="string">email_footer_template</item>
             </argument>
         </arguments>
     </type>

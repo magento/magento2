@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
@@ -32,7 +32,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @var string
      */
-    protected $eventPrefix = 'cataloginventory_stock_item';
+    protected $_eventPrefix = 'cataloginventory_stock_item';
 
     const WEBSITE_ID = 'website_id';
 
@@ -43,7 +43,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @var string
      */
-    protected $eventObject = 'item';
+    protected $_eventObject = 'item';
 
     /**
      * Store model manager
@@ -143,7 +143,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
+        $this->_init(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
     }
 
     /**
@@ -206,7 +206,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     public function getQty()
     {
-        return null === $this->_getData(static::QTY) ? null : floatval($this->_getData(static::QTY));
+        return null === $this->_getData(static::QTY) ? null : (float)$this->_getData(static::QTY);
     }
 
     /**
@@ -291,6 +291,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     {
         return (bool) $this->_getData(static::USE_CONFIG_MIN_SALE_QTY);
     }
+
     /**
      * Retrieve Minimum Qty Allowed in Shopping Cart or NULL when there is no limitation
      *
@@ -391,7 +392,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * Retrieve Quantity Increments
      *
-     * @return int|false
+     * @return int|float|false
      */
     public function getQtyIncrements()
     {
@@ -400,7 +401,13 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
                 if ($this->getUseConfigQtyIncrements()) {
                     $this->qtyIncrements = $this->stockConfiguration->getQtyIncrements($this->getStoreId());
                 } else {
-                    $this->qtyIncrements = (int) $this->getData(static::QTY_INCREMENTS);
+                    $this->qtyIncrements = $this->getData(static::QTY_INCREMENTS);
+                }
+
+                if ($this->getIsQtyDecimal()) { // Cast accordingly to decimal qty usage
+                    $this->qtyIncrements = (float) $this->qtyIncrements;
+                } else {
+                    $this->qtyIncrements = (int) $this->qtyIncrements;
                 }
             }
             if ($this->qtyIncrements <= 0) {
@@ -556,6 +563,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @param int $itemId
      * @return $this
@@ -831,5 +839,6 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

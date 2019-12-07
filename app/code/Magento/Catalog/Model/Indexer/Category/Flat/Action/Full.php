@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
+/**
+ * Class for full reindex flat categories
+ */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
     /**
@@ -64,18 +67,22 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
             }
             /** @TODO Do something with chunks */
             $categoriesIdsChunks = array_chunk($categoriesIds[$store->getRootCategoryId()], 500);
+
             foreach ($categoriesIdsChunks as $categoriesIdsChunk) {
                 $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
+                $linkField = $this->categoryMetadata->getLinkField();
+
                 $data = [];
                 foreach ($categories[$store->getRootCategoryId()] as $category) {
-                    if (!isset($attributesData[$category['entity_id']])) {
+                    if (!isset($attributesData[$category[$linkField]])) {
                         continue;
                     }
                     $category['store_id'] = $store->getId();
                     $data[] = $this->prepareValuesToInsert(
-                        array_merge($category, $attributesData[$category['entity_id']])
+                        array_merge($category, $attributesData[$category[$linkField]])
                     );
                 }
+
                 $this->connection->insertMultiple(
                     $this->addTemporaryTableSuffix($this->getMainStoreTable($store->getId())),
                     $data
@@ -88,6 +95,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
     /**
      * Create table and add attributes as fields for specified store.
+     *
      * This routine assumes that DDL operations are allowed
      *
      * @param int $store
@@ -105,6 +113,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
     /**
      * Create category flat tables and add attributes as fields.
+     *
      * Tables are created only if DDL operations are allowed
      *
      * @param \Magento\Store\Model\Store[] $stores if empty, create tables for all stores of the application
@@ -164,6 +173,44 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     }
 
     /**
+     * Retrieve all actual Catalog Product Flat Table names
+     *
+     * @return string[]
+     */
+    private function getActualStoreTablesForCategoryFlat(): array
+    {
+        $actualStoreTables = [];
+        foreach ($this->storeManager->getStores() as $store) {
+            $actualStoreTables[] = sprintf(
+                '%s_store_%s',
+                $this->connection->getTableName('catalog_category_flat'),
+                $store->getId()
+            );
+        }
+
+        return $actualStoreTables;
+    }
+
+    /**
+     * Delete all category flat tables for not existing stores
+     *
+     * @return void
+     */
+    private function deleteAbandonedStoreCategoryFlatTables(): void
+    {
+        $existentTables = $this->connection->getTables(
+            $this->connection->getTableName('catalog_category_flat_store_%')
+        );
+        $actualStoreTables = $this->getActualStoreTablesForCategoryFlat();
+
+        $tablesToDelete = array_diff($existentTables, $actualStoreTables);
+
+        foreach ($tablesToDelete as $table) {
+            $this->connection->dropTable($table);
+        }
+    }
+
+    /**
      * Transactional rebuild flat data from eav
      *
      * @return Full
@@ -178,7 +225,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $stores = $this->storeManager->getStores();
         $this->populateFlatTables($stores);
         $this->switchTables($stores);
-
+        $this->deleteAbandonedStoreCategoryFlatTables();
         $this->allowTableChanges = true;
 
         return $this;

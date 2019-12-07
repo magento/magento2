@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,20 +16,20 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * Test Flow:
  * 1.Log in to backend as admin user.
- * 2.Navigate to Stores>Other Settings>Customer Groups.
+ * 2.Navigate to Customers > Customer Groups.
  * 3.Start to create new Customer Group.
  * 4.Fill in all data according to data set.
  * 5.Click "Save Customer Group" button.
  * 6.Perform all assertions.
  *
- * @group Customer_Groups_(CS)
+ * @group Customer_Groups
  * @ZephyrId MAGETWO-23422
  */
 class CreateCustomerGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
+    const STABLE = 'no';
     /* end tags */
 
     /**

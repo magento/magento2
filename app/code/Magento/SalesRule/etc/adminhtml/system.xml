@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,12 +14,12 @@
             <resource>Magento_SalesRule::config_promo</resource>
             <group id="auto_generated_coupon_codes" translate="label" showInDefault="1" sortOrder="10">
                 <label>Auto Generated Specific Coupon Codes</label>
-                <field id="length" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="length" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Code Length</label>
                     <comment>Excluding prefix, suffix and separators.</comment>
                     <frontend_class>validate-digits</frontend_class>
                 </field>
-                <field id="format" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="format" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Code Format</label>
                     <source_model>Magento\SalesRule\Model\System\Config\Source\Coupon\Format</source_model>
                 </field>

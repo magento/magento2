@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Category;
 
 /**
  * Class View
+ * @api
  * @package Magento\Catalog\Block\Category
+ * @since 100.0.2
  */
 class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -57,7 +59,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     {
         parent::_prepareLayout();
 
-        $this->getLayout()->createBlock('Magento\Catalog\Block\Breadcrumbs');
+        $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
 
         $category = $this->getCurrentCategory();
         if ($category) {
@@ -118,7 +120,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     {
         if (!$this->getData('cms_block_html')) {
             $html = $this->getLayout()->createBlock(
-                'Magento\Cms\Block\Block'
+                \Magento\Cms\Block\Block::class
             )->setBlockId(
                 $this->getCurrentCategory()->getLandingPage()
             )->toHtml();

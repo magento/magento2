@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 
+/**
+ * Class CompositeConfigProvider
+ */
 class CompositeConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -18,13 +21,13 @@ class CompositeConfigProvider implements ConfigProviderInterface
      * @param ConfigProviderInterface[] $configProviders
      */
     public function __construct(
-        array $configProviders
+        array $configProviders = []
     ) {
         $this->configProviders = $configProviders;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {

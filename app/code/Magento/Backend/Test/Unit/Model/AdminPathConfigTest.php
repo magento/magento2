@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Model;
 use Magento\Backend\Model\AdminPathConfig;
 use Magento\Store\Model\Store;
 
-class AdminPathConfigTest extends \PHPUnit_Framework_TestCase
+class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -30,17 +30,22 @@ class AdminPathConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $adminPathConfig;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->coreConfig = $this->getMockForAbstractClass(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             '',
             false
         );
-        $this->backendConfig = $this->getMockForAbstractClass('Magento\Backend\App\ConfigInterface', [], '', false);
+        $this->backendConfig = $this->getMockForAbstractClass(
+            \Magento\Backend\App\ConfigInterface::class,
+            [],
+            '',
+            false
+        );
         $this->url = $this->getMockForAbstractClass(
-            'Magento\Framework\UrlInterface',
+            \Magento\Framework\UrlInterface::class,
             [],
             '',
             false,
@@ -54,7 +59,7 @@ class AdminPathConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrentSecureUrl()
     {
         $request = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [],
             '',
             false,
@@ -71,17 +76,35 @@ class AdminPathConfigTest extends \PHPUnit_Framework_TestCase
      * @param $unsecureBaseUrl
      * @param $useSecureInAdmin
      * @param $secureBaseUrl
+     * @param $useCustomUrl
+     * @param $customUrl
      * @param $expected
      * @dataProvider shouldBeSecureDataProvider
      */
-    public function testShouldBeSecure($unsecureBaseUrl, $useSecureInAdmin, $secureBaseUrl, $expected)
-    {
-        $coreConfigValueMap = [
+    public function testShouldBeSecure(
+        $unsecureBaseUrl,
+        $useSecureInAdmin,
+        $secureBaseUrl,
+        $useCustomUrl,
+        $customUrl,
+        $expected
+    ) {
+        $coreConfigValueMap = $this->returnValueMap([
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default', null, $unsecureBaseUrl],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, 'default', null, $secureBaseUrl],
-        ];
-        $this->coreConfig->expects($this->any())->method('getValue')->will($this->returnValueMap($coreConfigValueMap));
-        $this->backendConfig->expects($this->any())->method('isSetFlag')->willReturn($useSecureInAdmin);
+            ['admin/url/custom', 'default', null, $customUrl],
+        ]);
+        $backendConfigFlagsMap = $this->returnValueMap([
+            [\Magento\Store\Model\Store::XML_PATH_SECURE_IN_ADMINHTML, $useSecureInAdmin],
+            ['admin/url/use_custom', $useCustomUrl],
+        ]);
+        $this->coreConfig->expects($this->atLeast(1))->method('getValue')
+            ->will($coreConfigValueMap);
+        $this->coreConfig->expects($this->atMost(2))->method('getValue')
+            ->will($coreConfigValueMap);
+
+        $this->backendConfig->expects($this->atMost(2))->method('isSetFlag')
+            ->will($backendConfigFlagsMap);
         $this->assertEquals($expected, $this->adminPathConfig->shouldBeSecure(''));
     }
 
@@ -91,13 +114,13 @@ class AdminPathConfigTest extends \PHPUnit_Framework_TestCase
     public function shouldBeSecureDataProvider()
     {
         return [
-            ['http://localhost/', false, 'default', false],
-            ['http://localhost/', true, 'default', false],
-            ['https://localhost/', false, 'default', true],
-            ['https://localhost/', true, 'default', true],
-            ['http://localhost/', false, 'https://localhost/', false],
-            ['http://localhost/', true, 'https://localhost/', true],
-            ['https://localhost/', true, 'https://localhost/', true],
+            ['http://localhost/', false, 'default', false, '', false],
+            ['http://localhost/', true, 'default', false, '', false],
+            ['https://localhost/', false, 'default', false, '', true],
+            ['https://localhost/', true, 'default', false, '', true],
+            ['http://localhost/', false, 'https://localhost/', false, '', false],
+            ['http://localhost/', true, 'https://localhost/', false, '', true],
+            ['https://localhost/', true, 'https://localhost/', false, '', true],
         ];
     }
 

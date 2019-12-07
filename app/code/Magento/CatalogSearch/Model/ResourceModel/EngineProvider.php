@@ -1,27 +1,35 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog Search engine provider
- */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
+/**
+ * Catalog Search engine provider
+ *
+ * @api
+ * @since 100.0.2
+ */
 class EngineProvider
 {
+    /**
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
+     */
     const CONFIG_ENGINE_PATH = 'catalog/search/engine';
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\EngineInterface
+     * @var EngineInterface
      */
     protected $engine;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @deprecated since it is not used anymore
      */
     protected $scopeConfig;
 
@@ -38,18 +46,23 @@ class EngineProvider
     private $enginePool;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $engines
+     * @param EngineResolverInterface $engineResolver
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        array $engines
+        array $engines,
+        EngineResolverInterface $engineResolver
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->objectManager = $objectManager;
         $this->enginePool = $engines;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -60,7 +73,7 @@ class EngineProvider
     public function get()
     {
         if (!$this->engine) {
-            $currentEngine = $this->scopeConfig->getValue(self::CONFIG_ENGINE_PATH, ScopeInterface::SCOPE_STORE);
+            $currentEngine = $this->engineResolver->getCurrentSearchEngine();
             if (!isset($this->enginePool[$currentEngine])) {
                 throw new \LogicException(
                     'There is no such engine: ' . $currentEngine
@@ -69,12 +82,13 @@ class EngineProvider
             $engineClassName = $this->enginePool[$currentEngine];
 
             $engine = $this->objectManager->create($engineClassName);
-            if (false === $engine instanceof \Magento\CatalogSearch\Model\ResourceModel\EngineInterface) {
+            if (false === $engine instanceof EngineInterface) {
                 throw new \LogicException(
-                    $engineClassName . ' doesn\'t implement \Magento\CatalogSearch\Model\ResourceModel\EngineInterface'
+                    $currentEngine . ' doesn\'t implement ' . EngineInterface::class
                 );
             }
 
+            /** @var $engine EngineInterface */
             if ($engine && !$engine->isAvailable()) {
                 throw new \LogicException(
                     'Engine is not available: ' . $currentEngine

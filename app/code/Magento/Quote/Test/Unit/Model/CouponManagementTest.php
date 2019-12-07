@@ -1,17 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\CouponManagement;
+use Magento\Quote\Model\CouponManagement;
 
-class CouponManagementTest extends \PHPUnit_Framework_TestCase
+class CouponManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CouponManagement
@@ -40,32 +38,22 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->quoteMock = $this->getMock(
-            '\Magento\Quote\Model\Quote',
-            [
+        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
                 'getItemsCount',
                 'setCouponCode',
                 'collectTotals',
                 'save',
                 'getShippingAddress',
                 'getCouponCode',
+                'getStoreId',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->quoteAddressMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
-            [
+            ]);
+        $this->quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
                 'setCollectShippingRates',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false);
+            ]);
         $this->couponManagement = new CouponManagement(
             $this->quoteRepositoryMock
         );
@@ -76,7 +64,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 11;
         $couponCode = 'test_coupon_code';
 
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', ['getCouponCode', '__wakeup'], [], '', false);
+        $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getCouponCode', '__wakeup']);
         $quoteMock->expects($this->any())->method('getCouponCode')->will($this->returnValue($couponCode));
 
         $this->quoteRepositoryMock->expects($this->once())
@@ -84,13 +72,12 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
             ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
-
         $this->assertEquals($couponCode, $this->couponManagement->get($cartId));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Cart 33 doesn't contain products
+     * @expectedExceptionMessage The "33" Cart doesn't contain products.
      */
     public function testSetWhenCartDoesNotContainsProducts()
     {
@@ -105,12 +92,15 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not apply coupon code
+     * @expectedExceptionMessage The coupon code couldn't be applied. Verify the coupon code and try again.
      */
     public function testSetWhenCouldNotApplyCoupon()
     {
         $cartId = 33;
         $couponCode = '153a-ABC';
+
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
@@ -119,7 +109,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode);
-        $exceptionMessage = 'Could not apply coupon code';
+        $exceptionMessage = "The coupon code couldn't be applied. Verify the coupon code and try again.";
         $exception = new \Magento\Framework\Exception\CouldNotDeleteException(__($exceptionMessage));
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteRepositoryMock->expects($this->once())
@@ -132,12 +122,15 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Coupon code is not valid
+     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testSetWhenCouponCodeIsInvalid()
     {
         $cartId = 33;
         $couponCode = '153a-ABC';
+
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
@@ -158,6 +151,9 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 33;
         $couponCode = '153a-ABC';
 
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
@@ -174,7 +170,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Cart 65 doesn't contain products
+     * @expectedExceptionMessage The "65" Cart doesn't contain products.
      */
     public function testDeleteWhenCartDoesNotContainsProducts()
     {
@@ -190,7 +186,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Could not delete coupon code
+     * @expectedExceptionMessage The coupon code couldn't be deleted. Verify the coupon code and try again.
      */
     public function testDeleteWhenCouldNotDeleteCoupon()
     {
@@ -204,7 +200,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with('');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
-        $exceptionMessage = 'Could not delete coupon code';
+        $exceptionMessage = "The coupon code couldn't be deleted. Verify the coupon code and try again.";
         $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteRepositoryMock->expects($this->once())
@@ -217,7 +213,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Could not delete coupon code
+     * @expectedExceptionMessage The coupon code couldn't be deleted. Verify the coupon code and try again.
      */
     public function testDeleteWhenCouponIsNotEmpty()
     {

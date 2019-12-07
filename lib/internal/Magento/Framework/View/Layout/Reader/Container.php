@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Reader;
@@ -29,9 +29,7 @@ class Container implements Layout\ReaderInterface
     const CONTAINER_OPT_DISPLAY = 'display';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
-     */
+    /**#@-*/
     protected $helper;
 
     /**
@@ -54,7 +52,7 @@ class Container implements Layout\ReaderInterface
     }
 
     /**
-     * @return string[]
+     * @inheritdoc
      */
     public function getSupportedNodes()
     {
@@ -62,12 +60,7 @@ class Container implements Layout\ReaderInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param Context $readerContext
-     * @param Layout\Element $currentElement
-     * @param Layout\Element $parentElement
-     * @return $this
+     * @inheritdoc
      */
     public function interpret(Context $readerContext, Layout\Element $currentElement)
     {
@@ -141,11 +134,12 @@ class Container implements Layout\ReaderInterface
     ) {
         $containerName = $currentElement->getAttribute('name');
         $containerRemove = filter_var($currentElement->getAttribute('remove'), FILTER_VALIDATE_BOOLEAN);
-
         if ($containerRemove) {
             $scheduledStructure->setElementToRemoveList($containerName);
-        } else {
-            $this->mergeContainerAttributes($scheduledStructure, $currentElement);
+            return;
+        } elseif ($currentElement->getAttribute('remove')) {
+            $scheduledStructure->unsetElementFromListToRemove($containerName);
         }
+        $this->mergeContainerAttributes($scheduledStructure, $currentElement);
     }
 }

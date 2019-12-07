@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,14 +14,20 @@ namespace Magento\Tax\Model;
 use Magento\Store\Model\Store;
 
 /**
+ * Class to set flags for tax display setting
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Config
 {
-    // tax notifications
+    /**
+     * Tax notifications
+     */
     const XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT = 'tax/notification/ignore_discount';
 
     const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY = 'tax/notification/ignore_price_display';
+
+    const XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT = 'tax/notification/ignore_apply_discount';
 
     const XML_PATH_TAX_NOTIFICATION_INFO_URL = 'tax/notification/info_url';
 
@@ -68,6 +74,11 @@ class Config
 
     const XML_PATH_DISPLAY_CART_SHIPPING = 'tax/cart_display/shipping';
 
+    /**
+     * Tax cart display discount
+     *
+     * @deprecated
+     */
     const XML_PATH_DISPLAY_CART_DISCOUNT = 'tax/cart_display/discount';
 
     const XML_PATH_DISPLAY_CART_GRANDTOTAL = 'tax/cart_display/grandtotal';
@@ -85,6 +96,11 @@ class Config
 
     const XML_PATH_DISPLAY_SALES_SHIPPING = 'tax/sales_display/shipping';
 
+    /**
+     * Tax sales display discount
+     *
+     * @deprecated
+     */
     const XML_PATH_DISPLAY_SALES_DISCOUNT = 'tax/sales_display/discount';
 
     const XML_PATH_DISPLAY_SALES_GRANDTOTAL = 'tax/sales_display/grandtotal';
@@ -227,6 +243,7 @@ class Config
 
     /**
      * Get taxes/discounts calculation sequence.
+     *
      * This sequence depends on "Apply Customer Tax" and "Apply Discount On Prices" configuration options.
      *
      * @param   null|int|string|Store $store
@@ -349,6 +366,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for cart prices including tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -362,6 +381,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for cart prices excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -375,6 +396,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for cart prices both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -388,6 +411,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for cart subtotal including tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -401,6 +426,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for cart subtotal excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -414,6 +441,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for cart subtotal both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -427,6 +456,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for cart shipping including tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -440,6 +471,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for cart shipping excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -453,6 +486,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for shipping both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -466,8 +501,11 @@ class Config
     }
 
     /**
+     * Return the flag for display cart discount for including tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -479,8 +517,11 @@ class Config
     }
 
     /**
+     * Return the flag for display cart discount for excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -492,8 +533,11 @@ class Config
     }
 
     /**
+     * Return the flag for display cart discount for both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -505,6 +549,8 @@ class Config
     }
 
     /**
+     * Return the flag for display cart tax with grand total for both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -518,6 +564,8 @@ class Config
     }
 
     /**
+     * Return the flag for display cart full summary
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -531,6 +579,8 @@ class Config
     }
 
     /**
+     * Return the flag for display cart zero tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -544,6 +594,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales prices for including tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -557,6 +609,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales prices for excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -570,6 +624,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales prices for both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -583,6 +639,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales subtotal for including tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -596,6 +654,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales subtotal for excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -609,6 +669,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales subtotal for both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -622,6 +684,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for shipping including tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -635,6 +699,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for shipping excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -648,6 +714,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales for shipping both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -661,8 +729,11 @@ class Config
     }
 
     /**
+     * Return the flag for display sales discount for including tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -674,8 +745,11 @@ class Config
     }
 
     /**
+     * Return the flag for display sales discount for excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountExclTax($store = null)
     {
@@ -687,8 +761,11 @@ class Config
     }
 
     /**
+     * Return the flag for display sales discount for both including and excluding tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountBoth($store = null)
     {
@@ -700,6 +777,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales tax with grand total
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -713,6 +792,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales full summary
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -726,6 +807,8 @@ class Config
     }
 
     /**
+     * Return the flag for display sales zero tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -748,6 +831,25 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Check if admin notification related to misconfiguration of "Apply Discount On Prices" should be ignored.
+     *
+     * Warning is displayed in case when "Catalog Prices" = "Excluding Tax"
+     * AND "Apply Discount On Prices" = "Including Tax"
+     * AND "Apply Customer Tax" = "After Discount"
+     *
+     * @param null|string|Store $store
+     * @return bool
+     */
+    public function isWrongApplyDiscountSettingIgnored($store = null)
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -800,6 +902,7 @@ class Config
 
     /**
      * Check if necessary do product price conversion
+     *
      * If it necessary will be returned conversion type (minus or plus)
      *
      * @param null|int|string|Store $store
@@ -816,7 +919,7 @@ class Config
                 case self::DISPLAY_TYPE_BOTH:
                     return self::PRICE_CONVERSION_MINUS;
                 case self::DISPLAY_TYPE_INCLUDING_TAX:
-                    $res = true;
+                    $res = $this->displayCartPricesInclTax($store);
                     break;
                 default:
                     break;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <xs:element name="config">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="event" type="eventDeclaration" minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="event" type="eventDeclaration" minOccurs="0" maxOccurs="unbounded">
                     <xs:unique name="uniqueObserverName">
                         <xs:annotation>
                             <xs:documentation>
@@ -60,11 +60,11 @@
     <xs:simpleType name="eventName">
         <xs:annotation>
             <xs:documentation>
-                Event name can contain only [a-zA-Z_].
+                Event name can contain only [a-zA-Z0-9_].
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z_]+" />
+            <xs:pattern value="[a-zA-Z0-9_]+" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

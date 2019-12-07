@@ -1,27 +1,32 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var $relatedProduct \Magento\Catalog\Model\Product */
-$relatedProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$relatedProduct->load(1);
-if ($relatedProduct->getId()) {
-    $relatedProduct->delete();
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
+try {
+    $firstProduct = $productRepository->get('simple', false, null, true);
+    $productRepository->delete($firstProduct);
+} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+    //Product already removed
 }
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load(2);
-if ($product->getId()) {
-    $product->delete();
+try {
+    $secondProduct = $productRepository->get('simple_with_cross', false, null, true);
+    $productRepository->delete($secondProduct);
+} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+    //Product already removed
 }
 
 $registry->unregister('isSecureArea');

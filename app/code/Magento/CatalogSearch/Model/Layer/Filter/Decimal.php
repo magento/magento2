@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
@@ -12,6 +14,9 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
  */
 class Decimal extends AbstractFilter
 {
+    /** Decimal delta for filter  */
+    private const DECIMAL_DELTA = 0.001;
+
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
@@ -70,11 +75,17 @@ class Decimal extends AbstractFilter
 
         list($from, $to) = explode('-', $filter);
 
+        // When the range is 10-20 we only need to get products that are in the 10-19.99 range.
+        $toValue = $to;
+        if (!empty($toValue) && $from !== $toValue) {
+            $toValue -= self::DECIMAL_DELTA;
+        }
+
         $this->getLayer()
             ->getProductCollection()
             ->addFieldToFilter(
                 $this->getAttributeModel()->getAttributeCode(),
-                ['from' => $from, 'to' => $to]
+                ['from' => $from, 'to' => $toValue]
             );
 
         $this->getLayer()->getState()->addFilter(
@@ -113,10 +124,7 @@ class Decimal extends AbstractFilter
             if ($to == '*') {
                 $to = '';
             }
-            $label = $this->renderRangeLabel(
-                empty($from) ? 0 : $from,
-                empty($to) ? $to : $to
-            );
+            $label = $this->renderRangeLabel(empty($from) ? 0 : $from, $to);
             $value = $from . '-' . $to;
 
             $data[] = [

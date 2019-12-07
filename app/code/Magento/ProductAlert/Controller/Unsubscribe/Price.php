@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -12,7 +14,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class Price extends UnsubscribeController
+/**
+ * Class Price
+ */
+class Price extends UnsubscribeController implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -34,6 +39,8 @@ class Price extends UnsubscribeController
     }
 
     /**
+     * Unsubscribe action
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
@@ -50,14 +57,19 @@ class Price extends UnsubscribeController
             /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productRepository->getById($productId);
             if (!$product->isVisibleInCatalog()) {
-                throw new NoSuchEntityException();
+                $this->messageManager->addErrorMessage(
+                    __("The product wasn't found. Verify the product and try again.")
+                );
+                $resultRedirect->setPath('customer/account/');
+                return $resultRedirect;
             }
+
             /** @var \Magento\ProductAlert\Model\Price $model */
-            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Price')
+            $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Price::class)
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
                 ->setWebsiteId(
-                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                         ->getStore()
                         ->getWebsiteId()
                 )
@@ -66,13 +78,16 @@ class Price extends UnsubscribeController
                 $model->delete();
             }
 
-            $this->messageManager->addSuccess(__('You deleted the alert subscription.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the alert subscription.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('We can\'t find the product.'));
+            $this->messageManager->addErrorMessage(__("The product wasn't found. Verify the product and try again."));
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __("The alert subscription couldn't update at this time. Please try again later.")
+            );
         }
         $resultRedirect->setUrl($product->getProductUrl());
         return $resultRedirect;

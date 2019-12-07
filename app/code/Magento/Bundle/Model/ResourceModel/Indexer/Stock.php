@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
+
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Stock Status Indexer Resource Model
@@ -13,16 +16,52 @@ namespace Magento\Bundle\Model\ResourceModel\Indexer;
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return $this
+     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
      */
-    public function reindexEntity($entityIds)
-    {
-        $this->_updateIndex($entityIds);
+    private $activeTableSwitcher;
 
-        return $this;
+    /**
+     * @var \Magento\Bundle\Model\ResourceModel\Indexer\StockStatusSelectBuilder
+     */
+    private $stockStatusSelectBuilder;
+
+    /**
+     * @var \Magento\Bundle\Model\ResourceModel\Indexer\BundleOptionStockDataSelectBuilder
+     */
+    private $bundleOptionStockDataSelectBuilder;
+
+    /**
+     * Class constructor
+     *
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param null $connectionName
+     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     * @param StockStatusSelectBuilder|null $stockStatusSelectBuilder
+     * @param BundleOptionStockDataSelectBuilder|null $bundleOptionStockDataSelectBuilder
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $connectionName = null,
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
+        StockStatusSelectBuilder $stockStatusSelectBuilder = null,
+        BundleOptionStockDataSelectBuilder $bundleOptionStockDataSelectBuilder = null
+    ) {
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
+
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class);
+
+        $this->stockStatusSelectBuilder = $stockStatusSelectBuilder ?: ObjectManager::getInstance()
+            ->get(StockStatusSelectBuilder::class);
+
+        $this->bundleOptionStockDataSelectBuilder = $bundleOptionStockDataSelectBuilder ?: ObjectManager::getInstance()
+            ->get(BundleOptionStockDataSelectBuilder::class);
     }
 
     /**
@@ -45,45 +84,23 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     protected function _prepareBundleOptionStockData($entityIds = null, $usePrimaryTable = false)
     {
         $this->_cleanBundleOptionStockData();
-        $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
         $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            ['bo' => $this->getTable('catalog_product_bundle_option')],
-            ['parent_id']
-        );
-        $this->_addWebsiteJoinToSelect($select, false);
+        $table = $this->getActionType() === Full::ACTION_TYPE
+            ? $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable())
+            : $this->getMainTable();
+        $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
+        $select = $this->bundleOptionStockDataSelectBuilder->buildSelect($idxTable);
+
         $status = new \Zend_Db_Expr(
-            'MAX(' . $connection->getCheckSql('e.required_options = 0', 'i.stock_status', '0') . ')'
-        );
-        $select->columns(
-            'website_id',
-            'cw'
-        )->join(
-            ['cis' => $this->getTable('cataloginventory_stock')],
-            '',
-            ['stock_id']
-        )->joinLeft(
-            ['bs' => $this->getTable('catalog_product_bundle_selection')],
-            'bs.option_id = bo.option_id',
-            []
-        )->joinLeft(
-            ['i' => $idxTable],
-            'i.product_id = bs.product_id AND i.website_id = cw.website_id AND i.stock_id = cis.stock_id',
-            []
-        )->joinLeft(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = bs.product_id',
-            []
-        )->where(
-            'cw.website_id != 0'
-        )->group(
-            ['bo.parent_id', 'cw.website_id', 'cis.stock_id', 'bo.option_id']
-        )->columns(
-            ['option_id' => 'bo.option_id', 'status' => $status]
+            'MAX('
+            . $connection->getCheckSql('e.required_options = 0', 'i.stock_status', '0')
+            . ')'
         );
 
+        $select->columns(['status' => $status]);
+
         if ($entityIds !== null) {
-            $select->where('bo.parent_id IN(?)', $entityIds);
+            $select->where('product.entity_id IN(?)', $entityIds);
         }
 
         // clone select for bundle product without required bundle options
@@ -110,67 +127,19 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
         $this->_prepareBundleOptionStockData($entityIds, $usePrimaryTable);
-
         $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            ['e' => $this->getTable('catalog_product_entity')],
-            ['entity_id']
-        );
-        $this->_addWebsiteJoinToSelect($select, true);
-        $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $select->columns(
-            'cw.website_id'
-        )->join(
-            ['cis' => $this->getTable('cataloginventory_stock')],
-            '',
-            ['stock_id']
-        )->joinLeft(
-            ['cisi' => $this->getTable('cataloginventory_stock_item')],
-            'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
-            []
-        )->joinLeft(
-            ['o' => $this->_getBundleOptionTable()],
-            'o.entity_id = e.entity_id AND o.website_id = cw.website_id AND o.stock_id = cis.stock_id',
-            []
-        )->columns(
-            ['qty' => new \Zend_Db_Expr('0')]
-        )->where(
-            'cw.website_id != 0'
-        )->where(
-            'e.type_id = ?',
-            $this->getTypeId()
-        )->group(
-            ['e.entity_id', 'cw.website_id', 'cis.stock_id']
-        );
 
-        // add limitation of status
-        $condition = $connection->quoteInto(
-            '=?',
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-        );
-        $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
+        $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
+        $select = $this->stockStatusSelectBuilder->buildSelect($select);
 
-        if ($this->_isManageStock()) {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                '1',
-                'cisi.is_in_stock'
-            );
-        } else {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock',
-                '1'
-            );
-        }
+        $statusNotNullExpr = $connection->getCheckSql('o.stock_status IS NOT NULL', 'o.stock_status', '0');
+        $statusExpr = $this->getStatusExpression($connection);
 
         $select->columns(
             [
                 'status' => $connection->getLeastSql(
                     [
-                        new \Zend_Db_Expr(
-                            'MIN(' . $connection->getCheckSql('o.stock_status IS NOT NULL', 'o.stock_status', '0') . ')'
-                        ),
+                        new \Zend_Db_Expr('MIN(' . $statusNotNullExpr . ')'),
                         new \Zend_Db_Expr('MIN(' . $statusExpr . ')'),
                     ]
                 ),

@@ -1,11 +1,9 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Paypal\Test\Unit\Observer;
 
@@ -14,7 +12,7 @@ use Magento\Framework\DataObject;
 /**
  * Class RestrictAdminBillingAgreementUsageObserverTest
  */
-class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_TestCase
+class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver
@@ -43,18 +41,21 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
         $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->_authorization = $this->getMockForAbstractClass('Magento\Framework\AuthorizationInterface');
+        $this->_authorization = $this->getMockForAbstractClass(\Magento\Framework\AuthorizationInterface::class);
 
         $this->_model = new \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver($this->_authorization);
     }
 
+    /**
+     * @return array
+     */
     public function restrictAdminBillingAgreementUsageDataProvider()
     {
         return [
             [new \stdClass(), false, true],
             [
                 $this->getMockForAbstractClass(
-                    'Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement',
+                    \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement::class,
                     [],
                     '',
                     false
@@ -64,7 +65,7 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
             ],
             [
                 $this->getMockForAbstractClass(
-                    'Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement',
+                    \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement::class,
                     [],
                     '',
                     false
@@ -87,12 +88,12 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
         $this->_authorization->expects(
             $this->any()
         )->method(
-                'isAllowed'
-            )->with(
-                'Magento_Paypal::use'
-            )->will(
-                $this->returnValue($isAllowed)
-            );
+            'isAllowed'
+        )->with(
+            'Magento_Paypal::use'
+        )->will(
+            $this->returnValue($isAllowed)
+        );
         $result = new DataObject();
         $result->setData('is_available', true);
         $this->_event->setResult($result);

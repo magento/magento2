@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
 use Magento\Framework\View\Asset\PreProcessor\Minify;
+use Magento\Framework\View\Asset\PreProcessor\MinificationConfigProvider;
 
 /**
  * Unit test for Magento\Framework\View\Asset\PreProcessor\Minify
  */
-class MinifyTest extends \PHPUnit_Framework_TestCase
+class MinifyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\PreProcessor\Minify
@@ -29,21 +30,30 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
     protected $minificationMock;
 
     /**
+     * @var MinificationConfigProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $minificationConfigMock;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp()
     {
-        $this->adapterMock = $this->getMockBuilder('Magento\Framework\Code\Minifier\AdapterInterface')
+        $this->adapterMock = $this->getMockBuilder(\Magento\Framework\Code\Minifier\AdapterInterface::class)
             ->setMethods(['minify'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->minificationConfigMock = $this->getMockBuilder(MinificationConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->minify = new Minify(
             $this->adapterMock,
-            $this->minificationMock
+            $this->minificationMock,
+            $this->minificationConfigMock
         );
     }
 
@@ -58,7 +68,7 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($targetPath, $originalPath, $minifyCalls, $setContentCalls, $isEnabled)
     {
-        $chainMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
+        $chainMock = $this->getMockBuilder(\Magento\Framework\View\Asset\PreProcessor\Chain::class)
             ->disableOriginalConstructor()
             ->getMock();
         $chainMock
@@ -84,10 +94,10 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
             ->with('original content')
             ->willReturn('minified content');
 
-        $this->minificationMock
+        $this->minificationConfigMock
             ->expects($this->any())
-            ->method('isEnabled')
-            ->willReturnMap([['css', $isEnabled]]);
+            ->method('isMinificationEnabled')
+            ->willReturnMap([[$targetPath, $isEnabled]]);
 
         $this->minificationMock
             ->expects($this->any())

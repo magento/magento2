@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\ProductAlert\Model\ResourceModel;
 
 /**
  * Product alert for changed price resource model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
 {
@@ -50,7 +51,7 @@ class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (is_null($object->getId()) && $object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()
+        if ($object->getId() === null && $object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()
         ) {
             if ($row = $this->_getAlertRow($object)) {
                 $price = $object->getPrice();
@@ -61,7 +62,7 @@ class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
                 $object->setStatus(0);
             }
         }
-        if (is_null($object->getAddDate())) {
+        if ($object->getAddDate() === null) {
             $object->setAddDate($this->_dateFactory->create()->gmtDate());
         }
         return parent::_beforeSave($object);

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminShipThePendingOrderActionGroup">
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="waitForShipTab"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipButton"/>
+        <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+        <scrollTo  selector="{{AdminShipmentMainActionsSection.submitShipment}}"  stepKey="scrollToSubmitShipmentButton"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickOnSubmitShipmentButton"/>
+        <waitForPageLoad stepKey="waitToProcessShippingPageToLoad"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
+    </actionGroup>
+</actionGroups>

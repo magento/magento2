@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\EncryptionKey\Model\ResourceModel\Key;
@@ -13,6 +13,11 @@ use Magento\Framework\Config\File\ConfigFilePool;
 /**
  * Encryption key changer resource model
  * The operation must be done in one transaction
+ *
+ * @api
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -45,11 +50,20 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $writer;
 
     /**
+     * Random
+     *
+     * @var \Magento\Framework\Math\Random
+     * @since 100.0.4
+     */
+    protected $random;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
+     * @param \Magento\Framework\Math\Random $random
      * @param string $connectionName
      */
     public function __construct(
@@ -58,6 +72,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Config\Model\Config\Structure $structure,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\DeploymentConfig\Writer $writer,
+        \Magento\Framework\Math\Random $random,
         $connectionName = null
     ) {
         $this->encryptor = clone $encryptor;
@@ -65,6 +80,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::CONFIG);
         $this->structure = $structure;
         $this->writer = $writer;
+        $this->random = $random;
     }
 
     /**
@@ -92,7 +108,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (null === $key) {
-            $key = md5(time());
+            $key = md5($this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE));
         }
         $this->encryptor->setNewKey($key);
 
@@ -127,7 +143,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $configStructure = $this->structure;
         $paths = $configStructure->getFieldPathsByAttribute(
             'backend_model',
-            'Magento\Config\Model\Config\Backend\Encrypted'
+            \Magento\Config\Model\Config\Backend\Encrypted::class
         );
 
         // walk through found data and re-encrypt it

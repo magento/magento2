@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
@@ -51,7 +51,6 @@ class Bookmark extends AbstractComponent
         $this->bookmarkManagement = $bookmarkManagement;
     }
 
-
     /**
      * Get component name
      *
@@ -83,11 +82,11 @@ class Bookmark extends AbstractComponent
             }
         }
 
-        $this->setData('config', array_replace_recursive($config, $this->getConfiguration($this)));
+        $this->setData('config', array_replace_recursive($config, $this->getConfiguration()));
 
         parent::prepare();
 
-        $jsConfig = $this->getConfiguration($this);
+        $jsConfig = $this->getConfiguration();
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 }

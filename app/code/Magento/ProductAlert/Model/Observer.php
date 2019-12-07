@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model;
@@ -114,6 +114,11 @@ class Observer
     protected $inlineTranslation;
 
     /**
+     * @var ProductSalability
+     */
+    protected $productSalability;
+
+    /**
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -125,6 +130,7 @@ class Observer
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\ProductAlert\Model\EmailFactory $emailFactory
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param ProductSalability|null $productSalability
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -138,7 +144,8 @@ class Observer
         \Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory $stockColFactory,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\ProductAlert\Model\EmailFactory $emailFactory,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        ProductSalability $productSalability = null
     ) {
         $this->_catalogData = $catalogData;
         $this->_scopeConfig = $scopeConfig;
@@ -151,12 +158,15 @@ class Observer
         $this->_transportBuilder = $transportBuilder;
         $this->_emailFactory = $emailFactory;
         $this->inlineTranslation = $inlineTranslation;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->productSalability = $productSalability ?: $objectManager->get(ProductSalability::class);
     }
 
     /**
      * Retrieve website collection array
      *
      * @return array
+     * @throws \Exception
      */
     protected function _getWebsites()
     {
@@ -165,6 +175,7 @@ class Observer
                 $this->_websites = $this->_storeManager->getWebsites();
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
+                throw $e;
             }
         }
         return $this->_websites;
@@ -175,6 +186,7 @@ class Observer
      *
      * @param \Magento\ProductAlert\Model\Email $email
      * @return $this
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -183,7 +195,6 @@ class Observer
         $email->setType('price');
         foreach ($this->_getWebsites() as $website) {
             /* @var $website \Magento\Store\Model\Website */
-
             if (!$website->getDefaultGroup() || !$website->getDefaultGroup()->getDefaultStore()) {
                 continue;
             }
@@ -201,12 +212,13 @@ class Observer
                 )->setCustomerOrder();
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
-                return $this;
+                throw $e;
             }
 
             $previousCustomer = null;
             $email->setWebsite($website);
             foreach ($collection as $alert) {
+                $this->setAlertStoreId($alert, $email);
                 try {
                     if (!$previousCustomer || $previousCustomer->getId() != $alert->getCustomerId()) {
                         $customer = $this->customerRepository->getById($alert->getCustomerId());
@@ -244,6 +256,7 @@ class Observer
                     }
                 } catch (\Exception $e) {
                     $this->_errors[] = $e->getMessage();
+                    throw $e;
                 }
             }
             if ($previousCustomer) {
@@ -251,6 +264,7 @@ class Observer
                     $email->send();
                 } catch (\Exception $e) {
                     $this->_errors[] = $e->getMessage();
+                    throw $e;
                 }
             }
         }
@@ -262,6 +276,7 @@ class Observer
      *
      * @param \Magento\ProductAlert\Model\Email $email
      * @return $this
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -291,12 +306,13 @@ class Observer
                 )->setCustomerOrder();
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
-                return $this;
+                throw $e;
             }
 
             $previousCustomer = null;
             $email->setWebsite($website);
             foreach ($collection as $alert) {
+                $this->setAlertStoreId($alert, $email);
                 try {
                     if (!$previousCustomer || $previousCustomer->getId() != $alert->getCustomerId()) {
                         $customer = $this->customerRepository->getById($alert->getCustomerId());
@@ -321,7 +337,7 @@ class Observer
 
                     $product->setCustomerGroupId($customer->getGroupId());
 
-                    if ($product->isSalable()) {
+                    if ($this->productSalability->isSalable($product, $website)) {
                         $email->addStockProduct($product);
 
                         $alert->setSendDate($this->_dateFactory->create()->gmtDate());
@@ -331,6 +347,7 @@ class Observer
                     }
                 } catch (\Exception $e) {
                     $this->_errors[] = $e->getMessage();
+                    throw $e;
                 }
             }
 
@@ -339,6 +356,7 @@ class Observer
                     $email->send();
                 } catch (\Exception $e) {
                     $this->_errors[] = $e->getMessage();
+                    throw $e;
                 }
             }
         }
@@ -408,6 +426,23 @@ class Observer
         $this->_processPrice($email);
         $this->_processStock($email);
         $this->_sendErrorEmail();
+
+        return $this;
+    }
+
+    /**
+     * Set alert store id.
+     *
+     * @param \Magento\ProductAlert\Model\Price|\Magento\ProductAlert\Model\Stock $alert
+     * @param Email $email
+     * @return Observer
+     */
+    private function setAlertStoreId($alert, \Magento\ProductAlert\Model\Email $email) : Observer
+    {
+        $alertStoreId = $alert->getStoreId();
+        if ($alertStoreId) {
+            $email->setStoreId((int)$alertStoreId);
+        }
 
         return $this;
     }

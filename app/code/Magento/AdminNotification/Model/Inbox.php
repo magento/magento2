@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model;
@@ -12,8 +12,6 @@ use Magento\AdminNotification\Model\InboxInterface;
 /**
  * AdminNotification Inbox model
  *
- * @method \Magento\AdminNotification\Model\ResourceModel\Inbox _getResource()
- * @method \Magento\AdminNotification\Model\ResourceModel\Inbox getResource()
  * @method int getSeverity()
  * @method \Magento\AdminNotification\Model\Inbox setSeverity(int $value)
  * @method string getDateAdded()
@@ -29,7 +27,8 @@ use Magento\AdminNotification\Model\InboxInterface;
  * @method int getIsRemove()
  * @method \Magento\AdminNotification\Model\Inbox setIsRemove(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierInterface, InboxInterface
 {
@@ -38,7 +37,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      */
     protected function _construct()
     {
-        $this->_init('Magento\AdminNotification\Model\ResourceModel\Inbox');
+        $this->_init(\Magento\AdminNotification\Model\ResourceModel\Inbox::class);
     }
 
     /**

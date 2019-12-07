@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Helper;
@@ -15,6 +15,7 @@ class Customer extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/customers';
     const SERVICE_NAME = 'customerAccountManagementV1';
+    const CUSTOMER_REPOSITORY_SERVICE_NAME = "customerCustomerRepositoryV1";
     const SERVICE_VERSION = 'V1';
 
     const CONFIRMATION = 'a4fg7h893e39d';
@@ -45,10 +46,12 @@ class Customer extends WebapiAbstract
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
      */
     private $customerAddressFactory;
+
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
     private $customerDataFactory;
+
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
@@ -62,23 +65,27 @@ class Customer extends WebapiAbstract
         parent::__construct($name, $data, $dataName);
 
         $this->customerAddressFactory = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\AddressInterfaceFactory'
+            \Magento\Customer\Api\Data\AddressInterfaceFactory::class
         );
 
         $this->customerDataFactory = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory'
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
         );
 
         $this->dataObjectHelper = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\DataObjectHelper'
+            \Magento\Framework\Api\DataObjectHelper::class
         );
 
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Reflection\DataObjectProcessor'
+            \Magento\Framework\Reflection\DataObjectProcessor::class
         );
     }
 
-    public function createSampleCustomer()
+    /**
+     * @param array $additional
+     * @return array|bool|float|int|string
+     */
+    public function createSampleCustomer(array $additional = [])
     {
         $serviceInfo = [
             'rest' => [
@@ -91,9 +98,10 @@ class Customer extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'CreateAccount',
             ],
         ];
+
         $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
-            $this->createSampleCustomerDataObject(),
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            $this->createSampleCustomerDataObject($additional),
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $requestData = ['customer' => $customerDataArray, 'password' => self::PASSWORD];
         $customerData = $this->_webApiCall($serviceInfo, $requestData);
@@ -101,56 +109,41 @@ class Customer extends WebapiAbstract
     }
 
     /**
-     * Create customer using setters.
+     * Update Existing customer
      *
-     * @return CustomerInterface
+     * @param array $additional
+     * @param int $customerId
+     * @return array|bool|float|int|string
      */
-    public function createSampleCustomerDataObject()
+    public function updateSampleCustomer($customerId, array $additional = [])
     {
-        $customerAddress1 = $this->customerAddressFactory->create();
-        $customerAddress1->setCountryId('US');
-        $customerAddress1->setIsDefaultBilling(true);
-        $customerAddress1->setIsDefaultShipping(true);
-        $customerAddress1->setPostcode('75477');
-        $customerAddress1->setRegion(
-            Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\RegionInterfaceFactory')
-                ->create()
-                ->setRegionCode(self::ADDRESS_REGION_CODE1)
-                ->setRegion('Alabama')
-                ->setRegionId(1)
-        );
-        $customerAddress1->setStreet(['Green str, 67']);
-        $customerAddress1->setTelephone('3468676');
-        $customerAddress1->setCity(self::ADDRESS_CITY1);
-        $customerAddress1->setFirstname('John');
-        $customerAddress1->setLastname('Smith');
-        $address1 = $this->dataObjectProcessor->buildOutputDataArray(
-            $customerAddress1,
-            'Magento\Customer\Api\Data\AddressInterface'
-        );
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/" . $customerId,
+                'httpMethod' => RestRequest::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::CUSTOMER_REPOSITORY_SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::CUSTOMER_REPOSITORY_SERVICE_NAME . 'save',
+            ],
+        ];
 
-        $customerAddress2 = $this->customerAddressFactory->create();
-        $customerAddress2->setCountryId('US');
-        $customerAddress2->setIsDefaultBilling(false);
-        $customerAddress2->setIsDefaultShipping(false);
-        $customerAddress2->setPostcode('47676');
-        $customerAddress2->setRegion(
-            Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\RegionInterfaceFactory')
-                ->create()
-                ->setRegionCode(self::ADDRESS_REGION_CODE2)
-                ->setRegion('Alabama')
-                ->setRegionId(1)
+        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->createSampleCustomerDataObject($additional),
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $customerAddress2->setStreet(['Black str, 48', 'Building D']);
-        $customerAddress2->setTelephone('3234676');
-        $customerAddress2->setCity(self::ADDRESS_CITY2);
-        $customerAddress2->setFirstname('John');
-        $customerAddress2->setLastname('Smith');
-        $address2 = $this->dataObjectProcessor->buildOutputDataArray(
-            $customerAddress2,
-            'Magento\Customer\Api\Data\AddressInterface'
-        );
+        $requestData = ['customer' => $customerDataArray, 'password' => self::PASSWORD];
+        $customerData = $this->_webApiCall($serviceInfo, $requestData);
+        return $customerData;
+    }
 
+    /**
+     * @param array $additional
+     * @return array
+     */
+    private function getCustomerSampleData(array $additional = [])
+    {
         $customerData = [
             CustomerData::FIRSTNAME => self::FIRSTNAME,
             CustomerData::LASTNAME => self::LASTNAME,
@@ -167,7 +160,6 @@ class Customer extends WebapiAbstract
             CustomerData::SUFFIX => self::SUFFIX,
             CustomerData::TAXVAT => self::TAXVAT,
             CustomerData::WEBSITE_ID => self::WEBSITE_ID,
-            CustomerData::KEY_ADDRESSES => [$address1, $address2],
             'custom_attributes' => [
                 [
                     'attribute_code' => 'disable_auto_group_change',
@@ -175,11 +167,70 @@ class Customer extends WebapiAbstract
                 ],
             ],
         ];
+
+        return array_merge($customerData, $additional);
+    }
+
+    /**
+     * Create customer using setters.
+     *
+     * @param array $additional
+     * @return CustomerInterface
+     */
+    public function createSampleCustomerDataObject(array $additional = [])
+    {
+        $customerAddress1 = $this->customerAddressFactory->create();
+        $customerAddress1->setCountryId('US');
+        $customerAddress1->setIsDefaultBilling(true);
+        $customerAddress1->setIsDefaultShipping(true);
+        $customerAddress1->setPostcode('75477');
+        $customerAddress1->setRegion(
+            Bootstrap::getObjectManager()->create(\Magento\Customer\Api\Data\RegionInterfaceFactory::class)
+                ->create()
+                ->setRegionCode(self::ADDRESS_REGION_CODE1)
+                ->setRegion('Alabama')
+                ->setRegionId(1)
+        );
+        $customerAddress1->setStreet(['Green str, 67']);
+        $customerAddress1->setTelephone('3468676');
+        $customerAddress1->setCity(self::ADDRESS_CITY1);
+        $customerAddress1->setFirstname('John');
+        $customerAddress1->setLastname('Smith');
+        $address1 = $this->dataObjectProcessor->buildOutputDataArray(
+            $customerAddress1,
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
+
+        $customerAddress2 = $this->customerAddressFactory->create();
+        $customerAddress2->setCountryId('US');
+        $customerAddress2->setIsDefaultBilling(false);
+        $customerAddress2->setIsDefaultShipping(false);
+        $customerAddress2->setPostcode('47676');
+        $customerAddress2->setRegion(
+            Bootstrap::getObjectManager()->create(\Magento\Customer\Api\Data\RegionInterfaceFactory::class)
+                ->create()
+                ->setRegionCode(self::ADDRESS_REGION_CODE2)
+                ->setRegion('Alabama')
+                ->setRegionId(1)
+        );
+        $customerAddress2->setStreet(['Black str, 48', 'Building D']);
+        $customerAddress2->setTelephone('3234676');
+        $customerAddress2->setCity(self::ADDRESS_CITY2);
+        $customerAddress2->setFirstname('John');
+        $customerAddress2->setLastname('Smith');
+        $address2 = $this->dataObjectProcessor->buildOutputDataArray(
+            $customerAddress2,
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
+
+        $customerData = $this->getCustomerSampleData(
+            array_merge([CustomerData::KEY_ADDRESSES => [$address1, $address2]], $additional)
+        );
         $customer = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customer,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         return $customer;
     }

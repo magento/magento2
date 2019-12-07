@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Pricing\Price;
 
@@ -16,9 +14,11 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInterface;
 
 /**
- * Tire prices model
+ * @api
+ * @since 100.0.2
  */
 class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {
@@ -29,6 +29,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @var Session
+     * @deprecated 101.1.0
      */
     protected $customerSession;
 
@@ -57,12 +58,18 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected $groupManagement;
 
     /**
+     * @var CustomerGroupRetrieverInterface
+     */
+    private $customerGroupRetriever;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Session $customerSession
      * @param GroupManagementInterface $groupManagement
+     * @param CustomerGroupRetrieverInterface|null $customerGroupRetriever
      */
     public function __construct(
         Product $saleableItem,
@@ -70,16 +77,19 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        CustomerGroupRetrieverInterface $customerGroupRetriever = null
     ) {
-        $quantity = $quantity ?: 1;
+        $quantity = (float)$quantity ? $quantity : 1;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->customerSession = $customerSession;
         $this->groupManagement = $groupManagement;
+        $this->customerGroupRetriever = $customerGroupRetriever
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerGroupRetrieverInterface::class);
         if ($saleableItem->hasCustomerGroupId()) {
             $this->customerGroup = (int) $saleableItem->getCustomerGroupId();
         } else {
-            $this->customerGroup = (int) $this->customerSession->getCustomerGroupId();
+            $this->customerGroup = (int) $this->customerGroupRetriever->getCustomerGroupId();
         }
     }
 
@@ -162,6 +172,11 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         $qtyCache = [];
         $allCustomersGroupId = $this->groupManagement->getAllCustomersGroup()->getId();
         foreach ($priceList as $priceKey => &$price) {
+            if ($price['price'] >= $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue()) {
+                unset($priceList[$priceKey]);
+                continue;
+            }
+
             if (isset($price['price_qty']) && $price['price_qty'] == 1) {
                 unset($priceList[$priceKey]);
                 continue;
@@ -198,14 +213,21 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Calculates savings percentage according to the given tier price amount
+     * and related product price amount.
+     *
      * @param AmountInterface $amount
+     *
      * @return float
      */
     public function getSavePercent(AmountInterface $amount)
     {
-        return ceil(
-            100 - ((100 / $this->priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getBaseAmount())
-                * $amount->getBaseAmount())
+        $productPriceAmount = $this->priceInfo->getPrice(
+            FinalPrice::PRICE_CODE
+        )->getAmount();
+
+        return round(
+            100 - ((100 / $productPriceAmount->getValue()) * $amount->getValue())
         );
     }
 

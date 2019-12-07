@@ -1,22 +1,59 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
 
+use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\Rules;
+use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\RulesFactory;
 
+/**
+ * Test repository web API.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoryRepositoryTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/categories';
     const SERVICE_NAME = 'catalogCategoryRepositoryV1';
 
     private $modelId = 333;
+
+    /**
+     * @var RoleFactory
+     */
+    private $roleFactory;
+
+    /**
+     * @var RulesFactory
+     */
+    private $rulesFactory;
+
+    /**
+     * @var AdminTokenServiceInterface
+     */
+    private $adminTokens;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
+        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
+        $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category_backend.php
@@ -57,8 +94,10 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Load category data.
+     *
      * @param int $id
-     * @return string
+     * @return array
      */
     protected function getInfoCategory($id)
     {
@@ -103,7 +142,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     public function testDelete()
     {
         /** @var \Magento\UrlRewrite\Model\Storage\DbStorage $storage */
-        $storage = Bootstrap::getObjectManager()->get('Magento\UrlRewrite\Model\Storage\DbStorage');
+        $storage = Bootstrap::getObjectManager()->get(\Magento\UrlRewrite\Model\Storage\DbStorage::class);
         $categoryId = $this->modelId;
         $data = [
             UrlRewrite::ENTITY_ID => $categoryId,
@@ -157,7 +196,8 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         $categoryId = 333;
         $categoryData = [
-            'name' => "Update Category Test",
+            'name' => 'Update Category Test',
+            'is_active' => false,
             'custom_attributes' => [
                 [
                     'attribute_code' => 'description',
@@ -168,8 +208,9 @@ class CategoryRepositoryTest extends WebapiAbstract
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
         /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Category');
+        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
         $category = $model->load($categoryId);
+        $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
         $this->assertEquals("Update Category Description Test", $category->getDescription());
         // delete category to clean up auto-generated url rewrites
@@ -179,12 +220,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     protected function getSimpleCategoryData($categoryData = [])
     {
         return [
-            'path' => '2',
             'parent_id' => '2',
             'name' => isset($categoryData['name'])
                 ? $categoryData['name'] : uniqid('Category-', true),
             'is_active' => '1',
-            'include_in_menu' => "1",
+            'include_in_menu' => '1',
             'available_sort_by' => ['position', 'name'],
             'custom_attributes' => [
                 ['attribute_code' => 'url_key', 'value' => ''],
@@ -193,7 +233,7 @@ class CategoryRepositoryTest extends WebapiAbstract
                 ['attribute_code' => 'meta_keywords', 'value' => ''],
                 ['attribute_code' => 'meta_description', 'value' => ''],
                 ['attribute_code' => 'display_mode', 'value' => 'PRODUCTS'],
-                ['attribute_code' => 'landing_page', 'value' => ''],
+                ['attribute_code' => 'landing_page', 'value' => '0'],
                 ['attribute_code' => 'is_anchor', 'value' => '0'],
                 ['attribute_code' => 'custom_use_parent_settings', 'value' => '0'],
                 ['attribute_code' => 'custom_apply_to_products', 'value' => '0'],
@@ -208,10 +248,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     /**
      * Create category process
      *
-     * @param  $category
-     * @return int
+     * @param array $category
+     * @param string|null $token
+     * @return array
      */
-    protected function createCategory($category)
+    protected function createCategory(array $category, ?string $token = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -224,6 +265,9 @@ class CategoryRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
         $requestData = ['category' => $category];
         return $this->_webApiCall($serviceInfo, $requestData);
     }
@@ -250,7 +294,15 @@ class CategoryRepositoryTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, ['categoryId' => $id]);
     }
 
-    protected function updateCategory($id, $data)
+    /**
+     * Update given category via web API.
+     *
+     * @param int $id
+     * @param array $data
+     * @param string|null $token
+     * @return array
+     */
+    protected function updateCategory($id, $data, ?string $token = null)
     {
         $serviceInfo =
             [
@@ -264,6 +316,9 @@ class CategoryRepositoryTest extends WebapiAbstract
                     'operation' => self::SERVICE_NAME . 'Save',
                 ],
             ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $data['id'] = $id;
@@ -271,7 +326,125 @@ class CategoryRepositoryTest extends WebapiAbstract
         } else {
             $data['id'] = $id;
             return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-            return $this->_webApiCall($serviceInfo, ['category' => $data]);
         }
+    }
+
+    /**
+     * Update admin role resources list.
+     *
+     * @param string $roleName
+     * @param string[] $resources
+     * @return void
+     */
+    private function updateRoleResources(string $roleName, array $resources): void
+    {
+        /** @var Role $role */
+        $role = $this->roleFactory->create();
+        $role->load($roleName, 'role_name');
+        /** @var Rules $rules */
+        $rules = $this->rulesFactory->create();
+        $rules->setRoleId($role->getId());
+        $rules->setResources($resources);
+        $rules->saveRel();
+    }
+
+    /**
+     * Extract error returned by the server.
+     *
+     * @param \Throwable $exception
+     * @return string
+     */
+    private function extractCallExceptionMessage(\Throwable $exception): string
+    {
+        if ($restResponse = json_decode($exception->getMessage(), true)) {
+            //REST
+            return $restResponse['message'];
+        } else {
+            //SOAP
+            return $exception->getMessage();
+        }
+    }
+
+    /**
+     * Test design settings authorization
+     *
+     * @magentoApiDataFixture Magento/User/_files/user_with_custom_role.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveDesign(): void
+    {
+        //Updating our admin user's role to allow saving categories but not their design settings.
+        $roleName = 'test_custom_role';
+        $this->updateRoleResources($roleName, ['Magento_Catalog::categories']);
+        //Using the admin user with custom role.
+        $token = $this->adminTokens->createAdminAccessToken(
+            'customRoleUser',
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+
+        $categoryData = $this->getSimpleCategoryData();
+        $categoryData['custom_attributes'][] = ['attribute_code' => 'custom_layout_update_file', 'value' => 'test'];
+
+        //Creating new category with design settings.
+        $exceptionMessage = null;
+        try {
+            $this->createCategory($categoryData, $token);
+        } catch (\Throwable $exception) {
+            $exceptionMessage = $this->extractCallExceptionMessage($exception);
+        }
+        //We don't have the permissions.
+        $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
+
+        //Updating the user role to allow access to design properties.
+        $this->updateRoleResources($roleName, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
+        //Making the same request with design settings.
+        $categoryData = $this->getSimpleCategoryData();
+        foreach ($categoryData['custom_attributes'] as &$attribute) {
+            if ($attribute['attribute_code'] === 'custom_design') {
+                $attribute['value'] = 'test';
+                break;
+            }
+        }
+        $result = $this->createCategory($categoryData, $token);
+        $this->assertArrayHasKey('id', $result);
+        //Category must be saved.
+        $categorySaved = $this->getInfoCategory($result['id']);
+        $savedCustomDesign = null;
+        foreach ($categorySaved['custom_attributes'] as $customAttribute) {
+            if ($customAttribute['attribute_code'] === 'custom_design') {
+                $savedCustomDesign = $customAttribute['value'];
+                break;
+            }
+        }
+        $this->assertEquals('test', $savedCustomDesign);
+        $categoryData = $categorySaved;
+
+        //Updating our role to remove design properties access.
+        $this->updateRoleResources($roleName, ['Magento_Catalog::categories']);
+        //Updating the category but with the same design properties values.
+        //Omitting existing design attribute and keeping it's existing value
+        $attributes = $categoryData['custom_attributes'];
+        foreach ($attributes as $index => $attrData) {
+            if ($attrData['attribute_code'] === 'custom_design') {
+                unset($categoryData['custom_attributes'][$index]);
+                break;
+            }
+        }
+        unset($attributes, $index, $attrData);
+        $result = $this->updateCategory($categoryData['id'], $categoryData, $token);
+        //We haven't changed the design so operation is successful.
+        $this->assertArrayHasKey('id', $result);
+
+        //Changing a design property.
+        $categoryData['custom_attributes'][] = ['attribute_code' => 'custom_design', 'value' => 'test2'];
+        $exceptionMessage = null;
+        try {
+            $this->updateCategory($categoryData['id'], $categoryData, $token);
+        } catch (\Throwable $exception) {
+            $exceptionMessage = $this->extractCallExceptionMessage($exception);
+        }
+        //We don't have permissions to do that.
+        $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
     }
 }

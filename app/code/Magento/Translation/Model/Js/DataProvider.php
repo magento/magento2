@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Translation\Model\Js;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * DataProvider for js translation
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider implements DataProviderInterface
 {
@@ -42,7 +46,7 @@ class DataProvider implements DataProviderInterface
     /**
      * Basic translate renderer
      *
-     * @var \Magento\Framework\Phrase\Renderer\Translate
+     * @var \Magento\Framework\Phrase\RendererInterface
      */
     protected $translate;
 
@@ -50,7 +54,7 @@ class DataProvider implements DataProviderInterface
      * @param \Magento\Framework\App\State $appState
      * @param Config $config
      * @param \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
-     * @param \Magento\Framework\Phrase\Renderer\Translate $translate
+     * @param \Magento\Framework\Phrase\RendererInterface $translate
      * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      * @param \Magento\Framework\Component\DirSearch $dirSearch
      * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
@@ -60,7 +64,7 @@ class DataProvider implements DataProviderInterface
         \Magento\Framework\App\State $appState,
         Config $config,
         \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
-        \Magento\Framework\Phrase\Renderer\Translate $translate,
+        \Magento\Framework\Phrase\RendererInterface $translate,
         \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
         \Magento\Framework\Component\DirSearch $dirSearch,
         \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
@@ -99,16 +103,24 @@ class DataProvider implements DataProviderInterface
 
         $dictionary = [];
         foreach ($files as $filePath) {
-            /** @var \Magento\Framework\Filesystem\File\Read $read */
             $read = $this->fileReadFactory->create($filePath[0], \Magento\Framework\Filesystem\DriverPool::FILE);
             $content = $read->readAll();
             foreach ($this->getPhrases($content) as $phrase) {
-                $translatedPhrase = $this->translate->render([$phrase], []);
-                if ($phrase != $translatedPhrase) {
-                    $dictionary[$phrase] = $translatedPhrase;
+                try {
+                    $translatedPhrase = $this->translate->render([$phrase], []);
+                    if ($phrase != $translatedPhrase) {
+                        $dictionary[$phrase] = $translatedPhrase;
+                    }
+                } catch (\Exception $e) {
+                    throw new LocalizedException(
+                        __('Error while translating phrase "%s" in file %s.', $phrase, $filePath[0]),
+                        $e
+                    );
                 }
             }
         }
+
+        ksort($dictionary);
 
         return $dictionary;
     }
@@ -118,24 +130,25 @@ class DataProvider implements DataProviderInterface
      *
      * @param string $content
      * @return string[]
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getPhrases($content)
     {
         $phrases = [];
         foreach ($this->config->getPatterns() as $pattern) {
-            $result = preg_match_all($pattern, $content, $matches);
+            $concatenatedContent = preg_replace('~(["\'])\s*?\+\s*?\1~', '', $content);
+            $result = preg_match_all($pattern, $concatenatedContent, $matches);
 
             if ($result) {
                 if (isset($matches[2])) {
                     foreach ($matches[2] as $match) {
-                        $phrases[] = str_replace('\\\'', '\'', $match);
+                        $phrases[] = str_replace(["\'", '\"'], ["'", '"'], $match);
                     }
                 }
             }
             if (false === $result) {
-                throw new \Exception(
-                    sprintf('Error while generating js translation dictionary: "%s"', error_get_last())
+                throw new LocalizedException(
+                    __('Error while generating js translation dictionary: "%s"', error_get_last())
                 );
             }
         }

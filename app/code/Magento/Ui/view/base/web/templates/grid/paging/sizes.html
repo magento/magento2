@@ -1,115 +1,61 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 
-<div
-    class="selectmenu"
-    data-bind="collapsible"
-    data-role="toolbar-collapsible-menu">
-    <div
-        data-bind="openCollapsible"
-        class="selectmenu-value">
-        <input
-            data-bind="value: _value, attr: {id: index}"
-            type="text" />
+<div class="selectmenu" collapsible="">
+    <div class="selectmenu-value" openCollapsible="">
+        <input type="text" ko-value="_value" attr="id: index" autoselect/>
     </div>
-    <button
-        class="selectmenu-toggle"
-        type="button"
-        data-bind="toggleCollapsible, css: {_active: $collapsible.opened}"
-        aria-haspopup="true">
-        <span data-bind="i18n: 'Select'"></span>
+    <button class="selectmenu-toggle" type="button" css="_active: $collapsible.opened" toggleCollapsible>
+        <span translate="'Select'"/>
     </button>
-    <div
-        class="selectmenu-items"
-        data-role="toolbar-collapsible-menu"
-        data-bind="
-            css: {_active: $collapsible.opened},
-            outerClick: discardAll.bind($data)">
+    <div class="selectmenu-items" css="_active: $collapsible.opened" outerClick="discardAll.bind($data)">
         <ul>
-            <li
-                data-bind="
-                    repeat: {
-                        foreach: optionsArray,
-                        item: '$size'
-                    }"
-                data-repeat-bind="
-                    css: {
-                        _edit: isEditing($size().value)
-                    }">
-                <!-- ko if: $size().editable -->
-                <div
-                    class="selectmenu-item-edit"
-                    data-bind="keyboard: {13: updateSize.bind($data, $size().value, false)}">
-                    <input
-                        class="admin__control-text"
-                        type="text"
-                        data-bind="value: $size()._value, hasFocus: isEditing($size().value)"/>
-                    <button
-                        class="action-save"
-                        data-bind="click: updateSize.bind($data, $size().value, false)"
-                        type="button">
-                        <span data-bind="i18n: 'Save'"></span>
+            <li repeat="foreach: optionsArray, item: '$size'" css="_edit: isEditing($size().value)">
+                <div class="selectmenu-item-edit" if="$size().editable" keyboard="13: updateSize.bind($data, $size().value, false)">
+                    <input class="admin__control-text" type="text"
+                        ko-value="$size()._value" hasFocus="isEditing($size().value)"/>
+                    <button class="action-save" type="button" click="updateSize.bind($data, $size().value, false)">
+                        <span translate="'Save'"/>
                     </button>
-                    <button
-                        class="action-delete"
-                        data-bind="click: removeSize.bind($data, $size().value, false)"
-                        type="button">
-                        <span data-bind="i18n: 'Delete'"></span>
+                    <button class="action-delete" type="button" click="removeSize.bind($data, $size().value, false)">
+                        <span translate="'Delete'"/>
                     </button>
                 </div>
-                <!-- /ko -->
-
                 <div class="selectmenu-item">
-                    <button
-                        type="button"
-                        class="selectmenu-item-action"
-                        data-bind="text: $size().label, click: setSize.bind($data, $size().value)"></button>
-                    
-                    <!-- ko if: $size().editable -->
-                    <button
-                        class="action-edit"
+                    <button class="selectmenu-item-action" type="button" text="$size().label" click="setSize.bind($data, $size().value)"/>
+                    <button class="action-edit" type="button" if="$size().editable"
                         data-bind="
                             click: function () {
                                 discardCustom().edit($size().value);
-                            }"
-                        type="button">
-                        <span data-bind="i18n: 'Edit'"></span>
+                            }">
+                        <span translate="'Edit'"/>
                     </button>
-                    <!-- /ko -->
                 </div>
             </li>
 
-            <li data-bind="css: { _edit: isCustomVisible() }">
+            <li css="_edit: isCustomVisible()">
                 <div class="selectmenu-item">
-                    <button
-                       type="button"
-                       class="selectmenu-item-action"
+                    <button class="selectmenu-item-action" type="button"
+                       translate="'Custom'"
+                       ko-visible="!isCustomVisible()"
                        data-bind="
                             click: function () {
                                 $data.showCustom()
                                     .discardEditing();
-                            },
-                            visible: !isCustomVisible(),
-                            i18n: 'Custom'"></button>
+                            }"/>
                 </div>
-                <div class="selectmenu-item-edit" data-bind="keyboard: {13: applyCustom}">
-                    <input
-                        class="admin__control-text"
-                        type="text"
-                        data-bind="value: customValue, hasFocus: isCustomVisible()"/>
-                    <button
-                            class="action-save"
-                            data-bind="click: applyCustom"
-                            type="button">
-                        <span data-bind="i18n: 'Save'"></span>
+                <div class="selectmenu-item-edit" keyboard="13: applyCustom">
+                    <input class="admin__control-text" type="text" ko-value="customValue" hasFocus="isCustomVisible()"/>
+                    <button class="action-save" type="button" click="applyCustom">
+                        <span translate="'Save'"/>
                     </button>
                 </div>
             </li>
         </ul>
     </div>
 </div>
-<label class="admin__control-support-text" data-bind="i18n: 'per page', attr: { for: index }"></label>
+<label class="admin__control-support-text" translate="'per page'" attr="for: index"/>

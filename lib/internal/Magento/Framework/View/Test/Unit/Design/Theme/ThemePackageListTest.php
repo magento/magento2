@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 
-class ThemePackageListTest extends \PHPUnit_Framework_TestCase
+class ThemePackageListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -27,8 +27,10 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registrar = $this->getMockForAbstractClass('\Magento\Framework\Component\ComponentRegistrarInterface');
-        $this->factory = $this->getMock('Magento\Framework\View\Design\Theme\ThemePackageFactory', [], [], '', false);
+        $this->registrar = $this->getMockForAbstractClass(
+            \Magento\Framework\Component\ComponentRegistrarInterface::class
+        );
+        $this->factory = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackageFactory::class);
         $this->object = new ThemePackageList($this->registrar, $this->factory);
     }
 
@@ -56,7 +58,7 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $themeKey)
             ->willReturn($themePath);
-        $themePackage = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+        $themePackage = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackage::class);
         $this->factory->expects($this->once())
             ->method('create')
             ->with($themeKey, $themePath)
@@ -70,7 +72,7 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
             ->method('getPaths')
             ->with(ComponentRegistrar::THEME)
             ->willReturn(['theme1' => 'path1', 'theme2' => 'path2']);
-        $themePackage = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+        $themePackage = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackage::class);
         $this->factory->expects($this->exactly(2))
             ->method('create')
             ->withConsecutive(

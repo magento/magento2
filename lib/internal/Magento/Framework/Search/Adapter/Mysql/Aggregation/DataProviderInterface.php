@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
@@ -10,6 +10,12 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * MySQL search data provider.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 interface DataProviderInterface
 {
     /**

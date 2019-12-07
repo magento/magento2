@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Listing\Columns;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class DateTest
  */
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TIME = '2000-04-12 16:34:12';
 
@@ -37,12 +37,12 @@ class DateTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->contextMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false,
@@ -50,17 +50,17 @@ class DateTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $this->contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
 
-        $this->timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Ui\Component\Listing\Columns\Date',
+            \Magento\Ui\Component\Listing\Columns\Date::class,
             [
                 'context' => $this->contextMock,
                 'data' => [
@@ -88,5 +88,15 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->model->prepareDataSource(['data' => ['items' => [$item]]]);
         $this->assertEquals(self::TEST_TIME, $result['data']['items'][0]['field_name']);
+    }
+
+    public function testPrepareDataSourceWithZeroDate()
+    {
+        $zeroDate = '0000-00-00 00:00:00';
+        $item = ['test_data' => 'some_data', 'field_name' => $zeroDate];
+        $this->timezoneMock->expects($this->never())->method('date');
+
+        $result = $this->model->prepareDataSource(['data' => ['items' => [$item]]]);
+        $this->assertEquals($zeroDate, $result['data']['items'][0]['field_name']);
     }
 }

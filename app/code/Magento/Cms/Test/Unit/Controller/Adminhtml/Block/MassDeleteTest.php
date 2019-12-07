@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
@@ -28,19 +28,16 @@ class MassDeleteTest extends AbstractMassActionTest
     {
         parent::setUp();
 
-        $this->collectionFactoryMock = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Block\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->collectionFactoryMock = $this->createPartialMock(
+            \Magento\Cms\Model\ResourceModel\Block\CollectionFactory::class,
+            ['create']
         );
 
         $this->blockCollectionMock =
-            $this->getMock('Magento\Cms\Model\ResourceModel\Block\Collection', [], [], '', false);
+            $this->createMock(\Magento\Cms\Model\ResourceModel\Block\Collection::class);
 
         $this->massDeleteController = $this->objectManager->getObject(
-            'Magento\Cms\Controller\Adminhtml\Block\MassDelete',
+            \Magento\Cms\Controller\Adminhtml\Block\MassDelete::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
@@ -71,9 +68,9 @@ class MassDeleteTest extends AbstractMassActionTest
             ->willReturn(new \ArrayIterator($collection));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('A total of %1 record(s) have been deleted.', $deletedBlocksCount));
-        $this->messageManagerMock->expects($this->never())->method('addError');
+        $this->messageManagerMock->expects($this->never())->method('addErrorMessage');
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
@@ -90,7 +87,7 @@ class MassDeleteTest extends AbstractMassActionTest
      */
     protected function getBlockMock()
     {
-        $blockMock = $this->getMock('Magento\Cms\Model\ResourceModel\Block\Collection', ['delete'], [], '', false);
+        $blockMock = $this->createPartialMock(\Magento\Cms\Model\ResourceModel\Block\Collection::class, ['delete']);
         $blockMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $blockMock;

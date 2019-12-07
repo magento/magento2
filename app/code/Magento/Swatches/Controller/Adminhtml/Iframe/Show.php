@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Controller\Adminhtml\Iframe;
@@ -12,6 +12,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class Show extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Swatches::iframe';
+
     /**
      * Helper to move image from tmp to catalog
      *
@@ -82,6 +89,7 @@ class Show extends \Magento\Backend\App\Action
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $config = $this->config;
             $result = $uploader->save($mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath()));
+            unset($result['path']);
 
             $this->_eventManager->dispatch(
                 'swatch_gallery_upload_image_after',
@@ -89,7 +97,6 @@ class Show extends \Magento\Backend\App\Action
             );
 
             unset($result['tmp_name']);
-            unset($result['path']);
 
             $result['url'] = $this->config->getTmpMediaUrl($result['file']);
             $result['file'] = $result['file'] . '.tmp';
@@ -102,16 +109,5 @@ class Show extends \Magento\Backend\App\Action
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
             $this->getResponse()->setBody(json_encode($result));
         }
-    }
-
-    /**
-     * Check if user has enough privileges
-     *
-     * @codeCoverageIgnore
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Swatches::iframe');
     }
 }

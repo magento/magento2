@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Model;
 
 use \Magento\Wishlist\Model\LocaleQuantityProcessor;
 
-class LocaleQuantityProcessorTest extends \PHPUnit_Framework_TestCase
+class LocaleQuantityProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LocaleQuantityProcessor
@@ -24,10 +24,10 @@ class LocaleQuantityProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $filter;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->resolver = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')->getMock();
-        $this->filter   = $this->getMockBuilder('Magento\Framework\Filter\LocalizedToNormalized')
+        $this->resolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)->getMock();
+        $this->filter   = $this->getMockBuilder(\Magento\Framework\Filter\LocalizedToNormalized::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->processor = new LocaleQuantityProcessor($this->resolver, $this->filter);
@@ -60,6 +60,9 @@ class LocaleQuantityProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->processor->process($qty));
     }
 
+    /**
+     * @return array
+     */
     public function processDataProvider()
     {
         return [

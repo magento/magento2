@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      *
      * @var string
      */
-    protected $_template = 'catalog/category/widget/tree.phtml';
+    protected $_template = 'Magento_Catalog::catalog/category/widget/tree.phtml';
 
     /**
      * @return void
@@ -73,7 +73,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         );
 
         $chooser = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+            \Magento\Widget\Block\Adminhtml\Widget\Chooser::class
         )->setElement(
             $element
         )->setConfig(
@@ -121,7 +121,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
                 }
             ';
         } else {
-            $chooserJsObject = $this->getId();
+            $chooserJsObject = $this->escapeJs($this->getId());
             $js = '
                 function (node, e) {
                     ' .
@@ -144,7 +144,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      *
      * @param \Magento\Framework\Data\Tree\Node|array $node
      * @param int $level
-     * @return string
+     * @return array
      */
     protected function _getNodeJson($node, $level = 0)
     {

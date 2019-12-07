@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var $block Magento\Catalog\Block\Product\View */
 ?>
 <?php
 $required = '';
 if ($block->hasRequiredOptions()) {
-    $required = ' data-hasrequired="' . __('* Required Fields') . '"';
+    $required = ' data-hasrequired="' . $block->escapeHtmlAttr(__('* Required Fields')) . '"';
 }
 ?>
-<div class="product-options-wrapper" id="product-options-wrapper"<?php /* @escapeNotVerified */ echo $required; ?>>
+<div class="product-options-wrapper" id="product-options-wrapper"<?= /* @noEscape */ $required ?>>
     <div class="fieldset" tabindex="0">
-        <?php echo $block->getChildHtml('', true);?>
+        <?= $block->getChildHtml('', true) ?>
     </div>
 </div>

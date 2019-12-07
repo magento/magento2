@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 namespace Magento\Webapi\Routing;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient;
+use Magento\TestFramework\TestCase\Webapi\Adapter\Rest\RestClient;
 
 class CoreRoutingTest extends \Magento\Webapi\Routing\BaseService
 {
@@ -73,16 +73,17 @@ class CoreRoutingTest extends \Magento\Webapi\Routing\BaseService
                 'operation' => 'testModule3ErrorV1ServiceException',
             ],
         ];
-        $this->setExpectedException('SoapFault', 'Generic service exception');
+        $this->expectException('SoapFault');
+        $this->expectExceptionMessage('Generic service exception');
         $this->_webApiCall($serviceInfo);
     }
 
     public function testRestNoAcceptHeader()
     {
         $this->_markTestAsRestOnly();
-        /** @var $curlClient CurlClient */
+        /** @var $curlClient RestClient */
         $curlClient = Bootstrap::getObjectManager()->get(
-            'Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient'
+            \Magento\TestFramework\TestCase\Webapi\Adapter\Rest\RestClient::class
         );
         $response = $curlClient->get('/V1/testmodule1/resource1/1', [], ['Accept:']);
         $this->assertEquals('testProduct1', $response['name'], "Empty Accept header failed to return response.");

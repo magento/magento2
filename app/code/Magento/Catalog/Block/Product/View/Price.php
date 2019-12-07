@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@
  * Catalog product price block
  */
 namespace Magento\Catalog\Block\Product\View;
+
+use Magento\Catalog\Model\Product;
 
 class Price extends \Magento\Framework\View\Element\Template
 {
@@ -37,7 +39,8 @@ class Price extends \Magento\Framework\View\Element\Template
      */
     public function getPrice()
     {
+        /** @var Product $product */
         $product = $this->_coreRegistry->registry('product');
-        return $product->getFormatedPrice();
+        return $product->getFormattedPrice();
     }
 }

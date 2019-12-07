@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,17 +37,17 @@ class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
         $cmsIndex->open();
         $cmsIndex->getLinksBlock()->waitWelcomeMessage();
         $browser->open($_ENV['app_frontend_url'] . $initialCategory->getUrlKey() . '.html');
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $initialCategory->getName(),
             $categoryView->getTitleBlock()->getTitle(),
             'Wrong category name is displayed for default store.'
         );
 
-        $store = $category->getDataFieldConfig('store_id')['source']->store->getName();
+        $store = $category->getData()['store_id']['source']->getName();
         $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store);
         $cmsIndex->getLinksBlock()->waitWelcomeMessage();
         $browser->open($_ENV['app_frontend_url'] . $initialCategory->getUrlKey() . '.html');
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $category->getName(),
             $categoryView->getTitleBlock()->getTitle(),
             'Wrong category name is displayed for ' . $store

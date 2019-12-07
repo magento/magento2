@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -32,12 +32,12 @@
         <field name="custom_design_from" is_required="0" />
         <field name="custom_design_to" is_required="0" />
         <field name="custom_layout_update" is_required="0" />
-        <field name="description" is_required="0" group="product-details" />
+        <field name="description" is_required="0" group="content" />
         <field name="enable_googlecheckout" is_required="0" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
         <field name="has_options" is_required="0" />
-        <field name="image" is_required="0" />
+        <field name="image" is_required="0" group="gallery" source="Magento\Catalog\Test\Fixture\Product\Image" />
         <field name="image_label" is_required="0" />
         <field name="manufacturer" is_required="0" />
         <field name="media_gallery" is_required="0" />
@@ -53,10 +53,10 @@
         <field name="old_id" is_required="0" />
         <field name="options_container" is_required="0" />
         <field name="page_layout" is_required="0" />
-        <field name="price" is_required="1" group="product-details" source="Magento\Catalog\Test\Fixture\Product\Price" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\Price"/>
+        <field name="price" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\Product\Price" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\Price"/>
         <field name="quantity_and_stock_status" is_required="0" group="product-details" />
         <field name="required_options" is_required="0" />
-        <field name="short_description" is_required="0" group="autosettings" />
+        <field name="short_description" is_required="0" group="content" />
         <field name="sku" is_required="1" group="product-details" />
         <field name="small_image" is_required="0" />
         <field name="small_image_label" is_required="0" />
@@ -67,11 +67,11 @@
         <field name="tax_class_id" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\Product\TaxClass" />
         <field name="thumbnail" is_required="0" />
         <field name="thumbnail_label" is_required="0" />
-        <field name="tier_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
+        <field name="tier_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\Product\TierPrice" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
         <field name="updated_at" is_required="1" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
-        <field name="visibility" is_required="0" group="autosettings" />
+        <field name="visibility" is_required="0" group="product-details" />
         <field name="weight" is_required="0" group="product-details" />
         <field name="product_has_weight" group="product-details" />
         <field name="id" />
@@ -81,10 +81,10 @@
         <field name="affected_attribute_set" group="null" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="configurable_attributes_data" is_required="0" group="variations" source="Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct\ConfigurableAttributesData" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\ConfigurableAttributesData" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="checkout_data" group="null" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\CheckoutData" />
-        <field name="up_sell_products" group="upsells" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
-        <field name="cross_sell_products" group="crosssells" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
-        <field name="related_products" group="related-products" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="up_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="related_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
     </fixture>
 </config>

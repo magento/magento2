@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Annotation;
@@ -11,6 +11,7 @@ namespace Magento\TestFramework\Annotation;
 class DbIsolation
 {
     const MAGENTO_DB_ISOLATION = 'magentoDbIsolation';
+
     /**
      * @var bool
      */
@@ -19,11 +20,11 @@ class DbIsolation
     /**
      * Handler for 'startTestTransactionRequest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @param \Magento\TestFramework\Event\Param\Transaction $param
      */
     public function startTestTransactionRequest(
-        \PHPUnit_Framework_TestCase $test,
+        \PHPUnit\Framework\TestCase $test,
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         $methodIsolation = $this->_getIsolation($test);
@@ -39,11 +40,11 @@ class DbIsolation
     /**
      * Handler for 'endTestTransactionRequest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @param \Magento\TestFramework\Event\Param\Transaction $param
      */
     public function endTestTransactionRequest(
-        \PHPUnit_Framework_TestCase $test,
+        \PHPUnit\Framework\TestCase $test,
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         if ($this->_isIsolationActive && $this->_getIsolation($test)) {
@@ -54,11 +55,11 @@ class DbIsolation
     /**
      * Handler for 'startTransaction' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function startTransaction(\PHPUnit_Framework_TestCase $test)
+    public function startTransaction(\PHPUnit\Framework\TestCase $test)
     {
         $this->_isIsolationActive = true;
     }
@@ -78,11 +79,11 @@ class DbIsolation
      *   TRUE  - annotation is defined as 'enabled'
      *   FALSE - annotation is defined as 'disabled'
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return bool|null Returns NULL, if isolation is not defined for the current scope
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getIsolation(\PHPUnit_Framework_TestCase $test)
+    protected function _getIsolation(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $this->getAnnotations($test);
         if (isset($annotations[self::MAGENTO_DB_ISOLATION])) {
@@ -98,10 +99,10 @@ class DbIsolation
     }
 
     /**
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
-    private function getAnnotations(\PHPUnit_Framework_TestCase $test)
+    private function getAnnotations(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $test->getAnnotations();
         return array_replace($annotations['class'], $annotations['method']);

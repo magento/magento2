@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
  * Catalog category helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -62,6 +64,16 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     protected $categoryUrlPathGenerator;
 
     /**
+     * @var \Magento\Framework\Stdlib\StringUtils
+     */
+    private $string;
+
+    /**
+     * @var LayoutUpdateManager
+     */
+    private $layoutUpdateManager;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -72,6 +84,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param array $messageGroups
+     * @param \Magento\Framework\Stdlib\StringUtils|null $string
+     * @param LayoutUpdateManager|null $layoutUpdateManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -81,7 +96,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        array $messageGroups = []
+        array $messageGroups = [],
+        \Magento\Framework\Stdlib\StringUtils $string = null,
+        ?LayoutUpdateManager $layoutUpdateManager = null
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
@@ -90,7 +107,57 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->messageGroups = $messageGroups;
         $this->messageManager = $messageManager;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
+        $this->string = $string ?: ObjectManager::getInstance()->get(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->layoutUpdateManager = $layoutUpdateManager
+            ?? ObjectManager::getInstance()->get(LayoutUpdateManager::class);
         parent::__construct($context);
+    }
+
+    /**
+     * Add meta information from product to layout
+     *
+     * @param \Magento\Framework\View\Result\Page $resultPage
+     * @param \Magento\Catalog\Model\Product $product
+     * @return $this
+     */
+    private function preparePageMetadata(ResultPage $resultPage, $product)
+    {
+        $pageLayout = $resultPage->getLayout();
+        $pageConfig = $resultPage->getConfig();
+
+        $metaTitle = $product->getMetaTitle();
+        $pageConfig->setMetaTitle($metaTitle);
+        $pageConfig->getTitle()->set($metaTitle ?: $product->getName());
+
+        $keyword = $product->getMetaKeyword();
+        $currentCategory = $this->_coreRegistry->registry('current_category');
+        if ($keyword) {
+            $pageConfig->setKeywords($keyword);
+        } elseif ($currentCategory) {
+            $pageConfig->setKeywords($product->getName());
+        }
+
+        $description = $product->getMetaDescription();
+        if ($description) {
+            $pageConfig->setDescription($description);
+        } else {
+            $pageConfig->setDescription($this->string->substr(strip_tags($product->getDescription()), 0, 255));
+        }
+
+        if ($this->_catalogProduct->canUseCanonicalTag()) {
+            $pageConfig->addRemotePageAsset(
+                $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
+                'canonical',
+                ['attributes' => ['rel' => 'canonical']]
+            );
+        }
+
+        $pageMainTitle = $pageLayout->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            $pageMainTitle->setPageTitle($product->getName());
+        }
+
+        return $this;
     }
 
     /**
@@ -122,23 +189,18 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(
-                    ['id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId()],
-                    $handle
-                );
+                $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
-
-        $resultPage->addPageLayoutHandles(
-            ['id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId()]
-        );
+    
+        $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
+        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
 
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(
-                    ['id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId()],
-                    $handle
-                );
+                $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
 
@@ -151,6 +213,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                     $update->addUpdate($layoutUpdate);
                 }
             }
+        }
+        if ($settings->getPageLayoutHandles()) {
+            $resultPage->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
 
         $currentCategory = $this->_coreRegistry->registry('current_category');
@@ -186,6 +251,22 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function prepareAndRender(ResultPage $resultPage, $productId, $controller, $params = null)
     {
+        /**
+         * Remove default action handle from layout update to avoid its usage during processing of another action,
+         * It is possible that forwarding to another action occurs, e.g. to 'noroute'.
+         * Default action handle is restored just before the end of current method.
+         */
+        $defaultActionHandle = $resultPage->getDefaultLayoutHandle();
+        $handles = $resultPage->getLayout()->getUpdate()->getHandles();
+        if (in_array($defaultActionHandle, $handles)) {
+            $resultPage->getLayout()->getUpdate()->removeHandle($resultPage->getDefaultLayoutHandle());
+        }
+
+        if (!$controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Bad controller interface for showing product')
+            );
+        }
         // Prepare data
         $productHelper = $this->_catalogProduct;
         if (!$params) {
@@ -211,13 +292,12 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->_catalogSession->setLastViewedProductId($product->getId());
 
-        $this->initProductLayout($resultPage, $product, $params);
-
-        if (!$controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Bad controller interface for showing product')
-            );
+        if (in_array($defaultActionHandle, $handles)) {
+            $resultPage->addDefaultHandle();
         }
+
+        $this->initProductLayout($resultPage, $product, $params);
+        $this->preparePageMetadata($resultPage, $product);
         return $this;
     }
 }

@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Cron;
 
 use Magento\Setup\Model\Updater;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\Cron\Queue;
+use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Job to remove a component. Run by Setup Cron Task
@@ -26,15 +25,6 @@ class JobComponentUninstall extends AbstractJob
      * Data option
      */
     const DATA_OPTION = 'dataOption';
-
-    /**#@+
-     * Component types
-     */
-    const COMPONENT_MODULE = 'magento2-module';
-    const COMPONENT_THEME = 'magento2-theme';
-    const COMPONENT_LANGUAGE = 'magento2-language';
-    const COMPONENT = 'magento2-component';
-    /**#@-*/
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -111,7 +101,7 @@ class JobComponentUninstall extends AbstractJob
     {
         if (!isset($this->params['components']) || !is_array($this->params['components'])) {
             $this->status->toggleUpdateError(true);
-            throw new \RunTimeException('Job parameter format is incorrect');
+            throw new \RuntimeException('Job parameter format is incorrect');
         }
         $components = $this->params['components'];
         foreach ($components as $component) {
@@ -151,17 +141,17 @@ class JobComponentUninstall extends AbstractJob
         }
 
         if (!in_array($type, [
-            self::COMPONENT_MODULE,
-            self::COMPONENT_THEME,
-            self::COMPONENT_LANGUAGE,
-            self::COMPONENT
+            ComposerInformation::MODULE_PACKAGE_TYPE,
+            ComposerInformation::THEME_PACKAGE_TYPE,
+            ComposerInformation::LANGUAGE_PACKAGE_TYPE,
+            ComposerInformation::COMPONENT_PACKAGE_TYPE
         ])) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException('Unknown component type');
         }
 
         switch ($type) {
-            case self::COMPONENT_MODULE:
+            case ComposerInformation::MODULE_PACKAGE_TYPE:
                 $dataOption = isset($this->params[self::DATA_OPTION]) && $this->params[self::DATA_OPTION] === 'true';
                 $this->moduleUninstall->uninstall(
                     $this->output,
@@ -169,7 +159,7 @@ class JobComponentUninstall extends AbstractJob
                     $dataOption
                 );
                 break;
-            case self::COMPONENT_THEME:
+            case ComposerInformation::THEME_PACKAGE_TYPE:
                 $this->themeUninstall->uninstall($this->output, $componentName);
                 break;
         }

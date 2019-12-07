@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,7 +17,20 @@
         <arguments>
             <argument name="formIds" xsi:type="array">
                 <item name="user_login" xsi:type="string">user_login</item>
-                <item name="guest_checkout" xsi:type="string">guest_checkout</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Captcha\CustomerData\Captcha">
+        <arguments>
+            <argument name="formIds" xsi:type="array">
+                <item name="user_login" xsi:type="string">user_login</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="captcha" xsi:type="string">Magento\Captcha\CustomerData\Captcha</item>
             </argument>
         </arguments>
     </type>

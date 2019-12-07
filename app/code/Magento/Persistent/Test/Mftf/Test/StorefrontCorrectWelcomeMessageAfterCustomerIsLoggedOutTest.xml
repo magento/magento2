@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCorrectWelcomeMessageAfterCustomerIsLoggedOutTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="MAGETWO-97278 - Incorrect use of cookies for customer"/>
+            <title value="Checking welcome message for persistent customer after logout"/>
+            <description value="Checking welcome message for persistent customer after logout"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-10800"/>
+            <group value="persistent"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!--Enable Persistence-->
+            <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
+            <createData entity="PersistentLogoutClearDisable" stepKey="persistentLogoutClearDisable"/>
+
+            <!--Create customers-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomerForPersistent">
+                <field key="firstname">John1</field>
+                <field key="lastname">Doe1</field>
+            </createData>
+        </before>
+        <after>
+            <!--Roll back configuration-->
+            <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
+            <createData entity="PersistentLogoutClearEnabled" stepKey="persistentLogoutClearEnabled"/>
+
+            <!-- Logout customer on Storefront-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+            <!--Delete customers-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCustomerForPersistent" stepKey="deleteCustomerForPersistent"/>
+        </after>
+        <!--Login as a Customer with remember me unchecked-->
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeUnChecked" stepKey="loginToStorefrontAccountWithRememberMeUnchecked">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Check customer name and last name in welcome message-->
+        <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="seeCustomerAccountPageUrl"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!"
+             selector="{{StorefrontHeaderSection.welcomeMessage}}"
+             stepKey="seeLoggedInCustomerWelcomeMessage"/>
+        <!--Logout and check default welcome message-->
+        <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeCustomerSignOutPageUrl"/>
+        <see userInput="Default welcome msg!"
+             selector="{{StorefrontHeaderSection.welcomeMessage}}"
+             stepKey="seeDefaultWelcomeMessage"/>
+
+        <!--Login as a Customer with remember me checked-->
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeChecked" stepKey="loginToStorefrontAccountWithRememberMeChecked">
+            <argument name="Customer" value="$$createCustomerForPersistent$$"/>
+        </actionGroup>
+        <!--Check customer name and last name in welcome message-->
+        <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="seeCustomerAccountPageUrl1"/>
+        <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$!"
+             selector="{{StorefrontHeaderSection.welcomeMessage}}"
+             stepKey="seeLoggedInCustomerWelcomeMessage1"/>
+
+        <!--Logout and check persistent customer welcome message-->
+        <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout1"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeCustomerSignOutPageUrl1"/>
+        <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
+             selector="{{StorefrontHeaderSection.welcomeMessage}}"
+             stepKey="seePersistentWelcomeMessage"/>
+    </test>
+</tests>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,16 +40,16 @@ class AssertAttributeSetForm extends AbstractConstraint
         ];
         $productSet->open();
         $productSet->getGrid()->searchAndOpen($filterAttribute);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $filterAttribute['set_name'],
             $productSetEdit->getAttributeSetEditBlock()->getAttributeSetName(),
-            'Attribute Set not found'
+            'The attribute set wasn\'t found.'
             . "\nExpected: " . $filterAttribute['set_name']
             . "\nActual: " . $productSetEdit->getAttributeSetEditBlock()->getAttributeSetName()
         );
         if ($productAttribute !== null) {
             $attributeLabel = $productAttribute->getFrontendLabel();
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $productSetEdit->getAttributeSetEditBlock()->checkProductAttribute($attributeLabel),
                 "Product Attribute is absent on Attribute Set Groups"
             );

@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * Displays buttons on shopping cart page
+ *
+ * @api
+ */
 class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
 {
     /**
@@ -42,7 +47,8 @@ class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
                 'container' => $this,
                 'is_catalog_product' => $this->_isCatalogProduct,
                 'or_position' => $this->_orPosition,
-                'checkout_session' => $this->_checkoutSession
+                'checkout_session' => $this->_checkoutSession,
+                'is_shopping_cart' => true
             ]
         );
         return $this;

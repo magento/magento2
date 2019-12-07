@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\Config\Backend;
 
-class AllowedIpsTest extends \PHPUnit_Framework_TestCase
+class AllowedIpsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $value
@@ -19,7 +19,7 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Developer\Model\Config\Backend\AllowedIps
          */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Developer\Model\Config\Backend\AllowedIps'
+            \Magento\Developer\Model\Config\Backend\AllowedIps::class
         );
         $model->setValue($value);
         $model->setPath('path');

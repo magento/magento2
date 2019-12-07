@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address;
@@ -8,8 +8,9 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote;
 
 /**
- * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Item _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Item getResource()
+ * Quote item model.
+ *
+ * @api
  * @method int getParentItemId()
  * @method \Magento\Quote\Model\Quote\Address\Item setParentItemId(int $value)
  * @method int getQuoteAddressId()
@@ -47,6 +48,8 @@ use Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Address\Item setSuperProductId(int $value)
  * @method int getParentProductId()
  * @method \Magento\Quote\Model\Quote\Address\Item setParentProductId(int $value)
+ * @method int getStoreId()
+ * @method \Magento\Quote\Model\Quote\Address\Item setStoreId(int $value)
  * @method string getSku()
  * @method \Magento\Quote\Model\Quote\Address\Item setSku(string $value)
  * @method string getImage()
@@ -85,6 +88,7 @@ use Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Address\Item setBaseDiscountTaxCompensationAmount(float $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
 {
@@ -101,15 +105,15 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     protected $_quote;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Address\Item');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Address\Item::class);
     }
 
     /**
-     * @return $this|\Magento\Quote\Model\Quote\Item\AbstractItem
+     * @inheritdoc
      */
     public function beforeSave()
     {
@@ -154,6 +158,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     }
 
     /**
+     * Import quote item.
+     *
      * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @return $this
      */
@@ -168,6 +174,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
             $quoteItem->getProductId()
         )->setProduct(
             $quoteItem->getProduct()
+        )->setStoreId(
+            $quoteItem->getStoreId()
         )->setSku(
             $quoteItem->getSku()
         )->setName(
@@ -190,10 +198,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     }
 
     /**
-     * @param string $code
-     * @return \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface|null
+     * @inheritdoc
      */
-    public function getOptionBycode($code)
+    public function getOptionByCode($code)
     {
         if ($this->getQuoteItem()) {
             return $this->getQuoteItem()->getOptionBycode($code);

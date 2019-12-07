@@ -1,49 +1,50 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Backend\Block\Widget\Tabs */
 ?>
-<?php if (!empty($tabs)): ?>
+<?php if (!empty($tabs)) : ?>
 
-<div class="admin__page-nav" data-role="container" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>">
-    <?php if ($block->getTitle()): ?>
-        <div class="admin__page-nav-title" data-role="title" <?php /* @escapeNotVerified */ echo $block->getUiId('title') ?>>
-            <strong><?php /* @escapeNotVerified */ echo $block->getTitle() ?></strong>
+<div class="admin__page-nav" data-role="container" id="<?=  $block->escapeHtmlAttr($block->getId()) ?>">
+    <?php if ($block->getTitle()) : ?>
+        <div class="admin__page-nav-title" data-role="title" <?= /* @noEscape */ $block->getUiId('title') ?>>
+            <strong><?= $block->escapeHtml($block->getTitle()) ?></strong>
             <span data-role="title-messages" class="admin__page-nav-title-messages"></span>
         </div>
     <?php endif ?>
-    <ul <?php /* @escapeNotVerified */ echo $block->getUiId('tab', $block->getId()) ?> class="<?php /* @escapeNotVerified */ echo $block->getIsHoriz() ? 'tabs-horiz' : 'tabs admin__page-nav-items' ?>">
-        <?php foreach ($tabs as $_tab): ?>
-
-            <?php if (!$block->canShowTab($_tab)): continue;  endif; ?>
+    <ul <?= /* @noEscape */ $block->getUiId('tab', $block->getId()) ?> class="<?= /* @noEscape */ $block->getIsHoriz() ? 'tabs-horiz' : 'tabs admin__page-nav-items' ?>">
+        <?php foreach ($tabs as $_tab) : ?>
+            <?php
+            if (!$block->canShowTab($_tab)) :
+                continue;
+            endif;
+            ?>
             <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
             <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
             <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
 
-            <li class="admin__page-nav-item" <?php if ($block->getTabIsHidden($_tab)): ?> style="display:none"<?php endif; ?><?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'item', $_tab->getId()) ?>>
-                <a href="<?php /* @escapeNotVerified */ echo $_tabHref ?>" id="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab) ?>" name="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab, false) ?>" title="<?php /* @escapeNotVerified */ echo $block->getTabTitle($_tab) ?>"
-                   class="admin__page-nav-link <?php /* @escapeNotVerified */ echo $_tabClass;?>"
-                   data-tab-type="<?php /* @escapeNotVerified */ echo $_tabType;?>"
-                   <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'link', $_tab->getId()) ?>>
+            <li class="admin__page-nav-item" <?php if ($block->getTabIsHidden($_tab)) : ?> style="display:none"<?php endif; ?><?= /* @noEscape */ $block->getUiId('tab', 'item', $_tab->getId()) ?>>
+                <a href="<?=  $block->escapeUrl($_tabHref) ?>" id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>" name="<?=  $block->escapeHtmlAttr($block->getTabId($_tab, false)) ?>" title="<?=  $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
+                   class="admin__page-nav-link <?= $block->escapeHtmlAttr($_tabClass) ?>"
+                   data-tab-type="<?=  $block->escapeHtmlAttr($_tabType) ?>"
+                   <?= /* @noEscape */ $block->getUiId('tab', 'link', $_tab->getId()) ?>>
 
-                   <span><?php /* @escapeNotVerified */ echo $block->getTabLabel($_tab); ?></span>
+                   <span><?= $block->escapeHtml($block->getTabLabel($_tab)) ?></span>
 
                    <span class="admin__page-nav-item-messages" data-role="item-messages">
                        <span class="admin__page-nav-item-message _changed">
                            <span class="admin__page-nav-item-message-icon"></span>
                            <span class="admin__page-nav-item-message-tooltip">
-                               <?php /* @escapeNotVerified */ echo __('Changes have been made to this section that have not been saved.'); ?>
+                               <?= $block->escapeHtml(__('Changes have been made to this section that have not been saved.')) ?>
                            </span>
                        </span>
                        <span class="admin__page-nav-item-message _error">
                            <span class="admin__page-nav-item-message-icon"></span>
                            <span class="admin__page-nav-item-message-tooltip">
-                               <?php /* @escapeNotVerified */ echo __('This tab contains invalid data. Please resolve this before saving.'); ?>
+                               <?= $block->escapeHtml(__('This tab contains invalid data. Please resolve this before saving.')) ?>
                            </span>
                        </span>
                         <span class="admin__page-nav-item-message-loader">
@@ -54,7 +55,7 @@
                        </span>
                    </span>
                 </a>
-                <div id="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab) ?>_content" style="display:none;"<?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $_tab->getId()) ?>><?php /* @escapeNotVerified */ echo $block->getTabContent($_tab) ?></div>
+                <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" style="display:none;"<?= /* @noEscape */ $block->getUiId('tab', 'content', $_tab->getId()) ?>><?= /* @noEscape */ $block->getTabContent($_tab) ?></div>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -63,11 +64,11 @@
 <script>
 require(['jquery',"mage/backend/tabs"], function($){
     $(function() {
-        $('#<?php /* @escapeNotVerified */ echo $block->getId() ?>').tabs({
-            active: '<?php /* @escapeNotVerified */ echo $block->getActiveTabId() ?>',
-            destination: '#<?php /* @escapeNotVerified */ echo $block->getDestElementId() ?>',
-            shadowTabs: <?php /* @escapeNotVerified */ echo $block->getAllShadowTabs()?>,
-            tabsBlockPrefix: '<?php /* @escapeNotVerified */ echo $block->getId() ?>_',
+        $('#<?= /* @noEscape */ $block->getId() ?>').tabs({
+            active: '<?= /* @noEscape */ $block->getActiveTabId() ?>',
+            destination: '#<?= /* @noEscape */ $block->getDestElementId() ?>',
+            shadowTabs: <?= /* @noEscape */ $block->getAllShadowTabs() ?>,
+            tabsBlockPrefix: '<?= /* @noEscape */ $block->getId() ?>_',
             tabIdArgument: 'active_tab'
         });
     });

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,7 +41,7 @@ class AssertCustomerLogout extends AbstractConstraint
         $cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible(self::LOGOUT_PAGE_TITLE);
         $cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible(self::HOME_PAGE_TITLE);
         $cmsIndex->getCmsPageBlock()->waitPageInit();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getLinksBlock()->isLinkVisible('Sign In'),
             "Customer wasn't logged out."
         );

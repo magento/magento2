@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\LayeredNavigation;
@@ -13,8 +13,9 @@ use Magento\Catalog\Model\Layer\Filter\Item as FilterItem;
 
 /**
  * Class RenderLayered Render Swatches at Layered Navigation
- *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class RenderLayered extends Template
 {

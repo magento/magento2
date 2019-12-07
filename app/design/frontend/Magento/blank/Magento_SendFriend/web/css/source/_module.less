@@ -1,38 +1,38 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
+    .form.send.friend {
+        &:extend(.abs-add-fields all);
+    }
 
-.form.send.friend {
-    &:extend(.abs-add-fields all);
-}
+    .action.mailto.friend {
+        margin-left: -7px;
+        .lib-icon-font(
+            @_icon-font-content: @icon-envelope,
+            @_icon-font-size: 28px,
+            @_icon-font-line-height: 28px,
+            @_icon-font-vertical-align: top
+        );
 
-.action.mailto.friend {
-    margin-left: -7px;
-    .lib-icon-font(
-        @_icon-font-content: @icon-envelope,
-        @_icon-font-size: 28px,
-        @_icon-font-line-height: 28px,
-        @_icon-font-vertical-align: top
-    );
-    span {
-        line-height: 28px;
-        vertical-align: top;
-        display: inline-block;
+        span {
+            display: inline-block;
+            line-height: 28px;
+            vertical-align: top;
+        }
     }
 }
 
-}
-
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .form.send.friend {
         &:extend(.abs-add-fields-desktop all);

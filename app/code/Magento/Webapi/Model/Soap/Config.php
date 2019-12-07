@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap;
@@ -14,7 +14,9 @@ use Magento\Webapi\Model\ServiceMetadata;
  */
 class Config
 {
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $objectManager;
 
     /**
@@ -24,10 +26,14 @@ class Config
      */
     protected $soapOperations;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $registry;
 
-    /** @var  \Magento\Webapi\Model\ServiceMetadata */
+    /**
+     * @var \Magento\Webapi\Model\ServiceMetadata
+     */
     protected $serviceMetadata;
 
     /**
@@ -69,12 +75,14 @@ class Config
                 foreach ($serviceData[ServiceMetadata::KEY_SERVICE_METHODS] as $methodData) {
                     $method = $methodData[ServiceMetadata::KEY_METHOD];
                     $class = $serviceData[ServiceMetadata::KEY_CLASS];
-                    $operationName = $serviceName . ucfirst($method);
+                    $operation = $methodData[ServiceMetadata::KEY_METHOD_ALIAS];
+                    $operationName = $serviceName . ucfirst($operation);
                     $this->soapOperations[$operationName] = [
                         ServiceMetadata::KEY_CLASS => $class,
                         ServiceMetadata::KEY_METHOD => $method,
                         ServiceMetadata::KEY_IS_SECURE => $methodData[ServiceMetadata::KEY_IS_SECURE],
                         ServiceMetadata::KEY_ACL_RESOURCES => $methodData[ServiceMetadata::KEY_ACL_RESOURCES],
+                        ServiceMetadata::KEY_ROUTE_PARAMS => $methodData[ServiceMetadata::KEY_ROUTE_PARAMS]
                     ];
                 }
             }
@@ -104,7 +112,8 @@ class Config
             ServiceMetadata::KEY_CLASS => $soapOperations[$soapOperation][ServiceMetadata::KEY_CLASS],
             ServiceMetadata::KEY_METHOD => $soapOperations[$soapOperation][ServiceMetadata::KEY_METHOD],
             ServiceMetadata::KEY_IS_SECURE => $soapOperations[$soapOperation][ServiceMetadata::KEY_IS_SECURE],
-            ServiceMetadata::KEY_ACL_RESOURCES => $soapOperations[$soapOperation][ServiceMetadata::KEY_ACL_RESOURCES]
+            ServiceMetadata::KEY_ACL_RESOURCES => $soapOperations[$soapOperation][ServiceMetadata::KEY_ACL_RESOURCES],
+            ServiceMetadata::KEY_ROUTE_PARAMS => $soapOperations[$soapOperation][ServiceMetadata::KEY_ROUTE_PARAMS]
         ];
     }
 

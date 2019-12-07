@@ -1,25 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php if (sizeof($block->getTerms()) > 0): ?>
+<?php if (count($block->getTerms()) > 0) : ?>
     <ul class="search-terms">
-        <?php foreach ($block->getTerms() as $_term): ?>
+        <?php foreach ($block->getTerms() as $_term) : ?>
             <li class="item">
-                <a href="<?php /* @escapeNotVerified */ echo $block->getSearchUrl($_term) ?>"
-                   style="font-size:<?php /* @escapeNotVerified */ echo $_term->getRatio()*70+75 ?>%;">
-                    <?php echo $block->escapeHtml($_term->getName()) ?>
+                <a href="<?= $block->escapeUrl($block->getSearchUrl($_term)) ?>"
+                   style="font-size:<?= /* @noEscape */ $_term->getRatio()*70+75 ?>%;">
+                    <?= $block->escapeHtml($_term->getQueryText()) ?>
                 </a>
             </li>
         <?php endforeach; ?>
     </ul>
-<?php else: ?>
+<?php else : ?>
     <div class="message notice">
-        <div><?php /* @escapeNotVerified */ echo __('There are no search terms available.'); ?></div>
+        <div><?= $block->escapeHtml(__('There are no search terms available.')) ?></div>
     </div>
 <?php endif; ?>

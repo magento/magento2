@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -55,6 +55,56 @@
         <plugin name="customer_account" type="Magento\Customer\Controller\Plugin\Account" />
     </type>
     <type name="Magento\Checkout\Block\Cart\Sidebar">
-        <plugin name="customer_cart" type="\Magento\Customer\Model\Cart\ConfigPlugin" />
+        <plugin name="customer_cart" type="Magento\Customer\Model\Cart\ConfigPlugin" />
+    </type>
+    <type name="Magento\Framework\Session\SessionManagerInterface">
+        <plugin name="session_checker" type="Magento\Customer\CustomerData\Plugin\SessionChecker" />
+    </type>
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="customerSessionUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Customer\Model\Authorization\CustomerSessionUserContext</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\CustomerData">
+        <arguments>
+            <argument name="expirableSectionNames" xsi:type="array">
+                <item name="cart" xsi:type="string">cart</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="customerAlreadyExistsErrorMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerAlreadyExistsErrorMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="confirmAccountSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/confirmAccountSuccessMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="customerVatShippingAddressSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerVatShippingAddressSuccessMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="customerVatBillingAddressSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerVatBillingAddressSuccessMessage.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Observer;
@@ -32,7 +32,7 @@ class AssignBackendModelToAttributeObserver implements ObserverInterface
     }
 
     /**
-     * Automaticaly assign backend model to weee attributes
+     * Automatically assign backend model to weee attributes
      *
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  $this

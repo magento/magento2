@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Response;
 
 use Magento\Framework\Api\Search\AggregationInterface;
-use Magento\Framework\Search\Document;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Search\ResponseInterface;
 
 /**
  * Search Response
+ * @api
  */
-class QueryResponse implements ResponseInterface, \IteratorAggregate, \Countable
+class QueryResponse implements ResponseInterface
 {
     /**
      * Document Collection
@@ -29,17 +30,25 @@ class QueryResponse implements ResponseInterface, \IteratorAggregate, \Countable
     protected $aggregations;
 
     /**
+     * @var int
+     */
+    private $total;
+
+    /**
      * @param Document[] $documents
      * @param AggregationInterface $aggregations
+     * @param int $total
      */
-    public function __construct(array $documents, AggregationInterface $aggregations)
+    public function __construct(array $documents, AggregationInterface $aggregations, int $total = 0)
     {
         $this->documents = $documents;
         $this->aggregations = $aggregations;
+        $this->total = $total;
     }
 
     /**
-     * Countable: return count of fields in document
+     * Countable: return count of fields in document.
+     *
      * @return int
      */
     public function count()
@@ -58,10 +67,25 @@ class QueryResponse implements ResponseInterface, \IteratorAggregate, \Countable
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAggregations()
     {
         return $this->aggregations;
+    }
+
+    /**
+     * Temporary solution for an existing interface of a fulltext search request in Backward compatibility purposes.
+     * Don't use this function.
+     * It must be move to different interface.
+     * Scope to split Search response interface on two different 'Search' and 'Fulltext Search' contains in MC-16461.
+     *
+     * @deprecated
+     *
+     * @return int
+     */
+    public function getTotal(): int
+    {
+        return $this->total;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model;
@@ -10,6 +10,11 @@ use Magento\Framework\View\Element\Template;
 
 class Config
 {
+    /**
+     * Wysiwyg editor configuration path
+     */
+    const WYSIWYG_EDITOR_CONFIG_PATH = 'cms/wysiwyg/editor';
+
     /**
      * Configuration path to session storage logging setting
      */

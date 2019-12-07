@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\Test\Unit;
 
-class HeaderTest extends \PHPUnit_Framework_TestCase
+class HeaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -26,15 +26,10 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_request = $this->getMock(
-            'Magento\Framework\App\Request\Http',
-            ['getServer', 'getRequestUri'],
-            [],
-            '',
-            false
-        );
+        $this->_request =
+            $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getServer', 'getRequestUri']);
 
-        $this->_converter = $this->getMock('\Magento\Framework\Stdlib\StringUtils', ['cleanString']);
+        $this->_converter = $this->createPartialMock(\Magento\Framework\Stdlib\StringUtils::class, ['cleanString']);
     }
 
     /**
@@ -57,11 +52,11 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $this->_prepareCleanString($clean);
 
         $headerObject = $this->_objectManager->getObject(
-            'Magento\Framework\HTTP\Header',
+            \Magento\Framework\HTTP\Header::class,
             ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 
-        $method = new \ReflectionMethod('\Magento\Framework\HTTP\Header', $method);
+        $method = new \ReflectionMethod(\Magento\Framework\HTTP\Header::class, $method);
         $result = $method->invokeArgs($headerObject, ['clean' => $clean]);
 
         $this->assertEquals($expectedValue, $result);
@@ -139,7 +134,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $this->_prepareCleanString($clean);
 
         $headerObject = $this->_objectManager->getObject(
-            'Magento\Framework\HTTP\Header',
+            \Magento\Framework\HTTP\Header::class,
             ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 

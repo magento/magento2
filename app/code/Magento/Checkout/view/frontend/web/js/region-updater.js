@@ -1,15 +1,15 @@
 /**
- * @category    frontend Checkout region-updater
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true expr:true*/
+
 define([
     'jquery',
     'mage/template',
-    'jquery/ui',
+    'underscore',
+    'jquery-ui-modules/widget',
     'mage/validation'
-], function ($, mageTemplate) {
+], function ($, mageTemplate, _) {
     'use strict';
 
     $.widget('mage.regionUpdater', {
@@ -25,6 +25,10 @@ define([
             isMultipleCountriesAllowed: true
         },
 
+        /**
+         *
+         * @private
+         */
         _create: function () {
             this._initCountryElement();
 
@@ -43,12 +47,18 @@ define([
             }, this));
         },
 
-        _initCountryElement: function() {
+        /**
+         *
+         * @private
+         */
+        _initCountryElement: function () {
+
             if (this.options.isMultipleCountriesAllowed) {
                 this.element.parents('div.field').show();
                 this.element.on('change', $.proxy(function (e) {
                     this._updateRegion($(e.target).val());
                 }, this));
+
                 if (this.options.isCountryRequired) {
                     this.element.addClass('required-entry');
                     this.element.parents('div.field').addClass('required');
@@ -60,6 +70,7 @@ define([
 
         /**
          * Remove options from dropdown list
+         *
          * @param {Object} selectElement - jQuery object for dropdown list
          * @private
          */
@@ -113,7 +124,9 @@ define([
          * @private
          */
         _clearError: function () {
-            if (this.options.clearError && typeof (this.options.clearError) === 'function') {
+            var args = ['clearError', this.options.regionListId, this.options.regionInputId, this.options.postcodeId];
+
+            if (this.options.clearError && typeof this.options.clearError === 'function') {
                 this.options.clearError.call(this);
             } else {
                 if (!this.options.form) {
@@ -122,12 +135,19 @@ define([
 
                 this.options.form = $(this.options.form);
 
-                this.options.form && this.options.form.data('validation') && this.options.form.validation('clearError',
-                    this.options.regionListId, this.options.regionInputId, this.options.postcodeId);
+                this.options.form && this.options.form.data('validator') &&
+                    this.options.form.validation.apply(this.options.form, _.compact(args));
+
+                // Clean up errors on region & zip fix
+                $(this.options.regionInputId).removeClass('mage-error').parent().find('[generated]').remove();
+                $(this.options.regionListId).removeClass('mage-error').parent().find('[generated]').remove();
+                $(this.options.postcodeId).removeClass('mage-error').parent().find('[generated]').remove();
             }
         },
+
         /**
          * Update dropdown list based on the country selected
+         *
          * @param {String} country - 2 uppercase letter for country code
          * @private
          */
@@ -137,10 +157,13 @@ define([
                 regionInput = $(this.options.regionInputId),
                 postcode = $(this.options.postcodeId),
                 label = regionList.parent().siblings('label'),
-                requiredLabel = regionList.parents('div.field');
+                container = regionList.parents('div.field');
 
             this._clearError();
             this._checkRegionRequired(country);
+
+            $(regionList).find('option:selected').removeAttr('selected');
+            regionInput.val('');
 
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
@@ -161,13 +184,16 @@ define([
 
                 if (this.options.isRegionRequired) {
                     regionList.addClass('required-entry').removeAttr('disabled');
-                    requiredLabel.addClass('required');
+                    container.addClass('required').show();
                 } else {
                     regionList.removeClass('required-entry validate-select').removeAttr('data-validate');
-                    requiredLabel.removeClass('required');
+                    container.removeClass('required');
 
-                    if (!this.options.optionalRegionAllowed) {
-                        regionList.attr('disabled', 'disabled');
+                    if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
+                        regionList.hide();
+                        container.hide();
+                    } else {
+                        regionList.show();
                     }
                 }
 
@@ -175,18 +201,22 @@ define([
                 regionInput.hide();
                 label.attr('for', regionList.attr('id'));
             } else {
+                this._removeSelectOptions(regionList);
+
                 if (this.options.isRegionRequired) {
                     regionInput.addClass('required-entry').removeAttr('disabled');
-                    requiredLabel.addClass('required');
+                    container.addClass('required').show();
                 } else {
-                    if (!this.options.optionalRegionAllowed) {
+                    if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
                         regionInput.attr('disabled', 'disabled');
+                        container.hide();
                     }
+                    container.removeClass('required');
+                    regionInput.removeClass('required-entry');
                 }
 
-                regionList.removeClass('required-entry').hide();
+                regionList.removeClass('required-entry').prop('disabled', 'disabled').hide();
                 regionInput.show();
-                requiredLabel.removeClass('required');
                 label.attr('for', regionInput.attr('id'));
             }
 
@@ -208,10 +238,11 @@ define([
          * @private
          */
         _checkRegionRequired: function (country) {
-            this.options.isRegionRequired = false;
             var self = this;
-            $.each(this.options.regionJson.config.regions_required, function (index, elem) {
-                if (elem == country) {
+
+            this.options.isRegionRequired = false;
+            $.each(this.options.regionJson.config['regions_required'], function (index, elem) {
+                if (elem === country) {
                     self.options.isRegionRequired = true;
                 }
             });

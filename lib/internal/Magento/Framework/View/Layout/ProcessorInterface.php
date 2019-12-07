@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -126,7 +126,7 @@ interface ProcessorInterface
     public function getContainers();
 
     /**
-     * Return cache ID based current area/package/theme/store and handles
+     * Return cache ID based current area/package/theme/store, handles and cache key(s)
      *
      * @return string
      */

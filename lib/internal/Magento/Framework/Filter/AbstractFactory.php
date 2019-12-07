@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter;
@@ -68,7 +68,7 @@ abstract class AbstractFactory implements FactoryInterface
      */
     public function isShared($class)
     {
-        return isset($this->shared[$class]) ? $this->shared[$class] : $this->shareByDefault;
+        return $this->shared[$class] ?? $this->shareByDefault;
     }
 
     /**

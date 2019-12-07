@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,26 +21,25 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Input in "Search" field test data.
  * 3. Perform asserts.
  *
- * @group Search_Frontend_(CS)
- * @ZephyrId MAGETWO-24671
+ * @group Search_Frontend
+ * @ZephyrId MAGETWO-24671, MAGETWO-23186
  */
 class SuggestSearchingResultEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
      * Run suggest searching result test.
      *
      * @param CmsIndex $cmsIndex
-     * @param CatalogSearchQuery $catalogSearch
+     * @param CatalogSearchQuery $searchTerm
      * @return void
      */
-    public function testSearch(CmsIndex $cmsIndex, CatalogSearchQuery $catalogSearch)
+    public function testSearch(CmsIndex $cmsIndex, CatalogSearchQuery $searchTerm)
     {
         $cmsIndex->open();
-        $cmsIndex->getSearchBlock()->search($catalogSearch->getQueryText());
+        $cmsIndex->getSearchBlock()->search($searchTerm->getQueryText());
     }
 }

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor as SkuProcessor;
 
-class SkuProcessorTest extends \PHPUnit_Framework_TestCase
+class SkuProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -19,23 +19,15 @@ class SkuProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $skuProcessor;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->productFactory = $this->getMock(
-            '\Magento\Catalog\Model\ProductFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->skuProcessor = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product\SkuProcessor',
-            ['_getSkus'],
-            [
-                $this->productFactory
-            ],
-            ''
-        );
+        $this->productFactory = $this->createMock(\Magento\Catalog\Model\ProductFactory::class);
+        $this->skuProcessor = $this->getMockBuilder(
+            \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class
+        )
+            ->setMethods(['_getSkus'])
+            ->setConstructorArgs([$this->productFactory])
+            ->getMock();
     }
 
     public function testReloadOldSkus()

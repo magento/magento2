@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class BuilderTest
  */
-abstract class EntityChildTestAbstract extends \PHPUnit_Framework_TestCase
+abstract class EntityChildTestAbstract extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Io | \PHPUnit_Framework_MockObject_MockObject
@@ -31,33 +31,33 @@ abstract class EntityChildTestAbstract extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Code\Generator\DefinedClasses */
     protected $definedClassesMock;
 
+    /**
+     * @return mixed
+     */
     abstract protected function getSourceClassName();
 
+    /**
+     * @return mixed
+     */
     abstract protected function getResultClassName();
 
+    /**
+     * @return mixed
+     */
     abstract protected function getGeneratorClassName();
 
+    /**
+     * @return mixed
+     */
     abstract protected function getOutputFileName();
 
     protected function setUp()
     {
         require_once __DIR__ . '/Sample.php';
 
-        $this->ioObjectMock = $this->getMock(
-            'Magento\Framework\Code\Generator\Io',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->classGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\ClassGenerator',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->definedClassesMock = $this->getMockBuilder('Magento\Framework\Code\Generator\DefinedClasses')
+        $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
+        $this->classGenerator = $this->createMock(\Magento\Framework\Code\Generator\ClassGenerator::class);
+        $this->definedClassesMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\DefinedClasses::class)
             ->disableOriginalConstructor()->getMock();
 
         $objectManager = new ObjectManager($this);

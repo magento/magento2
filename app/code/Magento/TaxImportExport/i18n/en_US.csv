@@ -1,0 +1,22 @@
+Code,Code
+Country,Country
+State,State
+"Zip/Post Code","Zip/Post Code"
+Rate,Rate
+"Zip/Post is Range","Zip/Post is Range"
+"Range From","Range From"
+"Range To","Range To"
+"Tax Zones and Rates","Tax Zones and Rates"
+"Import and Export Tax Rates","Import and Export Tax Rates"
+"The tax rate has been imported.","The tax rate has been imported."
+"Invalid file upload attempt","Invalid file upload attempt"
+"Invalid file upload attempt.","Invalid file upload attempt."
+"Invalid file format.","Invalid file format."
+"Country code is invalid: %1","Country code is invalid: %1"
+"Import Tax Rates","Import Tax Rates"
+"Export Tax Rates","Export Tax Rates"
+CSV,CSV
+"Excel XML","Excel XML"
+"Import/Export Tax Rates","Import/Export Tax Rates"
+"Please select a file to import!","Please select a file to import!"
+

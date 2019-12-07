@@ -1,11 +1,17 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Mtf\Console\CommandListInterface" type="Magento\Mtf\Console\CommandList" />
+    <preference for="Magento\Mtf\Util\Command\File\ExportInterface" type="Magento\Mtf\Util\Command\File\Export" />
+    <preference for="Magento\Mtf\Util\Command\File\Export\ReaderInterface" type="Magento\Mtf\Util\Command\File\Export\Reader" />
+
+    <type name="Magento\Mtf\Util\Command\File\Export" shared="false" />
+
     <virtualType name="Magento\Mtf\Config\SchemaLocator\Config" type="Magento\Mtf\Config\SchemaLocator">
         <arguments>
             <argument name="schemaPath" xsi:type="string">etc/config.xsd</argument>
@@ -13,4 +19,100 @@
     </virtualType>
 
     <type name="Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator" shared="true" />
+
+    <type name="Magento\Mtf\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="check-magento-storefront" xsi:type="object">Magento\Mtf\Troubleshooting\StorefrontAnalyzer</item>
+                <item name="check-phpunit-config-file" xsi:type="object">Magento\Mtf\Troubleshooting\PhpUnitAnalyzer</item>
+                <item name="check-magento-admin" xsi:type="object">Magento\Mtf\Troubleshooting\AdminAnalyzer</item>
+                <item name="apply-magento-configuration" xsi:type="object">Magento\Mtf\Troubleshooting\Configuration</item>
+                <item name="check-selenium-session-connection" xsi:type="object">Magento\Mtf\Troubleshooting\SeleniumSessionAnalyzer</item>
+                <item name="generate-static-classes" xsi:type="object">Magento\Mtf\Troubleshooting\StaticClassesGenerator</item>
+                <item name="check-config-valid" xsi:type="object">Magento\Mtf\Troubleshooting\ConfigAnalyzer</item>
+                <item name="check-htaccess" xsi:type="object">Magento\Mtf\Troubleshooting\HtaccessAnalyzer</item>
+                <item name="check-all" xsi:type="object">Magento\Mtf\Troubleshooting\GlobalAnalyzer</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Mtf\Troubleshooting\GlobalAnalyzer">
+        <arguments>
+            <argument name="commandList" xsi:type="array">
+                <item name="0" xsi:type="object">Magento\Mtf\Troubleshooting\PhpUnitAnalyzer</item>
+                <item name="1" xsi:type="object">Magento\Mtf\Troubleshooting\StorefrontAnalyzer</item>
+                <item name="2" xsi:type="object">Magento\Mtf\Troubleshooting\ConfigAnalyzer</item>
+                <item name="3" xsi:type="object">Magento\Mtf\Troubleshooting\AdminAnalyzer</item>
+                <item name="4" xsi:type="object">Magento\Mtf\Troubleshooting\Configuration</item>
+                <item name="5" xsi:type="object">Magento\Mtf\Troubleshooting\HtaccessAnalyzer</item>
+                <item name="6" xsi:type="object">Magento\Mtf\Troubleshooting\StaticClassesGenerator</item>
+                <item name="7" xsi:type="object">Magento\Mtf\Troubleshooting\SeleniumSessionAnalyzer</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Mtf\Troubleshooting\ConfigAnalyzer">
+        <arguments>
+            <argument name="configXml" xsi:type="object">Magento\Mtf\Util\Troubleshooting\GlobalConfig</argument>
+            <argument name="configXmlDist" xsi:type="object">Magento\Mtf\Util\Troubleshooting\GlobalConfigDist</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Mtf\Util\Troubleshooting\Config" type="Magento\Mtf\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="fileResolver" xsi:type="object">Magento\Mtf\Config\FileResolver\Primary</argument>
+            <argument name="converter" xsi:type="object">Magento\Mtf\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Mtf\Config\SchemaLocator\Config</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config" xsi:type="string">scope</item>
+                <item name="/config/server/item" xsi:type="string">name</item>
+            </argument>
+            <argument name="fileName" xsi:type="string">config.xml</argument>
+            <argument name="defaultScope" xsi:type="string">etc</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\Mtf\Util\Troubleshooting\GlobalConfig" type="Magento\Mtf\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Mtf\Util\Troubleshooting\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\Mtf\Util\Troubleshooting\ConfigDist" type="Magento\Mtf\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="fileResolver" xsi:type="object">Magento\Mtf\Config\FileResolver\ScopeConfig</argument>
+            <argument name="converter" xsi:type="object">Magento\Mtf\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Mtf\Config\SchemaLocator\Config</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config" xsi:type="string">scope</item>
+                <item name="/config/server/item" xsi:type="string">name</item>
+            </argument>
+            <argument name="fileName" xsi:type="string">config.xml.dist</argument>
+            <argument name="defaultScope" xsi:type="string">etc</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\Mtf\Util\Troubleshooting\GlobalConfigDist" type="Magento\Mtf\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Mtf\Util\Troubleshooting\ConfigDist</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Mtf\Util\Command\File\Export\Reader">
+        <arguments>
+            <argument name="template" xsi:type="string">\w*?\.csv</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Mtf\Util\Command\File\Export\ProductReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
+        <arguments>
+            <argument name="template" xsi:type="string">catalog_product.*?\.csv</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\Mtf\Util\Command\File\Export\CustomerReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
+        <arguments>
+            <argument name="template" xsi:type="string">customer.*?\.csv</argument>
+        </arguments>
+    </virtualType>
 </config>

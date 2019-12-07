@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\IntUtils;
 use Magento\Framework\Validator\Regex;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -44,25 +44,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_vbFactoryMock = $this->getMock(
-            'Magento\Framework\Validator\UniversalFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->_vbFactoryMock = $this->createPartialMock(
+            \Magento\Framework\Validator\UniversalFactory::class,
+            ['create']
         );
-        $this->_vbMock = $this->getMock('Magento\Framework\Validator\Builder', [], [], '', false);
-        $this->_validatorMock = $this->getMock(
-            'Magento\Framework\Validator\ValidatorInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_vbMock = $this->createMock(\Magento\Framework\Validator\Builder::class);
+        $this->_validatorMock = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->_factory = $objectManager->getObject(
-            'Magento\GoogleAdwords\Model\Validator\Factory',
+            \Magento\GoogleAdwords\Model\Validator\Factory::class,
             ['validatorBuilderFactory' => $this->_vbFactoryMock]
         );
     }
@@ -80,13 +71,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\Validator\Builder',
+            \Magento\Framework\Validator\Builder::class,
             [
                 'constraints' => [
                     [
                         'alias' => 'Regex',
                         'type' => '',
-                        'class' => 'Magento\Framework\Validator\Regex',
+                        'class' => \Magento\Framework\Validator\Regex::class,
                         'options' => [
                             'arguments' => ['pattern' => '/^[0-9a-f]{6}$/i'],
                             'methods' => [
@@ -129,13 +120,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\Validator\Builder',
+            \Magento\Framework\Validator\Builder::class,
             [
                 'constraints' => [
                     [
                         'alias' => 'Int',
                         'type' => '',
-                        'class' => 'Magento\Framework\Validator\IntUtils',
+                        'class' => \Magento\Framework\Validator\IntUtils::class,
                         'options' => [
                             'methods' => [
                                 [

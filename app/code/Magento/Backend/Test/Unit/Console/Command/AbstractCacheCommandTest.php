@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 
 use Magento\Backend\Console\Command\AbstractCacheManageCommand;
 
-abstract class AbstractCacheCommandTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractCacheCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Cache\Manager|\PHPUnit_Framework_MockObject_MockObject
@@ -20,9 +20,9 @@ abstract class AbstractCacheCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected $command;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->cacheManagerMock = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
+        $this->cacheManagerMock = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
     }
 
     /**

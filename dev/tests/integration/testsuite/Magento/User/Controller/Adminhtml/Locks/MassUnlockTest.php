@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\Locks;
 
+/**
+ * Testing unlock controller.
+ *
+ * @magentoAppArea adminhtml
+ */
 class MassUnlockTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
@@ -18,7 +23,7 @@ class MassUnlockTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $userIds = [];
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $model \Magento\User\Model\User */
-        $model = $objectManager->create('Magento\User\Model\User');
+        $model = $objectManager->create(\Magento\User\Model\User::class);
         $userIds[] = $model->loadByUsername('adminUser1')->getId();
         $userIds[] = $model->loadByUsername('adminUser2')->getId();
 

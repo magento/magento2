@@ -1,16 +1,16 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <tr class="data-grid-editable-row data-grid-editable-row-actions">
     <td>
-        <button class="action-tertiary" type="button" data-bind="click: cancel">
-            <span data-bind="text: 'Cancel'"></span>
+        <button class="action-tertiary" type="button" click="cancel">
+            <span translate="'Cancel'"/>
         </button>
-        <button class="action-primary" type="button" data-bind="click: save, attr: { disabled: !canSave() }">
-            <span data-bind="text: 'Save'"></span>
+        <button class="action-primary" type="button" click="save" disable="!canSave()">
+            <span translate="'Save'"/>
         </button>
     </td>
 </tr>

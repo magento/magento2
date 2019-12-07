@@ -1,25 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer;
 
 use Magento\Framework\View\Element\Message\Renderer\RenderersPool;
 
-class RenderersPoolTest extends \PHPUnit_Framework_TestCase
+class RenderersPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetRenderer()
     {
         $renderers = [
-            'renderer_1' => $this->getMock(
-                'Magento\Framework\View\Element\Message\Renderer\RendererInterface'
+            'renderer_1' => $this->createMock(
+                \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             ),
-            'renderer_2' => $this->getMock(
-                'Magento\Framework\View\Element\Message\Renderer\RendererInterface'
+            'renderer_2' => $this->createMock(
+                \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             ),
-            'renderer_3' => $this->getMock(
-                'Magento\Framework\View\Element\Message\Renderer\RendererInterface'
+            'renderer_3' => $this->createMock(
+                \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             )
         ];
 

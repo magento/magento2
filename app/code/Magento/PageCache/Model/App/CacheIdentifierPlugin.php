@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\PageCache\Model\App;
 
+use Magento\Store\Model\StoreManager;
+
 /**
  * Class CachePlugin
+ *
  * Should add design exceptions o identifier for built-in cache
  */
 class CacheIdentifierPlugin
@@ -40,10 +43,23 @@ class CacheIdentifierPlugin
     public function afterGetValue(\Magento\Framework\App\PageCache\Identifier $identifier, $result)
     {
         if ($this->config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->config->isEnabled()) {
+            $identifierPrefix = '';
+
             $ruleDesignException = $this->designExceptions->getThemeByRequest($this->request);
             if ($ruleDesignException !== false) {
-                return $ruleDesignException . $result;
+                $identifierPrefix .= 'DESIGN' . '=' . $ruleDesignException . '|';
             }
+
+            if ($runType = $this->request->getServerValue(StoreManager::PARAM_RUN_TYPE)) {
+                $identifierPrefix .= StoreManager::PARAM_RUN_TYPE . '=' .  $runType . '|';
+            }
+
+            if ($runCode = $this->request->getServerValue(StoreManager::PARAM_RUN_CODE)) {
+                $identifierPrefix .= StoreManager::PARAM_RUN_CODE . '=' . $runCode . '|';
+            }
+
+            return $identifierPrefix . $result;
+
         }
         return $result;
     }

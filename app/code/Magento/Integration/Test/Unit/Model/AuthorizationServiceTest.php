@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Authorization\Model\ResourceModel\Rules;
@@ -11,7 +12,10 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\RootResource;
 use Magento\Integration\Model\AuthorizationService;
 
-class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Sample role Id
@@ -50,40 +54,25 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->roleMock = $this->getMock(
-            'Magento\Authorization\Model\Role',
-            ['load', 'delete', '__wakeup', 'getId', 'save'],
-            [],
-            '',
-            false
+        $this->roleMock = $this->createPartialMock(
+            \Magento\Authorization\Model\Role::class,
+            ['load', 'delete', '__wakeup', 'getId', 'save']
         );
         $this->roleMock->expects($this->any())->method('load')->will($this->returnSelf());
         $this->roleMock->expects($this->any())->method('delete')->will($this->returnSelf());
         $this->roleMock->expects($this->any())->method('save')->will($this->returnSelf());
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Authorization\Model\RoleFactory $roleFactoryMock */
-        $roleFactoryMock = $this->getMock(
-            'Magento\Authorization\Model\RoleFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $roleFactoryMock = $this->createPartialMock(\Magento\Authorization\Model\RoleFactory::class, ['create']);
         $roleFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->roleMock));
 
-        $roleCollectionFactoryMock = $this->getMock(
-            'Magento\Authorization\Model\ResourceModel\Role\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $roleCollectionFactoryMock = $this->createPartialMock(
+            \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class,
+            ['create']
         );
-        $roleCollectionMock = $this->getMock(
-            'Magento\Authorization\Model\ResourceModel\Role\Collection',
-            ['setUserFilter', 'getFirstItem'],
-            [],
-            '',
-            false
+        $roleCollectionMock = $this->createPartialMock(
+            \Magento\Authorization\Model\ResourceModel\Role\Collection::class,
+            ['setUserFilter', 'getFirstItem']
         );
         $roleCollectionMock->expects($this->any())->method('setUserFilter')->will($this->returnSelf());
         $roleCollectionMock->expects($this->any())->method('getFirstItem')->will($this->returnValue($this->roleMock));
@@ -92,27 +81,24 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($roleCollectionMock));
 
-        $rulesFactoryMock = $this->getMock('Magento\Authorization\Model\RulesFactory', ['create'], [], '', false);
-        $this->rulesMock = $this->getMock(
-            'Magento\Authorization\Model\Rules',
-            ['setRoleId', 'setResources', 'saveRel'],
-            [],
-            '',
-            false
+        $rulesFactoryMock = $this->createPartialMock(\Magento\Authorization\Model\RulesFactory::class, ['create']);
+        $this->rulesMock = $this->createPartialMock(
+            \Magento\Authorization\Model\Rules::class,
+            ['setRoleId', 'setResources', 'saveRel']
         );
         $rulesFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->rulesMock));
 
-        $this->rootAclResourceMock = $this->getMock('Magento\Framework\Acl\RootResource', ['getId'], [], '', false);
+        $this->rootAclResourceMock = $this->createPartialMock(\Magento\Framework\Acl\RootResource::class, ['getId']);
 
         $this->integrationAuthorizationService = new AuthorizationService(
-            $this->getMock('Magento\Framework\Acl\Builder', [], [], '', false),
+            $this->createMock(\Magento\Framework\Acl\Builder::class),
             $roleFactoryMock,
             $roleCollectionFactoryMock,
             $rulesFactoryMock,
-            $this->getMock('Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory', [], [], '', false),
-            $this->getMock('Psr\Log\LoggerInterface'),
+            $this->createMock(\Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory::class),
+            $this->createMock(\Psr\Log\LoggerInterface::class),
             $this->rootAclResourceMock
         );
     }
@@ -134,7 +120,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
         $this->roleMock->expects($this->once())
             ->method('load')
             ->with($roleName)
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->integrationAuthorizationService->removePermissions(self::INTEGRATION_ID);
     }
 
@@ -155,7 +141,8 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->rulesMock->expects($this->any())->method('saveRel')->will($this->returnSelf());
 
-        $this->integrationAuthorizationService->grantPermissions(self::INTEGRATION_ID, $this->resources);
+        $result = $this->integrationAuthorizationService->grantPermissions(self::INTEGRATION_ID, $this->resources);
+        $this->assertNull($result);
     }
 
     public function testGrantPermissionsNoRole()
@@ -185,12 +172,12 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->rulesMock->expects($this->any())->method('saveRel')->will($this->returnSelf());
 
-        $this->integrationAuthorizationService->grantPermissions(self::INTEGRATION_ID, $this->resources);
+        $result = $this->integrationAuthorizationService->grantPermissions(self::INTEGRATION_ID, $this->resources);
+        $this->assertNull($result);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Sorry, something went wrong granting permissions.
      */
     public function testGrantPermissionsException()
     {
@@ -207,9 +194,13 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             ->method('setResources')
             ->with($this->resources)
             ->will($this->returnSelf());
-        $this->rulesMock->expects($this->any())->method('saveRel')->will($this->throwException(new \Exception));
+        $this->rulesMock->expects($this->any())->method('saveRel')->will($this->throwException(new \Exception()));
 
         $this->integrationAuthorizationService->grantPermissions(self::INTEGRATION_ID, $this->resources);
+
+        $this->expectExceptionMessage(
+            'An error occurred during the attempt to grant permissions. For details, see the exceptions log.'
+        );
     }
 
     public function testGrantAllPermissions()
@@ -225,6 +216,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->rulesMock->expects($this->any())->method('saveRel')->will($this->returnSelf());
 
-        $this->integrationAuthorizationService->grantAllPermissions(self::INTEGRATION_ID);
+        $result = $this->integrationAuthorizationService->grantAllPermissions(self::INTEGRATION_ID);
+        $this->assertNull($result);
     }
 }

@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="top.container">
-            <block class="Magento\Paypal\Block\Bml\Banners" name="bml.center.logo" template="bml.phtml">
+            <block class="Magento\Paypal\Block\Bml\Banners" name="bml.center.logo" template="Magento_Paypal::bml.phtml">
                 <arguments>
                     <argument name="section" xsi:type="string">productpage</argument>
                     <argument name="position" xsi:type="number">0</argument>
@@ -16,7 +16,7 @@
             </block>
         </referenceContainer>
         <referenceContainer name="product.info.addtocart">
-            <block class="Magento\Paypal\Block\Bml\Banners" name="bml.right.logo" after="product.info.addtocart.paypal" template="bml.phtml">
+            <block class="Magento\Paypal\Block\Bml\Banners" name="bml.right.logo" template="Magento_Paypal::bml.phtml">
                 <arguments>
                     <argument name="section" xsi:type="string">productpage</argument>
                     <argument name="position" xsi:type="number">1</argument>

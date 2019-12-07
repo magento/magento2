@@ -1,31 +1,39 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
-
+/**
+ * MySQL search field.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 interface FieldInterface
 {
     const TYPE_FLAT = 1;
     const TYPE_FULLTEXT = 2;
 
     /**
-     * Get type of index
+     * Get type of index.
+     *
      * @return int
      */
     public function getType();
 
     /**
-     * Get ID of attribute
+     * Get ID of attribute.
+     *
      * @return int
      */
     public function getAttributeId();
 
     /**
-     * Get field name
+     * Get field nam.
+     *
      * @return string
      */
     public function getColumn();

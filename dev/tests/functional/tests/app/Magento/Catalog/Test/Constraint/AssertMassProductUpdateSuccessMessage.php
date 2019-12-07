@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,15 +23,14 @@ class AssertMassProductUpdateSuccessMessage extends AbstractConstraint
      * Assert that after mass update successful message appears.
      *
      * @param CatalogProductIndex $productGrid
-     * @param array $products
+     * @param int $productsCount
      * @return void
      */
-    public function processAssert(CatalogProductIndex $productGrid, $products = [])
+    public function processAssert(CatalogProductIndex $productGrid, $productsCount)
     {
-        $countProducts = count($products) ? count($products) : 1;
-        $expectedMessage = sprintf(self::SUCCESS_MESSAGE, $countProducts);
+        $expectedMessage = sprintf(self::SUCCESS_MESSAGE, $productsCount);
         $actualMessage = $productGrid->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong success message is displayed.'

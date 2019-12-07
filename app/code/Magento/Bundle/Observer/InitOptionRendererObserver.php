@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Observer;
@@ -18,7 +18,7 @@ class InitOptionRendererObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $block = $observer->getBlock();
-        $block->addOptionsRenderCfg('bundle', 'Magento\Bundle\Helper\Catalog\Product\Configuration');
+        $block->addOptionsRenderCfg('bundle', \Magento\Bundle\Helper\Catalog\Product\Configuration::class);
         return $this;
     }
 }

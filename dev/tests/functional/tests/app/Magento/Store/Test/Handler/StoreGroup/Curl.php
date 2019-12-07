@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class Curl extends AbstractCurl implements StoreGroupInterface
         $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("Store group entity creating by curl handler was not successful! Response: $response");
         }
 
@@ -65,7 +65,7 @@ class Curl extends AbstractCurl implements StoreGroupInterface
             throw new \Exception('Cannot find store group id');
         }
 
-        return intval($matches[1]);
+        return (int)$matches[1];
     }
 
     /**
@@ -84,6 +84,7 @@ class Curl extends AbstractCurl implements StoreGroupInterface
                 'root_category_id' => $categoryId,
                 'website_id' => $websiteId,
                 'group_id' => $fixture->hasData('group_id') ? $fixture->getGroupId() : '',
+                'code' => $fixture->hasData('code') ? $fixture->getCode() : '',
             ],
             'store_action' => 'add',
             'store_type' => 'group',

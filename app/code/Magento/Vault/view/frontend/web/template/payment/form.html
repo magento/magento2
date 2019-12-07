@@ -1,0 +1,58 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="payment-method" css="'_active': (getId() === isChecked())">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="
+                    attr: {'id': getId()},
+                    value: getId(),
+                    click: selectPaymentMethod,
+                    checked: isChecked,
+                    visible: isRadioButtonVisible()"/>
+        <label class="label" data-bind="attr: {'for': getId()}">
+            <img data-bind="attr: {
+            'src': getIcons(getCardType()).url,
+            'width': getIcons(getCardType()).width,
+            'height': getIcons(getCardType()).height,
+            'alt': getIcons(getCardType()).title
+            }" class="payment-icon">
+            <span translate="'ending'"></span>
+            <span text="getMaskedCard()"></span>
+            (
+            <span translate="'expires'"></span>:
+            <span text="getExpirationDate()"></span>
+            )
+        </label>
+    </div>
+
+    <div class="payment-method-content">
+        <each args="getRegion('messages')" render=""></each>
+        <div class="payment-method-billing-address">
+            <each args="data: $parent.getRegion(getBillingAddressFormName()), as: '$item'">
+                <render args="$item.getTemplate()"/>
+            </each>
+        </div>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                            click: placeOrder,
+                            attr: {title: $t('Place Order')}">
+                    <span translate="'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

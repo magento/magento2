@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
-
 /**
  * Class SearchResultTest
  */
-class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
+class GenerateSearchResultsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -21,13 +20,7 @@ class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->ioObjectMock = $this->getMock(
-            '\Magento\Framework\Code\Generator\Io',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
     }
 
     /**
@@ -36,24 +29,22 @@ class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         require_once __DIR__ . '/Sample.php';
-        $model = $this->getMock(
-            'Magento\Framework\Api\Code\Generator\SearchResults',
-            [
-                '_validateData'
-            ],
-            [
-                '\Magento\Framework\Api\Code\Generator\Sample',
-                null,
-                $this->ioObjectMock,
-                null,
-                null,
-                $this->getMock('Magento\Framework\Filesystem\FileResolver')
-            ]
-        );
+        $model = $this->getMockBuilder(\Magento\Framework\Api\Code\Generator\SearchResults::class)
+            ->setMethods(['_validateData'])
+            ->setConstructorArgs(
+                [\Magento\Framework\Api\Code\Generator\Sample::class,
+                    null,
+                    $this->ioObjectMock,
+                    null,
+                    null,
+                    $this->createMock(\Magento\Framework\Filesystem\FileResolver::class)
+                ]
+            )
+            ->getMock();
         $sampleSearchResultBuilderCode = file_get_contents(__DIR__ . '/_files/SampleSearchResults.txt');
         $this->ioObjectMock->expects($this->once())
             ->method('generateResultFileName')
-            ->with('\Magento\Framework\Api\Code\Generator\SampleSearchResults')
+            ->with('\\' . \Magento\Framework\Api\Code\Generator\SampleSearchResults::class)
             ->will($this->returnValue('SampleSearchResults.php'));
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\TestAsset;
@@ -14,15 +14,19 @@ class ConstructorOneArgument
 
     /**
      * One argument
-     */
-
-    /**
-     * One argument
      *
      * @param \Magento\Framework\ObjectManager\TestAsset\Basic $one
      */
     public function __construct(\Magento\Framework\ObjectManager\TestAsset\Basic $one)
     {
         $this->_one = $one;
+    }
+
+    /**
+     * @return Basic
+     */
+    public function getBasicDependency()
+    {
+        return $this->_one;
     }
 }

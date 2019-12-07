@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,6 +48,8 @@ class ToOrderItem
     }
 
     /**
+     * Convert quote item(quote address item) into order item.
+     *
      * @param Item|AddressItem $item
      * @param array $data
      * @return OrderItemInterface
@@ -63,6 +65,16 @@ class ToOrderItem
             'to_order_item',
             $item
         );
+        if ($item instanceof \Magento\Quote\Model\Quote\Address\Item) {
+            $orderItemData = array_merge(
+                $orderItemData,
+                $this->objectCopyService->getDataFromFieldset(
+                    'quote_convert_address_item',
+                    'to_order_item',
+                    $item
+                )
+            );
+        }
         if (!$item->getNoDiscount()) {
             $data = array_merge(
                 $data,
@@ -78,7 +90,7 @@ class ToOrderItem
         $this->dataObjectHelper->populateWithArray(
             $orderItem,
             array_merge($orderItemData, $data),
-            '\Magento\Sales\Api\Data\OrderItemInterface'
+            \Magento\Sales\Api\Data\OrderItemInterface::class
         );
         $orderItem->setProductOptions($options);
         if ($item->getParentItem()) {

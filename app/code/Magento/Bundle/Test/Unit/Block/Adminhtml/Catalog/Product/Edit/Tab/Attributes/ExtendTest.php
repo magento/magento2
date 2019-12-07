@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
 use Magento\Catalog\Model\Product;
 
-class ExtendTest extends \PHPUnit_Framework_TestCase
+class ExtendTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
@@ -21,15 +21,17 @@ class ExtendTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
     protected $object;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->registry = $this->getMockBuilder('Magento\\Framework\\Registry')->disableOriginalConstructor()->getMock(
-        );
-        $this->formFactory = $this->getMockBuilder('Magento\\Framework\\Data\\FormFactory')->disableOriginalConstructor(
-        )->getMock();
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->formFactory = $this->getMockBuilder(
+            \Magento\Framework\Data\FormFactory::class
+        )->disableOriginalConstructor()->getMock();
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
-            'Magento\\Bundle\\Block\\Adminhtml\\Catalog\\Product\\Edit\\Tab\\Attributes\\Extend',
+            \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::class,
             ['registry' => $this->registry, 'formFactory' => $this->formFactory]
         );
     }
@@ -53,16 +55,11 @@ class ExtendTest extends \PHPUnit_Framework_TestCase
     {
         $switchAttributeCode = 'test_code';
         $form = $this->getMockBuilder(\Magento\Framework\Data\Form::class)->disableOriginalConstructor()->getMock();
-        $and = new \PHPUnit_Framework_Constraint_And();
-        $and->setConstraints(
-            [
-                new \PHPUnit_Framework_Constraint_ArrayHasKey('value')
-            ]
-        );
+        $hasKey = new \PHPUnit\Framework\Constraint\ArrayHasKey('value');
         $form->expects($this->once())->method('addField')->with(
             $switchAttributeCode,
             'select',
-            $and
+            $hasKey
         );
 
         $this->formFactory->expects($this->once())->method('create')->with()->will($this->returnValue($form));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Console\Command;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @see \Magento\Developer\Console\Command\SourceThemeDeployCommand
  */
-class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
+class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
 {
     const PUB_STATIC_DIRECTORY = 'pub/static';
 
@@ -87,15 +87,17 @@ class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function clearStaticDirectory()
     {
-        /** @var \SplFileInfo $file */
-        foreach ($this->collectFiles($this->pubStatic) as $file) {
-            @unlink($file->getPathname());
+        if (is_dir($this->pubStatic)) {
+            /** @var \SplFileInfo $file */
+            foreach ($this->collectFiles($this->pubStatic) as $file) {
+                @unlink($file->getPathname());
+            }
         }
     }
 
     /**
      * @param string $path
-     * @return \RegexIterator
+     * @return \RegexIterator|array
      */
     private function collectFiles($path)
     {

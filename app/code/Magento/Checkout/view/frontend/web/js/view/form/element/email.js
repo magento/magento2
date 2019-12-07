@@ -1,9 +1,8 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+
 define([
     'jquery',
     'uiComponent',
@@ -18,7 +17,16 @@ define([
 ], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
     'use strict';
 
-    var validatedEmail = checkoutData.getValidatedEmailValue();
+    var validatedEmail;
+
+    if (!checkoutData.getValidatedEmailValue() &&
+        window.checkoutConfig.validatedEmailValue
+    ) {
+        checkoutData.setInputFieldEmailValue(window.checkoutConfig.validatedEmailValue);
+        checkoutData.setValidatedEmailValue(window.checkoutConfig.validatedEmailValue);
+    }
+
+    validatedEmail = checkoutData.getValidatedEmailValue();
 
     if (validatedEmail && !customer.isLoggedIn()) {
         quote.guestEmail = validatedEmail;
@@ -34,6 +42,9 @@ define([
             listens: {
                 email: 'emailHasChanged',
                 emailFocused: 'validateEmail'
+            },
+            ignoreTmpls: {
+                email: true
             }
         },
         checkDelay: 2000,
@@ -42,6 +53,19 @@ define([
         isCustomerLoggedIn: customer.isLoggedIn,
         forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
         emailCheckTimeout: 0,
+
+        /**
+         * Initializes regular properties of instance.
+         *
+         * @returns {Object} Chainable.
+         */
+        initConfig: function () {
+            this._super();
+
+            this.isPasswordVisible = this.resolveInitialPasswordVisibility();
+
+            return this;
+        },
 
         /**
          * Initializes observable properties of instance
@@ -82,19 +106,19 @@ define([
          * Check email existing.
          */
         checkEmailAvailability: function () {
-            var self = this;
             this.validateRequest();
             this.isEmailCheckComplete = $.Deferred();
             this.isLoading(true);
             this.checkRequest = checkEmailAvailability(this.isEmailCheckComplete, this.email());
 
             $.when(this.isEmailCheckComplete).done(function () {
-                self.isPasswordVisible(false);
-            }).fail(function () {
-                self.isPasswordVisible(true);
-            }).always(function () {
-                self.isLoading(false);
-            });
+                this.isPasswordVisible(false);
+            }.bind(this)).fail(function () {
+                this.isPasswordVisible(true);
+                checkoutData.setCheckedEmailValue(this.email());
+            }.bind(this)).always(function () {
+                this.isLoading(false);
+            }.bind(this));
         },
 
         /**
@@ -121,12 +145,19 @@ define([
             var loginFormSelector = 'form[data-role=email-with-possible-login]',
                 usernameSelector = loginFormSelector + ' input[name=username]',
                 loginForm = $(loginFormSelector),
-                validator;
+                validator,
+                valid;
 
             loginForm.validation();
 
             if (focused === false && !!this.email()) {
-                return !!$(usernameSelector).valid();
+                valid = !!$(usernameSelector).valid();
+
+                if (valid) {
+                    $(usernameSelector).removeAttr('aria-invalid aria-describedby');
+                }
+
+                return valid;
             }
 
             validator = loginForm.validate();
@@ -149,10 +180,27 @@ define([
 
             if (this.isPasswordVisible() && $(loginForm).validation() && $(loginForm).validation('isValid')) {
                 fullScreenLoader.startLoader();
-                loginAction(loginData).always(function() {
+                loginAction(loginData).always(function () {
                     fullScreenLoader.stopLoader();
                 });
             }
+        },
+
+        /**
+         * Resolves an initial state of a login form.
+         *
+         * @returns {Boolean} - initial visibility state.
+         */
+        resolveInitialPasswordVisibility: function () {
+            if (checkoutData.getInputFieldEmailValue() !== '' && checkoutData.getCheckedEmailValue() === '') {
+                return true;
+            }
+
+            if (checkoutData.getInputFieldEmailValue() !== '') {
+                return checkoutData.getInputFieldEmailValue() === checkoutData.getCheckedEmailValue();
+            }
+
+            return false;
         }
     });
 });

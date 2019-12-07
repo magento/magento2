@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,14 +28,13 @@ use Magento\Mtf\TestCase\Injectable;
  *  4. Click "Delete Role" button
  *  5. Perform all assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-23926
  */
 class DeleteUserRoleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -118,6 +117,8 @@ class DeleteUserRoleEntityTest extends Injectable
             $this->adminAuthLogin->open();
             $this->adminAuthLogin->getLoginBlock()->fill($adminUser);
             $this->adminAuthLogin->getLoginBlock()->submit();
+            $this->adminAuthLogin->waitForHeaderBlock();
+            $this->adminAuthLogin->dismissAdminUsageNotification();
         }
         $this->userRoleIndex->open();
         $this->userRoleIndex->getRoleGrid()->searchAndOpen($filter);

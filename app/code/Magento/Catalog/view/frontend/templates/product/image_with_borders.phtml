@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <span class="product-image-container"
-      style="width:<?php /* @escapeNotVerified */ echo $block->getWidth()?>px;">
+      style="width:<?= $block->escapeHtmlAttr($block->getWidth()) ?>px;">
     <span class="product-image-wrapper"
-          style="padding-bottom: <?php /* @escapeNotVerified */ echo ($block->getRatio() * 100); ?>%;">
-        <img class="product-image-photo"
-             <?php /* @escapeNotVerified */ echo $block->getCustomAttributes(); ?>
-             src="<?php /* @escapeNotVerified */ echo $block->getImageUrl(); ?>"
-             width="<?php /* @escapeNotVerified */ echo $block->getResizedImageWidth(); ?>"
-             height="<?php /* @escapeNotVerified */ echo $block->getResizedImageHeight(); ?>"
-             alt="<?php /* @escapeNotVerified */ echo $block->stripTags($block->getLabel(), null, true); ?>"/></span>
+          style="padding-bottom: <?= ($block->getRatio() * 100) ?>%;">
+        <img class="<?= $block->escapeHtmlAttr($block->getClass()) ?>"
+            <?= $block->escapeHtmlAttr($block->getCustomAttributes()) ?>
+            src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
+            max-width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
+            max-height="<?= $block->escapeHtmlAttr($block->getHeight()) ?>"
+            alt="<?= /* @noEscape */ $block->stripTags($block->getLabel(), null, true) ?>"/></span>
 </span>

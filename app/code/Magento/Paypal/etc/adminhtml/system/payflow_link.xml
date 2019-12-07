@@ -1,18 +1,21 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="payflow_link" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
-        <label>Payflow Link (Includes Express Checkout)</label>
+        <label>Payflow Link</label>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-        <fieldset_css>pp-method-payflow</fieldset_css>
-        <comment>Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site.</comment>
+        <fieldset_css>paypal-other-section</fieldset_css>
+        <comment><![CDATA[Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflow_link/active</attribute>
-        <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-payflow-link?partner_id=NB9WWHYEMVUMS</more_url>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-link.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
         <group id="payflow_link_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -67,13 +70,15 @@
                     </depends>
                     <attribute type="shared">1</attribute>
                 </field>
-                <field id="proxy_port" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1">
+                <field id="proxy_port" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1">
                     <label>Proxy Port</label>
+                    <comment>Please enter at least 0 and at most 65535</comment>
                     <config_path>payment/payflow_link/proxy_port</config_path>
                     <depends>
                         <field id="use_proxy">1</field>
                     </depends>
                     <attribute type="shared">1</attribute>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
                 </field>
                 <field id="payflowlink_info" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Info</frontend_model>
@@ -103,10 +108,10 @@
                     <field id="enable_payflow_link"/>
                 </requires>
             </field>
-            <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="41">
+            <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="41" showInDefault="1" showInWebsite="1">
                 <comment><![CDATA[Payflow Link lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
-                        <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                        <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
                 </comment>
                 <config_path>payment/payflow_express_bml/active</config_path>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Bml</frontend_model>
@@ -114,18 +119,25 @@
                     <field id="enable_express_checkout"/>
                 </requires>
             </field>
+            <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1">
+                <config_path>payment/payflow_express_bml/sort_order</config_path>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
+                <depends>
+                    <field id="enable_express_checkout_bml">1</field>
+                </depends>
+            </field>
 
 
 
-            <group id="payflow_link_advertise_bml"  translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="42">
+            <group id="payflow_link_advertise_bml"  translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="60">
                 <label>Advertise PayPal Credit</label>
                 <comment>
-                    <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                    <![CDATA[<a href="https://financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
                         <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
                         from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
                         Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
                         The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                        or more. <a href="https:/financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                        or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
                 </comment>
                 <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
                 <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />

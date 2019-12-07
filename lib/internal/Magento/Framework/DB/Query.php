@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
@@ -142,7 +142,7 @@ class Query implements QueryInterface
             $sql = $this->getSelectCountSql();
             $this->totalRecords = $this->getConnection()->fetchOne($sql, $this->bindParams);
         }
-        return intval($this->totalRecords);
+        return (int)$this->totalRecords;
     }
 
     /**

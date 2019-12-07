@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Category;
 
-class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
+class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -44,8 +44,8 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperMock = $this->getMock('Magento\GoogleOptimizer\Helper\Data', [], [], '', false);
-        $this->_categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $this->_helperMock = $this->createMock(\Magento\GoogleOptimizer\Helper\Data::class);
+        $this->_categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->_storeId = 0;
         $this->_categoryMock->expects(
             $this->atLeastOnce()
@@ -54,16 +54,16 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_storeId)
         );
-        $event = $this->getMock('Magento\Framework\Event', ['getCategory'], [], '', false);
+        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getCategory']);
         $event->expects($this->once())->method('getCategory')->will($this->returnValue($this->_categoryMock));
-        $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
-        $this->_codeMock = $this->getMock('Magento\GoogleOptimizer\Model\Code', [], [], '', false);
-        $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(
-            'Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver',
+            \Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver::class,
             ['helper' => $this->_helperMock, 'modelCode' => $this->_codeMock, 'request' => $this->_requestMock]
         );
     }
@@ -85,7 +85,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -113,8 +113,6 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $params
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Wrong request parameters
      * @dataProvider dataProviderWrongRequestForCreating
      */
     public function testCreatingCodeIfRequestIsNotValid($params)
@@ -174,7 +172,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -223,7 +221,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -254,7 +252,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(

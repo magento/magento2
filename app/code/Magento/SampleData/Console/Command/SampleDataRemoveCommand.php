@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\SampleData\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\SampleData\Model\Dependency;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -22,6 +23,8 @@ use Composer\Console\ApplicationFactory;
  */
 class SampleDataRemoveCommand extends Command
 {
+    const OPTION_NO_UPDATE = 'no-update';
+
     /**
      * @var Filesystem
      */
@@ -34,6 +37,7 @@ class SampleDataRemoveCommand extends Command
 
     /**
      * @var ArrayInputFactory
+     * @deprecated 100.1.0
      */
     private $arrayInputFactory;
 
@@ -68,6 +72,12 @@ class SampleDataRemoveCommand extends Command
     {
         $this->setName('sampledata:remove')
             ->setDescription('Remove all sample data packages from composer.json');
+        $this->addOption(
+            self::OPTION_NO_UPDATE,
+            null,
+            InputOption::VALUE_NONE,
+            'Update composer.json without executing composer update'
+        );
         parent::configure();
     }
 
@@ -80,10 +90,12 @@ class SampleDataRemoveCommand extends Command
         if (!empty($sampleDataPackages)) {
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
             $commonArgs = ['--working-dir' => $baseDir, '--no-interaction' => 1, '--no-progress' => 1];
+            if ($input->getOption(self::OPTION_NO_UPDATE)) {
+                $commonArgs['--no-update'] = 1;
+            }
             $packages = array_keys($sampleDataPackages);
             $arguments = array_merge(['command' => 'remove', 'packages' => $packages], $commonArgs);
-            /** @var ArrayInput $commandInput */
-            $commandInput = $this->arrayInputFactory->create(['parameters' => $arguments]);
+            $commandInput = new ArrayInput($arguments);
 
             /** @var Application $application */
             $application = $this->applicationFactory->create();

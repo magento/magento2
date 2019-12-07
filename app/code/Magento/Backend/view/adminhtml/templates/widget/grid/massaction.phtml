@@ -1,41 +1,38 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php /* @escapeNotVerified */ echo $block->getSomething(); ?>
-<div id="<?php echo $block->getHtmlId() ?>" class="admin__grid-massaction">
+<?= /* @noEscape */ $block->getSomething() ?>
+<div id="<?= $block->getHtmlId() ?>" class="admin__grid-massaction">
 
-    <?php if ($block->getHideFormElement() !== true):?>
-    <form action="" id="<?php echo $block->getHtmlId() ?>-form" method="post">
+    <?php if ($block->getHideFormElement() !== true) : ?>
+    <form action="" id="<?= $block->getHtmlId() ?>-form" method="post">
     <?php endif ?>
         <div class="admin__grid-massaction-form">
-    <?php echo $block->getBlockHtml('formkey')?>
+    <?= $block->getBlockHtml('formkey') ?>
             <select
-                id="<?php echo $block->getHtmlId() ?>-select"
+                id="<?= $block->getHtmlId() ?>-select"
                 class="required-entry local-validation admin__control-select"
-                <?php /* @escapeNotVerified */ echo $block->getUiId('select') ?>>
-                <option class="admin__control-select-placeholder" value="" selected><?php /* @escapeNotVerified */ echo __('Actions') ?></option>
-                <?php foreach ($block->getItems() as $_item):?>
-                    <option value="<?php /* @escapeNotVerified */ echo $_item->getId() ?>"<?php echo($_item->getSelected() ? ' selected="selected"' : '')?>><?php /* @escapeNotVerified */ echo $_item->getLabel() ?></option>
+                <?= /* @noEscape */ $block->getUiId('select') ?>>
+                <option class="admin__control-select-placeholder" value="" selected><?= $block->escapeHtml(__('Actions')) ?></option>
+                <?php foreach ($block->getItems() as $_item) : ?>
+                    <option value="<?= $block->escapeHtmlAttr($_item->getId()) ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?= $block->escapeHtml($_item->getLabel()) ?></option>
                 <?php endforeach; ?>
             </select>
-            <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-hiddens"></span>
-            <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-additional"></span>
-            <?php echo $block->getApplyButtonHtml() ?>
+            <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-hiddens"></span>
+            <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-additional"></span>
+            <?= $block->getApplyButtonHtml() ?>
         </div>
-    <?php if ($block->getHideFormElement() !== true):?>
+    <?php if ($block->getHideFormElement() !== true) :?>
     </form>
     <?php endif ?>
     <div class="no-display">
-    <?php foreach ($block->getItems() as $_item): ?>
-        <div id="<?php echo $block->getHtmlId() ?>-item-<?php /* @escapeNotVerified */ echo $_item->getId() ?>-block">
-            <?php if ('' != $_item->getBlockName()):?>
-                <?php echo $block->getChildHtml($_item->getBlockName());?>
+    <?php foreach ($block->getItems() as $_item) : ?>
+        <div id="<?= $block->getHtmlId() ?>-item-<?= /* @noEscape */ $_item->getId() ?>-block">
+            <?php if ('' != $_item->getBlockName()) :?>
+                <?= $block->getChildHtml($_item->getBlockName()) ?>
             <?php endif;?>
         </div>
     <?php endforeach; ?>
@@ -43,56 +40,60 @@
 
     <div class="mass-select-wrap">
         <select
-            id="<?php echo $block->getHtmlId() ?>-mass-select"
-            class="action-select-multiselect"
+            id="<?= $block->getHtmlId() ?>-mass-select"
+            class="action-select-multiselect _disabled"
+            disabled="disabled"
             data-menu="grid-mass-select">
-            <optgroup label="<?php /* @escapeNotVerified */ echo __('Mass Actions')?>">
+            <optgroup label="<?= $block->escapeHtmlAttr(__('Mass Actions')) ?>">
                 <option disabled selected></option>
-                <?php if ($block->getUseSelectAll()):?>
+                <?php if ($block->getUseSelectAll()) :?>
                     <option value="selectAll">
-                        <?php /* @escapeNotVerified */ echo __('Select All') ?>
+                        <?= $block->escapeHtml(__('Select All')) ?>
                     </option>
                     <option value="unselectAll">
-                        <?php /* @escapeNotVerified */ echo __('Unselect All') ?>
+                        <?= $block->escapeHtml(__('Unselect All')) ?>
                     </option>
                 <?php endif; ?>
                 <option value="selectVisible">
-                    <?php /* @escapeNotVerified */ echo __('Select Visible') ?>
+                    <?= $block->escapeHtml(__('Select Visible')) ?>
                 </option>
                 <option value="unselectVisible">
-                    <?php /* @escapeNotVerified */ echo __('Unselect Visible') ?>
+                    <?= $block->escapeHtml(__('Unselect Visible')) ?>
                 </option>
             </optgroup>
         </select>
-        <label for="<?php echo $block->getHtmlId() ?>-mass-select"></label>
+        <label for="<?= $block->getHtmlId() ?>-mass-select"></label>
     </div>
 
 <script>
-    require(['jquery'], function($){
+    require(['jquery', 'domReady!'], function($){
         'use strict';
-        $('#<?php echo $block->getHtmlId() ?>-mass-select').change(function () {
+        $('#<?= $block->getHtmlId() ?>-mass-select')
+            .removeClass('_disabled')
+            .prop('disabled', false)
+            .change(function () {
             var massAction = $('option:selected', this).val();
+            this.blur();
             switch (massAction) {
-                <?php if ($block->getUseSelectAll()):?>
+                <?php if ($block->getUseSelectAll()) : ?>
                 case 'selectAll':
-                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.selectAll();
+                    return <?= $block->escapeJs($block->getJsObjectName()) ?>.selectAll();
                     break;
                 case 'unselectAll':
-                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.unselectAll();
+                    return <?= $block->escapeJs($block->getJsObjectName()) ?>.unselectAll();
                     break;
                 <?php endif; ?>
                 case 'selectVisible':
-                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.selectVisible();
+                    return <?= $block->escapeJs($block->getJsObjectName()) ?>.selectVisible();
                     break;
                 case 'unselectVisible':
-                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.unselectVisible();
+                    return <?= $block->escapeJs($block->getJsObjectName()) ?>.unselectVisible();
                     break;
             }
-            this.blur();
         });
     });
-    <?php if (!$block->getParentBlock()->canDisplayContainer()): ?>
-        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.setGridIds('<?php /* @escapeNotVerified */ echo $block->getGridIdsJson() ?>');
+    <?php if (!$block->getParentBlock()->canDisplayContainer()) : ?>
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.setGridIds('<?= $block->escapeJs($block->getGridIdsJson()) ?>');
     <?php endif; ?>
 </script>
 </div>

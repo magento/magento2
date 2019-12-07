@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 
-class AbstractRendererTest extends \PHPUnit_Framework_TestCase
+class AbstractRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column|\PHPUnit_Framework_MockObject_MockObject
@@ -27,12 +27,13 @@ class AbstractRendererTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->dataObjectMock = $this->getMock('Magento\Framework\DataObject', ['getData'], [], '', false);
-        $this->columnMock = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column')
+        $this->dataObjectMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
+        $this->columnMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEditable', 'getIndex', 'getEditOnly', 'getId'])
             ->getMock();
-        $this->renderer = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer')
+        $this->renderer =
+            $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();

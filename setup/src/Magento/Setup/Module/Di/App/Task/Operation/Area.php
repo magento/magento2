@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
@@ -10,6 +10,9 @@ use Magento\Framework\App;
 use Magento\Setup\Module\Di\Compiler\Config;
 use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
+/**
+ * Area configuration aggregation
+ */
 class Area implements OperationInterface
 {
     /**
@@ -28,7 +31,7 @@ class Area implements OperationInterface
     private $configReader;
 
     /**
-     * @var Config\WriterInterface
+     * @var \Magento\Framework\App\ObjectManager\ConfigWriterInterface
      */
     private $configWriter;
 
@@ -46,7 +49,7 @@ class Area implements OperationInterface
      * @param App\AreaList $areaList
      * @param \Magento\Setup\Module\Di\Code\Reader\Decorator\Area $areaInstancesNamesList
      * @param Config\Reader $configReader
-     * @param Config\WriterInterface $configWriter
+     * @param \Magento\Framework\App\ObjectManager\ConfigWriterInterface $configWriter
      * @param \Magento\Setup\Module\Di\Compiler\Config\ModificationChain $modificationChain
      * @param array $data
      */
@@ -54,7 +57,7 @@ class Area implements OperationInterface
         App\AreaList $areaList,
         \Magento\Setup\Module\Di\Code\Reader\Decorator\Area $areaInstancesNamesList,
         Config\Reader $configReader,
-        Config\WriterInterface $configWriter,
+        \Magento\Framework\App\ObjectManager\ConfigWriterInterface $configWriter,
         Config\ModificationChain $modificationChain,
         $data = []
     ) {
@@ -67,7 +70,7 @@ class Area implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doOperation()
     {
@@ -84,6 +87,8 @@ class Area implements OperationInterface
                 $definitionsCollection->addCollection($this->getDefinitionsCollection($path));
             }
         }
+
+        $this->sortDefinitions($definitionsCollection);
 
         $areaCodes = array_merge([App\Area::AREA_GLOBAL], $this->areaList->getCodes());
         foreach ($areaCodes as $areaCode) {
@@ -120,5 +125,19 @@ class Area implements OperationInterface
     public function getName()
     {
         return 'Area configuration aggregation';
+    }
+
+    /**
+     * Sort definitions to make reproducible result
+     *
+     * @param DefinitionsCollection $definitionsCollection
+     */
+    private function sortDefinitions(DefinitionsCollection $definitionsCollection): void
+    {
+        $definitions = $definitionsCollection->getCollection();
+
+        ksort($definitions);
+
+        $definitionsCollection->initialize($definitions);
     }
 }

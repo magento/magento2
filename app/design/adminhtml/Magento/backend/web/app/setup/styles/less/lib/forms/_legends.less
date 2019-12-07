@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -20,39 +20,42 @@
 
 .form-legend,
 .form-legend-expand {
+    font-size: 1.25em;
+    font-weight: @font-weight__semibold;
     margin-bottom: 2.5em;
     padding-top: 1.5em;
-    font-weight: @font-weight__semibold;
-    font-size: 1.25em;
 }
 
 .form-legend {
-    width: 100%;
     border-top: 1px solid @color-border-legend;
+    width: 100%;
 }
 
 .form-legend-light {
-    margin-bottom: 1.5em;
     font-size: 1em;
+    margin-bottom: 1.5em;
 }
 
 .form-legend-expand {
     cursor: pointer;
     transition: opacity .2s linear;
+
     &:hover {
         opacity: .85;
     }
+
     &.expanded {
         &:after {
             content: @icon-expand-close__content;
         }
     }
+
     &:after {
-        margin-left: .5em;
-        font-weight: @font-weight__regular;
-        font-size: 1.15em;
-        font-family: @icons__font-family;
         content: @icon-expand-open__content;
+        font-family: @icons__font-family;
+        font-size: 1.15em;
+        font-weight: @font-weight__regular;
+        margin-left: .5em;
         vertical-align: sub;
     }
 }

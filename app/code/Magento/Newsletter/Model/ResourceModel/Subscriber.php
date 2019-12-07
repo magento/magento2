@@ -1,14 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model\ResourceModel;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Newsletter subscriber resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
 class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -46,27 +52,36 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $mathRandom;
 
     /**
+     * Store manager
+     *
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param string $connectionName
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Math\Random $mathRandom,
-        $connectionName = null
+        $connectionName = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         parent::__construct($context, $connectionName);
     }
 
     /**
-     * Initialize resource model
-     * Get tablename from config
+     * Initialize resource model. Get tablename from config
      *
      * @return void
      */
@@ -115,20 +130,36 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
-        $select = $this->connection->select()->from($this->getMainTable())->where('customer_id=:customer_id');
+        $storeIds = $this->storeManager->getWebsite()->getStoreIds();
 
-        $result = $this->connection->fetchRow($select, ['customer_id' => $customer->getId()]);
+        if ($customer->getId()) {
+            $select = $this->connection
+                ->select()
+                ->from($this->getMainTable())
+                ->where('customer_id = ?', $customer->getId())
+                ->where('store_id IN (?)', $storeIds)
+                ->limit(1);
 
-        if ($result) {
-            return $result;
+            $result = $this->connection->fetchRow($select);
+
+            if ($result) {
+                return $result;
+            }
         }
 
-        $select = $this->connection->select()->from($this->getMainTable())->where('subscriber_email=:subscriber_email');
+        if ($customer->getEmail()) {
+            $select = $this->connection
+                ->select()
+                ->from($this->getMainTable())
+                ->where('subscriber_email = ?', $customer->getEmail())
+                ->where('store_id IN (?)', $storeIds)
+                ->limit(1);
 
-        $result = $this->connection->fetchRow($select, ['subscriber_email' => $customer->getEmail()]);
+            $result = $this->connection->fetchRow($select);
 
-        if ($result) {
-            return $result;
+            if ($result) {
+                return $result;
+            }
         }
 
         return [];

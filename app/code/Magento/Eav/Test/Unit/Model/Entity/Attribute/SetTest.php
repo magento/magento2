@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
-class SetTest extends \PHPUnit_Framework_TestCase
+class SetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Set
@@ -18,23 +18,16 @@ class SetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resource = $this->getMock('Magento\Eav\Model\ResourceModel\Entity\Attribute\Set', [], [], '', false);
-        $attrGroupFactory = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\GroupFactory',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $attrFactory = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', [], [], '', false, false);
+        $resource = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class);
+        $attrGroupFactory = $this->createMock(\Magento\Eav\Model\Entity\Attribute\GroupFactory::class);
+        $attrFactory = $this->createMock(\Magento\Eav\Model\Entity\AttributeFactory::class);
         $arguments = [
             'attrGroupFactory' => $attrGroupFactory,
             'attributeFactory' => $attrFactory,
             'resource' => $resource,
         ];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $objectManagerHelper->getObject('Magento\Eav\Model\Entity\Attribute\Set', $arguments);
+        $this->_model = $objectManagerHelper->getObject(\Magento\Eav\Model\Entity\Attribute\Set::class, $arguments);
     }
 
     protected function tearDown()
@@ -51,7 +44,8 @@ class SetTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->getResource()->expects($this->any())->method('validate')->will($this->returnValue(false));
 
-        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', $exceptionMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->_model->setAttributeSetName($attributeSetName);
         $this->_model->validate();
     }
@@ -72,8 +66,8 @@ class SetTest extends \PHPUnit_Framework_TestCase
     public function invalidAttributeSetDataProvider()
     {
         return [
-            ['', 'Attribute set name is empty.'],
-            ['existing_name', 'An attribute set named "existing_name" already exists.']
+            ['', 'The attribute set name is empty. Enter the name and try again.'],
+            ['existing_name', 'A "existing_name" attribute set name already exists. Create a new name and try again.']
         ];
     }
 }

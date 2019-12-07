@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Braintree\Test\TestCase\CreateOrderWithPayPalBraintreeVaultBackendTest" summary="Checkout with PayPal Braintree Vault token from Admin">
+        <variation name="CreateOrderWithPayPalBraintreeVaultBackendTestVariation1" summary="Checkout with PayPal Braintree Vault token from Admin" ticketId="MAGETWO-59259">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree_paypal</data>
+            <data name="vault/method" xsi:type="string">braintree_paypal_vault</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_use_vault, braintree_paypal_skip_order_review</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">15.00</item>
+            </data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+        </variation>
+    </testCase>
+</config>

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Block;
 
@@ -14,10 +12,13 @@ use Magento\Customer\Model\Context;
 /**
  * Catalog navigation
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
+class Navigation extends \Magento\Framework\View\Element\Template implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Category
@@ -194,7 +195,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
     }
 
     /**
-     * Checkin activity of category
+     * Check activity of category
      *
      * @param   \Magento\Framework\DataObject $category
      * @return  bool

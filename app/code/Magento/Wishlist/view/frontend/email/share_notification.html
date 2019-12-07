@@ -1,11 +1,12 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Take a look at {{var customerName}}'s Wish List @-->
+<!--@subject {{trans "Take a look at %customer_name's Wish List" customer_name=$customerName}} @-->
 <!--@vars {
+"var store.frontend_name":"Store Name",
 "var customerName":"Customer Name",
 "var viewOnSiteLink":"View Wish List URL",
 "var items|raw":"Wish List Items",
@@ -14,7 +15,7 @@
 
 {{template config_path="design/email/header_template"}}
 
-<p>{{trans "%customer_name wants to share this Wish List from %store_name with you:" customer_name=$customerName store_name=$store.getFrontendName()}}</p>
+<p>{{trans "%customer_name wants to share this Wish List from %store_name with you:" customer_name=$customerName store_name=$store.frontend_name}}</p>
 
 {{depend message}}
 <table class="message-info">

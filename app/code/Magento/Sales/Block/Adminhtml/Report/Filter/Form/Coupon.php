@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
@@ -8,8 +8,10 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
 /**
  * Sales Adminhtml report filter form for coupons report
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
@@ -81,7 +83,12 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
             $fieldset->addField(
                 'rules_list',
                 'multiselect',
-                ['name' => 'rules_list', 'values' => $rulesListOptions, 'display' => 'none'],
+                [
+                    'name' => 'rules_list',
+                    'label' => '',
+                    'values' => $rulesListOptions,
+                    'display' => 'none'
+                ],
                 'price_rule_type'
             );
 
@@ -110,7 +117,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
              */
             /** @var $formAfterBlock \Magento\Backend\Block\Widget\Form\Element\Dependence */
             $formAfterBlock = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Element\Dependence',
+                \Magento\Backend\Block\Widget\Form\Element\Dependence::class,
                 'adminhtml.block.widget.form.element.dependence'
             );
             $formAfterBlock->addFieldMap(

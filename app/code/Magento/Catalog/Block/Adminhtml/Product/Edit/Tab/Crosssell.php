@@ -1,13 +1,7 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Crossell products admin grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
@@ -16,7 +10,13 @@ use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Catalog\Model\Product;
 
 /**
+ * Crossel product edit tab
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
+ * @deprecated Not used since cross-sell products grid moved to UI components.
+ * @see \Magento\Catalog\Ui\DataProvider\Product\Related\CrossSellDataProvider
  */
 class Crosssell extends Extended
 {

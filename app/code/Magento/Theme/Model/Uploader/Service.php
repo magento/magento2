@@ -2,11 +2,12 @@
 /**
  * Theme file uploader service
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Uploader;
 
+use Magento\Framework\Convert\DataSize;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
@@ -30,6 +31,13 @@ class Service
      * @var \Magento\Framework\File\Size
      */
     protected $_fileSize;
+
+    /**
+     * Data size converter
+     *
+     * @var \Magento\Framework\Convert\DataSize
+     */
+    protected $dataSize;
 
     /**
      * File uploader
@@ -58,18 +66,21 @@ class Service
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
+     * @param \Magento\Framework\Convert\DataSize $dataSize
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param array $uploadLimits keys are 'css' and 'js' for file type, values defines maximum file size, example: 2M
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\File\Size $fileSize,
+        \Magento\Framework\Convert\DataSize $dataSize,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         array $uploadLimits = []
     ) {
         $this->_tmpDirectory = $filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
         $this->_fileSize = $fileSize;
         $this->_uploaderFactory = $uploaderFactory;
+        $this->dataSize = $dataSize;
         if (isset($uploadLimits['css'])) {
             $this->_cssUploadLimit = $uploadLimits['css'];
         }
@@ -173,7 +184,7 @@ class Service
         if ($configuredLimit === null) {
             return $maxIniUploadSize;
         }
-        $maxUploadSize = $this->_fileSize->convertSizeToInteger($configuredLimit);
+        $maxUploadSize = $this->dataSize->convertSizeToBytes($configuredLimit);
         return min($maxUploadSize, $maxIniUploadSize);
     }
 

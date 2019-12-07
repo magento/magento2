@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
 
-class CacheTest extends \PHPUnit_Framework_TestCase
+class CacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Cache
@@ -27,7 +27,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->_initCacheTypeMocks();
 
         $this->_cacheFrontendMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Cache\FrontendInterface',
+            \Magento\Framework\Cache\FrontendInterface::class,
             [],
             '',
             true,
@@ -36,7 +36,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ['clean']
         );
 
-        $frontendPoolMock = $this->getMock('Magento\Framework\App\Cache\Frontend\Pool', [], [], '', false);
+        $frontendPoolMock = $this->createMock(\Magento\Framework\App\Cache\Frontend\Pool::class);
         $frontendPoolMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
 
         $frontendPoolMock->expects(
@@ -65,15 +65,19 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     protected function _initCacheTypeMocks()
     {
         $cacheTypes = [
-            'Magento\Framework\Cache\Frontend\Decorator\TagScope',
-            'Magento\Framework\Cache\Frontend\Decorator\Bare',
+            \Magento\Framework\Cache\Frontend\Decorator\TagScope::class,
+            \Magento\Framework\Cache\Frontend\Decorator\Bare::class,
         ];
         foreach ($cacheTypes as $type) {
-            $this->_cacheTypeMocks[$type] = $this->getMock(
-                $type,
-                ['clean'],
-                [$this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface'), 'FIXTURE_TAG']
-            );
+            $this->_cacheTypeMocks[$type] = $this->getMockBuilder($type)
+                ->setMethods(['clean'])
+                ->setConstructorArgs(
+                    [
+                        $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class), '
+                        FIXTURE_TAG'
+                    ]
+                )
+                ->getMock();
         }
     }
 
@@ -143,6 +147,9 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->_model->save($inputData, $inputId, $inputTags);
     }
 
+    /**
+     * @return array
+     */
     public function saveDataProvider()
     {
         $configTag = \Magento\Framework\App\Config::CACHE_TAG;
@@ -186,6 +193,9 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->_model->remove('test_id'));
     }
 
+    /**
+     * @return array
+     */
     public function successFailureDataProvider()
     {
         return ['success' => [true], 'failure' => [false]];

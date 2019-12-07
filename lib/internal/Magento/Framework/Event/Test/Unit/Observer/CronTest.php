@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Test\Unit\Observer;
@@ -10,7 +10,7 @@ use \Magento\Framework\Event\Observer\Cron;
 /**
  * Class CronTest
  */
-class CronTest extends \PHPUnit_Framework_TestCase
+class CronTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Cron
@@ -37,6 +37,9 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->cron->getNumeric($value));
     }
 
+    /**
+     * @return array
+     */
     public function numericValueProvider()
     {
         return [
@@ -78,6 +81,9 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->cron->matchCronExpression($expression, $number));
     }
 
+    /**
+     * @return array
+     */
     public function matchCronExpressionProvider()
     {
         return [
@@ -99,7 +105,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidFor($time, $expression, $expectedResult)
     {
-        $eventMock = $this->getMock('Magento\Framework\Event', [], [], '', false);
+        $eventMock = $this->createMock(\Magento\Framework\Event::class);
 
         $this->cron->setCronExpr($expression);
         $this->cron->setNow($time);
@@ -107,6 +113,9 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->cron->isValidFor($eventMock));
     }
 
+    /**
+     * @return array
+     */
     public function isValidForProvider()
     {
         return [

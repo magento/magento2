@@ -1,15 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Filter;
 
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
+/**
+ * MySQL search filter builder.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 interface BuilderInterface
 {
     /**
+     * Buil filter.
+     *
      * @param RequestFilterInterface $filter
      * @param string $conditionType
      * @return string

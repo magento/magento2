@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Customer;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
 {
     /**
@@ -83,7 +87,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
         $this->getSelect()->reset(
             \Magento\Framework\DB\Select::COLUMNS
         )->joinInner(
-            ['customer' => $connection->getTableName('customer_entity')],
+            ['customer' => $this->getTable('customer_entity')],
             'customer.entity_id = detail.customer_id',
             []
         )->columns(
@@ -100,19 +104,35 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * Additional processing of 'customer_name' field is required, as it is a concat field, which can not be aliased.
+     * @see _joinCustomers
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field === 'customer_name') {
+            $field = $this->getConnection()->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
+        }
+
+        return parent::addFieldToFilter($field, $condition);
+    }
+
+    /**
      * Get select count sql
      *
      * @return string
      */
     public function getSelectCountSql()
     {
-        $countSelect = clone $this->_select;
+        $countSelect = clone $this->getSelect();
         $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::WHERE);
 
         $countSelect->columns(new \Zend_Db_Expr('COUNT(DISTINCT detail.customer_id)'));
 

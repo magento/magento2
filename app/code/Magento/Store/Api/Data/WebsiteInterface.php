@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Api\Data;
@@ -9,9 +9,15 @@ namespace Magento\Store\Api\Data;
  * Website interface
  *
  * @api
+ * @since 100.0.2
  */
 interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**
+     * contains code of admin website
+     */
+    const ADMIN_CODE = 'admin';
+
     /**
      * @return int
      */
@@ -35,15 +41,15 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setCode($code);
 
     /**
-     * Rethreive website name
-     * 
+     * Retrieve website name
+     *
      * @return string
      */
     public function getName();
 
     /**
      * Set website name
-     * 
+     *
      * @param string $name
      * @return $this
      */

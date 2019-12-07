@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+/**
+ * Collects credit memo taxes.
+ */
 class Tax extends AbstractTotal
 {
     /**
+     * Collects credit memo taxes.
+     *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      *
@@ -36,13 +41,13 @@ class Tax extends AbstractTotal
             $baseOrderItemTax = (double)$orderItem->getBaseTaxInvoiced();
             $orderItemQty = (double)$orderItem->getQtyInvoiced();
 
-            if ($orderItemTax && $orderItemQty) {
+            if ($orderItemQty) {
                 /**
                  * Check item tax amount
                  */
 
                 $tax = $orderItemTax - $orderItem->getTaxRefunded();
-                $baseTax = $baseOrderItemTax - $orderItem->getTaxRefunded();
+                $baseTax = $baseOrderItemTax - $orderItem->getBaseTaxRefunded();
                 $discountTaxCompensation = $orderItem->getDiscountTaxCompensationInvoiced() -
                     $orderItem->getDiscountTaxCompensationRefunded();
                 $baseDiscountTaxCompensation = $orderItem->getBaseDiscountTaxCompensationInvoiced() -
@@ -70,27 +75,20 @@ class Tax extends AbstractTotal
         }
 
         $isPartialShippingRefunded = false;
+        $baseOrderShippingAmount = (float)$order->getBaseShippingAmount();
         if ($invoice = $creditmemo->getInvoice()) {
             //recalculate tax amounts in case if refund shipping value was changed
-            if ($order->getBaseShippingAmount() && $creditmemo->getBaseShippingAmount()) {
-                $taxFactor = $creditmemo->getBaseShippingAmount() / $order->getBaseShippingAmount();
+            if ($baseOrderShippingAmount && $creditmemo->getBaseShippingAmount() !== null) {
+                $taxFactor = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
                 $shippingTaxAmount = $invoice->getShippingTaxAmount() * $taxFactor;
                 $baseShippingTaxAmount = $invoice->getBaseShippingTaxAmount() * $taxFactor;
                 $totalDiscountTaxCompensation += $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
                 $baseTotalDiscountTaxCompensation +=
                     $invoice->getBaseShippingDiscountTaxCompensationAmnt() * $taxFactor;
-                $shippingDiscountTaxCompensationAmount =
-                    $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
-                $baseShippingDiscountTaxCompensationAmount =
-                    $invoice->getBaseShippingDiscountTaxCompensationAmnt() * $taxFactor;
                 $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount);
                 $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
                 $totalDiscountTaxCompensation = $creditmemo->roundPrice($totalDiscountTaxCompensation);
                 $baseTotalDiscountTaxCompensation = $creditmemo->roundPrice($baseTotalDiscountTaxCompensation, 'base');
-                $shippingDiscountTaxCompensationAmount =
-                    $creditmemo->roundPrice($shippingDiscountTaxCompensationAmount);
-                $baseShippingDiscountTaxCompensationAmount =
-                    $creditmemo->roundPrice($baseShippingDiscountTaxCompensationAmount, 'base');
                 if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0) {
                     $isPartialShippingRefunded = true;
                 }
@@ -99,7 +97,6 @@ class Tax extends AbstractTotal
             }
         } else {
             $orderShippingAmount = $order->getShippingAmount();
-            $baseOrderShippingAmount = $order->getBaseShippingAmount();
 
             $baseOrderShippingRefundedAmount = $order->getBaseShippingRefunded();
 

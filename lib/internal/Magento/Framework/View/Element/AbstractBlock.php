@@ -1,16 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\DataObject\IdentityInterface;
+
 /**
- * Base Content Block class
+ * Base class for all blocks.
  *
- * For block generation you must define Data source class, data source class method,
- * parameters array and block template
+ * Avoid inheriting from this class. Will be deprecated.
  *
+ * Marked as public API because it is actively used now.
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -23,6 +31,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Cache group Tag
      */
     const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
+
+    /**
+     * Prefix for cache key of block
+     */
+    const CACHE_KEY_PREFIX = 'BLOCK_';
 
     /**
      * Design
@@ -161,13 +174,26 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_scopeConfig;
 
     /**
+     * @var \Magento\Framework\App\CacheInterface
+     * @since 100.2.0
+     */
+    protected $_cache;
+
+    /**
+     * @var LockGuardedCacheLoader
+     */
+    private $lockQuery;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
      */
-    public function __construct(\Magento\Framework\View\Element\Context $context, array $data = [])
-    {
+    public function __construct(
+        \Magento\Framework\View\Element\Context $context,
+        array $data = []
+    ) {
         $this->_request = $context->getRequest();
         $this->_layout = $context->getLayout();
         $this->_eventManager = $context->getEventManager();
@@ -185,6 +211,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->filterManager = $context->getFilterManager();
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
+        $this->lockQuery = $context->getLockGuardedCacheLoader();
         if (isset($data['jsLayout'])) {
             $this->jsLayout = $data['jsLayout'];
             unset($data['jsLayout']);
@@ -219,6 +246,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Please override this one instead of overriding real __construct constructor
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {
@@ -414,9 +442,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function unsetCallChild($alias, $callback, $result, $params)
     {
+        $args = func_get_args();
         $child = $this->getChildBlock($alias);
         if ($child) {
-            $args = func_get_args();
             $alias = array_shift($args);
             $callback = array_shift($args);
             $result = (string)array_shift($args);
@@ -643,20 +671,22 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         }
 
         $html = $this->_loadCache();
-        if ($html === false) {
-            if ($this->hasData('translate_inline')) {
-                $this->inlineTranslation->suspend($this->getData('translate_inline'));
-            }
-
-            $this->_beforeToHtml();
-            $html = $this->_toHtml();
-            $this->_saveCache($html);
-
-            if ($this->hasData('translate_inline')) {
-                $this->inlineTranslation->resume();
-            }
-        }
         $html = $this->_afterToHtml($html);
+
+        /** @var \Magento\Framework\DataObject */
+        $transportObject = new \Magento\Framework\DataObject(
+            [
+                'html' => $html,
+            ]
+        );
+        $this->_eventManager->dispatch(
+            'view_block_abstract_to_html_after',
+            [
+                'block' => $this,
+                'transport' => $transportObject
+            ]
+        );
+        $html = $transportObject->getHtml();
 
         return $html;
     }
@@ -698,7 +728,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function getUiId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
-        return ' data-ui-id="' . $this->getJsId($arg1, $arg2, $arg3, $arg4, $arg5) . '" ';
+        return ' data-ui-id="' . $this->escapeHtmlAttr($this->getJsId($arg1, $arg2, $arg3, $arg4, $arg5)) . '" ';
     }
 
     /**
@@ -780,7 +810,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Retrieve formatting date
      *
-     * @param null|string|\DateTime $date
+     * @param null|string|\DateTimeInterface $date
      * @param int $format
      * @param bool $showTime
      * @param null|string $timezone
@@ -792,7 +822,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $showTime = false,
         $timezone = null
     ) {
-        $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
+        $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date ?? 'now');
         return $this->_localeDate->formatDateTime(
             $date,
             $format,
@@ -815,7 +845,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $format = \IntlDateFormatter::SHORT,
         $showDate = false
     ) {
-        $time = $time instanceof \DateTimeInterface ? $time : new \DateTime($time);
+        $time = $time instanceof \DateTimeInterface ? $time : new \DateTime($time ?? 'now');
         return $this->_localeDate->formatDateTime(
             $time,
             $showDate ? $format : \IntlDateFormatter::NONE,
@@ -844,24 +874,69 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public static function extractModuleName($className)
     {
+        if (!$className) {
+            return '';
+        }
+
         $namespace = substr(
             $className,
             0,
-            strpos($className, '\\' . 'Block')
+            (int)strpos($className, '\\' . 'Block' . '\\')
         );
         return str_replace('\\', '_', $namespace);
     }
 
     /**
-     * Escape html entities
+     * Escape HTML entities
      *
      * @param string|array $data
      * @param array|null $allowedTags
      * @return string
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeHtml($data, $allowedTags = null)
     {
         return $this->_escaper->escapeHtml($data, $allowedTags);
+    }
+
+    /**
+     * Escape string for the JavaScript context
+     *
+     * @param string $string
+     * @return string
+     * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
+     */
+    public function escapeJs($string)
+    {
+        return $this->_escaper->escapeJs($string);
+    }
+
+    /**
+     * Escape a string for the HTML attribute context
+     *
+     * @param string $string
+     * @param boolean $escapeSingleQuote
+     * @return string
+     * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
+     */
+    public function escapeHtmlAttr($string, $escapeSingleQuote = true)
+    {
+        return $this->_escaper->escapeHtmlAttr($string, $escapeSingleQuote);
+    }
+
+    /**
+     * Escape string for the CSS context
+     *
+     * @param string $string
+     * @return string
+     * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
+     */
+    public function escapeCss($string)
+    {
+        return $this->_escaper->escapeCss($string);
     }
 
     /**
@@ -881,14 +956,15 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape html entities in url
+     * Escape URL
      *
-     * @param string $data
+     * @param string $string
      * @return string
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
-    public function escapeUrl($data)
+    public function escapeUrl($string)
     {
-        return $this->_escaper->escapeUrl($data);
+        return $this->_escaper->escapeUrl((string)$string);
     }
 
     /**
@@ -896,6 +972,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return string
+     * @deprecated 100.2.0
      */
     public function escapeXssInUrl($data)
     {
@@ -907,9 +984,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
      *
-     * @param  string $data
-     * @param  bool $addSlashes
+     * @param string $data
+     * @param bool $addSlashes
      * @return string
+     * @deprecated 100.2.0
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -922,6 +1000,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param string $quote
      * @return string|array
+     * @deprecated 100.2.0
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -958,19 +1037,20 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function getCacheKey()
     {
         if ($this->hasData('cache_key')) {
-            return $this->getData('cache_key');
+            return static::CACHE_KEY_PREFIX . $this->getData('cache_key');
         }
+
         /**
          * don't prevent recalculation by saving generated cache key
          * because of ability to render single block instance with different data
          */
         $key = $this->getCacheKeyInfo();
-        //ksort($key);  // ignore order
-        $key = array_values($key);
-        // ignore array keys
+
+        $key = array_values($key);  // ignore array keys
+
         $key = implode('|', $key);
-        $key = sha1($key);
-        return $key;
+        $key = sha1($key); // use hashing to hide potentially private data
+        return static::CACHE_KEY_PREFIX . $key;
     }
 
     /**
@@ -986,42 +1066,83 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $tags = $this->getData('cache_tags');
         }
         $tags[] = self::CACHE_GROUP;
+
+        if ($this instanceof IdentityInterface) {
+            $tags = array_merge($tags, $this->getIdentities());
+        }
         return $tags;
     }
 
     /**
      * Get block cache life time
      *
-     * @return int
+     * @return int|bool|null
      */
     protected function getCacheLifetime()
     {
         if (!$this->hasData('cache_lifetime')) {
             return null;
         }
-        return $this->getData('cache_lifetime');
+
+        $cacheLifetime = $this->getData('cache_lifetime');
+        if (false === $cacheLifetime || null === $cacheLifetime) {
+            return null;
+        }
+
+        return (int)$cacheLifetime;
     }
 
     /**
      * Load block html from cache storage
      *
-     * @return string|false
+     * @return string
      */
     protected function _loadCache()
     {
+        $collectAction = function () {
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->suspend($this->getData('translate_inline'));
+            }
+
+            $this->_beforeToHtml();
+            return $this->_toHtml();
+        };
+
         if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            return false;
+            $html = $collectAction();
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->resume();
+            }
+            return $html;
         }
-        $cacheKey = $this->getCacheKey();
-        $cacheData = $this->_cache->load($cacheKey);
-        if ($cacheData) {
-            $cacheData = str_replace(
-                $this->_getSidPlaceholder($cacheKey),
-                $this->_sidResolver->getSessionIdQueryParam($this->_session) . '=' . $this->_session->getSessionId(),
-                $cacheData
-            );
-        }
-        return $cacheData;
+        $loadAction = function () {
+            $cacheKey = $this->getCacheKey();
+            $cacheData = $this->_cache->load($cacheKey);
+            if ($cacheData) {
+                $cacheData = str_replace(
+                    $this->_getSidPlaceholder($cacheKey),
+                    $this->_sidResolver->getSessionIdQueryParam($this->_session)
+                    . '='
+                    . $this->_session->getSessionId(),
+                    $cacheData
+                );
+            }
+            return $cacheData;
+        };
+
+        $saveAction = function ($data) {
+            $this->_saveCache($data);
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->resume();
+            }
+        };
+
+        return (string)$this->lockQuery->lockedLoadData(
+            $this->getCacheKey(),
+            $loadAction,
+            $collectAction,
+            $saveAction
+        );
     }
 
     /**
@@ -1032,7 +1153,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     protected function _saveCache($data)
     {
-        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
+        if (!$this->getCacheLifetime() || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
@@ -1042,7 +1163,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $data
         );
 
-        $this->_cache->save($data, $cacheKey, $this->getCacheTags(), $this->getCacheLifetime());
+        $this->_cache->save($data, $cacheKey, array_unique($this->getCacheTags()), $this->getCacheLifetime());
         return $this;
     }
 
@@ -1078,6 +1199,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
     /**
      * Determine if the block scope is private or public.
+     *
      * Returns true if scope is private, false otherwise
      *
      * @return bool

@@ -1,15 +1,11 @@
 {
-  "version": "0.74.0-beta9",
+  "config": {
+    "sort-packages": true
+  },
   "require": {
-    "magento/product-community-edition": "0.74.0-beta2",
+    "magento/product-community-edition": "*",
     "magento/sample-module-minimal" : "*"
    },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://repo.magento.com/"
-    }
-  ],
   "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "htdocs/lib/internal/Magento/Framework/",

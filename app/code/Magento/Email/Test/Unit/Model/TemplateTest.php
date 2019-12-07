@@ -1,27 +1,41 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model;
 
-use Magento\Email\Model\Template\Filter;
+use Magento\Email\Model\Template;
+use Magento\Email\Model\Template\Config;
+use Magento\Email\Model\Template\FilterFactory;
+use Magento\Email\Model\TemplateFactory;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Filter\Template as FilterTemplate;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Url;
+use Magento\Framework\View\Asset\Repository;
 use Magento\Setup\Module\I18n\Locale;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManager;
+use Magento\Theme\Model\View\Design;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Covers \Magento\Email\Model\Template
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $context;
 
@@ -31,12 +45,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $design;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     private $registry;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
+     * @var Emulation|\PHPUnit_Framework_MockObject_MockObject
      */
     private $appEmulation;
 
@@ -46,126 +61,137 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
      */
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Email\Model\Template\FilterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterFactory;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterManager;
 
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|\PHPUnit_Framework_MockObject_MockObject
      */
     private $urlModel;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $emailConfig;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $templateFactory;
 
-    public function setUp()
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
+        $this->design = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->appEmulation = $this->getMockBuilder('Magento\Store\Model\App\Emulation')
+        $this->appEmulation = $this->getMockBuilder(Emulation::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assetRepo = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+        $this->assetRepo = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
+        $this->emailConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
+        $this->templateFactory = $this->getMockBuilder(TemplateFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterManager = $this->getMockBuilder('Magento\Framework\Filter\FilterManager')
+        $this->filterManager = $this->getMockBuilder(FilterManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->urlModel = $this->getMockBuilder('Magento\Framework\Url')
+        $this->urlModel = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterFactory = $this->getMockBuilder('Magento\Email\Model\Template\FilterFactory')
+        $this->filterFactory = $this->getMockBuilder(FilterFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
     }
 
     /**
      * Return the model under test with additional methods mocked.
      *
      * @param array $mockedMethods
-     * @return \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @return Template|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getModelMock(array $mockedMethods = [])
     {
-        return $this->getMockBuilder('Magento\Email\Model\Template')
+        return $this->getMockBuilder(Template::class)
             ->setMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
-            ->setConstructorArgs([
-                $this->context,
-                $this->design,
-                $this->registry,
-                $this->appEmulation,
-                $this->storeManager,
-                $this->assetRepo,
-                $this->filesystem,
-                $this->scopeConfig,
-                $this->emailConfig,
-                $this->templateFactory,
-                $this->filterManager,
-                $this->urlModel,
-                $this->filterFactory,
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->context,
+                    $this->design,
+                    $this->registry,
+                    $this->appEmulation,
+                    $this->storeManager,
+                    $this->assetRepo,
+                    $this->filesystem,
+                    $this->scopeConfig,
+                    $this->emailConfig,
+                    $this->templateFactory,
+                    $this->filterManager,
+                    $this->urlModel,
+                    $this->filterFactory,
+                    [],
+                    $this->serializerMock
+                ]
+            )
             ->getMock();
     }
 
@@ -182,7 +208,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testSetAndGetTemplateFilter()
     {
         $model = $this->getModelMock();
-        $filterTemplate = $this->getMockBuilder('Magento\Email\Model\Template\Filter')
+        $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $model->setTemplateFilter($filterTemplate);
@@ -191,7 +217,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTemplateFilterWithEmptyValue()
     {
-        $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
+        $filterTemplate = $this->getMockBuilder(\Magento\Framework\Filter\Template::class)
             ->setMethods(['setUseAbsoluteLinks', 'setStoreId', 'setUrlModel'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -202,8 +228,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('setStoreId')
             ->will($this->returnSelf());
         $this->filterFactory->method('create')
-            ->will($this->returnValue($filterTemplate));
-        $designConfig = $this->getMockBuilder('Magento\Framework\DataObject')
+            ->willReturn($filterTemplate);
+        $designConfig = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -211,7 +237,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model = $this->getModelMock(['getUseAbsoluteLinks', 'getDesignConfig']);
         $model->expects($this->once())
             ->method('getDesignConfig')
-            ->will($this->returnValue($designConfig));
+            ->willReturn($designConfig);
 
         $this->assertSame($filterTemplate, $model->getTemplateFilter());
     }
@@ -233,9 +259,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $expectedOrigTemplateVariables,
         $expectedTemplateStyles
     ) {
-        $model = $this->getModelMock([
-            'getDesignParams'
-        ]);
+        $model = $this->getModelMock(['getDesignParams']);
 
         $designParams = [
             'area' => Area::AREA_FRONTEND,
@@ -245,7 +269,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $model->expects($this->once())
             ->method('getDesignParams')
-            ->will($this->returnValue($designParams));
+            ->willReturn($designParams);
 
         $templateId = 'templateId';
 
@@ -253,13 +277,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->emailConfig->expects($this->once())
             ->method('getTemplateFilename')
             ->with($templateId)
-            ->will($this->returnValue($templateFile));
+            ->willReturn($templateFile);
         $this->emailConfig->expects($this->once())
             ->method('getTemplateType')
             ->with($templateId)
-            ->will($this->returnValue($templateType));
+            ->willReturn($templateType);
 
-        $modulesDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+        $modulesDir = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->setMethods(['readFile', 'getRelativePath'])
             ->getMockForAbstractClass();
 
@@ -267,15 +291,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $modulesDir->expects($this->once())
             ->method('getRelativePath')
             ->with($templateFile)
-            ->will($this->returnValue($relativePath));
+            ->willReturn($relativePath);
         $modulesDir->expects($this->once())
             ->method('readFile')
-            ->will($this->returnValue($templateText));
+            ->willReturn($templateText);
 
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
-            ->will($this->returnValue($modulesDir));
+            ->willReturn($modulesDir);
 
         $model->loadDefault($templateId);
 
@@ -291,6 +315,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTemplateStyles, $model->getTemplateStyles());
     }
 
+    /**
+     * @return array
+     */
     public function loadDefaultDataProvider()
     {
         return [
@@ -304,7 +331,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in Plain Text Removed' => [
                 'templateType' => 'text',
-                'templateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -312,7 +339,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in HTML Removed' => [
                 'templateType' => 'html',
-                'templateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -355,15 +382,17 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testLoadByConfigPath($loadFromDatabase)
     {
         $configPath = 'design/email/header_template';
-        $model = $this->getModelMock([
-            'getDesignConfig',
-            'loadDefault',
-            'load',
-            'getTemplateText',
-            'setTemplateText',
-        ]);
+        $model = $this->getModelMock(
+            [
+                'getDesignConfig',
+                'loadDefault',
+                'load',
+                'getTemplateText',
+                'setTemplateText',
+            ]
+        );
 
-        $designConfig = $this->getMockBuilder('Magento\Framework\DataObject')
+        $designConfig = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -371,10 +400,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $storeId = 'storeId';
         $designConfig->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $model->expects($this->once())
             ->method('getDesignConfig')
-            ->will($this->returnValue($designConfig));
+            ->willReturn($designConfig);
 
         if ($loadFromDatabase) {
             $templateId = '1';
@@ -393,7 +422,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with($configPath, ScopeInterface::SCOPE_STORE, $storeId)
-            ->will($this->returnValue($templateId));
+            ->willReturn($templateId);
 
         $model->loadByConfigPath($configPath);
     }
@@ -426,64 +455,51 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $isSMTPDisabled bool
      * @param $senderName string
      * @param $senderEmail string
      * @param $templateSubject string
      * @dataProvider isValidForSendDataProvider
      */
-    public function testIsValidForSend($isSMTPDisabled, $senderName, $senderEmail, $templateSubject, $expectedValue)
+    public function testIsValidForSend($senderName, $senderEmail, $templateSubject, $expectedValue)
     {
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with('system/smtp/disable', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($isSMTPDisabled));
         $model = $this->getModelMock(['getSenderName', 'getSenderEmail', 'getTemplateSubject']);
         $model->expects($this->any())
             ->method('getSenderName')
-            ->will($this->returnValue($senderName));
+            ->willReturn($senderName);
         $model->expects($this->any())
             ->method('getSenderEmail')
-            ->will($this->returnValue($senderEmail));
+            ->willReturn($senderEmail);
         $model->expects($this->any())
             ->method('getTemplateSubject')
-            ->will($this->returnValue($templateSubject));
+            ->willReturn($templateSubject);
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
+    /**
+     * @return array
+     */
     public function isValidForSendDataProvider()
     {
         return [
             'should be valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
                 'expectedValue' => true
             ],
-            'no smtp so not valid' => [
-                'isSMTPDisabled' => true,
-                'senderName' => 'sender name',
-                'senderEmail' => 'email@example.com',
-                'templateSubject' => 'template subject',
-                'expectedValue' => false
-            ],
             'no sender name so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => '',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
                 'expectedValue' => false
             ],
             'no sender email so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => '',
                 'templateSubject' => 'template subject',
                 'expectedValue' => false
             ],
             'no subject so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => '',
@@ -498,29 +514,35 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $templateSubject = 'templateSubject';
         $model->setTemplateSubject($templateSubject);
+        $model->setTemplateId('123');
 
-        $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
-            ->setMethods(['setVariables', 'setStoreId', 'filter'])
+        class_exists(Template::class, true);
+        $filterTemplate = $this->getMockBuilder(\Magento\Framework\Filter\Template::class)
+            ->setMethods(['setVariables', 'setStoreId', 'filter', 'setStrictMode'])
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->once())
             ->method('getTemplateFilter')
-            ->will($this->returnValue($filterTemplate));
+            ->willReturn($filterTemplate);
+        $filterTemplate->expects($this->exactly(2))
+            ->method('setStrictMode')
+            ->withConsecutive([$this->equalTo(true)], [$this->equalTo(false)])
+            ->willReturnOnConsecutiveCalls(false, true);
 
         $model->expects($this->once())
             ->method('applyDesignConfig');
 
-        $designConfig = $this->getMockBuilder('Magento\Framework\DataObject')
+        $designConfig = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
         $storeId = 'storeId';
         $designConfig->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $model->expects($this->once())
             ->method('getDesignConfig')
-            ->will($this->returnValue($designConfig));
+            ->willReturn($designConfig);
 
         $filterTemplate->expects($this->once())
             ->method('setStoreId')
@@ -530,7 +552,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $filterTemplate->expects($this->once())
             ->method('filter')
             ->with($templateSubject)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $variables = [ 'key' => 'value' ];
         $filterTemplate->expects($this->once())
@@ -549,9 +571,17 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->getModelMock();
         $model->setData('orig_template_variables', $templateVariables);
+
+        $this->serializerMock->expects($this->any())->method('unserialize')
+            ->willReturn(
+                json_decode($templateVariables, true)
+            );
         $this->assertEquals($expectedResult, $model->getVariablesOptionArray($withGroup));
     }
 
+    /**
+     * @return array
+     */
     public function getVariablesOptionArrayDataProvider()
     {
         return [
@@ -616,13 +646,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessTemplate($templateId, $expectedResult)
     {
-        $model = $this->getModelMock([
-            'load',
-            'loadDefault',
-            'getProcessedTemplate',
-            'applyDesignConfig',
-            'cancelDesignConfig',
-        ]);
+        $model = $this->getModelMock(
+            [
+                'load',
+                'loadDefault',
+                'getProcessedTemplate',
+                'applyDesignConfig',
+                'cancelDesignConfig',
+            ]
+        );
         $model->setId($templateId);
         if (is_numeric($templateId)) {
             $model->expects($this->once())
@@ -636,22 +668,25 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $model->expects($this->once())
             ->method('applyDesignConfig')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $model->expects($this->once())
             ->method('cancelDesignConfig')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $vars = [ 'key' => 'value' ];
         $model->setVars($vars);
         $model->expects($this->once())
             ->method('getProcessedTemplate')
             ->with($vars)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->assertEquals($expectedResult, $model->processTemplate());
         $this->assertTrue($model->getUseAbsoluteLinks());
     }
 
+    /**
+     * @return array
+     */
     public function processTemplateVariable()
     {
         return [
@@ -671,17 +706,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessTemplateThrowsExceptionNonExistentTemplate()
     {
-        $model = $this->getModelMock([
-            'loadDefault',
-            'applyDesignConfig',
-        ]);
+        $model = $this->getModelMock(['loadDefault', 'applyDesignConfig',]);
         $model->expects($this->once())
             ->method('loadDefault')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $model->expects($this->once())
             ->method('applyDesignConfig')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $model->processTemplate();
     }
@@ -695,7 +727,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->expects($this->once())
             ->method('getProcessedTemplateSubject')
             ->with($variables)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $model->getSubject());
     }
 
@@ -716,31 +748,35 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetType($templateType, $expectedResult)
     {
-        $emailConfig = $this->getMockBuilder('\Magento\Email\Model\Template\Config')
+        $emailConfig = $this->getMockBuilder(Config::class)
             ->setMethods(['getTemplateType'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $emailConfig->expects($this->once())->method('getTemplateType')->will($this->returnValue($templateType));
 
-        /** @var \Magento\Email\Model\Template $model */
-        $model = $this->getMockBuilder('Magento\Email\Model\Template')
+        /** @var Template $model */
+        $model = $this->getMockBuilder(Template::class)
             ->setMethods(['_init'])
-            ->setConstructorArgs([
-                $this->getMock('Magento\Framework\Model\Context', [], [], '', false),
-                $this->getMock('Magento\Theme\Model\View\Design', [], [], '', false),
-                $this->getMock('Magento\Framework\Registry', [], [], '', false),
-                $this->getMock('Magento\Store\Model\App\Emulation', [], [], '', false),
-                $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false),
-                $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false),
-                $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
-                $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $emailConfig,
-                $this->getMock('Magento\Email\Model\TemplateFactory', [], [], '', false),
-                $this->getMock('Magento\Framework\Filter\FilterManager', [], [], '', false),
-                $this->getMock('Magento\Framework\Url', [], [], '', false),
-                $this->getMock('Magento\Email\Model\Template\FilterFactory', [], [], '', false),
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->createMock(Context::class),
+                    $this->createMock(Design::class),
+                    $this->createMock(Registry::class),
+                    $this->createMock(Emulation::class),
+                    $this->createMock(StoreManager::class),
+                    $this->createMock(Repository::class),
+                    $this->createMock(Filesystem::class),
+                    $this->createMock(ScopeConfigInterface::class),
+                    $emailConfig,
+                    $this->createMock(TemplateFactory::class),
+                    $this->createMock(FilterManager::class),
+                    $this->createMock(Url::class),
+                    $this->createMock(FilterFactory::class),
+                    [],
+                    $this->createMock(Json::class)
+                ]
+            )
             ->getMock();
 
         $model->setTemplateId(10);
@@ -748,6 +784,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getType());
     }
 
+    /**
+     * @return array
+     */
     public function getTypeDataProvider()
     {
         return [['text', 1], ['html', 2]];

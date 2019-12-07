@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -11,9 +11,17 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Quote\Model\Quote;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Framework\Webapi\Rest\Request;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CartRepositoryTest extends WebapiAbstract
 {
+    private static $mineCartUrl = '/V1/carts/mine';
+
     /**
      * @var ObjectManager
      */
@@ -34,25 +42,30 @@ class CartRepositoryTest extends WebapiAbstract
      */
     private $filterBuilder;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filterBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
         $this->sortOrderBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SortOrderBuilder'
+            \Magento\Framework\Api\SortOrderBuilder::class
         );
         $this->searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
     }
 
     protected function tearDown()
     {
         try {
+            /** @var CartRepositoryInterface $quoteRepository */
+            $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
             $cart = $this->getCart('test01');
-            $cart->delete();
+            $quoteRepository->delete($cart);
         } catch (\InvalidArgumentException $e) {
             // Do nothing if cart fixture was not used
         }
@@ -66,18 +79,27 @@ class CartRepositoryTest extends WebapiAbstract
      * @return \Magento\Quote\Model\Quote
      * @throws \InvalidArgumentException
      */
-    protected function getCart($reservedOrderId)
+    private function getCart($reservedOrderId)
     {
-        /** @var $cart \Magento\Quote\Model\Quote */
-        $cart = $this->objectManager->get('Magento\Quote\Model\Quote');
-        $cart->load($reservedOrderId, 'reserved_order_id');
-        if (!$cart->getId()) {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
+            ->create();
+
+        /** @var CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $items = $quoteRepository->getList($searchCriteria)->getItems();
+
+        if (empty($items)) {
             throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
         }
-        return $cart;
+
+        return array_pop($items);
     }
 
     /**
+     * Tests successfull get cart web-api call.
+     *
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testGetCart()
@@ -122,6 +144,8 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Tests exception when cartId is not provided.
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage No such entity with
      */
@@ -146,6 +170,8 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Tests carts search.
+     *
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testGetList()
@@ -176,6 +202,7 @@ class CartRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilters([$grandTotalFilter, $subtotalFilter]);
         $this->searchCriteriaBuilder->addFilters([$minCreatedAtFilter]);
         $this->searchCriteriaBuilder->addFilters([$maxCreatedAtFilter]);
+        $this->searchCriteriaBuilder->addFilter('reserved_order_id', 'test01');
         /** @var SortOrder $sortOrder */
         $sortOrder = $this->sortOrderBuilder->setField('subtotal')->setDirection(SortOrder::SORT_ASC)->create();
         $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
@@ -235,5 +262,125 @@ class CartRepositoryTest extends WebapiAbstract
         $searchCriteria = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchCriteria];
         $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * Saving quote - negative case, attempt to change customer id in the active quote for the user with Customer role.
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Invalid state change requested
+     * @dataProvider customerIdDataProvider
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     */
+    public function testSaveQuoteException($customerId)
+    {
+        $token = $this->getToken();
+
+        /** @var Quote $quote */
+        $quote = $this->getCart('test_order_1');
+
+        $requestData = $this->getRequestData($quote->getId());
+        // Replace to customer id not much with current user id..
+        $requestData['quote']['customer']['id'] = $customerId;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::$mineCartUrl,
+                'httpMethod'   => Request::HTTP_METHOD_PUT,
+                'token'        => $token
+            ],
+            'soap' => [
+                'service' => 'quoteCartRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'quoteCartRepositoryV1Save',
+                'token' => $token
+            ]
+        ];
+
+        $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * Saving quote - positive case: successful change correct customer data.
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     */
+    public function testSaveQuote()
+    {
+        $token = $this->getToken();
+
+        /** @var Quote $quote */
+        $quote = $this->getCart('test_order_1');
+
+        $requestData = $this->getRequestData($quote->getId());
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::$mineCartUrl,
+                'httpMethod'   => Request::HTTP_METHOD_PUT,
+                'token'        => $token
+            ],
+            'soap' => [
+                'service'        => 'quoteCartRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation'      => 'quoteCartRepositoryV1Save',
+                'token'          => $token
+            ]
+        ];
+
+        $this->_webApiCall($serviceInfo, $requestData);
+
+        $quote->loadActive($requestData["quote"]["id"]);
+        $this->assertEquals($requestData["quote"]["customer"]["firstname"], $quote->getCustomerFirstname());
+        $this->assertEquals($requestData["quote"]["customer"]["middlename"], $quote->getCustomerMiddlename());
+        $this->assertEquals($requestData["quote"]["customer"]["lastname"], $quote->getCustomerLastname());
+        $this->assertEquals($requestData["quote"]["customer"]["email"], $quote->getCustomerEmail());
+    }
+
+    /**
+     * Request to api for the current user token.
+     *
+     * @return string
+     */
+    private function getToken()
+    {
+        $customerTokenService = $this->objectManager->create(
+            CustomerTokenServiceInterface::class
+        );
+
+        return $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+    }
+
+    /**
+     * Request's data for tests.
+     *
+     * @param $quoteId Int
+     * @return array
+     */
+    private function getRequestData($quoteId)
+    {
+        $requestData['quote'] = [
+            'id'       => $quoteId,
+            'store_id' => 1,
+            'customer' => [
+                'id'         => 1,
+                'middlename' => 'Middlename_Test',
+                'firstname'  => 'Firstname_Test',
+                'lastname'   => 'Lastname_Test',
+                'email'      => 'customer@test.com'
+            ]
+        ];
+
+        return $requestData;
+    }
+
+    /**
+     * Provides different types of customer id.
+     *
+     * @return array
+     */
+    public function customerIdDataProvider()
+    {
+        return [[999],[null],['25']];
     }
 }

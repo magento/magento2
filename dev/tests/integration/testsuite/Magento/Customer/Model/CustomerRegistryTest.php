@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Model;
 
@@ -14,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test for \Magento\Customer\Model\CustomerRegistry
  */
-class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
+class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\CustomerRegistry
@@ -34,7 +32,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\CustomerRegistry');
+            ->create(\Magento\Customer\Model\CustomerRegistry::class);
     }
 
     /**
@@ -43,7 +41,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     public function testRetrieve()
     {
         $customer = $this->_model->retrieve(self::CUSTOMER_ID);
-        $this->assertInstanceOf('\Magento\Customer\Model\Customer', $customer);
+        $this->assertInstanceOf(\Magento\Customer\Model\Customer::class, $customer);
         $this->assertEquals(self::CUSTOMER_ID, $customer->getId());
     }
 
@@ -53,7 +51,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     public function testRetrieveByEmail()
     {
         $customer = $this->_model->retrieveByEmail('customer@example.com', self::WEBSITE_ID);
-        $this->assertInstanceOf('\Magento\Customer\Model\Customer', $customer);
+        $this->assertInstanceOf(\Magento\Customer\Model\Customer::class, $customer);
         $this->assertEquals(self::CUSTOMER_EMAIL, $customer->getEmail());
     }
 
@@ -66,7 +64,9 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
         //Setup customer in the id and email registries
         $customerBeforeDeletion = $this->_model->retrieve(self::CUSTOMER_ID);
         //Delete the customer from db
-        Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer')->load(self::CUSTOMER_ID)->delete();
+        Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\Customer::class
+        )->load(self::CUSTOMER_ID)->delete();
         //Verify presence of Customer in registry
         $this->assertEquals($customerBeforeDeletion, $this->_model->retrieve(self::CUSTOMER_ID));
         //Verify presence of Customer in email registry
@@ -107,7 +107,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $customer = $this->_model->retrieve(self::CUSTOMER_ID);
-        $this->assertInstanceOf('\Magento\Customer\Model\Customer', $customer);
+        $this->assertInstanceOf(\Magento\Customer\Model\Customer::class, $customer);
         $customer->delete();
         $this->_model->remove(self::CUSTOMER_ID);
         $this->_model->retrieve(self::CUSTOMER_ID);
@@ -121,7 +121,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     public function testRemoveByEmail()
     {
         $customer = $this->_model->retrieve(self::CUSTOMER_ID);
-        $this->assertInstanceOf('\Magento\Customer\Model\Customer', $customer);
+        $this->assertInstanceOf(\Magento\Customer\Model\Customer::class, $customer);
         $customer->delete();
         $this->_model->removeByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
         $this->_model->retrieveByEmail(self::CUSTOMER_EMAIL, $customer->getWebsiteId());

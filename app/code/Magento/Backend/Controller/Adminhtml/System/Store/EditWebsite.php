@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-class EditWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class EditWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Forward

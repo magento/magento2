@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,29 +52,25 @@ class StoreCookie
      * Delete cookie "store" if the store (a value in the cookie) does not exist or is inactive
      *
      * @param \Magento\Framework\App\FrontController $subject
-     * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
-     * @return mixed
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
+    public function beforeDispatch(
         \Magento\Framework\App\FrontController $subject,
-        \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $defaultStore = $this->storeManager->getDefaultStoreView();
         $storeCodeFromCookie = $this->storeCookieManager->getStoreCodeFromCookie();
         if ($storeCodeFromCookie) {
             try {
                 $this->storeRepository->getActiveStoreByCode($storeCodeFromCookie);
             } catch (StoreIsInactiveException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             } catch (NoSuchEntityException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             } catch (InvalidArgumentException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             }
         }
-        return $proceed($request);
     }
 }

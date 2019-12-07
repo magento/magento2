@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\AttributeSet;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -62,6 +66,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ),
                 'name' => 'affected-attribute-set',
                 'class' => 'admin__control-radio',
+                'css_class' => 'admin__field-option',
                 'checked' => true,
                 'value' => 'current'
             ]
@@ -73,6 +78,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'after_element_html' => __('Add configurable attributes to the new Attribute Set based on current'),
                 'name' => 'affected-attribute-set',
                 'class' => 'admin__control-radio',
+                'css_class' => 'admin__field-option',
                 'value' => 'new'
             ]
         );
@@ -96,6 +102,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'affected-attribute-set',
                 'required' => true,
                 'class' => 'admin__control-radio no-display',
+                'css_class' => 'admin__field-option',
                 'value' => 'existing'
             ]
         );
@@ -115,7 +122,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form->setUseContainer(true);
         $this->setForm($form);
     }
-
 
     /**
      * @return string

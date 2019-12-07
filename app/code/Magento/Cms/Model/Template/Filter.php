@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Template;
+
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Cms Template Filter Model
@@ -37,7 +39,12 @@ class Filter extends \Magento\Email\Model\Template\Filter
      */
     public function mediaDirective($construction)
     {
-        $params = $this->getParameters($construction[2]);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
+        if (preg_match('/\.\.(\\\|\/)/', $params['url'])) {
+            throw new \InvalidArgumentException('Image path must be absolute');
+        }
+
         return $this->_storeManager->getStore()->getBaseMediaDir() . '/' . $params['url'];
     }
 }

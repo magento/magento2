@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Observer;
@@ -42,9 +42,9 @@ class LoadCustomerQuoteObserver implements ObserverInterface
         try {
             $this->checkoutSession->loadCustomerQuote();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Load customer quote error'));
+            $this->messageManager->addExceptionMessage($e, __('Load customer quote error'));
         }
     }
 }

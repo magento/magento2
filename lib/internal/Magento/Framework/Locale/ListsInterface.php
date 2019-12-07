@@ -1,26 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
 
-interface ListsInterface
+/**
+ * @api
+ */
+interface ListsInterface extends OptionInterface
 {
-    /**
-     * Get options array for locale dropdown in current locale
-     *
-     * @return array
-     */
-    public function getOptionLocales();
-
-    /**
-     * Get translated to original locale options array for locale dropdown
-     *
-     * @return array
-     */
-    public function getTranslatedOptionLocales();
-
     /**
      * Retrieve timezone option list
      *

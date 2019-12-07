@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Reports\Model\ResourceModel\Product\Downloads;
 
 /**
  * Product Downloads Report collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-namespace Magento\Reports\Model\ResourceModel\Product\Downloads;
-
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
@@ -92,5 +96,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             parent::addFieldToFilter($field, $condition);
         }
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSelectCountSql()
+    {
+        $countSelect = parent::getSelectCountSql();
+        $countSelect->reset(\Zend\Db\Sql\Select::GROUP);
+        return $countSelect;
     }
 }

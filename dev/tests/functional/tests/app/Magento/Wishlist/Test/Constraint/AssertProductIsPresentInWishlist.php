@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,10 +32,18 @@ class AssertProductIsPresentInWishlist extends AbstractConstraint
         WishlistIndex $wishlistIndex,
         InjectableFixture $product
     ) {
+        $cmsIndex->open();
         $cmsIndex->getLinksBlock()->openLink('My Account');
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Wish List');
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        $isProductVisible = $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)
+            ->isVisible();
+        while (!$isProductVisible && $wishlistIndex->getTopToolbar()->nextPage()) {
+            $isProductVisible = $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)
+                ->isVisible();
+        }
+
+        \PHPUnit\Framework\Assert::assertTrue(
             $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)->isVisible(),
             $product->getName() . ' is not visible on Wish List page.'
         );

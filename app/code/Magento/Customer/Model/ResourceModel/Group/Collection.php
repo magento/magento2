@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel\Group;
@@ -13,13 +13,18 @@ namespace Magento\Customer\Model\ResourceModel\Group;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'customer_group_id';
+
+    /**
      * Resource initialization
      *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Group', 'Magento\Customer\Model\ResourceModel\Group');
+        $this->_init(\Magento\Customer\Model\Group::class, \Magento\Customer\Model\ResourceModel\Group::class);
     }
 
     /**

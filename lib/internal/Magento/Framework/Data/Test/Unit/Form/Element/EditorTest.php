@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
 use Magento\Framework\Data\Form\Element\Editor;
 
-class EditorTest extends \PHPUnit_Framework_TestCase
+class EditorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Editor
@@ -48,38 +48,34 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
-        $this->configMock = $this->getMock('\Magento\Framework\DataObject', ['getData'], [], '', false);
+        $this->factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+        $this->collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->configMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
+
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Framework\Data\Form\Element\Editor',
+            \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'factoryElement' => $this->factoryMock,
                 'factoryCollection' => $this->collectionFactoryMock,
                 'escaper' => $this->escaperMock,
-                'data' => ['config' => $this->configMock]
+                'data' => ['config' => $this->configMock],
+                'serializer' => $this->serializer
             ]
         );
 
-        $this->formMock = $this->getMock(
-            'Magento\Framework\Data\Form',
-            ['getHtmlIdPrefix', 'getHtmlIdSuffix'],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->formMock =
+            $this->createPartialMock(\Magento\Framework\Data\Form::class, ['getHtmlIdPrefix', 'getHtmlIdSuffix']);
         $this->model->setForm($this->formMock);
     }
 
@@ -93,7 +89,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects($this->once())->method('getData')->with('enabled')->willReturn(true);
 
         $model = $this->objectManager->getObject(
-            'Magento\Framework\Data\Form\Element\Editor',
+            \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'factoryElement' => $this->factoryMock,
                 'factoryCollection' => $this->collectionFactoryMock,
@@ -138,16 +134,41 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
     }
 
-    public function testIsEnabled()
+    /**
+     * @param bool $expected
+     * @param bool $globalFlag
+     * @param bool $attributeFlag
+     * @dataProvider isEnabledDataProvider
+     * @return void
+     */
+    public function testIsEnabled($expected, $globalFlag, $attributeFlag = null)
     {
-        $this->assertEmpty($this->model->isEnabled());
+        $this->configMock
+            ->expects($this->once())
+            ->method('getData')
+            ->with('enabled')
+            ->willReturn($globalFlag);
 
-        $this->model->setData('wysiwyg', true);
-        $this->assertTrue($this->model->isEnabled());
+        if ($attributeFlag !== null) {
+            $this->model->setData('wysiwyg', $attributeFlag);
+        }
+        $this->assertEquals($expected, $this->model->isEnabled());
+    }
 
-        $this->model->unsetData('wysiwyg');
-        $this->configMock->expects($this->once())->method('getData')->with('enabled')->willReturn(true);
-        $this->assertTrue($this->model->isEnabled());
+    /**
+     * @return array
+     */
+    public function isEnabledDataProvider()
+    {
+        return [
+            'Global disabled, attribute isnt set' => [false, false],
+            'Global disabled, attribute disabled' => [false, false, false],
+            'Global disabled, attribute enabled' => [false, false, true],
+
+            'Global enabled, attribute isnt set' => [true, true],
+            'Global enabled, attribute disabled' => [false, true, false],
+            'Global enabled, attribute enabled' => [true, true, true]
+        ];
     }
 
     public function testIsHidden()
@@ -165,7 +186,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $config = $this->getMock('\Magento\Framework\DataObject', ['getData'], [], '', false);
+        $config = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
         $this->assertEquals($config, $this->model->getConfig());
 
         $this->configMock->expects($this->once())->method('getData')->with('test')->willReturn('test');
@@ -177,8 +198,17 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTranslatedString()
     {
+        $callback = function ($params) {
+            return json_encode($params);
+        };
+
         $this->configMock->expects($this->any())->method('getData')->withConsecutive(['enabled'])->willReturn(true);
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback($callback);
+
         $html = $this->model->getElementHtml();
+
         $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
     }
 }

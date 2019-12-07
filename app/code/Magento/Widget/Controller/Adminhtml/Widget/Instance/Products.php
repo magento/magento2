@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
@@ -18,7 +18,7 @@ class Products extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         $selected = $this->getRequest()->getParam('selected', '');
         $productTypeId = $this->getRequest()->getParam('product_type_id', '');
         $chooser = $this->_view->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser'
+            \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser::class
         )->setName(
             $this->mathRandom->getUniqueHash('products_grid_')
         )->setUseMassaction(
@@ -30,7 +30,7 @@ class Products extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         );
         /* @var $serializer \Magento\Backend\Block\Widget\Grid\Serializer */
         $serializer = $this->_view->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Serializer',
+            \Magento\Backend\Block\Widget\Grid\Serializer::class,
             '',
             [
                 'data' => [

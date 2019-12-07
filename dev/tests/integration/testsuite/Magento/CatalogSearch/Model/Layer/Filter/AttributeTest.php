@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -10,7 +10,7 @@ namespace Magento\CatalogSearch\Model\Layer\Filter;
  *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
  */
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\Layer\Filter\Attribute
@@ -31,7 +31,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $attribute \Magento\Catalog\Model\Entity\Attribute */
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Entity\Attribute'
+            \Magento\Catalog\Model\Entity\Attribute::class
         );
         $attribute->loadByCode('catalog_product', 'attribute_with_option');
         foreach ($attribute->getSource()->getAllOptions() as $optionInfo) {
@@ -42,9 +42,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->_layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Category');
+            ->create(\Magento\Catalog\Model\Layer\Category::class);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogSearch\Model\Layer\Filter\Attribute', ['layer' => $this->_layer]);
+            ->create(\Magento\CatalogSearch\Model\Layer\Filter\Attribute::class, ['layer' => $this->_layer]);
         $this->_model->setAttributeModel($attribute);
         $this->_model->setRequestVar('attribute');
     }
@@ -58,7 +58,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEmpty($this->_model->getLayer()->getState()->getFilters());
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('attribute', []);
         $this->_model->apply($request);
 
@@ -70,7 +70,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->_model->getLayer()->getState()->getFilters());
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('attribute', $this->_attributeOptionId);
         $this->_model->apply($request);
 
@@ -83,7 +83,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testGetItemsWithApply()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('attribute', $this->_attributeOptionId);
         $this->_model->apply($request);
         $items = $this->_model->getItems();

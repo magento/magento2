@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,5 +12,8 @@
     </event>
     <event name="event_2">
         <observer name="observer_2" instance="instance_2" disabled="true" shared="false" />
+    </event>
+    <event name="some_eventName">
+        <observer name="observer_3" instance="instance_3" disabled="false" shared="true" />
     </event>
 </config>

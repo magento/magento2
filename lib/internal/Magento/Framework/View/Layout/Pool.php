@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\LayoutInterface;
  */
 class Pool
 {
-    const DEFAULT_CLASS = 'Magento\Framework\View\Layout\Generic';
+    const DEFAULT_CLASS = \Magento\Framework\View\Layout\Generic::class;
 
     /**
      * Layouts pool

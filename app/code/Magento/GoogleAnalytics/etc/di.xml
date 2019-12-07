@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,6 +10,13 @@
         <arguments>
             <argument name="compositeModules" xsi:type="array">
                 <item name="googleanalytics" xsi:type="string">Magento_GoogleAnalytics</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="google/analytics/account" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

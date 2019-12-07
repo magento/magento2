@@ -1,16 +1,21 @@
 {
     "name": "magento/module-captcha",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
-        "magento/module-store": "100.0.*",
-        "magento/module-customer": "100.0.*",
-        "magento/module-checkout": "100.0.*",
-        "magento/module-backend": "100.0.*",
-        "magento/framework": "100.0.*"
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-checkout": "*",
+        "magento/module-customer": "*",
+        "magento/module-store": "*",
+        "zendframework/zend-captcha": "^2.7.1",
+        "zendframework/zend-db": "^2.8.2",
+        "zendframework/zend-session": "^2.7.3"
     },
     "type": "magento2-module",
-    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

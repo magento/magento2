@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Product\DuplicateProductEntityTest">
-        <variation name="DuplicateProductEntityTestVariation3" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\DuplicateProductEntityTest" summary="Duplicate Product" ticketId="MAGETWO-23294">
+        <variation name="DuplicateProductEntityTestVariation3" summary="Dublicate downloadable product">
             <data name="productType" xsi:type="string">downloadableProduct::default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage" next="Magento\Downloadable\Test\Constraint\AssertDownloadableDuplicateForm" />
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableDuplicateForm" next="Magento\Catalog\Test\Constraint\AssertProductDuplicatedInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicatedInGrid" next="Magento\Catalog\Test\Constraint\AssertProductDuplicateIsNotDisplayingOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableDuplicateForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicatedInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateIsNotDisplayingOnFrontend" />
         </variation>
     </testCase>

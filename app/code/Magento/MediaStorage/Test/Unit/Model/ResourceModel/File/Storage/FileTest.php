@@ -1,17 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Model\ResourceModel\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class FileTest
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\Filesystem\Io\File
+     */
+    private $fileIoMock;
+
     /**
      * @var \Magento\MediaStorage\Model\ResourceModel\File\Storage\File
      */
@@ -37,25 +43,24 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->filesystemMock = $this->getMock(
-            'Magento\Framework\Filesystem',
-            ['getDirectoryRead'],
-            [],
-            '',
-            false
-        );
-        $this->directoryReadMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Read',
-            ['isDirectory', 'readRecursively'],
-            [],
-            '',
-            false
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead']);
+        $this->directoryReadMock = $this->createPartialMock(
+            \Magento\Framework\Filesystem\Directory\Read::class,
+            ['isDirectory', 'readRecursively']
         );
 
-        $this->storageFile = new \Magento\MediaStorage\Model\ResourceModel\File\Storage\File(
-            $this->filesystemMock,
-            $this->loggerMock
+        $this->fileIoMock = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
+
+        $objectManager = new ObjectManager($this);
+
+        $this->storageFile = $objectManager->getObject(
+            \Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class,
+            [
+                'filesystem' => $this->filesystemMock,
+                'log' => $this->loggerMock,
+                'fileIo' => $this->fileIoMock
+            ]
         );
     }
 
@@ -107,6 +112,20 @@ class FileTest extends \PHPUnit_Framework_TestCase
             'folder_one/folder_two/.htaccess',
             'folder_one/folder_two/file_two.txt',
         ];
+
+        $pathInfos = array_map(
+            function ($path) {
+                return [$path, pathinfo($path)];
+            },
+            $paths
+        );
+
+        $this->fileIoMock->expects(
+            $this->any()
+        )->method(
+            'getPathInfo'
+        )->will($this->returnValueMap($pathInfos));
+
         sort($paths);
         $this->directoryReadMock->expects(
             $this->once()

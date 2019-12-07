@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order;
 
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Sales\Model\Order\ProductOption;
 use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
@@ -41,16 +41,6 @@ class ItemRepository implements OrderItemRepositoryInterface
     protected $searchResultFactory;
 
     /**
-     * @var ProductOptionFactory
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory
-     */
-    protected $extensionFactory;
-
-    /**
      * @var ProductOptionProcessorInterface[]
      */
     protected $processorPool;
@@ -61,31 +51,41 @@ class ItemRepository implements OrderItemRepositoryInterface
     protected $registry = [];
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * @var ProductOption
+     */
+    private $productOption;
+
+    /**
      * @param DataObjectFactory $objectFactory
      * @param Metadata $metadata
      * @param OrderItemSearchResultInterfaceFactory $searchResultFactory
-     * @param ProductOptionFactory $productOptionFactory
-     * @param ProductOptionExtensionFactory $extensionFactory
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param ProductOption $productOption
      * @param array $processorPool
      */
     public function __construct(
         DataObjectFactory $objectFactory,
         Metadata $metadata,
         OrderItemSearchResultInterfaceFactory $searchResultFactory,
-        ProductOptionFactory $productOptionFactory,
-        ProductOptionExtensionFactory $extensionFactory,
+        CollectionProcessorInterface $collectionProcessor,
+        ProductOption $productOption,
         array $processorPool = []
     ) {
         $this->objectFactory = $objectFactory;
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
-        $this->productOptionFactory = $productOptionFactory;
-        $this->extensionFactory = $extensionFactory;
+        $this->collectionProcessor = $collectionProcessor;
+        $this->productOption = $productOption;
         $this->processorPool = $processorPool;
     }
 
     /**
-     * load entity
+     * Loads entity.
      *
      * @param int $id
      * @return OrderItemInterface
@@ -95,16 +95,19 @@ class ItemRepository implements OrderItemRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('ID required'));
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderItemInterface $orderItem */
             $orderItem = $this->metadata->getNewInstance()->load($id);
             if (!$orderItem->getItemId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
 
-            $this->addProductOption($orderItem);
+            $this->productOption->add($orderItem);
+            $this->addParentItem($orderItem);
             $this->registry[$id] = $orderItem;
         }
         return $this->registry[$id];
@@ -113,25 +116,18 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param SearchCriteria $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return OrderItemInterface[]
      */
-    public function getList(SearchCriteria $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var OrderItemSearchResultInterface $searchResult */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection $searchResult */
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
-
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-
+        $this->collectionProcessor->process($searchCriteria, $searchResult);
         /** @var OrderItemInterface $orderItem */
         foreach ($searchResult->getItems() as $orderItem) {
-            $this->addProductOption($orderItem);
+            $this->productOption->add($orderItem);
         }
 
         return $searchResult;
@@ -172,7 +168,9 @@ class ItemRepository implements OrderItemRepositoryInterface
     {
         if ($entity->getProductOption()) {
             $request = $this->getBuyRequest($entity);
-            $entity->setProductOptions(['info_buyRequest' => $request->toArray()]);
+            $productOptions = $entity->getProductOptions();
+            $productOptions['info_buyRequest'] = $request->toArray();
+            $entity->setProductOptions($productOptions);
         }
 
         $this->metadata->getMapper()->save($entity);
@@ -181,60 +179,25 @@ class ItemRepository implements OrderItemRepositoryInterface
     }
 
     /**
-     * Add product option data
+     * Set parent item.
      *
      * @param OrderItemInterface $orderItem
-     * @return $this
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    protected function addProductOption(OrderItemInterface $orderItem)
+    private function addParentItem(OrderItemInterface $orderItem)
     {
-        /** @var DataObject $request */
-        $request = $orderItem->getBuyRequest();
+        if ($parentId = $orderItem->getParentItemId()) {
+            $orderItem->setParentItem($this->get($parentId));
+        } else {
+            $orderCollection = $orderItem->getOrder()->getItemsCollection()->filterByParent($orderItem->getItemId());
 
-        $productType = $orderItem->getProductType();
-        if (isset($this->processorPool[$productType])
-            && !$orderItem->getParentItemId()) {
-            $data = $this->processorPool[$productType]->convertToProductOption($request);
-            if ($data) {
-                $this->setProductOption($orderItem, $data);
+            foreach ($orderCollection->getItems() as $item) {
+                if ($item->getParentItemId() === $orderItem->getItemId()) {
+                    $item->setParentItem($orderItem);
+                }
             }
         }
-
-        if (isset($this->processorPool['custom_options'])
-            && !$orderItem->getParentItemId()) {
-            $data = $this->processorPool['custom_options']->convertToProductOption($request);
-            if ($data) {
-                $this->setProductOption($orderItem, $data);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set product options data
-     *
-     * @param OrderItemInterface $orderItem
-     * @param array $data
-     * @return $this
-     */
-    protected function setProductOption(OrderItemInterface $orderItem, array $data)
-    {
-        $productOption = $orderItem->getProductOption();
-        if (!$productOption) {
-            $productOption = $this->productOptionFactory->create();
-            $orderItem->setProductOption($productOption);
-        }
-
-        $extensionAttributes = $productOption->getExtensionAttributes();
-        if (!$extensionAttributes) {
-            $extensionAttributes = $this->extensionFactory->create();
-            $productOption->setExtensionAttributes($extensionAttributes);
-        }
-
-        $extensionAttributes->setData(key($data), current($data));
-
-        return $this;
     }
 
     /**

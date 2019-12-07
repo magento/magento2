@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorization\Model\ResourceModel;
@@ -68,6 +68,7 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (!$role->getTreeLevel()) {
+            $treeLevel = 0;
             if ($role->getPid() > 0) {
                 $select = $this->getConnection()->select()->from(
                     $this->getMainTable(),
@@ -79,8 +80,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $binds = ['pid' => (int)$role->getPid()];
 
                 $treeLevel = $this->getConnection()->fetchOne($select, $binds);
-            } else {
-                $treeLevel = 0;
             }
 
             $role->setTreeLevel($treeLevel + 1);

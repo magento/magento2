@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter;
@@ -8,8 +8,10 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
 /**
  * Sales Adminhtml report filter form
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {
@@ -75,7 +77,12 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
             $fieldset->addField(
                 'order_statuses',
                 'multiselect',
-                ['name' => 'order_statuses', 'values' => $values, 'display' => 'none'],
+                [
+                    'name' => 'order_statuses',
+                    'label' => '',
+                    'values' => $values,
+                    'display' => 'none'
+                ],
                 'show_order_statuses'
             );
 
@@ -84,7 +91,7 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
                 $this->setChild(
                     'form_after',
                     $this->getLayout()->createBlock(
-                        'Magento\Backend\Block\Widget\Form\Element\Dependence'
+                        \Magento\Backend\Block\Widget\Form\Element\Dependence::class
                     )->addFieldMap(
                         "{$htmlIdPrefix}show_order_statuses",
                         'show_order_statuses'

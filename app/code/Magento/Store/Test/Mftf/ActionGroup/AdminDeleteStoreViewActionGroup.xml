@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteStoreViewActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Deletes the provided Store without creating a Backup. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customStore" defaultValue="customStore"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
+        <waitForPageLoad stepKey="waitStoreIndexPageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
+        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewInGrid"/>
+        <waitForPageLoad stepKey="waitForStoreViewPage"/>
+        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreView"/>
+        <selectOption selector="{{AdminStoreBackupOptionsSection.createBackupSelect}}" userInput="No" stepKey="dontCreateDbBackup"/>
+        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewAgain"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
+        <waitForPageLoad stepKey="waitForSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessageAppears"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
+    </actionGroup>
+
+    <actionGroup name="DeleteCustomStoreViewBackupEnabledYesActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Deleted the provided Store while creating a Backup. Validates that the Success Messages (Delete/Backup) are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickEditExistingStoreViewRow"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewButtonOnEditStorePage"/>
+        <selectOption userInput="Yes" selector="{{AdminStoreBackupOptionsSection.createBackupSelect}}" stepKey="setCreateDbBackupToYes"/>
+        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewButtonOnDeleteStorePage"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreViewDelete"/>
+        <waitForPageLoad stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminStoresGridSection.successMessage}}" userInput="The database was backed up." stepKey="seeAssertDatabaseBackedUpMessage"/>
+        <see selector="{{AdminStoresGridSection.successMessage}}" userInput="You deleted the store view." stepKey="seeAssertSuccessDeleteStoreViewMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AssertStoreViewNotInGrid">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Store View name. Validates that it does NOT appear in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see selector="{{AdminStoresGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertStoreViewNotInGridMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminSearchStoreViewByNameActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Clears filters and search by store view name.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
+        <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{storeViewName}}" stepKey="fillSearchStoreViewField"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
+    </actionGroup>
+
+    <actionGroup name="AdminDeleteStoreViewIfExistsActionGroup" extends="AdminSearchStoreViewByNameActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminSearchStoreViewByNameActionGroup. Goes to the Admin Stores grid page. Deletes the provided Store (if exists) without creating a Backup. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <executeInSelenium function="function($webdriver) use ($I) {
+                $items = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('.col-store_title>a'));
+                if(!empty($items)) {
+                    $I->click('.col-store_title>a');
+                    $I->waitForPageLoad(10);
+                    $I->click('#delete');
+                    $I->waitForPageLoad(30);
+                    $I->selectOption('select#store_create_backup', 'No');
+                    $I->click('#delete');
+                    $I->waitForPageLoad(30);
+                    $I->waitForElementVisible('aside.confirm .modal-title', 10);
+                    $I->click('aside.confirm .modal-footer button.action-accept');
+                    $I->waitForPageLoad(60);
+                    $I->waitForElementVisible('#messages div.message-success', 10);
+                    $I->see('You deleted the store view.', '#messages div.message-success');
+                }
+            }" after="clickSearchButton" stepKey="deleteStoreViewIfExists"/>
+    </actionGroup>
+</actionGroups>

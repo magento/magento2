@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model;
 /**
  * Class StockRegistryTest
  */
-class StockRegistryTest extends \PHPUnit_Framework_TestCase
+class StockRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\StockRegistry
@@ -20,13 +20,13 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
      */
     protected $criteria;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->criteria = $this->getMockBuilder('Magento\CatalogInventory\Api\StockItemCriteriaInterface')
+        $this->criteria = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockItemCriteriaInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $criteriaFactory = $this->getMockBuilder('Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory')
+        $criteriaFactory = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -34,7 +34,7 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\CatalogInventory\Model\StockRegistry',
+            \Magento\CatalogInventory\Model\StockRegistry::class,
             [
                 'criteriaFactory' => $criteriaFactory
             ]

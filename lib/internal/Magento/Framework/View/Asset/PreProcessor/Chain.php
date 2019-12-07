@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,9 +11,16 @@ use Magento\Framework\View\Asset\LocalInterface;
 /**
  * An object that's passed to preprocessors to carry current and original information for processing
  * Encapsulates complexity of all necessary context and parameters
+ *
+ * @api
  */
 class Chain
 {
+    /**
+     * @var array
+     */
+    private $compatibleTypes;
+
     /**
      * @var LocalInterface
      */
@@ -59,12 +66,14 @@ class Chain
      * @param string $origContent
      * @param string $origContentType
      * @param string $origAssetPath
+     * @param array $compatibleTypes
      */
     public function __construct(
         LocalInterface $asset,
         $origContent,
         $origContentType,
-        $origAssetPath
+        $origAssetPath,
+        array $compatibleTypes = []
     ) {
         $this->asset = $asset;
         $this->origContent = $origContent;
@@ -74,6 +83,7 @@ class Chain
         $this->targetContentType = $asset->getContentType();
         $this->targetAssetPath = $asset->getPath();
         $this->origAssetPath = $origAssetPath;
+        $this->compatibleTypes = $compatibleTypes;
     }
 
     /**
@@ -178,7 +188,8 @@ class Chain
      */
     public function assertValid()
     {
-        if ($this->contentType !== $this->targetContentType) {
+        if ($this->contentType !== $this->targetContentType
+                && empty($this->compatibleTypes[$this->targetContentType][$this->contentType])) {
             throw new \LogicException(
                 "The requested asset type was '{$this->targetContentType}', but ended up with '{$this->contentType}'"
             );

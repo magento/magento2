@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,19 +8,21 @@ namespace Magento\Tax\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class TaxRateCollectionTest extends \PHPUnit_Framework_TestCase
+class TaxRateCollectionTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateTaxRateCollectionItem()
     {
         /** @var \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection $collection */
-        $collection = Bootstrap::getObjectManager()->get('Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection');
+        $collection = Bootstrap::getObjectManager()->get(
+            \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection::class
+        );
         $dbTaxRatesQty = $collection->count();
         if (($dbTaxRatesQty == 0) || ($collection->getFirstItem()->getId() != 1)) {
             $this->fail("Preconditions failed.");
         }
         /** @var \Magento\Tax\Model\TaxRateCollection $taxRatesCollection */
         $taxRatesCollection = Bootstrap::getObjectManager()
-            ->create('Magento\Tax\Model\TaxRateCollection');
+            ->create(\Magento\Tax\Model\TaxRateCollection::class);
         $collectionTaxRatesQty = $taxRatesCollection->count();
         $this->assertEquals($dbTaxRatesQty, $collectionTaxRatesQty, 'Tax rates quantity is invalid.');
         $taxRate = $taxRatesCollection->getFirstItem()->getData();

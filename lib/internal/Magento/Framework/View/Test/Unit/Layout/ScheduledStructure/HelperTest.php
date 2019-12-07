@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\App\State;
  * Class HelperTest
  * @covers \Magento\Framework\View\Layout\ScheduledStructure\Helper
  */
-class HelperTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
@@ -43,20 +43,20 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
+        $this->scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
+        $this->dataStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->helper = $helperObjectManager->getObject(
-            'Magento\Framework\View\Layout\ScheduledStructure\Helper',
+            \Magento\Framework\View\Layout\ScheduledStructure\Helper::class,
             [
                 'logger' => $this->loggerMock,
                 'state' => $this->stateMock
@@ -144,7 +144,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $loggerExpects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $loggerExpects
      * @param string $stateMode
      * @return void
      * @dataProvider scheduleElementLogDataProvider
@@ -181,7 +181,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->willReturn($stateMode);
         $this->loggerMock->expects($loggerExpects)
-            ->method('critical')
+            ->method('info')
             ->with(
                 "Broken reference: the '{$key}' element cannot be added as child to '{$parentName}', " .
                 'because the latter doesn\'t exist'

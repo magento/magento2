@@ -1,10 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
+use Magento\Framework\Indexer\CacheContext;
+
+/**
+ * Category product indexer
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
@@ -22,8 +30,16 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      */
     protected $rowsActionFactory;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
+
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     * @since 100.0.11
+     */
+    protected $cacheContext;
 
     /**
      * @param Product\Action\FullFactory $fullActionFactory
@@ -49,6 +65,19 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
     public function execute($ids)
     {
         $this->executeAction($ids);
+        $this->registerEntities($ids);
+    }
+
+    /**
+     * Add entities to cache context
+     *
+     * @param int[] $ids
+     * @return void
+     * @since 100.0.11
+     */
+    protected function registerEntities($ids)
+    {
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Category::CACHE_TAG, $ids);
     }
 
     /**
@@ -59,6 +88,18 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
     public function executeFull()
     {
         $this->fullActionFactory->create()->execute();
+        $this->registerTags();
+    }
+
+    /**
+     * Add tags to cache context
+     *
+     * @return void
+     * @since 100.0.11
+     */
+    protected function registerTags()
+    {
+        $this->getCacheContext()->registerTags([\Magento\Catalog\Model\Category::CACHE_TAG]);
     }
 
     /**
@@ -96,11 +137,28 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
 
         /** @var Product\Action\Rows $action */
         $action = $this->rowsActionFactory->create();
-        if ($indexer->isWorking()) {
+        if ($indexer->isScheduled()) {
             $action->execute($ids, true);
+        } else {
+            $action->execute($ids);
         }
-        $action->execute($ids);
 
         return $this;
+    }
+
+    /**
+     * Get cache context
+     *
+     * @return \Magento\Framework\Indexer\CacheContext
+     * @deprecated 100.0.11
+     * @since 100.0.11
+     */
+    protected function getCacheContext()
+    {
+        if (!($this->cacheContext instanceof CacheContext)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        } else {
+            return $this->cacheContext;
+        }
     }
 }

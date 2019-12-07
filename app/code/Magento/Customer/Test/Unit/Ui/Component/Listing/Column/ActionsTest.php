@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Customer\Ui\Component\Listing\Column\Actions;
 
-class ActionsTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class ActionsTest
+ */
+class ActionsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Actions */
     protected $component;
@@ -23,21 +26,15 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context->expects($this->any())->method('getProcessor')->willReturn($processor);
-        $this->uiComponentFactory = $this->getMock(
-            'Magento\Framework\View\Element\UiComponentFactory',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
+        $this->uiComponentFactory = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
         $this->urlBuilder = $this->getMockForAbstractClass(
-            'Magento\Framework\UrlInterface',
+            \Magento\Framework\UrlInterface::class,
             [],
             '',
             false
@@ -70,7 +67,8 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
                             'edit' => [
                                 'href' => 'http://magento.com/customer/index/edit',
                                 'label' => new \Magento\Framework\Phrase('Edit'),
-                                'hidden' => false
+                                'hidden' => false,
+                                '__disableTmpl' => true,
                             ]
                         ]
                     ],

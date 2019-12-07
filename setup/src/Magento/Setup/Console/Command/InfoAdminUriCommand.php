@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,9 +43,9 @@ class InfoAdminUriCommand extends Command
         parent::configure();
     }
 
-     /**
-      * {@inheritdoc}
-      */
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(
@@ -53,5 +53,6 @@ class InfoAdminUriCommand extends Command
             . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
             . "\n"
         );
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

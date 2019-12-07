@@ -2,25 +2,32 @@
 /**
  * Test for \Magento\Framework\Filesystem\Driver\File
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Driver;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Exception\FileSystemException;
+
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File
+     * @var File
      */
-    protected $driver;
+    private $driver;
 
     /**
-     * @var string
+     * @var String
      */
-    protected $absolutePath;
+    private $absolutePath;
 
     /**
-     * get relative path for test
+     * @var String
+     */
+    private $generatedPath;
+
+    /**
+     * Returns relative path for the test.
      *
      * @param $relativePath
      * @return string
@@ -31,16 +38,26 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Set up
+     * @inheritdoc
      */
     public function setUp()
     {
-        $this->driver = new \Magento\Framework\Filesystem\Driver\File();
+        $this->driver = new File();
         $this->absolutePath = dirname(__DIR__) . '/_files/';
+        $this->generatedPath = $this->getTestPath('generated');
+        $this->removeGeneratedDirectory();
     }
 
     /**
-     * test read recursively read
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->removeGeneratedDirectory();
+    }
+
+    /**
+     * Tests directory recursive read.
      */
     public function testReadDirectoryRecursively()
     {
@@ -58,12 +75,64 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test exception
+     * Tests directory reading exception.
      *
      * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testReadDirectoryRecursivelyFailure()
     {
         $this->driver->readDirectoryRecursively($this->getTestPath('not-existing-directory'));
+    }
+
+    /**
+     * Tests of directory creating.
+     *
+     * @throws FileSystemException
+     */
+    public function testCreateDirectory()
+    {
+        $generatedPath = $this->getTestPath('generated/roo/bar/baz/foo');
+        $generatedPathBase = $this->getTestPath('generated');
+        // Delete the generated directory if it already exists
+        if (is_dir($generatedPath)) {
+            $this->assertTrue($this->driver->deleteDirectory($generatedPathBase));
+        }
+        $this->assertTrue($this->driver->createDirectory($generatedPath));
+        $this->assertTrue(is_dir($generatedPath));
+    }
+
+    /**
+     * Tests creation and removing of symlinks.
+     *
+     * @throws FileSystemException
+     * @return void
+     */
+    public function testSymlinks(): void
+    {
+        $sourceDirectory = $this->generatedPath . '/source';
+        $destinationDirectory = $this->generatedPath . '/destination';
+
+        $this->driver->createDirectory($sourceDirectory);
+        $this->driver->createDirectory($destinationDirectory);
+
+        $linkName = $destinationDirectory . '/link';
+
+        self::assertTrue($this->driver->isWritable($destinationDirectory));
+        self::assertTrue($this->driver->symlink($sourceDirectory, $linkName));
+        self::assertTrue($this->driver->isExists($linkName));
+        self::assertTrue($this->driver->deleteDirectory($linkName));
+    }
+
+    /**
+     * Remove generated directories.
+     *
+     * @throws FileSystemException
+     * @return void
+     */
+    private function removeGeneratedDirectory(): void
+    {
+        if (is_dir($this->generatedPath)) {
+            $this->driver->deleteDirectory($this->generatedPath);
+        }
     }
 }

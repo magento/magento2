@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer;
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerInterface;
 
+/**
+ * @api Instantiate save handler when implementing custom Indexer\Action
+ */
 class SaveHandlerFactory
 {
     /**

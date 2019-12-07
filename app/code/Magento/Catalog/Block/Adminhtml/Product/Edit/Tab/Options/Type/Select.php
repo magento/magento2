@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/options/type/select.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit/options/type/select.phtml';
 
     /**
      * Class constructor
@@ -38,7 +38,7 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
     {
         $this->addChild(
             'add_select_row_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Add New Row'),
                 'class' => 'add add-select-row',
@@ -48,7 +48,7 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
 
         $this->addChild(
             'delete_select_row_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Delete Row'),
                 'class' => 'delete delete-select-row icon-btn',

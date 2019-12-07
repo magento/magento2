@@ -1,265 +1,325 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-// @codingStandardsIgnoreFile
-
-/**
- * Test customer ajax login controller
- */
 namespace Magento\Customer\Test\Unit\Controller\Ajax;
 
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Controller\Ajax\Login;
+use Magento\Customer\Model\Account\Redirect;
+use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\ObjectManager\ObjectManager as FakeObjectManager;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class LoginTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class LoginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Controller\Ajax\Login
+     * @var Login
      */
-    protected $object;
+    private $controller;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
-    protected $request;
+    private $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
-    protected $response;
+    private $response;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FakeObjectManager|MockObject
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountManagement|MockObject
      */
-    protected $customerAccountManagementMock;
+    private $accountManagement;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
-    protected $jsonHelperMock;
+    private $jsonHelper;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
-    protected $resultJson;
+    private $resultJson;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory| \PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|MockObject
      */
-    protected $resultJsonFactory;
+    private $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Raw| \PHPUnit_Framework_MockObject_MockObject
+     * @var Raw|MockObject
      */
-    protected $resultRaw;
+    private $resultRaw;
 
-    protected function setUp()
+    /**
+     * @var RedirectInterface|MockObject
+     */
+    private $redirect;
+
+    /**
+     * @var CookieManagerInterface|MockObject
+     */
+    private $cookieManager;
+
+    /**
+     * @var CookieMetadataFactory|MockObject
+     */
+    private $cookieMetadataFactory;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
-            ->disableOriginalConstructor()->getMock();
-        $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
-            ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode'],
-            [],
-            '',
-            false
+        $this->request = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->response = $this->createPartialMock(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode']
         );
-        $this->customerSession = $this->getMock(
-            '\Magento\Customer\Model\Session',
+        $this->customerSession = $this->createPartialMock(
+            Session::class,
             [
                 'isLoggedIn',
                 'getLastCustomerId',
                 'getBeforeAuthUrl',
                 'setBeforeAuthUrl',
                 'setCustomerDataAsLoggedIn',
-                'regenerateId'
-            ],
-            [],
-            '',
-            false
+                'regenerateId',
+                'getData'
+            ]
         );
-        $this->objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
-            ['get'],
-            [],
-            '',
-            false
-        );
-        $this->customerAccountManagementMock =
-            $this->getMock(
-                '\Magento\Customer\Model\AccountManagement',
-                ['authenticate'],
-                [],
-                '',
-                false
-            );
+        $this->objectManager = $this->createPartialMock(FakeObjectManager::class, ['get']);
+        $this->accountManagement = $this->createPartialMock(AccountManagement::class, ['authenticate']);
 
-        $this->jsonHelperMock = $this->getMock(
-            '\Magento\Framework\Json\Helper\Data',
-            ['jsonDecode'],
-            [],
-            '',
-            false
-        );
+        $this->jsonHelper = $this->createPartialMock(Data::class, ['jsonDecode']);
 
-        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $this->resultJson = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+        $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->resultRaw = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+        $this->cookieManager = $this->getMockBuilder(CookieManagerInterface::class)
+            ->setMethods(['getCookie', 'deleteCookie'])
+            ->getMockForAbstractClass();
+        $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultRawFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+
+        $this->resultRaw = $this->getMockBuilder(Raw::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultRawFactory = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRawFactory->expects($this->atLeastOnce())
-            ->method('create')
+        $resultRawFactory->method('create')
             ->willReturn($this->resultRaw);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->object = $objectManager->getObject(
-            'Magento\Customer\Controller\Ajax\Login',
+        /** @var Context|MockObject $context */
+        $context = $this->createMock(Context::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
+        $context->method('getRedirect')
+            ->willReturn($this->redirect);
+        $context->method('getRequest')
+            ->willReturn($this->request);
+
+        $objectManager = new ObjectManager($this);
+        $this->controller = $objectManager->getObject(
+            Login::class,
             [
+                'context' => $context,
                 'customerSession' => $this->customerSession,
-                'helper' => $this->jsonHelperMock,
-                'request' => $this->request,
+                'helper' => $this->jsonHelper,
                 'response' => $this->response,
                 'resultRawFactory' => $resultRawFactory,
                 'resultJsonFactory' => $this->resultJsonFactory,
                 'objectManager' => $this->objectManager,
-                'customerAccountManagement' => $this->customerAccountManagementMock,
+                'customerAccountManagement' => $this->accountManagement,
+                'cookieManager' => $this->cookieManager,
+                'cookieMetadataFactory' => $this->cookieMetadataFactory
             ]
         );
     }
 
-    public function testLogin()
+    /**
+     * Checks successful login.
+     */
+    public function testLogin(): void
     {
         $jsonRequest = '{"username":"customer@example.com", "password":"password"}';
         $loginSuccessResponse = '{"errors": false, "message":"Login successful."}';
+        $this->withRequest($jsonRequest);
 
-        $this->request
-            ->expects($this->any())
-            ->method('getContent')
-            ->willReturn($jsonRequest);
-
-        $this->request
-            ->expects($this->any())
-            ->method('getMethod')
-            ->willReturn('POST');
-
-        $this->request
-            ->expects($this->any())
-            ->method('isXmlHttpRequest')
-            ->willReturn(true);
-
-        $this->resultJsonFactory->expects($this->atLeastOnce())
-            ->method('create')
+        $this->resultJsonFactory->method('create')
             ->willReturn($this->resultJson);
 
-        $this->jsonHelperMock
-            ->expects($this->any())
-            ->method('jsonDecode')
+        $this->jsonHelper->method('jsonDecode')
             ->with($jsonRequest)
             ->willReturn(['username' => 'customer@example.com', 'password' => 'password']);
 
-        $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
-        $this->customerAccountManagementMock
-            ->expects($this->any())
-            ->method('authenticate')
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->accountManagement->method('authenticate')
             ->with('customer@example.com', 'password')
-            ->willReturn($customerMock);
+            ->willReturn($customer);
 
-        $this->customerSession->expects($this->once())
-            ->method('setCustomerDataAsLoggedIn')
-            ->with($customerMock);
+        $this->customerSession->method('setCustomerDataAsLoggedIn')
+            ->with($customer);
+        $this->customerSession->method('regenerateId');
 
-        $this->customerSession->expects($this->once())->method('regenerateId');
+        /** @var Redirect|MockObject $redirect */
+        $redirect = $this->createMock(Redirect::class);
+        $this->controller->setAccountRedirect($redirect);
+        $redirect->method('getRedirectCookie')
+            ->willReturn('some_url1');
 
-        $this->resultRaw->expects($this->never())->method('setHttpResponseCode');
+        $this->withCookieManager();
+
+        $this->withScopeConfig();
+
+        $this->redirect->method('success')
+            ->willReturn('some_url2');
+        $this->resultRaw->expects(self::never())
+            ->method('setHttpResponseCode');
 
         $result = [
             'errors' => false,
-            'message' => __('Login successful.')
+            'message' => __('Login successful.'),
+            'redirectUrl' => 'some_url2',
         ];
 
-        $this->resultJson
-            ->expects($this->once())
-            ->method('setData')
+        $this->resultJson->method('setData')
             ->with($result)
             ->willReturn($loginSuccessResponse);
-        $this->assertEquals($loginSuccessResponse, $this->object->execute());
+        self::assertEquals($loginSuccessResponse, $this->controller->execute());
     }
 
-    public function testLoginFailure()
+    /**
+     * Checks unsuccessful login.
+     */
+    public function testLoginFailure(): void
     {
         $jsonRequest = '{"username":"invalid@example.com", "password":"invalid"}';
         $loginFailureResponse = '{"message":"Invalid login or password."}';
+        $this->withRequest($jsonRequest);
 
-        $this->request
-            ->expects($this->any())
-            ->method('getContent')
-            ->willReturn($jsonRequest);
-
-        $this->request
-            ->expects($this->any())
-            ->method('getMethod')
-            ->willReturn('POST');
-
-        $this->request
-            ->expects($this->any())
-            ->method('isXmlHttpRequest')
-            ->willReturn(true);
-
-        $this->resultJsonFactory->expects($this->once())
-            ->method('create')
+        $this->resultJsonFactory->method('create')
             ->willReturn($this->resultJson);
 
-        $this->jsonHelperMock
-            ->expects($this->any())
-            ->method('jsonDecode')
+        $this->jsonHelper->method('jsonDecode')
             ->with($jsonRequest)
             ->willReturn(['username' => 'invalid@example.com', 'password' => 'invalid']);
 
-        $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
-        $this->customerAccountManagementMock
-            ->expects($this->any())
-            ->method('authenticate')
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->accountManagement->method('authenticate')
             ->with('invalid@example.com', 'invalid')
             ->willThrowException(new InvalidEmailOrPasswordException(__('Invalid login or password.')));
 
-        $this->customerSession->expects($this->never())
+        $this->customerSession->expects(self::never())
             ->method('setCustomerDataAsLoggedIn')
-            ->with($customerMock);
-
-        $this->customerSession->expects($this->never())->method('regenerateId');
+            ->with($customer);
+        $this->customerSession->expects(self::never())
+            ->method('regenerateId');
 
         $result = [
             'errors' => true,
             'message' => __('Invalid login or password.')
         ];
-        $this->resultJson
-            ->expects($this->once())
-            ->method('setData')
+        $this->resultJson->method('setData')
             ->with($result)
             ->willReturn($loginFailureResponse);
 
-        $this->assertEquals($loginFailureResponse, $this->object->execute());
+        self::assertEquals($loginFailureResponse, $this->controller->execute());
+    }
+
+    /**
+     * Emulates request behavior.
+     *
+     * @param string $jsonRequest
+     */
+    private function withRequest(string $jsonRequest): void
+    {
+        $this->request->method('getContent')
+            ->willReturn($jsonRequest);
+
+        $this->request->method('getMethod')
+            ->willReturn('POST');
+
+        $this->request->method('isXmlHttpRequest')
+            ->willReturn(true);
+    }
+
+    /**
+     * Emulates cookie manager behavior.
+     */
+    private function withCookieManager(): void
+    {
+        $this->cookieManager->method('getCookie')
+            ->with('mage-cache-sessid')
+            ->willReturn(true);
+        $cookieMetadata = $this->getMockBuilder(CookieMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cookieMetadataFactory->method('createCookieMetadata')
+            ->willReturn($cookieMetadata);
+        $cookieMetadata->method('setPath')
+            ->with('/')
+            ->willReturnSelf();
+        $this->cookieManager->method('deleteCookie')
+            ->with('mage-cache-sessid', $cookieMetadata)
+            ->willReturnSelf();
+    }
+
+    /**
+     * Emulates config behavior.
+     */
+    private function withScopeConfig(): void
+    {
+        /** @var ScopeConfigInterface|MockObject $scopeConfig */
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->controller->setScopeConfig($scopeConfig);
+        $scopeConfig->method('getValue')
+            ->with('customer/startup/redirect_dashboard')
+            ->willReturn(0);
     }
 }

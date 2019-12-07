@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
-use \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView;
+use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView;
 
-class StoreViewTest extends \PHPUnit_Framework_TestCase
+class StoreViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
@@ -30,11 +30,6 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected $indexerRegistryMock;
 
     /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
@@ -42,7 +37,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            \Magento\Framework\Indexer\IndexerInterface::class,
             [],
             '',
             false,
@@ -50,65 +45,59 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->stateMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Category\Flat\State',
-            ['isFlatEnabled'],
-            [],
-            '',
-            false
+        $this->stateMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Indexer\Category\Flat\State::class,
+            ['isFlatEnabled']
         );
-        $this->closureMock = function () {
-            return false;
-        };
-        $this->subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Store', [], [], '', false);
-        $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
-            ['get'],
-            [],
-            '',
-            false
+        $this->subjectMock = $this->createMock(\Magento\Store\Model\ResourceModel\Store::class);
+        $this->indexerRegistryMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['get']
         );
         $this->model = new StoreView($this->indexerRegistryMock, $this->stateMock);
     }
 
-    public function testAroundSaveNewObject()
+    public function testBeforeAndAfterSaveNewObject()
     {
         $this->mockConfigFlatEnabled();
         $this->mockIndexerMethods();
-        $storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
+        $storeMock = $this->createPartialMock(
+            \Magento\Store\Model\Store::class,
+            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
         );
         $storeMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(true));
-        $this->assertFalse($this->model->aroundSave($this->subjectMock, $this->closureMock, $storeMock));
+        $this->model->beforeSave($this->subjectMock, $storeMock);
+        $this->assertSame(
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $storeMock)
+        );
     }
 
-    public function testAroundSaveHasChanged()
+    public function testBeforeAndAfterSaveHasChanged()
     {
-        $storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
+        $storeMock = $this->createPartialMock(
+            \Magento\Store\Model\Store::class,
+            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
         );
-        $this->assertFalse($this->model->aroundSave($this->subjectMock, $this->closureMock, $storeMock));
+        $this->model->beforeSave($this->subjectMock, $storeMock);
+        $this->assertSame(
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $storeMock)
+        );
     }
 
-    public function testAroundSaveNoNeed()
+    public function testBeforeAndAfterSaveNoNeed()
     {
-        $this->mockConfigFlatEnabledNeever();
-        $storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
+        $this->mockConfigFlatEnabledNever();
+        $storeMock = $this->createPartialMock(
+            \Magento\Store\Model\Store::class,
+            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
         );
-        $this->assertFalse($this->model->aroundSave($this->subjectMock, $this->closureMock, $storeMock));
+        $this->model->beforeSave($this->subjectMock, $storeMock);
+        $this->assertSame(
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $storeMock)
+        );
     }
 
     protected function mockIndexerMethods()
@@ -125,7 +114,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(true));
     }
 
-    protected function mockConfigFlatEnabledNeever()
+    protected function mockConfigFlatEnabledNever()
     {
         $this->stateMock->expects($this->never())->method('isFlatEnabled');
     }

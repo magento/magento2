@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,10 +7,22 @@
 //  Dashboard
 //  _____________________________________________
 
+//
+//  Variables
+//  _____________________________________________
+
 @dashboard__font-size__base: 1.3rem;
 @dashboard__font-size-l: 2.4rem;
 @dashboard-tabs__padding: 2rem;
 @dashboard-tabs__background-color: @color-white;
+
+//  Secondary column
+@dashboard-secondary-table__width-px: 235px;
+@dashboard-secondary-table-col-name__width-px: 135px;
+@dashboard-secondary-table-col-value__width-px: 50px;
+
+@dashboard-secondary-table-col-name__width-pct: @dashboard-secondary-table-col-name__width-px * 100% / @dashboard-secondary-table__width-px; // 57.44680851%
+@dashboard-secondary-table-col-value__width-pct: @dashboard-secondary-table-col-value__width-px * 100% / @dashboard-secondary-table__width-px; // 21.27659574%
 
 //
 //  Tables
@@ -20,6 +32,13 @@
     background: @dashboard-tabs__background-color;
     font-size: @dashboard__font-size__base;
     width: 100%;
+
+    tr {
+        &._clickable {
+            cursor: pointer;
+        }
+    }
+
     th,
     td {
         padding: 1rem 0 1rem 1rem;
@@ -27,6 +46,7 @@
             padding-left: 0;
         }
     }
+
     &.admin__table-primary {
         th {
             border-top: 0;
@@ -35,15 +55,14 @@
 
     //  Primary column
     .dashboard-main & {
-
         @dashboard-table__width-px: 560px;
         @dashboard-table-col-product__width-px: 392px;
         @dashboard-table-col-name__width-px: 308px;
         @dashboard-table-col-value__width-px: 84px;
 
-        @dashboard-table-col-product__width-pct: @dashboard-table-col-product__width-px * 100% / @dashboard-table__width-px; //  70%
-        @dashboard-table-col-name__width-pct: @dashboard-table-col-name__width-px * 100% / @dashboard-table__width-px; //  55%
-        @dashboard-table-col-value__width-pct: @dashboard-table-col-value__width-px * 100% / @dashboard-table__width-px; //  15%
+        @dashboard-table-col-product__width-pct: @dashboard-table-col-product__width-px * 100% / @dashboard-table__width-px; // 70%
+        @dashboard-table-col-name__width-pct: @dashboard-table-col-name__width-px * 100% / @dashboard-table__width-px; // 55%
+        @dashboard-table-col-value__width-pct: @dashboard-table-col-value__width-px * 100% / @dashboard-table__width-px; // 15%
 
         th,
         td {
@@ -51,27 +70,21 @@
             white-space: nowrap;
             width: @dashboard-table-col-value__width-pct;
         }
+
         .col-name {
             text-align: left;
             white-space: normal;
             width: @dashboard-table-col-name__width-pct;
         }
+
         .col-product {
             width: @dashboard-table-col-product__width-pct;
         }
-        .col-orders_count {
+
+        .col-orders {
             text-align: left;
         }
     }
-
-    //  Secondary column
-
-    @dashboard-secondary-table__width-px: 235px;
-    @dashboard-secondary-table-col-name__width-px: 135px;
-    @dashboard-secondary-table-col-value__width-px: 50px;
-
-    @dashboard-secondary-table-col-name__width-pct: @dashboard-secondary-table-col-name__width-px * 100% / @dashboard-secondary-table__width-px; //  57.44680851%
-    @dashboard-secondary-table-col-value__width-pct: @dashboard-secondary-table-col-value__width-px * 100% / @dashboard-secondary-table__width-px; //  21.27659574%
 
     .dashboard-secondary & {
         .col-popularity,
@@ -79,8 +92,9 @@
             text-align: right;
             width: @dashboard-secondary-table-col-value__width-pct;
         }
+
         .col-customer,
-        .col-search_query {
+        .col-search-query {
             width: @dashboard-secondary-table-col-name__width-pct;
         }
     }
@@ -91,6 +105,7 @@
         background: @dashboard-tabs__background-color;
         font-size: @dashboard__font-size__base;
     }
+
     .ui-tabs-panel {
         border-top: 1px solid @color-gray68;
     }
@@ -112,8 +127,9 @@
 //  Range switcher
 .dashboard-diagram-switcher {
     margin-bottom: 2rem;
+
     .label {
-        .extend__visually-hidden();
+        &:extend(.abs-visually-hidden all);
     }
 }
 
@@ -132,8 +148,8 @@
 
 .dashboard-totals-list {
     &:extend(.abs-clearfix all);
+    &:extend(.abs-list-reset-styles all);
     display: table;
-    .extend__list-reset-styles();
     width: 100%;
 }
 
@@ -141,6 +157,7 @@
     display: table-cell;
     padding: 0 1rem 0 0;
     width: 25%;
+
     &:first-child {
         .price {
             color: @color-phoenix;
@@ -168,6 +185,7 @@
         &:extend(.abs-clearfix all);
         margin-bottom: 0;
         position: relative;
+
         &:before {
             .lib-background-gradient(
             @_background-gradient: true,
@@ -197,6 +215,7 @@
         overflow-x: auto;
         white-space: nowrap;
         width: 100%; // IE9 fix
+
         .ui-state-default {
             display: inline-block;
             float: none;
@@ -245,7 +264,7 @@
 
     //
     //  Totals: Revenue, Tax, Shipping, Quantity
-    //  ---------------------------------------------
+    //  -----------------------------------------
 
     .dashboard-totals-item {
         float: left;

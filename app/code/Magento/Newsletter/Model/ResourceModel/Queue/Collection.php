@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model\ResourceModel\Queue;
@@ -9,6 +9,9 @@ namespace Magento\Newsletter\Model\ResourceModel\Queue;
  * Newsletter queue collection.
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -63,11 +66,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_map['fields']['queue_id'] = 'main_table.queue_id';
-        $this->_init('Magento\Newsletter\Model\Queue', 'Magento\Newsletter\Model\ResourceModel\Queue');
+        $this->_init(\Magento\Newsletter\Model\Queue::class, \Magento\Newsletter\Model\ResourceModel\Queue::class);
     }
 
     /**
-     * Joines templates information
+     * Joins templates information
      *
      * @return $this
      */
@@ -83,7 +86,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Adds subscribers info to selelect
+     * Adds subscribers info to select
      *
      * @return $this
      */
@@ -127,7 +130,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Joines subscribers information
+     * Joins subscribers information
      *
      * @return $this
      */
@@ -138,8 +141,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Checks if field is 'subscribers_total', 'subscribers_sent'
-     * to add specific filter or adds reguler filter
+     * Checks if field is 'subscribers_total', 'subscribers_sent' to add specific filter or adds regular filter
      *
      * @param string $field
      * @param null|string|array $condition
@@ -207,7 +209,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Add filter by only ready fot sending item
+     * Add filter by only ready for sending item
      *
      * @return $this
      */
@@ -218,7 +220,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             [\Magento\Newsletter\Model\Queue::STATUS_SENDING, \Magento\Newsletter\Model\Queue::STATUS_NEVER]
         )->where(
             'main_table.queue_start_at < ?',
-            $this->_date->gmtdate()
+            $this->_date->gmtDate()
         )->where(
             'main_table.queue_start_at IS NOT NULL'
         );

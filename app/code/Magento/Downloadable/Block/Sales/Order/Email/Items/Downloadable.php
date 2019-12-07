@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items;
 
@@ -16,7 +14,8 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Downlaodable Sales Order Email items renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 {
@@ -36,24 +35,28 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     protected $_itemsFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var \Magento\Framework\Url
+     * @since 100.1.0
      */
-    protected $urlGenerator;
+    protected $frontendUrlBuilder;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
+     * @param \Magento\Framework\Url $frontendUrlBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory,
+        \Magento\Framework\Url $frontendUrlBuilder,
         array $data = []
     ) {
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
+        $this->frontendUrlBuilder = $frontendUrlBuilder;
         parent::__construct($context, $data);
     }
 
@@ -65,12 +68,12 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     public function getLinks()
     {
         $this->_purchased = $this->_purchasedFactory->create()->load(
-            $this->getItem()->getId(),
+            $this->getItem()->getOrderItemId(),
             'order_item_id'
         );
         $purchasedLinks = $this->_itemsFactory->create()->addFieldToFilter(
             'order_item_id',
-            $this->getItem()->getId()
+            $this->getItem()->getOrderItemId()
         );
         $this->_purchased->setPurchasedItems($purchasedLinks);
 
@@ -94,7 +97,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
      */
     public function getPurchasedLinkUrl($item)
     {
-        return $this->_urlBuilder->getUrl(
+        return $this->frontendUrlBuilder->getUrl(
             'downloadable/download/link',
             [
                 'id' => $item->getLinkHash(),

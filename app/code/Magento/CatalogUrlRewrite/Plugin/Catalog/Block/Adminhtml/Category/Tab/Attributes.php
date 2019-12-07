@@ -1,37 +1,38 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab;
 
+/**
+ * Class Attributes
+ */
 class Attributes
 {
     /**
-     * @param \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes $subject
-     * @param \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes $result
+     * @param \Magento\Catalog\Model\Category\DataProvider $subject
+     * @param array $result
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes
+     * @return array
      */
-    public function afterSetForm(
-        \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes $subject,
-        \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes $result
+    public function afterGetAttributesMeta(
+        \Magento\Catalog\Model\Category\DataProvider $subject,
+        $result
     ) {
-        $form = $subject->getForm();
-        $fieldset = $form->getElements()[0];
-        $field = $form->getElement('url_key');
-        if ($field) {
-            if ($subject->getCategory()->getLevel() == 1) {
-                $fieldset->removeField('url_key');
-                $fieldset->addField(
-                    'url_key',
-                    'hidden',
-                    ['name' => 'url_key', 'value' => $subject->getCategory()->getUrlKey()]
-                );
+        /** @var \Magento\Catalog\Model\Category $category */
+        $category = $subject->getCurrentCategory();
+        if (isset($result['url_key'])) {
+            if ($category && $category->getId()) {
+                if ($category->getLevel() == 1) {
+                    $result['url_key_group']['componentDisabled'] = true;
+                } else {
+                    $result['url_key_create_redirect']['valueMap']['true'] = $category->getUrlKey();
+                    $result['url_key_create_redirect']['value'] = $category->getUrlKey();
+                    $result['url_key_create_redirect']['disabled'] = true;
+                }
             } else {
-                $field->setRenderer(
-                    $subject->getLayout()->createBlock('Magento\CatalogUrlRewrite\Block\UrlKeyRenderer')
-                );
+                $result['url_key_create_redirect']['visible'] = false;
             }
         }
         return $result;

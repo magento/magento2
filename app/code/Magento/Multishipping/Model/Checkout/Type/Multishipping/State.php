@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Model\Checkout\Type\Multishipping;
@@ -24,6 +24,8 @@ class State extends \Magento\Framework\DataObject
     const STEP_OVERVIEW = 'multishipping_overview';
 
     const STEP_SUCCESS = 'multishipping_success';
+
+    const STEP_RESULTS = 'multishipping_results';
 
     /**
      * Allow steps array
@@ -61,6 +63,7 @@ class State extends \Magento\Framework\DataObject
             self::STEP_BILLING => new \Magento\Framework\DataObject(['label' => __('Billing Information')]),
             self::STEP_OVERVIEW => new \Magento\Framework\DataObject(['label' => __('Place Order')]),
             self::STEP_SUCCESS => new \Magento\Framework\DataObject(['label' => __('Order Success')]),
+            self::STEP_RESULTS => new \Magento\Framework\DataObject(['label' => __('Order Results')]),
         ];
 
         foreach ($this->_steps as $step) {

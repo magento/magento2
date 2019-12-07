@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Component;
@@ -9,6 +9,8 @@ namespace Magento\Framework\Component;
  * Provides ability to statically register components.
  *
  * @author Josh Di Fabio <joshdifabio@gmail.com>
+ *
+ * @api
  */
 class ComponentRegistrar implements ComponentRegistrarInterface
 {
@@ -19,18 +21,16 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     const LIBRARY = 'library';
     const THEME = 'theme';
     const LANGUAGE = 'language';
+    const SETUP = 'setup';
     /**#@- */
 
-    /**
-     * All paths
-     *
-     * @var array
-     */
+    /**#@- */
     private static $paths = [
         self::MODULE => [],
         self::LIBRARY => [],
         self::LANGUAGE => [],
         self::THEME => [],
+        self::SETUP => []
     ];
 
     /**
@@ -46,7 +46,10 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     {
         self::validateType($type);
         if (isset(self::$paths[$type][$componentName])) {
-            throw new \LogicException('\'' . $componentName . '\' component already exists');
+            throw new \LogicException(
+                ucfirst($type) . ' \'' . $componentName . '\' from \'' . $path . '\' '
+                . 'has been already defined in \'' . self::$paths[$type][$componentName] . '\'.'
+            );
         } else {
             self::$paths[$type][$componentName] = str_replace('\\', '/', $path);
         }
@@ -67,7 +70,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     public function getPath($type, $componentName)
     {
         self::validateType($type);
-        return isset(self::$paths[$type][$componentName]) ? self::$paths[$type][$componentName] : null;
+        return self::$paths[$type][$componentName] ?? null;
     }
 
     /**

@@ -1,20 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * Wish list Add controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Add extends \Magento\Wishlist\Controller\AbstractIndex
+class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -32,21 +36,29 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
     protected $productRepository;
 
     /**
+     * @var Validator
+     */
+    protected $formKeyValidator;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param ProductRepositoryInterface $productRepository
+     * @param Validator $formKeyValidator
      */
     public function __construct(
         Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        Validator $formKeyValidator
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
-        parent::__construct($context);
         $this->productRepository = $productRepository;
+        $this->formKeyValidator = $formKeyValidator;
+        parent::__construct($context);
     }
 
     /**
@@ -60,6 +72,12 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $resultRedirect->setPath('*/');
+        }
+
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
             throw new NotFoundException(__('Page not found.'));
@@ -75,8 +93,6 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $productId = isset($requestParams['product']) ? (int)$requestParams['product'] : null;
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$productId) {
             $resultRedirect->setPath('*/');
             return $resultRedirect;
@@ -101,8 +117,9 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             if (is_string($result)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__($result));
             }
-            $wishlist->save();
-
+            if ($wishlist->isObjectNew()) {
+                $wishlist->save();
+            }
             $this->_eventManager->dispatch(
                 'wishlist_add_product',
                 ['wishlist' => $wishlist, 'product' => $product, 'item' => $result]
@@ -115,7 +132,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
                 $referer = $this->_redirect->getRefererUrl();
             }
 
-            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+            $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
 
             $this->messageManager->addComplexSuccessMessage(
                 'addProductSuccessMessage',
@@ -124,6 +141,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
                     'referer' => $referer
                 ]
             );
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage(
                 __('We can\'t add the item to Wish List right now: %1.', $e->getMessage())

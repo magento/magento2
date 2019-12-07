@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Persistent\Block\Header;
 /**
  * @magentoDataFixture Magento/Persistent/_files/persistent.php
  */
-class AdditionalTest extends \PHPUnit_Framework_TestCase
+class AdditionalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Block\Header\Additional
@@ -36,11 +36,11 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Persistent\Helper\Session $persistentSessionHelper */
-        $this->_persistentSessionHelper = $this->_objectManager->create('Magento\Persistent\Helper\Session');
+        $this->_persistentSessionHelper = $this->_objectManager->create(\Magento\Persistent\Helper\Session::class);
 
-        $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $this->_customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
 
-        $this->_block = $this->_objectManager->create('Magento\Persistent\Block\Header\Additional');
+        $this->_block = $this->_objectManager->create(\Magento\Persistent\Block\Header\Additional::class);
     }
 
     /**
@@ -56,8 +56,8 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $this->_customerSession->loginById(1);
         $translation = __('Not you?');
 
-        $this->assertStringMatchesFormat(
-            '%A<span>%A<a%Ahref="' . $this->_block->getHref() . '"%A>' . $translation . '</a>%A</span>%A',
+        $this->assertContains(
+            '<a href="' . $this->_block->getHref() . '">' . $translation . '</a>',
             $this->_block->toHtml()
         );
         $this->_customerSession->logout();

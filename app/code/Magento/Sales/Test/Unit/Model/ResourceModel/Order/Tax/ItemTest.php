@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Tax;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Tax;
 /**
  * Class ItemTest
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -30,27 +30,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->appResourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($this->connectionMock));
         $this->appResourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->taxItem = $objectManager->getObject(
-            'Magento\Sales\Model\ResourceModel\Order\Tax\Item',
+            \Magento\Sales\Model\ResourceModel\Order\Tax\Item::class,
             [
                 'resource' => $this->appResourceMock
             ]
@@ -71,13 +59,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'real_base_amount' => 12
             ]
         ];
-        $select = $this->getMock(
-            'Magento\Framework\DB\Select',
-            [],
-            [],
-            '',
-            false
-        );
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(
             ['item' => 'sales_order_tax_item'],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
@@ -13,6 +13,8 @@ use Magento\Framework\Escaper;
 /**
  * Data form abstract class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -169,7 +171,11 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getHtmlId()
     {
-        return $this->getForm()->getHtmlIdPrefix() . $this->getData('html_id') . $this->getForm()->getHtmlIdSuffix();
+        return $this->_escaper->escapeHtml(
+            $this->getForm()->getHtmlIdPrefix() .
+            $this->getData('html_id') .
+            $this->getForm()->getHtmlIdSuffix()
+        );
     }
 
     /**
@@ -179,7 +185,7 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getName()
     {
-        $name = $this->getData('name');
+        $name = $this->_escaper->escapeHtml($this->getData('name'));
         if ($suffix = $this->getForm()->getFieldNameSuffix()) {
             $name = $this->getForm()->addSuffixToName($name, $suffix);
         }
@@ -200,6 +206,8 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
+     * Set form.
+     *
      * @param AbstractForm $form
      * @return $this
      */
@@ -237,6 +245,7 @@ abstract class AbstractElement extends AbstractForm
             'onchange',
             'disabled',
             'readonly',
+            'autocomplete',
             'tabindex',
             'placeholder',
             'data-form-part',
@@ -283,7 +292,7 @@ abstract class AbstractElement extends AbstractForm
      */
     protected function _escape($string)
     {
-        return htmlspecialchars($string, ENT_COMPAT);
+        return $this->_escaper->escapeHtml($string);
     }
 
     /**
@@ -325,6 +334,8 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
+     * Get Ui Id.
+     *
      * @param null|string $suffix
      * @return string
      */
@@ -333,7 +344,7 @@ abstract class AbstractElement extends AbstractForm
         if ($this->_renderer instanceof \Magento\Framework\View\Element\AbstractBlock) {
             return $this->_renderer->getUiId($this->getType(), $this->getName(), $suffix);
         } else {
-            return ' data-ui-id="form-element-' . $this->getName() . ($suffix ?: '') . '"';
+            return ' data-ui-id="form-element-' . $this->_escaper->escapeHtml($this->getName()) . ($suffix ?: '') . '"';
         }
     }
 
@@ -347,37 +358,27 @@ abstract class AbstractElement extends AbstractForm
         $html = '';
         $htmlId = $this->getHtmlId();
 
-        if (($beforeElementHtml = $this->getBeforeElementHtml())) {
-            $html .= '<label class="addbefore" for="' .
-                $htmlId .
-                '">' .
-                $beforeElementHtml .
-                '</label>';
+        $beforeElementHtml = $this->getBeforeElementHtml();
+        if ($beforeElementHtml) {
+            $html .= '<label class="addbefore" for="' . $htmlId . '">' . $beforeElementHtml . '</label>';
         }
 
-        $html .= '<input id="' .
-            $htmlId .
-            '" name="' .
-            $this->getName() .
-            '" ' .
-            $this->_getUiId() .
-            ' value="' .
-            $this->getEscapedValue() .
-            '" ' .
-            $this->serialize(
-                $this->getHtmlAttributes()
-            ) . '/>';
+        if (is_array($this->getValue())) {
+            foreach ($this->getValue() as $value) {
+                $html .= $this->getHtmlForInputByValue($this->_escape($value));
+            }
+        } else {
+            $html .= $this->getHtmlForInputByValue($this->getEscapedValue());
+        }
 
-        if (($afterElementJs = $this->getAfterElementJs())) {
+        $afterElementJs = $this->getAfterElementJs();
+        if ($afterElementJs) {
             $html .= $afterElementJs;
         }
 
-        if (($afterElementHtml = $this->getAfterElementHtml())) {
-            $html .= '<label class="addafter" for="' .
-                $htmlId .
-                '">' .
-                $afterElementHtml .
-                '</label>';
+        $afterElementHtml = $this->getAfterElementHtml();
+        if ($afterElementHtml) {
+            $html .= '<label class="addafter" for="' . $htmlId . '">' . $afterElementHtml . '</label>';
         }
 
         return $html;
@@ -417,15 +418,18 @@ abstract class AbstractElement extends AbstractForm
      * Render HTML for element's label
      *
      * @param string $idSuffix
+     * @param string $scopeLabel
      * @return string
      */
-    public function getLabelHtml($idSuffix = '')
+    public function getLabelHtml($idSuffix = '', $scopeLabel = '')
     {
+        $scopeLabel = $scopeLabel ? ' data-config-scope="' . $scopeLabel . '"' : '';
+
         if ($this->getLabel() !== null) {
             $html = '<label class="label admin__field-label" for="' .
                 $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId(
                     'label'
-                ) . '><span>' . $this->_escape(
+                ) . '><span' . $scopeLabel . '>' . $this->_escape(
                     $this->getLabel()
                 ) . '</span></label>' . "\n";
         } else {
@@ -443,10 +447,10 @@ abstract class AbstractElement extends AbstractForm
     {
         $html = $this->getData('default_html');
         if ($html === null) {
-            $html = $this->getNoSpan() === true ? '' : '<span class="field-row">' . "\n";
+            $html = $this->getNoSpan() === true ? '' : '<div class="admin__field">' . "\n";
             $html .= $this->getLabelHtml();
             $html .= $this->getElementHtml();
-            $html .= $this->getNoSpan() === true ? '' : '</span>' . "\n";
+            $html .= $this->getNoSpan() === true ? '' : '</div>' . "\n";
         }
         return $html;
     }
@@ -584,5 +588,18 @@ abstract class AbstractElement extends AbstractForm
     public function isLocked()
     {
         return $this->getData($this->lockHtmlAttribute) == 1;
+    }
+
+    /**
+     * Get input html by sting value.
+     *
+     * @param string|null $value
+     *
+     * @return string
+     */
+    private function getHtmlForInputByValue($value)
+    {
+        return '<input id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" ' . $this->_getUiId()
+            . ' value="' . $value . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>';
     }
 }

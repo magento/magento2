@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Model;
 
 use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
@@ -62,6 +63,11 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     protected $_tokenProvider;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $_dateHelper;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -94,6 +100,22 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     }
 
     /**
+     * The getter function to get the new DateTime dependency
+     *
+     * @return \Magento\Framework\Stdlib\DateTime\DateTime
+     *
+     * @deprecated 100.0.6
+     */
+    private function getDateHelper()
+    {
+        if ($this->_dateHelper === null) {
+            $this->_dateHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        }
+        return $this->_dateHelper;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function createConsumer($consumerData)
@@ -108,7 +130,9 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Unexpected error. Unable to create oAuth consumer account.')
+                __(
+                    "The oAuth consumer account couldn't be created due to an unexpected error. Please try again later."
+                )
             );
         }
     }
@@ -165,7 +189,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Unexpected error. Unable to load oAuth consumer account.')
+                __("The oAuth consumer account couldn't be loaded due to an unexpected error. Please try again later.")
             );
         }
     }
@@ -181,7 +205,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Unexpected error. Unable to load oAuth consumer account.')
+                __("The oAuth consumer account couldn't be loaded due to an unexpected error. Please try again later.")
             );
         }
     }
@@ -192,10 +216,12 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     public function postToConsumer($consumerId, $endpointUrl)
     {
         try {
-            $consumer = $this->_consumerFactory->create()->load($consumerId);
+            $consumer = $this->loadConsumer($consumerId);
+            $consumer->setUpdatedAt($this->getDateHelper()->gmtDate());
+            $consumer->save();
             if (!$consumer->getId()) {
                 throw new \Magento\Framework\Oauth\Exception(
-                    __('A consumer with ID %1 does not exist', $consumerId)
+                    __('A consumer with "%1" ID doesn\'t exist. Verify the ID and try again.', $consumerId)
                 );
             }
             $consumerData = $consumer->getData();
@@ -222,7 +248,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
         } catch (\Exception $exception) {
             $this->_logger->critical($exception);
             throw new \Magento\Framework\Oauth\Exception(
-                __('Unable to post data to consumer due to an unexpected error')
+                __('The attempt to post data to consumer failed due to an unexpected error. Please try again later.')
             );
         }
     }
@@ -264,7 +290,9 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     {
         $consumer = $this->_consumerFactory->create()->load($consumerId);
         if (!$consumer->getId()) {
-            throw new IntegrationException(__('Consumer with ID \'%1\' does not exist.', $consumerId));
+            throw new IntegrationException(
+                __('A consumer with ID "%1" doesn\'t exist. Verify the ID and try again.', $consumerId)
+            );
         }
         return $consumer;
     }

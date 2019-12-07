@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,17 +9,17 @@
     <block class="Magento\Framework\View\Element\Text" name="block1">
         <block class="Magento\Framework\View\Element\Text" name="block2" group="group1">
             <arguments>
-                <argument xsi:type="string" name="text">blok2</argument>
+                <argument xsi:type="string" name="text">block2</argument>
             </arguments>
         </block>
         <block class="Magento\Framework\View\Element\Text" name="block3" group="group1" >
             <arguments>
-                <argument xsi:type="string" name="text">blok3</argument>
+                <argument xsi:type="string" name="text">block3</argument>
             </arguments>
         </block>
         <block class="Magento\Framework\View\Element\Text" name="block4">
             <arguments>
-                <argument xsi:type="string" name="text">blok4</argument>
+                <argument xsi:type="string" name="text">block4</argument>
             </arguments>
         </block>
         </block>

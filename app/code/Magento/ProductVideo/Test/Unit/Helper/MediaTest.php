@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Helper;
 
 use Magento\ProductVideo\Helper\Media;
 
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfigMock;
@@ -27,9 +27,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMock();
-        $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
         $this->helper = new \Magento\ProductVideo\Helper\Media(
             $this->contextMock

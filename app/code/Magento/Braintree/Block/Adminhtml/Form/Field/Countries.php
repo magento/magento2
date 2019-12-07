@@ -1,85 +1,53 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block\Adminhtml\Form\Field;
 
-class Countries extends \Magento\Framework\View\Element\Html\Select
+use Magento\Braintree\Helper\Country;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Html\Select;
+
+/**
+ * Class Countries
+ */
+class Countries extends Select
 {
     /**
-     * Countries cache
-     *
-     * @var array
+     * @var Country
      */
-    protected $countries;
-
-    /**
-     * @var \Magento\Braintree\Model\System\Config\Source\Country
-     */
-    protected $countrySource;
-
-    /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
-     */
-    protected $countryCollectionFactory;
+    private $countryHelper;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Braintree\Model\System\Config\Source\Country $countrySource
-     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
+     * @param Context $context
+     * @param Country $countryHelper
      * @param array $data
      */
-    public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        \Magento\Braintree\Model\System\Config\Source\Country $countrySource,
-        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
-        array $data = []
-    ) {
+    public function __construct(Context $context, Country $countryHelper, array $data = [])
+    {
         parent::__construct($context, $data);
-        $this->countrySource = $countrySource;
-        $this->countryCollectionFactory = $countryCollectionFactory;
+        $this->countryHelper = $countryHelper;
     }
 
-    /**
-     * Returns countries array
-     * 
-     * @return array
-     */
-    protected function _getCountries()
-    {
-        if (!$this->countries) {
-            $restrictedCountries = $this->countrySource->getRestrictedCountries();
-            $this->countries = $this->countryCollectionFactory->create()
-                ->addFieldToFilter('country_id', ['nin' => $restrictedCountries])
-                ->loadData()
-                ->toOptionArray(false);
-        }
-        return $this->countries;
-    }
-    
     /**
      * Render block HTML
      *
      * @return string
      */
-    public function _toHtml()
+    protected function _toHtml()
     {
         if (!$this->getOptions()) {
-            foreach ($this->_getCountries() as $country) {
-                if (isset($country['value']) && $country['value'] && isset($country['label']) && $country['label']) {
-                    $this->addOption($country['value'], $country['label']);
-                }
-            }
+            $this->setOptions($this->countryHelper->getCountries());
         }
         return parent::_toHtml();
     }
 
     /**
      * Sets name for input element
-     * 
+     *
      * @param string $value
      * @return $this
      */

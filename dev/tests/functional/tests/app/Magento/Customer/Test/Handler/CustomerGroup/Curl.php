@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Handler\CustomerGroup;
 use Magento\Backend\Test\Handler\Extractor;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
+use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -42,7 +43,7 @@ class Curl extends AbstractCurl implements CustomerGroupInterface
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception(
                 "Customer Group entity creating by curl handler was not successful! Response: $response"
             );
@@ -59,11 +60,22 @@ class Curl extends AbstractCurl implements CustomerGroupInterface
      */
     public function getCustomerGroupId(array $data)
     {
-        $url = 'customer/group/index/sort/time/dir/desc';
-        $regExp = '/.*id\/(\d+)\/.*' . $data['code'] . '/siu';
-        $extractor = new Extractor($url, $regExp);
-        $match = $extractor->getData();
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'customer_group_listing',
+            'filters' => [
+                'placeholder' => true,
+                'customer_group_code' => $data['code']
+            ],
+            'isAjax' => true
+        ];
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
 
+        $curl->write($url, $data, CurlInterface::POST);
+        $response = $curl->read();
+        $curl->close();
+
+        preg_match('/customer_group_listing_data_source.+items.+"customer_group_id":"(\d+)"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
     }
 }

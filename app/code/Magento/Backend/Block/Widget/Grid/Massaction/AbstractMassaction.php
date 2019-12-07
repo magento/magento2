@@ -1,23 +1,37 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
-use Magento\Framework\View\Element\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\ColumnSet;
+use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Grid widget massaction block
  *
- * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
+ * @method Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
-abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
+abstract class AbstractMassaction extends Widget
 {
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
 
@@ -34,13 +48,13 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Backend::widget/grid/massaction.phtml';
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param Context $context
+     * @param EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        Context $context,
+        EncoderInterface $jsonEncoder,
         array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
@@ -48,13 +62,13 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
         parent::_construct();
 
-        $this->setErrorText($this->escapeJsQuote(__('Please select items.')));
+        $this->setErrorText($this->escapeHtml(__('An item needs to be selected. Select and try again.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {
@@ -73,26 +87,40 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *      'complete' => string, // Only for ajax enabled grid (optional)
      *      'url'      => string,
      *      'confirm'  => string, // text of confirmation of this action (optional)
-     *      'additional' => string // (optional)
+     *      'additional' => string, // (optional)
+     *      'visible' => object // instance of VisibilityCheckerInterface (optional)
      * );
      *
      * @param string $itemId
-     * @param array|\Magento\Framework\DataObject $item
+     * @param array|DataObject $item
      * @return $this
      */
     public function addItem($itemId, $item)
     {
         if (is_array($item)) {
-            $item = new \Magento\Framework\DataObject($item);
+            $item = new DataObject($item);
         }
 
-        if ($item instanceof \Magento\Framework\DataObject) {
+        if ($item instanceof DataObject && $this->isVisible($item)) {
             $item->setId($itemId);
             $item->setUrl($this->getUrl($item->getUrl()));
             $this->_items[$itemId] = $item;
         }
 
         return $this;
+    }
+
+    /**
+     * Check that item can be added to list
+     *
+     * @param DataObject $item
+     * @return bool
+     */
+    private function isVisible(DataObject $item)
+    {
+        /** @var VisibilityChecker $checker */
+        $checker = $item->getData('visible');
+        return (!$checker instanceof VisibilityChecker) || $checker->isVisible();
     }
 
     /**
@@ -103,11 +131,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getItem($itemId)
     {
-        if (isset($this->_items[$itemId])) {
-            return $this->_items[$itemId];
-        }
-
-        return null;
+        return $this->_items[$itemId] ?? null;
     }
 
     /**
@@ -142,7 +166,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getCount()
     {
-        return sizeof($this->_items);
+        return count($this->_items);
     }
 
     /**
@@ -199,30 +223,30 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve JSON string of selected checkboxes
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSelectedJson()
     {
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return join(',', $selected);
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
      * Retrieve array of selected checkboxes
      *
      * @return string[]
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSelected()
     {
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return $selected;
-        } else {
-            return [];
         }
+        return [];
     }
 
     /**
@@ -236,6 +260,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get mass action javascript code.
+     *
      * @return string
      */
     public function getJavaScript()
@@ -252,6 +278,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get grid ids in JSON format.
+     *
      * @return string
      */
     public function getGridIdsJson()
@@ -260,17 +288,27 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
             return '';
         }
 
-        /** @var \Magento\Framework\Data\Collection $allIdsCollection */
-        $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        $gridIds = $allIdsCollection->clear()->setPageSize(0)->getAllIds();
+        /** @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection */
+        $collection = clone $this->getParentBlock()->getCollection();
 
-        if (!empty($gridIds)) {
-            return join(",", $gridIds);
+        if ($collection instanceof AbstractDb) {
+            $idsSelect = clone $collection->getSelect();
+            $idsSelect->reset(Select::ORDER);
+            $idsSelect->reset(Select::LIMIT_COUNT);
+            $idsSelect->reset(Select::LIMIT_OFFSET);
+            $idsSelect->reset(Select::COLUMNS);
+            $idsSelect->columns($this->getMassactionIdField());
+            $idList = $collection->getConnection()->fetchCol($idsSelect);
+        } else {
+            $idList = $collection->setPageSize(0)->getColumnValues($this->getMassactionIdField());
         }
-        return '';
+
+        return implode(',', $idList);
     }
 
     /**
+     * Get Html id.
+     *
      * @return string
      */
     public function getHtmlId()
@@ -325,7 +363,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         $columnId = 'massaction';
         $massactionColumn = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Column'
+            Column::class
         )->setData(
             [
                 'index' => $this->getMassactionIdField(),
@@ -345,7 +383,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         $gridBlock = $this->getParentBlock();
         $massactionColumn->setSelected($this->getSelected())->setGrid($gridBlock)->setId($columnId);
 
-        /** @var $columnSetBlock \Magento\Backend\Block\Widget\Grid\ColumnSet */
+        /** @var $columnSetBlock ColumnSet */
         $columnSetBlock = $gridBlock->getColumnSet();
         $childNames = $columnSetBlock->getChildNames();
         $siblingElement = count($childNames) ? current($childNames) : 0;

@@ -1,12 +1,15 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'Magento_Ui/js/modal/confirm',
     'mage/translate'
 ], function ($, _) {
@@ -37,10 +40,17 @@ define([
         },
 
         /**
+         * Create widget.
+         */
+        _create: function () {
+            this.options.actions.always();
+            this._super();
+        },
+
+        /**
          * Close modal window.
          */
         closeModal: function () {
-            this.options.actions.always();
             this.element.bind('alertclosed', _.bind(this._remove, this));
 
             return this._super();

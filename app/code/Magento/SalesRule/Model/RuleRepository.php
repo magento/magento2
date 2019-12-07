@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 
 /**
@@ -63,15 +63,23 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     protected $ruleCollectionFactory;
 
     /**
-     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * RuleRepository constructor.
+     * @param RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Api\Data\RuleInterfaceFactory $ruleDataFactory
      * @param \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory
-     * @param \Magento\SalesRule\Model\Converter\ToDataModel $toDataModelConverter
-     * @param \Magento\SalesRule\Model\Converter\ToModel $toModelConverter
+     * @param Converter\ToDataModel $toDataModelConverter
+     * @param Converter\ToModel $toModelConverter
      * @param \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory $searchResultFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleCollectionFactory
+     * @param ResourceModel\Rule\CollectionFactory $ruleCollectionFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -82,7 +90,8 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory $searchResultFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleCollectionFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->ruleDataFactory = $ruleDataFactory;
@@ -93,10 +102,11 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->ruleCollectionFactory = $ruleCollectionFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\SalesRule\Api\Data\RuleInterface $rule)
     {
@@ -108,7 +118,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($id)
     {
@@ -125,42 +135,20 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $collection */
         $collection = $this->ruleCollectionFactory->create();
-        $ruleInterfaceName = 'Magento\SalesRule\Api\Data\RuleInterface';
+        $ruleInterfaceName = \Magento\SalesRule\Api\Data\RuleInterface::class;
         $this->extensionAttributesJoinProcessor->process($collection, $ruleInterfaceName);
 
-        $collection->addWebsitesToResult();
-        //Add filters from root filter group to the collection
-        /** @var FilterGroup $group */
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            $this->addFilterGroupToCollection($group, $collection);
-        }
-
-        $sortOrders = $searchCriteria->getSortOrders();
-        if ($sortOrders === null) {
-            $sortOrders = [];
-        }
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
-        foreach ($sortOrders as $sortOrder) {
-            $field = $sortOrder->getField();
-            $collection->addOrder(
-                $field,
-                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-            );
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
-        $collection->load();
-
+        $this->collectionProcessor->process($searchCriteria, $collection);
         $rules = [];
         /** @var \Magento\SalesRule\Model\Rule $ruleModel */
         foreach ($collection->getItems() as $ruleModel) {
-            $ruleModel->getCustomerGroupIds();
+            $ruleModel->load($ruleModel->getId());
             $ruleModel->getStoreLabels();
             $rules[] = $this->toDataModelConverter->toDataModel($ruleModel);
         }
@@ -194,12 +182,13 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param FilterGroup $filterGroup
      * @param Collection $collection
+     * @deprecated 100.2.0
      * @return void
      */
     protected function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        FilterGroup $filterGroup,
         Collection $collection
     ) {
         $fields = [];
@@ -212,5 +201,21 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
         }
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated 100.2.0
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

@@ -1,16 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model\Rate;
 
+/**
+ * Class Result
+ *
+ * Container for Rates
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Result
 {
     /**
      * Shipping method rates
      *
-     * @var array
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult[]
      */
     protected $_rates = [];
 
@@ -91,7 +99,7 @@ class Result
     /**
      * Return all quotes in the result
      *
-     * @return array
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method[]
      */
     public function getAllRates()
     {

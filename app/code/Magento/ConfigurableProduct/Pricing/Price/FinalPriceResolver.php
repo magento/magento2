@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,6 @@ class FinalPriceResolver implements PriceResolverInterface
      */
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {
-        return $product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)
-            ->getAmount()->getBaseAmount();
+        return $product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)->getValue();
     }
 }

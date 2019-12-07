@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
@@ -8,11 +8,15 @@ namespace Magento\Sales\Block\Order;
 /**
  * Sales order link
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\View\Element\Html\Link\Current
 {
-    /** @var \Magento\Framework\Registry  */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $_registry;
 
     /**

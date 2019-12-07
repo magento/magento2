@@ -1,21 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Test\Unit\Model\Plugin;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\StoreResolverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreIsInactiveException;
 use \InvalidArgumentException;
 
 /**
- * Class StoreCookieTest
+ * Unit tests for \Magento\Store\Model\Plugin\StoreCookie class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreCookieTest extends \PHPUnit_Framework_TestCase
+class StoreCookieTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Plugin\StoreCookie
@@ -38,11 +40,6 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
     protected $storeMock;
 
     /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    /**
      * @var \Magento\Framework\App\FrontController|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
@@ -60,44 +57,40 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->storeCookieManagerMock = $this->getMockBuilder('Magento\Store\Api\StoreCookieManagerInterface')
+        $this->storeCookieManagerMock = $this->getMockBuilder(\Magento\Store\Api\StoreCookieManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->closureMock = function () {
-            return 'ExpectedValue';
-        };
-
-        $this->subjectMock = $this->getMockBuilder('Magento\Framework\App\FrontController')
+        $this->subjectMock = $this->getMockBuilder(\Magento\Framework\App\FrontController::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->storeRepositoryMock = $this->getMockBuilder('Magento\Store\Api\StoreRepositoryInterface')
+        $this->storeRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->plugin = (new ObjectManager($this))->getObject(
-            'Magento\Store\Model\Plugin\StoreCookie',
+            \Magento\Store\Model\Plugin\StoreCookie::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'storeCookieManager' => $this->storeCookieManagerMock,
@@ -106,61 +99,109 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchNoSuchEntity()
+    /**
+     * @return void
+     */
+    public function testBeforeDispatchNoSuchEntity()
     {
         $storeCode = 'store';
-        $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
-        $this->storeCookieManagerMock->expects($this->once())->method('getStoreCodeFromCookie')->willReturn($storeCode);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getDefaultStoreView')
+            ->willReturn($this->storeMock);
+        $this->storeCookieManagerMock->expects($this->atLeastOnce())
+            ->method('getStoreCodeFromCookie')
+            ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
             ->willThrowException(new NoSuchEntityException);
-        $this->storeCookieManagerMock->expects($this->once())->method('deleteStoreCookie')->with($this->storeMock);
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->storeCookieManagerMock->expects($this->once())
+            ->method('deleteStoreCookie')
+            ->with($this->storeMock);
+
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
-    public function testAroundDispatchStoreIsInactive()
+    /**
+     * @return void
+     */
+    public function testBeforeDispatchStoreIsInactive()
     {
         $storeCode = 'store';
-        $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
-        $this->storeCookieManagerMock->expects($this->once())->method('getStoreCodeFromCookie')->willReturn($storeCode);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getDefaultStoreView')
+            ->willReturn($this->storeMock);
+        $this->storeCookieManagerMock->expects($this->atLeastOnce())
+            ->method('getStoreCodeFromCookie')
+            ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
             ->willThrowException(new StoreIsInactiveException);
-        $this->storeCookieManagerMock->expects($this->once())->method('deleteStoreCookie')->with($this->storeMock);
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->storeCookieManagerMock->expects($this->once())
+            ->method('deleteStoreCookie')
+            ->with($this->storeMock);
+
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
-    public function testAroundDispatchInvalidArgument()
+    /**
+     * @return void
+     */
+    public function testBeforeDispatchInvalidArgument()
     {
         $storeCode = 'store';
-        $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
-        $this->storeCookieManagerMock->expects($this->once())->method('getStoreCodeFromCookie')->willReturn($storeCode);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getDefaultStoreView')
+            ->willReturn($this->storeMock);
+        $this->storeCookieManagerMock->expects($this->atLeastOnce())
+            ->method('getStoreCodeFromCookie')
+            ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
             ->willThrowException(new InvalidArgumentException);
-        $this->storeCookieManagerMock->expects($this->once())->method('deleteStoreCookie')->with($this->storeMock);
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->storeCookieManagerMock->expects($this->once())
+            ->method('deleteStoreCookie')
+            ->with($this->storeMock);
+
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
-    public function testAroundDispatchNoStoreCookie()
+    /**
+     * @return void
+     */
+    public function testBeforeDispatchNoStoreCookie()
     {
         $storeCode = null;
-        $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
-        $this->storeCookieManagerMock->expects($this->once())->method('getStoreCodeFromCookie')->willReturn($storeCode);
-        $this->storeRepositoryMock->expects($this->never())->method('getActiveStoreByCode');
-        $this->storeCookieManagerMock->expects($this->never())->method('deleteStoreCookie')->with($this->storeMock);
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->storeCookieManagerMock->expects($this->atLeastOnce())
+            ->method('getStoreCodeFromCookie')
+            ->willReturn($storeCode);
+        $this->storeManagerMock->expects($this->never())
+            ->method('getDefaultStoreView')
+            ->willReturn($this->storeMock);
+        $this->storeRepositoryMock->expects($this->never())
+            ->method('getActiveStoreByCode');
+        $this->storeCookieManagerMock->expects($this->never())
+            ->method('deleteStoreCookie')
+            ->with($this->storeMock);
+
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+    }
+
+    /**
+     * @return void
+     */
+    public function testBeforeDispatchWithStoreRequestParam()
+    {
+        $storeCode = 'store';
+        $this->storeCookieManagerMock->expects($this->atLeastOnce())
+            ->method('getStoreCodeFromCookie')
+            ->willReturn($storeCode);
+        $this->storeRepositoryMock->expects($this->atLeastOnce())
+            ->method('getActiveStoreByCode')
+            ->willReturn($this->storeMock);
+        $this->storeCookieManagerMock->expects($this->never())
+            ->method('deleteStoreCookie')
+            ->with($this->storeMock);
+
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 }

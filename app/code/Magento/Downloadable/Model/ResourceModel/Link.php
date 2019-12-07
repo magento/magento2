@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\ResourceModel;
@@ -8,7 +8,8 @@ namespace Magento\Downloadable\Model\ResourceModel;
 /**
  * Downloadable Product  Samples resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -198,12 +199,16 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['s' => $this->getTable('downloadable_link_title')],
             's.link_id=m.link_id AND s.store_id=0',
             []
+        )->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            'cpe.entity_id = m.product_id',
+            []
         )->joinLeft(
             ['st' => $this->getTable('downloadable_link_title')],
             'st.link_id=m.link_id AND st.store_id=:store_id',
             ['title' => $ifNullDefaultTitle]
         )->where(
-            'm.product_id=:product_id'
+            'cpe.entity_id=:product_id'
         );
         $bind = [':store_id' => (int)$storeId, ':product_id' => $productId];
 
@@ -211,6 +216,8 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Get Currency model.
+     *
      * @return \Magento\Directory\Model\Currency
      */
     protected function _createCurrency()

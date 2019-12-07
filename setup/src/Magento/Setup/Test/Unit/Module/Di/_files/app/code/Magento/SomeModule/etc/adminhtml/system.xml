@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,7 +10,7 @@
         <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Advanced</label>
             <tab>advanced</tab>
-            <resource>Magento_Backend::advanced</resource>
+            <resource>Magento_Config::advanced</resource>
             <group id="modules_disable_output" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Disable Modules Output</label>
                 <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset\Modules\DisableOutput\Proxy</frontend_model>

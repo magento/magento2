@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 return [
     'router' => [
@@ -13,7 +12,7 @@ return [
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
-                        'controller' => 'Magento\Setup\Controller\Index',
+                        'controller' => \Magento\Setup\Controller\Index::class,
                         'action'     => 'index',
                     ],
                 ],

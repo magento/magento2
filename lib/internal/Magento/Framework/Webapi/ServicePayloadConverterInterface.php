@@ -2,13 +2,15 @@
 /**
  * Application interface
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
 
 /**
  * Interface for data conversion based on data type.
+ *
+ * @api
  */
 interface ServicePayloadConverterInterface
 {

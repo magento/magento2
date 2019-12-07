@@ -1,17 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Weee\Test\Unit\Pricing;
 
-use \Magento\Weee\Pricing\TaxAdjustment;
+use Magento\Weee\Pricing\TaxAdjustment;
 
-
-class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
+class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TaxAdjustment
@@ -38,14 +35,15 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     protected $sortOrder = 5;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->weeeHelperMock = $this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
-        $this->taxHelperMock = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
+        $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                     function ($arg) {
                         return round($arg * 0.5, 2);
                     }
@@ -53,11 +51,12 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
             );
         $this->priceCurrencyMock->expects($this->any())
             ->method('convert')
-            ->will($this->returnCallback(
-                function ($arg) {
-                    return $arg * 0.5;
-                }
-            )
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        return $arg * 0.5;
+                    }
+                )
             );
 
         $this->adjustment = new TaxAdjustment(
@@ -90,8 +89,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
         $isWeeeTaxable,
         $weeeDisplayConfig,
         $expectedResult
-    )
-    {
+    ) {
         $this->weeeHelperMock->expects($this->any())
             ->method('isEnabled')
             ->willReturn(true);
@@ -154,7 +152,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyAdjustment($amount, $weeeAttributes, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
+        $object = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
 
         $this->weeeHelperMock->expects($this->any())
             ->method('getProductWeeeAttributes')

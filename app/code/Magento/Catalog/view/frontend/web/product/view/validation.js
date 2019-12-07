@@ -1,30 +1,44 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define([
-            "jquery",
-            "jquery/ui",
-            "mage/validation/validation"
-        ], factory);
-    } else {
-        factory(jQuery);
-    }
-}(function ($) {
-    "use strict";
-    
-    $.widget("mage.validation", $.mage.validation, {
+
+define([
+    'jquery',
+    'jquery-ui-modules/widget',
+    'mage/validation/validation'
+], function ($) {
+    'use strict';
+
+    $.widget('mage.validation', $.mage.validation, {
         options: {
             radioCheckboxClosest: 'ul, ol',
+
+            /**
+             * @param {*} error
+             * @param {HTMLElement} element
+             */
             errorPlacement: function (error, element) {
+                var messageBox,
+                    dataValidate;
+
+                if ($(element).hasClass('datetime-picker')) {
+                    element = $(element).parent();
+
+                    if (element.parent().find('[generated=true].mage-error').length) {
+                        return;
+                    }
+                }
+
                 if (element.attr('data-errors-message-box')) {
-                    var messageBox = $(element.attr('data-errors-message-box'));
+                    messageBox = $(element.attr('data-errors-message-box'));
                     messageBox.html(error);
+
                     return;
                 }
-                var dataValidate = element.attr('data-validate');
+
+                dataValidate = element.attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-one-checkbox-required-by-name') > 0) {
                     error.appendTo('#links-advice-container');
                 } else if (element.is(':radio, :checkbox')) {
@@ -33,11 +47,18 @@
                     element.after(error);
                 }
             },
+
+            /**
+             * @param {HTMLElement} element
+             * @param {String} errorClass
+             */
             highlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
-                    $(element).parent().find('.datetime-picker').each(function() {
+                    $(element).parent().find('.datetime-picker').each(function () {
                         $(this).removeClass(errorClass);
+
                         if ($(this).val().length === 0) {
                             $(this).addClass(errorClass);
                         }
@@ -48,8 +69,14 @@
                     $(element).addClass(errorClass);
                 }
             },
+
+            /**
+             * @param {HTMLElement} element
+             * @param {String} errorClass
+             */
             unhighlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').removeClass(errorClass);
                 } else if ($(element).is(':radio, :checkbox')) {
@@ -62,4 +89,4 @@
     });
 
     return $.mage.validation;
-}));
+});

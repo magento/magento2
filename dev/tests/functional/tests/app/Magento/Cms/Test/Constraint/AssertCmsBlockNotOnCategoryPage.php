@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@ use Magento\Cms\Test\Fixture\CmsBlock;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Assert that created CMS block non visible on frontend category page.
@@ -25,31 +26,35 @@ class AssertCmsBlockNotOnCategoryPage extends AbstractConstraint
      * @param CmsBlock $cmsBlock
      * @param CatalogCategoryView $catalogCategoryView
      * @param FixtureFactory $fixtureFactory
+     * @param Category|null $category [optional]
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
         CmsBlock $cmsBlock,
         CatalogCategoryView $catalogCategoryView,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        Category $category = null
     ) {
-        $category = $fixtureFactory->createByCode(
-            'category',
-            [
-                'dataset' => 'default_subcategory',
-                'data' => [
-                    'display_mode' => 'Static block and products',
-                    'landing_page' => $cmsBlock->getTitle(),
+        if ($category === null) {
+            $category = $fixtureFactory->createByCode(
+                'category',
+                [
+                    'dataset' => 'default_subcategory',
+                    'data' => [
+                        'display_mode' => 'Static block and products',
+                        'landing_page' => $cmsBlock->getTitle(),
+                    ]
                 ]
-            ]
-        );
-        $category->persist();
+            );
+            $category->persist();
+        }
 
         $cmsIndex->open();
         $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
         $categoryViewContent = $catalogCategoryView->getViewBlock()->getContent();
 
-        \PHPUnit_Framework_Assert::assertNotEquals(
+        \PHPUnit\Framework\Assert::assertNotEquals(
             $cmsBlock->getContent(),
             $categoryViewContent,
             'Wrong block content on category is displayed.'

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product\Edit\Action;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product\Edit\Action;
 /**
  * Class AttributeTest
  */
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -30,14 +30,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             '',
             false
         );
 
         $this->attribute = $objectManager->getObject(
-            'Magento\Catalog\Helper\Product\Edit\Action\Attribute',
+            \Magento\Catalog\Helper\Product\Edit\Action\Attribute::class,
             [
                 'storeManager' => $this->storeManagerMock
             ]
@@ -53,13 +53,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 20;
 
-        $storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
-            ['getWebsiteId'],
-            [],
-            '',
-            false
-        );
+        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
 
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')

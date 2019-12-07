@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var $agreement \Magento\CheckoutAgreements\Model\Agreement */
-$agreement = $objectManager->create('Magento\CheckoutAgreements\Model\Agreement');
+$agreement = $objectManager->create(\Magento\CheckoutAgreements\Model\Agreement::class);
 $agreement->setData([
     'name' => 'Checkout Agreement (inactive)',
     'content' => 'Checkout agreement content: TEXT',

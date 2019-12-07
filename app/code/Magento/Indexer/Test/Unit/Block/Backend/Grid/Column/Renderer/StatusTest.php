@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid\Column\Renderer;
 
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $indexValues
@@ -14,7 +14,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender($indexValues, $expectedResult)
     {
-        $context = $this->getMockBuilder('\Magento\Backend\Block\Context')
+        $context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $model = new \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status($context);
@@ -33,6 +33,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return [

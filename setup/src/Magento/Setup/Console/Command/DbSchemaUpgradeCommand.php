@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,29 +10,30 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for install and update of DB schema
+ * Command for install and update of DB schema.
  */
 class DbSchemaUpgradeCommand extends AbstractSetupCommand
 {
     /**
-     * Factory to create installer
+     * Factory to create installer.
      *
      * @var InstallerFactory
      */
     private $installFactory;
 
     /**
-     * Deployment configuration
+     * Deployment configuration.
      *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * Inject dependencies
+     * Inject dependencies.
      *
      * @param InstallerFactory $installFactory
      * @param DeploymentConfig $deploymentConfig
@@ -45,13 +46,26 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
     }
 
     /**
-     * Initialization of the command
+     * Initialization of the command.
      *
      * @return void
      */
     protected function configure()
     {
-        $this->setName('setup:db-schema:upgrade')->setDescription('Installs and upgrades the DB schema');
+        $this
+            ->setName('setup:db-schema:upgrade')
+            ->setDefinition(
+                [
+                    new InputOption(
+                        InstallCommand::CONVERT_OLD_SCRIPTS_KEY,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Allows to convert old scripts (InstallSchema, UpgradeSchema) to db_schema.xml format',
+                        false
+                    )
+                ]
+            )
+            ->setDescription('Installs and upgrades the DB schema');
         parent::configure();
     }
 
@@ -62,9 +76,11 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
     {
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         $installer = $this->installFactory->create(new ConsoleLogger($output));
-        $installer->installSchema();
+        $installer->installSchema($input->getOptions());
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

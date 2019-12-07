@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class AssertTaxReportNotInGrid extends AbstractConstraint
             'tax_amount' => $taxAmount,
         ];
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $salesTaxReport->getGridBlock()->isRowVisible($filter, false),
             "Tax Report is visible in grid on tax report page."
         );

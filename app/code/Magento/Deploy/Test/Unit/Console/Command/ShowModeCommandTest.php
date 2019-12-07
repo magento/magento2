@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Console\Command;
@@ -12,7 +12,7 @@ use Magento\Framework\App\State;
 /**
  * @package Magento\Deploy\Test\Unit\Console\Command
  */
-class ShowModeCommandTest extends \PHPUnit_Framework_TestCase
+class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Deploy\Model\Mode|\PHPUnit_Framework_MockObject_MockObject
@@ -31,12 +31,12 @@ class ShowModeCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->modeMock = $this->getMock('Magento\Deploy\Model\Mode', [], [], '', false);
+        $this->objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+        $this->modeMock = $this->createMock(\Magento\Deploy\Model\Mode::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->command = $objectManager->getObject(
-            'Magento\Deploy\Console\Command\ShowModeCommand',
+            \Magento\Deploy\Console\Command\ShowModeCommand::class,
             ['objectManager' => $this->objectManagerMock]
         );
 

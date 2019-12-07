@@ -1,11 +1,9 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
@@ -18,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreatePostTest extends \PHPUnit_Framework_TestCase
+class CreatePostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Controller\Account\CreatePost
@@ -129,6 +127,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirectFactoryMock;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -140,72 +139,64 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
          * For now the \Magento\Customer\Test\Unit\Controller\AccountTest sufficiently covers the SUT
          */
         $this->markTestSkipped('Cannot be unit tested with the auto generated builder dependencies');
-        $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
-        $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
-        $this->responseMock = $this->getMock('Magento\Framework\Webapi\Response');
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\Webapi\Response::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
-        $this->urlMock = $this->getMock('Magento\Framework\Url', [], [], '', false);
-        $urlFactoryMock = $this->getMock('Magento\Framework\UrlFactory', [], [], '', false);
+        $this->urlMock = $this->createMock(\Magento\Framework\Url::class);
+        $urlFactoryMock = $this->createMock(\Magento\Framework\UrlFactory::class);
         $urlFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->urlMock));
 
-        $this->customerMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->customerDetailsMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface', [], [], '', false
-        );
-        $this->customerDetailsFactoryMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory', [], [], '', false
+        $this->customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $this->customerDetailsMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $this->customerDetailsFactoryMock = $this->createMock(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
         );
 
-        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
-        $this->customerRepository = $this->getMock('Magento\Customer\Api\CustomerRepositoryInterface');
-        $this->accountManagement = $this->getMock('Magento\Customer\Api\AccountManagementInterface');
-        $this->addressHelperMock = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
-        $formFactoryMock = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', [], [], '', false);
+        $this->customerRepository = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->accountManagement = $this->createMock(\Magento\Customer\Api\AccountManagementInterface::class);
+        $this->addressHelperMock = $this->createMock(\Magento\Customer\Helper\Address::class);
+        $formFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
 
-        $this->subscriberMock = $this->getMock('Magento\Newsletter\Model\Subscriber', [], [], '', false);
-        $subscriberFactoryMock = $this->getMock(
-            'Magento\Newsletter\Model\SubscriberFactory', ['create'], [], '', false
+        $this->subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
+        $subscriberFactoryMock = $this->createPartialMock(
+            \Magento\Newsletter\Model\SubscriberFactory::class,
+            ['create']
         );
         $subscriberFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->subscriberMock));
 
-        $regionFactoryMock = $this->getMock(
-            'Magento\Customer\Api\Data\RegionInterfaceFactory', [], [], '', false
-        );
-        $addressFactoryMock = $this->getMock(
-            'Magento\Customer\Api\Data\AddressInterfaceFactory', [], [], '', false
-        );
-        $this->customerUrl = $this->getMock('Magento\Customer\Model\Url', [], [], '', false);
-        $this->registration = $this->getMock('Magento\Customer\Model\Registration', [], [], '', false);
-        $escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
-        $this->customerExtractorMock = $this->getMock('Magento\Customer\Model\CustomerExtractor', [], [], '', false);
-        $this->dataObjectHelperMock = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $regionFactoryMock = $this->createMock(\Magento\Customer\Api\Data\RegionInterfaceFactory::class);
+        $addressFactoryMock = $this->createMock(\Magento\Customer\Api\Data\AddressInterfaceFactory::class);
+        $this->customerUrl = $this->createMock(\Magento\Customer\Model\Url::class);
+        $this->registration = $this->createMock(\Magento\Customer\Model\Registration::class);
+        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->customerExtractorMock = $this->createMock(\Magento\Customer\Model\CustomerExtractor::class);
+        $this->dataObjectHelperMock = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
 
-        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            \Magento\Framework\Controller\Result\RedirectFactory::class
+        )
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->redirectMock);
 
-        $contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
         $contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -226,7 +217,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirectFactoryMock);
 
         $this->model = $objectManager->getObject(
-            'Magento\Customer\Controller\Account\CreatePost',
+            \Magento\Customer\Controller\Account\CreatePost::class,
             [
                 'context' => $contextMock,
                 'customerSession' => $this->customerSessionMock,
@@ -355,11 +346,13 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
-                ['password', null, $password],
-                ['password_confirmation', null, $password],
-                ['is_subscribed', false, true],
-            ]);
+            ->willReturnMap(
+                [
+                    ['password', null, $password],
+                    ['password_confirmation', null, $password],
+                    ['is_subscribed', false, true],
+                ]
+            );
 
         $this->customerMock->expects($this->once())
             ->method('setAddresses')
@@ -380,7 +373,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($customerId));
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->will($this->returnSelf());
 
@@ -486,11 +479,13 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
-                ['password', null, $password],
-                ['password_confirmation', null, $password],
-                ['is_subscribed', false, true],
-            ]);
+            ->willReturnMap(
+                [
+                    ['password', null, $password],
+                    ['password_confirmation', null, $password],
+                    ['is_subscribed', false, true],
+                ]
+            );
 
         $this->customerMock->expects($this->once())
             ->method('setAddresses')
@@ -511,16 +506,18 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($customerId));
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->will($this->returnSelf());
 
         $this->urlMock->expects($this->any())
             ->method('getUrl')
-            ->willReturnMap([
-                ['*/*/index', ['_secure' => true], $successUrl],
-                ['*/*/create', ['_secure' => true], $successUrl],
-            ]);
+            ->willReturnMap(
+                [
+                    ['*/*/index', ['_secure' => true], $successUrl],
+                    ['*/*/create', ['_secure' => true], $successUrl],
+                ]
+            );
         $this->redirectMock->expects($this->once())
             ->method('success')
             ->with($this->equalTo($successUrl))
@@ -542,6 +539,9 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $this->model->execute();
     }
 
+    /**
+     * @return array
+     */
     public function getSuccessRedirectDataProvider()
     {
         return [

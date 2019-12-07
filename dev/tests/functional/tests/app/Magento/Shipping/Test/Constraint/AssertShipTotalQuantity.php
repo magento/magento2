@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,7 +40,7 @@ class AssertShipTotalQuantity extends AbstractAssertOrderOnFrontend
         $orderHistory->getOrderHistoryBlock()->openOrderById($order->getId());
         $customerOrderView->getOrderViewBlock()->openLinkByName('Order Shipments');
         foreach ($ids['shipmentIds'] as $key => $shipmentIds) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $totalQty[$key],
                 $shipmentView->getShipmentBlock()->getItemShipmentBlock($shipmentIds)->getTotalQty()
             );

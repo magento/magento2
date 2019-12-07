@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Search\Test\Unit\Request;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CleanerTest extends \PHPUnit_Framework_TestCase
+class CleanerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\Search\Request\Aggregation\StatusInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $status;
@@ -21,13 +22,13 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->status = $this->getMockBuilder('\Magento\Framework\Search\Request\Aggregation\StatusInterface')
+        $this->status = $this->getMockBuilder(\Magento\Framework\Search\Request\Aggregation\StatusInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isEnabled'])
             ->getMockForAbstractClass();
 
         $this->cleaner = $helper->getObject(
-            'Magento\Framework\Search\Request\Cleaner',
+            \Magento\Framework\Search\Request\Cleaner::class,
             ['aggregationStatus' => $this->status]
         );
     }
@@ -259,7 +260,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cycle found. Query filtered_query already used in request hierarchy
+     * @expectedExceptionMessage A cycle was found. The "filtered_query" query is already used in the request hierarchy.
      */
     public function testCleanQueryCycle()
     {
@@ -331,6 +332,66 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
             'query' => 'test',
             'queries' => [],
             'filters' => [],
+        ];
+
+        $this->cleaner->clean($requestData);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Search\Request\EmptyRequestDataException
+     * @expectedExceptionMessage The request query and filters aren't set. Verify the query and filters and try again.
+     */
+    public function testCleanEmptyQueryAndFilter()
+    {
+        $this->status->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
+        $requestData = [
+            'query' => 'bool_query',
+            'queries' => [
+                'bool_query' => [
+                    'queryReference' => [
+                        ['ref' => 'bool_query_rm'],
+                        ['ref' => 'filtered_query_to_filter2'],
+                    ],
+                    'type' => 'boolQuery',
+                ],
+                'bool_query_rm' => [
+                    'queryReference' => [
+                        ['ref' => 'match_query_rm'],
+                        ['ref' => 'filtered_query_to_query'],
+                        ['ref' => 'filtered_query_to_filter'],
+                    ],
+                    'type' => 'boolQuery',
+                ],
+                'match_query_rm' => ['value' => '$some$', 'type' => 'matchQuery'],
+                'match_query_rm2' => ['value' => '$some2$', 'type' => 'matchQuery'],
+                'filtered_query_to_query' => [
+                    'queryReference' => [['ref' => 'match_query_rm2']],
+                    'type' => 'filteredQuery',
+                ],
+                'filtered_query_to_filter' => [
+                    'filterReference' => [['ref' => 'bool_filter']],
+                    'type' => 'filteredQuery',
+                ],
+                'filtered_query_to_filter2' => [
+                    'filterReference' => [['ref' => 'bool_filter2']],
+                    'type' => 'filteredQuery',
+                ],
+            ],
+            'filters' => [
+                'bool_filter' => [
+                    'filterReference' => [['ref' => 'term_filter'], ['ref' => 'range_filter']],
+                    'type' => 'boolFilter',
+                ],
+                'term_filter' => ['value' => '$val$', 'type' => 'termFilter'],
+                'range_filter' => ['from' => '$from$', 'to' => '$to$', 'type' => 'rangeFilter'],
+                'bool_filter2' => [
+                    'filterReference' => [['ref' => 'term_filter2']],
+                    'type' => 'boolFilter',
+                ],
+                'term_filter2' => ['value' => '$val$', 'type' => 'termFilter'],
+            ],
         ];
 
         $this->cleaner->clean($requestData);

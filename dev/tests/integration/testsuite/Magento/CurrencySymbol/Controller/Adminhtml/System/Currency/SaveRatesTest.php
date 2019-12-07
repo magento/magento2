@@ -1,9 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
+
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Escaper;
 
 class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -12,13 +16,22 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     protected $currencyRate;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * Initial setup
      */
     protected function setUp()
     {
         $this->currencyRate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Directory\Model\Currency'
+            \Magento\Directory\Model\Currency::class
         );
+        $this->escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            Escaper::class
+        );
+
         parent::setUp();
     }
 
@@ -43,6 +56,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $rate = 1.0000;
 
         $request = $this->getRequest();
+        $request->setMethod(HttpRequest::METHOD_POST);
         $request->setPostValue(
             'rate',
             [
@@ -75,6 +89,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $rate = '0';
 
         $request = $this->getRequest();
+        $request->setMethod(HttpRequest::METHOD_POST);
         $request->setPostValue(
             'rate',
             [
@@ -84,7 +99,11 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->dispatch('backend/admin/system_currency/saveRates');
 
         $this->assertSessionMessages(
-            $this->contains((string)__('Please correct the input data for %1 => %2 rate', $currencyCode, $currencyTo)),
+            $this->contains(
+                $this->escaper->escapeHtml(
+                    (string)__('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
+                )
+            ),
             \Magento\Framework\Message\MessageInterface::TYPE_WARNING
         );
     }

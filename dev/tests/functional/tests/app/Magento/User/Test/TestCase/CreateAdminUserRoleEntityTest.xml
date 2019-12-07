@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\User\Test\TestCase\CreateAdminUserRoleEntityTest" summary="Create Admin User Role" ticketId="MAGETWO-23413">
         <variation name="CreateAdminUserRoleEntityTestVariation1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+            <data name="role/data/current_password" xsi:type="string">%current_password%</data>
             <data name="role/data/resource_access" xsi:type="string">Custom</data>
             <data name="role/data/roles_resources" xsi:type="string">Sales</data>
             <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage" />
@@ -16,9 +18,17 @@
         </variation>
         <variation name="CreateAdminUserRoleEntityTestVariation2">
             <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+            <data name="role/data/current_password" xsi:type="string">%current_password%</data>
             <data name="role/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid" />
+        </variation>
+        <variation name="CreateAdminUserRoleEntityTestVariation3">
+            <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+            <data name="role/data/current_password" xsi:type="string">incorrect password</data>
+            <data name="role/data/resource_access" xsi:type="string">All</data>
+            <constraint name="Magento\User\Test\Constraint\AssertIncorrectUserPassword" />
+            <constraint name="Magento\User\Test\Constraint\AssertRoleNotInGrid" />
         </variation>
     </testCase>
 </config>

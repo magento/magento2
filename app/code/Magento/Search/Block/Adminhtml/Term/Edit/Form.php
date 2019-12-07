@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,15 @@
  * Adminhtml tag edit form
  *
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Block\Adminhtml\Term\Edit;
 
+/**
+ * Edit Form Block
+ *
+ * Class \Magento\Search\Block\Adminhtml\Term\Edit\Form
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -51,6 +58,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form fields
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
@@ -95,7 +104,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
         } else {
@@ -112,7 +121,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'label' => __('Number of results'),
                     'title' => __('Number of results (For the last time placed)'),
                     'note' => __('For the last time placed.'),
-                    'required' => true
+                    'required' => true,
+                    'class' => 'required-entry validate-digits validate-zero-or-greater'
                 ]
             );
 
@@ -123,21 +133,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'name' => 'popularity',
                     'label' => __('Number of Uses'),
                     'title' => __('Number of Uses'),
-                    'required' => true
+                    'required' => true,
+                    'class' => 'required-entry validate-digits validate-zero-or-greater'
                 ]
             );
         }
-
-        $fieldset->addField(
-            'synonym_for',
-            'text',
-            [
-                'name' => 'synonym_for',
-                'label' => __('Synonym For'),
-                'title' => __('Synonym For'),
-                'note' => __('Will make search for the query above return results for this search')
-            ]
-        );
 
         $fieldset->addField(
             'redirect',

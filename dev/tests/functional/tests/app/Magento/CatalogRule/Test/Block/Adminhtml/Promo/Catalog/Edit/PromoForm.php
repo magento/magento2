@@ -1,35 +1,45 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Backend\Test\Block\Template;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Form for creation of a Catalog Price Rule.
  */
-class PromoForm extends FormTabs
+class PromoForm extends FormSections
 {
+    /**
+     * Selector for template block.
+     *
+     * @var string
+     */
+    private $templateBlockSelector = './ancestor::body';
+
     /**
      * Fill form with tabs.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement $element
      * @param array $replace
-     * @return $this|FormTabs
+     * @return $this
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, array $replace = null)
     {
-        $tabs = $this->getFieldsByTabs($fixture);
+        $this->waitPageToLoad();
+        $sections = $this->getFixtureFieldsByContainers($fixture);
         if ($replace) {
-            $tabs = $this->prepareData($tabs, $replace);
+            $sections = $this->prepareData($sections, $replace);
         }
-        $this->fillTabs($tabs, $element);
+        return $this->fillContainers($sections, $element);
     }
 
     /**
@@ -54,5 +64,29 @@ class PromoForm extends FormTabs
         }
 
         return $tabs;
+    }
+
+    /**
+     * Wait page to load.
+     *
+     * @return void
+     */
+    protected function waitPageToLoad()
+    {
+        $this->waitForElementVisible($this->header);
+        $this->getTemplateBlock()->waitLoader();
+    }
+
+    /**
+     * Get template block.
+     *
+     * @return Template
+     */
+    private function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            Template::class,
+            ['element' => $this->_rootElement->find($this->templateBlockSelector, Locator::SELECTOR_XPATH)]
+        );
     }
 }

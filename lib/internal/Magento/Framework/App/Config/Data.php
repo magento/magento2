@@ -2,7 +2,7 @@
 /**
  * Configuration data container
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -29,7 +29,8 @@ class Data implements DataInterface
      */
     public function __construct(MetadataProcessor $processor, array $data)
     {
-        $this->_data = $processor->process($data);
+        /** Clone the array to work around a kink in php7 that modifies the argument by reference */
+        $this->_data = $processor->process($this->arrayClone($data));
         $this->_source = $data;
     }
 
@@ -76,5 +77,20 @@ class Data implements DataInterface
             $currentElement = & $currentElement[$key];
         }
         $currentElement[$lastKey] = $value;
+    }
+
+    /**
+     * Copy array by value
+     *
+     * @param array $data
+     * @return array
+     */
+    private function arrayClone(array $data)
+    {
+        $clone = [];
+        foreach ($data as $key => $value) {
+            $clone[$key]= $value;
+        }
+        return $clone;
     }
 }
