@@ -29,7 +29,7 @@
         </before>
         <after>
             <actionGroup ref="deleteProductBySku" stepKey="deleteDefaultVirtualProduct">
-                <argument name="sku" value="$$initialVirtualProduct.sku$$"/>
+                <argument name="sku" value="{{updateVirtualProductRegularPrice5OutOfStock.sku}}"/>
             </actionGroup>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
