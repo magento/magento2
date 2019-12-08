@@ -31,7 +31,7 @@
             <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts" after="selectFirstGridRow"/>
             <fillField selector="{{AdminProductFormBundleSection.firstProductQuantity}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty" after="clickAddSelectedBundleProducts"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveBundleProduct" after="fillProductDefaultQty"/>
-            <actionGroup ref="viewBundleProductInAdminGrid" stepKey="viewBundleProductInGrid" after="saveBundleProduct">
+            <actionGroup ref="ViewBundleProductInAdminGridActionGroup" stepKey="viewBundleProductInGrid" after="saveBundleProduct">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
 
