@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Framework\Exception\InputException;
+
 class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -28,14 +30,22 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $productLinkMock;
 
+    protected $productResourceMock;
+
     protected function setUp()
     {
+
+        $this->productResourceMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductsIdsBySkus'])
+            ->getMock();
         $this->categoryRepositoryMock = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->productLinkMock = $this->createMock(\Magento\Catalog\Api\Data\CategoryProductLinkInterface::class);
         $this->model = new \Magento\Catalog\Model\CategoryLinkRepository(
             $this->categoryRepositoryMock,
-            $this->productRepositoryMock
+            $this->productRepositoryMock,
+            $this->productResourceMock
         );
     }
 
@@ -193,5 +203,67 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())->method('setPostedProducts')->with([]);
         $categoryMock->expects($this->once())->method('save');
         $this->assertTrue($this->model->delete($this->productLinkMock));
+    }
+
+    public function testDeleteBySkus()
+    {
+        $categoryId = "42";
+        $productSku = "testSku";
+        $productId = 55;
+        $productPositions = [55 => 1];
+        $categoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getProductsPosition', 'setPostedProducts', 'save', 'getId']
+        );
+        $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
+            ->willReturn($categoryMock);
+        $this->productResourceMock->expects($this->once())->method('getProductsIdsBySkus')
+            ->willReturn(['testSku' => $productId]);
+        $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
+        $categoryMock->expects($this->once())->method('setPostedProducts')->with([]);
+        $categoryMock->expects($this->once())->method('save');
+        $this->assertTrue($this->model->deleteBySkus($categoryId, [$productSku]));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage The category doesn't contain the specified products.
+     */
+    public function testDeleteBySkusWithInputException()
+    {
+        $categoryId = "42";
+        $productSku = "testSku";
+        $categoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getProductsPosition', 'setPostedProducts', 'save', 'getId']
+        );
+        $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
+            ->willReturn($categoryMock);
+        $this->model->deleteBySkus($categoryId, [$productSku]);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @expectedExceptionMessage Could not save products "testSku" to category 42
+     */
+    public function testDeleteSkusIdsWithCouldNotSaveException()
+    {
+        $categoryId = "42";
+        $productSku = "testSku";
+        $productId = 55;
+        $productPositions = [55 => 1];
+        $categoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getProductsPosition', 'setPostedProducts', 'save', 'getId']
+        );
+        $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
+            ->willReturn($categoryMock);
+        $this->productResourceMock->expects($this->once())->method('getProductsIdsBySkus')
+            ->willReturn(['testSku' => $productId]);
+        $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
+        $categoryMock->expects($this->once())->method('setPostedProducts')->with([]);
+        $categoryMock->expects($this->once())->method('getId')->willReturn($categoryId);
+        $categoryMock->expects($this->once())->method('save')->willThrowException(new \Exception());
+        $this->assertTrue($this->model->deleteBySkus($categoryId, [$productSku]));
     }
 }

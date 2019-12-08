@@ -125,7 +125,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
 
         $productPositions = $category->getProductsPosition();
 
-        foreach ($products as $productSku => $productId) {
+        foreach ($products as $productId) {
             if (isset($productPositions[$productId])) {
                 unset($productPositions[$productId]);
             }

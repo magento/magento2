@@ -13,7 +13,7 @@ namespace Magento\Catalog\Api;
 interface CategoryListDeleteBySkuInterface
 {
     /**
-     * delete by skus list
+     * Delete by skus list
      *
      * @param int   $categoryId
      * @param array $productSkuList
