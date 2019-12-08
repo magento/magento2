@@ -943,6 +943,11 @@
             <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\CaptureCommand</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\ProcessInvoiceOperation">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\CaptureCommand</argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Model\Order\Payment\Operations\OrderOperation">
         <arguments>
             <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\OrderCommand</argument>

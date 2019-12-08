@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\Checkout\Api;
 
 use Braintree\Result\Error;
+use Braintree\Result\Successful;
+use Braintree\Transaction;
+use Braintree\Transaction\CreditCardDetails;
 use Magento\Braintree\Gateway\Http\Client\TransactionSale;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -16,14 +19,14 @@ use Magento\Framework\App\Area;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Sales\Api\Data\TransactionInterface;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class PaymentInformationManagementTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentInformationManagementTest extends TestCase
@@ -39,6 +42,11 @@ class PaymentInformationManagementTest extends TestCase
     private $client;
 
     /**
+     * @var PaymentInformationManagementInterface
+     */
+    private $management;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -49,6 +57,7 @@ class PaymentInformationManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManager->addSharedInstance($this->client, TransactionSale::class);
+        $this->management = $this->objectManager->get(PaymentInformationManagementInterface::class);
     }
 
     /**
@@ -85,10 +94,7 @@ class PaymentInformationManagementTest extends TestCase
         $state->setAreaCode($area);
 
         $quote = $this->getQuote('test_order_1');
-
-        /** @var PaymentInterface $payment */
-        $payment = $this->objectManager->create(PaymentInterface::class);
-        $payment->setMethod(ConfigProvider::CODE);
+        $payment = $this->getPayment();
 
         $errors = ['errors' => []];
 
@@ -103,9 +109,7 @@ class PaymentInformationManagementTest extends TestCase
 
         $this->expectExceptionMessage($expectedOutput);
 
-        /** @var PaymentInformationManagementInterface $paymentInformationManagement */
-        $paymentInformationManagement = $this->objectManager->get(PaymentInformationManagementInterface::class);
-        $paymentInformationManagement->savePaymentInformationAndPlaceOrder(
+        $this->management->savePaymentInformationAndPlaceOrder(
             $quote->getId(),
             $payment
         );
@@ -140,6 +144,72 @@ class PaymentInformationManagementTest extends TestCase
     }
 
     /**
+     * Checks a case when order should be placed with "Sale" payment action.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     * @magentoConfigFixture current_store payment/braintree/active 1
+     * @magentoConfigFixture current_store payment/braintree/payment_action authorize_capture
+     */
+    public function testPlaceOrderWithSaleAction()
+    {
+        $response = $this->getSuccessfulResponse(Transaction::SUBMITTED_FOR_SETTLEMENT);
+        $this->client->method('placeRequest')
+            ->willReturn($response);
+
+        $quote = $this->getQuote('test_order_1');
+        $payment = $this->getPayment();
+
+        $orderId = $this->management->savePaymentInformationAndPlaceOrder($quote->getId(), $payment);
+        self::assertNotEmpty($orderId);
+
+        $transactions = $this->getPaymentTransactionList((int) $orderId);
+        self::assertEquals(1, sizeof($transactions), 'Only one transaction should be present.');
+
+        /** @var TransactionInterface $transaction */
+        $transaction = array_pop($transactions);
+        self::assertEquals(
+            'capture',
+            $transaction->getTxnType(),
+            'Order should contain only the "capture" transaction.'
+        );
+        self::assertFalse((bool) $transaction->getIsClosed(), 'Transaction should not be closed.');
+    }
+
+    /**
+     * Checks a case when order should be placed with "Authorize" payment action.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     * @magentoConfigFixture current_store payment/braintree/active 1
+     * @magentoConfigFixture current_store payment/braintree/payment_action authorize
+     */
+    public function testPlaceOrderWithAuthorizeAction()
+    {
+        $response = $this->getSuccessfulResponse(Transaction::AUTHORIZED);
+        $this->client->method('placeRequest')
+            ->willReturn($response);
+
+        $quote = $this->getQuote('test_order_1');
+        $payment = $this->getPayment();
+
+        $orderId = $this->management->savePaymentInformationAndPlaceOrder($quote->getId(), $payment);
+        self::assertNotEmpty($orderId);
+
+        $transactions = $this->getPaymentTransactionList((int) $orderId);
+        self::assertEquals(1, sizeof($transactions), 'Only one transaction should be present.');
+
+        /** @var TransactionInterface $transaction */
+        $transaction = array_pop($transactions);
+        self::assertEquals(
+            'authorization',
+            $transaction->getTxnType(),
+            'Order should contain only the "authorization" transaction.'
+        );
+        self::assertFalse((bool) $transaction->getIsClosed(), 'Transaction should not be closed.');
+    }
+
+    /**
      * Retrieves quote by provided order ID.
      *
      * @param string $reservedOrderId
@@ -158,5 +228,86 @@ class PaymentInformationManagementTest extends TestCase
             ->getItems();
 
         return array_pop($items);
+    }
+
+    /**
+     * Creates Braintree payment method.
+     *
+     * @return PaymentInterface
+     */
+    private function getPayment(): PaymentInterface
+    {
+        /** @var PaymentInterface $payment */
+        $payment = $this->objectManager->create(PaymentInterface::class);
+        $payment->setMethod(ConfigProvider::CODE);
+
+        return $payment;
+    }
+
+    /**
+     * Get list of order transactions.
+     *
+     * @param int $orderId
+     * @return TransactionInterface[]
+     */
+    private function getPaymentTransactionList(int $orderId): array
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('order_id', $orderId)
+            ->create();
+
+        /** @var TransactionRepositoryInterface $transactionRepository */
+        $transactionRepository = $this->objectManager->get(TransactionRepositoryInterface::class);
+        return $transactionRepository->getList($searchCriteria)
+            ->getItems();
+    }
+
+    /**
+     * Returns successful Braintree response.
+     *
+     * @param string $transactionStatus
+     * @return array
+     */
+    private function getSuccessfulResponse(string $transactionStatus): array
+    {
+        $successResponse = new Successful();
+        $successResponse->success = true;
+        $successResponse->transaction = $this->getBraintreeTransaction($transactionStatus);
+
+        $response = [
+            'object' => $successResponse,
+        ];
+
+        return $response;
+    }
+
+    /**
+     * Returns Braintree transaction.
+     *
+     * @param string $transactionStatus
+     * @return Transaction
+     */
+    private function getBraintreeTransaction(string $transactionStatus)
+    {
+        $cardData = [
+            'token' => '73nrjn',
+            'bin' => '411111',
+            'cardType' => 'Visa',
+            'expirationMonth' => '12',
+            'expirationYear' => '2025',
+            'last4' => '1111'
+        ];
+
+        $transactionData = [
+            'id' => 'c0n6gvjb',
+            'status' => $transactionStatus,
+            'creditCard' => $cardData,
+            'creditCardDetails' => new CreditCardDetails($cardData)
+        ];
+
+        $transaction = Transaction::factory($transactionData);
+
+        return $transaction;
     }
 }
