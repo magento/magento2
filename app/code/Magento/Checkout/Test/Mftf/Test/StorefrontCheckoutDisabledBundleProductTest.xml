@@ -47,7 +47,7 @@
             <deleteData createDataKey="createBundleDynamicProduct" stepKey="deleteBundleProduct"/>
         </after>
         <!-- Add simple product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="cartAddSimpleProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
