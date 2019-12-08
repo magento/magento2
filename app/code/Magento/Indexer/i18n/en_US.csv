@@ -20,7 +20,7 @@ Never,Never
 "Field '%1' not found","Field '%1' not found"
 "Some Exception Message","Some Exception Message"
 "Test Phrase","Test Phrase"
-"Change indexer mode &amp; invalidate index","Change indexer mode &amp; invalidate index"
+"Change indexer mode","Change indexer mode"
 Indexer,Indexer
 Description,Description
 Mode,Mode
