@@ -132,7 +132,7 @@ class DataTest extends TestCase
     {
         $invalidBlock = $this->createMock(Product::class);
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage((string)__('Invalid block type: %1'));
+        $this->expectExceptionMessage((string)__('Invalid block type: %1')); // @codingStandardsIgnoreLine
 
         $this->helper->createBlock($invalidBlock);
     }
