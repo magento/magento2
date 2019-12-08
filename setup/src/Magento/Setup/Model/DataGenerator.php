@@ -72,7 +72,7 @@ class DataGenerator
 
         if ($key === null || !array_key_exists($key, $this->generatedValues)) {
             for ($i = 0; $i < $numberOfWords; $i++) {
-                $result .= ' ' . $this->dictionaryData[mt_rand(0, count($this->dictionaryData) - 1)];
+                $result .= ' ' . $this->dictionaryData[random_int(0, count($this->dictionaryData) - 1)];
             }
             $result = trim($result);
 
