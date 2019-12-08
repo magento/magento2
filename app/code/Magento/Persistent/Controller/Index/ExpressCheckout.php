@@ -6,6 +6,7 @@
 namespace Magento\Persistent\Controller\Index;
 
 use Magento\Persistent\Controller\Index;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
@@ -13,7 +14,7 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @codeCoverageIgnore
  */
-class ExpressCheckout extends Index
+class ExpressCheckout extends Index implements HttpGetActionInterface
 {
     /**
      * Add appropriate session message and redirect to shopping cart

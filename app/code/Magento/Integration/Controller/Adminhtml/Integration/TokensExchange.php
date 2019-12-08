@@ -6,12 +6,13 @@
 
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
  * Class TokensExchange executes post consumer credentials for Oauth integration.
  */
-class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integration
+class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpGetActionInterface
 {
     /**
      * Let the admin know that integration has been sent for activation and token exchange is in process.

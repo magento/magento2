@@ -9,6 +9,8 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Class PreventExpressCheckoutObserver exectues prevent express checkout
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class PreventExpressCheckoutObserver implements ObserverInterface
 {
