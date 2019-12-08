@@ -41,6 +41,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $tableAlias = $attribute->getAttributeCode() . '_idx';
         $conditions = [
             "{$tableAlias}.entity_id = e.entity_id",
+            $connection->quoteInto("(e.type_id <> ? OR {$tableAlias}.entity_id = {$tableAlias}.source_id)", \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE),
             $connection->quoteInto("{$tableAlias}.attribute_id = ?", $attribute->getAttributeId()),
             $connection->quoteInto("{$tableAlias}.store_id = ?", $collection->getStoreId()),
             $connection->quoteInto("{$tableAlias}.value = ?", $value),
@@ -77,6 +78,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $tableAlias = sprintf('%s_idx', $attribute->getAttributeCode());
         $conditions = [
             "{$tableAlias}.entity_id = e.entity_id",
+            $connection->quoteInto("(e.type_id <> ? OR {$tableAlias}.entity_id = {$tableAlias}.source_id)", \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE),
             $connection->quoteInto("{$tableAlias}.attribute_id = ?", $attribute->getAttributeId()),
             $connection->quoteInto("{$tableAlias}.store_id = ?", $filter->getStoreId()),
         ];
