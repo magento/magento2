@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Magento\Shipping\Model\Tracking\Result;
 
 /**
+ * Tracking Status DataObject
+ *
  * @method string getCarrier()
  * @method Status setCarrier(string $carrierCode)
  * @method string getCarrierTitle()
@@ -17,6 +19,8 @@ namespace Magento\Shipping\Model\Tracking\Result;
 class Status extends AbstractResult
 {
     /**
+     * Returns all Status data
+     *
      * @return array
      */
     public function getAllData(): array
