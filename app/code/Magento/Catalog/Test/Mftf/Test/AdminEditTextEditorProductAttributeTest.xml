@@ -12,10 +12,10 @@
             <features value="Catalog"/>
             <stories value="MAGETWO-51484-Input type configuration for custom Product Attributes"/>
             <group value="Catalog"/>
-            <title value="Admin should be able to switch between two versions of TinyMCE"/>
-            <description value="Admin should be able to switch between two versions of TinyMCE"/>
+            <title value="Admin are able to change Input Type of Text Editor product attribute"/>
+            <description value="Admin are able to change Input Type of Text Editor product attribute"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-85745"/>
+            <testCaseId value="MC-6215"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>

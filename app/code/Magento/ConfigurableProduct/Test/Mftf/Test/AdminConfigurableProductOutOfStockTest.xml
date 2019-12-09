@@ -77,7 +77,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
@@ -200,7 +200,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
@@ -301,9 +301,10 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
         </after>
 

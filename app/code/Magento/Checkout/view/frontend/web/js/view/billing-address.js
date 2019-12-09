@@ -18,7 +18,7 @@ define([
     'Magento_Checkout/js/action/set-billing-address',
     'Magento_Ui/js/model/messageList',
     'mage/translate',
-    'Magento_Checkout/js/model/shipping-rates-validator'
+    'Magento_Checkout/js/model/billing-address-postcode-validator'
 ],
 function (
     ko,
@@ -35,35 +35,28 @@ function (
     setBillingAddressAction,
     globalMessageList,
     $t,
-    shippingRatesValidator
+    billingAddressPostcodeValidator
 ) {
     'use strict';
 
     var lastSelectedBillingAddress = null,
-        newAddressOption = {
-            /**
-             * Get new address label
-             * @returns {String}
-             */
-            getAddressInline: function () {
-                return $t('New Address');
-            },
-            customerAddressId: null
-        },
         countryData = customerData.get('directory-data'),
         addressOptions = addressList().filter(function (address) {
-            return address.getType() == 'customer-address'; //eslint-disable-line eqeqeq
+            return address.getType() === 'customer-address';
         });
-
-    addressOptions.push(newAddressOption);
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/billing-address'
+            template: 'Magento_Checkout/billing-address',
+            actionsTemplate: 'Magento_Checkout/billing-address/actions',
+            formTemplate: 'Magento_Checkout/billing-address/form',
+            detailsTemplate: 'Magento_Checkout/billing-address/details',
+            links: {
+                isAddressFormVisible: '${$.billingAddressListProvider}:isNewAddressSelected'
+            }
         },
         currentBillingAddress: quote.billingAddress,
-        addressOptions: addressOptions,
-        customerHasAddresses: addressOptions.length > 1,
+        customerHasAddresses: addressOptions.length > 0,
 
         /**
          * Init component
@@ -73,7 +66,7 @@ function (
             quote.paymentMethod.subscribe(function () {
                 checkoutDataResolver.resolveBillingAddress();
             }, this);
-            shippingRatesValidator.initFields(this.get('name') + '.form-fields');
+            billingAddressPostcodeValidator.initFields(this.get('name') + '.form-fields');
         },
 
         /**
@@ -84,7 +77,7 @@ function (
                 .observe({
                     selectedAddress: null,
                     isAddressDetailsVisible: quote.billingAddress() != null,
-                    isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length === 1,
+                    isAddressFormVisible: !customer.isLoggedIn() || !addressOptions.length,
                     isAddressSameAsShipping: false,
                     saveInAddressBook: 1
                 });
@@ -147,7 +140,7 @@ function (
         updateAddress: function () {
             var addressData, newBillingAddress;
 
-            if (this.selectedAddress() && this.selectedAddress() != newAddressOption) { //eslint-disable-line eqeqeq
+            if (this.selectedAddress() && !this.isAddressFormVisible()) {
                 selectBillingAddress(this.selectedAddress());
                 checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
             } else {
@@ -166,7 +159,6 @@ function (
                     }
                     addressData['save_in_address_book'] = this.saveInAddressBook() ? 1 : 0;
                     newBillingAddress = createBillingAddress(addressData);
-
                     // New address must be selected as a billing address
                     selectBillingAddress(newBillingAddress);
                     checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
@@ -219,13 +211,6 @@ function (
         },
 
         /**
-         * @param {Object} address
-         */
-        onAddressChange: function (address) {
-            this.isAddressFormVisible(address == newAddressOption); //eslint-disable-line eqeqeq
-        },
-
-        /**
          * @param {Number} countryId
          * @return {*}
          */
@@ -251,6 +236,30 @@ function (
          */
         getCode: function (parent) {
             return _.isFunction(parent.getCode) ? parent.getCode() : 'shared';
+        },
+
+        /**
+         * Get customer attribute label
+         *
+         * @param {*} attribute
+         * @returns {*}
+         */
+        getCustomAttributeLabel: function (attribute) {
+            var resultAttribute;
+
+            if (typeof attribute === 'string') {
+                return attribute;
+            }
+
+            if (attribute.label) {
+                return attribute.label;
+            }
+
+            resultAttribute = _.findWhere(this.source.get('customAttributes')[attribute['attribute_code']], {
+                value: attribute.value
+            });
+
+            return resultAttribute && resultAttribute.label || attribute.value;
         }
     });
 });

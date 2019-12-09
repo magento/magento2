@@ -32,6 +32,8 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- go to bundle product creation page-->

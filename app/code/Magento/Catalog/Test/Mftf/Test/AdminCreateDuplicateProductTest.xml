@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDuplicateProductTest">
+        <annotations>
+            <stories value="Create Product"/>
+            <title value="Create Duplicate Product With Existed Subcategory Name And UrlKey"/>
+            <description value="Login as admin and create duplicate Product"/>
+            <testCaseId value="MC-14714"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="SubCategory" stepKey="category"/>
+            <createData entity="Two_nested_categories" stepKey="subCategory">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to new simple product page -->
+        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="goToCreateProductPage"/>
+
+        <!-- Fill the main fields in the form -->
+        <actionGroup ref="FillMainProductFormByString" stepKey="fillMainProductForm">
+            <argument name="productName" value="$$subCategory.name$$"/>
+            <argument name="productSku" value="{{defaultSimpleProduct.sku}}"/>
+            <argument name="productPrice" value="{{defaultSimpleProduct.price}}"/>
+            <argument name="productQuantity" value="{{defaultSimpleProduct.quantity}}"/>
+            <argument name="productStatus" value="{{defaultSimpleProduct.status}}"/>
+            <argument name="productWeight" value="{{defaultSimpleProduct.weight}}"/>
+        </actionGroup>
+
+        <!-- Select the category that we created in the before block -->
+        <actionGroup ref="SetCategoryByName" stepKey="setCategory">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
+        <!-- Set the url key to match the subcategory created in the before block -->
+        <actionGroup ref="SetProductUrlKeyByString" stepKey="fillUrlKey">
+            <argument name="urlKey" value="$$subCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Save the product and expect to see an error message -->
+        <actionGroup ref="SaveProductFormNoSuccessCheck" stepKey="tryToSaveProduct"/>
+        <see selector="{{AdminProductFormSection.successMessage}}"  userInput="The value specified in the URL Key field would generate a URL that already exists." stepKey="seeErrorMessage"/>
+    </test>
+</tests>

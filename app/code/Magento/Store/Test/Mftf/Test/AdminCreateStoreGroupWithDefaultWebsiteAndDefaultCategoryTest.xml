@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateStoreGroupWithDefaultWebsiteAndDefaultCategoryTest">
+        <annotations>
+            <stories value="Create Store Group"/>
+            <title value="Create Store Group with Default Website and Default Category"/>
+            <description value="Test log in to Stores and Create Store Group with Default Website and Default Category Test"/>
+            <testCaseId value="MC-14298"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStoreGroup">
+                <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create custom store group with default website and default category and verify AssertStoreGroupSuccessSaveMessage-->
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewCustomStoreGroup">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+            <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+        </actionGroup>
+
+        <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid-->
+        <actionGroup ref="AssertStoreGroupInGrid" stepKey="seeCreatedStoreGroupInGrid">
+            <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+        </actionGroup>
+
+        <!--Go to store group form page and verify AssertStoreGroupForm and AssertStoreGroupOnStoreViewForm-->
+        <actionGroup ref="AssertStoreGroupForm" stepKey="seeCreatedStoreGroupForm">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+            <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            <argument name="rootCategory" value="Default Category"/>
+        </actionGroup>
+    </test>
+</tests>

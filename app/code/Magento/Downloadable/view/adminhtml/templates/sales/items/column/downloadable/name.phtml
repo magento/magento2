@@ -3,48 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 
-<?php if ($_item = $block->getItem()): ?>
-    <div class="product-title"><?= /* @escapeNotVerified */ $_item->getName() ?></div>
+<?php if ($_item = $block->getItem()) : ?>
+    <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
     <div class="product-sku-block">
-        <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span>
-        <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))) ?>
+        <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
+        <?= /* @noEscape */ implode('<br />', $this->helper(Magento\Catalog\Helper\Data::class)->splitSku($block->getSku())) ?>
     </div>
-    <?php if ($block->getOrderOptions()): ?>
+    <?php if ($block->getOrderOptions()) : ?>
         <dl class="item-options">
-        <?php foreach ($block->getOrderOptions() as $_option): ?>
+        <?php foreach ($block->getOrderOptions() as $_option) : ?>
             <dt><?= $block->escapeHtml($_option['label']) ?>:</dt>
             <dd>
-            <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
-                <?= /* @escapeNotVerified */ $_option['value'] ?>
-            <?php else: ?>
-                <?= $block->truncateString($_option['value'], 55, '', $_remainder) ?>
-                <?php if ($_remainder):?>
-                    ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
+            <?php if (isset($_option['custom_view']) && $_option['custom_view']) : ?>
+                <?= $block->escapeHtml($_option['value']) ?>
+            <?php else : ?>
+                <?= $block->escapeHtml($block->truncateString($_option['value'], 55, '', $_remainder)) ?>
+                <?php if ($_remainder) :?>
+                    ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $block->escapeHtml($_remainder) ?></span>
                     <script>
-require(['prototype'], function(){
-
-    $('<?= /* @escapeNotVerified */ $_id ?>').hide();
-    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_id ?>').show();});
-    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_id ?>').hide();});
-
-});
-</script>
+                        require(['prototype'], function(){
+                            <?php $escapedId = $block->escapeJs($_id) ?>
+                            $('<?= /* @noEscape */ $escapedId ?>').hide();
+                            $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseover', function(){$('<?= /* @noEscape */ $escapedId ?>').show();});
+                            $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseout',  function(){$('<?= /* @noEscape */ $escapedId ?>').hide();});
+                        });
+                    </script>
                 <?php endif;?>
             <?php endif;?>
             </dd>
         <?php endforeach; ?>
         </dl>
     <?php endif; ?>
-    <?php if ($block->getLinks()): ?>
+    <?php if ($block->getLinks()) : ?>
         <dl class="item-options">
             <dt><?= $block->escapeHtml($block->getLinksTitle()) ?>:</dt>
-            <?php foreach ($block->getLinks()->getPurchasedItems() as $_link): ?>
-                <dd><?= $block->escapeHtml($_link->getLinkTitle()) ?> (<?= /* @escapeNotVerified */ $_link->getNumberOfDownloadsUsed() . ' / ' . ($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('U')) ?>)</dd>
+            <?php foreach ($block->getLinks()->getPurchasedItems() as $_link) : ?>
+                <dd><?= $block->escapeHtml($_link->getLinkTitle()) ?> (<?= $block->escapeHtml($_link->getNumberOfDownloadsUsed() . ' / ' . ($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('U'))) ?>)</dd>
             <?php endforeach; ?>
         </dl>
     <?php endif; ?>

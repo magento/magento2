@@ -13,7 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Ensure that id selector is not used
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#types
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#types
  */
 class AvoidIdSniff implements Sniff
 {

@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Store\Model\System;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -118,6 +121,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
             $options[] = ['label' => __('All Store Views'), 'value' => 0];
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
 
         foreach ($this->_websiteCollection as $website) {
@@ -126,7 +130,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                 if ($website->getId() != $group->getWebsiteId()) {
                     continue;
                 }
-                $groupShow = false;
+                $values = [];
                 foreach ($this->_storeCollection as $store) {
                     if ($group->getId() != $store->getGroupId()) {
                         continue;
@@ -135,16 +139,12 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                         $options[] = ['label' => $website->getName(), 'value' => []];
                         $websiteShow = true;
                     }
-                    if (!$groupShow) {
-                        $groupShow = true;
-                        $values = [];
-                    }
                     $values[] = [
                         'label' => str_repeat($nonEscapableNbspChar, 4) . $store->getName(),
                         'value' => $store->getId(),
                     ];
                 }
-                if ($groupShow) {
+                if (!empty($values)) {
                     $options[] = [
                         'label' => str_repeat($nonEscapableNbspChar, 4) . $group->getName(),
                         'value' => $values,
@@ -152,6 +152,12 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                 }
             }
         }
+        array_walk(
+            $options,
+            function (&$item) {
+                $item['__disableTmpl'] = true;
+            }
+        );
         return $options;
     }
 
@@ -398,6 +404,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
 
     /**
      * Load/Reload collection(s) by type
+     *
      * Allowed types: website, group, store or null for all
      *
      * @param string $type

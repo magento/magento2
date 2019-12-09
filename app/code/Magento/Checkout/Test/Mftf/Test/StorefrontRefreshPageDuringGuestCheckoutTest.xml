@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRefreshPageDuringGuestCheckoutTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Guest checkout"/>
+            <title value="Storefront refresh page during guest checkout test"/>
+            <description value="Address is not lost for guest checkout if guest refresh page during checkout"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12084"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Logout admin -->
+            <actionGroup ref="logout" stepKey="logoutAsAdmin"/>
+        </after>
+        <!-- Add simple product to cart as Guest -->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Go to Checkout page -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+
+        <!-- Fill email field and addresses form and go next -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+        <!-- Refresh page -->
+        <reloadPage stepKey="refreshPage"/>
+
+        <!-- Click Place Order and assert order is placed -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Order review page has address that was created during checkout -->
+        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
+        <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
+        <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}} {{CustomerAddressSimple.city}}, {{CustomerAddressSimple.state}}, {{CustomerAddressSimple.postcode}}" stepKey="checkShippingAddress"/>
+    </test>
+</tests>

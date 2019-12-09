@@ -20,6 +20,8 @@
         <message code="81716" translate="true">Credit card number must be 12-19 digits.</message>
         <message code="81723" translate="true">Cardholder name is too long.</message>
         <message code="81736" translate="true">CVV verification failed.</message>
+        <message code="cvv" translate="true">CVV verification failed.</message>
+        <message code="2059" translate="true">Address Verification Failed.</message>
         <message code="81737" translate="true">Postal code verification failed.</message>
         <message code="81750" translate="true">Credit card number is prohibited.</message>
         <message code="81801" translate="true">Addresses must have at least one field filled in.</message>

@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.email.template.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">systemEmailTemplateGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Email\Model\ResourceModel\Template\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Email\Model\ResourceModel\Template\Collection</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
                     <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                     <argument name="grid_url" xsi:type="url" path="*/*/grid">

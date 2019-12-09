@@ -27,6 +27,7 @@ $salesRule->setData(
         'discount_amount' => 5,
         'discount_step' => 0,
         'stop_rules_processing' => 1,
+        'store_labels' => [0 => '5$ fixed discount on whole cart'],
         'website_ids' => [
             $objectManager->get(StoreManagerInterface::class)->getWebsite()->getId(),
         ],

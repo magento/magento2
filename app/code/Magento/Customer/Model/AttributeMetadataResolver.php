@@ -16,6 +16,7 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share as ShareConfig;
+use Magento\Customer\Model\FileUploaderDataResolver;
 
 /**
  * Class to build meta data of the customer or customer address attribute
@@ -77,14 +78,14 @@ class AttributeMetadataResolver
     /**
      * @param CountryWithWebsites $countryWithWebsiteSource
      * @param EavValidationRules $eavValidationRules
-     * @param \Magento\Customer\Model\FileUploaderDataResolver $fileUploaderDataResolver
+     * @param FileUploaderDataResolver $fileUploaderDataResolver
      * @param ContextInterface $context
      * @param ShareConfig $shareConfig
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
         EavValidationRules $eavValidationRules,
-        fileUploaderDataResolver $fileUploaderDataResolver,
+        FileUploaderDataResolver $fileUploaderDataResolver,
         ContextInterface $context,
         ShareConfig $shareConfig
     ) {
@@ -101,21 +102,24 @@ class AttributeMetadataResolver
      * @param AbstractAttribute $attribute
      * @param Type $entityType
      * @param bool $allowToShowHiddenAttributes
-     * @param string $requestFieldName
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributesMeta(
         AbstractAttribute $attribute,
         Type $entityType,
-        bool $allowToShowHiddenAttributes,
-        string $requestFieldName
+        bool $allowToShowHiddenAttributes
     ): array {
         $meta = $this->modifyBooleanAttributeMeta($attribute);
         // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
         foreach (self::$metaProperties as $metaName => $origName) {
             $value = $attribute->getDataUsingMethod($origName);
-            $meta['arguments']['data']['config'][$metaName] = ($metaName === 'label') ? __($value) : $value;
+            if ($metaName === 'label') {
+                $meta['arguments']['data']['config'][$metaName] = __($value);
+                $meta['arguments']['data']['config']['__disableTmpl'] = [$metaName => true];
+            } else {
+                $meta['arguments']['data']['config'][$metaName] = $value;
+            }
             if ('frontend_input' === $origName) {
                 $meta['arguments']['data']['config']['formElement'] = self::$formElement[$value] ?? $value;
             }
@@ -126,7 +130,14 @@ class AttributeMetadataResolver
                 $meta['arguments']['data']['config']['options'] = $this->countryWithWebsiteSource
                     ->getAllOptions();
             } else {
-                $meta['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                $options = $attribute->getSource()->getAllOptions();
+                array_walk(
+                    $options,
+                    function (&$item) {
+                        $item['__disableTmpl'] = ['label' => true];
+                    }
+                );
+                $meta['arguments']['data']['config']['options'] = $options;
             }
         }
 
@@ -138,7 +149,6 @@ class AttributeMetadataResolver
         $meta['arguments']['data']['config']['componentType'] = Field::NAME;
         $meta['arguments']['data']['config']['visible'] = $this->canShowAttribute(
             $attribute,
-            $requestFieldName,
             $allowToShowHiddenAttributes
         );
 
@@ -147,7 +157,6 @@ class AttributeMetadataResolver
             $attribute,
             $meta['arguments']['data']['config']
         );
-
         return $meta;
     }
 
@@ -155,48 +164,16 @@ class AttributeMetadataResolver
      * Detect can we show attribute on specific form or not
      *
      * @param AbstractAttribute $customerAttribute
-     * @param string $requestFieldName
      * @param bool $allowToShowHiddenAttributes
      * @return bool
      */
     private function canShowAttribute(
         AbstractAttribute $customerAttribute,
-        string $requestFieldName,
         bool $allowToShowHiddenAttributes
     ) {
-        $userDefined = (bool)$customerAttribute->getIsUserDefined();
-        if (!$userDefined) {
-            return $customerAttribute->getIsVisible();
-        }
-
-        $canShowOnForm = $this->canShowAttributeInForm($customerAttribute, $requestFieldName);
-
-        return ($allowToShowHiddenAttributes && $canShowOnForm) ||
-            (!$allowToShowHiddenAttributes && $canShowOnForm && $customerAttribute->getIsVisible());
-    }
-
-    /**
-     * Check whether the specific attribute can be shown in form: customer registration, customer edit, etc...
-     *
-     * @param AbstractAttribute $customerAttribute
-     * @param string $requestFieldName
-     * @return bool
-     */
-    private function canShowAttributeInForm(AbstractAttribute $customerAttribute, string $requestFieldName): bool
-    {
-        $isRegistration = $this->context->getRequestParam($requestFieldName) === null;
-
-        if ($customerAttribute->getEntityType()->getEntityTypeCode() === 'customer') {
-            return \is_array($customerAttribute->getUsedInForms()) &&
-                (
-                    (\in_array('customer_account_create', $customerAttribute->getUsedInForms(), true)
-                        && $isRegistration) ||
-                    (\in_array('customer_account_edit', $customerAttribute->getUsedInForms(), true)
-                        && !$isRegistration)
-                );
-        }
-        return \is_array($customerAttribute->getUsedInForms()) &&
-            \in_array('customer_address_edit', $customerAttribute->getUsedInForms(), true);
+        return $allowToShowHiddenAttributes && (bool) $customerAttribute->getIsUserDefined()
+            ? true
+            : (bool) $customerAttribute->getIsVisible();
     }
 
     /**

@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php
 /**
@@ -16,21 +15,29 @@
 ?>
 
 <ol class="items">
-    <?php foreach ($filterItems as $filterItem): ?>
+    <?php foreach ($filterItems as $filterItem) : ?>
         <li class="item">
-            <?php if ($filterItem->getCount() > 0): ?>
+            <?php if ($filterItem->getCount() > 0) : ?>
                 <a href="<?= $block->escapeUrl($filterItem->getUrl()) ?>">
-                    <?= /* @escapeNotVerified */ $filterItem->getLabel() ?>
-                    <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
-                        <span class="count"><?= /* @escapeNotVerified */ $filterItem->getCount() ?><span class="filter-count-label">
-                            <?php if ($filterItem->getCount() == 1):?> <?= /* @escapeNotVerified */ __('item') ?><?php else:?> <?= /* @escapeNotVerified */ __('items') ?><?php endif;?></span></span>
+                    <?= /* @noEscape */ $filterItem->getLabel() ?>
+                    <?php if ($this->helper(\Magento\Catalog\Helper\Data::class)->shouldDisplayProductCountOnLayer()) : ?>
+                        <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
+                            <?php if ($filterItem->getCount() == 1) :
+                                ?> <?= $block->escapeHtml(__('item')) ?><?php
+                            else :
+                                ?> <?= $block->escapeHtml(__('item')) ?><?php
+                            endif;?></span></span>
                     <?php endif; ?>
                 </a>
-            <?php else:?>
-                <?= /* @escapeNotVerified */ $filterItem->getLabel() ?>
-                <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
-                    <span class="count"><?= /* @escapeNotVerified */ $filterItem->getCount() ?><span class="filter-count-label">
-                        <?php if ($filterItem->getCount() == 1):?><?= /* @escapeNotVerified */ __('item') ?><?php else:?><?= /* @escapeNotVerified */ __('items') ?><?php endif;?></span></span>
+            <?php else :?>
+                <?= /* @noEscape */ $filterItem->getLabel() ?>
+                <?php if ($this->helper(\Magento\Catalog\Helper\Data::class)->shouldDisplayProductCountOnLayer()) : ?>
+                    <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
+                        <?php if ($filterItem->getCount() == 1) :
+                            ?><?= $block->escapeHtml(__('items')) ?><?php
+                        else :
+                            ?><?= $block->escapeHtml(__('items')) ?><?php
+                        endif;?></span></span>
                 <?php endif; ?>
             <?php endif; ?>
         </li>

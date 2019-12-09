@@ -15,8 +15,9 @@ namespace Magento\Catalog\Block\Product\View\Options;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 
 /**
- * Product aoptions section abstract block.
+ * Product options section abstract block.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

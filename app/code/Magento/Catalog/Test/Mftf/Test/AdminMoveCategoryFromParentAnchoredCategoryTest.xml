@@ -59,6 +59,9 @@
         <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
 
+        <!--Run re-index task -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Verify category displayed in store front page-->
         <amOnPage url="/$$createDefaultCategory.name$$/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageLoad"/>

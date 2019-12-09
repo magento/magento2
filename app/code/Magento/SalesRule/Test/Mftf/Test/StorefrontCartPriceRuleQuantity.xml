@@ -68,6 +68,7 @@
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
 
         <!-- Should not see the discount yet because we have only 1 item in our cart -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
@@ -81,6 +82,7 @@
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity2"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart2"/>
         <waitForPageLoad stepKey="waitForAddToCart2"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
 
         <!-- Now we should see the discount because we have more than 1 item -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage2"/>
