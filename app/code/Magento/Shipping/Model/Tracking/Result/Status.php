@@ -13,7 +13,7 @@ namespace Magento\Shipping\Model\Tracking\Result;
  *
  * @method string getCarrier()
  * @method Status setCarrier(string $carrierCode)
- * @method string getCarrierTitle()
+ * @method string|null getCarrierTitle()
  * @method Status setCarrierTitle(string $carrierTitle)
  */
 class Status extends AbstractResult
