@@ -431,31 +431,31 @@
     }
 }
 
-@media only screen and (max-device-width: 480px) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     .minicart-items .item-qty {
-        margin: 0 10px 5px 0;
+        margin: 0 @indent__s @indent__xs 0;
     }
 }
 
 @media only screen 
-and (min-device-width: 480px) 
-and (max-device-width: 767px) {
+and (min-device-width: @screen__xs) 
+and (max-device-width: @screen__m) {
     .minicart-wrapper .product .actions {
-        margin: 5px 0 0;
+        margin: @indent__xs 0 0;
     }
       
     .minicart-items .product-item {
-        padding: 20px 0 0;
+        padding: @indent__base 0 0;
     }
 }
 
-@media only screen and (max-device-width: 767px) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .minicart-items .product-item-details .details-qty {
         margin: 0;
     }
     
     .minicart-items .update-cart-item {
-        padding: 7px 25px;
+        padding: 7px @indent__m;
     }
 }
 //
