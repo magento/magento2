@@ -37,6 +37,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setMetaDescription('meta description')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
+    ->setCategoryIds([333])
     ->setStockData(
         [
             'use_config_manage_stock'   => 1,
@@ -50,8 +51,3 @@ $product->setTypeId(Type::TYPE_SIMPLE)
 /** @var ProductRepositoryInterface $productRepositoryFactory */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $productRepository->save($product);
-
-$categoryLinkManagement->assignProductToCategories(
-    $product->getSku(),
-    [333]
-);
