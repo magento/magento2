@@ -31,8 +31,8 @@
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="title" value="{{AdminMenuContentDesignThemes.pageTitle}}"/>
         </actionGroup>
-	<click selector="{{AdminThemeSection.columnHeader('Theme Title')}}" stepKey="clickSortByTitle"/>
-	<click selector="{{AdminThemeSection.columnHeader('Theme Title')}}" stepKey="clickSortByTitleSecondTime"/>
+        <click selector="{{AdminThemeSection.columnHeader('Theme Title')}}" stepKey="clickSortByTitle"/>
+        <click selector="{{AdminThemeSection.columnHeader('Theme Title')}}" stepKey="clickSortByTitleSecondTime"/>
         <seeNumberOfElements selector="{{AdminThemeSection.rowsInColumn('theme_path')}}" userInput="2" stepKey="see2RowsOnTheGrid"/>
         <seeElement selector="{{AdminThemeSection.gridCellUpdated('Magento Luma')}}" stepKey="seeLumaThemeInTitleColumn"/>
         <seeElement selector="{{AdminThemeSection.gridCellUpdated('Magento Blank')}}" stepKey="seeBlankThemeInTitleColumn"/>
