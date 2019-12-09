@@ -905,7 +905,7 @@ abstract class AbstractType
     /**
      * Set store filter for associated products
      *
-     * @param $store int|\Magento\Store\Model\Store
+     * @param int|\Magento\Store\Model\Store $store
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
