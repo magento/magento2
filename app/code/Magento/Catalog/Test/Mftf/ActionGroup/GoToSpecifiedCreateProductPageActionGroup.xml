@@ -16,7 +16,7 @@
             <argument type="string" name="productType" defaultValue="simple"/>
         </arguments>
 
-        <comment userInput="actionGroup:GoToSpecifiedCreateProductPage" stepKey="actionGroupComment"/>
+        <comment userInput="actionGroup:GoToSpecifiedCreateProductPageActionGroup" stepKey="actionGroupComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addTypeProduct(productType)}}" stepKey="clickAddProduct"/>
