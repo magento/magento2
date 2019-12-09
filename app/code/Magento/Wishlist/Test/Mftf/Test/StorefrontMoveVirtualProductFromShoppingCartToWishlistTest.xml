@@ -53,16 +53,14 @@
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert move product to wishlist success message -->
-        <click selector="{{CheckoutCartProductSection.moveToWishlistByProductName($$createProduct.name$$)}}" stepKey="moveToWishlist"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="$$createProduct.name$$ has been moved to your wish list." selector="{{CheckoutCartMessageSection.successMessage}}" stepKey="assertMoveProductToWishlistSuccessMessage"/>
-        
-        <!-- Assert product is present in wishlist -->
-        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishlistPage"/>
-        <waitForPageLoad stepKey="waitForWishlistPage"/>
+        <actionGroup ref="AssertMoveProductToWishListSuccessMessage" stepKey="moveToWishlist">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
 
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" stepKey="assertProductIsPresentInWishlist">
-            <argument name="productVar" value="$$createProduct$$"/>
+        <!-- Assert product is present in wishlist -->
+        <actionGroup ref="AssertProductIsPresentInWishList" stepKey="assertProductPresent">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productPrice" value="$$createProduct.price$$"/>
         </actionGroup>
 
         <!-- Assert cart is empty -->

@@ -78,23 +78,22 @@
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert move product to wishlist success message -->
-        <click selector="{{CheckoutCartProductSection.moveToWishlistByProductName($$createBundleProduct.name$$)}}" stepKey="moveToWishlist"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="$$createBundleProduct.name$$ has been moved to your wish list." selector="{{CheckoutCartMessageSection.successMessage}}" stepKey="assertMoveProductToWishlistSuccessMessage"/>
+        <actionGroup ref="AssertMoveProductToWishListSuccessMessage" stepKey="moveToWishlist">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
 
         <!-- Assert product is present in wishlist -->
-        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishlistPage"/>
-        <waitForPageLoad stepKey="waitForWishlistPage"/>
-        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName($$createBundleProduct.name$$)}}" time="30" stepKey="assertWishlistProductName"/>
-        <see userInput="$101.23" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName($$createBundleProduct.name$$)}}" stepKey="AssertWishlistProductPrice"/>
+        <actionGroup ref="AssertProductIsPresentInWishList" stepKey="assertProductPresent">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+            <argument name="productPrice" value="$101.23"/>
+        </actionGroup>
 
         <!-- Assert product details in Wishlist -->
-        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName($$createBundleProduct.name$$)}}" stepKey="wishlistMoveMouseOverProduct"/>
-        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName($$createBundleProduct.name$$)}}" stepKey="AssertWishlistAddToCart"/>
-        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName($$createBundleProduct.name$$)}}" stepKey="AssertWishlistProductImage"/>
-        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsByName($$createBundleProduct.name$$)}}" stepKey="seeDetailsMoveMouseOverProduct"/>
-        <see userInput="$$createBundleOption1_1.title$$" selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsLabelByName($$createBundleProduct.name$$)}}" stepKey="seeBundleOption"/>
-        <see userInput="$$simpleProduct1.sku$$ $100.00" selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsValueByName($$createBundleProduct.name$$)}}" stepKey="seeProduct"/>
+        <actionGroup ref="AssertProductDetailsInWishlist" stepKey="assertProductDetails">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+            <argument name="label" value="$$createBundleOption1_1.title$$"/>
+            <argument name="labelValue" value="$$simpleProduct1.sku$$ $100.00"/>
+        </actionGroup>
 
         <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="assertCartIsEmpty"/>
     </test>
