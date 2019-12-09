@@ -17,8 +17,6 @@ use Magento\Framework\Notification\MessageInterface;
 
 /**
  * Renderer class for severity in the admin notifications grid
- *
- * @package Magento\AdminNotification\Block\Grid\Renderer
  */
 class Severity extends AbstractRenderer
 {

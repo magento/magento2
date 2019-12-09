@@ -18,8 +18,6 @@ use Magento\Framework\Url\Helper\Data;
 
 /**
  * Renderer class for action in the admin notifications grid
- *
- * @package Magento\AdminNotification\Block\Grid\Renderer
  */
 class Actions extends AbstractRenderer
 {

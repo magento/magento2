@@ -14,8 +14,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Renderer class for notice in the admin notifications grid
- *
- * @package Magento\AdminNotification\Block\Grid\Renderer
  */
 class Notice extends AbstractRenderer
 {
