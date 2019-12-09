@@ -10,15 +10,15 @@
     <table name="report_compared_product_index" resource="default" engine="innodb"
            comment="Reports Compared Product Index Table">
         <column xsi:type="bigint" name="index_id" padding="20" unsigned="true" nullable="false" identity="true"
-                comment="Index Id"/>
+                comment="Index ID"/>
         <column xsi:type="int" name="visitor_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Visitor Id"/>
+                comment="Visitor ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Customer Id"/>
+                comment="Customer ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Added At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -54,15 +54,15 @@
     <table name="report_viewed_product_index" resource="default" engine="innodb"
            comment="Reports Viewed Product Index Table">
         <column xsi:type="bigint" name="index_id" padding="20" unsigned="true" nullable="false" identity="true"
-                comment="Index Id"/>
+                comment="Index ID"/>
         <column xsi:type="int" name="visitor_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Visitor Id"/>
+                comment="Visitor ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Customer Id"/>
+                comment="Customer ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Added At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -97,7 +97,7 @@
     </table>
     <table name="report_event_types" resource="default" engine="innodb" comment="Reports Event Type Table">
         <column xsi:type="smallint" name="event_type_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Event Type Id"/>
+                comment="Event Type ID"/>
         <column xsi:type="varchar" name="event_name" nullable="false" length="64" comment="Event Name"/>
         <column xsi:type="smallint" name="customer_login" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer Login"/>
@@ -107,19 +107,19 @@
     </table>
     <table name="report_event" resource="default" engine="innodb" comment="Reports Event Table">
         <column xsi:type="bigint" name="event_id" padding="20" unsigned="true" nullable="false" identity="true"
-                comment="Event Id"/>
+                comment="Event ID"/>
         <column xsi:type="timestamp" name="logged_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Logged At"/>
         <column xsi:type="smallint" name="event_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Event Type Id"/>
+                default="0" comment="Event Type ID"/>
         <column xsi:type="int" name="object_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Object Id"/>
+                default="0" comment="Object ID"/>
         <column xsi:type="int" name="subject_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Subject Id"/>
+                default="0" comment="Subject ID"/>
         <column xsi:type="smallint" name="subtype" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Subtype"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="event_id"/>
         </constraint>
@@ -146,12 +146,12 @@
     </table>
     <table name="report_viewed_product_aggregated_daily" resource="default" engine="innodb"
            comment="Most Viewed Products Aggregated Daily">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>
@@ -182,12 +182,12 @@
     </table>
     <table name="report_viewed_product_aggregated_monthly" resource="default" engine="innodb"
            comment="Most Viewed Products Aggregated Monthly">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>
@@ -218,12 +218,12 @@
     </table>
     <table name="report_viewed_product_aggregated_yearly" resource="default" engine="innodb"
            comment="Most Viewed Products Aggregated Yearly">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>

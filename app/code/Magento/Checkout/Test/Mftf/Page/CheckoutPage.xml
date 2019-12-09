@@ -14,5 +14,6 @@
         <section name="CheckoutOrderSummarySection"/>
         <section name="CheckoutSuccessMainSection"/>
         <section name="CheckoutPaymentSection"/>
+        <section name="SelectShippingBillingPopupSection"/>
     </page>
 </pages>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportCSVWithSpecialCharactersTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import CSV file"/>
+            <title value="Import CSV with special characters"/>
+            <description value="Import CSV with special characters"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-6416"/>
+            <useCaseId value="MAGETWO-91569"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="AdminCheckDataForImportProductActionGroup" stepKey="adminImportProducts">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="importSpecChars.csv"/>
+        </actionGroup>
+        <see selector="{{AdminImportHeaderSection.messageNote}}" userInput='File must be saved in UTF-8 encoding for proper import' stepKey="seeNoteMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput='File is valid! To start import process press "Import" button' stepKey="seeSuccessMessage"/>
+    </test>
+</tests>

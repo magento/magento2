@@ -11,6 +11,10 @@
     <section name="LocaleOptionsSection">
         <element name="sectionHeader" type="text" selector="#general_locale-head"/>
         <element name="timezone" type="select" selector="#general_locale_timezone"/>
+        <element name="locale" type="select" selector="#general_locale_code"/>
+        <element name="localeEnabled" type="select" selector="#general_locale_code:enabled"/>
+        <element name="localeDisabled" type="select" selector="#general_locale_code[disabled=disabled]"/>
         <element name="useDefault" type="checkbox" selector="#general_locale_timezone_inherit"/>
+        <element name="defaultLocale" type="checkbox" selector="#general_locale_code_inherit"/>
     </section>
 </sections>

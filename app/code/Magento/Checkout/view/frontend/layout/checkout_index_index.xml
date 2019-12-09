@@ -118,7 +118,7 @@
                                                         </item>
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping</item>
                                                         <item name="provider" xsi:type="string">checkoutProvider</item>
-                                                        <item name="sortOrder" xsi:type="string">1</item>
+                                                        <item name="sortOrder" xsi:type="string">10</item>
                                                         <item name="children" xsi:type="array">
                                                             <item name="customer-email" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/form/element/email</item>
@@ -246,6 +246,7 @@
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
                                                         <item name="config" xsi:type="array">
                                                             <item name="title" xsi:type="string" translate="true">Payment</item>
+                                                            <item name="sortOrder" xsi:type="string">20</item>
                                                         </item>
                                                         <item name="children" xsi:type="array">
                                                             <item name="renders" xsi:type="array">

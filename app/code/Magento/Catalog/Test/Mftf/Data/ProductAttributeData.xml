@@ -108,6 +108,10 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="multipleSelectProductAttribute" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="frontend_input_admin">Multiple Select</data>
+    </entity>
     <entity name="productDropDownAttributeNotSearchable" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">select</data>
@@ -268,6 +272,28 @@
         <data key="is_visible_in_advanced_search">false</data>
         <data key="is_visible_on_front">true</data>
         <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">false</data>
+        <data key="is_used_for_promo_rules">false</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">false</data>
+        <data key="is_visible_in_grid">false</data>
+        <data key="is_filterable_in_grid">false</data>
+        <data key="used_for_sort_by">false</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeTypeOfPrice" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">price</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">false</data>
+        <data key="is_visible">true</data>
+        <data key="is_wysiwyg_enabled">false</data>
+        <data key="is_visible_in_advanced_search">false</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
         <data key="is_filterable_in_search">false</data>
         <data key="used_in_product_listing">false</data>
         <data key="is_used_for_promo_rules">false</data>

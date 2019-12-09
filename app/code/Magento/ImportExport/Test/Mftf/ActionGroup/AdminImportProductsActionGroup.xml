@@ -17,7 +17,7 @@
             <argument name="validationStrategy" type="string" defaultValue="Stop on Error"/>
             <argument name="allowedErrorsCount" type="string" defaultValue="10"/>
             <argument name="importFile" type="string"/>
-            <argument name="importNoticeMessage" type="string"/>
+            <argument name="importNoticeMessage" type="string" defaultValue=""/>
             <argument name="importMessageType" type="string" defaultValue="success"/>
             <argument name="importMessage" type="string" defaultValue="Import successfully done"/>
         </arguments>
@@ -45,5 +45,19 @@
         <waitForElementVisible selector="{{AdminImportValidationMessagesSection.notice}}" after="clickCheckDataButton" stepKey="waitForValidationNoticeMessage"/>
         <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{validationNoticeMessage}}" after="waitForValidationNoticeMessage" stepKey="seeValidationNoticeMessage"/>
         <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{validationMessage}}" after="seeValidationNoticeMessage" stepKey="seeValidationMessage"/>
+    </actionGroup>
+    <actionGroup name="AdminCheckDataForImportProductActionGroup">
+        <arguments>
+            <argument name="behavior" type="string" defaultValue="Add/Update"/>
+            <argument name="importFile" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
+        <waitForPageLoad stepKey="adminImportMainSectionLoad"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="{{behavior}}" stepKey="selectImportBehaviorOption"/>
+        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="{{importFile}}" stepKey="attachFileForImport"/>
+        <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 </actionGroups>

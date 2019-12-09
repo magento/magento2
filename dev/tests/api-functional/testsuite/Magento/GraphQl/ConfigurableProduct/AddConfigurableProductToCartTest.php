@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -140,6 +141,62 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage Could not find specified product.
+     */
+    public function testAddVariationFromAnotherConfigurableProductWithTheSameSuperAttributeToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+
+        $sku = 'simple_20';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_different_super_attribute.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage Could not find specified product.
+     */
+    public function testAddVariationFromAnotherConfigurableProductWithDifferentSuperAttributeToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+
+        $sku = 'simple_20';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @expectedException \Exception
@@ -208,7 +265,8 @@ QUERY;
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
+            'Could not add the product with SKU configurable to the shopping cart: The product that was requested ' .
+            'doesn\'t exist. Verify the product and try again.'
         );
 
         $this->graphQlMutation($query);

@@ -310,7 +310,7 @@ class Editor extends Textarea
                         if (isset($buttonOptions['style'])) {
                             $configStyle = $buttonOptions['style'];
                         }
-                        $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
+                        $buttonOptions['style'] = 'display:none; ' . $configStyle;
                     }
                     $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
                 }
@@ -409,7 +409,7 @@ class Editor extends Textarea
     protected function _wrapIntoContainer($html)
     {
         if (!$this->getConfig('use_container')) {
-            return '<div class="admin__control-wysiwig">' .$html . '</div>';
+            return '<div class="admin__control-wysiwig">' . $html . '</div>';
         }
 
         $html = '<div id="editor' . $this->getHtmlId() . '"'
@@ -533,10 +533,6 @@ class Editor extends Textarea
             $jsSetupObject .
             '));
                     varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
-                    varienGlobalEvents.clearEventHandlers("open_browser_callback");
-                    varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
-            $jsSetupObject .
-            '.openFileBrowser);
                 //]]>
                 });
                 </script>';
