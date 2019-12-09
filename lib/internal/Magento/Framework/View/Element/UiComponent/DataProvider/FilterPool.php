@@ -11,7 +11,7 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
- * Class FilterPool
+ * Filter poll apply filters from search criteria
  *
  * @api
  */
@@ -31,6 +31,8 @@ class FilterPool
     }
 
     /**
+     * Apply filters from search criteria
+     *
      * @param Collection $collection
      * @param SearchCriteriaInterface $criteria
      * @return void
