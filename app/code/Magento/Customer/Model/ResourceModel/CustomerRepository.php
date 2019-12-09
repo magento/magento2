@@ -31,6 +31,8 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Customer repository.
  *
+ * CRUD operations for customer entity
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -187,8 +189,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
-        $prevCustomerData = null;
-        $prevCustomerDataArr = null;
+        $prevCustomerData = $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $prevCustomerData->__toArray();
