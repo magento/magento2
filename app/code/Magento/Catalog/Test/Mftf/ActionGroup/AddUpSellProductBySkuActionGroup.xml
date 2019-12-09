@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AddUpSellProductBySkuActionGroup" extends="AddRelatedProductBySkuActionGroup">
         <annotations>
-            <description>EXTENDS: addRelatedProductBySku. Add the provided Product as an Up Sell Product.</description>
+            <description>EXTENDS: AddRelatedProductBySkuActionGroup. Add the provided Product as an Up Sell Product.</description>
         </annotations>
 
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddUpSellProductsButton}}" stepKey="clickAddRelatedProductButton"/>
