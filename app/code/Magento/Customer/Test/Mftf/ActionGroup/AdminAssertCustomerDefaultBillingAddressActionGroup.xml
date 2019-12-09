@@ -5,10 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert Customer Default Billing Address -->
-    <actionGroup name="AdminAssertCustomerDefaultBillingAddress" >
+    <actionGroup name="AdminAssertCustomerDefaultBillingAddress">
+        <annotations>
+            <description>Validates that the provided Default Customer Billing Address details are present and correct on the Customer creation/edit page. Under the section 'Addresses'.</description>
+        </annotations>
         <arguments>
             <argument name="firstName" type="string" defaultValue=""/>
             <argument name="lastName" type="string" defaultValue=""/>
@@ -18,6 +22,7 @@
             <argument name="country" type="string" defaultValue=""/>
             <argument name="telephone" type="string" defaultValue=""/>
         </arguments>
+        
         <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
         <see userInput="{{firstName}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="firstName"/>
         <see userInput="{{lastName}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="lastName"/>

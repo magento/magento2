@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class ProxyDeferredFactoryTest extends TestCase
 {
     /**
-     * @var ProxyDeferredFactory
+     * @var \TestDeferred\TestClass\ProxyDeferredFactory
      */
     private $factory;
 
@@ -43,6 +43,7 @@ class ProxyDeferredFactoryTest extends TestCase
         //phpcs:ignore
         include_once __DIR__ .'/_files/test_class.php';
         \TestDeferred\TestClass::$created = 0;
+        $this->factory = Bootstrap::getObjectManager()->get(\TestDeferred\TestClass\ProxyDeferredFactory::class);
     }
 
     /*
@@ -57,9 +58,10 @@ class ProxyDeferredFactoryTest extends TestCase
             return new \TestDeferred\TestClass($value);
         };
         /** @var \TestDeferred\TestClass $proxy */
-        $proxy = $this->factory->createFor(
-            \TestDeferred\TestClass::class,
-            $this->callbackDeferredFactory->create(['callback' => $callback])
+        $proxy = $this->factory->create(
+            [
+                'deferred' => $this->callbackDeferredFactory->create(['callback' => $callback])
+            ]
         );
         $this->assertInstanceOf(\TestDeferred\TestClass::class, $proxy);
         $this->assertEmpty(\TestDeferred\TestClass::$created);
@@ -80,9 +82,10 @@ class ProxyDeferredFactoryTest extends TestCase
             return new \TestDeferred\TestClass($value);
         };
         /** @var \TestDeferred\TestClass $proxy */
-        $proxy = $this->factory->createFor(
-            \TestDeferred\TestClass::class,
-            $this->callbackDeferredFactory->create(['callback' => $callback])
+        $proxy = $this->factory->create(
+            [
+                'deferred' => $this->callbackDeferredFactory->create(['callback' => $callback])
+            ]
         );
         //phpcs:disable
         /** @var \TestDeferred\TestClass $unserialized */
@@ -106,9 +109,10 @@ class ProxyDeferredFactoryTest extends TestCase
             return new \TestDeferred\TestClass($value);
         };
         /** @var \TestDeferred\TestClass $proxy */
-        $proxy = $this->factory->createFor(
-            \TestDeferred\TestClass::class,
-            $this->callbackDeferredFactory->create(['callback' => $callback])
+        $proxy = $this->factory->create(
+            [
+                'deferred' => $this->callbackDeferredFactory->create(['callback' => $callback])
+            ]
         );
         $this->assertEquals(0, \TestDeferred\TestClass::$created);
         $this->assertEquals(0, $called);
@@ -137,9 +141,10 @@ class ProxyDeferredFactoryTest extends TestCase
             };
         };
         /** @var \TestDeferred\TestClass $proxy */
-        $proxy = $this->factory->createFor(
-            \TestDeferred\TestClass::class,
-            $this->callbackDeferredFactory->create(['callback' => $callback])
+        $proxy = $this->factory->create(
+            [
+                'deferred' => $this->callbackDeferredFactory->create(['callback' => $callback])
+            ]
         );
         $this->assertInstanceOf(\TestDeferred\TestClass::class, $proxy);
         $this->assertEmpty(\TestDeferred\TestClass::$created);

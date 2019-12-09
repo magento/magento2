@@ -13,19 +13,19 @@
 
 <script>
 require([
-    "jquery",
-    "jquery/ui"
+    'jquery',
+    'jquery-ui-modules/datepicker'
 ], function($){
 
 //<![CDATA[
     $.extend(true, $, {
         calendarConfig: {
-            dayNames: <?= $block->escapeJs($days['wide']) ?>,
-            dayNamesMin: <?= $block->escapeJs($days['abbreviated']) ?>,
-            monthNames: <?= $block->escapeJs($months['wide']) ?>,
-            monthNamesShort: <?= $block->escapeJs($months['abbreviated']) ?>,
+            dayNames: <?= /* @noEscape */ $days['wide'] ?>,
+            dayNamesMin: <?= /* @noEscape */ $days['abbreviated'] ?>,
+            monthNames: <?= /* @noEscape */ $months['wide'] ?>,
+            monthNamesShort: <?= /* @noEscape */ $months['abbreviated'] ?>,
             infoTitle: "<?= $block->escapeJs(__('About the calendar')) ?>",
-            firstDay: <?= $block->escapeJs($firstDay) ?>,
+            firstDay: <?= (int)$firstDay ?>,
             closeText: "<?= $block->escapeJs(__('Close')) ?>",
             currentText: "<?= $block->escapeJs(__('Go Today')) ?>",
             prevText: "<?= $block->escapeJs(__('Previous')) ?>",
@@ -50,7 +50,7 @@ require([
         }
     });
 
-    enUS = <?= $block->escapeJs($enUS) ?>; // en_US locale reference
+    enUS = <?= /* @noEscape */ $enUS ?>; // en_US locale reference
 //]]>
 
 });

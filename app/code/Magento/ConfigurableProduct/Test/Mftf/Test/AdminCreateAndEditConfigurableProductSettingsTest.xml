@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAndEditConfigurableProductSettingsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create/Edit configurable product in Admin"/>
+            <title value="Admin should be able to set/edit other product information when creating/editing a configurable product"/>
+            <description value="Admin should be able to set/edit other product information when creating/editing a configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3240"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create a configurable product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Fill configurable product values -->
+        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Set Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="setProductDesignSettings"/>
+
+        <!-- Set Gift Options settings for the product -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="enableGiftMessageSettings">
+            <argument name="status" value="1"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="{{BaseConfigurableProduct.sku}}"/>
+        </actionGroup>
+
+        <!-- Assert product design settings "left bar is present at product page with 2 columns" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutTwoColumnsLeft}}" stepKey="seeDesign"/>
+
+        <!-- Assert Gift Option product settings is present -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="BaseConfigurableProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <actionGroup ref="StorefrontAssertGiftMessageFieldsActionGroup" stepKey="assertGiftMessageFieldsArePresent"/>
+
+        <!-- Open created product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForCreatedProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Edit product Search Engine Optimization settings -->
+        <actionGroup ref="AdminChangeProductSEOSettingsActionGroup" stepKey="editProductSEOSettings">
+            <argument name="productName" value="ApiConfigurableProduct.name"/>
+        </actionGroup>
+
+        <!-- Edit Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="editProductDesignSettings">
+            <argument name="designSettings" value="simpleLumaDesignEmpty"/>
+        </actionGroup>
+
+        <!-- Edit Gift Option product settings -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+
+        <!-- Verify Url Key after changing -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="{{ApiConfigurableProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert product design settings "Layout empty" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutEmpty}}" stepKey="seeNewDesignChanges"/>
+
+        <!-- Assert Gift Option product settings -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
+
+        <!-- Delete created configurable product -->
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+    </test>
+</tests>

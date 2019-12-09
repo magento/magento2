@@ -65,7 +65,8 @@ class SetShippingAddressesOnCart implements ResolverInterface
         }
         $shippingAddresses = $args['input']['shipping_addresses'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->checkCartCheckoutAllowance->execute($cart);
         $this->setShippingAddressesOnCart->execute($context, $cart, $shippingAddresses);
 

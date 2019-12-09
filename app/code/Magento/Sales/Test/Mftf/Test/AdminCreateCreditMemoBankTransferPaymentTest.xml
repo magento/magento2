@@ -17,9 +17,6 @@
             <testCaseId value="MC-15862"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17140"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -67,8 +64,8 @@
         <!-- Create Invoice -->
         <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startInvoice"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
 
         <!-- Go to Sales > Orders > find out placed order and open -->
         <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
@@ -86,7 +83,6 @@
         </actionGroup>
 
         <!-- On order's page click 'Refund offline' button -->
-        <scrollTo selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="scrollTOButton"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
         <waitForPageLoad stepKey="waitForResultPage"/>
 

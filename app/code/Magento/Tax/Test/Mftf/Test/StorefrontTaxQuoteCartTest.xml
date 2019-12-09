@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-295"/>
             <group value="Tax"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

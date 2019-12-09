@@ -7,26 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Paypal\Model\Api\Nvp;
-use Magento\PaypalGraphQl\AbstractTest;
+use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\UrlInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Test ExpressSetPaymentMethodTest graphql endpoint for guest
  *
  * @magentoAppArea graphql
  */
-class PaypalExpressSetPaymentMethodTest extends AbstractTest
+class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
 {
-    /**
-     * @var Http
-     */
-    private $request;
-
     /**
      * @var SerializerInterface
      */
@@ -41,13 +34,8 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
     }
 
     /**
@@ -56,6 +44,7 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
      * @param string $paymentMethod
      * @return void
      * @dataProvider getPaypalCodesProvider
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -80,19 +69,16 @@ class PaypalExpressSetPaymentMethodTest extends AbstractTest
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
 
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
-
         $query = <<<QUERY
 mutation {
     createPaypalExpressToken(input: {
         cart_id: "{$cartId}",
         code: "{$paymentMethod}",
         urls: {
-            return_url: "{$baseUrl}paypal/express/return/",
-            cancel_url: "{$baseUrl}paypal/express/cancel/"
-            success_url: "{$baseUrl}checkout/onepage/success/",
-            pending_url: "{$baseUrl}checkout/onepage/pending/"
+            return_url: "paypal/express/return/",
+            cancel_url: "paypal/express/cancel/"
+            success_url: "checkout/onepage/success/",
+            pending_url: "checkout/onepage/pending/"
         }
         express_button: false
     })
@@ -107,7 +93,6 @@ mutation {
     setPaymentMethodOnCart(input: {
         payment_method: {
           code: "{$paymentMethod}",
-          additional_data: {
             paypal_express: {
               payer_id: "$payerId",
               token: "$token"
@@ -116,7 +101,6 @@ mutation {
               payer_id: "$payerId",
               token: "$token"
             }
-          }
         },
         cart_id: "{$cartId}"})
       {
@@ -128,19 +112,11 @@ mutation {
       }
       placeOrder(input: {cart_id: "{$cartId}"}) {
         order {
-          order_id
+          order_number
         }
       }
 }
 QUERY;
-
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
 
         $paypalRequest = include __DIR__ . '/../../../_files/guest_paypal_create_token_request.php';
         $paypalResponse = [
@@ -196,7 +172,7 @@ QUERY;
                 ]
             );
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
 
         $this->assertArrayHasKey('data', $responseData);
@@ -215,11 +191,11 @@ QUERY;
         );
 
         $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_id'])
+            isset($responseData['data']['placeOrder']['order']['order_number'])
         );
         $this->assertEquals(
             'test_quote',
-            $responseData['data']['placeOrder']['order']['order_id']
+            $responseData['data']['placeOrder']['order']['order_number']
         );
     }
 

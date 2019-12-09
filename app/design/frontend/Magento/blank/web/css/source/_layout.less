@@ -18,7 +18,7 @@
         .column.main {
             &:extend(.abs-add-box-sizing all);
             .lib-css(padding-bottom, @indent__xl);
-            .lib-vendor-prefix-flex-basis(100%);
+            .lib-vendor-prefix-flex-basis(auto);
             .lib-vendor-prefix-flex-grow(1);
             .lib-vendor-prefix-order(1);
             width: 100%;
@@ -125,11 +125,14 @@
     }
 
     .page-layout-2columns-left {
+        .main {
+            padding-left: @layout-column__additional-sidebar-offset
+        }
+
         .sidebar-additional {
             clear: left;
             float: left;
             padding-left: 0;
-            padding-right: @layout-column__additional-sidebar-offset;
         }
     }
 

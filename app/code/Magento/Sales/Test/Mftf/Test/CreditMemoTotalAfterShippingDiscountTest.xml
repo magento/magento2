@@ -33,7 +33,7 @@
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
         </after>
@@ -58,7 +58,7 @@
 
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
-        <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        <actionGroup ref="logout" stepKey="adminLogout"/>
 
         <!-- Place an order from Storefront as a Guest  -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
@@ -104,7 +104,9 @@
 
         <!-- Create invoice -->
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
+        <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
 
         <!-- Verify Invoice Totals including subTotal Shipping  Discount and GrandTotal -->

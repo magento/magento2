@@ -6,14 +6,19 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- You must already be on the product form > Advanced Inventory;
          Action group can be used for customer group price and tier price -->
     <actionGroup name="AdminAddAdvancedPricingToTheProductActionGroup">
+        <annotations>
+            <description>Clicks 'Advanced Pricing' on the Admin Product creation/edit page. Fills in the provided Group Price at the provided Index for CE/EE. Clicks on Done.</description>
+        </annotations>
         <arguments>
             <argument name="index" type="string"/>
             <argument name="groupPrice" type="entity"/>
         </arguments>
+
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.addCustomerGroupPrice}}" stepKey="clickCustomerGroupPriceAddButton"/>
@@ -26,6 +31,10 @@
 
     <!-- Customer group is selected in different way for B2B -->
     <actionGroup name="AdminAddAdvancedPricingToTheProductExtendedActionGroup" extends="AdminAddAdvancedPricingToTheProductActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminAddAdvancedPricingToTheProductActionGroup. Removes 'selectProductTierPriceCustomerGroupInput'. Selects the provided Group Price at the provided Index for B2B.</description>
+        </annotations>
+
         <remove keyForRemoval="selectProductTierPriceCustomerGroupInput"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" stepKey="clickProductTierPriceCustGroupSelect" after="selectProductTierPriceWebsiteInput"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceGroupOrCatalogOption(groupPrice.customer_group)}}" time="30" stepKey="waitProductTierPriceGroupOrCatalogOption" after="clickProductTierPriceCustGroupSelect"/>

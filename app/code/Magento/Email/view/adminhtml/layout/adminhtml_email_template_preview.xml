@@ -6,11 +6,16 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="empty" />
     <body>
+        <attribute name="id" value="html-body"/>
+        <attribute name="class" value="preview-window"/>
+        <referenceContainer name="backend.page" remove="true"/>
+        <referenceContainer name="menu.wrapper" remove="true"/>
         <referenceContainer name="root">
-            <block name="preview.page.content" class="Magento\Framework\View\Element\Template" template="Magento_Email::template/preview.phtml">
-                <block class="Magento\Email\Block\Adminhtml\Template\Preview" name="content" as="content"/>
+            <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_Email::preview/iframeswitcher.phtml">
+                <arguments>
+                    <argument name="preview_form_view_model" xsi:type="object">Magento\Email\ViewModel\Template\Preview\Form</argument>
+                </arguments>
             </block>
         </referenceContainer>
     </body>

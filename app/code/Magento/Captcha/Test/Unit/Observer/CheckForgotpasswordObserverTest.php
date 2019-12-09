@@ -138,7 +138,7 @@ class CheckForgotpasswordObserverTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($this->_captcha)
         );
-        $this->_messageManager->expects($this->once())->method('addError')->with($warningMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($warningMessage);
         $this->_actionFlag->expects(
             $this->once()
         )->method(

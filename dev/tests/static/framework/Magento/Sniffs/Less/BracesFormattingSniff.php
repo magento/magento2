@@ -15,7 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * Ensure there is a single blank line after the closing brace of a class definition
  *
  * @see Squiz_Sniffs_CSS_ClassDefinitionClosingBraceSpaceSniff
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#braces
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#braces
  */
 class BracesFormattingSniff implements Sniff
 {

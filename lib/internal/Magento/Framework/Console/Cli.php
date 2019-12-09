@@ -19,6 +19,7 @@ use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Application;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
@@ -62,6 +63,11 @@ class Cli extends Console\Application
     private $objectManager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param string $name the application name
      * @param string $version the application version
      */
@@ -93,6 +99,8 @@ class Cli extends Console\Application
         }
 
         parent::__construct($name, $version);
+        $this->serviceManager->setService(\Symfony\Component\Console\Application::class, $this);
+        $this->logger = $this->objectManager->get(LoggerInterface::class);
     }
 
     /**
@@ -102,7 +110,14 @@ class Cli extends Console\Application
      */
     public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $exitCode = parent::doRun($input, $output);
+        $exitCode = null;
+        try {
+            $exitCode = parent::doRun($input, $output);
+        } catch (\Exception $e) {
+            $errorMessage = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            $this->logger->error($errorMessage);
+            $this->initException = $e;
+        }
 
         if ($this->initException) {
             throw $this->initException;
@@ -209,6 +224,7 @@ class Cli extends Console\Application
         $commands = [];
         foreach (CommandLocator::getCommands() as $commandListClass) {
             if (class_exists($commandListClass)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $commands = array_merge(
                     $commands,
                     $objectManager->create($commandListClass)->getCommands()

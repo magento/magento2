@@ -233,7 +233,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_downlod_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_downlod_tmp" resource="default" engine="innodb"
            comment="Temporary Indexer Table for price of downloadable products">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>

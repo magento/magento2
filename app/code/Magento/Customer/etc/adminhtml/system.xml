@@ -280,6 +280,7 @@
                 </field>
                 <field id="html" translate="label" type="textarea" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>HTML</label>
+                    <comment>Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed</comment>
                 </field>
                 <field id="pdf" translate="label" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>PDF</label>
@@ -289,10 +290,12 @@
                 <label>Online Customers Options</label>
                 <field id="online_minutes_interval" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Online Minutes Interval</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
                     <comment>Leave empty for default (15 minutes).</comment>
                 </field>
                 <field id="section_data_lifetime" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Customer Data Lifetime</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
                     <comment>Please specify value in minutes.</comment>
                 </field>
             </group>

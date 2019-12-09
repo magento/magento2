@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -52,6 +55,9 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
      */
     private $collectionProcessorMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->categoryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
@@ -93,7 +99,12 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
 
         $collection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
-        $collection->expects($this->once())->method('getAllIds')->willReturn([$categoryIdFirst, $categoryIdSecond]);
+        $collection->expects($this->once())->method('getData')->willReturn(
+            [['entity_id' => $categoryIdFirst], ['entity_id' => $categoryIdSecond]]
+        );
+        $collection->expects($this->any())->method('getEntity')->willReturn(
+            new \Magento\Framework\DataObject(['id_field_name' => 'entity_id'])
+        );
 
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')
@@ -106,10 +117,7 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
 
         $this->categoryRepository->expects($this->exactly(2))
             ->method('get')
-            ->willReturnMap([
-                [$categoryIdFirst, $categoryFirst],
-                [$categoryIdSecond, $categorySecond],
-            ])
+            ->willReturnMap([[$categoryIdFirst, $categoryFirst], [$categoryIdSecond, $categorySecond]])
             ->willReturn($categoryFirst);
 
         $this->categorySearchResultsFactory->expects($this->once())->method('create')->willReturn($searchResult);

@@ -84,8 +84,11 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
         $entity = $this->getEntity();
         $fKey = 'e.' . $this->getEntityPkName($entity);
         $pKey = $tableName . '.' . $this->getEntityPkName($entity);
+        $attributeId = $attributeModel->getAttributeId();
         $condition = "({$pKey} = {$fKey}) AND ("
             . $this->_getConditionSql("{$tableName}.value", $condition)
+            . ') AND ('
+            . $this->_getConditionSql("{$tableName}.attribute_id", $attributeId)
             . ')';
         $selectExistsInAllStores = $this->getConnection()->select()->from($tableName);
         $this->getSelect()->exists($selectExistsInAllStores, $condition);

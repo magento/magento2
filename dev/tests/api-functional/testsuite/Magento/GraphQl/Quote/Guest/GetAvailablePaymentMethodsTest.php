@@ -73,7 +73,9 @@ class GetAvailablePaymentMethodsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_all_active_payment_methods.php
+     * @magentoConfigFixture default_store payment/paypal_billing_agreement/active 0
+     * @magentoConfigFixture default_store payment/checkmo/active 0
+     * @magentoConfigFixture default_store payment/free/active 0
      */
     public function testGetAvailablePaymentMethodsIfPaymentsAreNotPresent()
     {
