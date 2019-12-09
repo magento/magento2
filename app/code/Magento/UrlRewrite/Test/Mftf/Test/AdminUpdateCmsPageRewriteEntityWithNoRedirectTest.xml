@@ -54,7 +54,7 @@
         </actionGroup>
 
         <!-- Update URL Rewrite for CMS Page -->
-        <actionGroup ref="AdminUpdateUrlRewrite" stepKey="updateUrlRewriteFirstAttempt">
+        <actionGroup ref="AdminUpdateUrlRewriteActionGroup" stepKey="updateUrlRewriteFirstAttempt">
             <argument name="storeValue" value="{{customStore.name}}"/>
             <argument name="requestPath" value="newrequestpath"/>
             <argument name="redirectTypeValue" value="No"/>

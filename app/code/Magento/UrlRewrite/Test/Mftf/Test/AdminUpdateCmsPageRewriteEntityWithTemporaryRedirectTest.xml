@@ -54,7 +54,7 @@
         </actionGroup>
 
         <!-- Update URL Rewrite for CMS Page -->
-        <actionGroup ref="AdminUpdateUrlRewrite" stepKey="updateUrlRewrite">
+        <actionGroup ref="AdminUpdateUrlRewriteActionGroup" stepKey="updateUrlRewrite">
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="temporaryrequestpath.html"/>
             <argument name="redirectTypeValue" value="Temporary (302)"/>
