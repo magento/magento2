@@ -292,7 +292,7 @@ QUERY;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: This product is out of stock.'
+            'Could not add the product with SKU configurable to the shopping cart'
         );
 
         $this->graphQlMutation($query);
@@ -318,7 +318,7 @@ QUERY;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: This product is out of stock.'
+            'Could not add the product with SKU configurable to the shopping cart'
         );
 
         $this->graphQlMutation($query);
