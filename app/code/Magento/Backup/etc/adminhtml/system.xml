@@ -12,7 +12,7 @@
                 <label>Backup Settings</label>
                 <field id="functionality_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable Backup</label>
-                    <comment>Disabled by default for security reasons</comment>
+                    <comment>Disabled by default for security reasons.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">

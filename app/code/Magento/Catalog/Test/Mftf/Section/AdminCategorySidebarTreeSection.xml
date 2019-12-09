@@ -19,6 +19,7 @@
         <element name="lastCreatedCategory" type="block" selector=".x-tree-root-ct li li:last-child" />
         <element name="treeContainer" type="block" selector=".tree-holder" />
         <element name="expandRootCategory" type="text" selector="img.x-tree-elbow-end-plus"/>
+        <element name="expandRootCategoryByName" type="button" selector="//div[@class='x-tree-root-node']/li/div/a/span[contains(., '{{categoryName}}')]/../../img[contains(@class, 'x-tree-elbow-end-plus')]" parameterized="true" timeout="30"/>
         <element name="categoryByName" type="text" selector="//div[contains(@class, 'categories-side-col')]//a/span[contains(text(), '{{categoryName}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

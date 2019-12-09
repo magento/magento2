@@ -9,6 +9,6 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSaveCustomerAddressActionGroup">
         <click selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="saveCustomerAddress"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the address." stepKey="seeSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You saved the address." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

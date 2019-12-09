@@ -277,15 +277,57 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Add tier price attribute filter to collection
+     * Add tier price attribute filter to collection with different condition types.
      *
+     * @param mixed $condition
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     *
+     * @dataProvider addAttributeTierPriceToFilterDataProvider
      */
-    public function testAddAttributeTierPriceToFilter(): void
+    public function testAddAttributeTierPriceToFilter($condition): void
     {
-        $this->assertEquals(11, $this->collection->getSize());
-        $this->collection->addAttributeToFilter('tier_price', ['gt' => 0]);
+        $this->collection->addAttributeToFilter('tier_price', $condition);
         $this->assertEquals(1, $this->collection->getSize());
+    }
+
+    /**
+     * @return array
+     */
+    public function addAttributeTierPriceToFilterDataProvider(): array
+    {
+        return [
+            'condition is array' => [['eq' => 8]],
+            'condition is string' => ['8'],
+            'condition is int' => [8],
+            'condition is null' => [null]
+        ];
+    }
+
+    /**
+     * Add is_saleable attribute filter to collection with different condition types.
+     *
+     * @param mixed $condition
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     *
+     * @dataProvider addAttributeIsSaleableToFilterDataProvider
+     */
+    public function testAddAttributeIsSaleableToFilter($condition): void
+    {
+        $this->collection->addAttributeToFilter('is_saleable', $condition);
+        $this->assertEquals(1, $this->collection->getSize());
+    }
+
+    /**
+     * @return array
+     */
+    public function addAttributeIsSaleableToFilterDataProvider(): array
+    {
+        return [
+            'condition is array' => [['eq' => 1]],
+            'condition is string' => ['1'],
+            'condition is int' => [1],
+            'condition is null' => [null]
+        ];
     }
 }

@@ -131,7 +131,10 @@ define([
             this._createWrapper();
             this._renderModal();
             this._createButtons();
-            $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
+
+            if (this.options.trigger) {
+                $(document).on('click', this.options.trigger, _.bind(this.toggleModal, this));
+            }
             this._on(this.modal.find(this.options.modalCloseBtn), {
                 'click': this.options.modalCloseBtnHandler ? this.options.modalCloseBtnHandler : this.closeModal
             });
