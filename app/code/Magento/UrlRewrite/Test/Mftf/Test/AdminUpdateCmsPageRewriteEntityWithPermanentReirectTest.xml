@@ -33,13 +33,13 @@
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="cmsId" regex="#\/([0-9]*)?\/$#"/>
-        <actionGroup ref="AddStoreViewToCmsPage" stepKey="updateStoreViewForCmsPage">
+        <actionGroup ref="AddStoreViewToCmsPageActionGroup" stepKey="updateStoreViewForCmsPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
             <argument name="storeViewName" value="All Store Views"/>
         </actionGroup>
 
         <!--Create CMS Page URL Redirect-->
-        <actionGroup ref="AdminAddCustomUrlRewrite" stepKey="addCustomUrlRewrite">
+        <actionGroup ref="AdminAddCustomUrlRewriteActionGroup" stepKey="addCustomUrlRewrite">
             <argument name="customUrlRewriteValue" value="Custom"/>
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="created-new-cms-page"/>
@@ -49,7 +49,7 @@
         </actionGroup>
 
         <!--Search created CMS page url rewrite in grid-->
-        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="searchUrlRewrite">
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGridActionGroup" stepKey="searchUrlRewrite">
             <argument name="requestPath" value="created-new-cms-page"/>
         </actionGroup>
 
@@ -70,13 +70,13 @@
         <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront">
             <argument name="page" value="permanentrequestpath.htm"/>
         </actionGroup>
-        <actionGroup ref="AssertStoreFrontCMSPage" stepKey="assertCMSPage">
+        <actionGroup ref="AssertStoreFrontCMSPageActionGroup" stepKey="assertCMSPage">
             <argument name="cmsTitle"  value="$$createCMSPage.title$$"/>
             <argument name="cmsContent" value="$$createCMSPage.content$$"/>
             <argument name="cmsContentHeading" value="$$createCMSPage.content_heading$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
             <argument name="requestPath" value="permanentrequestpath.htm"/>
         </actionGroup>
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView"/>
