@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="DeleteProductByNameActionGroup" extends="DeleteProductBySkuActionGroup">
         <annotations>
-            <description>EXTENDS: deleteProductBySku. Deletes the provided Product Name.</description>
+            <description>EXTENDS: DeleteProductBySkuActionGroup. Deletes the provided Product Name.</description>
         </annotations>
         <arguments>
             <argument name="sku" type="string" defaultValue=""/>

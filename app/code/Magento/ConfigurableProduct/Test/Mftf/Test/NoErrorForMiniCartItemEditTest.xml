@@ -28,7 +28,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- Delete the first simple product -->
-            <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+            <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
