@@ -56,9 +56,11 @@
                 </field>
                 <field id="gateway_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Gateway URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>
                 <field id="gateway_xml_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Gateway XML URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>
                 <field id="handling_type" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Calculate Handling Fee</label>
@@ -104,6 +106,7 @@
                 </field>
                 <field id="tracking_xml_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Tracking XML URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>
                 <field id="type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>UPS Type</label>
@@ -131,7 +134,7 @@
                 <field id="include_taxes" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Request Tax-Inclusive Rate</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>When applicable, taxes (sales tax, VAT etc.) are included in the rate</comment>
+                    <comment>When applicable, taxes (sales tax, VAT etc.) are included in the rate.</comment>
                 </field>
                 <field id="shipper_number" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipper Number</label>

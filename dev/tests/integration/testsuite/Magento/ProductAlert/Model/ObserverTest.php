@@ -70,7 +70,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->observer->process();
         $this->assertContains(
-            'John Smith,',
+            'ohn Smith,',
             $this->transportBuilder->getSentMessage()->getRawMessage()
         );
     }
@@ -78,8 +78,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Check translations for product alerts
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppArea frontend
+     * @magentoDataFixture Magento/Catalog/_files/category.php
      * @magentoConfigFixture current_store catalog/productalert/allow_price 1
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture fixture_second_store_store general/locale/code pt_BR
@@ -87,7 +88,6 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessPortuguese()
     {
-        $this->markTestSkipped('MC-21646');
         // get second store
         $storeRepository = $this->_objectManager->create(StoreRepository::class);
         $secondStore = $storeRepository->get('fixture_second_store');
@@ -117,9 +117,10 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
         // dispatch process() method and check sent message
         $this->observer->process();
-        $message = $this->transportBuilder->getSentMessage()->getRawMessage();
+        $message = $this->transportBuilder->getSentMessage();
+        $messageContent = $message->getBody()->getParts()[0]->getRawContent();
         $expectedText = array_shift($translation);
-        $this->assertContains('/frontend/Magento/luma/pt_BR/', $message);
-        $this->assertContains(substr($expectedText, 0, 50), $message);
+        $this->assertContains('/frontend/Magento/luma/pt_BR/', $messageContent);
+        $this->assertContains(substr($expectedText, 0, 50), $messageContent);
     }
 }

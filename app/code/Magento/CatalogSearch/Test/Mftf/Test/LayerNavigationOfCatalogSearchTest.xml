@@ -57,6 +57,10 @@
         <fillField selector="{{AdminProductAttributeSection.customAttribute($$createPriceAttribute.attribute_code$$)}}" userInput="70" stepKey="fillCustomPrice2"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton2"/>
         <waitForPageLoad stepKey="waitForSimpleProductSaved2"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Navigate to category on Storefront-->
         <comment userInput="Navigate to category on Storefront" stepKey="comment3"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$subCategory.name$$)}}" stepKey="goToCategoryStorefront"/>

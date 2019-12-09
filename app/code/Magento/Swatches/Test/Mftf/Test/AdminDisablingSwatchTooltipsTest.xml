@@ -11,6 +11,7 @@
     <test name="AdminDisablingSwatchTooltipsTest">
         <annotations>
             <features value="Swatches"/>
+            <stories value="Swatch Tooltip Status Change"/>
             <title value="Admin disabling swatch tooltips test."/>
             <description value="Verify possibility to disable/enable swatch tooltips."/>
             <severity value="AVERAGE"/>

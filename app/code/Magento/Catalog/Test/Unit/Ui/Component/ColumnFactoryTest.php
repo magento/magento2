@@ -129,6 +129,7 @@ class ColumnFactoryTest extends TestCase
                     'visible' => null,
                     'filter' => $filter,
                     'component' => 'Magento_Ui/js/grid/columns/column',
+                    '__disableTmpl' => ['label' => true]
                 ],
             ],
             'context' => $this->context,
