@@ -73,6 +73,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
 
     /**
      * Add attribute to select result set.
+     *
      * Backward compatibility with EAV collection
      *
      * @param string $attribute
@@ -86,6 +87,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
 
     /**
      * Specify collection select filter by attribute value
+     *
      * Backward compatibility with EAV collection
      *
      * @param string|\Magento\Eav\Model\Entity\Attribute $attribute
@@ -100,6 +102,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
 
     /**
      * Specify collection select order by attribute value
+     *
      * Backward compatibility with EAV collection
      *
      * @param string $attribute
@@ -114,6 +117,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
 
     /**
      * Set collection page start and records to show
+     *
      * Backward compatibility with EAV collection
      *
      * @param int $pageNum
@@ -128,6 +132,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
 
     /**
      * Create all ids retrieving select with limitation
+     *
      * Backward compatibility with EAV collection
      *
      * @param int $limit
@@ -148,6 +153,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
 
     /**
      * Retrieve all ids for collection
+     *
      * Backward compatibility with EAV collection
      *
      * @param int $limit

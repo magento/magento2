@@ -159,6 +159,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
     /**
      * Add join for catalog/product_website table
+     *
      * Joined table has alias pw
      *
      * @param \Magento\Framework\DB\Select $select the select object

@@ -13,6 +13,7 @@ use Magento\Payment\Model\MethodInterface;
 
 /**
  * Class AbstractDataAssignObserver
+ *
  * @package Magento\Payment\Observer
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
