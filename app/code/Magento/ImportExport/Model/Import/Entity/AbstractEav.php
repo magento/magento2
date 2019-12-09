@@ -19,7 +19,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEntity
 {
     /**
-     * Attribute collection name
+     * Attribute collection name (data collection)
      */
     const ATTRIBUTE_COLLECTION_NAME = \Magento\Framework\Data\Collection::class;
 
