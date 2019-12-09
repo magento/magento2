@@ -657,7 +657,7 @@ abstract class AbstractEntity
     /**
      * Get the master attribute code to use in an import
      *
-     * @return string
+     * @return string the master attribute code to use in an import
      */
     public function getMasterAttributeCode()
     {
