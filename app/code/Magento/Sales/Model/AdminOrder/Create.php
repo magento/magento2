@@ -1859,7 +1859,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $existingAddressDataObject = $this->addressRepository->getById($quoteAddressId);
             /** Update customer address data */
             $this->dataObjectHelper->mergeDataObjects(
-                get_class($existingAddressDataObject),
+                \Magento\Customer\Api\Data\AddressInterface::class,
                 $existingAddressDataObject,
                 $customerAddress
             );
