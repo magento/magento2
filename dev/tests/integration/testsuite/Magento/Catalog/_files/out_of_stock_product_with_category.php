@@ -3,12 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
@@ -22,7 +20,6 @@ $objectManager = Bootstrap::getObjectManager();
 $productFactory = $objectManager->get(ProductFactory::class);
 /** @var CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = $objectManager->get(CategoryLinkManagementInterface::class);
-/** @var $product Product */
 $product = $productFactory->create();
 $product->isObjectNew(true);
 $product->setTypeId(Type::TYPE_SIMPLE)

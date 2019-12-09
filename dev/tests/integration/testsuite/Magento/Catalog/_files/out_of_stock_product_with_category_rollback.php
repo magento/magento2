@@ -12,8 +12,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/category_rollback.php';
 
-/** @var Registry $registry */
 $objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 
 $registry->unregister('isSecureArea');
