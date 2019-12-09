@@ -72,12 +72,12 @@ define([
          * Create widget.
          */
         _create: function () {
-            var modalContentElem;
+            var modalContent;
             
             this.options.focus = this.options.promptField;
             this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
-            modalContentElem = this.modal.find(this.options.modalContent).append(this.getFormTemplate());
+            modalContent = this.modal.find(this.options.modalContent).append(this.getFormTemplate());
             if(this.options.formSelector) {
                 modalContentElem.find(this.options.formSelector).on('submit', _.bind(this.submitForm, this));
             }
