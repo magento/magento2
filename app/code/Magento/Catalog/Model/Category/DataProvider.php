@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\Attribute\Backend\Image as ImageBackendModel;
+use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
@@ -195,7 +196,6 @@ class DataProvider extends ModifierPoolDataProvider
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
      * @param ArrayManager|null $arrayManager
      * @param FileInfo|null $fileInfo
-     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -484,7 +484,7 @@ class DataProvider extends ModifierPoolDataProvider
     /**
      * Add use default settings
      *
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Category $category
      * @param array $categoryData
      * @return array
      * @deprecated 101.1.0
@@ -572,7 +572,7 @@ class DataProvider extends ModifierPoolDataProvider
     /**
      * Converts category image data to acceptable for rendering format
      *
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Category $category
      * @param array $categoryData
      * @return array
      */
@@ -582,7 +582,7 @@ class DataProvider extends ModifierPoolDataProvider
             if ($attributeCode === 'custom_layout_update_file') {
                 if (!empty($categoryData['custom_layout_update'])) {
                     $categoryData['custom_layout_update_file']
-                        = \Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
+                        = LayoutUpdate::VALUE_USE_UPDATE_XML;
                 }
             }
             if (!isset($categoryData[$attributeCode])) {
