@@ -136,9 +136,9 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
     /**
      * Check if operands in not null and set operands values if they are empty
      *
-     * @param float|int &$firstOperand
-     * @param float|int &$secondOperand
-     * @param float|int &$tmpResult
+     * @param float|int $firstOperand
+     * @param float|int $secondOperand
+     * @param float|int $tmpResult
      * @param float|int $result
      * @return void
      */
