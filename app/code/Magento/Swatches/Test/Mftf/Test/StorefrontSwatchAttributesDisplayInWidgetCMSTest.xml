@@ -11,6 +11,7 @@
     <test name="StorefrontSwatchAttributesDisplayInWidgetCMSTest">
         <annotations>
             <features value="ConfigurableProduct"/>
+            <stories value="Swatches"/>
             <title value="Swatch Attribute is not displayed in the Widget CMS"/>
             <description value="Swatch Attribute is not displayed in the Widget CMS"/>
             <severity value="MAJOR"/>

@@ -109,6 +109,7 @@
 
         <!-- Go to Product Page and see Default Store View-->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToDefaultStorefrontProductPage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive(TestImageNew.filename)}}" time="30" stepKey="waitImageToBeLoaded"/>
         <seeElement selector="{{StorefrontProductMediaSection.productImageActive(TestImageNew.filename)}}" stepKey="seeActiveImageDefault"/>
 
         <!-- English Switch Store View and see English Store View -->
@@ -120,6 +121,7 @@
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc(ProductImage.fileName)}}" stepKey="seeThumb"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct.name$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad time="30" stepKey="waitForProductPage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive(ProductImage.filename)}}" time="30" stepKey="waitImageToBeLoaded2"/>
         <seeElement selector="{{StorefrontProductMediaSection.productImageActive(ProductImage.filename)}}" stepKey="seeActiveImageEnglish"/>
 
         <!-- Switch France Store View and see France Store View -->
@@ -131,6 +133,7 @@
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc(Magento3.fileName)}}" stepKey="seeThumb1"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct.name$$)}}" stepKey="openProductPage1"/>
         <waitForPageLoad time="30" stepKey="waitForProductPage1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive(Magento3.filename)}}" time="30" stepKey="waitImageToBeLoaded3"/>
         <seeElement selector="{{StorefrontProductMediaSection.productImageActive(Magento3.filename)}}" stepKey="seeActiveImageFrance"/>
     </test>
 </tests>

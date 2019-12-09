@@ -17,6 +17,9 @@
             <description value="Admin should be able to see the full title of the selected custom option value in the order"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-3043"/>
+            <skip>
+                <issueId value="MQE-1128"/>
+            </skip>
         </annotations>
         <before>
             <!--Create Simple Product with Custom Options-->
@@ -102,6 +105,7 @@
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
@@ -113,6 +117,6 @@
         </assertEquals>
         <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd" stepKey="hoverProduct"/>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd:nth-child(2)" stepKey="waitForCustomOptionValueFullName"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj111 11Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
     </test>
 </tests>

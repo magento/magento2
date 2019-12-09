@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product attribute add/edit form main tab
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
+/**
+ * Product attribute add/edit form main tab
+ */
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -110,7 +108,6 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
@@ -280,10 +277,11 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Processing block html after rendering
+     * Processing block html after rendering.
+     *
      * Adding js block to the end of this block
      *
-     * @param   string $html
+     * @param string $html
      * @return  string
      */
     protected function _afterToHtml($html)

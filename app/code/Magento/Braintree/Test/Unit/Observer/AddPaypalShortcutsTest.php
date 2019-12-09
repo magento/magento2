@@ -19,9 +19,17 @@ use Magento\Framework\View\LayoutInterface;
  */
 class AddPaypalShortcutsTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Tests PayPal shortcuts observer.
+     */
     public function testExecute()
     {
-        $addPaypalShortcuts = new AddPaypalShortcuts();
+        $addPaypalShortcuts = new AddPaypalShortcuts(
+            [
+                'mini_cart' => 'Minicart-block',
+                'shopping_cart' => 'Shoppingcart-block'
+            ]
+        );
 
         /** @var Observer|\PHPUnit_Framework_MockObject_MockObject $observerMock */
         $observerMock = $this->getMockBuilder(Observer::class)
@@ -60,7 +68,7 @@ class AddPaypalShortcutsTest extends \PHPUnit\Framework\TestCase
 
         $layoutMock->expects(self::once())
             ->method('createBlock')
-            ->with(AddPaypalShortcuts::PAYPAL_SHORTCUT_BLOCK)
+            ->with('Minicart-block')
             ->willReturn($blockMock);
 
         $shortcutButtonsMock->expects(self::once())

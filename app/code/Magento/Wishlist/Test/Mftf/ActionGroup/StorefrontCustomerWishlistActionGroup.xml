@@ -10,10 +10,14 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add Product to wishlist from the category page and check message -->
     <actionGroup name="StorefrontCustomerAddCategoryProductToWishlistActionGroup">
+        <annotations>
+            <description>Adds the provided Product to the Wish List from a Storefront Category page. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="productVar"/>
         </arguments>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct" />
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct"/>
         <click selector="{{StorefrontCategoryProductSection.ProductAddToWishlistByName(productVar.name)}}" stepKey="addCategoryProductToWishlistClickAddProductToWishlist"/>
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addCategoryProductToWishlistWaitForSuccessMessage"/>
         <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addCategoryProductToWishlistSeeProductNameAddedToWishlist"/>
@@ -22,11 +26,15 @@
 
     <!-- Add Product to wishlist from the product page and check message -->
     <actionGroup name="StorefrontCustomerAddProductToWishlistActionGroup">
+        <annotations>
+            <description>Adds the provided Product to the Wish List from the Storefront Product page. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="productVar"/>
         </arguments>
-        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="WaitForWishList"/>
-        <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="addProductToWishlistClickAddToWishlist" />
+
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="WaitForWishList" time="30"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="addProductToWishlistClickAddToWishlist"/>
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
         <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List. Click here to continue shopping." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
         <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
@@ -34,32 +42,44 @@
 
     <!-- Check product in wishlist -->
     <actionGroup name="StorefrontCustomerCheckProductInWishlist">
+        <annotations>
+            <description>Validates that the provided Product details (Price and Name) are present in the Storefront Customer Dashboard Wish List.</description>
+        </annotations>
         <arguments>
             <argument name="productVar"/>
         </arguments>
+
         <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistProductName"/>
         <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistProductPrice"/>
-        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productVar.name)}}" stepKey="wishlistMoveMouseOverProduct" />
-        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistAddToCart" />
-        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistProductImage" />
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productVar.name)}}" stepKey="wishlistMoveMouseOverProduct"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistAddToCart"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistProductImage"/>
     </actionGroup>
 
     <!-- Check product in wishlist sidebar -->
     <actionGroup name="StorefrontCustomerCheckProductInWishlistSidebar">
+        <annotations>
+            <description>Validates that the provided Product details (Name) are present in the Wish List side bar menu.</description>
+        </annotations>
         <arguments>
             <argument name="productVar"/>
         </arguments>
+
         <waitForElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistSidebarProductName"/>
         <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistSidebarSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductPrice"/>
-        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistSidebarAddToCart" />
-        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductImage" />
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistSidebarAddToCart"/>
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductImage"/>
     </actionGroup>
 
     <!--Remove a product from the wishlist using the sidebar -->
     <actionGroup name="StorefrontCustomerRemoveProductFromWishlistUsingSidebar">
+        <annotations>
+            <description>Removes the provided Product from the Wish List side bar menu. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>
+
         <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductRemoveByName(product.name)}}" stepKey="RemoveProductFromWishlistUsingSidebarClickRemoveItemFromWishlist"/>
         <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="RemoveProductFromWishlistUsingSidebarWaitForSuccessMessage"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="{{product.name}} has been removed from your Wish List." stepKey="RemoveProductFromWishlistUsingSidebarSeeProductNameRemovedFromWishlist"/>
@@ -67,20 +87,28 @@
 
     <!--Add a product to the cart from the wishlist using the sidebar -->
     <actionGroup name="StorefrontCustomerAddProductToCartFromWishlistUsingSidebar">
+        <annotations>
+            <description>Add the provided Product to the Cart from the Wish List side bar menu. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>
+
         <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(product.name)}}" stepKey="AddProductToCartFromWishlistUsingSidebarClickAddToCartFromWishlist"/>
         <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="AddProductToCartFromWishlistUsingSidebarWaitForSuccessMessage"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="AddProductToCartFromWishlistUsingSidebarSeeProductNameAddedToCartFromWishlist"/>
     </actionGroup>
 
     <actionGroup name="StorefrontCustomerEditProductInWishlist">
+        <annotations>
+            <description>Edits the provided Product on the Storefront Wish List page. Fills in the provided Description and Quantity. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
             <argument name="description" type="string"/>
             <argument name="quantity" type="string"/>
         </arguments>
+
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(product.name)}}" stepKey="mouseOverOnProduct"/>
         <fillField selector="{{StorefrontCustomerWishlistProductSection.ProductDescription(product.name)}}" userInput="{{description}}" stepKey="fillDescription"/>
         <fillField selector="{{StorefrontCustomerWishlistProductSection.ProductQuantity(product.name)}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
@@ -91,10 +119,20 @@
 
     <!-- Share wishlist -->
     <actionGroup name="StorefrontCustomerShareWishlistActionGroup">
+        <annotations>
+            <description>Shares the Wish List from the Storefront Wish List page. PLEASE NOTE: The details for sharing are Hardcoded using 'Wishlist'.</description>
+        </annotations>
+
         <click selector="{{StorefrontCustomerWishlistProductSection.productShareWishList}}" stepKey="clickMyWishListButton"/>
         <fillField userInput="{{Wishlist.shareInfo_emails}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistEmail}}" stepKey="fillEmailsForShare"/>
         <fillField userInput="{{Wishlist.shareInfo_message}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistTextMessage}}" stepKey="fillShareMessage"/>
         <click selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistButton}}" stepKey="sendWishlist"/>
         <see selector="{{StorefrontCustomerWishlistProductSection.productSuccessShareMessage}}" userInput="Your wish list has been shared." stepKey="successMessage"/>
+    </actionGroup>
+
+    <!-- Check that wishlist is empty -->
+    <actionGroup name="StorefrontAssertCustomerWishlistIsEmpty">
+        <dontSeeElement selector="{{StorefrontCustomerWishlistProductSection.pager}}" stepKey="checkThatPagerIsAbsent"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.wishlistEmpty}}" userInput="You have no items in your wish list." stepKey="checkNoItemsMessage"/>
     </actionGroup>
 </actionGroups>

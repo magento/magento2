@@ -32,4 +32,15 @@
         <data key="display_mode">Cart Price Rule Related</data>
         <data key="restrict_type">Header</data>
     </entity>
+    <entity name="DefaultOrderBySKUWidget" type="widget">
+        <data key="type">Order by SKU</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">Test Widget</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="sort_order">0</data>
+        <data key="display_on">All Pages</data>
+        <data key="container">Sidebar Main</data>
+    </entity>
 </entities>

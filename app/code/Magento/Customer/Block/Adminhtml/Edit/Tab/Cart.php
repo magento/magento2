@@ -75,7 +75,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -119,7 +119,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -201,7 +201,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGridUrl()
     {
@@ -224,7 +224,13 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/product/edit', ['id' => $row->getProductId()]);
+        return $this->getUrl(
+            'catalog/product/edit',
+            [
+                'id' => $row->getProductId(),
+                'customerId' => $this->getCustomerId()
+            ]
+        );
     }
 
     /**

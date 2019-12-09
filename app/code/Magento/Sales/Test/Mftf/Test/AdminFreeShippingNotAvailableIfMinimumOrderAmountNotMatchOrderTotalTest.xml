@@ -57,7 +57,7 @@
         <!--Submit Order and verify that Order isn't placed-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
 
-        <dontSeeElement selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
-        <seeElement selector="{{AdminMessagesSection.errorMessage}}" stepKey="seeErrorMessage"/>
+        <dontSeeElement selector="{{AdminOrderFormMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+        <seeElement selector="{{AdminOrderFormMessagesSection.error}}" stepKey="seeErrorMessage"/>
     </test>
 </tests>

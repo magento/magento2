@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
+use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Customers field resolver, used for GraphQL request processing.
@@ -19,25 +21,25 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class Customer implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
-     * @var CustomerDataProvider
+     * @var ExtractCustomerData
      */
-    private $customerDataProvider;
+    private $extractCustomerData;
 
     /**
-     * @param CheckCustomerAccount $checkCustomerAccount
-     * @param CustomerDataProvider $customerDataProvider
+     * @param GetCustomer $getCustomer
+     * @param ExtractCustomerData $extractCustomerData
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
-        CustomerDataProvider $customerDataProvider
+        GetCustomer $getCustomer,
+        ExtractCustomerData $extractCustomerData
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
-        $this->customerDataProvider = $customerDataProvider;
+        $this->getCustomer = $getCustomer;
+        $this->extractCustomerData = $extractCustomerData;
     }
 
     /**
@@ -50,13 +52,12 @@ class Customer implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
 
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        $currentUserId = (int)$currentUserId;
-        $data = $this->customerDataProvider->getCustomerById($currentUserId);
-        return $data;
+        $customer = $this->getCustomer->execute($context);
+        return $this->extractCustomerData->execute($customer);
     }
 }

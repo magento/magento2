@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Captcha\Test\TestCase\CaptchaOnStoreFrontRegisterTest" summary="Check CAPTCHA on StoreFront Register Page" ticketId="MAGETWO-43602">
         <variation name="CaptchaOnStoreFrontRegisterTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="customer/dataset" xsi:type="string">register_customer</data>
             <data name="customer/data/captcha" xsi:type="string">111</data>
             <data name="configData" xsi:type="string">captcha_storefront_register</data>

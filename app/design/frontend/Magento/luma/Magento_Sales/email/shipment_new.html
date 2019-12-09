@@ -4,29 +4,33 @@
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject {{trans "Your %store_name order has shipped" store_name=$store.getFrontendName()}} @-->
+<!--@subject {{trans "Your %store_name order has shipped" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
-"var order.getCustomerName()":"Customer Name",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL",
+"var order_data.customer_name":"Customer Name",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
-"var comment":"Shipment Comment",
+"var comment|escape|nl2br":"Shipment Comment",
 "var shipment.increment_id":"Shipment Id",
 "layout handle=\"sales_email_order_shipment_items\" shipment=$shipment order=$order":"Shipment Items Grid",
 "block class='Magento\\\\Framework\\\\View\\\\Element\\\\Template' area='frontend' template='Magento_Sales::email\/shipment\/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
 "var formattedShippingAddress|raw":"Shipping Address",
 "var order.shipping_description":"Shipping Description",
-"var order.getShippingDescription()":"Shipping Description"
+"var store.frontend_name":"Store Frontend Name",
+"var store_email":"Store Email",
+"var order_data.is_not_virtual": "Order Type",
+"var shipment": "Shipment",
+"var order": "Order"
 } @-->
 {{template config_path="design/email/header_template"}}
 
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
-                {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
+                {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
                 {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}
             </p>
             <p>
@@ -51,14 +55,14 @@
                 </tr>
             </table>
             {{/depend}}
-            {{block class='Magento\\Framework\\View\\Element\\Template' area='frontend' template='Magento_Sales::email/shipment/track.phtml' shipment=$shipment order=$order}}
+            {{layout handle="sales_email_order_shipment_track" shipment=$shipment order=$order}}
             <table class="order-details">
                 <tr>
                     <td class="address-details">
                         <h3>{{trans "Billing Info"}}</h3>
                         <p>{{var formattedBillingAddress|raw}}</p>
                     </td>
-                    {{depend order.getIsNotVirtual()}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="address-details">
                         <h3>{{trans "Shipping Info"}}</h3>
                         <p>{{var formattedShippingAddress|raw}}</p>
@@ -70,10 +74,10 @@
                         <h3>{{trans "Payment Method"}}</h3>
                         {{var payment_html|raw}}
                     </td>
-                    {{depend order.getIsNotVirtual()}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="method-info">
                         <h3>{{trans "Shipping Method"}}</h3>
-                        <p>{{var order.getShippingDescription()}}</p>
+                        <p>{{var order.shipping_description}}</p>
                     </td>
                     {{/depend}}
                 </tr>

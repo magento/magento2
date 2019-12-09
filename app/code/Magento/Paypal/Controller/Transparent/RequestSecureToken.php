@@ -90,6 +90,10 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
             return $this->getErrorResponse();
         }
 
+        if (!$this->transparent->isActive($quote->getStoreId())) {
+            return $this->getErrorResponse();
+        }
+
         $this->sessionTransparent->setQuoteId($quote->getId());
         try {
             $token = $this->secureTokenService->requestToken($quote);

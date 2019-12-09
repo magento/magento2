@@ -5,6 +5,8 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Query\BoolExpression;
@@ -35,6 +37,16 @@ class Match implements QueryInterface
     protected $preprocessorContainer;
 
     /**
+     * @var AttributeProvider
+     */
+    private $attributeProvider;
+
+    /**
+     * @var TypeResolver
+     */
+    private $fieldTypeResolver;
+
+    /**
      * @var ValueTransformerPool
      */
     private $valueTransformerPool;
@@ -42,15 +54,23 @@ class Match implements QueryInterface
     /**
      * @param FieldMapperInterface $fieldMapper
      * @param PreprocessorInterface[] $preprocessorContainer
+     * @param AttributeProvider|null $attributeProvider
+     * @param TypeResolver|null $fieldTypeResolver
      * @param ValueTransformerPool|null $valueTransformerPool
      */
     public function __construct(
         FieldMapperInterface $fieldMapper,
         array $preprocessorContainer,
+        AttributeProvider $attributeProvider = null,
+        TypeResolver $fieldTypeResolver = null,
         ValueTransformerPool $valueTransformerPool = null
     ) {
         $this->fieldMapper = $fieldMapper;
         $this->preprocessorContainer = $preprocessorContainer;
+        $this->attributeProvider = $attributeProvider ?? ObjectManager::getInstance()
+            ->get(AttributeProvider::class);
+        $this->fieldTypeResolver = $fieldTypeResolver ?? ObjectManager::getInstance()
+            ->get(TypeResolver::class);
         $this->valueTransformerPool = $valueTransformerPool ?? ObjectManager::getInstance()
             ->get(ValueTransformerPool::class);
     }
@@ -116,14 +136,16 @@ class Match implements QueryInterface
         $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
         $condition = ($count) ? 'match_phrase' : 'match';
 
-        $attributesTypes = $this->fieldMapper->getAllAttributesTypes();
         $transformedTypes = [];
         foreach ($matches as $match) {
             $resolvedField = $this->fieldMapper->getFieldName(
                 $match['field'],
                 ['type' => FieldMapperInterface::TYPE_QUERY]
             );
-            $valueTransformer = $this->valueTransformerPool->get($attributesTypes[$resolvedField]['type'] ?? 'text');
+
+            $attributeAdapter = $this->attributeProvider->getByAttributeCode($resolvedField);
+            $fieldType = $this->fieldTypeResolver->getFieldType($attributeAdapter);
+            $valueTransformer = $this->valueTransformerPool->get($fieldType ?? 'text');
             $valueTransformerHash = \spl_object_hash($valueTransformer);
             if (!isset($transformedTypes[$valueTransformerHash])) {
                 $transformedTypes[$valueTransformerHash] = $valueTransformer->transform($value);

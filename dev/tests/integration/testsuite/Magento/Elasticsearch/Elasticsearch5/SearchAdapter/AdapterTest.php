@@ -43,7 +43,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $contentManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
+        $this->clientMock = $this->getMockBuilder(\Magento\Elasticsearch6\Model\Client\Elasticsearch::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contentManager
@@ -78,7 +78,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @return void
      */

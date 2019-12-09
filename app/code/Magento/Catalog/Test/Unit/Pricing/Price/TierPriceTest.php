@@ -393,4 +393,40 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ['basePrice' => '20.80', 'tierPrice' => '18.72', 'savedPercent' => '10']
         ];
     }
+
+    /**
+     * @param null|string|float $quantity
+     * @param float $expectedValue
+     * @dataProvider getQuantityDataProvider
+     */
+    public function testGetQuantity($quantity, $expectedValue)
+    {
+        $tierPrice = new TierPrice(
+            $this->product,
+            $quantity,
+            $this->calculator,
+            $this->priceCurrencyMock,
+            $this->session,
+            $this->groupManagement,
+            $this->customerGroupRetriever
+        );
+
+        $this->assertEquals($expectedValue, $tierPrice->getQuantity());
+    }
+
+    /**
+     * @return array
+     */
+    public function getQuantityDataProvider()
+    {
+        return [
+            [null, 1],
+            ['one', 1],
+            ['', 1],
+            [4, 4],
+            [4.5, 4.5],
+            ['0.7', 0.7],
+            ['0.0000000', 1]
+        ];
+    }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" extends="AssertStorefrontProductPricesActionGroup">
+        <annotations>
+            <description>EXTENDS: AssertStorefrontProductPricesActionGroup. Clicks on the provided Custom Option on a Storefront Product page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customOption" type="entity"/>
+            <argument name="customOptionValue" type="entity"/>
+            <argument name="productPrice" type="string"/>
+            <argument name="productFinalPrice" type="string"/>
+        </arguments>
+        
+        <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsRadioButtons(customOption.title, customOptionValue.price)}}" stepKey="clickRadioButtonsProductOption" before="productPriceAmount"/>
+    </actionGroup>
+</actionGroups>

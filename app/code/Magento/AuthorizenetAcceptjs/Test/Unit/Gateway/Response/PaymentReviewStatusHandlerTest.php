@@ -112,6 +112,9 @@ class PaymentReviewStatusHandlerTest extends TestCase
         $this->handler->handle($subject, $response);
     }
 
+    /**
+     * @return array
+     */
     public function pendingTransactionStatusesProvider()
     {
         return [
@@ -120,6 +123,9 @@ class PaymentReviewStatusHandlerTest extends TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function declinedTransactionStatusesProvider()
     {
         return [

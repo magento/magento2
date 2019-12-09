@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout_overview">
-            <block class="Magento\CheckoutAgreements\Block\Agreements" name="checkout.multishipping.agreements" as="agreements" template="Magento_CheckoutAgreements::multishipping_agreements.phtml"/>
+            <block class="Magento\CheckoutAgreements\Block\Agreements" name="checkout.multishipping.agreements" as="agreements" template="Magento_CheckoutAgreements::additional_agreements.phtml"/>
         </referenceBlock>
     </body>
 </page>

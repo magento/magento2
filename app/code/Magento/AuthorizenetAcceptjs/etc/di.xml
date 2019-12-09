@@ -134,6 +134,7 @@
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsRefundRequest</argument>
             <argument name="handler" xsi:type="object">AuthorizenetAcceptjsRefundSettledHandler</argument>
+            <argument name="validator" xsi:type="object">AuthorizenetAcceptjsTransactionValidator</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsCaptureCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\CaptureStrategyCommand">
@@ -145,6 +146,7 @@
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsCaptureRequest</argument>
             <argument name="handler" xsi:type="object">AuthorizenetAcceptjsCaptureTransactionHandler</argument>
+            <argument name="validator" xsi:type="object">AuthorizenetAcceptjsTransactionValidator</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
@@ -188,10 +190,15 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="CloseCaptureTransactionHandler" type="Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler">
+        <arguments>
+            <argument name="closeTransaction" xsi:type="boolean">false</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="AuthorizenetAcceptjsCaptureTransactionHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="close_parent_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseParentTransactionHandler</item>
+                <item name="close_transaction" xsi:type="string">CloseCaptureTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>
@@ -199,8 +206,7 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="transaction_id" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionIdHandler</item>
-                <item name="close_parent_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseParentTransactionHandler</item>
-                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
+                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\ClosePartialTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>
@@ -258,6 +264,7 @@
                 <item name="po" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PoDataBuilder</item>
                 <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
+                <item name="3d_secure" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StubDataBuilder</item>
                 <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>
                 <item name="passthrough_data" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder</item>
             </argument>

@@ -6,13 +6,11 @@
 namespace Magento\Newsletter\Model\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
-use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Framework\App\ObjectManager;
-use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Newsletter\Model\ResourceModel\Subscriber;
+use Magento\Customer\Api\Data\CustomerExtensionInterface;
 
 /**
  * Newsletter Plugin for customer
@@ -42,28 +40,20 @@ class CustomerPlugin
     private $customerSubscriptionStatus = [];
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * Initialize dependencies.
      *
      * @param SubscriberFactory $subscriberFactory
      * @param ExtensionAttributesFactory $extensionFactory
      * @param Subscriber $subscriberResource
-     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         SubscriberFactory $subscriberFactory,
         ExtensionAttributesFactory $extensionFactory,
-        Subscriber $subscriberResource,
-        StoreManagerInterface $storeManager = null
+        Subscriber $subscriberResource
     ) {
         $this->subscriberFactory = $subscriberFactory;
         $this->extensionFactory = $extensionFactory;
         $this->subscriberResource = $subscriberResource;
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -164,8 +154,7 @@ class CustomerPlugin
     public function afterGetById(CustomerRepository $subject, CustomerInterface $customer)
     {
         $extensionAttributes = $customer->getExtensionAttributes();
-        $storeId = $this->storeManager->getStore()->getId();
-        $customer->setStoreId($storeId);
+
         if ($extensionAttributes === null) {
             /** @var CustomerExtensionInterface $extensionAttributes */
             $extensionAttributes = $this->extensionFactory->create(CustomerInterface::class);

@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Newsletter\Controller\Manage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
-use Magento\Customer\Model\Customer;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Newsletter\Model\Subscriber;
@@ -65,7 +66,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
     /**
      * Save newsletter subscription preference action
      *
-     * @return void|null
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {
@@ -110,16 +111,16 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
                 $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
             }
         }
-        $this->_redirect('customer/account/');
+        return $this->_redirect('customer/account/');
     }
 
     /**
      * Set ignore_validation_flag to skip unnecessary address and customer validation
      *
-     * @param Customer $customer
+     * @param CustomerInterface $customer
      * @return void
      */
-    private function setIgnoreValidationFlag($customer)
+    private function setIgnoreValidationFlag(CustomerInterface $customer): void
     {
         $customer->setData('ignore_validation_flag', true);
     }

@@ -10,6 +10,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontCustomerDashboardPage" url="/customer/account/" area="storefront" module="Magento_Customer">
         <section name="StorefrontCustomerDashboardAccountInformationSection" />
+        <section name="StorefrontCustomerResentOrdersSection"/>
         <section name="StorefrontCustomerSidebarSection"/>
+        <section name="StorefrontMinicartSection"/>
+        <section name="StorefrontCustomerFooterSection"/>
     </page>
 </pages>

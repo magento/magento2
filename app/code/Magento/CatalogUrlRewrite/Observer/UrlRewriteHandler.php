@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
@@ -16,6 +16,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Model\MergeDataProvider;
@@ -81,6 +82,11 @@ class UrlRewriteHandler
     private $productScopeRewriteGenerator;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
@@ -90,6 +96,8 @@ class UrlRewriteHandler
      * @param MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param Json|null $serializer
      * @param ProductScopeRewriteGenerator|null $productScopeRewriteGenerator
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,
@@ -100,7 +108,8 @@ class UrlRewriteHandler
         CategoryProductUrlPathGenerator $categoryBasedProductRewriteGenerator,
         MergeDataProviderFactory $mergeDataProviderFactory = null,
         Json $serializer = null,
-        ProductScopeRewriteGenerator $productScopeRewriteGenerator = null
+        ProductScopeRewriteGenerator $productScopeRewriteGenerator = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
@@ -109,12 +118,15 @@ class UrlRewriteHandler
         $this->productCollectionFactory = $productCollectionFactory;
         $this->categoryBasedProductRewriteGenerator = $categoryBasedProductRewriteGenerator;
 
-        $objectManager = ObjectManager::getInstance();
-        $mergeDataProviderFactory = $mergeDataProviderFactory ?: $objectManager->get(MergeDataProviderFactory::class);
+        $mergeDataProviderFactory = $mergeDataProviderFactory
+            ?? ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
-        $this->serializer = $serializer ?: $objectManager->get(Json::class);
+        $this->serializer = $serializer
+            ?? ObjectManager::getInstance()->get(Json::class);
         $this->productScopeRewriteGenerator = $productScopeRewriteGenerator
-            ?: $objectManager->get(ProductScopeRewriteGenerator::class);
+            ?? ObjectManager::getInstance()->get(ProductScopeRewriteGenerator::class);
+        $this->scopeConfig = $scopeConfig
+            ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -133,14 +145,19 @@ class UrlRewriteHandler
         if ($category->getChangedProductIds()) {
             $this->generateChangedProductUrls($mergeDataProvider, $category, $storeId, $saveRewriteHistory);
         } else {
-            $mergeDataProvider->merge(
-                $this->getCategoryProductsUrlRewrites(
-                    $category,
-                    $storeId,
-                    $saveRewriteHistory,
-                    $category->getEntityId()
-                )
-            );
+            $categoryStoreIds = $this->getCategoryStoreIds($category);
+
+            foreach ($categoryStoreIds as $categoryStoreId) {
+                $this->isSkippedProduct[$category->getEntityId()] = [];
+                $mergeDataProvider->merge(
+                    $this->getCategoryProductsUrlRewrites(
+                        $category,
+                        $categoryStoreId,
+                        $saveRewriteHistory,
+                        $category->getEntityId()
+                    )
+                );
+            }
         }
 
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
@@ -192,18 +209,14 @@ class UrlRewriteHandler
         foreach ($categoryIds as $categoryId) {
             $this->urlPersist->deleteByData(
                 [
-                    UrlRewrite::ENTITY_ID =>
-                        $categoryId,
-                    UrlRewrite::ENTITY_TYPE =>
-                        CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::ENTITY_ID => $categoryId,
+                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
             $this->urlPersist->deleteByData(
                 [
-                    UrlRewrite::METADATA =>
-                        $this->serializer->serialize(['category_id' => $categoryId]),
-                    UrlRewrite::ENTITY_TYPE =>
-                        ProductUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::METADATA => $this->serializer->serialize(['category_id' => $categoryId]),
+                    UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
         }
@@ -225,18 +238,19 @@ class UrlRewriteHandler
         $rootCategoryId = null
     ) {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+        $generateProductRewrite = (bool)$this->scopeConfig->getValue('catalog/seo/generate_category_product_rewrites');
 
         /** @var Collection $productCollection */
         $productCollection = $this->productCollectionFactory->create();
 
         $productCollection->addCategoriesFilter(['eq' => [$category->getEntityId()]])
-            ->setStoreId($storeId)
+            ->addStoreFilter($storeId)
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('visibility')
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('url_path');
 
-        foreach ($productCollection as $product) {
+        foreach ($this->getProducts($productCollection) as $product) {
             if (isset($this->isSkippedProduct[$category->getEntityId()]) &&
                 in_array($product->getId(), $this->isSkippedProduct[$category->getEntityId()])
             ) {
@@ -245,12 +259,34 @@ class UrlRewriteHandler
             $this->isSkippedProduct[$category->getEntityId()][] = $product->getId();
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
+            $product->setData('generate_rewrites', $generateProductRewrite);
             $mergeDataProvider->merge(
                 $this->categoryBasedProductRewriteGenerator->generate($product, $rootCategoryId)
             );
         }
 
         return $mergeDataProvider->getData();
+    }
+
+    /**
+     * Get products from provided collection
+     *
+     * @param Collection $collection
+     * @return \Generator|Product[]
+     */
+    private function getProducts(Collection $collection): \Generator
+    {
+        $collection->setPageSize(1000);
+        $pageCount = $collection->getLastPageNumber();
+        $currentPage = 1;
+        while ($currentPage <= $pageCount) {
+            $collection->setCurPage($currentPage);
+            foreach ($collection as $key => $product) {
+                yield $key => $product;
+            }
+            $collection->clear();
+            $currentPage++;
+        }
     }
 
     /**
@@ -280,7 +316,7 @@ class UrlRewriteHandler
             /* @var Collection $collection */
             $collection = $this->productCollectionFactory->create()
                 ->setStoreId($categoryStoreId)
-                ->addIdFilter($category->getAffectedProductIds())
+                ->addIdFilter($category->getChangedProductIds())
                 ->addAttributeToSelect('visibility')
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')

@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Validator\EmailAddress as EmailValidator;
 
 /**
  * Is Customer Email Available
@@ -24,12 +26,20 @@ class IsEmailAvailable implements ResolverInterface
     private $accountManagement;
 
     /**
+     * @var EmailValidator
+     */
+    private $emailValidator;
+
+    /**
      * @param AccountManagementInterface $accountManagement
+     * @param EmailValidator $emailValidator
      */
     public function __construct(
-        AccountManagementInterface $accountManagement
+        AccountManagementInterface $accountManagement,
+        EmailValidator $emailValidator
     ) {
         $this->accountManagement = $accountManagement;
+        $this->emailValidator = $emailValidator;
     }
 
     /**
@@ -42,11 +52,19 @@ class IsEmailAvailable implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $email = $args['email'] ?? null;
-        if (!$email) {
-            throw new GraphQlInputException(__('"Email should be specified'));
+        if (empty($args['email'])) {
+            throw new GraphQlInputException(__('Email must be specified'));
         }
-        $isEmailAvailable = $this->accountManagement->isEmailAvailable($email);
+
+        if (!$this->emailValidator->isValid($args['email'])) {
+            throw new GraphQlInputException(__('Email is invalid'));
+        }
+
+        try {
+            $isEmailAvailable = $this->accountManagement->isEmailAvailable($args['email']);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
+        }
 
         return [
             'is_email_available' => $isEmailAvailable

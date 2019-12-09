@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportGroupedProductWithSpecialPriceTest">
+        <annotations>
+            <features value="CatalogImportExport"/>
+            <stories value="Export products"/>
+            <title value="Export grouped product with special price"/>
+            <description value="Admin should be able to export grouped product with special price"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14009"/>
+            <group value="catalog_import_export"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create first simple product and add special price  -->
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
+            <createData entity="specialProductPrice2" stepKey="specialPriceToFirstProduct">
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+
+             <!-- Create second simple product and add special price-->
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
+            <createData entity="specialProductPrice2" stepKey="specialPriceToSecondProduct">
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </createData>
+
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create group product with created below simple products -->
+            <createData entity="ApiGroupedProduct2" stepKey="createGroupedProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addFirstProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addFirstProduct" stepKey="addSecondProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </updateData>
+
+            <!-- Run cron twice -->
+            <magentoCLI command="cron:run" stepKey="runCron1"/>
+            <magentoCLI command="cron:run" stepKey="runCron2"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
+        </before>
+        <after>
+            <!-- Deleted created products -->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete exported file -->
+            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to export page -->
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
+        <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
+
+        <!-- Export created below products -->
+        <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
+
+        <!-- Run cron -->
+        <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
+
+        <!-- Download product -->
+        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
+    </test>
+</tests>

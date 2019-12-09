@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Element\Template;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+
 /**
  * Constructor modification point for Magento\Framework\View\Element\Template.
  *
@@ -17,7 +19,7 @@ namespace Magento\Framework\View\Element\Template;
  * the classes they were introduced for.
  *
  * @api
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD)
  */
 class Context extends \Magento\Framework\View\Element\Context
 {
@@ -105,6 +107,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Element\Template\File\Resolver $resolver
      * @param \Magento\Framework\View\Element\Template\File\Validator $validator
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -133,7 +136,8 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Element\Template\File\Resolver $resolver,
-        \Magento\Framework\View\Element\Template\File\Validator $validator
+        \Magento\Framework\View\Element\Template\File\Validator $validator,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         parent::__construct(
             $request,
@@ -152,7 +156,8 @@ class Context extends \Magento\Framework\View\Element\Context
             $escaper,
             $filterManager,
             $localeDate,
-            $inlineTranslation
+            $inlineTranslation,
+            $lockQuery
         );
         $this->resolver = $resolver;
         $this->validator = $validator;
@@ -246,6 +251,8 @@ class Context extends \Magento\Framework\View\Element\Context
     }
 
     /**
+     * Get page config.
+     *
      * @return \Magento\Framework\View\Page\Config
      */
     public function getPageConfig()

@@ -21,5 +21,6 @@
         <element name="ProductDataMayBeLostModal" type="button" selector="//aside[contains(@class,'_show')]//header[contains(.,'Product data may be lost')]"/>
         <element name="ProductDataMayBeLostConfirmButton" type="button" selector="//aside[contains(@class,'_show')]//button[.='Change Input Type']"/>
         <element name="defaultLabel" type="text" selector="//td[contains(text(), '{{attributeName}}')]/following-sibling::td[contains(@class, 'col-frontend_label')]" parameterized="true"/>
+        <element name="formByStoreId" type="block" selector="//form[contains(@action,'store/{{store_id}}')]" parameterized="true"/>
     </section>
 </sections>

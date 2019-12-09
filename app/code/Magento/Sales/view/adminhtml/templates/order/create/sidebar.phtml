@@ -4,18 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-/** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar */
+/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar $block */
 ?>
 <div class="customer-current-activity-inner">
-    <h4 class="customer-activity-title"><?= /* @escapeNotVerified */ __('Customer\'s Activities') ?></h4>
+    <h4 class="customer-activity-title"><?= $block->escapeHtml(__('Customer\'s Activities')) ?></h4>
     <div class="create-order-sidebar-container">
     <?= $block->getChildHtml('top_button') ?>
-    <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child): ?>
-        <?php if ($_alias != 'top_button' && $_alias != 'bottom_button'): ?>
-            <?php if ($block->canDisplay($_child)): ?>
-                <div class="order-sidebar-block" id="order-sidebar_<?= /* @escapeNotVerified */ $_alias ?>">
+    <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child) : ?>
+        <?php if ($_alias != 'top_button' && $_alias != 'bottom_button') : ?>
+            <?php if ($block->canDisplay($_child)) : ?>
+                <div class="order-sidebar-block" id="order-sidebar_<?= $block->escapeHtmlAttr($_alias) ?>">
                     <?= $block->getChildHtml($_alias) ?>
                 </div>
             <?php endif; ?>
@@ -32,12 +30,12 @@ require([
 
     function addSidebarCompositeListType() {
         productConfigure.addListType('sidebar', {
-            urlFetch: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/configureProductToAdd') ?>',
-            urlConfirm: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/addConfigured') ?>'
+            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/configureProductToAdd'))) ?>',
+            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/addConfigured'))) ?>'
         });
         productConfigure.addListType('sidebar_wishlist', {
-            urlFetch: '<?= /* @escapeNotVerified */ $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
-            urlConfirm: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/addConfigured') ?>'
+            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))) ?>',
+            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/addConfigured'))) ?>'
         });
     }
 

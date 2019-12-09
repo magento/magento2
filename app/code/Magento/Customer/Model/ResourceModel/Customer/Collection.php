@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Customer;
 
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-
 /**
  * Customers collection
  *
@@ -45,7 +43,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $modelName
      *
-     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -61,8 +58,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        $modelName = self::CUSTOMER_MODEL_NAME,
-        ResourceModelPoolInterface $resourceModelPool = null
+        $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         $this->_fieldsetConfig = $fieldsetConfig;
         $this->_modelName = $modelName;
@@ -77,8 +73,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
             $resourceHelper,
             $universalFactory,
             $entitySnapshot,
-            $connection,
-            $resourceModelPool
+            $connection
         );
     }
 

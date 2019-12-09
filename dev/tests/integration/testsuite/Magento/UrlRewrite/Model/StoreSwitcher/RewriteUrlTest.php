@@ -8,15 +8,28 @@ declare(strict_types=1);
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreSwitcher;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreSwitcher;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class RewriteUrlTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Test store switching
+ */
+class RewriteUrlTest extends TestCase
 {
     /**
      * @var StoreSwitcher
@@ -34,6 +47,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Class dependencies initialization
      *
      * @return void
@@ -43,28 +61,26 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeSwitcher = $this->objectManager->get(StoreSwitcher::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->storeManager = $this->objectManager->create(StoreManagerInterface::class);
     }
 
     /**
+     * Test switching stores with non-existent cms pages and then redirecting to the homepage
+     *
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testSwitchToNonExistingPage(): void
     {
-        $fromStoreCode = 'default';
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $fromStore = $storeRepository->get($fromStoreCode);
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
 
-        $toStoreCode = 'fixture_second_store';
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $toStore = $storeRepository->get($toStoreCode);
-
-        $this->setBaseUrl($toStore);
+        $this->setBaseUrl($toStore, 'http://domain.com/');
 
         $product = $this->productRepository->get('simple333');
 
@@ -72,25 +88,22 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $expectedUrl = $toStore->getBaseUrl();
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+        $this->setBaseUrl($toStore, 'http://localhost/');
     }
 
     /**
+     * Testing store switching with existing cms pages
+     *
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
+     * @magentoDbIsolation disabled
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testSwitchToExistingPage(): void
     {
-        $fromStoreCode = 'default';
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $fromStore = $storeRepository->get($fromStoreCode);
-
-        $toStoreCode = 'fixture_second_store';
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $toStore = $storeRepository->get($toStoreCode);
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
 
         $redirectUrl = "http://localhost/index.php/page-c/";
         $expectedUrl = "http://localhost/index.php/page-c-on-2nd-store";
@@ -99,16 +112,72 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Testing store switching using cms pages with the same url_key but with different page_id
+     *
+     * @magentoDataFixture Magento/Cms/_files/two_cms_page_with_same_url_for_different_stores.php
+     * @magentoDbIsolation disabled
+     * @return void
+     */
+    public function testSwitchCmsPageToAnotherStore(): void
+    {
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
+        $redirectUrl = "http://localhost/index.php/page100/";
+        $expectedUrl = "http://localhost/index.php/page100/";
+        $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+    }
+
+    /**
+     * Test store switching with logged in customer on cms page with different url_key
+     *
+     * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea frontend
+     * @return void
+     */
+    public function testSwitchCmsPageToAnotherStoreAsCustomer(): void
+    {
+        /** @var CustomerRepositoryInterface $repository */
+        $repository = $this->objectManager->create(CustomerRepositoryInterface::class);
+        $this->loginAsCustomer($repository->get('customer@example.com'));
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
+
+        $redirectUrl = "http://localhost/index.php/page-c/";
+        $expectedUrl = "http://localhost/index.php/page-c-on-2nd-store";
+        /** @var DecoderInterface $decoder */
+        $decoder = $this->objectManager->create(DecoderInterface::class);
+        $secureRedirectUrl = $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl);
+        parse_str(parse_url($secureRedirectUrl, PHP_URL_QUERY), $secureRedirectUrlQueryParams);
+        $encodedActualUrl = $secureRedirectUrlQueryParams[ActionInterface::PARAM_NAME_URL_ENCODED];
+        $actualUrl = $decoder->decode($encodedActualUrl);
+        $this->assertEquals($expectedUrl, $actualUrl);
+    }
+
+    /**
+     * Login as customer
+     *
+     * @param CustomerInterface $customer
+     */
+    private function loginAsCustomer($customer)
+    {
+        /** @var Session $session */
+        $session = $this->objectManager->get(Session::class);
+        $session->setCustomerDataAsLoggedIn($customer);
+    }
+
+    /**
      * Set base url to store.
      *
      * @param StoreInterface $targetStore
+     * @param string $baseUrl
      * @return void
      */
-    private function setBaseUrl(StoreInterface $targetStore): void
+    private function setBaseUrl(StoreInterface $targetStore, string $baseUrl): void
     {
         $configValue = $this->objectManager->create(Value::class);
         $configValue->load('web/unsecure/base_url', 'path');
-        $baseUrl = 'http://domain.com/';
         if (!$configValue->getPath()) {
             $configValue->setPath('web/unsecure/base_url');
         }
@@ -119,5 +188,17 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
 
         $reinitibleConfig = $this->objectManager->create(ReinitableConfigInterface::class);
         $reinitibleConfig->reinit();
+    }
+
+    /**
+     * Get store object by storeCode
+     *
+     * @param string $storeCode
+     * @return StoreInterface
+     */
+    private function getStoreByCode(string $storeCode): StoreInterface
+    {
+        /** @var StoreRepositoryInterface */
+        return $this->storeManager->getStore($storeCode);
     }
 }

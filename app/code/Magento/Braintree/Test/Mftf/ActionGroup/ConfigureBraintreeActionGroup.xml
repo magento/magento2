@@ -5,20 +5,24 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="ConfigureBraintree">
+        <annotations>
+            <description>Sets up the Braintree configuration setting using the BraintreeConfigurationSection Data Entity. PLEASE NOTE: The Action Group values are Hardcoded.</description>
+        </annotations>
+
         <!-- GoTo ConfigureBraintree fields -->
         <click stepKey="clickOnSTORES" selector="{{AdminMenuSection.stores}}"/>
         <waitForPageLoad stepKey="waitForConfiguration" time="2"/>
-        <click stepKey="clickOnConfigurations" selector="{{AdminMenuSection.configuration}}" />
+        <click stepKey="clickOnConfigurations" selector="{{AdminMenuSection.configuration}}"/>
         <waitForPageLoad stepKey="waitForSales" time="2"/>
-        <click stepKey="clickOnSales" selector="{{ConfigurationListSection.sales}}" />
+        <click stepKey="clickOnSales" selector="{{ConfigurationListSection.sales}}"/>
         <waitForPageLoad stepKey="waitForPaymentMethods" time="2"/>
-        <click stepKey="clickOnPaymentMethods" selector="{{ConfigurationListSection.salesPaymentMethods}}" />
+        <click stepKey="clickOnPaymentMethods" selector="{{ConfigurationListSection.salesPaymentMethods}}"/>
         <waitForPageLoad stepKey="waitForConfigureButton" time="2"/>
-        <click stepKey="clickOnConfigureButtonForBraintree" selector="{{ConfigurationPaymentSection.configureButton}}" />
+        <click stepKey="clickOnConfigureButtonForBraintree" selector="{{ConfigurationPaymentSection.configureButton}}"/>
         <waitForPageLoad stepKey="BraintreeSettings" time="2"/>
 
         <!-- Fill Braintree fields -->
@@ -47,6 +51,10 @@
     </actionGroup>
 
     <actionGroup name="DisableBrainTree">
+        <annotations>
+            <description>Disables the Braintree and BraintreePaypal configuration settings via the CLI.</description>
+        </annotations>
+
         <magentoCLI stepKey="disableBrainTree" command="config:set payment/braintree/active 0"/>
         <magentoCLI stepKey="disableBrainTreePaypal" command="config:set payment/braintree_paypal/active 0"/>
     </actionGroup>

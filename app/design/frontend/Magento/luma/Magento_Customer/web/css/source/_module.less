@@ -200,7 +200,7 @@
 
     //  Checkout address (create shipping address)
     .field.street {
-        .field.additional {
+        .field {
             .label {
                 &:extend(.abs-visually-hidden all);
             }
@@ -408,6 +408,7 @@
     .form.send.confirmation,
     .form.password.forget,
     .form.create.account,
+    .form.search.advanced,
     .form.form-orders-search {
         min-width: 600px;
         width: 50%;
@@ -606,6 +607,17 @@
     .customer-account-index {
         .page-title-wrapper {
             position: relative;
+        }
+    }
+
+    .form.search.advanced {
+        .field.price {
+            .with-addon {
+                .input-text {
+                    flex-basis: auto;
+                    width: 100%;
+                }
+            }
         }
     }
 }

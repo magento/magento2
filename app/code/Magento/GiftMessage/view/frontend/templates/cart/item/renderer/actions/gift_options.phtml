@@ -4,19 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions */
 ?>
-<?php if (!$block->isVirtual()): ?>
-    <div id="gift-options-cart-item-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>"
-        data-bind="scope:'giftOptionsCartItem-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>'"
+<?php if (!$block->isVirtual()) : ?>
+    <div id="gift-options-cart-item-<?= (int) $block->getItem()->getId() ?>"
+        data-bind="scope:'giftOptionsCartItem-<?= (int) $block->getItem()->getId() ?>'"
         class="gift-options-cart-item">
         <!-- ko template: getTemplate() --><!-- /ko -->
         <script type="text/x-magento-init">
             {
-                "#gift-options-cart-item-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>": {
-                    "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
+                "#gift-options-cart-item-<?= (int) $block->getItem()->getId() ?>": {
+                    "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
                 }
             }
         </script>

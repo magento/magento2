@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
 
@@ -18,6 +18,10 @@ define([
                 $(this.options.emptyCartButton).attr('name', 'update_cart_action_temp');
                 $(this.options.updateCartActionContainer)
                     .attr('name', 'update_cart_action').attr('value', 'empty_cart');
+
+                if ($(this.options.emptyCartButton).parents('form').length > 0) {
+                    $(this.options.emptyCartButton).parents('form').submit();
+                }
             }, this));
             items = $.find('[data-role="cart-item-qty"]');
 

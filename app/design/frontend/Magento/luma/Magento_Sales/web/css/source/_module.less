@@ -66,6 +66,10 @@
             &:not(:last-child) {
                 margin-bottom: @indent__l;
             }
+
+            &.order-items-shipment {
+                overflow: visible;
+            }
         }
 
         .table-order-items {
@@ -97,7 +101,7 @@
                     }
 
                     &.options {
-                        padding: 0 0 15px;
+                        padding: 10px 10px 15px;
                     }
                 }
 
@@ -398,6 +402,17 @@
         &.orders-recent {
             &:extend(.abs-account-table-margin-mobile all);
             &:extend(.abs-no-border-top all);
+            .table-order-items {
+                &.table {
+                    tbody {
+                        > tr {
+                            > td.col {
+                                padding-left: 0;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
