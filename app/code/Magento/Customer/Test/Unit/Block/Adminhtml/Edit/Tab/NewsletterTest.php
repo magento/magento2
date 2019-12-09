@@ -16,7 +16,7 @@ use Magento\Customer\Model\Config\Share;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Checkbox;
 use Magento\Framework\Data\Form\Element\Fieldset;
-use \Magento\Framework\Data\Form\Element\Select;
+use Magento\Framework\Data\Form\Element\Select;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

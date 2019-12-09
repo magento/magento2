@@ -9,7 +9,7 @@ use Magento\Customer\Controller\RegistryConstants;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class NewsletterTest
+ * Test Customer account form block functionality
  *
  * @magentoAppArea adminhtml
  */
