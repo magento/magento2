@@ -11,7 +11,7 @@ namespace Magento\Shipping\Model\Tracking\Result;
 /**
  * Tracking Status DataObject
  *
- * @method string getCarrier()
+ * @method string|null getCarrier()
  * @method Status setCarrier(string $carrierCode)
  * @method string|null getCarrierTitle()
  * @method Status setCarrierTitle(string $carrierTitle)
