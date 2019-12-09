@@ -29,7 +29,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView"/>
 
         <!-- Open CMS Edit Page, Get the CMS ID and Modify Store View Option to All Store Views -->
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage">
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="cmsId" regex="#\/([0-9]*)?\/$#"/>
@@ -71,7 +71,7 @@
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchToCustomStoreView">
             <argument name="storeView" value="customStore"/>
         </actionGroup>
-        <actionGroup ref="navigateToStorefrontForCreatedPage" stepKey="navigateToTheStoreFront">
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront">
             <argument name="page" value="newrequestpath"/>
         </actionGroup>
         <actionGroup ref="AssertStoreFrontCMSPage" stepKey="assertCMSPage">
