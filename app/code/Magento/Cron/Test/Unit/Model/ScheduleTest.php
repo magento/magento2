@@ -6,8 +6,10 @@
 namespace Magento\Cron\Test\Unit\Model;
 
 use Magento\Cron\Model\Schedule;
+use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -22,7 +24,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule
+     * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceJobMock;
 
@@ -37,6 +39,11 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     private $dateTimeFactory;
 
     /**
+     * @var DeadlockRetrierInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $retrierMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -45,12 +52,21 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceJobMock = $this->getMockBuilder(\Magento\Cron\Model\ResourceModel\Schedule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['trySetJobStatusAtomic', '__wakeup', 'getIdFieldName', 'trySetJobStatuses'])
+            ->setMethods(
+                [
+                    'trySetJobStatusAtomic',
+                    '__wakeup',
+                    'getIdFieldName',
+                    'trySetJobStatuses',
+                    'getConnection',
+                    'getTable'
+                ]
+            )
             ->getMockForAbstractClass();
 
         $this->resourceJobMock->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
 
         $this->timezoneConverter = $this->getMockBuilder(TimezoneInterface::class)
             ->setMethods(['date'])
@@ -59,6 +75,8 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->setMethods(['create'])
             ->getMock();
+
+        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
     }
 
     /**
@@ -451,21 +469,44 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     {
         $scheduleId = 1;
         $jobCode = 'test_job';
+        $tableName = 'cron_schedule';
 
-        $this->resourceJobMock->expects($this->once())
-            ->method('trySetJobStatuses')
-            ->with($jobCode, Schedule::STATUS_ERROR, Schedule::STATUS_RUNNING)
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $tableName,
+                ['status' => Schedule::STATUS_ERROR],
+                ['job_code = ?' => $jobCode, 'status = ?' => Schedule::STATUS_RUNNING]
+            )
             ->willReturn(1);
+
         $this->resourceJobMock->expects($this->once())
             ->method('trySetJobStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
+        $this->resourceJobMock->expects($this->once())
+            ->method('getTable')
+            ->with($tableName)
+            ->willReturn($tableName);
+        $this->resourceJobMock->expects($this->exactly(3))
+            ->method('getConnection')
+            ->willReturn($connectionMock);
 
-        /** @var \Magento\Cron\Model\Schedule $model */
+        $this->retrierMock->expects($this->exactly(2))
+            ->method('execute')
+            ->willReturnCallback(
+                function ($callback) {
+                    return $callback();
+                }
+            );
+
+        /** @var Schedule $model */
         $model = $this->helper->getObject(
-            \Magento\Cron\Model\Schedule::class,
+            Schedule::class,
             [
-                'resource' => $this->resourceJobMock
+                'resource' => $this->resourceJobMock,
+                'retrier' => $this->retrierMock,
             ]
         );
         $model->setId($scheduleId);
@@ -486,21 +527,44 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     {
         $scheduleId = 1;
         $jobCode = 'test_job';
+        $tableName = 'cron_schedule';
 
-        $this->resourceJobMock->expects($this->once())
-            ->method('trySetJobStatuses')
-            ->with($jobCode, Schedule::STATUS_ERROR, Schedule::STATUS_RUNNING)
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $tableName,
+                ['status' => Schedule::STATUS_ERROR],
+                ['job_code = ?' => $jobCode, 'status = ?' => Schedule::STATUS_RUNNING]
+            )
             ->willReturn(1);
+
         $this->resourceJobMock->expects($this->once())
             ->method('trySetJobStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
+        $this->resourceJobMock->expects($this->once())
+            ->method('getTable')
+            ->with($tableName)
+            ->willReturn($tableName);
+        $this->resourceJobMock->expects($this->exactly(3))
+            ->method('getConnection')
+            ->willReturn($connectionMock);
+
+        $this->retrierMock->expects($this->exactly(2))
+            ->method('execute')
+            ->willReturnCallback(
+                function ($callback) {
+                    return $callback();
+                }
+            );
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
             \Magento\Cron\Model\Schedule::class,
             [
-                'resource' => $this->resourceJobMock
+                'resource' => $this->resourceJobMock,
+                'retrier' => $this->retrierMock,
             ]
         );
         $model->setId($scheduleId);

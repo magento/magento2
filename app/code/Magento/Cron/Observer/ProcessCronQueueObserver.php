@@ -15,6 +15,7 @@ use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\StatFactory;
+use Magento\Cron\Model\DeadlockRetrierInterface;
 
 /**
  * The observer for processing cron jobs.
@@ -157,6 +158,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     private $eventManager;
 
     /**
+     * @var DeadlockRetrierInterface
+     */
+    private $retrier;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Cron\Model\ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -171,6 +177,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param StatFactory $statFactory
      * @param \Magento\Framework\Lock\LockManagerInterface $lockManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param DeadlockRetrierInterface $retrier
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -187,7 +194,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\App\State $state,
         StatFactory $statFactory,
         \Magento\Framework\Lock\LockManagerInterface $lockManager,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        DeadlockRetrierInterface $retrier
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -203,6 +211,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->statProfiler = $statFactory->create();
         $this->lockManager = $lockManager;
         $this->eventManager = $eventManager;
+        $this->retrier = $retrier;
     }
 
     /**
@@ -325,7 +334,12 @@ class ProcessCronQueueObserver implements ObserverInterface
         }
 
         $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()));
-        $schedule->save();
+        $this->retrier->execute(
+            function () use ($schedule) {
+                $schedule->save();
+            },
+            $schedule->getResource()->getConnection()
+        );
 
         $this->startProfiling();
         $this->eventManager->dispatch('cron_job_run', ['job_name' => 'cron/' . $groupId . '/' . $jobCode]);
@@ -527,16 +541,17 @@ class ProcessCronQueueObserver implements ObserverInterface
         ];
 
         $jobs = $this->_config->getJobs()[$groupId];
-        /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
-        $scheduleResource = $this->_scheduleFactory->create()->getResource();
-        $connection = $scheduleResource->getConnection();
         $count = 0;
         foreach ($historyLifetimes as $status => $time) {
-            $count += $scheduleResource->cleanup(
+            $count += $this->cleanup(
                 [
                     'status = ?' => $status,
                     'job_code in (?)' => array_keys($jobs),
-                    'created_at < ?' => $connection->formatDate($currentTime - $time)
+                    'created_at < ?' => $this->_scheduleFactory
+                        ->create()
+                        ->getResource()
+                        ->getConnection()
+                        ->formatDate($currentTime - $time)
                 ]
             );
         }
@@ -650,9 +665,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         }
 
         if (count($jobsToCleanup) > 0) {
-            /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
-            $scheduleResource = $this->_scheduleFactory->create()->getResource();
-            $count = $scheduleResource->cleanup(
+            $count = $this->cleanup(
                 [
                     'status = ?' => Schedule::STATUS_PENDING,
                     'job_code in (?)' => $jobsToCleanup,
@@ -693,10 +706,8 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function cleanupScheduleMismatches()
     {
-        /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
-        $scheduleResource = $this->_scheduleFactory->create()->getResource();
         foreach ($this->invalid as $jobCode => $scheduledAtList) {
-            $scheduleResource->cleanup(
+            $this->cleanup(
                 [
                     'status = ?' => Schedule::STATUS_PENDING,
                     'job_code = ?' => $jobCode,
@@ -768,7 +779,12 @@ class ProcessCronQueueObserver implements ObserverInterface
                 $procesedJobs[$schedule->getJobCode()] = true;
             }
 
-            $schedule->save();
+            $this->retrier->execute(
+                function () use ($schedule) {
+                    $schedule->save();
+                },
+                $schedule->getResource()->getConnection()
+            );
         }
     }
 
@@ -820,5 +836,27 @@ class ProcessCronQueueObserver implements ObserverInterface
         ) {
             $this->logger->info($schedule->getMessages());
         }
+    }
+
+    /**
+     * Clean up schedule
+     *
+     * @param mixed $where
+     * @return int
+     */
+    private function cleanup($where = ''): int
+    {
+        /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
+        $scheduleResource = $this->_scheduleFactory->create()->getResource();
+
+        return (int) $this->retrier->execute(
+            function () use ($scheduleResource, $where) {
+                return $scheduleResource->getConnection()->delete(
+                    $scheduleResource->getTable('cron_schedule'),
+                    $where
+                );
+            },
+            $scheduleResource->getConnection()
+        );
     }
 }

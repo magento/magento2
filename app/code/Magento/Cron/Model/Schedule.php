@@ -57,6 +57,11 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     private $dateTimeFactory;
 
     /**
+     * @var DeadlockRetrierInterface
+     */
+    private $retrier;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -64,6 +69,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      * @param TimezoneInterface|null $timezoneConverter
      * @param DateTimeFactory|null $dateTimeFactory
+     * @param DeadlockRetrierInterface $retrier
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -72,11 +78,13 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         TimezoneInterface $timezoneConverter = null,
-        DateTimeFactory $dateTimeFactory = null
+        DateTimeFactory $dateTimeFactory = null,
+        DeadlockRetrierInterface $retrier = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->timezoneConverter = $timezoneConverter ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
         $this->dateTimeFactory = $dateTimeFactory ?: ObjectManager::getInstance()->get(DateTimeFactory::class);
+        $this->retrier = $retrier ?: ObjectManager::getInstance()->get(DeadlockRetrierInterface::class);
     }
 
     /**
@@ -262,17 +270,31 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
         $scheduleResource = $this->_getResource();
 
-        $scheduleResource->trySetJobStatuses(
-            $this->getJobCode(),
-            self::STATUS_ERROR,
-            self::STATUS_RUNNING
+        // Change statuses from running to error for terminated jobs
+        $this->retrier->execute(
+            function () use ($scheduleResource) {
+                return $scheduleResource->getConnection()->update(
+                    $scheduleResource->getTable('cron_schedule'),
+                    ['status' => self::STATUS_ERROR],
+                    ['job_code = ?' => $this->getJobCode(), 'status = ?' => self::STATUS_RUNNING]
+                );
+            },
+            $scheduleResource->getConnection()
         );
 
-        if ($scheduleResource->trySetJobStatusAtomic(
-            $this->getId(),
-            self::STATUS_RUNNING,
-            self::STATUS_PENDING
-        )) {
+        // Change status from pending to running for ran jobs
+        $result = $this->retrier->execute(
+            function () use ($scheduleResource) {
+                return $scheduleResource->trySetJobStatusAtomic(
+                    $this->getId(),
+                    self::STATUS_RUNNING,
+                    self::STATUS_PENDING
+                );
+            },
+            $scheduleResource->getConnection()
+        );
+
+        if ($result) {
             $this->setStatus(self::STATUS_RUNNING);
             return true;
         }
