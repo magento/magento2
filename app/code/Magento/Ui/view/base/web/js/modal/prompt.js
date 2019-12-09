@@ -73,13 +73,14 @@ define([
          */
         _create: function () {
             var modalContent;
-            
+
             this.options.focus = this.options.promptField;
             this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
             modalContent = this.modal.find(this.options.modalContent).append(this.getFormTemplate());
-            if(this.options.formSelector) {
-                modalContentElem.find(this.options.formSelector).on('submit', _.bind(this.submitForm, this));
+
+            if (this.options.formSelector) {
+                modalContent.find(this.options.formSelector).on('submit', _.bind(this.submitForm, this));
             }
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
 
@@ -126,7 +127,7 @@ define([
 
         /**
          * Handle submit of the form inside prompt
-         * @param event {Event} Event triggered by submit
+         * @param {Event} event
          */
         submitForm: function (event) {
             event.preventDefault();
