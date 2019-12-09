@@ -26,7 +26,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class MassUnsubscribeTest
+ * Class to test mass unsubscribe customers by ids
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassUnsubscribeTest extends TestCase

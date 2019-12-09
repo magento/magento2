@@ -15,7 +15,7 @@ use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Class MassSubscribe
+ * Class to mass subscribe customers by ids
  */
 class MassSubscribe extends AbstractMassAction implements HttpPostActionInterface
 {

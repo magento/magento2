@@ -19,7 +19,7 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**
- * Class MassUnsubscribe
+ * Class to mass unsubscribe customers by ids
  */
 class MassUnsubscribe extends AbstractMassAction implements HttpPostActionInterface
 {
