@@ -8,24 +8,24 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\Framework\Bulk\OperationManagementInterface;
 use Magento\AsynchronousOperations\Model\ConfigInterface as AsyncConfig;
-use Magento\Framework\MessageQueue\MessageValidator;
-use Magento\Framework\MessageQueue\MessageEncoder;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Bulk\OperationManagementInterface;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
+use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\MessageValidator;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class OperationProcessor
+ * Proccess operation
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -136,7 +136,9 @@ class OperationProcessor
                 $result = $this->executeHandler($callback, $entityParams);
                 $status = $result['status'];
                 $errorCode = $result['error_code'];
+                // phpcs:disable Magento2.Performance.ForeachArrayMerge
                 $messages = array_merge($messages, $result['messages']);
+                // phpcs:enable Magento2.Performance.ForeachArrayMerge
                 $outputData = $result['output_data'];
             }
         }
@@ -186,7 +188,9 @@ class OperationProcessor
             'output_data' => null
         ];
         try {
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
             $result['output_data'] = call_user_func_array($callback, $entityParams);
+            // phpcs:enable Magento2.Functions.DiscouragedFunction
             $result['messages'][] = sprintf('Service execution success %s::%s', get_class($callback[0]), $callback[1]);
         } catch (\Zend_Db_Adapter_Exception  $e) {
             $this->logger->critical($e->getMessage());
