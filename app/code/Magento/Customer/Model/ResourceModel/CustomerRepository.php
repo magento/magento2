@@ -214,6 +214,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
             );
         }
+        $this->setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr);
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
             $customerModel->setAttributeSetId(CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER);
@@ -450,6 +451,20 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         if (isset($customerArray['ignore_validation_flag'])) {
             $customerModel->setData('ignore_validation_flag', true);
+        }
+    }
+
+    /**
+     * Set customer group id
+     *
+     * @param Customer $customerModel
+     * @param array $customerArr
+     * @param array $prevCustomerDataArr
+     */
+    private function setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr)
+    {
+        if (!isset($customerArr['group_id']) && $prevCustomerDataArr && isset($prevCustomerDataArr['group_id'])) {
+            $customerModel->setGroupId($prevCustomerDataArr['group_id']);
         }
     }
 }
