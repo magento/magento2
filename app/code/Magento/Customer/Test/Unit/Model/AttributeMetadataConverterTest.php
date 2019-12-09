@@ -22,9 +22,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AttributeMetadataConverterTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @package Magento\Customer\Test\Unit\Model
  */
 class AttributeMetadataConverterTest extends TestCase
 {
