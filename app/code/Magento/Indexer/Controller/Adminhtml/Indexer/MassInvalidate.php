@@ -55,6 +55,6 @@ class MassInvalidate extends \Magento\Indexer\Controller\Adminhtml\Indexer imple
                 );
             }
         }
-        $this->_redirect('*/*/list');
+        return $this->resultRedirectFactory->create()->setPath('*/*/list');
     }
 }
