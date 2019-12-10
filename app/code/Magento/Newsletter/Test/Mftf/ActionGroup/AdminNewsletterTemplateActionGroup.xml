@@ -8,7 +8,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SwitchToPreviewIframeActionGroup">
-        <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
         <wait time="10" stepKey="waitBeforeSwitchToIframe"/>
         <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
