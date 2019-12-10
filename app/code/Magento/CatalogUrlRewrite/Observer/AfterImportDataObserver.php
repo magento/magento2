@@ -340,7 +340,7 @@ class AfterImportDataObserver implements ObserverInterface
      */
     private function addProductToImport($product, $storeId)
     {
-        if ($product->getVisibility() == (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]) {
+        if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
             return $this;
         }
         if (!isset($this->products[$product->getId()])) {
