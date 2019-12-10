@@ -172,7 +172,7 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute($indexerIds, $exception)
     {
-        $this->controller = new \Magento\Indexer\Controller\Adminhtml\Indexer\MassInvalidate($this->contextMock);
+        $this->controller = new \Magento\Indexer\Controller\Adminhtml\Indexer\MassInvalidate($this->contextMock, $this->indexReg);
         $this->request->expects($this->any())
             ->method('getParam')->with('indexer_ids')
             ->will($this->returnValue($indexerIds));
