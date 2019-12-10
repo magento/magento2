@@ -220,8 +220,11 @@ class CustomerPlugin
      */
     public function afterGetById(CustomerRepositoryInterface $subject, CustomerInterface $customer)
     {
-        $isSubscribed = $this->getSubscriber($customer)->isSubscribed();
-        $this->addIsSubscribedExtensionAttr($customer, $isSubscribed);
+        $extensionAttributes = $customer->getExtensionAttributes();
+        if ($extensionAttributes === null || $extensionAttributes->getIsSubscribed() === null) {
+            $isSubscribed = $this->getSubscriber($customer)->isSubscribed();
+            $this->addIsSubscribedExtensionAttr($customer, $isSubscribed);
+        }
 
         return $customer;
     }
