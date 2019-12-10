@@ -9,9 +9,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="weee_tax" resource="default" engine="innodb" comment="Weee Tax">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Website Id"/>
+                default="0" comment="Website ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="varchar" name="country" nullable="true" length="2" comment="Country"/>
@@ -20,7 +20,7 @@
         <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="false" identity="false" default="0"
                 comment="State"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Attribute Id"/>
+                comment="Attribute ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
         </constraint>

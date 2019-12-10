@@ -302,6 +302,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
         ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
         'invalidNewToDateValue' => 'Make sure new_to_date is later than or the same as new_from_date',
+        // Can't add new translated strings in patch release
+        'invalidLayoutUpdate' => 'Invalid format.',
+        'insufficientPermissions' => 'Invalid format.',
     ];
     //@codingStandardsIgnoreEnd
 
@@ -1195,7 +1198,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
             $this->_fieldsMap = array_merge($this->_fieldsMap, $model->getCustomFieldsMapping());
             $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
-            // phpcs:enable 
+            // phpcs:enable
         }
         $this->_initErrorTemplates();
         // remove doubles
@@ -1511,7 +1514,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @throws LocalizedException
-     * phpcs:disable Generic.Metrics.NestingLevel
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function _saveProducts()
     {
@@ -2032,9 +2035,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _getUploader()
     {
         if ($this->_fileUploader === null) {
-            $this->_fileUploader = $this->_uploaderFactory->create();
+            $fileUploader = $this->_uploaderFactory->create();
 
-            $this->_fileUploader->init();
+            $fileUploader->init();
 
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
@@ -2045,7 +2048,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
             }
 
-            if (!$this->_fileUploader->setTmpDir($tmpPath)) {
+            if (!$fileUploader->setTmpDir($tmpPath)) {
                 throw new LocalizedException(
                     __('File directory \'%1\' is not readable.', $tmpPath)
                 );
@@ -2054,11 +2057,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $destinationPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationPath);
-            if (!$this->_fileUploader->setDestDir($destinationPath)) {
+            if (!$fileUploader->setDestDir($destinationPath)) {
                 throw new LocalizedException(
                     __('File directory \'%1\' is not writable.', $destinationPath)
                 );
             }
+
+            $this->_fileUploader = $fileUploader;
         }
         return $this->_fileUploader;
     }
@@ -3057,6 +3062,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param int $nextLinkId
      * @param array $positionAttrId
      * @return void
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processLinkBunches(
         array $bunch,
@@ -3067,6 +3074,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $productIds = [];
         $linkRows = [];
         $positionRows = [];
+        $linksToDelete = [];
 
         $bunch = array_filter($bunch, [$this, 'isRowAllowedToImport'], ARRAY_FILTER_USE_BOTH);
         foreach ($bunch as $rowData) {
@@ -3083,10 +3091,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
             foreach ($linkNameToId as $linkName => $linkId) {
                 $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
+                //process empty value
+                if (!empty($linkSkus[0]) && $linkSkus[0] === $this->getEmptyAttributeValueConstant()) {
+                    $linksToDelete[$linkId][] = $productId;
+                    continue;
+                }
+
                 $linkPositions = !empty($rowData[$linkName . 'position'])
                     ? explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
                     : [];
-
                 $linkSkus = array_filter(
                     $linkSkus,
                     function ($linkedSku) use ($sku) {
@@ -3095,6 +3108,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             && strcasecmp($linkedSku, $sku) !== 0;
                     }
                 );
+
                 foreach ($linkSkus as $linkedKey => $linkedSku) {
                     $linkedId = $this->getProductLinkedId($linkedSku);
                     if ($linkedId == null) {
@@ -3126,7 +3140,32 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
         }
+        $this->deleteProductsLinks($resource, $linksToDelete);
         $this->saveLinksData($resource, $productIds, $linkRows, $positionRows);
+    }
+
+    /**
+     * Delete links
+     *
+     * @param Link $resource
+     * @param array $linksToDelete
+     * @return void
+     * @throws LocalizedException
+     */
+    private function deleteProductsLinks(Link $resource, array $linksToDelete)
+    {
+        if (!empty($linksToDelete) && Import::BEHAVIOR_APPEND === $this->getBehavior()) {
+            foreach ($linksToDelete as $linkTypeId => $productIds) {
+                if (!empty($productIds)) {
+                    $whereLinkId = $this->_connection->quoteInto('link_type_id', $linkTypeId);
+                    $whereProductId =  $this->_connection->quoteInto('product_id IN (?)', array_unique($productIds));
+                    $this->_connection->delete(
+                        $resource->getMainTable(),
+                        $whereLinkId . ' AND ' . $whereProductId
+                    );
+                }
+            }
+        }
     }
 
     /**

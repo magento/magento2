@@ -11,6 +11,7 @@
     <test name="AdminProductBackRedirectNavigateFromCustomerViewCartProduct">
         <annotations>
             <features value="Customer"/>
+            <stories value="Product Back Button"/>
             <title value="Product back redirect navigate from customer view cart product"/>
             <description value="Back button on product page is redirecting to customer page if opened form shopping cart"/>
             <severity value="MINOR"/>

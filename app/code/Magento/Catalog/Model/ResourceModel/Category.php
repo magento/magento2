@@ -18,6 +18,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Catalog\Setup\CategorySetup;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Resource model for category entity
@@ -96,6 +98,11 @@ class Category extends AbstractResource
     private $indexerProcessor;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -106,6 +113,7 @@ class Category extends AbstractResource
      * @param Processor $indexerProcessor
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param MetadataPool|null $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,7 +125,8 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         Processor $indexerProcessor,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        MetadataPool $metadataPool = null
     ) {
         parent::__construct(
             $context,
@@ -132,6 +141,7 @@ class Category extends AbstractResource
         $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -761,6 +771,8 @@ class Category extends AbstractResource
             'custom_layout_update'
         )->addAttributeToSelect(
             'custom_apply_to_products'
+        )->addAttributeToSelect(
+            'custom_layout_update_file'
         )->addFieldToFilter(
             'entity_id',
             ['in' => $pathIds]
@@ -1160,13 +1172,14 @@ class Category extends AbstractResource
             return [];
         }
 
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()
             ->from(
                 ['cce' => $this->getTable('catalog_category_entity')],
-                ['entity_id', 'parent_id', 'path']
+                [$linkField, 'parent_id', 'path']
             )->join(
                 ['cce_int' => $this->getTable('catalog_category_entity_int')],
-                'cce.entity_id = cce_int.entity_id',
+                'cce.' . $linkField . ' = cce_int.' . $linkField,
                 ['is_anchor' => 'cce_int.value']
             )->where(
                 'cce_int.attribute_id = ?',

@@ -15,8 +15,9 @@
         <?= $block->getChildHtml('track-all-link') ?>
     <?php endif; ?>
     <a href="<?= $block->escapeUrl($block->getPrintAllShipmentsUrl($_order)) ?>"
-       onclick="this.target='_blank'"
-       class="action print">
+       class="action print"
+       target="_blank"
+       rel="noopener">
         <span><?= $block->escapeHtml(__('Print All Shipments')) ?></span>
     </a>
 </div>
@@ -24,8 +25,9 @@
     <div class="order-title">
         <strong><?= $block->escapeHtml(__('Shipment #')) ?><?= $block->escapeHtml($_shipment->getIncrementId()) ?></strong>
         <a href="<?= $block->escapeUrl($block->getPrintShipmentUrl($_shipment)) ?>"
-           onclick="this.target='_blank'"
-           class="action print">
+           class="action print"
+           target="_blank"
+           rel="noopener">
             <span><?= $block->escapeHtml(__('Print Shipment')) ?></span>
         </a>
         <a href="#"
