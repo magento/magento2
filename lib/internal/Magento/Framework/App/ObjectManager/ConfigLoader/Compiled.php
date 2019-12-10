@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
- * Class Compiled
+ * Load configuration files
  */
 class Compiled implements ConfigLoaderInterface
 {

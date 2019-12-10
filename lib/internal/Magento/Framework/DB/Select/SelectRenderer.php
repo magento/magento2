@@ -8,7 +8,7 @@ namespace Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select;
 
 /**
- * Class SelectRenderer
+ * Phrase renderer interface
  */
 class SelectRenderer implements RendererInterface
 {

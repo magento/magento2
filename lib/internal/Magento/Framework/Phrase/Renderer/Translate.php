@@ -1,7 +1,5 @@
 <?php
 /**
- * Translate Phrase renderer
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,7 +10,7 @@ use Magento\Framework\TranslateInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Translate
+ * Translate Phrase renderer
  */
 class Translate implements RendererInterface
 {
