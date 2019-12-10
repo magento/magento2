@@ -80,7 +80,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     private function getUploadedImageName($value)
     {
         if (is_array($value) && isset($value[0]['name'])) {
-            return $value[0]['name'];
+            return basename($value[0]['name']);
         }
 
         return '';
