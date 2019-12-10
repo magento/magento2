@@ -80,7 +80,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     private function getUploadedImageName($value)
     {
         if (is_array($value) && isset($value[0]['name'])) {
-            return basename($value[0]['name']);
+            return $value[0]['name'];
         }
 
         return '';
@@ -198,6 +198,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function afterSave($object)
     {
         $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
+
+        if (is_array($value) && count($value)) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $value[0]['name'] = basename($value[0]['name']);
+        }
 
         if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
             try {
