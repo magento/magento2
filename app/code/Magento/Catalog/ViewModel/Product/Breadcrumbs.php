@@ -10,6 +10,7 @@ use Magento\Catalog\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Escaper;
@@ -44,6 +45,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     /**
      * @param Data $catalogData
      * @param ScopeConfigInterface $scopeConfig
+     * @param Json|null $json
      * @param JsonHexTag $jsonSerializer
      * @param Escaper|null $escaper
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -51,6 +53,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     public function __construct(
         Data $catalogData,
         ScopeConfigInterface $scopeConfig,
+        Json $json = null,
         JsonHexTag $jsonSerializer,
         Escaper $escaper = null
     ) {
@@ -114,7 +117,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
                     'useCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
                     'product' => $this->escaper->escapeHtml($this->getProductName())
                 ]
-                ]
+            ]
         );
     }
 
