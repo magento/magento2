@@ -33,36 +33,36 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     private $scopeConfig;
 
     /**
-     * @var JsonHexTag
-     */
-    private $jsonSerializer;
-
-    /**
      * @var Escaper
      */
     private $escaper;
 
     /**
+     * @var JsonHexTag
+     */
+    private $jsonSerializer;
+
+    /**
      * @param Data $catalogData
      * @param ScopeConfigInterface $scopeConfig
      * @param Json|null $json
-     * @param JsonHexTag $jsonSerializer
      * @param Escaper|null $escaper
+     * @param JsonHexTag|null $jsonSerializer
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Data $catalogData,
         ScopeConfigInterface $scopeConfig,
         Json $json = null,
-        JsonHexTag $jsonSerializer,
-        Escaper $escaper = null
+        Escaper $escaper = null,
+        JsonHexTag $jsonSerializer = null
     ) {
         parent::__construct();
 
         $this->catalogData = $catalogData;
         $this->scopeConfig = $scopeConfig;
-        $this->jsonSerializer = $jsonSerializer;
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
+        $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(JsonHexTag::class);
     }
 
     /**
