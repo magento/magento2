@@ -17,6 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -68,6 +69,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         'default' => 'default_value',
         'size' => 'multiline_count',
     ];
+
+    private $boolMetaProperties = ['visible', 'required'];
 
     /**
      * Form element mapping
@@ -369,16 +372,26 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
                 $meta[$code][$metaName] = $value;
+                if (in_array($metaName, $this->boolMetaProperties, true)) {
+                    $meta[$code][$metaName] = (bool)$meta[$code][$metaName];
+                }
                 if ('frontend_input' === $origName) {
                     $meta[$code]['formElement'] = isset($this->formElement[$value])
                         ? $this->formElement[$value]
                         : $value;
                 }
                 if ($attribute->usesSource()) {
-                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
-                    foreach ($meta[$code]['options'] as &$option) {
+                    $source = $attribute->getSource();
+                    $currentCategory = $this->getCurrentCategory();
+                    if ($source instanceof SpecificSourceInterface && $currentCategory) {
+                        $options = $source->getOptionsFor($currentCategory);
+                    } else {
+                        $options = $source->getAllOptions();
+                    }
+                    foreach ($options as &$option) {
                         $option['__disableTmpl'] = true;
                     }
+                    $meta[$code]['options'] = $options;
                 }
             }
 
@@ -533,6 +546,12 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private function convertValues($category, $categoryData): array
     {
         foreach ($category->getAttributes() as $attributeCode => $attribute) {
+            if ($attributeCode === 'custom_layout_update_file') {
+                if (!empty($categoryData['custom_layout_update'])) {
+                    $categoryData['custom_layout_update_file']
+                        = \Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
+                }
+            }
             if (!isset($categoryData[$attributeCode])) {
                 continue;
             }
@@ -629,6 +648,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                     'custom_design',
                     'page_layout',
                     'custom_layout_update',
+                    'custom_layout_update_file'
                 ],
             'schedule_design_update' => [
                     'custom_design_from',

@@ -94,7 +94,7 @@ class ExportFileDataProvider extends DataProvider
             return $emptyResponse;
         }
 
-        $files = $this->file->readDirectoryRecursively($directory->getAbsolutePath() . 'export/');
+        $files = $this->getExportFiles($directory->getAbsolutePath() . 'export/');
         if (empty($files)) {
             return $emptyResponse;
         }
@@ -110,5 +110,29 @@ class ExportFileDataProvider extends DataProvider
         $result['items'] = array_slice($result['items'], $pageOffset, $pageSize);
 
         return $result;
+    }
+
+    /**
+     * Get files from directory path, sort them by date modified and return sorted array of full path to files
+     *
+     * @param string $directoryPath
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function getExportFiles(string $directoryPath): array
+    {
+        $sortedFiles = [];
+        $files = $this->file->readDirectoryRecursively($directoryPath);
+        if (empty($files)) {
+            return [];
+        }
+        foreach ($files as $filePath) {
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $sortedFiles[filemtime($filePath)] = $filePath;
+        }
+        //sort array elements using key value
+        krsort($sortedFiles);
+
+        return $sortedFiles;
     }
 }

@@ -11,9 +11,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\Model\AbstractModel;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteDTO;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\EntityManager\TypeResolver;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Returns URL rewrites list for the specified product
@@ -26,12 +28,36 @@ class UrlRewrite implements ResolverInterface
     private $urlFinder;
 
     /**
+     * @var array
+     */
+    private $entityTypeMapping;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
+    /**
      * @param UrlFinderInterface $urlFinder
+     * @param TypeResolver $typeResolver
+     * @param MetadataPool $metadataPool
+     * @param array $entityTypeMapping
      */
     public function __construct(
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        TypeResolver $typeResolver,
+        MetadataPool $metadataPool,
+        array $entityTypeMapping = []
     ) {
         $this->urlFinder = $urlFinder;
+        $this->typeResolver = $typeResolver;
+        $this->metadataPool = $metadataPool;
+        $this->entityTypeMapping = $entityTypeMapping;
     }
 
     /**
@@ -48,11 +74,24 @@ class UrlRewrite implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /** @var AbstractModel $entity */
+        /** @var  AbstractModel $entity */
         $entity = $value['model'];
         $entityId = $entity->getEntityId();
 
-        $urlRewriteCollection = $this->urlFinder->findAllByData([UrlRewriteDTO::ENTITY_ID => $entityId]);
+        $resolveEntityType = $this->typeResolver->resolve($entity);
+        $metadata = $this->metadataPool->getMetadata($resolveEntityType);
+        $entityType = $this->getEntityType($metadata->getEavEntityType());
+
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+
+        $data = [
+            UrlRewriteDTO::ENTITY_TYPE => $entityType,
+            UrlRewriteDTO::ENTITY_ID => $entityId,
+            UrlRewriteDTO::STORE_ID => $storeId
+        ];
+
+        $urlRewriteCollection = $this->urlFinder->findAllByData($data);
+
         $urlRewrites = [];
 
         /** @var UrlRewriteDTO $urlRewrite */
@@ -80,14 +119,32 @@ class UrlRewrite implements ResolverInterface
     {
         $urlParameters = [];
         $targetPathParts = explode('/', trim($targetPath, '/'));
+        $count = count($targetPathParts) - 1;
 
-        for ($i = 3; ($i < sizeof($targetPathParts) - 1); $i += 2) {
+        /** $index starts from 3 to eliminate catalog/product/view/ part and fetch only name,
+         value data from from target path */
+        //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+        for ($index = 3; $index < $count; $index += 2) {
             $urlParameters[] = [
-                'name' => $targetPathParts[$i],
-                'value' => $targetPathParts[$i + 1]
+                'name' => $targetPathParts[$index],
+                'value' => $targetPathParts[$index + 1]
             ];
         }
-
         return $urlParameters;
+    }
+
+    /**
+     * Get the entity type
+     *
+     * @param string $entityTypeMetadata
+     * @return string
+     */
+    private function getEntityType(string $entityTypeMetadata) : string
+    {
+        $entityType = '';
+        if ($entityTypeMetadata) {
+            $entityType = $this->entityTypeMapping[$entityTypeMetadata];
+        }
+        return $entityType;
     }
 }
