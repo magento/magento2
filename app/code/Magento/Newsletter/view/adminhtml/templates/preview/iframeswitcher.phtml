@@ -8,7 +8,7 @@
 ?>
 <div id="preview" class="cms-revision-preview">
     <div class="toolbar">
-        <?php if (!$block->isSingleStoreMode()) :?>
+        <?php if (!$block->isSingleStoreMode()):?>
         <div class="store-switcher">
             <?= $block->getChildHtml('store_switcher') ?>
         </div>
