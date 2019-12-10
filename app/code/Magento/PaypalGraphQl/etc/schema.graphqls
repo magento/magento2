@@ -7,7 +7,7 @@ type Query {
 }
 
 type Mutation {
-    createPaypalExpressToken(input: PaypalExpressTokenInput!): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates an Express Checkout transaction and receives a token. Use this mutation for Express Checkout and Payments Standard payment methods.")
+    createPaypalExpressToken(input: PaypalExpressTokenInput!): PaypalExpressTokenOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates an Express Checkout transaction and receives a token. Use this mutation for Express Checkout and Payments Standard payment methods.")
     createPayflowProToken(input: PayflowProTokenInput!): CreatePayflowProTokenOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProToken") @doc(description: "Initiates a transaction and receives a token. Use this mutation for Payflow Pro and Payments Pro payment methods")
     handlePayflowProResponse(input: PayflowProResponseInput!): PayflowProResponseOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProResponse") @doc(description: "Handles payment response and saves payment in Quote. Use this mutations for Payflow Pro and Payments Pro payment methods.")
 }
@@ -20,7 +20,12 @@ input PaypalExpressTokenInput @doc(description: "Defines the attributes required
     express_button: Boolean @doc(description: "Indicates whether the buyer selected the quick checkout button. The default value is false")
 }
 
-type PaypalExpressToken @doc(description: "Contains the token returned by PayPal and a set of URLs that allow the buyer to authorize payment and adjust checkout details. Applies to Express Checkout and Payments Standard payment methods.") {
+type PaypalExpressToken @doc(description: "Deprecated: use type `PaypalExpressTokenOutput` instead") {
+    token: String @deprecated(reason: "Use field `token` of type `PaypalExpressTokenOutput` instead") @doc(description:"The token returned by PayPal")
+    paypal_urls: PaypalExpressUrlList @deprecated(reason: "Use field `paypal_urls` of type `PaypalExpressTokenOutput` instead") @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details")
+}
+
+type PaypalExpressTokenOutput @doc(description: "Contains the token returned by PayPal and a set of URLs that allow the buyer to authorize payment and adjust checkout details. Applies to Express Checkout and Payments Standard payment methods.") {
     token: String @doc(description:"The token returned by PayPal")
     paypal_urls: PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details")
 }

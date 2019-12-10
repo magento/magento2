@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for create customer functionallity
+ * Test for create customer functionality
  */
 class CreateCustomerTest extends GraphQlAbstract
 {
@@ -27,7 +27,7 @@ class CreateCustomerTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -140,7 +140,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Required parameters are missing: Email
+     * @expectedExceptionMessage  Required parameters are missing: Email
      */
     public function testCreateCustomerIfEmailMissed()
     {
@@ -275,7 +275,7 @@ mutation {
 QUERY;
         $this->graphQlMutation($query);
     }
- 
+
     /**
      * @magentoConfigFixture default_store newsletter/general/active 0
      */
@@ -308,7 +308,40 @@ QUERY;
         $this->assertEquals(false, $response['createCustomer']['customer']['is_subscribed']);
     }
 
-    public function tearDown()
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage A customer with the same email address already exists in an associated website.
+     */
+    public function testCreateCustomerIfCustomerWithProvidedEmailAlreadyExists()
+    {
+        $existedEmail = 'customer@example.com';
+        $password = 'test123#';
+        $firstname = 'John';
+        $lastname = 'Smith';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            email: "{$existedEmail}"
+            password: "{$password}"
+            firstname: "{$firstname}"
+            lastname: "{$lastname}"
+        }
+    ) {
+        customer {
+            firstname
+            lastname
+            email
+        }
+    }
+}
+QUERY;
+        $this->graphQlMutation($query);
+    }
+
+    public function tearDown(): void
     {
         $newEmail = 'new_customer@example.com';
         try {

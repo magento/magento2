@@ -191,6 +191,18 @@
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
         <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="dontSeeCategoryInTree"/>
     </actionGroup>
+    <actionGroup name="AdminDeleteCategoryByName" extends="DeleteCategory">
+        <arguments>
+            <argument name="categoryName" type="string" defaultValue="category1"/>
+        </arguments>
+        <remove keyForRemoval="clickCategoryLink"/>
+        <remove keyForRemoval="dontSeeCategoryInTree"/>
+        <remove keyForRemoval="expandToSeeAllCategories"/>
+        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandAll}}" dependentSelector="{{AdminCategorySidebarTreeSection.categoryByName(categoryName)}}" visible="false" stepKey="expandCategories" after="waitForCategoryPageLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryByName(categoryName)}}" stepKey="clickCategory" after="expandCategories"/>
+        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandAll}}" dependentSelector="{{AdminCategorySidebarTreeSection.categoryByName(categoryName)}}" visible="false" stepKey="expandCategoriesToSeeAll" after="seeDeleteSuccess"/>
+        <dontSee selector="{{AdminCategorySidebarTreeSection.categoryByName(categoryName)}}" stepKey="dontSeeCategory" after="expandCategoriesToSeeAll"/>
+    </actionGroup>
 
     <!-- Actions to fill out a new category from the product page-->
     <!-- The action assumes that you are already on an admin product configuration page -->
