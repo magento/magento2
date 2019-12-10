@@ -36,7 +36,7 @@
             <createData entity="NewRootCategory" stepKey="createNewRootCategoryA"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>

@@ -121,11 +121,15 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if ($this->fileResidesOutsideCategoryDir($value)) {
             // use relative path for image attribute so we know it's outside of category dir when we fetch it
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $value[0]['url'] = parse_url($value[0]['url'], PHP_URL_PATH);
             $value[0]['name'] = $value[0]['url'];
         }
 
         if ($imageName = $this->getUploadedImageName($value)) {
-            $imageName = $this->checkUniqueImageName($imageName);
+            if (!$this->fileResidesOutsideCategoryDir($value)) {
+                $imageName = $this->checkUniqueImageName($imageName);
+            }
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
@@ -182,7 +186,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return false;
         }
 
-        return strpos($fileUrl, $baseMediaDir) === 0;
+        return strpos($fileUrl, $baseMediaDir) !== false;
     }
 
     /**

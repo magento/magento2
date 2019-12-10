@@ -17,9 +17,6 @@
             <testCaseId value="MC-14769"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -80,63 +77,27 @@
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        
+
         <!-- Navigate to category on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
-        
-        <!-- Check product 1 name on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
-            <argument name="productInfo" value="$createProduct1.name$"/>
-            <argument name="productNumber" value="3"/>
-        </actionGroup>
 
         <!-- Check product 1 price on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Price">
-            <argument name="productInfo" value="$51.10"/>
-            <argument name="productNumber" value="3"/>
-        </actionGroup>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$51.10" stepKey="storefrontProduct1Price"/>
 
         <!-- Check product 1 regular price on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1RegularPrice">
-            <argument name="productInfo" value="$56.78"/>
-            <argument name="productNumber" value="3"/>
-        </actionGroup>
-
-        <!-- Check product 2 name on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct2Name">
-            <argument name="productInfo" value="$createProduct2.name$"/>
-            <argument name="productNumber" value="2"/>
-        </actionGroup>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$56.78" stepKey="storefrontProduct1RegularPrice"/>
 
         <!-- Check product 2 price on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct2Price">
-            <argument name="productInfo" value="$51.10"/>
-            <argument name="productNumber" value="2"/>
-        </actionGroup>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct2.name$)}}" userInput="$51.10" stepKey="storefrontProduct2Price"/>
 
-        <!-- Check product 2 price on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct2RegularPrice">
-            <argument name="productInfo" value="$56.78"/>
-            <argument name="productNumber" value="2"/>
-        </actionGroup>
-
-        <!-- Check product 3 name on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct3Name">
-            <argument name="productInfo" value="$createProduct3.name$"/>
-            <argument name="productNumber" value="1"/>
-        </actionGroup>
+        <!-- Check product 2 regular price on store front category page -->
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct2.name$)}}" userInput="$56.78" stepKey="storefrontProduct2RegularPrice"/>
 
         <!-- Check product 3 price on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct3Price">
-            <argument name="productInfo" value="$51.10"/>
-            <argument name="productNumber" value="1"/>
-        </actionGroup>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$51.10" stepKey="storefrontProduct3Price"/>
 
         <!-- Check product 3 regular price on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct3RegularPrice">
-            <argument name="productInfo" value="$56.78"/>
-            <argument name="productNumber" value="1"/>
-        </actionGroup>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$56.78" stepKey="storefrontProduct3RegularPrice"/>
 
         <!-- Navigate to product 1 on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage1"/>

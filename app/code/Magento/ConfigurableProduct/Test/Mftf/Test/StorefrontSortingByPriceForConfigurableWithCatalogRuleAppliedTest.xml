@@ -16,7 +16,7 @@
             <description value="Sort by price should be correct if the apply Catalog Rule to child product of configurable product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69988"/>
-            <group value="сonfigurable_product"/>
+            <group value="configurable_product"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>

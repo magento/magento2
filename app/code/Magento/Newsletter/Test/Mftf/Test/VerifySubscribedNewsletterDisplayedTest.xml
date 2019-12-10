@@ -49,7 +49,7 @@
             </actionGroup>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!--Go to store front (default) and click Create an Account.-->

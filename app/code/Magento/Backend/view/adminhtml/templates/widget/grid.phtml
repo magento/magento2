@@ -23,7 +23,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
     <?php if ($block->canDisplayContainer()) : ?>
 <div id="<?= $block->escapeHtml($block->getId()) ?>" data-grid-id="<?= $block->escapeHtml($block->getId()) ?>">
     <?php else : ?>
-    <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+        <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
 
         <div class="admin__data-grid-header admin__data-grid-toolbar">
@@ -169,6 +169,9 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
         <?php endif; ?>
         <?php if ($block->getSortableUpdateCallback()) : ?>
                 <?= $block->escapeJs($block->getJsObjectName()) ?>.sortableUpdateCallback = <?= /* @noEscape */ $block->getSortableUpdateCallback() ?>;
+        <?php endif; ?>
+        <?php if ($block->getFilterKeyPressCallback()) : ?>
+            <?= $block->escapeJs($block->getJsObjectName()) ?>.filterKeyPressCallback = <?= /* @noEscape */ $block->getFilterKeyPressCallback() ?>;
         <?php endif; ?>
         <?= $block->escapeJs($block->getJsObjectName()) ?>.bindSortable();
         <?php if ($block->getRowInitCallback()) : ?>

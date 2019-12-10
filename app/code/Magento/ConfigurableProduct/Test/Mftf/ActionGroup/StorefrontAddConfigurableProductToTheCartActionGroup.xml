@@ -9,12 +9,16 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAddConfigurableProductToTheCartActionGroup">
+        <annotations>
+            <description>Goes to the provided Storefront URL. Selects the provided Product Option under the Product Attribute. Fills in the provided Quantity. Clicks Add to Cart. Validates that the Success Message is present.</description>
+        </annotations>
         <arguments>
             <argument name="urlKey" type="string"/>
             <argument name="productAttribute" type="string"/>
-            <argument name="productOption" type="string" />
+            <argument name="productOption" type="string"/>
             <argument name="qty" type="string"/>
         </arguments>
+
         <amOnPage url="{{urlKey}}.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(productAttribute)}}" userInput="{{productOption}}" stepKey="selectOption1"/>

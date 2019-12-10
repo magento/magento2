@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SendFriend\Model;
 
 use Magento\Framework\Exception\LocalizedException as CoreException;
@@ -193,8 +195,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                     'store' => $this->_storeManager->getStore()->getId(),
                 ]
-            )->setFrom(
-                $sender
+            )->setFromByScope(
+                'general'
+            )->setReplyTo(
+                $sender['email'],
+                $sender['name']
             )->setTemplateVars(
                 [
                     'name' => $name,

@@ -25,6 +25,10 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
             <!-- log in and create the price rule -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
@@ -150,6 +154,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -172,6 +177,10 @@
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <!-- As a NOT LOGGED IN user, go to the storefront category page and should see the discount -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategory1"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createProduct.name$$" stepKey="seeProduct1"/>
@@ -186,5 +195,28 @@
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategory2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createProduct.name$$" stepKey="seeProduct2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$123.00" stepKey="seeDiscountedPrice2"/>
+    </test>
+
+    <test name="AdminCreateCatalogPriceRuleWithInvalidDataTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Create Catalog Price Rule"/>
+            <title value="Admin can not create catalog price rule with the invalid data"/>
+            <description value="Admin can not create catalog price rule with the invalid data"/>
+            <severity value="MAJOR"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="newCatalogPriceRuleWithInvalidData" stepKey="createNewPriceRule">
+            <argument name="catalogRule" value="catalogRuleWithInvalid"/>
+        </actionGroup>
+
+        <see selector="{{AdminNewCatalogPriceRule.fieldError('sort_order')}}" userInput="Please enter a valid number in this field." stepKey="seeSortOrderError"/>
     </test>
 </tests>

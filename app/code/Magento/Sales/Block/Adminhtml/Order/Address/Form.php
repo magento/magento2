@@ -136,4 +136,12 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     {
         return $this->_getAddress()->getData();
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getAddressStoreId()
+    {
+        return $this->_getAddress()->getOrder()->getStoreId();
+    }
 }

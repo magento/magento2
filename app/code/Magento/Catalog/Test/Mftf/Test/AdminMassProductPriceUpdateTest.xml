@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMassProductPriceUpdateTest">
         <annotations>
-            <stories value="Mass product update "/>
+            <stories value="Mass product update"/>
             <features value="Catalog"/>
             <title value="Mass update simple product price"/>
             <description value="Login as admin and update mass product price"/>
@@ -24,8 +24,8 @@
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct2"/>
         </before>
         <after>
-            <deleteData  createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData  createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

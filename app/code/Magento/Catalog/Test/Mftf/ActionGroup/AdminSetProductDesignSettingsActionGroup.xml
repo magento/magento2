@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSetProductDesignSettingsActionGroup">
         <arguments>
-            <argument name="designSettings" defaultValue="simpleBlankDesign"/>
+            <argument name="designSettings" defaultValue="simpleBlankDesignTwoColumnsLeft"/>
         </arguments>
         <click selector="{{ProductDesignSection.DesignTab}}" stepKey="clickDesignTab"/>
         <waitForPageLoad stepKey="waitForTabOpen"/>

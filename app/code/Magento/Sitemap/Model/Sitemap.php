@@ -10,6 +10,7 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
@@ -192,6 +193,16 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     private $lastModMinTsVal;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var DocumentRoot
+     */
+    private $documentRoot;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -238,8 +249,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
-        $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
+        $this->documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
+        $this->filesystem = $filesystem;
+        $this->_directory = $filesystem->getDirectoryWrite($this->documentRoot->getPath());
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_cmsFactory = $cmsFactory;
@@ -362,7 +374,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
                     PHP_EOL .
                     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
-                    ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
                     ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
                     PHP_EOL,
                 self::CLOSE_TAG_KEY => '</urlset>',
@@ -728,8 +739,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getDocumentRoot()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return realpath($this->_request->getServer('DOCUMENT_ROOT'));
+        return $this->filesystem->getDirectoryRead($this->documentRoot->getPath())
+            ->getAbsolutePath();
     }
 
     /**

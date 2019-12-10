@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\Test\Php;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
+use Magento\TestFramework\CodingStandard\Tool\PhpCompatibility;
 use PHPMD\TextUI\Command;
 
 /**
@@ -164,6 +164,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $listFiles = glob($globFilesListPattern);
         if (!empty($listFiles)) {
             foreach ($listFiles as $listFile) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $filesDefinedInList = array_merge(
                     $filesDefinedInList,
                     file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
@@ -218,9 +219,12 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             };
         } else {
             $allowedDirectories = array_map('realpath', $allowedDirectories);
-            usort($allowedDirectories, function ($dir1, $dir2) {
-                return strlen($dir1) - strlen($dir2);
-            });
+            usort(
+                $allowedDirectories,
+                function ($dir1, $dir2) {
+                    return strlen($dir1) - strlen($dir2);
+                }
+            );
             $fileIsInAllowedDirectory = function ($file) use ($allowedDirectories) {
                 foreach ($allowedDirectories as $directory) {
                     if (strpos($file, $directory) === 0) {
@@ -261,17 +265,69 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Retrieves the lowest PHP version specified in <kbd>composer.json</var> of project.
+     *
+     * @return string
+     */
+    private function getLowestPhpVersion(): string
+    {
+        $composerJson = json_decode(file_get_contents(BP . '/composer.json'), true);
+        $phpVersion   = '7.0';
+
+        if (isset($composerJson['require']['php'])) {
+            $versions = explode('||', $composerJson['require']['php']);
+
+            //normalize version constraints
+            foreach ($versions as $key => $version) {
+                $version = ltrim($version, '^~');
+                $version = str_replace('*', '999', $version);
+
+                $versions[$key] = $version;
+            }
+
+            //sort versions
+            usort($versions, 'version_compare');
+
+            $lowestVersion = array_shift($versions);
+            $versionParts  = explode('.', $lowestVersion);
+            $phpVersion    = sprintf('%s.%s', $versionParts[0], $versionParts[1] ?? '0');
+        }
+
+        return $phpVersion;
+    }
+
+    /**
+     * Returns whether a full scan was requested.
+     *
+     * This can be set in the `phpunit.xml` used to run these test cases, by setting the constant
+     * `TESTCODESTYLE_IS_FULL_SCAN` to `1`, e.g.:
+     * ```xml
+     * <php>
+     *     <!-- TESTCODESTYLE_IS_FULL_SCAN - specify if full scan should be performed for test code style test -->
+     *     <const name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/>
+     * </php>
+     * ```
+     *
+     * @return bool
+     */
+    private function isFullScan(): bool
+    {
+        return defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
+    }
+
+    /**
      * Test code quality using phpcs
      */
     public function testCodeStyle()
     {
-        $isFullScan = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         if (!file_exists($reportFile)) {
             touch($reportFile);
         }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']));
+        $result = $codeSniffer->run(
+            $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml'])
+        );
         $report = file_get_contents($reportFile);
         $this->assertEquals(
             0,
@@ -325,6 +381,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $blackList = [];
         foreach (glob(__DIR__ . '/_files/phpcpd/blacklist/*.txt') as $list) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
             $blackList = array_merge($blackList, file($list, FILE_IGNORE_NEW_LINES));
         }
 
@@ -378,6 +435,34 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             "Following files are missing strict type declaration:"
             . PHP_EOL
             . implode(PHP_EOL, $filesMissingStrictTyping)
+        );
+    }
+
+    /**
+     * Test for compatibility to lowest PHP version declared in <kbd>composer.json</kbd>.
+     */
+    public function testPhpCompatibility()
+    {
+        $targetVersion = $this->getLowestPhpVersion();
+        $reportFile    = self::$reportDir . '/phpcompatibility_report.txt';
+        $rulesetDir    = __DIR__ . '/_files/PHPCompatibilityMagento';
+
+        if (!file_exists($reportFile)) {
+            touch($reportFile);
+        }
+
+        $codeSniffer = new PhpCompatibility($rulesetDir, $reportFile, new Wrapper());
+        $codeSniffer->setTestVersion($targetVersion);
+
+        $result = $codeSniffer->run(
+            $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml'])
+        );
+        $report = file_get_contents($reportFile);
+
+        $this->assertEquals(
+            0,
+            $result,
+            'PHP Compatibility detected violation(s):' . PHP_EOL . $report
         );
     }
 }

@@ -16,9 +16,6 @@
             <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84375"/>
-            <skip>
-                <issueId value="MC-17232"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
@@ -73,11 +70,14 @@
         <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="scrollToTinyMCE4" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="clickInsertImageIcon2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Browse}}" stepKey="clickBrowse2" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading13"/>
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.CancelBtn}}" stepKey="waitForCancelButton2"/>
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn2" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading13"/>
+        <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" stepKey="waitForCreateFolderBtn2"/>
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn2" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading14"/>
+        <see selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderContainer}}" userInput="Storage Root" stepKey="seeFolderContainer" />
+        <click userInput="Storage Root" stepKey="clickOnRootFolder" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading15"/>
         <dontSeeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
         <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFileUpload3"/>

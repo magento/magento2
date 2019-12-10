@@ -10,7 +10,7 @@
     <table name="admin_user_session" resource="default" engine="innodb" comment="Admin User sessions table">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="varchar" name="session_id" nullable="false" length="128" comment="Session id value"/>
+        <column xsi:type="varchar" name="session_id" nullable="false" length="128" comment="Session ID value"/>
         <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Admin User ID"/>
         <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false"

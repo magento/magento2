@@ -6,11 +6,27 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- ActionGroup click on Advanced Inventory in product form;
          You must already be on the product form page -->
     <actionGroup name="AdminClickOnAdvancedInventoryLinkActionGroup">
+        <annotations>
+            <description>Clicks on the 'Advanced Inventory' link on the Admin Product creation/edit page.</description>
+        </annotations>
+
         <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink"/>
+        <waitForPageLoad stepKey="waitForAdvancedInventoryPageToLoad"/>
+    </actionGroup>
+
+    <!-- ActionGroup click on Advanced Inventory Button in product form;
+         You must already be on the product form page -->
+    <actionGroup name="AdminClickOnAdvancedInventoryButtonActionGroup">
+        <annotations>
+            <description>Clicks on the 'Advanced Inventory' link on the Admin Product creation/edit page.</description>
+        </annotations>
+
+        <click selector="{{AdminProductFormSection.advancedInventoryButton}}" stepKey="clickOnAdvancedInventoryLink"/>
         <waitForPageLoad stepKey="waitForAdvancedInventoryPageToLoad"/>
     </actionGroup>
 </actionGroups>
