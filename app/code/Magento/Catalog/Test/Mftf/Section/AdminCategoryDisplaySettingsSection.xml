@@ -11,5 +11,6 @@
     <section name="AdminCategoryDisplaySettingsSection">
         <element name="settingsHeader" type="button" selector="//*[contains(text(),'Display Settings')]" timeout="30"/>
         <element name="displayMode" type="button" selector="//*[@name='display_mode']"/>
+        <element name="currencySymbol" type="text" selector=".admin__field[data-index=filter_price_range_group] .admin__addon-prefix span"/>
     </section>
 </sections>

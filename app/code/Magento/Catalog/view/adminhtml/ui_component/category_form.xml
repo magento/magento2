@@ -340,7 +340,7 @@
                     <item name="breakLine" xsi:type="boolean">true</item>
                 </item>
             </argument>
-            <field name="filter_price_range" formElement="input">
+            <field name="filter_price_range" formElement="input" class="Magento\Catalog\Ui\Component\Form\Field\FilterPriceRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="source" xsi:type="string">category</item>
@@ -354,7 +354,6 @@
                     <additionalClasses>
                         <class name="admin__field-small">true</class>
                     </additionalClasses>
-                    <addBefore>$</addBefore>
                     <label translate="true">Layered Navigation Price Step</label>
                 </settings>
             </field>

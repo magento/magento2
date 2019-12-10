@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogCheckCategoryFormWithChangedBaseCurrencyTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/Edit Category in Admin"/>
+                <title value="Check category form with changed base currency"/>
+            <description value="Check category form with base currency which is different from USD"/>
+            <severity value="MINOR"/>
+            <group value="category"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <!--Set Base Currency to Euro-->
+            <magentoCLI command="config:set {{SetCurrencyEURBaseConfig.path}} {{SetCurrencyEURBaseConfig.value}}" stepKey="setCurrencyBaseEUR"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyEURandUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyEURConfig.path}} {{SetDefaultCurrencyEURConfig.value}}" stepKey="setCurrencyDefaultEUR"/>
+        </before>
+        <after>
+            <!--Reset configurations-->
+            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="setCurrencyDefaultUSD"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyUSD"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminCatalogNavigateToCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="AdminAssertCurrencySymbolCategoryFormActionGroup" stepKey="assertCurrencySymbol">
+            <argument name="baseCurrency" value="€"/>
+        </actionGroup>
+    </test>
+</tests>
