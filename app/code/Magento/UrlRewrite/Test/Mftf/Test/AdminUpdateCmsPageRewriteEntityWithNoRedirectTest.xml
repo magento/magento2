@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCmsPageRewriteEntityWithNoRedirectTest">
+        <annotations>
+            <stories value="Update CMS Page URL Redirect With No Redirect"/>
+            <title value="Update CMS Page URL Redirect With No Redirect"/>
+            <description value="Login as Admin and tried to update the created URL Rewrite for CMS page"/>
+            <group value="cMSContent"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create Custom Store View-->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView"/>
+
+        <!-- Open CMS Edit Page, Get the CMS ID and Modify Store View Option to All Store Views -->
+        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="cmsId" regex="#\/([0-9]*)?\/$#"/>
+        <actionGroup ref="AddStoreViewToCmsPage" stepKey="updateStoreViewForCmsPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+            <argument name="storeViewName" value="All Store Views"/>
+        </actionGroup>
+
+        <!--Create CMS Page URL Redirect-->
+        <actionGroup ref="AdminAddCustomUrlRewrite" stepKey="addCustomUrlRewrite">
+            <argument name="customUrlRewriteValue" value="Custom"/>
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="created-new-cms-page"/>
+            <argument name="redirectTypeValue" value="Permanent (301)"/>
+            <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
+            <argument name="description" value="Created New CMS Page"/>
+        </actionGroup>
+
+         <!--Search created CMS page url rewrite in grid-->
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="searchUrlRewrite">
+            <argument name="requestPath" value="created-new-cms-page"/>
+        </actionGroup>
+
+        <!-- Update URL Rewrite for CMS Page -->
+        <actionGroup ref="AdminUpdateUrlRewrite" stepKey="updateUrlRewriteFirstAttempt">
+            <argument name="storeValue" value="{{customStore.name}}"/>
+            <argument name="requestPath" value="newrequestpath"/>
+            <argument name="redirectTypeValue" value="No"/>
+            <argument name="description" value="test_description_custom_store"/>
+        </actionGroup>
+
+        <!-- Assert Url Rewrite Save Message -->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="The URL Rewrite has been saved."/>
+        </actionGroup>
+
+        <!-- Assert Url Rewrite Cms Page Redirect -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchToCustomStoreView">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="navigateToStorefrontForCreatedPage" stepKey="navigateToTheStoreFront">
+            <argument name="page" value="newrequestpath"/>
+        </actionGroup>
+        <actionGroup ref="AssertStoreFrontCMSPage" stepKey="assertCMSPage">
+            <argument name="cmsTitle"  value="$$createCMSPage.title$$"/>
+            <argument name="cmsContent" value="$$createCMSPage.content$$"/>
+            <argument name="cmsContentHeading" value="$$createCMSPage.content_heading$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+            <argument name="requestPath" value="newrequestpath"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView"/>
+
+    </test>
+</tests>
