@@ -23,13 +23,22 @@ class MinificationFilenameResolver implements FilenameResolverInterface
     private $minification;
 
     /**
+     * @var MinificationConfigProvider
+     */
+    private $minificationConfig;
+
+    /**
      * Constructor
      *
      * @param Minification $minification
+     * @param MinificationConfigProvider $minificationConfig
      */
-    public function __construct(Minification $minification)
-    {
+    public function __construct(
+        Minification $minification,
+        MinificationConfigProvider $minificationConfig
+    ) {
         $this->minification = $minification;
+        $this->minificationConfig = $minificationConfig;
     }
 
     /**
@@ -40,10 +49,11 @@ class MinificationFilenameResolver implements FilenameResolverInterface
      */
     public function resolve($path)
     {
-        if (!$this->minification->isEnabled(pathinfo($path, PATHINFO_EXTENSION))) {
-            return $path;
+        $result = $path;
+        if ($this->minificationConfig->isMinificationEnabled($path)) {
+            $result = str_replace(self::FILE_PART, '.', $path);
         }
 
-        return str_replace(self::FILE_PART, '.', $path);
+        return $result;
     }
 }
