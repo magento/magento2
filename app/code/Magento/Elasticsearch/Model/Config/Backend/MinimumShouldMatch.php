@@ -34,7 +34,10 @@ class MinimumShouldMatch extends Value
     {
         if (strlen($this->getValue()) && !preg_match('/^((\d+<)?-?\d+%?\s?)+$/', $this->getValue())) {
             throw new LocalizedException(
-                __('Value for the field "%1" was not saved because of the incorrect format.', __('Minimum Terms to Match'))
+                __(
+                    'Value for the field "%1" was not saved because of the incorrect format.',
+                    __('Minimum Terms to Match')
+                )
             );
         }
     }
