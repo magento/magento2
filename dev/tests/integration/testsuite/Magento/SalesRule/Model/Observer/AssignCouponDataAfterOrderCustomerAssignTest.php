@@ -17,8 +17,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class AssignCouponDataAfterOrderCustomerAssignTest
- *
  * @magentoAppIsolation enabled
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -9,7 +9,7 @@ namespace Magento\Checkout\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Payment information management
+ * Payment information management service.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
