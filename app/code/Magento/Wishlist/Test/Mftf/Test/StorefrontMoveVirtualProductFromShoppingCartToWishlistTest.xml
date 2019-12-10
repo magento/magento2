@@ -53,12 +53,12 @@
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert move product to wishlist success message -->
-        <actionGroup ref="AssertMoveProductToWishListSuccessMessage" stepKey="moveToWishlist">
+        <actionGroup ref="AssertMoveProductToWishListSuccessMessageActionGroup" stepKey="moveToWishlist">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
 
         <!-- Assert product is present in wishlist -->
-        <actionGroup ref="AssertProductIsPresentInWishList" stepKey="assertProductPresent">
+        <actionGroup ref="AssertProductIsPresentInWishListActionGroup" stepKey="assertProductPresent">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productPrice" value="$$createProduct.price$$"/>
         </actionGroup>
