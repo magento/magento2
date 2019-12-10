@@ -10,6 +10,9 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Mview\View;
 use Magento\Framework\Phrase;
 
+/**
+ * Renderer for 'Schedule Status' column in indexer grid
+ */
 class ScheduleStatus extends AbstractRenderer
 {
     /**

@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
+/**
+ * Renderer for 'Status' column in indexer grid
+ */
 class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
