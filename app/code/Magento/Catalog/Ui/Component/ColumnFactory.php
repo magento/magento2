@@ -15,7 +15,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 
 /**
- * Column Factory
+ * Create columns factory on product grid page
  *
  * @api
  * @since 100.0.2

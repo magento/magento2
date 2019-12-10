@@ -40,7 +40,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 
 /**
- * Class Eav
+ * Data provider for eav attributes on product page
  *
  * @api
  *

@@ -5,14 +5,21 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\FrontendLabel;
+use Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class AttributeTest.
+ * Test for EAV Entity attribute model
  */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
      * Attribute model to be tested
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     protected $_model;
 
@@ -21,7 +28,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->_model = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup']);
+        $this->_model = $this->createPartialMock(Attribute::class, ['__wakeup']);
     }
 
     /**
@@ -132,7 +139,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $attributeId = 1;
         $storeLabels = ['test_attribute_store1'];
-        $frontendLabelFactory = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class)
+        $frontendLabelFactory = $this->getMockBuilder(FrontendLabelFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -144,15 +151,15 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             '_resource' => $resource,
             'frontendLabelFactory' => $frontendLabelFactory,
         ];
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $objectManager->getObject(\Magento\Eav\Model\Entity\Attribute::class, $arguments);
+        $objectManager = new ObjectManager($this);
+        $this->_model = $objectManager->getObject(Attribute::class, $arguments);
         $this->_model->setAttributeId($attributeId);
 
         $resource->expects($this->once())
             ->method('getStoreLabelsByAttributeId')
             ->with($attributeId)
             ->willReturn($storeLabels);
-        $frontendLabel = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabel::class)
+        $frontendLabel = $this->getMockBuilder(FrontendLabel::class)
             ->setMethods(['setStoreId', 'setLabel'])
             ->disableOriginalConstructor()
             ->getMock();

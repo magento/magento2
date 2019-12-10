@@ -41,7 +41,7 @@ use Magento\Framework\Event\ManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class EavTest
+ * Class to test Data provider for eav attributes on product page
  *
  * @method Eav getModel
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -692,6 +692,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => false,
                 'frontendInput' => 'datetime',
