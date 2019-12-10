@@ -15,6 +15,7 @@
         <arguments>
             <argument name="baseCurrency" type="string"/>
         </arguments>
+        <click selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" stepKey="clickDisplaySettingHeader"/>
         <grabTextFrom selector="{{AdminCategoryDisplaySettingsSection.currencySymbol}}" stepKey="currencySymbol"/>
         <assertEquals stepKey="assertCurrencySymbol">
             <expectedResult type="string">{{baseCurrency}}</expectedResult>
