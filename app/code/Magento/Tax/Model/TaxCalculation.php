@@ -275,7 +275,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param bool $round
      * @return TaxDetailsItemInterface
      */
-    protected function processItem(
+    public function processItem(
         QuoteDetailsItemInterface $item,
         AbstractCalculator $calculator,
         $round = true
