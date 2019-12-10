@@ -14,7 +14,7 @@
             <title value="Move Fixed Bundle Product from Shopping Cart to Wishlist"/>
             <description value="Move Fixed Bundle Product from Shopping Cart to Wishlist"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-29545"/>
+            <testCaseId value="MC-14213"/>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
         </annotations>

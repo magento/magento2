@@ -14,7 +14,7 @@
             <title value="Move Virtual Product from Shopping Cart to Wishlist"/>
             <description value="Move Virtual Product from Shopping Cart to Wishlist"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-29545"/>
+            <testCaseId value="MC-14210"/>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
         </annotations>
