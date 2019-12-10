@@ -8,6 +8,9 @@ namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 
+/**
+ * And another docblock to make the sniff shut up.
+ */
 class PoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -111,25 +114,38 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     public function initializationParamsDataProvider()
     {
         return [
-            'default frontend, default settings' => [
+            'no deployment config, default settings' => [
                 ['frontend' => []],
                 [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
                 ['default_option' => 'default_value'],
             ],
-            'default frontend, overridden settings' => [
+            'deployment config, default settings' => [
                 ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
-                [Pool::DEFAULT_FRONTEND_ID => ['ignored_option' => 'ignored_value']],
+                [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
+                ['configured_option' => 'configured_value', 'default_option' => 'default_value'],
+            ],
+            'deployment config, overridden settings' => [
+                ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
+                [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'default_value']],
                 ['configured_option' => 'configured_value'],
             ],
-            'custom frontend, default settings' => [
-                ['frontend' => []],
-                ['custom' => ['default_option' => 'default_value']],
-                ['default_option' => 'default_value'],
+            'deployment config, default settings, overridden settings' => [
+                ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
+                [Pool::DEFAULT_FRONTEND_ID => [
+                    'configured_option' => 'default_value',
+                    'default_setting' => 'default_value'
+                ]],
+                ['configured_option' => 'configured_value', 'default_setting' => 'default_value'],
             ],
-            'custom frontend, overridden settings' => [
+            'custom deployent config, default settings' => [
                 ['frontend' => ['custom' => ['configured_option' => 'configured_value']]],
-                ['custom' => ['ignored_option' => 'ignored_value']],
-                ['configured_option' => 'configured_value'],
+                ['custom' => ['default_option' => 'default_value']],
+                ['configured_option' => 'configured_value', 'default_option' => 'default_value'],
+            ],
+            'custom deployent config, default settings, overridden settings' => [
+                ['frontend' => ['custom' => ['configured_option' => 'configured_value']]],
+                ['custom' => ['default_option' => 'default_value', 'configured_option' => 'default_value']],
+                ['configured_option' => 'configured_value', 'default_option' => 'default_value'],
             ]
         ];
     }

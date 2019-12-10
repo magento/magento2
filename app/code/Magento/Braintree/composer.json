@@ -22,11 +22,11 @@
         "magento/module-sales": "*",
         "magento/module-ui": "*",
         "magento/module-vault": "*",
-        "magento/module-multishipping": "*"
+        "magento/module-multishipping": "*",
+        "magento/module-theme": "*"
     },
     "suggest": {
-        "magento/module-checkout-agreements": "*",
-        "magento/module-theme": "*"
+        "magento/module-checkout-agreements": "*"
     },
     "type": "magento2-module",
     "license": [
