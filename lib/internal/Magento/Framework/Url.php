@@ -763,10 +763,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function addSessionParam()
     {
-        $this->setQueryParam(
-            $this->_sidResolver->getSessionIdQueryParam($this->_session),
-            $this->_session->getSessionId()
-        );
         return $this;
     }
 
@@ -972,18 +968,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $url
      *
      * @return \Magento\Framework\UrlInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareSessionUrl($url)
     {
-        if (!$this->getUseSession()) {
-            return $this;
-        }
-        $sessionId = $this->_session->getSessionIdForHost($url);
-        if ($this->_sidResolver->getUseSessionVar() && !$sessionId) {
-            $this->setQueryParam('___SID', $this->_isSecure() ? 'S' : 'U');
-        } elseif ($sessionId) {
-            $this->setQueryParam($this->_sidResolver->getSessionIdQueryParam($this->_session), $sessionId);
-        }
         return $this;
     }
 
@@ -1067,15 +1055,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
              */
             // @codingStandardsIgnoreEnd
             function ($match) {
-                if ($this->useSessionIdForUrl($match[2] == 'S')) {
-                    return $match[1] . $this->_sidResolver->getSessionIdQueryParam($this->_session) . '='
-                        . $this->_session->getSessionId() . (isset($match[3]) ? $match[3] : '');
-                } else {
-                    if ($match[1] == '?') {
-                        return isset($match[3]) ? '?' : '';
-                    } elseif ($match[1] == '&amp;' || $match[1] == '&') {
-                        return $match[3] ?? '';
-                    }
+                if ($match[1] == '?') {
+                    return isset($match[3]) ? '?' : '';
+                } elseif ($match[1] == '&amp;' || $match[1] == '&') {
+                    return $match[3] ?? '';
                 }
             },
             $html

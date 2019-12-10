@@ -5,7 +5,11 @@
  */
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\Math\Random;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppIsolation enabled
@@ -24,13 +28,19 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 
     protected static $_mocks = [];
 
+    /**
+     * @var SessionManagerInterface
+     */
+    private $session;
+
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
-            ->setAreaCode('frontend');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\DesignInterface::class
-        )->setDefaultDesignTheme();
+        /** @var \Magento\Framework\App\State $state */
+        $state = Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class);
+        $state->setAreaCode('frontend');
+        /** @var \Magento\Framework\View\DesignInterface $design */
+        $design = Bootstrap::getObjectManager()->get(\Magento\Framework\View\DesignInterface::class);
+        $design->setDefaultDesignTheme();
         $this->_block = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\AbstractBlock::class,
             [
@@ -40,6 +50,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
                 ['module_name' => 'Magento_Theme']
             ]
         );
+        $this->session = Bootstrap::getObjectManager()->get(SessionManagerInterface::class);
     }
 
     /**
@@ -562,6 +573,35 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 
         $block->setCacheKey('key');
         $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
+    }
+
+    /**
+     * Check that SIDs inside blocks are not being replaced.
+     *
+     * @return void
+     * @magentoCache block_html enabled
+     */
+    public function testNoSid(): void
+    {
+        $blockId = 'block-with-sid' .Random::getRandomNumber(1, 9999);
+        $block = $this->_createBlockWithLayout(
+            $blockId,
+            $blockId,
+            \Magento\Framework\View\Element\Text::class
+        );
+        $outerId = 'block-outer' .Random::getRandomNumber(1, 9999);
+        $outer = $this->_createBlockWithLayout($outerId, $outerId);
+        $block->setText(
+            $text = 'Some text with ' .SidResolverInterface::SESSION_ID_QUERY_PARAM
+                .'=' .$this->session->getSessionId()
+        );
+        $block->setData('cache_lifetime', 3600);
+        //Caching the block's content
+        $outer->getBlockHtml($blockId);
+        //New ID generated, must not be replace in block's content.
+        $this->session->regenerateId();
+        $html = $outer->getBlockHtml($blockId);
+        $this->assertEquals($text, $html);
     }
 
     /**

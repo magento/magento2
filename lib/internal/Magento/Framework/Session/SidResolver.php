@@ -27,11 +27,13 @@ class SidResolver implements SidResolverInterface
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @deprecated Not used anymore.
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @deprecated Not used anymore.
      */
     protected $request;
 
@@ -59,11 +61,6 @@ class SidResolver implements SidResolverInterface
      * @var string
      */
     protected $_scopeType;
-
-    /**
-     * @var State
-     */
-    private $appState;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -99,21 +96,7 @@ class SidResolver implements SidResolverInterface
      */
     public function getSid(SessionManagerInterface $session)
     {
-        if ($this->appState->getAreaCode() !== \Magento\Framework\App\Area::AREA_FRONTEND) {
-            return null;
-        }
-
-        $sidKey = null;
-
-        $useSidOnFrontend = $this->getUseSessionInUrl();
-        if ($useSidOnFrontend && $this->request->getQuery(
-            $this->getSessionIdQueryParam($session),
-            false
-        ) && $this->urlBuilder->isOwnOriginUrl()
-        ) {
-            $sidKey = $this->request->getQuery($this->getSessionIdQueryParam($session));
-        }
-        return $sidKey;
+        return null;
     }
 
     /**

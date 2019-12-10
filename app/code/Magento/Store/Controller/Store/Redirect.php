@@ -18,6 +18,8 @@ use Magento\Framework\Session\Generic as Session;
 
 /**
  * Builds correct url to target store and performs redirect.
+ *
+ * @deprecated Is not employed during stores switching process.
  */
 class Redirect extends \Magento\Framework\App\Action\Action
 {
@@ -30,11 +32,6 @@ class Redirect extends \Magento\Framework\App\Action\Action
      * @var StoreResolverInterface
      */
     private $storeResolver;
-
-    /**
-     * @var SidResolverInterface
-     */
-    private $sidResolver;
 
     /**
      * @var Session
@@ -59,7 +56,6 @@ class Redirect extends \Magento\Framework\App\Action\Action
         $this->storeRepository = $storeRepository;
         $this->storeResolver = $storeResolver;
         $this->session = $session;
-        $this->sidResolver = $sidResolver;
     }
 
     /**
@@ -96,12 +92,6 @@ class Redirect extends \Magento\Framework\App\Action\Action
                 StoreResolverInterface::PARAM_NAME => $targetStoreCode,
                 \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
             ];
-
-            if ($this->sidResolver->getUseSessionInUrl()) {
-                // allow customers to stay logged in during store switching
-                $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
-                $query[$sidName] = $this->session->getSessionId();
-            }
 
             $arguments = [
                 '_nosid' => true,
