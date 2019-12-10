@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout $block */
 
 ?>
@@ -34,11 +32,11 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '<label for="widget_instance[<%- data.id %>][page_group]">Display on <span class="required">*</span></label>'+
         '<?= $block->getDisplayOnSelectHtml() ?>'+
         '<div class="actions">'+
-        <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
+        <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
         '</div>'+
     '</div>'+
     '<div class="fieldset-wrapper-content">'+
-<?php foreach ($block->getDisplayOnContainers() as $container): ?>
+<?php foreach ($block->getDisplayOnContainers() as $container) : ?>
     '<div class="no-display <?= $block->escapeJs($container['code']) ?> group_container" id="<?= $block->escapeJs($container['name']) ?>_<%- data.id %>">'+
         '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>]" />'+
         '<input disabled="disabled" type="hidden" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][page_id]" value="<%- data.page_id %>" />'+
@@ -481,7 +479,7 @@ var WidgetInstance = {
 window.WidgetInstance = WidgetInstance;
 
 jQuery(function(){
-    <?php foreach ($block->getPageGroups() as $pageGroup): ?>
+    <?php foreach ($block->getPageGroups() as $pageGroup) : ?>
         WidgetInstance.addPageGroup(<?= /* @noEscape */ $pageGroup ?>);
     <?php endforeach; ?>
     Event.observe(document, 'product:changed', function(event){

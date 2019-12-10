@@ -8,9 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface" type="Magento\Framework\GraphQl\Schema\SchemaGenerator" />
     <preference for="Magento\Framework\GraphQl\Query\Resolver\ContextInterface" type="Magento\GraphQl\Model\Query\Resolver\Context" />
+    <preference for="Magento\GraphQl\Model\Query\ContextInterface" type="Magento\GraphQl\Model\Query\Context" />
     <preference for="Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface" type="Magento\Framework\GraphQl\Schema\Type\Entity\DefaultMapper"/>
     <preference for="Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface" type="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper"/>
     <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
+    <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
+    <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">

@@ -9,6 +9,7 @@ namespace Magento\EavGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
+use Magento\EavGraphQl\Model\Resolver\Query\FrontendType;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -27,11 +28,18 @@ class CustomAttributeMetadata implements ResolverInterface
     private $type;
 
     /**
-     * @param Type $type
+     * @var FrontendType
      */
-    public function __construct(Type $type)
+    private $frontendType;
+
+    /**
+     * @param Type $type
+     * @param FrontendType $frontendType
+     */
+    public function __construct(Type $type, FrontendType $frontendType)
     {
         $this->type = $type;
+        $this->frontendType = $frontendType;
     }
 
     /**
@@ -52,6 +60,7 @@ class CustomAttributeMetadata implements ResolverInterface
                 continue;
             }
             try {
+                $frontendType = $this->frontendType->getType($attribute['attribute_code'], $attribute['entity_type']);
                 $type = $this->type->getType($attribute['attribute_code'], $attribute['entity_type']);
             } catch (InputException $exception) {
                 $attributes['items'][] = new GraphQlNoSuchEntityException(
@@ -78,7 +87,8 @@ class CustomAttributeMetadata implements ResolverInterface
             $attributes['items'][] = [
                 'attribute_code' => $attribute['attribute_code'],
                 'entity_type' => $attribute['entity_type'],
-                'attribute_type' => ucfirst($type)
+                'attribute_type' => ucfirst($type),
+                'input_type' => $frontendType
             ];
         }
 

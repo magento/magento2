@@ -7,13 +7,22 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFormSaveAndClose">
+        <annotations>
+            <description>Clicks on 'Save and Close'. Validates that the Success Message is present.</description>
+        </annotations>
+
         <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="openSaveDropDown"/>
         <click selector="{{AdminProductFormActionSection.saveAndClose}}" stepKey="clickOnSaveAndClose"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
     </actionGroup>
+
     <actionGroup name="AdminFormSaveAndDuplicate">
+        <annotations>
+            <description>Clicks on 'Save and Duplicate'. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
         <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="openSaveDropDown"/>
         <click selector="{{AdminProductFormActionSection.saveAndDuplicate}}" stepKey="clickOnSaveAndDuplicate"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveSuccess" userInput="You saved the product."/>

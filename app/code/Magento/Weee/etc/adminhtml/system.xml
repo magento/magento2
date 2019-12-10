@@ -44,6 +44,7 @@
             <group id="totals_sort">
                 <field id="weee" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Fixed Product Tax</label>
+                    <validate>required-number validate-number</validate>
                 </field>
             </group>
         </section>

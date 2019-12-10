@@ -28,6 +28,7 @@
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct2">
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultView" stepKey="NavigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>

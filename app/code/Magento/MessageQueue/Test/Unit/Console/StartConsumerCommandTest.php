@@ -8,7 +8,7 @@ namespace Magento\MessageQueue\Test\Unit\Console;
 
 use Magento\MessageQueue\Console\StartConsumerCommand;
 use Magento\Framework\Filesystem\File\WriteFactory;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
+use Magento\Framework\Lock\LockManagerInterface;
 
 /**
  * Unit tests for StartConsumerCommand.
@@ -36,9 +36,9 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     private $writeFactoryMock;
 
     /**
-     * @var PidConsumerManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $pidConsumerManagerMock;
+    private $lockManagerMock;
 
     /**
      * @var StartConsumerCommand
@@ -50,9 +50,8 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->pidConsumerManagerMock = $this->getMockBuilder(PidConsumerManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
+            ->getMockForAbstractClass();
         $this->consumerFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerFactory::class)
             ->disableOriginalConstructor()->getMock();
         $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
@@ -68,7 +67,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
                 'consumerFactory' => $this->consumerFactory,
                 'appState' => $this->appState,
                 'writeFactory' => $this->writeFactoryMock,
-                'pidConsumerManager' => $this->pidConsumerManagerMock,
+                'lockManager' => $this->lockManagerMock,
             ]
         );
         parent::setUp();
@@ -78,9 +77,11 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
      * Test for execute method.
      *
      * @param string|null $pidFilePath
-     * @param int $savePidExpects
-     * @param int $isRunExpects
-     * @param bool $isRun
+     * @param bool $singleThread
+     * @param int $lockExpects
+     * @param int $isLockedExpects
+     * @param bool $isLocked
+     * @param int $unlockExpects
      * @param int $runProcessExpects
      * @param int $expectedReturn
      * @return void
@@ -88,9 +89,11 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute(
         $pidFilePath,
-        $savePidExpects,
-        $isRunExpects,
-        $isRun,
+        $singleThread,
+        $lockExpects,
+        $isLockedExpects,
+        $isLocked,
+        $unlockExpects,
         $runProcessExpects,
         $expectedReturn
     ) {
@@ -105,17 +108,19 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
         $input->expects($this->once())->method('getArgument')
             ->with(\Magento\MessageQueue\Console\StartConsumerCommand::ARGUMENT_CONSUMER)
             ->willReturn($consumerName);
-        $input->expects($this->exactly(4))->method('getOption')
+        $input->expects($this->exactly(5))->method('getOption')
             ->withConsecutive(
                 [\Magento\MessageQueue\Console\StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES],
                 [\Magento\MessageQueue\Console\StartConsumerCommand::OPTION_BATCH_SIZE],
                 [\Magento\MessageQueue\Console\StartConsumerCommand::OPTION_AREACODE],
-                [\Magento\MessageQueue\Console\StartConsumerCommand::PID_FILE_PATH]
+                [\Magento\MessageQueue\Console\StartConsumerCommand::PID_FILE_PATH],
+                [\Magento\MessageQueue\Console\StartConsumerCommand::OPTION_SINGLE_THREAD]
             )->willReturnOnConsecutiveCalls(
                 $numberOfMessages,
                 $batchSize,
                 $areaCode,
-                $pidFilePath
+                $pidFilePath,
+                $singleThread
             );
         $this->appState->expects($this->exactly($runProcessExpects))->method('setAreaCode')->with($areaCode);
         $consumer = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)
@@ -124,14 +129,17 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->exactly($runProcessExpects))->method('process')->with($numberOfMessages);
 
-        $this->pidConsumerManagerMock->expects($this->exactly($isRunExpects))
-            ->method('isRun')
-            ->with($pidFilePath)
-            ->willReturn($isRun);
+        $this->lockManagerMock->expects($this->exactly($isLockedExpects))
+            ->method('isLocked')
+            ->with(md5($consumerName)) //phpcs:ignore
+            ->willReturn($isLocked);
 
-        $this->pidConsumerManagerMock->expects($this->exactly($savePidExpects))
-            ->method('savePid')
-            ->with($pidFilePath);
+        $this->lockManagerMock->expects($this->exactly($lockExpects))
+            ->method('lock')
+            ->with(md5($consumerName)); //phpcs:ignore
+        $this->lockManagerMock->expects($this->exactly($unlockExpects))
+            ->method('unlock')
+            ->with(md5($consumerName)); //phpcs:ignore
 
         $this->assertEquals(
             $expectedReturn,
@@ -147,25 +155,31 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'pidFilePath' => null,
-                'savePidExpects' => 0,
-                'isRunExpects' => 0,
-                'isRun' => false,
+                'singleThread' => false,
+                'lockExpects' => 0,
+                'isLockedExpects' => 0,
+                'isLocked' => false,
+                'unlockExpects' => 0,
                 'runProcessExpects' => 1,
                 'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_SUCCESS,
             ],
             [
                 'pidFilePath' => '/var/consumer.pid',
-                'savePidExpects' => 1,
-                'isRunExpects' => 1,
-                'isRun' => false,
+                'singleThread' => true,
+                'lockExpects' => 1,
+                'isLockedExpects' => 1,
+                'isLocked' => false,
+                'unlockExpects' => 1,
                 'runProcessExpects' => 1,
                 'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_SUCCESS,
             ],
             [
                 'pidFilePath' => '/var/consumer.pid',
-                'savePidExpects' => 0,
-                'isRunExpects' => 1,
-                'isRun' => true,
+                'singleThread' => true,
+                'lockExpects' => 0,
+                'isLockedExpects' => 1,
+                'isLocked' => true,
+                'unlockExpects' => 0,
                 'runProcessExpects' => 0,
                 'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_FAILURE,
             ],
@@ -186,6 +200,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES);
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_AREACODE);
         $this->command->getDefinition()->getOption(StartConsumerCommand::PID_FILE_PATH);
+        $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_SINGLE_THREAD);
         $this->assertContains('To start consumer which will process', $this->command->getHelp());
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerLoginDuringCheckoutTest">
+        <annotations>
+            <features value="OnePageCheckout"/>
+            <stories value="Customer Login during checkout"/>
+            <title value="Storefront customer login during checkout test"/>
+            <description value="Logging during checkout for customer without addresses in address book"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13097"/>
+            <group value="OnePageCheckout"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Customer log out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <!-- Delete customer -->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+
+            <!-- Logout admin -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Go to Storefront as Guest and create new account -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createNewCustomerAccount"/>
+
+        <!-- Sign Out -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+        <!-- Add simple product to cart as Guest -->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Go to Checkout page -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+
+        <!-- Input in field email and password for newly created customer; click Login button -->
+        <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+
+        <!-- Block with email is disappeared -->
+        <dontSeeElement selector="{{CheckoutShippingSection.email}}" stepKey="dontSeeEmailBlock"/>
+
+        <!-- Shipping form is pre-filed with first name and last name -->
+        <seeInField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="seeCustomerFirstNameInField"/>
+        <seeInField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="seeCustomerLastNameInField"/>
+    </test>
+</tests>

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,6 +11,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 
+/**
+ * Wishlist plugin before dispatch
+ */
 class Plugin
 {
     /**
@@ -75,7 +77,9 @@ class Plugin
             if (!$this->customerSession->getBeforeWishlistUrl()) {
                 $this->customerSession->setBeforeWishlistUrl($this->redirector->getRefererUrl());
             }
-            $this->customerSession->setBeforeWishlistRequest($request->getParams());
+            $data = $request->getParams();
+            unset($data['login']);
+            $this->customerSession->setBeforeWishlistRequest($data);
             $this->customerSession->setBeforeRequestParams($this->customerSession->getBeforeWishlistRequest());
             $this->customerSession->setBeforeModuleName('wishlist');
             $this->customerSession->setBeforeControllerName('index');

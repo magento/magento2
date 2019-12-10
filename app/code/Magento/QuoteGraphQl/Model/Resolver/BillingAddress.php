@@ -11,7 +11,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\Address\BillingAddressDataProvider;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\QuoteGraphQl\Model\Cart\ExtractQuoteAddressData;
+use Magento\QuoteGraphQl\Model\Cart\ValidateAddressFromSchema;
 
 /**
  * @inheritdoc
@@ -19,17 +21,25 @@ use Magento\QuoteGraphQl\Model\Cart\Address\BillingAddressDataProvider;
 class BillingAddress implements ResolverInterface
 {
     /**
-     * @var BillingAddressDataProvider
+     * @var ExtractQuoteAddressData
      */
-    private $addressDataProvider;
+    private $extractQuoteAddressData;
 
     /**
-     * @param BillingAddressDataProvider $addressDataProvider
+     * @var ValidateAddressFromSchema
+     */
+    private $validateAddressFromSchema;
+
+    /**
+     * @param ExtractQuoteAddressData $extractQuoteAddressData
+     * @param ValidateAddressFromSchema $validateAddressFromSchema
      */
     public function __construct(
-        BillingAddressDataProvider $addressDataProvider
+        ExtractQuoteAddressData $extractQuoteAddressData,
+        ValidateAddressFromSchema $validateAddressFromSchema
     ) {
-        $this->addressDataProvider = $addressDataProvider;
+        $this->extractQuoteAddressData = $extractQuoteAddressData;
+        $this->validateAddressFromSchema = $validateAddressFromSchema;
     }
 
     /**
@@ -40,9 +50,14 @@ class BillingAddress implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-
+        /** @var CartInterface $cart */
         $cart = $value['model'];
 
-        return $this->addressDataProvider->getCartAddresses($cart);
+        $billingAddress = $cart->getBillingAddress();
+        $addressData = $this->extractQuoteAddressData->execute($billingAddress);
+        if (!$this->validateAddressFromSchema->execute($addressData)) {
+            return null;
+        }
+        return $addressData;
     }
 }

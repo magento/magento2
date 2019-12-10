@@ -4,19 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
 
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?= $block->getBackButtonHtml() ?>
     <?= $block->getPreviewButtonHtml() ?>
-    <?php if (!$block->getIsPreview()): ?>
+    <?php if (!$block->getIsPreview()) : ?>
         <?= $block->getResetButtonHtml() ?>
         <?= $block->getSaveButtonHtml() ?>
     <?php endif ?>
-    <?php if ($block->getCanResume()): ?>
+    <?php if ($block->getCanResume()) : ?>
         <?= $block->getResumeButtonHtml() ?>
     <?php endif ?>
 </div>

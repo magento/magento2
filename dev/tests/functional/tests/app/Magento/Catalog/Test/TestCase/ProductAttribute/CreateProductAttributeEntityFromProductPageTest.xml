@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityFromProductPageTest" summary="Create Product Attribute from Product Page" ticketId="MAGETWO-30528">
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation1_Searchable_Global_Visible_Comparable_HtmlAllowed_UsedForSorting">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="attribute/data/is_required" xsi:type="string">No</data>
@@ -33,6 +34,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend" />
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation2_Filterable">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Dropdown</data>
             <data name="attribute/data/options/dataset" xsi:type="string">two_options</data>
@@ -50,6 +52,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable" />
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation3_Required">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="attribute/data/is_required" xsi:type="string">Yes</data>
@@ -59,6 +62,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation4_Unique">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="attribute/data/is_required" xsi:type="string">No</data>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAssociateGroupedProductToWebsitesTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Create/Edit grouped product in Admin"/>
+            <title value="Admin should be able to associate grouped product to websites"/>
+            <description value="Admin should be able to associate grouped product to websites"/>
+            <testCaseId value="MC-3377"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="groupedProduct"/>
+        </annotations>
+
+        <before>
+            <!-- Set Store Code To Urls -->
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToYes"/>
+
+            <!-- Create grouped product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Create website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
+                <argument name="websiteCode" value="{{secondCustomWebsite.code}}"/>
+            </actionGroup>
+            <!-- Create second store -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+                <argument name="website" value="{{secondCustomWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+            <!-- Create second store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+
+            <!-- Reindex -->
+            <magentoCLI command="indexer:reindex" stepKey="reindexAllIndexes"/>
+        </before>
+
+        <after>
+            <!-- Disable Store Code To Urls -->
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToNo"/>
+
+            <!-- Delete product data -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+
+            <!-- Delete second website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultView" stepKey="resetProductGridFilter"/>
+
+            <!-- Admin logout -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Open product page and assign grouped project to second website -->
+        <actionGroup ref="filterAndSelectProduct" stepKey="openAdminProductPage">
+            <argument name="productSku" value="$$createGroupedProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminUnassignProductInWebsiteActionGroup" stepKey="unassignProductFromDefaultWebsite">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveGroupedProduct"/>
+
+        <!-- Assert product is assigned to Second website -->
+        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+
+        <!-- Assert product is not assigned to Main website -->
+        <actionGroup ref="AssertProductIsNotAssignedToWebsite" stepKey="seeMainWebsiteIsNotChecked">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+
+        <!-- Go to frontend and open product on Main website -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createGroupedProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Assert 404 page -->
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="assertPageNotFoundErrorOnProductDetailPage">
+            <argument name="product" value="$$createGroupedProduct$$"/>
+        </actionGroup>
+
+        <!-- Assert grouped product on Second website -->
+        <actionGroup ref="StorefrontOpenProductPageUsingStoreCodeInUrlActionGroup" stepKey="openProductPageUsingStoreCodeInUrl">
+            <argument name="product" value="$$createGroupedProduct$$"/>
+            <argument name="storeView" value="SecondStoreUnique"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -85,6 +85,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyCoupon">

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EnablePayPalConfiguration">
+        <annotations>
+            <description>Expands the 'OTHER PAYPAL PAYMENT SOLUTIONS' tab on the Admin Configuration page. Enables the provided PayPal Config type for the provided Country Code.</description>
+        </annotations>
+        <arguments>
+            <argument name="payPalConfigType"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
+        <waitForElementVisible selector="{{payPalConfigType.configureBtn(countryCode)}}" stepKey="waitForWPSExpressConfigureBtn"/>
+        <click selector="{{payPalConfigType.configureBtn(countryCode)}}" stepKey="clickWPSExpressConfigureBtn"/>
+        <waitForElementVisible selector="{{payPalConfigType.enableSolution(countryCode)}}" stepKey="waitForWPSExpressEnable"/>
+        <selectOption selector="{{payPalConfigType.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableWPSExpressSolution"/>
+        <seeInPopup userInput="There is already another PayPal solution enabled. Enable this solution instead?" stepKey="seeAlertMessage"/>
+        <acceptPopup stepKey="acceptEnablePopUp"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+    </actionGroup>
+    <actionGroup name="EnablePayPalSolutionWithoutSave" >
+        <annotations>
+            <description>Expands the 'OTHER PAYPAL PAYMENT SOLUTIONS' tab on the Admin Configuration page. Enables the provided PayPal Config type for the provided Country Code without saving.</description>
+        </annotations>
+        <arguments>
+            <argument name="payPalConfigType"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
+        <waitForElementVisible selector="{{payPalConfigType.configureBtn(countryCode)}}" stepKey="waitForWPSExpressConfigureBtn"/>
+        <click selector="{{payPalConfigType.configureBtn(countryCode)}}" stepKey="clickWPSExpressConfigureBtn"/>
+        <waitForElementVisible selector="{{payPalConfigType.enableSolution(countryCode)}}" stepKey="waitForWPSExpressEnable"/>
+        <selectOption selector="{{payPalConfigType.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableWPSExpressSolution"/>
+    </actionGroup>
+    <actionGroup name="CheckEnableOptionPayPalConfiguration">
+        <annotations>
+            <description>Expands the 'OTHER PAYPAL PAYMENT SOLUTIONS' tab on the Admin Configuration page. Enables the provided PayPal Config type for the provided Country Code.</description>
+        </annotations>
+        <arguments>
+            <argument name="payPalConfigType"/>
+            <argument name="enabledOption" type="string"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
+        <waitForElementVisible selector="{{payPalConfigType.configureBtn(countryCode)}}" stepKey="waitForWPSExpressConfigureBtn"/>
+        <click selector="{{payPalConfigType.configureBtn(countryCode)}}" stepKey="clickWPSExpressConfigureBtn1"/>
+        <waitForElementVisible selector="{{payPalConfigType.enableSolution(countryCode)}}" stepKey="waitForWPSExpressEnable"/>
+        <seeOptionIsSelected selector="{{payPalConfigType.enableSolution(countryCode)}}" userInput="{{enabledOption}}" stepKey="seeSelectedOption"/>
+        <click selector="{{payPalConfigType.configureBtn(countryCode)}}" stepKey="clickWPSExpressConfigureBtn2"/>
+    </actionGroup>
+</actionGroups>

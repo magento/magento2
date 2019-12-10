@@ -11,6 +11,7 @@
     <test name="StorefrontProductNameMinicartOnCheckoutPageDifferentStoreViewsTest">
         <annotations>
             <features value="Checkout"/>
+            <stories value="Minicart"/>
             <title value="Checking Product name in Minicart and on Checkout page with different store views"/>
             <description value="Checking Product name in Minicart and on Checkout page with different store views"/>
             <severity value="MAJOR"/>

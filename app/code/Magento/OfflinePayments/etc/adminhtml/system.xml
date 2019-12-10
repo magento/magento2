@@ -42,9 +42,11 @@
                 </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="98" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="max_order_total" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Maximum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="model"></field>
             </group>
@@ -76,9 +78,11 @@
                 </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="98" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="max_order_total" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Maximum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="model"></field>
             </group>
@@ -109,12 +113,15 @@
                 </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="98" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="max_order_total" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Maximum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
+                    <validate>validate-number</validate>
                 </field>
             </group>
             <group id="cashondelivery" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -144,48 +151,16 @@
                 </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="98" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="max_order_total" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Maximum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
+                    <validate>validate-number</validate>
                 </field>
-            </group>
-            <group id="free" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Zero Subtotal Checkout</label>
-                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="order_status" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>New Order Status</label>
-                    <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
-                </field>
-                <field id="payment_action" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Automatically Invoice All Items</label>
-                    <source_model>Magento\Payment\Model\Source\Invoice</source_model>
-                    <depends>
-                        <field id="order_status" separator=",">processing</field>
-                    </depends>
-                </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Sort Order</label>
-                    <frontend_class>validate-number</frontend_class>
-                </field>
-                <field id="title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Title</label>
-                </field>
-                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Payment from Applicable Countries</label>
-                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="51" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment from Specific Countries</label>
-                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                    <can_be_empty>1</can_be_empty>
-                </field>
-                <field id="model"></field>
             </group>
         </section>
     </system>

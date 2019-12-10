@@ -86,6 +86,7 @@
         <arguments>
             <argument name="lifetimePath" xsi:type="const">Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME</argument>
             <argument name="sessionName" xsi:type="const">Magento\Backend\Model\Session\AdminConfig::SESSION_NAME_ADMIN</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Result\PageFactory">

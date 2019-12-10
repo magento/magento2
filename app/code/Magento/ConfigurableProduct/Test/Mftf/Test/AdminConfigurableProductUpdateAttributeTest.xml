@@ -96,7 +96,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
@@ -213,7 +213,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
@@ -239,6 +239,7 @@
         <click stepKey="clickEditConfig" selector="{{AdminProductFormConfigurationsSection.createConfigurations}}"/>
         <waitForPageLoad stepKey="waitForEditConfig"/>
         <click stepKey="clickNextWizard" selector="{{AdminCreateProductConfigurationsPanel.next}}"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click stepKey="createNewValue" selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}"/>
         <fillField stepKey="fillNewAttribute" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" userInput="simple"/>
         <click stepKey="confirmNewAttribute" selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}"/>

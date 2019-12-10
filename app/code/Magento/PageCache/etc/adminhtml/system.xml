@@ -62,12 +62,19 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
+                    <field id="export_button_version6" type="button" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish6</frontend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
                     <depends>
                         <field id="caching_application">2</field>
                     </depends>
                 </group>
                 <field id="ttl" type="text" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>TTL for public content</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                     <comment>Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. </comment>
                     <backend_model>Magento\PageCache\Model\System\Config\Backend\Ttl</backend_model>
                 </field>

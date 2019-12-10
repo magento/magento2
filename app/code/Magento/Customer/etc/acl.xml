@@ -26,7 +26,7 @@
                             <resource id="Magento_Customer::config_customer" title="Customers Section" translate="title" sortOrder="50" />
                         </resource>
                     </resource>
-                   </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

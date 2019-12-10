@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Newsletter\Controller\Subscriber;
 
 use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
@@ -131,7 +132,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     /**
      * New subscription action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -160,7 +161,10 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
+        $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+        $redirectUrl = $this->_redirect->getRedirectUrl();
+        return $redirect->setUrl($redirectUrl);
     }
 
     /**

@@ -24,7 +24,9 @@ class SpecialAttribute implements ResolverInterface
      */
     public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {
-        if (in_array($attribute->getAttributeCode(), ['id', 'sku', 'store_id', 'visibility'], true)) {
+        if (in_array($attribute->getAttributeCode(), ['id', 'sku', 'store_id', 'visibility'], true)
+            && empty($context['type'])
+        ) {
             return $attribute->getAttributeCode();
         }
 

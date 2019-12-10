@@ -14,7 +14,7 @@
         <attribute type="activity_path">payment/payflowpro/active</attribute>
         <attribute type="paypal_ec_separate">1</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-pro.html</comment>
+            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-pro.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -65,13 +65,15 @@
                     </depends>
                     <attribute type="shared">1</attribute>
                 </field>
-                <field id="proxy_port" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1">
+                <field id="proxy_port" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1">
                     <label>Proxy Port</label>
+                    <comment>Please enter at least 0 and at most 65535</comment>
                     <config_path>payment/payflowpro/proxy_port</config_path>
                     <depends>
                         <field id="use_proxy">1</field>
                     </depends>
                     <attribute type="shared">1</attribute>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
                 </field>
             </group>
             <field id="enable_paypal_payflow" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">

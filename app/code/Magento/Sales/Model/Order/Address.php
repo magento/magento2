@@ -601,7 +601,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      */
     public function setTelephone($telephone)
     {
-        return $this->setData(OrderAddressInterface::TELEPHONE, $telephone);
+        return $this->setData(OrderAddressInterface::TELEPHONE, trim($telephone));
     }
 
     /**
@@ -728,6 +728,17 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave()
+    {
+        if ($this->getEmail() === null) {
+            $this->setEmail($this->getOrder()->getCustomerEmail());
+        }
+        return parent::beforeSave();
     }
 
     //@codeCoverageIgnoreEnd

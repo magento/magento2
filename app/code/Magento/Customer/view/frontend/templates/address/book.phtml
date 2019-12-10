@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Address\Book $block */
 ?>
 <div class="block block-addresses-default">
     <div class="block-title"><strong><?= $block->escapeHtml(__('Default Addresses')) ?></strong></div>
     <div class="block-content">
-        <?php if ($_pAddsses = $block->getDefaultBilling()): ?>
+        <?php if ($_pAddsses = $block->getDefaultBilling()) : ?>
             <div class="box box-address-billing">
                 <strong class="box-title">
                     <span><?= $block->escapeHtml(__('Default Billing Address')) ?></span>
@@ -27,7 +25,7 @@
                     </a>
                 </div>
             </div>
-        <?php else: ?>
+        <?php else : ?>
             <div class="box box-billing-address">
                 <strong class="box-title"><span><?= $block->escapeHtml(__('Default Billing Address')) ?></span></strong>
                 <div class="box-content">
@@ -36,7 +34,7 @@
             </div>
         <?php endif ?>
 
-        <?php if ($_pAddsses = $block->getDefaultShipping()): ?>
+        <?php if ($_pAddsses = $block->getDefaultShipping()) : ?>
             <div class="box box-address-shipping">
                 <strong class="box-title">
                     <span><?= $block->escapeHtml(__('Default Shipping Address')) ?></span>
@@ -52,7 +50,7 @@
                     </a>
                 </div>
             </div>
-        <?php else: ?>
+        <?php else : ?>
             <div class="box box-shipping-address">
                 <strong class="box-title"><span><?= $block->escapeHtml(__('Default Shipping Address')) ?></span></strong>
                 <div class="box-content">

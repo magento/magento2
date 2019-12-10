@@ -2,12 +2,13 @@
     "name": "magento/module-tinymce-3",
     "description": "N/A",
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-ui": "*",
         "magento/module-variable": "*",
-        "magento/module-widget": "*"
+        "magento/module-widget": "*",
+        "magento/module-cms": "*"
 
     },
     "suggest": {

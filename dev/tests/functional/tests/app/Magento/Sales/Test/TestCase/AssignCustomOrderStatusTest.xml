@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\AssignCustomOrderStatusTest" summary="Assign Custom Order Status" ticketId="MAGETWO-29382">
         <variation name="AssignCustomOrderStatusTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="orderStatusState/state" xsi:type="string">Pending</data>
             <data name="orderStatusState/is_default" xsi:type="string">Yes</data>
             <data name="orderStatusState/visible_on_front" xsi:type="string">No</data>
@@ -16,6 +17,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderNotVisibleOnMyAccount" />
         </variation>
         <variation name="AssignCustomOrderStatusTestVariation2">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="orderStatusState/state" xsi:type="string">Pending</data>
             <data name="orderStatusState/is_default" xsi:type="string">Yes</data>
             <data name="orderStatusState/visible_on_front" xsi:type="string">Yes</data>

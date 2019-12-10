@@ -46,6 +46,14 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getComment'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $reflection = new \ReflectionClass($this->abstractElementMock);
+        $reflection_property = $reflection->getProperty('_escaper');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($this->abstractElementMock, $escaper);
+
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getLocaleDate'])
             ->disableOriginalConstructor()

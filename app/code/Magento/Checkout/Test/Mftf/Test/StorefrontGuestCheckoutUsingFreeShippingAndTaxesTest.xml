@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest">
+        <annotations>
+            <stories value="Checkout"/>
+            <title value="Verify guest checkout using free shipping and tax variations"/>
+            <description value="Verify guest checkout using free shipping and tax variations"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14709"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-18802"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <createData entity="MinimumOrderAmount100" stepKey="minimumOrderAmount100"/>
+            <createData entity="taxRate_US_NY_8_1" stepKey="createTaxRule"/>
+
+            <!--Create Simple Product -->
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
+                <field key="price">10.00</field>
+            </createData>
+
+            <!-- Create the configurable product with product Attribute options-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <field key="price">10.00</field>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+
+            <!-- Create Bundle Product -->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">200.00</field>
+            </createData>
+            <!--Create Bundle product with multi select option-->
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="MultipleSelectOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigProduct1"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule1"/>
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create a Tax Rule -->
+        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
+        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
+        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
+        <waitForPageLoad stepKey="waitForTaxRuleIndex2"/>
+
+        <!-- Create a tax rule with defaults -->
+        <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
+        <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$createTaxRule.code$$" stepKey="fillTaxRateSearch"/>
+        <wait stepKey="waitForSearch" time="5" />
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$createTaxRule.code$$)}}" stepKey="selectNeededItem"  />
+        <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="saveTaxRule" />
+        <waitForPageLoad stepKey="waitForTaxRuleSaved" />
+
+        <!-- Verify we see success message -->
+        <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="assertTaxRuleSuccessMessage" />
+
+        <!--Open Product page in StoreFront and assert product and price range -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Add product to the cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Add Configurable Product to the cart -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="productOption" value="$$getConfigAttributeOption1.label$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!--Open Product page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openBundleProduct">
+            <argument name="product" value="$$createBundleProduct$$"/>
+        </actionGroup>
+
+        <!-- Click on customize And Add To Cart Button -->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickOnCustomizeAndAddtoCartButton"/>
+
+        <!-- Select Two Products, enter the quantity and add product to the cart -->
+        <selectOption selector="{{StorefrontBundledSection.multiSelectOption}}" userInput="$$simpleProduct1.name$$ +$100.00" stepKey="selectOption"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+
+        <!--Open View and edit -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+
+        <!-- Fill the Estimate Shipping and Tax section -->
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields">
+            <argument name="address" value="US_Address_NY_Default_Shipping"/>
+        </actionGroup>
+        <reloadPage stepKey="reloadThePage"/>
+        <waitForPageLoad stepKey="waitForPageToReload"/>
+        <waitForText selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.60" time="90" stepKey="waitForTaxAmount"/>
+
+        <!--Select Free Shipping and proceed to checkout -->
+        <click selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="selectFlatRateShippingMethod"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Fill Guest form -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillTheSignInForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="customerAddress" value="US_Address_NY_Default_Shipping"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+
+        <!-- Place order and Assert success message -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+
+        <!-- Assert empty Mini Cart -->
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
+
+        <!-- Open Order Index Page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
+
+        <!-- Filter Order using orderId and assert order-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <!-- Assert order buttons -->
+        <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
+
+        <!-- Assert Grand Total -->
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$129.60" stepKey="seeGrandTotal"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderStatus"/>
+
+        <!-- Ship the order and assert the status -->
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
+
+        <!-- Assert customer order address -->
+        <actionGroup ref="AssertOrderAddressInformationActionGroup" stepKey="assertCustomerInformation">
+            <argument name="customer" value=""/>
+            <argument name="shippingAddress" value="US_Address_NY_Default_Shipping"/>
+            <argument name="billingAddress" value="US_Address_NY_Default_Shipping"/>
+            <argument name="customerGroup" value=""/>
+        </actionGroup>
+    </test>
+</tests>

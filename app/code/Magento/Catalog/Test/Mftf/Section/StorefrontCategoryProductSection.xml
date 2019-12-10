@@ -21,6 +21,8 @@
 
         <element name="ProductTitleByName" type="button" selector="//main//li//a[contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="ProductPriceByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//span[@class='price']" parameterized="true"/>
+        <element name="ProductCatalogRuleSpecialPriceTitleByName" type="text" selector="//div[descendant::*[contains(text(), '{{var1}}')]]//*[contains(@class, 'special-price')]" parameterized="true"/>
+        <element name="ProductCatalogRulePriceTitleByName" type="text" selector="//div[descendant::*[contains(text(), '{{var1}}')]]//*[contains(@class, 'price-label')]" parameterized="true"/>
         <element name="ProductImageByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[@class='product-image-photo']" parameterized="true"/>
         <element name="ProductImageBySrc" type="text" selector=".products-grid img[src*='{{pattern}}']" parameterized="true"/>
         <element name="ProductInfoByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//div[@class='product-item-info']" parameterized="true"/>
@@ -32,5 +34,6 @@
         <!--<element name="ProductAddToCompareByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocompare')]" parameterized="true"/>-->
         <element name="ProductAddToCompareByName" type="text" selector="//*[contains(@class,'product-item-info')][descendant::a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocompare')]" parameterized="true"/>
         <element name="ProductImageByNameAndSrc" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[contains(@src, '{{src}}')]" parameterized="true"/>
+        <element name="ProductStockUnavailable" type="text" selector="//*[text()='Out of stock']"/>
     </section>
 </sections>

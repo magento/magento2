@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Fill main fields in create product form-->
     <actionGroup name="fillMainBundleProductForm">
+        <annotations>
+            <description>Fills the Name, SKU and Stock Status fields.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="BundleProduct"/>
         </arguments>
+
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="selectStockStatus"/>
@@ -20,6 +24,10 @@
 
     <!--Check that required fields are actually required-->
     <actionGroup name="checkRequiredFieldsInBundleProductForm">
+        <annotations>
+            <description>Clears the Name and SKU fields when adding a Product and then verifies that they are required after attempting to Save.</description>
+        </annotations>
+
         <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductSku"/>
         <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductName"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
@@ -30,10 +38,14 @@
 
     <!--Filter product grid and see expected product-->
     <actionGroup name="viewBundleProductInAdminGrid">
+        <annotations>
+            <description>Clears the Grid Filters on the Catalog Grid page and applies Filter by Name and Sku. Then checks to see if the Product exists in the 1st row. Then clears the Grid Filters again for future Tests.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="BundleProduct"/>
             <argument name="thumbnail" defaultValue="ProductPlaceholderImage"/>
         </arguments>
+
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoadInitial"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>

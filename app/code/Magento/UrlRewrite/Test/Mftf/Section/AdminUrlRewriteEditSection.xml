@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminUrlRewriteEditSection">
+        <element name="createCustomUrlRewrite" type="select" selector="//select[@id='entity-type-selector']" />
+        <element name="createCustomUrlRewriteValue" type="text" selector="//select[@id='entity-type-selector']/option[contains(.,'{{var}}')]" parameterized="true"/>
+        <element name="store" type="select" selector="//select[@id='store_id']"/>
+        <element name="storeValue" type="select" selector="//select[@id='store_id']//option[contains(., '{{var}}')]" parameterized="true" />
+        <element name="requestPath" type="input" selector="//input[@id='request_path']"/>
+        <element name="targetPath" type="input" selector="//input[@id='target_path']"/>
+        <element name="redirectType" type="select" selector="//select[@id='redirect_type']"/>
+        <element name="redirectTypeValue" type="select" selector="//select[@id='redirect_type']//option[contains(., '{{Var}}')]" parameterized="true"/>
+        <element name="description" type="input" selector="#description"/>
+        <element name="categoryInTree" type="text" selector="//li[contains(@class,'active-category jstree-open')]/a[contains(., '{{categoryName}}')]" parameterized="true"/>
+        <element name="saveButton" type="button" selector="#save" timeout="30"/>
+        <element name="deleteButton" type="button" selector="#delete" timeout="30"/>
+        <element name="okButton" type="button" selector="//button[@class='action-primary action-accept']" timeout="30"/>
+        <element name="requestPathField" type="input" selector="#request_path"/>
+    </section>
+</sections>

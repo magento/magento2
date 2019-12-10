@@ -289,11 +289,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     public function execute()
     {
         $returnToEdit = false;
-        $originalRequestData = $this->getRequest()->getPostValue();
-
         $customerId = $this->getCurrentCustomerId();
 
-        if ($originalRequestData) {
+        if ($this->getRequest()->getPostValue()) {
             try {
                 // optional fields might be set in request for future processing by observers in other modules
                 $customerData = $this->_extractCustomerData();
@@ -356,7 +354,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 $this->_getSession()->unsCustomerFormData();
                 // Done Saving customer, finish save action
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
-                $this->messageManager->addSuccess(__('You saved the customer.'));
+                $this->messageManager->addSuccessMessage(__('You saved the customer.'));
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
             } catch (\Magento\Framework\Validator\Exception $exception) {
                 $messages = $exception->getMessages();
@@ -364,7 +362,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     $messages = $exception->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
-                $this->_getSession()->setCustomerFormData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
                 $returnToEdit = true;
             } catch (\Magento\Framework\Exception\AbstractAggregateException $exception) {
                 $errors = $exception->getErrors();
@@ -373,18 +371,22 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     $messages[] = $error->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
-                $this->_getSession()->setCustomerFormData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
                 $returnToEdit = true;
             } catch (LocalizedException $exception) {
                 $this->_addSessionErrorMessages($exception->getMessage());
-                $this->_getSession()->setCustomerFormData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
                 $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
-                $this->_getSession()->setCustomerFormData($originalRequestData);
+                $this->messageManager->addExceptionMessage(
+                    $exception,
+                    __('Something went wrong while saving the customer.')
+                );
+                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
                 $returnToEdit = true;
             }
         }
+
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($returnToEdit) {
             if ($customerId) {
@@ -488,5 +490,30 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
             $addressModel = $this->addressRegistry->retrieve($address->getId());
             $addressModel->setShouldIgnoreValidation(true);
         }
+    }
+
+    /**
+     * Retrieve formatted form data
+     *
+     * @return array
+     */
+    private function retrieveFormattedFormData(): array
+    {
+        $originalRequestData = $this->getRequest()->getPostValue();
+
+        /* Customer data filtration */
+        if (isset($originalRequestData['customer'])) {
+            $customerData = $this->_extractData(
+                'adminhtml_customer',
+                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                [],
+                'customer'
+            );
+
+            $customerData = array_intersect_key($customerData, $originalRequestData['customer']);
+            $originalRequestData['customer'] = array_merge($originalRequestData['customer'], $customerData);
+        }
+
+        return $originalRequestData;
     }
 }
