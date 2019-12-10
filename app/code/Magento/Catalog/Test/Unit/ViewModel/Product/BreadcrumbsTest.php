@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\ViewModel\Product\Breadcrumbs;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
 /**
  * Unit test for Magento\Catalog\ViewModel\Product\Breadcrumbs.
@@ -39,6 +40,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var JsonHexTag|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
+    /**
      * @inheritdoc
      */
     protected function setUp() : void
@@ -54,15 +60,16 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $escaper = $this->getObjectManager()->getObject(\Magento\Framework\Escaper::class);
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\JsonHexTag::class);
+
+        $this->serializer = $this->createMock(JsonHexTag::class);
 
         $this->viewModel = $this->getObjectManager()->getObject(
             Breadcrumbs::class,
             [
                 'catalogData' => $this->catalogHelper,
                 'scopeConfig' => $this->scopeConfig,
-                'jsonSerializer' => $this->serializer,
-                'escaper' => $escaper
+                'escaper' => $escaper,
+                'jsonSerializer' => $this->serializer
             ]
         );
     }
