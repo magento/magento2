@@ -135,4 +135,47 @@
         <dontSeeElement selector="{{StorefrontCustomerWishlistProductSection.pager}}" stepKey="checkThatPagerIsAbsent"/>
         <see selector="{{StorefrontCustomerWishlistProductSection.wishlistEmpty}}" userInput="You have no items in your wish list." stepKey="checkNoItemsMessage"/>
     </actionGroup>
+
+    <actionGroup name="AssertMoveProductToWishListSuccessMessage">
+        <annotations>
+            <description>Moves a product from the cart to the wishlist.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <click selector="{{CheckoutCartProductSection.moveToWishlistByProductName(productName)}}" stepKey="moveToWishlist"/>
+        <waitForPageLoad stepKey="waitForMove"/>
+        <see userInput="{{productName}} has been moved to your wish list." selector="{{CheckoutCartMessageSection.successMessage}}" stepKey="assertSuccess"/>
+    </actionGroup>
+
+    <actionGroup name="AssertProductIsPresentInWishList">
+        <annotations>
+            <description>Go to storefront customer wishlist page and assert product name and price is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productPrice" type="string"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishList"/>
+        <waitForPageLoad stepKey="waitForWishList"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName(productName)}}" time="30" stepKey="assertProductName"/>
+        <see userInput="{{productPrice}}" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName(productName)}}" stepKey="assertProductPrice"/>
+    </actionGroup>
+
+    <actionGroup name="AssertProductDetailsInWishlist">
+        <annotations>
+            <description>Assert product name and price in wishlist on hover.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="label" type="string"/>
+            <argument name="labelValue" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProductInfo"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName(productName)}}" stepKey="seeAddToCart"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName(productName)}}" stepKey="seeImage"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsByName(productName)}}" stepKey="moveMouseOverProductDetails"/>
+        <see userInput="{{label}}" selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsLabelByName(productName)}}" stepKey="seeLabel"/>
+        <see userInput="{{labelValue}}" selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsValueByName(productName)}}" stepKey="seeLabelValue"/>
+    </actionGroup>
 </actionGroups>
