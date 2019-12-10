@@ -227,18 +227,14 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
 
             if ($exception) {
                 if ($exception instanceof \Magento\Framework\Exception\LocalizedException) {
-                    $expectError = 1;
-                    $expectException = 0;
+                    $this->messageManager->expects($this->exactly(1))
+                        ->method('addError')
+                        ->with($exception->getMessage());
                 } else {
-                    $expectError = 0;
-                    $expectException = 1;
+                    $this->messageManager->expects($this->exactly(1))
+                        ->method('addException')
+                        ->with($exception, "We couldn't invalidate indexer(s) because of an error.");
                 }
-                $this->messageManager->expects($this->exactly($expectError))
-                    ->method('addError')
-                    ->with($exception->getMessage());
-                $this->messageManager->expects($this->exactly($expectException))
-                    ->method('addException')
-                    ->with($exception, "We couldn't invalidate indexer(s) because of an error.");
             }
         }
 
