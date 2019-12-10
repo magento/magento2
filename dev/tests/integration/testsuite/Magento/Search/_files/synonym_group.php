@@ -13,8 +13,6 @@ $objectManager = Bootstrap::getObjectManager();
 
 $synonymsGroupModel = $objectManager->create(SynonymGroupInterface::class);
 $synonymGroupRepository=$objectManager->create(SynonymGroupRepository::class);
-$synonymsGroupModel->setStoreId(Magento\Store\Model\Store::DEFAULT_STORE_ID)
-    ->setSynonymGroup('a,b,c')
-    ->setWebsiteId(0);
+$synonymsGroupModel->setStoreId(Magento\Store\Model\Store::DEFAULT_STORE_ID)->setStoreId(0)->setWebsiteId(0);
 
 $synonymGroupRepository->save($synonymsGroupModel);
