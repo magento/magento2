@@ -13,10 +13,11 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * To display Denied Page
- *
- * Class Denied
  */
 class Denied extends DeniedController implements HttpGetActionInterface
 {
-
+    /**
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
 }
