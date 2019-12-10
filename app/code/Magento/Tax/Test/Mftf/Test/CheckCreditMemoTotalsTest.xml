@@ -112,7 +112,7 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <!--Set shipping method-->
-        <actionGroup stepKey="orderSelectFlatRateShipping" ref="OrderSelectFlatRateShippingActionGroup"/>
+        <actionGroup stepKey="OrderSelectFlatRateShippingActionGroup" ref="OrderSelectFlatRateShippingActionGroup"/>
         <!--Submit order-->
         <click stepKey="SubmitOrder" selector="{{AdminOrderFormActionSection.SubmitOrder}}"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>

@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="NavigateToNewOrderPageExistingCustomerAndStoreActionGroup" extends="navigateToNewOrderPageExistingCustomer">
+    <actionGroup name="NavigateToNewOrderPageExistingCustomerAndStoreActionGroup" extends="NavigateToNewOrderPageExistingCustomerActionGroup">
         <annotations>
-            <description>EXTENDS: navigateToNewOrderPageExistingCustomer. Clicks on the provided Store View.</description>
+            <description>EXTENDS: NavigateToNewOrderPageExistingCustomerActionGroup. Clicks on the provided Store View.</description>
         </annotations>
         <arguments>
             <argument name="storeView" defaultValue="_defaultStore"/>
