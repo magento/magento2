@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * ColumnFactory test.
+ * Test to Create columns factory on product grid page
  */
 class ColumnFactoryTest extends TestCase
 {
@@ -206,6 +206,7 @@ class ColumnFactoryTest extends TestCase
                     'component' => 'Magento_Ui/js/grid/columns/date',
                     'timezone' => $expectedTimezone,
                     'dateFormat' => $expectedDateFormat,
+                    '__disableTmpl' => ['label' => true],
                     'options' => [
                         'showsTime' => $showsTime
                     ]

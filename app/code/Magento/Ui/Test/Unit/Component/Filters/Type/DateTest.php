@@ -16,7 +16,7 @@ use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class DateTest
+ * Test for Date grid filter functionality
  */
 class DateTest extends \PHPUnit\Framework\TestCase
 {
