@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\Framework\Phrase;
 
 /**
  * Layer attribute filter
@@ -66,8 +67,11 @@ class Attribute extends AbstractFilter
         $productCollection->addFieldToFilter($attribute->getAttributeCode(), $attributeValue);
 
         $labels = [];
-        foreach ((array) $attributeValue as $value) {
-            $labels[] = (array) $this->getOptionText($value);
+        foreach ((array)$attributeValue as $value) {
+            $label = $this->getOptionText($value);
+            $labels[] = $label instanceof Phrase
+                ? (array)$label->__toString()
+                : (array)$label;
         }
         $label = implode(',', array_unique(array_merge(...$labels)));
         $this->getLayer()
