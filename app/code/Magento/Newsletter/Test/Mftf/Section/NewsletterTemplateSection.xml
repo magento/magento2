@@ -52,5 +52,13 @@
         <element name="InsertTable" type="button" selector=".mce-i-table" />
         <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
         <element name="Preview" type="text" selector="//td[contains(text(),'{{var1}}')]//following-sibling::td/select//option[contains(text(), 'Preview')]" parameterized="true" timeout="60"/>
+        <element name="Queue" type="text" selector="//td[contains(text(),'{{var1}}')]//following-sibling::td/select//option[contains(text(), 'Queue Newsletter')]" parameterized="true" timeout="60"/>
+    </section>
+    <section name="NewsletterTemplateSection">
+        <element name="templateName" type="input" selector="#template_code"/>
+        <element name="templateSubject" type="input" selector="#template_subject"/>
+        <element name="senderContent" type="input" selector="#template_text"/>
+        <element name="save" type="button" selector="button[data-role='template-save']" timeout="60"/>
+        <element name="preview" type="button" selector=".page-actions-buttons button.preview" timeout="60"/>
     </section>
 </sections>
