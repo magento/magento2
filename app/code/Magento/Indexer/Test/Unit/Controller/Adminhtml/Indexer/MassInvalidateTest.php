@@ -81,6 +81,11 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
     protected $session;
 
     /**
+     * @var \Magento\Framework\Controller\Result\Redirect
+     */
+    protected $resultRedirect;
+
+    /**
      * Set up test
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -100,7 +105,8 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
                 'getRequest',
                 'getResponse',
                 'getObjectManager',
-                'getMessageManager'
+                'getMessageManager',
+                'getResultRedirectFactory',
             ]);
 
         $this->response = $this->createPartialMock(
@@ -140,6 +146,19 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
             false
         );
 
+        $resultRedirectFactory = $this->createPartialMock(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class,
+            ['create']
+        );
+        $this->resultRedirect = $this->createPartialMock(
+            \Magento\Framework\Controller\Result\Redirect::class,
+            ['setPath']
+        );
+        $this->contextMock->expects($this->any())->method('getResultRedirectFactory')
+            ->willReturn($resultRedirectFactory);
+        $resultRedirectFactory->expects($this->any())->method('create')
+            ->willReturn($this->resultRedirect);
+
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
         $this->page = $this->createMock(\Magento\Framework\View\Result\Page::class);
         $this->config = $this->createMock(\Magento\Framework\View\Result\Page::class);
@@ -172,7 +191,10 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute($indexerIds, $exception)
     {
-        $this->controller = new \Magento\Indexer\Controller\Adminhtml\Indexer\MassInvalidate($this->contextMock, $this->indexReg);
+        $this->controller = new \Magento\Indexer\Controller\Adminhtml\Indexer\MassInvalidate(
+            $this->contextMock,
+            $this->indexReg
+        );
         $this->request->expects($this->any())
             ->method('getParam')->with('indexer_ids')
             ->will($this->returnValue($indexerIds));
@@ -222,9 +244,9 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->any())->method("getUrl")->willReturn("magento.com");
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
+        $this->resultRedirect->expects($this->once())->method('setPath')->with('*/*/list');
 
-        $result = $this->controller->execute();
-        $this->assertNull($result);
+        $this->controller->execute();
     }
 
     /**
