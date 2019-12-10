@@ -5,12 +5,14 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
 /**
  * Class ResetPassword
  *
  * @package Magento\User\Controller\Adminhtml\Auth
  */
-class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth
+class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth implements HttpGetActionInterface
 {
     /**
      * Display reset forgotten password form
