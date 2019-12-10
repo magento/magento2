@@ -33,6 +33,7 @@
                             <item name="invalidate_index" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Invalidate index</item>
                                 <item name="url" xsi:type="string">*/indexer/massInvalidate</item>
+                                <item name="confirm" xsi:type="string" translate="true">Are you sure you want to invalidate the selected index(es)?</item>
                             </item>
                         </argument>
                     </arguments>
