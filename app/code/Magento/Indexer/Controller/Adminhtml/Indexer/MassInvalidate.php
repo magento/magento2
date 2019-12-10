@@ -5,13 +5,27 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * Controller endpoint for mass action: invalidate index
  */
 class MassInvalidate extends \Magento\Indexer\Controller\Adminhtml\Indexer implements HttpPostActionInterface
 {
+    /**
+     * @param Context $context
+     * @param IndexerRegistry $indexerRegistry
+     */
+    public function __construct(
+        Context $context,
+        IndexerRegistry $indexerRegistry
+    ) {
+        parent::__construct($context);
+        $this->indexerRegistry = $indexerRegistry;
+    }
+
     /**
      * Turn mview on for the given indexers
      *
@@ -26,9 +40,7 @@ class MassInvalidate extends \Magento\Indexer\Controller\Adminhtml\Indexer imple
             try {
                 foreach ($indexerIds as $indexerId) {
                     /** @var \Magento\Framework\Indexer\IndexerInterface $model */
-                    $model = $this->_objectManager->get(
-                        \Magento\Framework\Indexer\IndexerRegistry::class
-                    )->get($indexerId);
+                    $model = $this->indexerRegistry->get($indexerId);
                     $model->invalidate();
                 }
                 $this->messageManager->addSuccess(
