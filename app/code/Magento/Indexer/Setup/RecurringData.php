@@ -42,7 +42,7 @@ class RecurringData implements InstallDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
