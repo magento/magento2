@@ -41,7 +41,7 @@
         <after>
             <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
             <!-- Delete the rule -->
-            <actionGroup ref="RemoveCatalogPriceRule" stepKey="deletePriceRule">
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deletePriceRule">
                 <argument name="ruleName" value="{{CatalogRuleToPercent.name}}" />
             </actionGroup>
             <!--Clear all filters in grid-->
