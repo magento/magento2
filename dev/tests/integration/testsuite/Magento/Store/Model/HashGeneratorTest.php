@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
-use Magento\Framework\ObjectManagerInterface as ObjectManager;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Store\Model\StoreSwitcher\HashGenerator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session as CustomerSession;
-use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Store\Model\StoreSwitcher\HashGenerator;
 use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Store\Model\StoreSwitcher\HashGenerator
@@ -119,9 +119,8 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         $redirectUrl = "http://domain.com/";
         $fromStoreCode = 'test';
         $fromStore  = $this->createPartialMock(Store::class, ['getCode']);
-        $toStore = $this->createPartialMock(Store::class, ['getCode']);
-        $fromStore->expects($this->once())->method('getCode')->willReturn($fromStoreCode);
-        $targetUrl=$this->hashGenerator->switch($fromStore, $toStore, $redirectUrl);
+        $fromStore->expects($this->any())->method('getCode')->willReturn($fromStoreCode);
+        $targetUrl=$this->hashGenerator->switch($fromStore, $redirectUrl);
         // phpcs:ignore
         $urlParts=parse_url($targetUrl, PHP_URL_QUERY);
         $signature='';
@@ -163,11 +162,10 @@ class HashGeneratorTest extends \PHPUnit\Framework\TestCase
         );
         $redirectUrl = "http://domain.com/";
         $fromStore = $this->createPartialMock(Store::class, ['getCode']);
-        $toStore = $this->createPartialMock(Store::class, ['getCode']);
-        $fromStore->expects($this->once())->method('getCode')->willReturn($fromStoreCode);
-        $targetUrl = $this->hashGenerator->switch($fromStore, $toStore, $redirectUrl);
+        $fromStore->expects($this->any())->method('getCode')->willReturn($fromStoreCode);
+        $targetUrl = $this->hashGenerator->switch($fromStore, $redirectUrl);
         // phpcs:ignore
-        $urlParts = parse_url($targetUrl,PHP_URL_QUERY);
+        $urlParts = parse_url($targetUrl, PHP_URL_QUERY);
         $signature = '';
         // phpcs:ignore
         parse_str($urlParts, $params);
