@@ -75,7 +75,7 @@ Pages,Pages
 "A block identifier with the same properties already exists in the selected store.","A block identifier with the same properties already exists in the selected store."
 "The page URL key contains capital letters or disallowed symbols.","The page URL key contains capital letters or disallowed symbols."
 "The page URL key cannot be made of only numbers.","The page URL key cannot be made of only numbers."
-"Please rename the folder using only letters, numbers, underscores and dashes.","Please rename the folder using only letters, numbers, underscores and dashes."
+"Please rename the folder using only Latin letters, numbers, underscores and dashes.","Please rename the folder using only Latin letters, numbers, underscores and dashes."
 "We found a directory with the same name. Please try another folder name.","We found a directory with the same name. Please try another folder name."
 "We cannot create a new directory.","We cannot create a new directory."
 "We cannot delete directory %1.","We cannot delete directory %1."
