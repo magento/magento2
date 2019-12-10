@@ -30,6 +30,7 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 
 /**
  * View a category on storefront. Needs to be accessible by POST because of the store switching.
@@ -97,6 +98,11 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     private $toolbarMemorizer;
 
     /**
+     * @var LayoutUpdateManager
+     */
+    private $customLayoutManager;
+
+    /**
      * @var CategoryHelper
      */
     private $categoryHelper;
@@ -119,7 +125,8 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param ForwardFactory $resultForwardFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param ToolbarMemorizer $toolbarMemorizer
+     * @param ToolbarMemorizer|null $toolbarMemorizer
+     * @param LayoutUpdateManager|null $layoutUpdateManager
      * @param CategoryHelper $categoryHelper
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -136,6 +143,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         ToolbarMemorizer $toolbarMemorizer = null,
+        ?LayoutUpdateManager $layoutUpdateManager = null,
         CategoryHelper $categoryHelper = null,
         LoggerInterface $logger = null
     ) {
@@ -149,8 +157,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->resultForwardFactory = $resultForwardFactory;
         $this->layerResolver = $layerResolver;
         $this->categoryRepository = $categoryRepository;
-        $this->toolbarMemorizer = $toolbarMemorizer ?: ObjectManager::getInstance()
-            ->get(ToolbarMemorizer::class);
+        $this->toolbarMemorizer = $toolbarMemorizer ?: ObjectManager::getInstance()->get(ToolbarMemorizer::class);
+        $this->customLayoutManager = $layoutUpdateManager
+            ?? ObjectManager::getInstance()->get(LayoutUpdateManager::class);
         $this->categoryHelper = $categoryHelper ?: ObjectManager::getInstance()
             ->get(CategoryHelper::class);
         $this->logger = $logger ?: ObjectManager::getInstance()
@@ -278,6 +287,11 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 $page->addUpdate($layoutUpdate);
                 $page->addPageLayoutHandles(['layout_update' => sha1($layoutUpdate)], null, false);
             }
+        }
+
+        //Selected files
+        if ($settings->getPageLayoutHandles()) {
+            $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
     }
 }
