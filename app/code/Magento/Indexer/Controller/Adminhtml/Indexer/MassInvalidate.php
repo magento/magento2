@@ -7,6 +7,9 @@ namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 
+/**
+ * Controller endpoint for mass action: invalidate index
+ */
 class MassInvalidate extends \Magento\Indexer\Controller\Adminhtml\Indexer implements HttpPostActionInterface
 {
     /**

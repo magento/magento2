@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml;
 
+/**
+ * Abstract class used as part of inheritance tree for Indexer controllers
+ */
 abstract class Indexer extends \Magento\Backend\App\Action
 {
     /**
