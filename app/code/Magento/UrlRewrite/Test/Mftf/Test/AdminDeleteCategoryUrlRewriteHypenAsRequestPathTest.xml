@@ -38,7 +38,7 @@
         </actionGroup>
 
         <!--Delete the Category Url Rewrite-->
-        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="deleteCustomUrlRewrite">
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
             <argument name="requestPath" value="-"/>
         </actionGroup>
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
