@@ -44,12 +44,12 @@ class CustomerAddressesFormatterTest extends TestCase
         $addressMock->expects($this->any())->method('getName')->willReturn('Address Name');
         $addressMock->expects($this->any())->method('getStreetFull')->willReturn('Address Street Full');
         $addressMock->expects($this->any())->method('getCity')->willReturn('Address City');
-        $addressMock->expects($this->any())->method('getRegion')->willReturn('Address Region');
-        $addressMock->expects($this->any())->method('getPostcode')->willReturn('Address Postcode');
+        $addressMock->expects($this->any())->method('getRegion')->willReturn('California');
+        $addressMock->expects($this->any())->method('getPostcode')->willReturn('12345');
         $addressMock->expects($this->any())->method('getCountryModel')->willReturn($countryMock);
 
         $this->assertEquals(
-            'Address Name, Address Street Full, Address City, Address Region Address Postcode, USA',
+            'Address Name, Address Street Full, Address City, California 12345, USA',
             $this->customerAddressesFormatter->format($addressMock)
         );
     }
