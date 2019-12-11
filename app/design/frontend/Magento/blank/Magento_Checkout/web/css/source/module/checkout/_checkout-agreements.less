@@ -11,6 +11,27 @@
     .checkout-agreements-block {
         .checkout-agreements {
             margin-bottom: @indent__base;
+            &.fieldset .field  {
+                input {
+                    display: inline-block;
+                }
+
+                .label {
+                    display: inline-block;
+                    width: 90%;
+                    vertical-align: top;
+                    position: relative;
+                    &:after {
+                        position: absolute;
+                        margin: 0;
+                        left: -7px;
+                    }
+
+                    button {
+                        text-align: left;
+                    }
+                }
+            }
         }
 
         .action-show {
