@@ -28,7 +28,7 @@
         </after>
 
         <!--Create the Category Url Rewrite-->
-        <actionGroup ref="AdminAddUrlRewrite" stepKey="addUrlRewriteSecondTime">
+        <actionGroup ref="AdminAddUrlRewriteActionGroup" stepKey="addUrlRewriteSecondTime">
             <argument name="category" value="$$category.name$$"/>
             <argument name="customUrlRewriteValue" value="For Category"/>
             <argument name="storeValue" value="Default Store View"/>

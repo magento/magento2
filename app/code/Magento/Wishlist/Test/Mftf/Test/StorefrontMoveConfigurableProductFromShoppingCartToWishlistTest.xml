@@ -136,12 +136,12 @@
         <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" y="-200" stepKey="scroll"/>
 
         <!-- Add product to the cart and Assert add product to cart success message-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartVirtualProductFromStorefrontProductPage">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert move product to wishlist success message -->
         <actionGroup ref="AssertMoveProductToWishListSuccessMessageActionGroup" stepKey="moveToWishlist">
