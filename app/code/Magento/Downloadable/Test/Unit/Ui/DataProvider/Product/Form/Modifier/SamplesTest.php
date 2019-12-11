@@ -16,7 +16,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
- * Class SamplesTest
+ * Test for class Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SamplesTest extends \PHPUnit\Framework\TestCase

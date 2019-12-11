@@ -10,7 +10,7 @@ namespace Magento\Framework\Session;
 use Magento\Framework\App\State;
 
 /**
- * Class SidResolver
+ * Resolves SID by processing request parameters.
  * @deprecated 2.3.3 SIDs in URLs are no longer used
  */
 class SidResolver implements SidResolverInterface
@@ -96,6 +96,7 @@ class SidResolver implements SidResolverInterface
      *
      * @return string|null
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getSid(SessionManagerInterface $session)
     {

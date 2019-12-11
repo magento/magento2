@@ -16,7 +16,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Downloadable\Api\Data\SampleInterface;
 
 /**
- * Class Samples
+ * Class to add samples
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Samples

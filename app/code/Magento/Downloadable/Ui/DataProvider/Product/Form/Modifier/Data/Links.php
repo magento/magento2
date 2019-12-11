@@ -16,7 +16,7 @@ use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
- * Class Links
+ * Grid class to add links
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Links

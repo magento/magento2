@@ -52,7 +52,7 @@ namespace Magento\Framework\Session {
             SessionManagerTest::$isIniSetInvoked[$varName] = $newValue;
             return true;
         }
-        return call_user_func_array('\ini_set', func_get_args());
+        return call_user_func_array('\ini_set', [$varName, $newValue]);
     }
 
     /**

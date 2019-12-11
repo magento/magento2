@@ -292,7 +292,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getUseSession()
     {
-        return $this->_useSession;
+        return false;
     }
 
     /**
