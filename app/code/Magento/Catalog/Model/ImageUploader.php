@@ -191,7 +191,6 @@ class ImageUploader
      * Checking file for moving and move it
      *
      * @param string $imageName
-     *
      * @param bool $returnRelativePath
      * @return string
      *
