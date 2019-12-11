@@ -78,6 +78,45 @@ class TextAttributeTest extends AbstractAttributeTest
     }
 
     /**
+     * @magentoDbIsolation disabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_varchar_attribute.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     */
+    public function testAttributePerStoreView(): void
+    {
+        $this->processMultiStoreView(
+            'simple2',
+            0,
+            'second store view value',
+            'second store view value',
+            'fixturestore'
+        );
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_two_websites.php
+     * @magentoDataFixture Magento/Catalog/_files/product_varchar_attribute.php
+     *
+     * @return void
+     */
+    public function testAttributePerWebsites(): void
+    {
+        $this->processMultiStoreView(
+            'simple-on-two-websites',
+            2,
+            'second website value',
+            'second website value',
+            'fixture_second_store'
+        );
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getAttributeCode(): string

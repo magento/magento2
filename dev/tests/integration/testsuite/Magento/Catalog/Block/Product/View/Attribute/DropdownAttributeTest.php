@@ -78,6 +78,47 @@ class DropdownAttributeTest extends AbstractAttributeTest
     }
 
     /**
+     * @magentoDbIsolation disabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     */
+    public function testAttributePerStoreView(): void
+    {
+        $attributeValue = $this->getAttribute()->getSource()->getOptionId('Option 3');
+        $this->processMultiStoreView(
+            'simple2',
+            0,
+            $attributeValue,
+            'Option 3',
+            'fixturestore'
+        );
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_two_websites.php
+     *
+     * @return void
+     */
+    public function testAttributePerWebsites(): void
+    {
+        $attributeValue = $this->getAttribute()->getSource()->getOptionId('Option 3');
+        $this->processMultiStoreView(
+            'simple-on-two-websites',
+            2,
+            $attributeValue,
+            'Option 3',
+            'fixture_second_store'
+        );
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getAttributeCode(): string

@@ -16,6 +16,7 @@ use Magento\Catalog\Helper\Output;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -48,6 +49,9 @@ abstract class AbstractAttributeTest extends TestCase
     /** @var Output */
     private $outputHelper;
 
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
     /**
      * @inheritdoc
      */
@@ -62,6 +66,7 @@ abstract class AbstractAttributeTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->block = $this->layout->createBlock(Attributes::class);
         $this->outputHelper = $this->objectManager->create(Output::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -143,6 +148,36 @@ abstract class AbstractAttributeTest extends TestCase
         $this->assertNotNull($dataItem);
         $output = $this->outputHelper->productAttribute($product, $dataItem['value'], $dataItem['code']);
         $this->assertEquals($expectedAttributeValue, $output);
+    }
+
+    /**
+     * Process attribute view per store views
+     *
+     * @param string $sku
+     * @param int $attributeScopeValue
+     * @param string $attributeValue
+     * @param string $expectedAttributeValue
+     * @param string $storeCode
+     * @return void
+     */
+    protected function processMultiStoreView(
+        string $sku,
+        int $attributeScopeValue,
+        string $attributeValue,
+        string $expectedAttributeValue,
+        string $storeCode
+    ): void {
+        $currentStore = $this->storeManager->getStore();
+        $this->updateAttribute(['is_global' => $attributeScopeValue, 'is_visible_on_front' => true]);
+        $this->storeManager->setCurrentStore($storeCode);
+
+        try {
+            $product = $this->updateProduct($sku, $attributeValue);
+            $this->registerProduct($product);
+            $this->assertEquals($this->prepareExpectedData($expectedAttributeValue), $this->block->getAdditionalData());
+        } finally {
+            $this->storeManager->setCurrentStore($currentStore);
+        }
     }
 
     /**
