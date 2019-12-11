@@ -33,10 +33,13 @@ define([
             spyOn($, 'ajax').and.callFake(
              function () {
                     return {
-                        done: function (data) {
-                                            obj.targetElementId = 1;
-                                        }
-                    }
+                        /**
+                         * Succes result of ajax request
+                         */
+                        done: function () {
+                            obj.targetElementId = 1;
+                        }
+                    };
                 });
             obj.openDialog('instance/url', 100, 100, 'title', options);
             obj.openDialog('instance/url', 100, 100, 'title', options);
@@ -48,11 +51,14 @@ define([
             spyOn($, 'ajax').and.callFake(
              function () {
                 return {
-                    done: function (data) {
-                                    obj.targetElementId = 'instance/url';
-                                    obj.modalLoaded = true;
-                                }
-                }
+                    /**
+                     * Succes result of ajax request
+                     */
+                    done: function () {
+                        obj.targetElementId = 'instance/url';
+                        obj.modalLoaded = true;
+                    }
+                };
             });
             obj.openDialog('instance/url', 100, 100, 'title', undefined);
             obj.openDialog('instance/url', 100, 100, 'title', undefined);
