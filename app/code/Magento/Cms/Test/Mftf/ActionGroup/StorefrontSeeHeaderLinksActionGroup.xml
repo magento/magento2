@@ -9,8 +9,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontSeeHeaderLinksActionGroup">
         <arguments>
-            <argument name="LinkName" type="string" defaultValue="Create an Account"/>
+            <argument name="linkName" type="string" defaultValue="Create an Account"/>
         </arguments>
-        <see stepKey="SeeElement" selector="{{StorefrontHeaderSection.headerlinks}}" userInput="{{LinkName}}"/>
+        <see stepKey="seeElement" selector="{{StorefrontHeaderSection.headerlinks}}" userInput="{{linkName}}"/>
     </actionGroup>
 </actionGroups>

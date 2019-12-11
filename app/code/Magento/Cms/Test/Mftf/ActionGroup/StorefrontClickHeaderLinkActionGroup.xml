@@ -9,9 +9,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontClickHeaderLinkActionGroup">
         <arguments>
-            <argument name="LinkName" type="string" defaultValue="Create an Account"/>
+            <argument name="linkName" type="string" defaultValue="Create an Account"/>
         </arguments>
-        <click stepKey="ClickTheLink" selector="{{StorefrontHeaderSection.HeaderLinkByText(LinkName)}}"/>
-        <waitForPageLoad stepKey="Wait"/>
+        <click stepKey="clickTheLink" selector="{{StorefrontHeaderSection.headerLinkByText(linkName)}}"/>
+        <waitForPageLoad stepKey="wait"/>
     </actionGroup>
 </actionGroups>
