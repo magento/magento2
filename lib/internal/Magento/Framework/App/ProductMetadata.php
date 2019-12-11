@@ -85,8 +85,8 @@ class ProductMetadata implements ProductMetadataInterface
                 } else {
                     $this->version = 'UNKNOWN';
                 }
-                $this->cache->save($this->version, self::VERSION_CACHE_KEY, [Config::CACHE_TAG]);
             }
+            $this->cache->save($this->version, self::VERSION_CACHE_KEY, [Config::CACHE_TAG]);
         }
         return $this->version;
     }
