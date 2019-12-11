@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Store\Controller\Store;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -21,7 +22,7 @@ use Magento\Framework\Session\Generic as Session;
  *
  * @deprecated Is not employed during stores switching process.
  */
-class Redirect extends \Magento\Framework\App\Action\Action
+class Redirect extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * @var StoreRepositoryInterface
@@ -44,6 +45,7 @@ class Redirect extends \Magento\Framework\App\Action\Action
      * @param StoreResolverInterface $storeResolver
      * @param Session $session
      * @param SidResolverInterface $sidResolver
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -59,7 +61,8 @@ class Redirect extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @inheritDoc
+     *
      * @throws NoSuchEntityException
      */
     public function execute()
