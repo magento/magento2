@@ -1310,7 +1310,7 @@ XMLAuth;
      *
      * @return array
      */
-    public function getAllowedMethods(): array
+    public function getAllowedMethods()
     {
         $isUpsXml = $this->getConfigData('type') === 'UPS_XML';
         $origin = $this->getConfigData('origin_shipment');
