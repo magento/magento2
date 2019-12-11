@@ -51,49 +51,6 @@ class HashGenerator
     }
 
     /**
-     * Builds redirect url with token
-     *
-     * @param StoreInterface $fromStore store where we came from
-     * @param string $redirectUrl original url requested for redirect after switching
-     * @return string redirect url
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function switch(StoreInterface $fromStore, string $redirectUrl): string
-    {
-        $targetUrl = $redirectUrl;
-        $customerId = null;
-        $encodedUrl = $this->urlHelper->getEncodedUrl($redirectUrl);
-
-        if ($this->currentUser->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
-            $customerId = $this->currentUser->getUserId();
-        }
-
-        if ($customerId) {
-            // phpcs:disable Magento2.Functions.DiscouragedFunction
-            $urlParts = parse_url($targetUrl);
-            $host = $urlParts['host'];
-            $scheme = $urlParts['scheme'];
-            $fromStoreCode = $fromStore->getCode();
-
-            $targetUrl = $scheme . "://" . $host . '/stores/store/switchrequest';
-            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['___from_store' => $fromStoreCode]);
-            $targetUrl = $this->urlHelper->addRequestParam(
-                $targetUrl,
-                [ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl]
-            );
-
-            $customerHash = $this->generateHash($fromStore);
-
-            $targetUrl = $this->urlHelper->addRequestParam(
-                $targetUrl,
-                $customerHash
-            );
-        }
-
-        return $targetUrl;
-    }
-
-    /**
      * Generate hash data for customer
      *
      * @param StoreInterface $fromStore
