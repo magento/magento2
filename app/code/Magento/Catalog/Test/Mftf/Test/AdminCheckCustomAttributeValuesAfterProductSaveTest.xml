@@ -12,7 +12,7 @@
             <features value="Catalog"/>
             <stories value="Product attributes"/>
             <title value="Saving custom attribute values using UI"/>
-            <description value="Checks, that saved custom attribute values are reflected on the product's edit page"/>
+            <description value="Checks that saved custom attribute values are reflected on the product's edit page"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-17516"/>
             <useCaseId value="MC-29022"/>
@@ -84,11 +84,11 @@
         </actionGroup>
 
         <!-- Assert that attribute values present in layered navigation -->
-        <actionGroup ref="StorefrontAssertAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertFirstAttributeOptionPresence">
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertFirstAttributeOptionPresence">
             <argument name="attributeLabel" value="$createMultiSelectProductAttribute.attribute[frontend_labels][0][label]$"/>
             <argument name="attributeOptionLabel" value="$addFirstOptionToAttribute.option[store_labels][0][label]$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertThirdAttributeOptionPresence">
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertThirdAttributeOptionPresence">
             <argument name="attributeLabel" value="$createMultiSelectProductAttribute.attribute[frontend_labels][0][label]$"/>
             <argument name="attributeOptionLabel" value="$addThirdOptionToAttribute.option[store_labels][0][label]$"/>
         </actionGroup>
