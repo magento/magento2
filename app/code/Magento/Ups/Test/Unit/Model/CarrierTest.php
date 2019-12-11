@@ -404,7 +404,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $methodType
      * @param string $methodCode
      * @param string $methodTitle
-     * @param array $expectedMethod
+     * @param array $expectedMethods
      * @return void
      */
     public function testGetAllowedMethods(
@@ -412,7 +412,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         string $methodType,
         string $methodCode,
         string $methodTitle,
-        array $expectedMethod
+        array $expectedMethods
     ): void {
         $this->scope->method('getValue')
             ->willReturnMap(
@@ -434,8 +434,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->configHelper->method('getCode')
             ->with($methodType)
             ->willReturn([$methodCode => new Phrase($methodTitle)]);
-        $actualMethod = $this->model->getAllowedMethods();
-        $this->assertEquals($expectedMethod, $actualMethod);
+        $actualMethods = $this->model->getAllowedMethods();
+        $this->assertEquals($expectedMethods, $actualMethods);
     }
 
     /**
