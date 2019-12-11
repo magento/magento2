@@ -62,7 +62,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
     /**
-     * @deprecated
+     * @deprecated due to movement of the account confirmation into another class
      * @see AccountConfirmation::XML_PATH_IS_CONFIRM
      */
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
