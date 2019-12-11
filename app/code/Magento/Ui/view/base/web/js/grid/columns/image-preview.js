@@ -13,6 +13,8 @@ define([
         defaults: {
             bodyTmpl: 'ui/grid/columns/image-preview',
             previewImageSelector: '[data-image-preview]',
+            masonrySelector: '.masonry-image-grid',
+            isListenerActive: false,
             visibleRecord: null,
             height: 0,
             displayedRecord: {},
@@ -46,7 +48,6 @@ define([
          */
         initialize: function () {
             this._super();
-            $(document).on('keydown', this.handleKeyDown.bind(this));
 
             return this;
         },
@@ -129,6 +130,11 @@ define([
          */
         show: function (record) {
             var img;
+
+            if (!this.isListenerActive) {
+                $(this.masonrySelector).on('keydown', this.handleKeyDown.bind(this));
+                this.isListenerActive = true;
+            }
 
             if (record._rowIndex === this.visibleRecord()) {
                 this.hide();
@@ -239,7 +245,7 @@ define([
         handleKeyDown: function (e) {
             var key = keyCodes[e.keyCode];
 
-            if (this.visibleRecord() !== null) {
+            if (this.visibleRecord() !== null && document.activeElement.tagName !== 'INPUT') {
                 if (key === 'pageLeftKey') {
                     this.prev(this.displayedRecord());
                 } else if (key === 'pageRightKey') {
