@@ -9,6 +9,7 @@ namespace Magento\Store\Controller\Store;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -18,11 +19,9 @@ use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Session\Generic as Session;
 
 /**
- * Builds correct url to target store and performs redirect.
- *
- * @deprecated Is not employed during stores switching process.
+ * Builds correct url to target store (group) and performs redirect.
  */
-class Redirect extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+class Redirect extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var StoreRepositoryInterface
