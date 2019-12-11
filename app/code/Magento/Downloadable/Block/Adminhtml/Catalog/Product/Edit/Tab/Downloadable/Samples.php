@@ -250,7 +250,7 @@ class Samples extends \Magento\Backend\Block\Widget
      */
     public function getConfigJson()
     {
-        $url = $this->_urlFactory->create()->addSessionParam()->getUrl(
+        $url = $this->_urlFactory->create()->getUrl(
             'adminhtml/downloadable_file/upload',
             ['type' => 'samples', '_secure' => true]
         );

@@ -143,7 +143,7 @@ class Samples
                     'name' => $this->downloadableFile->getFileFromPathFile($sampleFile),
                     'size' => $this->downloadableFile->getFileSize($file),
                     'status' => 'old',
-                    'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                    'url' => $this->urlBuilder->getUrl(
                         'adminhtml/downloadable_product_edit/sample',
                         ['id' => $sample->getId(), '_secure' => true]
                     ),

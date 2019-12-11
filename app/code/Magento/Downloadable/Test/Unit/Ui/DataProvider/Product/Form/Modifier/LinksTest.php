@@ -169,7 +169,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->method('toOptionArray');
         $this->shareableMock->expects($this->once())
             ->method('toOptionArray');
-        $this->urlBuilderMock->expects($this->exactly(2))
+        $this->urlBuilderMock->expects($this->never())
             ->method('addSessionParam')
             ->willReturnSelf();
         $this->urlBuilderMock->expects($this->exactly(2))

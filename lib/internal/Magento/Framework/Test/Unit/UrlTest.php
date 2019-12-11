@@ -108,7 +108,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     {
         $routeParamsResolverFactoryMock = $this->createMock(\Magento\Framework\Url\RouteParamsResolverFactory::class);
         if ($resolve) {
-            $routeParamsResolverFactoryMock->expects($this->once())->method('create')
+            $routeParamsResolverFactoryMock->expects($this->any())->method('create')
                 ->will($this->returnValue($this->routeParamsResolverMock));
         }
         return $routeParamsResolverFactoryMock;
@@ -467,10 +467,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionInUrl')->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('getSessionIdForHost')->will($this->returnValue(false));
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionVar')->will($this->returnValue(true));
-        $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')
+        $this->sidResolverMock->expects($this->any())->method('getUseSessionInUrl')->will($this->returnValue(true));
+        $this->sessionMock->expects($this->any())->method('getSessionIdForHost')->will($this->returnValue(false));
+        $this->sidResolverMock->expects($this->any())->method('getUseSessionVar')->will($this->returnValue(true));
+        $this->routeParamsResolverMock->expects($this->any())->method('hasData')->with('secure_is_forced')
             ->will($this->returnValue(true));
         $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam');
         $this->queryParamsResolverMock->expects($this->once())
@@ -491,11 +491,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionInUrl')->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('getSessionIdForHost')
+        $this->sidResolverMock->expects($this->never())->method('getUseSessionInUrl')->will($this->returnValue(true));
+        $this->sessionMock->expects($this->never())->method('getSessionIdForHost')
             ->will($this->returnValue('session-id'));
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionVar')->will($this->returnValue(false));
-        $this->sidResolverMock->expects($this->once())->method('getSessionIdQueryParam');
+        $this->sidResolverMock->expects($this->never())->method('getUseSessionVar')->will($this->returnValue(false));
+        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam');
         $this->queryParamsResolverMock->expects($this->once())
             ->method('getQuery')
             ->will($this->returnValue('foo=bar'));

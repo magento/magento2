@@ -398,7 +398,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getUploadUrl($type)
     {
-        return $this->_urlFactory->create()->addSessionParam()->getUrl(
+        return $this->_urlFactory->create()->getUrl(
             'adminhtml/downloadable_file/upload',
             ['type' => $type, '_secure' => true]
         );
