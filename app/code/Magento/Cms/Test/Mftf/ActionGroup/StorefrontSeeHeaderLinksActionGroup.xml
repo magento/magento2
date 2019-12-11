@@ -8,6 +8,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontSeeHeaderLinksActionGroup">
+        <annotations>
+            <description>See a link by name in the storefront header.</description>
+        </annotations>
         <arguments>
             <argument name="linkName" type="string" defaultValue="Create an Account"/>
         </arguments>
