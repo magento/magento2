@@ -15,7 +15,6 @@
                 <confirm>0</confirm>
                 <default_group>1</default_group>
                 <tax_calculation_address_type>billing</tax_calculation_address_type>
-                <email_domain>example.com</email_domain>
                 <email_identity>general</email_identity>
                 <email_template>customer_create_account_email_template</email_template>
                 <email_no_password_template>customer_create_account_email_no_password_template</email_no_password_template>

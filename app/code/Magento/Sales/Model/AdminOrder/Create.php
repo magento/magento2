@@ -29,7 +29,10 @@ use Psr\Log\LoggerInterface;
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
 {
     /**
-     * Xml default email domain path
+     * Path to "CUSTOMERS > Customer Configuration > Create New Account Options > Default Email Domain" setting
+     *
+     * @deprecated since version 2.2.6
+     * @see \Magento\Sales\Model\AdminOrder\Create. Constant usage has been removed from _getNewCustomerEmail() method.
      */
     const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
