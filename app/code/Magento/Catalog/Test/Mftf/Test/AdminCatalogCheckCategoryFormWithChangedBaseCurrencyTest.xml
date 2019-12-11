@@ -12,7 +12,7 @@
         <annotations>
             <features value="Catalog"/>
             <stories value="Create/Edit Category in Admin"/>
-                <title value="Check category form with changed base currency"/>
+            <title value="Check category form with changed base currency"/>
             <description value="Check category form with base currency which is different from USD"/>
             <severity value="MINOR"/>
             <group value="category"/>
