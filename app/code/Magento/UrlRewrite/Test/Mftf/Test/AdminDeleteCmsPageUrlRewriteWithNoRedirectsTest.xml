@@ -6,16 +6,16 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminDeleteCmsPageUrlRewriteWithNoRedirectsTest">
         <annotations>
             <stories value="Delete CMS Page URL rewrite with No Redirects"/>
             <title value="Delete CMS Page URL rewrite with No Redirects"/>
             <description value="Log in to admin and delete CMS Page URL rewrite with No Redirects"/>
-            <group value="cMSContent"/>
+            <testCaseId value="MC-14648"/>
             <group value="mtf_migrated"/>
         </annotations>
-
         <before>
             <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
@@ -46,14 +46,15 @@
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
             <argument name="message" value="You deleted the URL rewrite."/>
         </actionGroup>
+
         <!--Search and verify AssertUrlRewriteNotInGrid-->
         <actionGroup ref="AdminSearchDeletedUrlRewrite" stepKey="searchDeletedUrlRewriteInGrid">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
+
         <!--Verify AssertPageByUrlRewriteIsNotFound-->
         <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="assertPageByUrlRewriteIsNotFound">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
-
     </test>
 </tests>
