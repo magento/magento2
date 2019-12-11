@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ups\Test\Unit\Model;
 
 use Magento\Directory\Model\Country;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -20,11 +21,15 @@ use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Ups\Helper\Config;
 use Magento\Ups\Model\Carrier;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Unit tests for \Magento\Ups\Model\Carrier class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CarrierTest extends \PHPUnit\Framework\TestCase
@@ -92,16 +97,22 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     private $logger;
 
+    /**
+     * @var Config|MockObject
+     */
+    private $configHelper;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->helper = new ObjectManager($this);
 
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getValue', 'isSetFlag'])
             ->getMock();
-
-        $this->scope->method('getValue')
-            ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
         $this->error = $this->getMockBuilder(Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
@@ -143,6 +154,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
+        $this->configHelper = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCode'])
+            ->getMock();
+
         $this->model = $this->helper->getObject(
             Carrier::class,
             [
@@ -153,6 +169,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
                 'httpClientFactory' => $httpClientFactory,
+                'configHelper' => $this->configHelper,
             ]
         );
     }
@@ -189,14 +206,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param bool $freeShippingEnabled
      * @param int $requestSubtotal
      * @param int $expectedPrice
+     * @return void
      */
     public function testGetMethodPrice(
-        $cost,
-        $shippingMethod,
-        $freeShippingEnabled,
-        $requestSubtotal,
-        $expectedPrice
-    ) {
+        int $cost,
+        string $shippingMethod,
+        bool $freeShippingEnabled,
+        int $requestSubtotal,
+        int $expectedPrice
+    ): void {
+        $this->scope->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
         $path = 'carriers/' . $this->model->getCarrierCode() . '/';
         $this->scope->method('isSetFlag')
             ->with($path . 'free_shipping_enable')
@@ -244,8 +264,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testCollectRatesErrorMessage()
+    /**
+     * @return void
+     */
+    public function testCollectRatesErrorMessage(): void
     {
+        $this->scope->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
         $this->scope->method('isSetFlag')
             ->willReturn(false);
 
@@ -370,6 +395,69 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         return [
             ['countryCode' => 'PR', 'foundCountryCode' => null],
             ['countryCode' => 'US', 'foundCountryCode' => 'US'],
+        ];
+    }
+
+    /**
+     * @dataProvider allowedMethodsDataProvider
+     * @param string $carrierType
+     * @param string $methodType
+     * @param string $methodCode
+     * @param string $methodTitle
+     * @param array $expectedMethods
+     * @return void
+     */
+    public function testGetAllowedMethods(
+        string $carrierType,
+        string $methodType,
+        string $methodCode,
+        string $methodTitle,
+        array $expectedMethods
+    ): void {
+        $this->scope->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        'carriers/ups/type',
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $carrierType
+                    ],
+                    [
+                        'carriers/ups/origin_shipment',
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        'Shipments Originating in United States',
+                    ],
+                ]
+            );
+        $this->configHelper->method('getCode')
+            ->with($methodType)
+            ->willReturn([$methodCode => new Phrase($methodTitle)]);
+        $actualMethods = $this->model->getAllowedMethods();
+        $this->assertEquals($expectedMethods, $actualMethods);
+    }
+
+    /**
+     * @return array
+     */
+    public function allowedMethodsDataProvider(): array
+    {
+        return [
+            [
+                'UPS',
+                'method',
+                '1DM',
+                'Next Day Air Early AM',
+                ['1DM' => 'Next Day Air Early AM'],
+            ],
+            [
+                'UPS_XML',
+                'originShipment',
+                '01',
+                'UPS Next Day Air',
+                ['01' => 'UPS Next Day Air'],
+            ],
         ];
     }
 
