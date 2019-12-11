@@ -1,6 +1,7 @@
 Magento\Security\Controller\Adminhtml\Session\Activity
 Magento\Security\Controller\Adminhtml\Session\LogoutAll
 Magento\Backend\Controller\Adminhtml\Denied
+Magento\Backend\Controller\Adminhtml\Index\Denied
 Magento\Backend\Controller\Adminhtml\Noroute\Index
 Magento\Directory\Controller\Adminhtml\Json\CountryRegion
 Magento\Tax\Controller\Adminhtml\Rule\AjaxLoadRates
