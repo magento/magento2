@@ -207,7 +207,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testDeleteBySkus()
     {
-        $categoryId = "42";
+        $categoryId = 42;
         $productSku = "testSku";
         $productId = 55;
         $productPositions = [55 => 1];
@@ -231,7 +231,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteBySkusWithInputException()
     {
-        $categoryId = "42";
+        $categoryId = 42;
         $productSku = "testSku";
         $categoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
@@ -248,7 +248,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteSkusIdsWithCouldNotSaveException()
     {
-        $categoryId = "42";
+        $categoryId = 42;
         $productSku = "testSku";
         $productId = 55;
         $productPositions = [55 => 1];

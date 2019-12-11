@@ -22,5 +22,5 @@ interface CategoryListDeleteBySkuInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function deleteBySkus($categoryId, array $productSkuList);
+    public function deleteBySkus(int $categoryId, array $productSkuList): bool;
 }

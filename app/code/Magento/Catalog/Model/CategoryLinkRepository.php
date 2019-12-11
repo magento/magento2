@@ -114,7 +114,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     /**
      * {@inheritDoc}
      */
-    public function deleteBySkus($categoryId, array $productSkuList)
+    public function deleteBySkus(int $categoryId, array $productSkuList): bool
     {
         $category = $this->categoryRepository->get($categoryId);
         $products = $this->productResource->getProductsIdsBySkus($productSkuList);
