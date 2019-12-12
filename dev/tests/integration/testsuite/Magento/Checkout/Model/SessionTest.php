@@ -18,7 +18,7 @@ use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class SessionTest
+ * Checkout Session model test.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
