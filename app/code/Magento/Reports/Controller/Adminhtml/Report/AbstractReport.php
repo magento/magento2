@@ -19,8 +19,9 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  * Reports api controller
  *
  * phpcs:disable Magento2.Classes.AbstractApi
+ *
  * @api
- * @since 100.0.2
+ * @since                                    100.0.2
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class AbstractReport extends \Magento\Backend\App\Action
@@ -141,7 +142,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $flag = $this->_objectManager->create(\Magento\Reports\Model\Flag::class)
             ->setReportFlagCode($flagCode)
             ->loadSelf();
-        $updatedAt = __('Never');
+        $updatedAt = 'Never';
         if ($flag->hasData()) {
             $updatedAt = $this->timezone->formatDate(
                 $flag->getLastUpdate(),
@@ -153,18 +154,25 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
         $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent');
 
-        $this->messageManager->addNoticeMessage(
-            __(
-                'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
-                'click <a href="#2" data-post="%3">here</a>.',
-                $updatedAt,
-                $refreshStatsLink,
-                str_replace(
+        $this->messageManager->addComplexNoticeMessage(
+            'addStatisticsReportMessage',
+            [
+                'updatedAt' => $updatedAt,
+                'refreshStatsLink' => $refreshStatsLink,
+                'data' => str_replace(
                     '"',
                     '&quot;',
-                    json_encode(['action' => $directRefreshLink, 'data' => ['code' => $refreshCode]])
+                    json_encode(
+                        [
+                                'action' => $directRefreshLink,
+                                'data' =>
+                                    [
+                                        'code' => $refreshCode
+                                    ]
+                            ]
+                    )
                 )
-            )
+            ]
         );
         return $this;
     }
