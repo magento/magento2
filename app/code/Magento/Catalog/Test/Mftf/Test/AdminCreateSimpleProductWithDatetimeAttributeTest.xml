@@ -42,7 +42,7 @@
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductPage"/>
         <actionGroup ref="fillMainProductForm" stepKey="fillDefaultProductFields"/>
         <!-- Add datetime attribute -->
-        <actionGroup ref="addProductAttributeInProductModal" stepKey="addDatetimeAttribute">
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addDatetimeAttribute">
             <argument name="attributeCode" value="$createDatetimeAttribute.attribute_code$"/>
         </actionGroup>
         <!-- Flush config cache to reset product attributes in attribute set -->
