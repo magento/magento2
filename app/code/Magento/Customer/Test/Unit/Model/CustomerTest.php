@@ -15,6 +15,7 @@ use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Math\Random;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -86,6 +87,14 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     private $dataObjectHelper;
 
+    /**
+     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mathRandom;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_website = $this->createMock(\Magento\Store\Model\Website::class);
@@ -130,6 +139,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['populateWithArray'])
             ->getMock();
+        $this->mathRandom = $this->createMock(Random::class);
 
         $this->_model = $helper->getObject(
             \Magento\Customer\Model\Customer::class,
@@ -146,7 +156,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                 'accountConfirmation' => $this->accountConfirmation,
                 '_addressesFactory' => $this->addressesFactory,
                 'customerDataFactory' => $this->customerDataFactory,
-                'dataObjectHelper' => $this->dataObjectHelper
+                'dataObjectHelper' => $this->dataObjectHelper,
+                'mathRandom' => $this->mathRandom,
             ]
         );
     }
@@ -219,15 +230,17 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->method('getTransport')
             ->will($this->returnValue($transportMock));
 
-        $this->_model->setData([
-            'website_id' => 1,
-            'store_id' => 1,
-            'email' => 'email@example.com',
-            'firstname' => 'FirstName',
-            'lastname' => 'LastName',
-            'middlename' => 'MiddleName',
-            'prefix' => 'Name Prefix',
-        ]);
+        $this->_model->setData(
+            [
+                'website_id' => 1,
+                'store_id' => 1,
+                'email' => 'email@example.com',
+                'firstname' => 'FirstName',
+                'lastname' => 'LastName',
+                'middlename' => 'MiddleName',
+                'prefix' => 'Name Prefix',
+            ]
+        );
         $this->_model->sendNewAccountEmail('registered');
     }
 
@@ -382,5 +395,21 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customerDataObject->expects($this->atLeastOnce())->method('setId')->with($customerId)->willReturnSelf();
         $this->_model->getDataModel();
         $this->assertEquals($customerDataObject, $this->_model->getDataModel());
+    }
+
+    /**
+     * Check getRandomConfirmationKey use cryptographically secure function
+     *
+     * @return void
+     */
+    public function testGetRandomConfirmationKey() : void
+    {
+        $this->mathRandom
+            ->expects($this->once())
+            ->method('getRandomString')
+            ->with(32)
+            ->willReturn('random_string');
+
+        $this->_model->getRandomConfirmationKey();
     }
 }

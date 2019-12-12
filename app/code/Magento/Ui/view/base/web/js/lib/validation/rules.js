@@ -1067,6 +1067,16 @@ define([
                 return new RegExp(param).test(value);
             },
             $.mage.__('This link is not allowed.')
+        ],
+        'validate-dob': [
+            function (value) {
+                if (value === '') {
+                    return true;
+                }
+
+                return moment(value).isBefore(moment());
+            },
+            $.mage.__('The Date of Birth should not be greater than today.')
         ]
     }, function (data) {
         return {
