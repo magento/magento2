@@ -222,6 +222,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterSave($object)
     {
+        parent::afterSave($object);
+
         return $this;
     }
 }
