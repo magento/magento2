@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="CreateProductAttributeWithDatetimeFieldActionGroup" extends="createProductAttribute" insertAfter="checkRequired">
+    <actionGroup name="CreateProductAttributeWithDatetimeFieldActionGroup" extends="CreateProductAttributeActionGroup" insertAfter="checkRequired">
         <annotations>
             <description>EXTENDS: createProductAttribute. Fills in the Attribute Code and Default Value (Attribute Type: Date and Time Field).</description>
         </annotations>
