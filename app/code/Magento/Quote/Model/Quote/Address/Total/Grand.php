@@ -42,8 +42,14 @@ class Grand extends AbstractTotal
      */
     public function collect(Quote $quote, ShippingAssignment $shippingAssignment, Total $total): Grand
     {
-        $totals = array_sum($total->getAllTotalAmounts());
-        $baseTotals = array_sum($total->getAllBaseTotalAmounts());
+        $totals = 0;
+        $baseTotals = 0;
+        foreach ($total->getAllTotalAmounts() as $itemTotal) {
+            $totals = $totals + $this->priceRounder->roundPrice($itemTotal, 4);
+        }
+        foreach ($total->getAllBaseTotalAmounts() as $baseTotal) {
+            $baseTotals = $baseTotals + $this->priceRounder->roundPrice($baseTotal, 4);
+        }
         $grandTotal = $this->priceRounder->roundPrice($total->getGrandTotal() + $totals, 4);
         $baseGrandTotal = $this->priceRounder->roundPrice($total->getBaseGrandTotal() + $baseTotals, 4);
 
