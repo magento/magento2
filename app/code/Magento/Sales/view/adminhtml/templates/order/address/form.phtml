@@ -7,7 +7,11 @@
 <div class="messages">
     <div class="message message-notice">
         <div class="message-inner">
-            <div class="message-content"><?= $block->escapeHtml(__('Changing address information will not recalculate shipping, tax or other order amount.')) ?></div>
+            <div class="message-content">
+                <?= $block->escapeHtml(
+                    __('Changing address information will not recalculate shipping, tax or other order amount.')
+                ) ?>
+            </div>
         </div>
     </div>
 </div>
