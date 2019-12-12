@@ -27,7 +27,7 @@
     <event name="sales_order_customer_assign_after">
         <observer name="sales_order_assign_customer_after" instance="Magento\SalesRule\Observer\AssignCouponDataAfterOrderCustomerAssignObserver" />
     </event>
-    <event name="sales_quote_address_collect_totals_before">
+    <event name="sales_quote_collect_totals_after">
         <observer name="coupon_code_validation" instance="Magento\SalesRule\Observer\CouponCodeValidation" />
     </event>
 </config>
