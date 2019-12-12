@@ -253,4 +253,21 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype">
+        <arguments>
+            <argument name="optionsArray" xsi:type="array">
+                <item name="450" xsi:type="array">
+                    <item name="value" xsi:type="string">datetime</item>
+                    <item name="label" xsi:type="string" translate="true">Date and Time</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\DataProvider\Mapper\FormElement">
+        <arguments>
+            <argument name="mappings" xsi:type="array">
+                <item name="datetime" xsi:type="string">date</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
