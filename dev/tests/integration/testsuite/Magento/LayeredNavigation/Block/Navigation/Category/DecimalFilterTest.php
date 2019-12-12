@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\LayeredNavigation\Block\Navigation\Category;
 
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Store\Model\Store;
@@ -25,13 +27,29 @@ class DecimalFilterTest extends AbstractFiltersTest
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
      * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
-     * @param int $filterable
+     * @param array $attributeData
      * @param array $expectation
      * @return void
      */
-    public function testGetFiltersWithCustomAttribute(array $products, int $filterable, array $expectation): void
+    public function testGetFiltersWithCustomAttribute(array $products, array $attributeData, array $expectation): void
     {
-        $this->getFiltersAndAssert($products, $filterable, $expectation, 'decimal_attribute');
+        $this->getCategoryFiltersAndAssert($products, $attributeData, $expectation, 'Category 999');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getLayerType(): string
+    {
+        return Resolver::CATALOG_LAYER_CATEGORY;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getAttributeCode(): string
+    {
+        return 'decimal_attribute';
     }
 
     /**
@@ -77,7 +95,7 @@ class DecimalFilterTest extends AbstractFiltersTest
         return [
             'not_used_in_navigation' => [
                 'products_data' => [],
-                'filterable' => 0,
+                'attribute_data' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
             'used_in_navigation_with_results' => [
@@ -85,7 +103,7 @@ class DecimalFilterTest extends AbstractFiltersTest
                     'simple1000' => 10.00,
                     'simple1001' => 20.00,
                 ],
-                'filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS,
+                'attribute_data' => ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
                 'expectation' => [
                     [
                         'label' => '<span class="price">$10.00</span> - <span class="price">$19.99</span>',
