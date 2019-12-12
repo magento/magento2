@@ -43,7 +43,7 @@ class FilterScopeTest extends AbstractFiltersTest
     protected function setUp()
     {
         parent::setUp();
-        $this->storeManager = $this->objectManager->create(StoreManagerInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->oldStoreId = (int)$this->storeManager->getStore()->getId();
         $this->currentStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
     }
@@ -67,15 +67,18 @@ class FilterScopeTest extends AbstractFiltersTest
         );
         $this->updateProductsOnStore($products);
         $this->clearInstanceAndReindexSearch();
-        $this->storeManager->setCurrentStore($this->currentStoreId);
-        $this->navigationBlock->getLayer()->setCurrentCategory(
-            $this->loadCategory('Category 999', $this->currentStoreId)
-        );
-        $this->navigationBlock->setLayout($this->layout);
-        $filter = $this->getFilterByCode($this->navigationBlock->getFilters(), $this->getAttributeCode());
-        $this->assertNotNull($filter);
-        $this->assertEquals($expectation, $this->prepareFilterItems($filter));
-        $this->storeManager->setCurrentStore($this->oldStoreId);
+        try {
+            $this->storeManager->setCurrentStore($this->currentStoreId);
+            $this->navigationBlock->getLayer()->setCurrentCategory(
+                $this->loadCategory('Category 999', $this->currentStoreId)
+            );
+            $this->navigationBlock->setLayout($this->layout);
+            $filter = $this->getFilterByCode($this->navigationBlock->getFilters(), $this->getAttributeCode());
+            $this->assertNotNull($filter);
+            $this->assertEquals($expectation, $this->prepareFilterItems($filter));
+        } finally {
+            $this->storeManager->setCurrentStore($this->oldStoreId);
+        }
     }
 
     /**
@@ -144,11 +147,14 @@ class FilterScopeTest extends AbstractFiltersTest
      */
     private function updateProductsOnStore(array $productsData): void
     {
-        foreach ($productsData as $storeCode => $products) {
-            $storeId = (int)$this->storeManager->getStore($storeCode)->getId();
-            $this->storeManager->setCurrentStore($storeId);
-            $this->updateProducts($products, $this->getAttributeCode(), $storeId);
+        try {
+            foreach ($productsData as $storeCode => $products) {
+                $storeId = (int)$this->storeManager->getStore($storeCode)->getId();
+                $this->storeManager->setCurrentStore($storeId);
+                $this->updateProducts($products, $this->getAttributeCode(), $storeId);
+            }
+        } finally {
+            $this->storeManager->setCurrentStore($this->oldStoreId);
         }
-        $this->storeManager->setCurrentStore($this->oldStoreId);
     }
 }

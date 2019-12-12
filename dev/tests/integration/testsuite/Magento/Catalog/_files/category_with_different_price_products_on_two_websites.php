@@ -13,8 +13,6 @@ require __DIR__ . '/category_with_different_price_products.php';
 require __DIR__ . '/../../Store/_files/second_website_with_two_stores.php';
 
 $objectManager =  Bootstrap::getObjectManager();
-/** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $defaultWebsiteId = $websiteRepository->get('base')->getId();
