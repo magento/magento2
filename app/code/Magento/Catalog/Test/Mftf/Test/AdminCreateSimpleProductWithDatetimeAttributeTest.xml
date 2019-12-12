@@ -23,10 +23,10 @@
         </before>
         <after>
             <deleteData createDataKey="createDatetimeAttribute" stepKey="deleteDatetimeAttribute"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -40,7 +40,7 @@
         </createData>
         <!-- Open the new simple product page -->
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductPage"/>
-        <actionGroup ref="fillMainProductForm" stepKey="fillDefaultProductFields"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillDefaultProductFields"/>
         <!-- Add datetime attribute -->
         <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addDatetimeAttribute">
             <argument name="attributeCode" value="$createDatetimeAttribute.attribute_code$"/>
@@ -48,7 +48,7 @@
         <!-- Flush config cache to reset product attributes in attribute set -->
         <magentoCLI command="cache:flush" arguments="config" stepKey="flushConfigCache"/>
         <!-- Save the product -->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <!-- Check default value -->
         <scrollTo selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="goToAttributesSection"/>
         <click selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="openAttributesSection"/>
