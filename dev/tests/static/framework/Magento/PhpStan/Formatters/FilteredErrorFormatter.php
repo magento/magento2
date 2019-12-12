@@ -9,8 +9,7 @@ namespace Magento\PhpStan\Formatters;
 
 use PHPStan\Command\AnalysisResult;
 use PHPStan\Command\ErrorFormatter\TableErrorFormatter;
-use PHPStan\File\RelativePathHelper;
-use Symfony\Component\Console\Style\OutputStyle;
+use PHPStan\Command\Output;
 
 /**
  * To mute the PHPStan error message add a comment above the reported error line.
@@ -47,10 +46,11 @@ class FilteredErrorFormatter extends TableErrorFormatter
     /**
      * @inheritdoc
      */
-    public function formatErrors(AnalysisResult $analysisResult, OutputStyle $outputStyle): int
+    public function formatErrors(AnalysisResult $analysisResult, Output $output): int
     {
         if (!$analysisResult->hasErrors()) {
-            $outputStyle->success('No errors');
+            $style = $output->getStyle();
+            $style->success('No errors');
             return self::NO_ERRORS;
         }
 
@@ -62,12 +62,11 @@ class FilteredErrorFormatter extends TableErrorFormatter
             $fileSpecificErrorsWithoutIgnoredErrors,
             $analysisResult->getNotFileSpecificErrors(),
             $analysisResult->isDefaultLevelUsed(),
-            $analysisResult->getCurrentDirectory(),
             $analysisResult->hasInferrablePropertyTypesFromConstructor(),
             $analysisResult->getProjectConfigFile()
         );
 
-        return parent::formatErrors($clearedAnalysisResult, $outputStyle);
+        return parent::formatErrors($clearedAnalysisResult, $output);
     }
 
     /**

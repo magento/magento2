@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Autoloader\GeneratedClassesAutoloader;
 
 if (!defined('TESTS_TEMP_DIR')) {
     //phpcs:ignore Magento2.Functions.DiscouragedFunction
-    define('TESTS_TEMP_DIR', dirname(__DIR__) . '../../tmp');
+    define('TESTS_TEMP_DIR', dirname(__DIR__) . '/../../tmp');
 }
 
 $generatorIo = new Io(

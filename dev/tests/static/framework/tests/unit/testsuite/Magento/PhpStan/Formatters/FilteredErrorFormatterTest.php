@@ -9,37 +9,16 @@ namespace Magento\PhpStan\Formatters;
 
 use PHPStan\Analyser\Error;
 use PHPStan\Command\AnalysisResult;
-use PHPStan\Command\ErrorsConsoleStyle;
 use PHPStan\File\FuzzyRelativePathHelper;
 use PHPStan\ShouldNotHappenException;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\StreamOutput;
+use PHPStan\Testing\ErrorFormatterTestCase;
 
 /**
  * Tests filter error formatter.
  */
-class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
+class FilteredErrorFormatterTest extends ErrorFormatterTestCase
 {
-    private const DIRECTORY_PATH = __DIR__ . '/Fixtures';
-
-    /** @var StreamOutput */
-    private $outputStream;
-
-    /** @var ErrorsConsoleStyle */
-    private $errorConsoleStyle;
-
-    /**
-     * @throws ShouldNotHappenException
-     */
-    protected function setUp(): void
-    {
-        $resource = fopen('php://memory', 'w', false);
-        if ($resource === false) {
-            throw new ShouldNotHappenException();
-        }
-        $this->outputStream = new StreamOutput($resource);
-        $this->errorConsoleStyle = new ErrorsConsoleStyle(new StringInput(''), $this->outputStream);
-    }
+    protected const DIRECTORY_PATH = __DIR__ . '/Fixtures';
 
     /**
      * Tests errors filtering.
@@ -62,14 +41,14 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
             new FuzzyRelativePathHelper(self::DIRECTORY_PATH, '/', []),
             false,
             false,
-            false
+            false,
+            true
         );
 
         $analysisResult = new AnalysisResult(
             $fileErrors,
             [],
             false,
-            self::DIRECTORY_PATH,
             false,
             null
         );
@@ -78,7 +57,7 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
             $exitCode,
             $formatter->formatErrors(
                 $analysisResult,
-                $this->errorConsoleStyle
+                $this->getOutput()
             ),
             sprintf('%s: response code do not match', $message)
         );
@@ -160,36 +139,5 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
                 // phpcs:enable Generic.Files.LineLength.TooLong
             ]
         ];
-    }
-
-    /**
-     * @return string
-     * @throws ShouldNotHappenException
-     */
-    private function getOutputContent(): string
-    {
-        rewind($this->outputStream->getStream());
-        $contents = stream_get_contents($this->outputStream->getStream());
-        if ($contents === false) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $this->rtrimMultiline($contents);
-    }
-
-    /**
-     * @param string $output
-     * @return string
-     */
-    private function rtrimMultiline(string $output): string
-    {
-        $result = array_map(
-            function (string $line): string {
-                return rtrim($line, " \r\n");
-            },
-            explode("\n", $output)
-        );
-
-        return implode("\n", $result);
     }
 }

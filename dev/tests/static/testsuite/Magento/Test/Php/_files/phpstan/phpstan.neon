@@ -1,6 +1,5 @@
 parameters:
-	featureToggles:
-		missingReturnRule: true
+	checkExplicitMixedMissingReturn: true
 	checkPhpDocMissingReturn: true
 	reportUnmatchedIgnoredErrors: false
 	excludes_analyse:
@@ -9,6 +8,7 @@ parameters:
 		- %rootDir%/../../../dev/tests/functional/*
 		- %rootDir%/../../../dev/tests/*/Fixtures/*
 		- %rootDir%/../../../dev/tests/*/tmp/*
+		- %rootDir%/../../../dev/tests/*/_generated/*
 		- %rootDir%/../../../pub/*
 	autoload_directories:
 		- %rootDir%/../../../dev/tests/static/framework/tests/unit/testsuite/Magento
@@ -35,3 +35,4 @@ services:
 			showTipsOfTheDay: false
 			checkThisOnly: false
 			inferPrivatePropertyTypeFromConstructor: true
+			checkMissingTypehints: %checkMissingTypehints%
