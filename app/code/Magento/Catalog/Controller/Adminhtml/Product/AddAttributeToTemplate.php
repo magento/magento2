@@ -31,7 +31,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class AddAttributeToTemplate
+ * Assign attribute to attribute set.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
