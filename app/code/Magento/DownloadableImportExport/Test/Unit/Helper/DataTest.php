@@ -10,6 +10,7 @@ namespace Magento\DownloadableImportExport\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\DownloadableImportExport\Helper\Data as HelperData;
+use Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable;
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
@@ -50,15 +51,15 @@ class DataTest extends TestCase
         return [
             'Data set include downloadable link and sample' => [
                 [
-                    'downloadable_links' => 'https://magento2.com/download_link',
-                    'downloadable_samples' => 'https://magento2.com/sample_link'
+                    Downloadable::COL_DOWNLOADABLE_LINKS => 'https://magento2.com/download_link',
+                    Downloadable::COL_DOWNLOADABLE_SAMPLES => 'https://magento2.com/sample_link'
                 ],
                 false
             ],
             'Data set with empty' => [
                 [
-                    'downloadable_links' => '',
-                    'downloadable_samples' => ''
+                    Downloadable::COL_DOWNLOADABLE_LINKS => '',
+                    Downloadable::COL_DOWNLOADABLE_SAMPLES => ''
                 ],
                 true
             ]
@@ -87,15 +88,15 @@ class DataTest extends TestCase
         return [
             'Data set include downloadable link and sample' => [
                 [
-                    'downloadable_links' => 'https://magento2.com/download_link',
-                    'downloadable_samples' => 'https://magento2.com/sample_link'
+                    Downloadable::COL_DOWNLOADABLE_LINKS => 'https://magento2.com/download_link',
+                    Downloadable::COL_DOWNLOADABLE_SAMPLES => 'https://magento2.com/sample_link'
                 ],
                 true
             ],
             'Data set with empty' => [
                 [
-                    'downloadable_links' => '',
-                    'downloadable_samples' => ''
+                    Downloadable::COL_DOWNLOADABLE_LINKS => '',
+                    Downloadable::COL_DOWNLOADABLE_SAMPLES => ''
                 ],
                 false
             ]
@@ -267,11 +268,11 @@ class DataTest extends TestCase
         return [
             'Case File Option Value' => [
                 'file1',
-                'file'
+                Downloadable::FILE_OPTION_VALUE
             ],
             'Case url Option Value' => [
                 'https://example.com',
-                'url'
+                Downloadable::URL_OPTION_VALUE
             ]
         ];
     }
