@@ -230,7 +230,7 @@
         .product-info-stock-sku {
             display: table-cell;
             padding-bottom: @indent__s;
-            padding-left: 10%;
+            padding-left: 1%;
             text-align: right;
             vertical-align: top;
         }
@@ -644,6 +644,20 @@
     .product.info.detailed {
         .additional-attributes-wrapper {
             &:extend(.abs-no-border-top all);
+        }
+    }
+}
+
+//
+//  Mobile @screen__xs
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .product-info-main {
+        .product-info-price {
+            .price-box {
+                width: 1px;
+            }
         }
     }
 }
