@@ -78,8 +78,7 @@ class DecimalFilterTest extends AbstractFiltersTest
         array $products,
         string $attributeCode,
         int $storeId = Store::DEFAULT_STORE_ID
-    ): void
-    {
+    ): void {
         $attribute = $this->attributeRepository->get($attributeCode);
 
         foreach ($products as $productSku => $value) {
