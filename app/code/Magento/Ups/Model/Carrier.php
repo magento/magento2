@@ -1312,13 +1312,20 @@ XMLAuth;
      */
     public function getAllowedMethods()
     {
+        $allowedMethods = explode(',', (string)$this->getConfigData('allowed_methods'));
         $isUpsXml = $this->getConfigData('type') === 'UPS_XML';
         $origin = $this->getConfigData('origin_shipment');
-        $allowedMethods = $isUpsXml
+
+        $availableByTypeMethods = $isUpsXml
             ? $this->configHelper->getCode('originShipment', $origin)
             : $this->configHelper->getCode('method');
+
+        $filteredMethods = array_filter($availableByTypeMethods, function ($methodCode) use ($allowedMethods) {
+            return in_array($methodCode, $allowedMethods);
+        }, ARRAY_FILTER_USE_KEY);
+
         $methods = [];
-        foreach ($allowedMethods as $methodCode => $methodData) {
+        foreach ($filteredMethods as $methodCode => $methodData) {
             $methods[$methodCode] = $methodData->getText();
         }
 

@@ -404,6 +404,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $methodType
      * @param string $methodCode
      * @param string $methodTitle
+     * @param string $allowedMethods
      * @param array $expectedMethods
      * @return void
      */
@@ -412,11 +413,18 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         string $methodType,
         string $methodCode,
         string $methodTitle,
+        string $allowedMethods,
         array $expectedMethods
     ): void {
         $this->scope->method('getValue')
             ->willReturnMap(
                 [
+                    [
+                        'carriers/ups/allowed_methods',
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $allowedMethods
+                    ],
                     [
                         'carriers/ups/type',
                         ScopeInterface::SCOPE_STORE,
@@ -449,6 +457,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'method',
                 '1DM',
                 'Next Day Air Early AM',
+                '',
+                [],
+            ],
+            [
+                'UPS',
+                'method',
+                '1DM',
+                'Next Day Air Early AM',
+                '1DM,1DML,1DA',
                 ['1DM' => 'Next Day Air Early AM'],
             ],
             [
@@ -456,6 +473,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'originShipment',
                 '01',
                 'UPS Next Day Air',
+                '01,02,03',
                 ['01' => 'UPS Next Day Air'],
             ],
         ];
