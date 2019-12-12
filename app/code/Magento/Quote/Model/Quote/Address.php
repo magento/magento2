@@ -1022,6 +1022,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $request->setLimitCarrier($this->getLimitCarrier());
         $baseSubtotalInclTax = $this->getBaseSubtotalTotalInclTax();
         $request->setBaseSubtotalInclTax($baseSubtotalInclTax);
+        $request->setBaseSubtotalWithDiscountInclTax($this->getBaseSubtotalWithDiscount() + $this->getBaseTaxAmount());
 
         $result = $this->_rateCollector->create()->collectRates($request)->getResult();
 
