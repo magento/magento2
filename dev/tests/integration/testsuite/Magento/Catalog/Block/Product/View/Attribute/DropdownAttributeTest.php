@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View\Attribute;
 
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+
 /**
  * Class checks dropdown attribute displaying on frontend
  *
@@ -88,11 +90,9 @@ class DropdownAttributeTest extends AbstractAttributeTest
      */
     public function testAttributePerStoreView(): void
     {
-        $attributeValue = $this->getAttribute()->getSource()->getOptionId('Option 3');
         $this->processMultiStoreView(
             'simple2',
-            0,
-            $attributeValue,
+            ScopedAttributeInterface::SCOPE_STORE,
             'Option 3',
             'fixturestore'
         );
@@ -108,11 +108,9 @@ class DropdownAttributeTest extends AbstractAttributeTest
      */
     public function testAttributePerWebsites(): void
     {
-        $attributeValue = $this->getAttribute()->getSource()->getOptionId('Option 3');
         $this->processMultiStoreView(
             'simple-on-two-websites',
-            2,
-            $attributeValue,
+            ScopedAttributeInterface::SCOPE_WEBSITE,
             'Option 3',
             'fixture_second_store'
         );

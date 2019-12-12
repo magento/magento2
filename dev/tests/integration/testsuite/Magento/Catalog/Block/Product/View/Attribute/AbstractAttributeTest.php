@@ -164,7 +164,6 @@ abstract class AbstractAttributeTest extends TestCase
         string $sku,
         int $attributeScopeValue,
         string $attributeValue,
-        string $expectedAttributeValue,
         string $storeCode
     ): void {
         $currentStore = $this->storeManager->getStore();
@@ -174,7 +173,7 @@ abstract class AbstractAttributeTest extends TestCase
         try {
             $product = $this->updateProduct($sku, $attributeValue);
             $this->registerProduct($product);
-            $this->assertEquals($this->prepareExpectedData($expectedAttributeValue), $this->block->getAdditionalData());
+            $this->assertEquals($this->prepareExpectedData($attributeValue), $this->block->getAdditionalData());
         } finally {
             $this->storeManager->setCurrentStore($currentStore);
         }
@@ -220,8 +219,11 @@ abstract class AbstractAttributeTest extends TestCase
      */
     private function updateProduct(string $productSku, string $attributeValue): ProductInterface
     {
+        $value = $this->getAttribute()->usesSource()
+            ? $this->attribute->getSource()->getOptionId($attributeValue)
+            : $attributeValue;
         $product = $this->productRepository->get($productSku);
-        $product->addData([$this->getAttributeCode() => $attributeValue]);
+        $product->addData([$this->getAttributeCode() => $value]);
 
         return $this->productRepository->save($product);
     }

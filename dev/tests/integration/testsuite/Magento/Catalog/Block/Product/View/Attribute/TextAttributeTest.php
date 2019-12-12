@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View\Attribute;
 
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+
 /**
  * Class checks text attribute displaying on frontend
  *
@@ -90,8 +92,7 @@ class TextAttributeTest extends AbstractAttributeTest
     {
         $this->processMultiStoreView(
             'simple2',
-            0,
-            'second store view value',
+            ScopedAttributeInterface::SCOPE_STORE,
             'second store view value',
             'fixturestore'
         );
@@ -109,8 +110,7 @@ class TextAttributeTest extends AbstractAttributeTest
     {
         $this->processMultiStoreView(
             'simple-on-two-websites',
-            2,
-            'second website value',
+            ScopedAttributeInterface::SCOPE_WEBSITE,
             'second website value',
             'fixture_second_store'
         );

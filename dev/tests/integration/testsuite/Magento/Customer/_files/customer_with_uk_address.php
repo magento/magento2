@@ -20,7 +20,9 @@ use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var CustomerRepositoryInterface $customerRepository */
 $customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
+/** @var CustomerFactory $customerFactory */
 $customerFactory = $objectManager->get(CustomerFactory::class);
 $customer = $customerFactory->create();
 /** @var CustomerRegistry $customerRegistry */
@@ -42,7 +44,7 @@ $customer->setWebsiteId($mainWebsite->getId())
     ->setSuffix('Esq.')
     ->setTaxvat('12')
     ->setGender(0);
-
+/** @var AddressFactory $customerAddressFactory */
 $customerAddressFactory = $objectManager->get(AddressFactory::class);
 /** @var AddressRepositoryInterface $customerAddressRepository */
 $customerAddressRepository = $objectManager->create(AddressRepositoryInterface::class);
