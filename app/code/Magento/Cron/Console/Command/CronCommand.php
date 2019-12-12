@@ -90,6 +90,11 @@ class CronCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // Tasks run via cron are slightly less important than website visitors.
+        if (function_exists('proc_nice')) {
+            proc_nice(5);
+        }
+
         if (!$this->deploymentConfig->get('cron/enabled', 1)) {
             $output->writeln('<info>' . 'Cron is disabled. Jobs were not run.' . '</info>');
             return;
