@@ -14,10 +14,10 @@ type Query {
     cmsPage (
         id: Int @doc(description: "Id of the CMS page") @deprecated(reason: "The `id` is deprecated. Use `identifier` instead.") @doc(description: "The CMS page query returns information about a CMS page")
         identifier: String @doc(description: "Identifier of the CMS page")
-    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Page") @doc(description: "The CMS page query returns information about a CMS page") @cache(cacheTag: "cms_p", cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Page\\Identity")
+    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Page") @doc(description: "The CMS page query returns information about a CMS page") @cache(cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Page\\Identity")
     cmsBlocks (
         identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
-    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "The CMS block query returns information about CMS blocks") @cache(cacheTag: "cms_b", cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Block\\Identity")
+    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "The CMS block query returns information about CMS blocks") @cache(cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Block\\Identity")
 }
 
 type CmsPage @doc(description: "CMS page defines all CMS page information") {

@@ -26,7 +26,7 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product via the UI -->
@@ -104,6 +104,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
         <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>

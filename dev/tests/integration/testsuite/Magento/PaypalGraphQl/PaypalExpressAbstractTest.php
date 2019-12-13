@@ -30,7 +30,6 @@ use Magento\Paypal\Model\Api\Type\Factory as ApiFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Config\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\UrlInterface;
 
 /**
  * Abstract class with common logic for Paypal GraphQl tests
@@ -181,8 +180,6 @@ abstract class PaypalExpressAbstractTest extends TestCase
      */
     protected function getCreateTokenMutation(string $cartId, string $paymentMethod): string
     {
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
 
         return <<<QUERY
 mutation {
@@ -190,10 +187,10 @@ mutation {
         cart_id: "{$cartId}",
         code: "{$paymentMethod}",
         urls: {
-            return_url: "{$baseUrl}paypal/express/return/",
-            cancel_url: "{$baseUrl}paypal/express/cancel/"
-            success_url: "{$baseUrl}checkout/onepage/success/",
-            pending_url: "{$baseUrl}checkout/onepage/pending/"
+            return_url: "paypal/express/return/",
+            cancel_url: "paypal/express/cancel/"
+            success_url: "checkout/onepage/success/",
+            pending_url: "checkout/onepage/pending/"
         }
         express_button: true
     })

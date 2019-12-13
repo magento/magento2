@@ -7,7 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="dev">
+        <section id="dev" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="js">
+                <field id="move_script_to_bottom" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Move JS code to the bottom of the page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
             <group id="css">
                 <field id="use_css_critical_path" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use CSS critical path</label>

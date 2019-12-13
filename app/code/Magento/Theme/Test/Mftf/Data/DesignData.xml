@@ -11,4 +11,10 @@
     <entity name="Layout" type="page_layout">
         <data key="1column">1 column</data>
     </entity>
+    <entity name="MagentoBlankTheme" type="theme">
+        <data key="name">Magento Blank</data>
+    </entity>
+    <entity name="MagentoLumaTheme" type="theme">
+        <data key="name">Magento Luma</data>
+    </entity>
 </entities>

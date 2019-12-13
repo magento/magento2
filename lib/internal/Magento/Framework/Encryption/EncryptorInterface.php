@@ -28,7 +28,9 @@ interface EncryptorInterface
     public function getHash($password, $salt = false);
 
     /**
-     * Hash a string
+     * Hash a string.
+     *
+     * Returns one-way encrypted string, always the same result for the same value. Suitable for signatures.
      *
      * @param string $data
      * @return string
@@ -36,17 +38,20 @@ interface EncryptorInterface
     public function hash($data);
 
     /**
-     * Validate hash against hashing method (with or without salt)
+     * Synonym to isValidHash.
      *
      * @param string $password
      * @param string $hash
      * @return bool
      * @throws \Exception
+     * @see isValidHash
      */
     public function validateHash($password, $hash);
 
     /**
-     * Validate hash against hashing method (with or without salt)
+     * Validate hash against hashing method.
+     *
+     * Works for both hashes returned by hash() and getHash().
      *
      * @param string $password
      * @param string $hash

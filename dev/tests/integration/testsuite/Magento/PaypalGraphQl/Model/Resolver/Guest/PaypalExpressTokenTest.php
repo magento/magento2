@@ -15,7 +15,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 
 /**
- * Test createPaypalExpressToken graphql endpoint for guest
+ * Test create PaypalExpressToken graphql endpoint for guest
  *
  * @magentoAppArea graphql
  */
@@ -136,54 +136,44 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 
     /**
-     * Test redirect Urls are validated
+     * Test create paypal token for Invalid Url for guest
      *
+     * @param string $paymentMethod
      * @return void
+     * @dataProvider getPaypalCodesProvider
+     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
-    public function testResolveWithInvalidRedirectUrl(): void
+    public function testResolveWithInvalidRedirectUrl($paymentMethod): void
     {
-        $paymentMethod = 'paypal_express';
         $this->enablePaymentMethod($paymentMethod);
+        if ($paymentMethod === 'payflow_express') {
+            $this->enablePaymentMethod('payflow_link');
+        }
         $reservedQuoteId = 'test_quote';
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
 
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
-        $query = <<<QUERY
-mutation {
-    createPaypalExpressToken(input: {
-        cart_id: "{$cartId}",
-        code: "{$paymentMethod}",
-        urls: {
-            return_url: "http://mangeto.test/paypal/express/return/",
-            cancel_url: "http://mangeto.test/paypal/express/cancel/"
-            success_url: "not/a/url",
-            pending_url: "http://mangeto.test/checkout/onepage/pending/"
-        }
-    })
-    {
-        __typename
-        token
-        paypal_urls{
-            start
-            edit
-        }
-    }
-}
-QUERY;
 
-        $expectedExceptionMessage = "Invalid URL 'not/a/url'.";
-
+        $query = $this->getCreateTokenMutationWithInvalidUrl($cartId, $paymentMethod);
+        $expectedExceptionMessage = "Invalid Url.";
         $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
+        $this->assertArrayHasKey('createPaypalExpressToken', $responseData['data']);
+        $this->assertEmpty($responseData['data']['createPaypalExpressToken']);
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 
     /**
@@ -197,5 +187,38 @@ QUERY;
             ['paypal_express'],
             ['payflow_express'],
         ];
+    }
+
+    /**
+     * Get GraphQl query for creating Paypal token
+     *
+     * @param string $cartId
+     * @param string $paymentMethod
+     * @return string
+     */
+    protected function getCreateTokenMutationWithInvalidUrl(string $cartId, string $paymentMethod): string
+    {
+        return <<<QUERY
+mutation {
+    createPaypalExpressToken(input: {
+        cart_id: "{$cartId}",
+        code: "{$paymentMethod}",
+        urls: {
+            return_url: "paypal/express/return/",
+            cancel_url: "paypal/express/cancel/"
+            success_url: "http://mage.com/checkout/onepage/success/",
+            pending_url: "checkout/onepage/pending/"
+        }
+    })
+    {
+        __typename
+        token
+        paypal_urls{
+            start
+            edit
+        }
+    }
+}
+QUERY;
     }
 }

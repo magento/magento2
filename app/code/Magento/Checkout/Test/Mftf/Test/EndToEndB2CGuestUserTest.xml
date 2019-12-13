@@ -9,11 +9,194 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CGuestUserTest">
-        <annotations>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
-        </annotations>
+        <!-- Step 3: User adds products to cart -->
+        <comment userInput="Start of adding products to cart" stepKey="startOfAddingProductsToCart" after="endOfBrowsingCatalog"/>
+        <!-- Add Simple Product 1 to cart -->
+        <comment userInput="Add Simple Product 1 to cart" stepKey="commentAddSimpleProduct1ToCart" after="startOfAddingProductsToCart" />
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory" after="commentAddSimpleProduct1ToCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCartCategoryloaded" after="cartClickCategory"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory" after="waitForCartCategoryloaded">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="productCount" value="3"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="cartAssertSimpleProduct1" after="cartAssertCategory">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="cartGrabSimpleProduct1ImageSrc" after="cartAssertSimpleProduct1"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartGrabSimpleProduct1ImageSrc" stepKey="cartAssertSimpleProduct1ImageNotDefault" after="cartGrabSimpleProduct1ImageSrc"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickSimpleProduct1" after="cartAssertSimpleProduct1ImageNotDefault"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCartSimpleProduct1loaded" after="cartClickSimpleProduct1"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertProduct1Page" after="waitForCartSimpleProduct1loaded">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartGrabSimpleProduct1PageImageSrc" after="cartAssertProduct1Page"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabSimpleProduct1PageImageSrc" stepKey="cartAssertSimpleProduct1PageImageNotDefault" after="cartGrabSimpleProduct1PageImageSrc"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddProduct1ToCart" after="cartAssertSimpleProduct1PageImageNotDefault">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Add Simple Product 2 to cart -->
+        <comment userInput="Add Simple Product 2 to cart" stepKey="commentAddSimpleProduct2ToCart" after="cartAddProduct1ToCart" />
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory1" after="commentAddSimpleProduct2ToCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCartCategory1loaded" after="cartClickCategory1"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForSimpleProduct2" after="waitForCartCategory1loaded">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="productCount" value="3"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="cartAssertSimpleProduct2" after="cartAssertCategory1ForSimpleProduct2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="cartGrabSimpleProduct2ImageSrc" after="cartAssertSimpleProduct2"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartGrabSimpleProduct2ImageSrc" stepKey="cartAssertSimpleProduct2ImageNotDefault" after="cartGrabSimpleProduct2ImageSrc"/>
+        <actionGroup ref="StorefrontAddCategoryProductToCartActionGroup" stepKey="cartAddProduct2ToCart" after="cartAssertSimpleProduct2ImageNotDefault">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="productCount" value="CONST.two"/>
+        </actionGroup>
+
+        <!-- Check products in minicart -->
+        <!-- Check simple product 1 in minicart -->
+        <comment userInput="Check simple product 1 in minicart" stepKey="commentCheckSimpleProduct1InMinicart" after="cartAddProduct2ToCart"/>
+        <actionGroup ref="StorefrontOpenMinicartAndCheckSimpleProductActionGroup" stepKey="cartOpenMinicartAndCheckSimpleProduct1" after="commentCheckSimpleProduct1InMinicart">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="cartMinicartGrabSimpleProduct1ImageSrc" after="cartOpenMinicartAndCheckSimpleProduct1"/>
+        <assertNotRegExp expected="'/placeholder\/thumbnail\.jpg/'" actual="$cartMinicartGrabSimpleProduct1ImageSrc" stepKey="cartMinicartAssertSimpleProduct1ImageNotDefault" after="cartMinicartGrabSimpleProduct1ImageSrc"/>
+        <click selector="{{StorefrontMinicartSection.productLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartMinicartClickSimpleProduct1" after="cartMinicartAssertSimpleProduct1ImageNotDefault"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForMinicartSimpleProduct1loaded" after="cartMinicartClickSimpleProduct1"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertMinicartProduct1Page" after="waitForMinicartSimpleProduct1loaded">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartMinicartGrabSimpleProduct1PageImageSrc" after="cartAssertMinicartProduct1Page"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartMinicartGrabSimpleProduct1PageImageSrc" stepKey="cartMinicartAssertSimpleProduct1PageImageNotDefault" after="cartMinicartGrabSimpleProduct1PageImageSrc"/>
+        <actionGroup ref="StorefrontOpenMinicartAndCheckSimpleProductActionGroup" stepKey="cartOpenMinicartAndCheckSimpleProduct2" after="cartMinicartAssertSimpleProduct1PageImageNotDefault">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- Check simple product2 in minicart -->
+        <comment userInput="Check simple product 2 in minicart" stepKey="commentCheckSimpleProduct2InMinicart" after="cartOpenMinicartAndCheckSimpleProduct2"/>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="cartMinicartGrabSimpleProduct2ImageSrc" after="commentCheckSimpleProduct2InMinicart"/>
+        <assertNotRegExp expected="'/placeholder\/thumbnail\.jpg/'" actual="$cartMinicartGrabSimpleProduct2ImageSrc" stepKey="cartMinicartAssertSimpleProduct2ImageNotDefault" after="cartMinicartGrabSimpleProduct2ImageSrc"/>
+        <click selector="{{StorefrontMinicartSection.productLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartMinicartClickSimpleProduct2" after="cartMinicartAssertSimpleProduct2ImageNotDefault"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForMinicartSimpleProduct2loaded" after="cartMinicartClickSimpleProduct2"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertMinicartProduct2Page" after="waitForMinicartSimpleProduct2loaded">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartMinicartGrabSimpleProduct2PageImageSrc" after="cartAssertMinicartProduct2Page"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartMinicartGrabSimpleProduct2PageImageSrc" stepKey="cartMinicartAssertSimpleProduct2PageImageNotDefault" after="cartMinicartGrabSimpleProduct2PageImageSrc"/>
+
+        <!-- Check products in cart -->
+        <comment userInput="Check cart information" stepKey="commentCheckCartInformation" after="cartMinicartAssertSimpleProduct2PageImageNotDefault" />
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" after="commentCheckCartInformation"/>
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCart" after="cartOpenCart">
+            <argument name="subtotal" value="480.00"/>
+            <argument name="shipping" value="15.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="495.00"/>
+        </actionGroup>
+
+        <!-- Check simple product 1 in cart -->
+        <comment userInput="Check simple product 1 in cart" stepKey="commentCheckSimpleProduct1InCart" after="cartAssertCart"/>
+        <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="cartAssertCartSimpleProduct1" after="commentCheckSimpleProduct1InCart">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="productQuantity" value="CONST.one"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="cartCartGrabSimpleProduct1ImageSrc" after="cartAssertCartSimpleProduct1"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartCartGrabSimpleProduct1ImageSrc" stepKey="cartCartAssertSimpleProduct1ImageNotDefault" after="cartCartGrabSimpleProduct1ImageSrc"/>
+        <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickCartSimpleProduct1" after="cartCartAssertSimpleProduct1ImageNotDefault"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCartSimpleProduct1loadedAgain" after="cartClickCartSimpleProduct1"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertCartProduct1Page" after="waitForCartSimpleProduct1loadedAgain">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartCartGrabSimpleProduct2PageImageSrc1" after="cartAssertCartProduct1Page"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartCartGrabSimpleProduct2PageImageSrc1" stepKey="cartCartAssertSimpleProduct2PageImageNotDefault1" after="cartCartGrabSimpleProduct2PageImageSrc1"/>
+
+        <!-- Check simple product 2 in cart -->
+        <comment userInput="Check simple product 2 in cart" stepKey="commentCheckSimpleProduct2InCart" after="cartCartAssertSimpleProduct2PageImageNotDefault1"/>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart1" after="commentCheckSimpleProduct2InCart"/>
+        <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="cartAssertCartSimpleProduct2" after="cartOpenCart1">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="productQuantity" value="CONST.one"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="cartCartGrabSimpleProduct2ImageSrc" after="cartAssertCartSimpleProduct2"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartCartGrabSimpleProduct2ImageSrc" stepKey="cartCartAssertSimpleProduct2ImageNotDefault" after="cartCartGrabSimpleProduct2ImageSrc"/>
+        <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartClickCartSimpleProduct2" after="cartCartAssertSimpleProduct2ImageNotDefault"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCartSimpleProduct2loaded" after="cartClickCartSimpleProduct2"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertCartProduct2Page" after="waitForCartSimpleProduct2loaded">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartCartGrabSimpleProduct2PageImageSrc2" after="cartAssertCartProduct2Page"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartCartGrabSimpleProduct2PageImageSrc2" stepKey="cartCartAssertSimpleProduct2PageImageNotDefault2" after="cartCartGrabSimpleProduct2PageImageSrc2"/>
+        <comment userInput="End of adding products to cart" stepKey="endOfAddingProductsToCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2" />
+
+        <!-- Step 6: Check out -->
+        <comment userInput="Start of checking out" stepKey="startOfCheckingOut" after="endOfUsingCouponCode" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" after="startOfCheckingOut"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection" after="guestGoToCheckoutFromMinicart">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+
+        <!-- Check order summary in checkout -->
+        <comment userInput="Check order summary in checkout" stepKey="commentCheckOrderSummaryInCheckout" after="guestCheckoutFillingShippingSection" />
+        <actionGroup ref="CheckOrderSummaryInCheckoutActionGroup" stepKey="guestCheckoutCheckOrderSummary" after="commentCheckOrderSummaryInCheckout">
+            <argument name="subtotal" value="480.00"/>
+            <argument name="shippingTotal" value="15.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="495.00"/>
+        </actionGroup>
+
+        <!-- Check ship to information in checkout -->
+        <comment userInput="Check ship to information in checkout" stepKey="commentCheckShipToInformationInCheckout" after="guestCheckoutCheckOrderSummary" />
+        <actionGroup ref="CheckShipToInformationInCheckoutActionGroup" stepKey="guestCheckoutCheckShipToInformation" after="commentCheckShipToInformationInCheckout">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+
+        <!-- Check shipping method in checkout -->
+        <comment userInput="Check shipping method in checkout" stepKey="commentCheckShippingMethodInCheckout" after="guestCheckoutCheckShipToInformation" />
+        <actionGroup ref="CheckShippingMethodInCheckoutActionGroup" stepKey="guestCheckoutCheckShippingMethod" after="commentCheckShippingMethodInCheckout">
+            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod" />
+        </actionGroup>
+
+        <!-- Verify Simple Product 1 is in checkout cart items -->
+        <comment userInput="Verify Simple Product 1 is in checkout cart items" stepKey="commentVerifySimpleProduct1IsInCheckoutCartItems" after="guestCheckoutCheckShippingMethod" />
+        <actionGroup ref="CheckProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckSimpleProduct1InCartItems" after="commentVerifySimpleProduct1IsInCheckoutCartItems">
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+
+        <!-- Verify Simple Product 2 is in checkout cart items -->
+        <comment userInput="Verify Simple Product 2 is in checkout cart items" stepKey="commentVerifySimpleProduct2IsInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct1InCartItems" />
+        <actionGroup ref="CheckProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckSimpleProduct2InCartItems" after="commentVerifySimpleProduct2IsInCheckoutCartItems">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+
+        <comment userInput="Place order with check money order payment" stepKey="commentPlaceOrderWithCheckMoneyOrderPayment" after="guestCheckoutCheckSimpleProduct2InCartItems" />
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" after="commentPlaceOrderWithCheckMoneyOrderPayment"/>
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="guestSeeBillingAddress" after="guestSelectCheckMoneyOrderPayment">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder" after="guestSeeBillingAddress">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+        <comment userInput="End of checking out" stepKey="endOfCheckingOut" after="guestPlaceorder" />
+    </test>
+    <test name="EndToEndB2CGuestUserMysqlTest">
         <!-- Step 3: User adds products to cart -->
         <comment userInput="Start of adding products to cart" stepKey="startOfAddingProductsToCart" after="endOfBrowsingCatalog"/>
         <!-- Add Simple Product 1 to cart -->

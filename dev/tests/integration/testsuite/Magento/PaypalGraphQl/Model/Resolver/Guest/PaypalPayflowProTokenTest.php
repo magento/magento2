@@ -107,9 +107,9 @@ mutation {
     input: {
       cart_id:"{$cartId}",
       urls: {
-        cancel_url: "http://domain/paypal/transparent/cancel/"
-        error_url: "not/a/url"
-        return_url: "http://domain/paypal/transparent/response/"
+        cancel_url: "paypal/transparent/cancel/"
+        error_url: "http://domain/paypal/transparent/cancel"
+        return_url: "paypal/transparent/response/"
       }
     }
   ) {
@@ -122,13 +122,14 @@ mutation {
 }
 QUERY;
 
-        $expectedExceptionMessage = "Invalid URL 'not/a/url'.";
+        $expectedExceptionMessage = "Invalid Url.";
 
         $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
+
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 }

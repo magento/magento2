@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<script src="<?= $block->escapeUrl($block->getTrackingUrl()) ?>" async></script>
+<script>
+    var adminAnalyticsMetadata = {
+        "version": "<?= $block->escapeJs($block->getMetadata()->getMagentoVersion()) ?>",
+        "user": "<?= $block->escapeJs($block->getMetadata()->getCurrentUser()) ?>",
+        "mode": "<?= $block->escapeJs($block->getMetadata()->getMode()) ?>"
+    };
+</script>

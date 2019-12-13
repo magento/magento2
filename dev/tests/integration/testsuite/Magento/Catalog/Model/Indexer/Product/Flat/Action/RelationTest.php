@@ -122,6 +122,7 @@ class RelationTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testExecute() : void
     {
+        $this->markTestSkipped('MC-19675');
         try {
             $this->indexer->execute();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

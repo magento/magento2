@@ -5,6 +5,7 @@
  */
 namespace Magento\Swatches\Test\Unit\Block\Product\Renderer\Listing;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 
 /**
@@ -130,14 +131,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->configurable->setProduct($this->product);
         $this->swatchHelper->expects($this->once())->method('getSwatchAttributesAsArray')
             ->with($this->product)
-            ->willReturn([
-                1 => [
-                    'options' => [1 => 'testA', 3 => 'testB'],
-                    'use_product_image_for_swatch' => true,
-                    'used_in_product_listing' => false,
-                    'attribute_code' => 'code',
-                ],
-            ]);
+            ->willReturn(
+                [
+                    1 => [
+                        'options' => [1 => 'testA', 3 => 'testB'],
+                        'use_product_image_for_swatch' => true,
+                        'used_in_product_listing' => false,
+                        'attribute_code' => 'code',
+                    ],
+                ]
+            );
         $this->swatchHelper->expects($this->once())->method('getSwatchesByOptionsId')
             ->willReturn([]);
         $this->jsonEncoder->expects($this->once())->method('encode')->with([]);
@@ -163,19 +166,19 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->configurable->setProduct($this->product);
         $this->swatchHelper->expects($this->once())->method('getSwatchAttributesAsArray')
             ->with($this->product)
-            ->willReturn([
-                1 => [
-                    'options' => $products,
-                    'use_product_image_for_swatch' => true,
-                    'used_in_product_listing' => true,
-                    'attribute_code' => 'code',
-                ],
-            ]);
+            ->willReturn(
+                [
+                    1 => [
+                        'options' => $products,
+                        'use_product_image_for_swatch' => true,
+                        'used_in_product_listing' => true,
+                        'attribute_code' => 'code',
+                    ],
+                ]
+            );
         $this->swatchHelper->expects($this->once())->method('getSwatchesByOptionsId')
             ->with([1, 3])
-            ->willReturn([
-                3 => ['type' => $expected['type'], 'value' => $expected['value']]
-            ]);
+            ->willReturn([3 => ['type' => $expected['type'], 'value' => $expected['value']]]);
         $this->jsonEncoder->expects($this->once())->method('encode');
         $this->configurable->getJsonSwatchConfig();
     }
@@ -183,11 +186,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private function prepareGetJsonSwatchConfig()
     {
         $product1 = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product1->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
+        $product1->expects($this->any())->method('isSaleable')->willReturn(true);
+        $product1->expects($this->atLeastOnce())->method('getStatus')->willReturn(Status::STATUS_ENABLED);
         $product1->expects($this->any())->method('getData')->with('code')->willReturn(1);
 
         $product2 = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product2->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
+        $product2->expects($this->any())->method('isSaleable')->willReturn(true);
+        $product2->expects($this->atLeastOnce())->method('getStatus')->willReturn(Status::STATUS_ENABLED);
         $product2->expects($this->any())->method('getData')->with('code')->willReturn(3);
 
         $simpleProducts = [$product1, $product2];

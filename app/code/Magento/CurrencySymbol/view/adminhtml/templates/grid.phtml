@@ -3,8 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
+
 /**
  * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
  */
@@ -27,7 +26,7 @@
                 <div class="admin__field admin__field-option">
                     <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           onclick="toggleUseDefault(<?= '\'' . $block->escapeJs($code) . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
+                           onclick="toggleUseDefault(<?= '\'' . $block->escapeHtmlAttr($block->escapeJs($code)) . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
@@ -43,25 +42,10 @@
         <?php endforeach; ?>
     </fieldset>
 </form>
-<script>
-require(['jquery', "mage/mage", 'prototype'], function(jQuery){
-
-    jQuery('#currency-symbols-form').mage('form').mage('validation');
-
-    function toggleUseDefault(code, value)
+<script type="text/x-magento-init">
     {
-        checkbox = jQuery('#custom_currency_symbol_inherit'+code);
-        input = jQuery('#custom_currency_symbol'+code);
-
-        if (checkbox.is(':checked')) {
-            input.addClass('disabled');
-            input.val(value);
-            input.prop('readonly', true);
-        } else {
-            input.removeClass('disabled');
-            input.prop('readonly', false);
+        "#currency-symbols-form": {
+            "Magento_CurrencySymbol/js/symbols-form": {}
         }
     }
-    window.toggleUseDefault = toggleUseDefault;
-});
 </script>

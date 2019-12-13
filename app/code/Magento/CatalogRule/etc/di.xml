@@ -164,5 +164,4 @@
             <argument name="customConditionProvider" xsi:type="object">CatalogRuleCustomConditionProvider</argument>
         </arguments>
     </type>
-    <preference for="Magento\CatalogRule\Model\RuleDateFormatterInterface" type="Magento\CatalogRule\Model\RuleDateFormatter" />
 </config>

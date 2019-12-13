@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup">
+        <annotations>
+            <description>Clicks 'Customize and Add to Cart' on a Storefront Bundled Product page.</description>
+        </annotations>
+
         <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickOnCustomizeAndAddToCartButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

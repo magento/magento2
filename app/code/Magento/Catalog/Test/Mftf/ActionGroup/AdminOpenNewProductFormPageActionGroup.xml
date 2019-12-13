@@ -5,15 +5,19 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenNewProductFormPageActionGroup">
+        <annotations>
+            <description>Goes to the Product creation/edit page for the provided Product Type and Attribute Set ID.</description>
+        </annotations>
         <arguments>
-            <argument name="productType" type="string" defaultValue="simple" />
-            <argument name="attributeSetId" type="string" defaultValue="{{defaultAttributeSet.attribute_set_id}}" />
+            <argument name="productType" type="string" defaultValue="simple"/>
+            <argument name="attributeSetId" type="string" defaultValue="{{defaultAttributeSet.attribute_set_id}}"/>
         </arguments>
 
-        <amOnPage url="{{AdminProductCreatePage.url(attributeSetId, productType)}}" stepKey="openProductNewPage" />
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <amOnPage url="{{AdminProductCreatePage.url(attributeSetId, productType)}}" stepKey="openProductNewPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
