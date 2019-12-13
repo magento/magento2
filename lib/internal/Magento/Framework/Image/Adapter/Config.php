@@ -18,13 +18,13 @@ class Config implements ConfigInterface, UploadConfigInterface
 
     /**
      * Config path for the maximal image width value
-     * @deprecated
+     * @deprecated Used in a method that is deprecated
      */
     const XML_PATH_MAX_WIDTH_IMAGE = 'system/upload_configuration/max_width';
 
     /**
      * Config path for the maximal image height value
-     * @deprecated
+     * @deprecated Used in a method that is deprecated
      */
     const XML_PATH_MAX_HEIGHT_IMAGE = 'system/upload_configuration/max_height';
 

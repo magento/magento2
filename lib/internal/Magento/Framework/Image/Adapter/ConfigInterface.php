@@ -12,11 +12,15 @@ namespace Magento\Framework\Image\Adapter;
 interface ConfigInterface
 {
     /**
+     * Get adapter alias
+     *
      * @return string
      */
     public function getAdapterAlias();
 
     /**
+     * Get adapters
+     *
      * @return array
      */
     public function getAdapters();
