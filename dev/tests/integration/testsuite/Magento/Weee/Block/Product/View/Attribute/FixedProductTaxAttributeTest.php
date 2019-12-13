@@ -102,6 +102,7 @@ class FixedProductTaxAttributeTest extends TestCase
     {
         $this->registry->unregister('product');
         $this->registry->unregister('current_product');
+        $this->customerSession->logout();
 
         parent::tearDown();
     }
