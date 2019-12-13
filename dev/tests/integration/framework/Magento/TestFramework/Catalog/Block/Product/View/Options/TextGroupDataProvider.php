@@ -40,7 +40,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option field title 1</span>',
                     'price' => 'data-price-amount="10"',
-                    'required_element' => '<input type="text"',
+                    'required_element' => '/<input type="text"/',
                 ],
             ],
             'type_field_not_required' => [
@@ -58,7 +58,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option field title 2</span>',
                     'price' => 'data-price-amount="10"',
-                    'required_element' => '<input type="text"',
+                    'required_element' => '/<input type="text"/',
                 ],
             ],
             'type_field_fixed_price' => [
@@ -76,7 +76,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option field title 3</span>',
                     'price' => 'data-price-amount="50"',
-                    'required_element' => '<input type="text"',
+                    'required_element' => '/<input type="text"/',
                 ],
             ],
             'type_field_percent_price' => [
@@ -94,7 +94,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option field title 4</span>',
                     'price' => 'data-price-amount="5"',
-                    'required_element' => '<input type="text"',
+                    'required_element' => '/<input type="text"/',
                 ],
             ],
             'type_field_max_characters' => [
@@ -112,7 +112,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option field title 5</span>',
                     'price' => 'data-price-amount="10"',
-                    'required_element' => '<input type="text"',
+                    'required_element' => '/<input type="text"/',
                     'max_characters' => 'Maximum 99 characters',
                 ],
             ],
@@ -131,7 +131,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option area title 1</span>',
                     'price' => 'data-price-amount="10"',
-                    'required_element' => '<textarea',
+                    'required_element' => '/<textarea/',
                 ],
             ],
             'type_area_not_required' => [
@@ -149,7 +149,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option area title 2</span>',
                     'price' => 'data-price-amount="10"',
-                    'required_element' => '<textarea',
+                    'required_element' => '/<textarea/',
                 ],
             ],
             'type_area_fixed_price' => [
@@ -167,7 +167,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option area title 3</span>',
                     'price' => 'data-price-amount="50"',
-                    'required_element' => '<textarea',
+                    'required_element' => '/<textarea/',
                 ],
             ],
             'type_area_percent_price' => [
@@ -185,7 +185,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option area title 4</span>',
                     'price' => 'data-price-amount="5"',
-                    'required_element' => '<textarea',
+                    'required_element' => '/<textarea/',
                 ],
             ],
             'type_area_max_characters' => [
@@ -203,7 +203,7 @@ class TextGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="options_%s_text">',
                     'title' => '<span>Test option area title 5</span>',
                     'price' => 'data-price-amount="10"',
-                    'required_element' => '<textarea',
+                    'required_element' => '/<textarea/',
                     'max_characters' => 'Maximum 99 characters',
                 ],
             ],

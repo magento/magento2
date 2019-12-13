@@ -230,6 +230,10 @@ class RenderOptionsTest extends TestCase
         if (isset($checkArray['price'])) {
             $this->assertContains($checkArray['price'], $optionHtml);
         }
+
+        if (isset($checkArray['required_element'])) {
+            $this->assertRegExp($checkArray['required_element'], $optionHtml);
+        }
     }
 
     /**
@@ -251,9 +255,7 @@ class RenderOptionsTest extends TestCase
 
         $option = $this->productCustomOptionFactory->create(['data' => $optionData]);
         $product->setOptions([$option]);
-        $this->productRepository->save($product);
-        $product = $this->productRepository->get('simple');
-        $createdOptions = $product->getOptions();
+        $createdOptions = $this->productRepository->save($product)->getOptions();
 
         return reset($createdOptions);
     }
