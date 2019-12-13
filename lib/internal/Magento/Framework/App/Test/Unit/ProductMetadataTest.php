@@ -34,14 +34,10 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
 
         $objectManager = new ObjectManager($this);
-        $this->productMetadata = $objectManager->getObject(ProductMetadata::class);
+        $this->productMetadata = $objectManager->getObject(ProductMetadata::class, ['cache' => $this->cacheMock]);
         $reflectionProperty = new \ReflectionProperty($this->productMetadata, 'composerInformation');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productMetadata, $this->composerInformationMock);
-
-        $reflectionProperty = new \ReflectionProperty($this->productMetadata, 'cache');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->productMetadata, $this->cacheMock);
     }
 
     /**
@@ -63,6 +59,7 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
         $expectedVersion = '1.2.3';
         $this->composerInformationMock->expects($this->never())->method('getSystemPackages');
         $this->cacheMock->expects($this->once())->method('load')->willReturn($expectedVersion);
+        $this->cacheMock->expects($this->never())->method('save');
         $productVersion = $this->productMetadata->getVersion();
         $this->assertEquals($expectedVersion, $productVersion);
     }
