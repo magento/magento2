@@ -173,7 +173,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage "Email" is not a valid email address.
+     * @expectedExceptionMessage "email" is not a valid email address.
      */
     public function testCreateCustomerIfEmailIsNotValid()
     {
