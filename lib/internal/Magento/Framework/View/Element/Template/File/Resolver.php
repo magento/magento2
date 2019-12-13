@@ -10,6 +10,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class Resolver
+ *
  * @package Magento\Framework\View\Element\Template\File
  */
 class Resolver

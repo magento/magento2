@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element;
 
 /**
  * Class ExceptionHandlerBlockFactory
+ *
  * @package Magento\Framework\View\Element
  */
 class ExceptionHandlerBlockFactory
