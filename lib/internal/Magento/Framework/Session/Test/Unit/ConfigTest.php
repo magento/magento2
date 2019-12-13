@@ -402,9 +402,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ['getBasePath', 'isSecure', 'getHttpHost']
         );
         $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
-        $this->requestMock->expects(
-            $this->atLeastOnce()
-        )->method(
+        $this->requestMock->method(
             'getHttpHost'
         )->will(
             $this->returnValue('init.host')

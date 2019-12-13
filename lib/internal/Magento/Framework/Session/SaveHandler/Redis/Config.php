@@ -131,7 +131,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const XML_PATH_ADMIN_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
-     * Session max lifetime
+     * Max lifetime for session
      */
     const SESSION_MAX_LIFETIME = 31536000;
 

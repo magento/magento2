@@ -10,7 +10,7 @@ namespace Magento\Framework\Session;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
- * Session Manager
+ * Basic Session Manager implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */

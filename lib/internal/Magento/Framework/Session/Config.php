@@ -160,8 +160,7 @@ class Config implements ConfigInterface
         $this->setCookiePath($path, $this->_httpRequest->getBasePath());
 
         $domain = $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_DOMAIN, $this->_scopeType);
-        $domain = empty($domain) ? $this->_httpRequest->getHttpHost() : $domain;
-        $this->setCookieDomain((string)$domain, $this->_httpRequest->getHttpHost());
+        $this->setCookieDomain((string)$domain);
 
         $this->setCookieHttpOnly(
             $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_HTTPONLY, $this->_scopeType)

@@ -8,7 +8,7 @@
 namespace Magento\Framework\Session;
 
 /**
- * Session Manager Interface
+ * Session Manager - Manages php session
  *
  * @api
  */
