@@ -52,12 +52,6 @@ class ValidateCustomerData
      */
     public function execute(array $customerData): void
     {
-        if (!$this->emailAddressValidator->isValid($customerData['email'])) {
-            throw new GraphQlInputException(
-                __('"%1" is not a valid email address.', $customerData['email'])
-            );
-        }
-
         $attributes = $this->getAllowedCustomerAttributes->execute(array_keys($customerData));
         $errorInput = [];
 
@@ -73,6 +67,12 @@ class ValidateCustomerData
         if ($errorInput) {
             throw new GraphQlInputException(
                 __('Required parameters are missing: %1', [implode(', ', $errorInput)])
+            );
+        }
+
+        if (!$this->emailAddressValidator->isValid($customerData['email'])) {
+            throw new GraphQlInputException(
+                __('"%1" is not a valid email address.', $customerData['email'])
             );
         }
     }
