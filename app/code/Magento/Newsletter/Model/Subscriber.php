@@ -628,7 +628,7 @@ class Subscriber extends AbstractModel
             $customer = $this->customerRepository->getById($customerId);
             $websiteId = (int)$this->_storeManager->getStore()->getWebsiteId();
             $this->loadByCustomer((int)$customerId, $websiteId);
-            if ($customer->getId() && !$this->getCustomerId()) {
+            if ($this->getId() && $customer->getId() && !$this->getCustomerId()) {
                 $this->setCustomerId($customer->getId());
                 $this->setSubscriberConfirmCode($this->randomSequence());
                 $this->save();
