@@ -36,7 +36,7 @@
         <selectOption userInput="{{role.resourceAccess}}" selector="{{AdminCreateRoleSection.roleResourceNew}}" stepKey="selectResourceAccess"/>
         <click selector="{{AdminCreateRoleSection.save}}" stepKey="saveUserRole"/>
         <waitForPageLoad stepKey="waitForSaving"/>
-        <see userInput="You saved the role." selector="{{AdminMessagesSection.successMessage}}" stepKey="seeMessage"/>
+        <see userInput="You saved the role." selector="{{AdminMessagesSection.success}}" stepKey="seeMessage"/>
     </actionGroup>
 
     <actionGroup name="AdminAddNewUserRoleWithCustomRoleScopes" extends="AdminAddNewUserRoleActionGroup">

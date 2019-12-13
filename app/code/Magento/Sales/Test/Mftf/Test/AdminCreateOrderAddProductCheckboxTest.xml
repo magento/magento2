@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderAddProductCheckboxTest">
+        <annotations>
+            <title value="Create Order in Admin and Add Product"/>
+            <stories value="Create order and add product using checkbox"/>
+            <description value="Create order in Admin panel, add product by clicking checkbox, and verify it is checked"/>
+            <features value="Sales"/>
+            <severity value="AVERAGE"/>
+            <group value="Sales"/>
+        </annotations>
+
+        <before>
+            <!-- Create simple customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createSimpleCustomer"/>
+
+            <!-- Create simple product -->
+            <createData entity="ApiProductWithDescription" stepKey="createSimpleProduct"/>
+
+            <!-- Login to Admin Panel -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Initiate create new order -->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createSimpleCustomer$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="$$createSimpleProduct.sku$$" stepKey="fillSkuFilterBundle"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
+        <seeCheckboxIsChecked selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="verifyProductChecked"/>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleCustomer" stepKey="deleteSimpleCustomer"/>
+        </after>
+    </test>
+</tests>

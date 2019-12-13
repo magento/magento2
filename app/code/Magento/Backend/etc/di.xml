@@ -198,8 +198,4 @@
             <argument name="anchorRenderer" xsi:type="object">Magento\Backend\Block\AnchorRenderer</argument>
         </arguments>
     </type>
-    <preference for="Magento\Backend\Spi\SessionUserHydratorInterface"
-                type="Magento\Backend\Model\Auth\SessionUserHydrator" />
-    <preference for="Magento\Backend\Spi\SessionAclHydratorInterface"
-                type="Magento\Backend\Model\Auth\SessionAclHydrator" />
 </config>

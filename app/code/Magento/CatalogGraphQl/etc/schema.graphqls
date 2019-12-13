@@ -11,9 +11,12 @@ type Query {
     ): Products
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
     category (
-        id: Int @doc(description: "Id of the category.")
+     id: Int @doc(description: "Id of the category.")
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @deprecated(reason: "Use 'categoryList' query instead of 'category' query") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
+    categoryList(
+    filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
+    ): [CategoryTree] @doc(description: "Returns an array of categories based on the specified filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
 }
 
 type Price @doc(description: "Price is deprecated, replaced by ProductPrice. The Price object defines the price of a product as well as any tax-related adjustments.") {
@@ -21,16 +24,16 @@ type Price @doc(description: "Price is deprecated, replaced by ProductPrice. The
     adjustments: [PriceAdjustment] @deprecated(reason: "Price is deprecated, use ProductPrice.") @doc(description: "An array that provides information about tax, weee, or weee_tax adjustments.")
 }
 
-type PriceAdjustment @doc(description: "The PricedAdjustment object defines the amount of money to apply as an adjustment, the type of adjustment to apply, and whether the item is included or excluded from the adjustment.") {
+type PriceAdjustment @doc(description: "PriceAdjustment is deprecated. Taxes will be included or excluded in the price. The PricedAdjustment object defines the amount of money to apply as an adjustment, the type of adjustment to apply, and whether the item is included or excluded from the adjustment.") {
     amount: Money @doc(description: "The amount of the price adjustment and its currency code.")
-    code: PriceAdjustmentCodesEnum @doc(description: "Indicates whether the adjustment involves tax, weee, or weee_tax.")
-    description: PriceAdjustmentDescriptionEnum @doc(description: "Indicates whether the entity described by the code attribute is included or excluded from the adjustment.")
+    code: PriceAdjustmentCodesEnum @deprecated(reason: "PriceAdjustment is deprecated.") @doc(description: "Indicates whether the adjustment involves tax, weee, or weee_tax.")
+    description: PriceAdjustmentDescriptionEnum @deprecated(reason: "PriceAdjustment is deprecated.") @doc(description: "Indicates whether the entity described by the code attribute is included or excluded from the adjustment.")
 }
 
-enum PriceAdjustmentCodesEnum @doc(description: "Note: This enumeration contains values defined in modules other than the Catalog module.") {
+enum PriceAdjustmentCodesEnum @doc(description: "PriceAdjustment.code is deprecated. This enumeration contains values defined in modules other than the Catalog module.") {
 }
 
-enum PriceAdjustmentDescriptionEnum @doc(description: "This enumeration states whether a price adjustment is included or excluded.") {
+enum PriceAdjustmentDescriptionEnum @doc(description: "PriceAdjustmentDescriptionEnum is deprecated. This enumeration states whether a price adjustment is included or excluded.") {
     INCLUDED
     EXCLUDED
 }
@@ -99,14 +102,14 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     country_of_manufacture: String @doc(description: "The product's country of origin.")
     type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable.")
     websites: [Website] @doc(description: "An array of websites in which the product is available.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
-    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductLinks")
+    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\BatchProductLinks")
     media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use product's `media_gallery` instead") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
     price: ProductPrices @deprecated(reason: "Use price_range for product price information.") @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     price_range: PriceRange! @doc(description: "A PriceRange object, indicating the range of prices for the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\PriceRange")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
-    canonical_url: String @doc(description: "Canonical URL.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
+    canonical_url: String @doc(description: "Relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Products' is enabled") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
     media_gallery: [MediaGalleryInterface] @doc(description: "An array of Media Gallery objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
 }
 
@@ -195,7 +198,7 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
 
 interface MediaGalleryInterface @doc(description: "Contains basic information about a product image or video.") @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\MediaGalleryTypeResolver") {
     url: String @doc(description: "The URL of the product image or video.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Url")
-    label: String @doc(description: "The label of the product image or video.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Label")
+    label: String @doc(description: "The label of the product image or video.")
 }
 
 type ProductImage implements MediaGalleryInterface @doc(description: "Product image information. Contains the image URL and label.") {
@@ -220,6 +223,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     path_in_store: String @doc(description: "Category path in store.")
     url_key: String @doc(description: "The url key assigned to the category.")
     url_path: String @doc(description: "The url path assigned to the category.")
+    canonical_url: String @doc(description: "Relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Categories' is enabled") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CanonicalUrl")
     position: Int @doc(description: "The position of the category relative to other categories at the same level in tree.")
     level: Int @doc(description: "Indicates the depth of the category within the tree.")
     created_at: String @doc(description: "Timestamp indicating when the category was created.")
@@ -292,6 +296,13 @@ type CategoryProducts @doc(description: "The category products object returned i
 
 input ProductAttributeFilterInput @doc(description: "ProductAttributeFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
     category_id: FilterEqualTypeInput @doc(description: "Filter product by category id")
+}
+
+input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
+{
+    ids: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies the category.")
+    url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category")
+    name: FilterMatchTypeInput @doc(description: "Filter by the display name of the category.")
 }
 
 input ProductFilterInput @doc(description: "ProductFilterInput is deprecated, use @ProductAttributeFilterInput instead. ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {

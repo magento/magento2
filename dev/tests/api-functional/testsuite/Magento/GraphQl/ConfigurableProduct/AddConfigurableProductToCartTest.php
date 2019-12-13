@@ -265,7 +265,8 @@ QUERY;
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
+            'Could not add the product with SKU configurable to the shopping cart: The product that was requested ' .
+            'doesn\'t exist. Verify the product and try again.'
         );
 
         $this->graphQlMutation($query);
