@@ -15,7 +15,7 @@
                 <label>Advanced Reporting</label>
                 <comment><![CDATA[This service provides a dynamic suite of reports with rich insights about your business.
                 Your reports can be accessed securely on a personalized dashboard outside of the admin panel by clicking on the
-                "Go to Advanced Reporting" link. </br> For more information, see our <a href="https://magento.com/legal/terms/cloud-terms">
+                "Go to Advanced Reporting" link. </br> For more information, see our <a target="_blank" href="https://magento.com/legal/terms/cloud-terms">
                 terms and conditions</a>.]]></comment>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Advanced Reporting Service</label>

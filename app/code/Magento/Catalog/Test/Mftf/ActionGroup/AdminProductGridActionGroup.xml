@@ -389,7 +389,7 @@
         <waitForPageLoad stepKey="waitForGridLoad"/>
     </actionGroup>
 
-    <!--Filter and select the the product  -->
+    <!--Filter and select the product  -->
     <actionGroup name="filterAndSelectProduct">
         <annotations>
             <description>Goes to the Admin Products grid. Filters the Product grid by the provided Product SKU.</description>

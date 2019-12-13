@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingSiteMapCreateNewTest">
+        <annotations>
+            <features value="Sitemap"/>
+            <stories value="Create Site Map"/>
+            <title value="Create New Site Map with valid data"/>
+            <description value="Create New Site Map with valid data"/>
+            <severity value="CRITICAL"/>
+            <group value="sitemap"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminMarketingSiteDeleteByNameActionGroup" stepKey="deleteSiteMap">
+                <argument name="filename" value="{{DefaultSiteMap.filename}}" />
+            </actionGroup>
+            <actionGroup ref="AssertSiteMapDeleteSuccessActionGroup" stepKey="assertDeleteSuccessMessage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminMarketingSiteMapNavigateNewActionGroup" stepKey="navigateNewSiteMap"/>
+        <actionGroup ref="AdminMarketingSiteMapFillFormActionGroup" stepKey="fillSiteMapForm">
+            <argument name="sitemap" value="DefaultSiteMap" />
+        </actionGroup>
+        <actionGroup ref="AssertSiteMapCreateSuccessActionGroup" stepKey="seeSuccessMessage"/>
+    </test>
+</tests>

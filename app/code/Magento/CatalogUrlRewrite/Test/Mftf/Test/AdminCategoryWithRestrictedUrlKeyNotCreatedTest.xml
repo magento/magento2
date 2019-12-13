@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCategoryWithRestrictedUrlKeyNotCreatedTest">
+        <annotations>
+            <features value="CatalogUrlRewrite"/>
+            <stories value="Url rewrites"/>
+            <title value="Category with restricted Url Key cannot be created"/>
+            <description value="Category with restricted Url Key cannot be created"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17515"/>
+            <useCaseId value="MAGETWO-69825"/>
+            <group value="CatalogUrlRewrite"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created categories-->
+            <comment userInput="Delete created categories" stepKey="commentDeleteCreatedCategories"/>
+            <actionGroup ref="AdminDeleteCategoryByName" stepKey="deleteAdminCategory">
+                <argument name="categoryName" value="admin"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCategoryByName" stepKey="deleteSoapCategory">
+                <argument name="categoryName" value="soap"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCategoryByName" stepKey="deleteRestCategory">
+                <argument name="categoryName" value="rest"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCategoryByName" stepKey="deleteGraphQlCategory">
+                <argument name="categoryName" value="graphql"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Check category creation with restricted url key 'admin'-->
+        <comment userInput="Check category creation with restricted url key 'admin'" stepKey="commentCheckAdminCategoryCreation"/>
+        <actionGroup ref="goToCreateCategoryPage" stepKey="goToCreateAdminCategoryPage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillAdminFirstCategoryForm">
+            <argument name="categoryName" value="admin"/>
+            <argument name="categoryUrlKey" value=""/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlAdmin}}' stepKey="seeAdminFirstErrorMessage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillAdminSecondCategoryForm">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+            <argument name="categoryUrlKey" value="admin"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlAdmin}}' stepKey="seeAdminSecondErrorMessage"/>
+        <!--Create category with 'admin' name-->
+        <comment userInput="Create category with 'admin' name" stepKey="commentAdminCategoryCreation"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillAdminThirdCategoryForm">
+            <argument name="categoryName" value="admin"/>
+            <argument name="categoryUrlKey" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="seeAdminSuccessMessage"/>
+        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryByName('admin')}}" stepKey="seeAdminCategoryInTree"/>
+        <!--Check category creation with restricted url key 'soap'-->
+        <comment userInput="Check category creation with restricted url key 'soap'" stepKey="commentCheckSoapCategoryCreation"/>
+        <actionGroup ref="goToCreateCategoryPage" stepKey="goToCreateSoapCategoryPage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillSoapFirstCategoryForm">
+            <argument name="categoryName" value="soap"/>
+            <argument name="categoryUrlKey" value=""/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlSoap}}' stepKey="seeSoapFirstErrorMessage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillSoapSecondCategoryForm">
+            <argument name="categoryName" value="{{ApiCategory.name}}"/>
+            <argument name="categoryUrlKey" value="soap"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlSoap}}' stepKey="seeSoapSecondErrorMessage"/>
+        <!--Create category with 'soap' name-->
+        <comment userInput="Create category with 'soap' name" stepKey="commentSoapCategoryCreation"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillSoapThirdCategoryForm">
+            <argument name="categoryName" value="soap"/>
+            <argument name="categoryUrlKey" value="{{ApiCategory.name}}"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="seeSoapSuccessMessage"/>
+        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryByName('soap')}}" stepKey="seeSoapCategoryInTree"/>
+        <!--Check category creation with restricted url key 'rest'-->
+        <comment userInput="Check category creation with restricted url key 'rest'" stepKey="commentCheckRestCategoryCreation"/>
+        <actionGroup ref="goToCreateCategoryPage" stepKey="goToCreateRestCategoryPage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillRestFirstCategoryForm">
+            <argument name="categoryName" value="rest"/>
+            <argument name="categoryUrlKey" value=""/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlRest}}' stepKey="seeRestFirstErrorMessage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillRestSecondCategoryForm">
+            <argument name="categoryName" value="{{SubCategoryWithParent.name}}"/>
+            <argument name="categoryUrlKey" value="rest"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlRest}}' stepKey="seeRestSecondErrorMessage"/>
+        <!--Create category with 'rest' name-->
+        <comment userInput="Create category with 'rest' name" stepKey="commentRestCategoryCreation"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillRestThirdCategoryForm">
+            <argument name="categoryName" value="rest"/>
+            <argument name="categoryUrlKey" value="{{SubCategoryWithParent.name}}"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="seeRestSuccessMesdgssage"/>
+        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryByName('rest')}}" stepKey="seeRestCategoryInTree"/>
+        <!--Check category creation with restricted url key 'graphql'-->
+        <comment userInput="Check category creation with restricted url key 'graphql'" stepKey="commentCheckGraphQlCategoryCreation"/>
+        <actionGroup ref="goToCreateCategoryPage" stepKey="goToCreateCategoryPage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillGraphQlFirstCategoryForm">
+            <argument name="categoryName" value="graphql"/>
+            <argument name="categoryUrlKey" value=""/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlGraphql}}' stepKey="seeGraphQlFirstErrorMessage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillGraphQlSecondCategoryForm">
+            <argument name="categoryName" value="{{NewSubCategoryWithParent.name}}"/>
+            <argument name="categoryUrlKey" value="graphql"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlGraphql}}' stepKey="seeGraphQlSecondErrorMessage"/>
+        <!--Create category with 'graphql' name-->
+        <comment userInput="Create category with 'graphql' name" stepKey="commentGraphQlCategoryCreation"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillGraphQlThirdCategoryForm">
+            <argument name="categoryName" value="graphql"/>
+            <argument name="categoryUrlKey" value="{{NewSubCategoryWithParent.name}}"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="seeGraphQlSuccessMessage"/>
+        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryByName('graphql')}}" stepKey="seeGraphQlCategoryInTree"/>
+    </test>
+</tests>

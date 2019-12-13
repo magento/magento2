@@ -48,7 +48,6 @@
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
         </arguments>
-
         <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
         <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"  stepKey="fillName" />
         <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
@@ -57,7 +56,26 @@
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForApplied"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateCatalogPriceRuleWithConditionActionGroup" extends="createCatalogPriceRule">
+        <arguments>
+            <argument name="catalogRuleType" type="entity" defaultValue="PriceRuleWithCondition"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad" after="addNewRule"/>
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="expandConditions" before="openActionDropdown"/>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="scrollToConditionsTab" after="expandConditions"/>
+        <waitForElementVisible selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="waitForNewRule" after="scrollToConditionsTab"/>
+        <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="clickNewRule" after="waitForNewRule"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionsDropdown}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="selectProductAttribute" after="clickNewRule"/>
+        <waitForPageLoad stepKey="waitForAttributeLoad" after="selectProductAttribute"/>
+        <!--Assert that attribute contains today date without time-->
+        <comment userInput="Assert that attribute contains today date without time" stepKey="assertDate" after="waitForAttributeLoad"/>
+        <generateDate date="now" format="Y-m-d" stepKey="today" after="assertDate"/>
+        <grabTextFrom selector="{{PriceRuleConditionsSection.firstProductAttributeSelected}}"  stepKey="grabTextFromSelectedAttribute" after="today"/>
+        <assertEquals expected="$today" actual="$grabTextFromSelectedAttribute" stepKey="assertTodayDate" after="grabTextFromSelectedAttribute"/>
     </actionGroup>
     <actionGroup name="AdminCreateMultipleWebsiteCatalogPriceRule" extends="createCatalogPriceRule">
         <remove keyForRemoval="selectSite"/>
@@ -189,5 +207,49 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" after="waitForElementVisible" stepKey="clickToConfirm"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" after="clickToConfirm" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." after="waitForSuccessMessage" stepKey="verifyRuleIsDeleted"/>
+    </actionGroup>
+
+    <actionGroup name="AdminFillCatalogRuleConditionActionGroup">
+        <annotations>
+            <description>Clicks on the Conditions tab. Fills in the provided condition for Catalog Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="condition" type="string" defaultValue="{{CatalogRuleProductConditions.categoryIds}}"/>
+            <argument name="conditionOperator" type="string" defaultValue="is"/>
+            <argument name="conditionValue" type="string" defaultValue="2"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTab}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" visible="false" stepKey="openConditionsTab"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="waitForAddConditionButton"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="{{condition}}" stepKey="selectTypeCondition"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.condition('is')}}" stepKey="clickOnOperator"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" userInput="{{conditionOperator}}" stepKey="selectCondition"/>
+        <!-- In case we are choosing already selected value - select is not closed automatically -->
+        <conditionalClick selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" visible="true" stepKey="closeSelect"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" stepKey="clickToChooseOption3"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.activeValueInput}}" stepKey="waitForValueInput"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleConditions.activeValueInput}}" userInput="{{conditionValue}}" stepKey="fillConditionValue"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.activeConditionApplyButton}}" stepKey="clickApply"/>
+        <waitForElementNotVisible selector="{{AdminNewCatalogPriceRuleConditions.activeConditionApplyButton}}" stepKey="waitForApplyButtonInvisibility"/>
+    </actionGroup>
+
+    <actionGroup name="newCatalogPriceRuleWithInvalidData">
+        <annotations>
+            <description>Goes to the Catalog Price Rule grid. Clicks on Add. Fills in the provided Catalog Rule details with invalid data.</description>
+        </annotations>
+        <arguments>
+            <argument name="catalogRule" defaultValue="catalogRuleWithInvalid"/>
+        </arguments>
+
+        <!-- Go to the admin Catalog rule grid and add a new one -->
+        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+
+        <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
+        <fillField stepKey="fillPriority" selector="{{AdminNewCatalogPriceRule.priority}}" userInput="{{catalogRule.priority}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
 </actionGroups>

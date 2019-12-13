@@ -62,12 +62,30 @@ class Item extends Sidebar
      */
     public function removeItemFromMiniCart()
     {
+        $this->waitForDeleteButtonVisible();
         $this->_rootElement->find($this->removeItem)->click();
         $element = $this->browser->find($this->confirmModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
         $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
         $modal->acceptAlert();
         $modal->waitModalWindowToDisappear();
+    }
+
+    /**
+     * Wait for Delete button is visible in the block.
+     *
+     * @return bool|null
+     */
+    private function waitForDeleteButtonVisible()
+    {
+        $rootElement = $this->_rootElement;
+        $deleteButtonSelector = $this->removeItem;
+        return $rootElement->waitUntil(
+            function () use ($rootElement, $deleteButtonSelector) {
+                $element = $rootElement->find($deleteButtonSelector);
+                return $element->isVisible() ? true : null;
+            }
+        );
     }
 
     /**

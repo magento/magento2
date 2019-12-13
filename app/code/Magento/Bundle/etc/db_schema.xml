@@ -203,7 +203,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_bundle_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_bundle_tmp" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Tmp">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -265,7 +265,7 @@
             <column name="selection_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_bundle_sel_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_bundle_sel_tmp" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Sel Tmp">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -320,7 +320,7 @@
             <column name="option_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_bundle_opt_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_bundle_opt_tmp" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Opt Tmp">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>

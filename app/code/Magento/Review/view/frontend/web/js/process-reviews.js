@@ -54,7 +54,7 @@ define([
 
                 event.preventDefault();
                 anchor = $(this).attr('href').replace(/^.*?(#|$)/, '');
-                addReviewBlock = $('.block.review-add .block-content #' + anchor);
+                addReviewBlock = $('#' + anchor);
 
                 if (addReviewBlock.length) {
                     $('.product.data.items [data-role="content"]').each(function (index) { //eslint-disable-line

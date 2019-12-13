@@ -8,6 +8,7 @@ namespace Magento\NewRelicReporting\Test\Unit\Model\Module;
 use Magento\NewRelicReporting\Model\Module\Collect;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\Manager;
 use Magento\NewRelicReporting\Model\Module;
 
 /**
