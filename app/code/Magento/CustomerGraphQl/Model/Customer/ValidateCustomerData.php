@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 
 /**
- * Class ValidateCustomerData
+ * Customer data validation used during customer account creation and updating
  */
 class ValidateCustomerData
 {
