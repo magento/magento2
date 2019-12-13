@@ -20,6 +20,6 @@
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(attributeLabel)}}" stepKey="waitForAttributeVisible"/>
         <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(attributeLabel)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandAttribute"/>
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" stepKey="waitForAttributeOptionsVisible"/>
-        <see selector="{{StorefrontCategorySidebarSection.filterOptionItem}}" userInput="{{attributeOptionLabel}}" stepKey="assertAttributeOptionInLayeredNavigation"/>
+        <see selector="{{StorefrontCategorySidebarSection.activeFilterOptionItem}}" userInput="{{attributeOptionLabel}}" stepKey="assertAttributeOptionInLayeredNavigation"/>
     </actionGroup>
 </actionGroups>

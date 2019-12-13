@@ -41,20 +41,13 @@
             <!-- Delete created entities -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createMultiSelectProductAttribute" stepKey="deleteMultiSelectProductAttribute"/>
-            <!-- Clear products grid filters -->
-            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsGridFilters"/>
-            <waitForPageLoad stepKey="waitForCleanProductsFilters"/>
             <!-- Logout from Admin page -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Open created product for edit -->
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProductInProductsGrid">
-            <argument name="product" value="$createSimpleProduct$"/>
-        </actionGroup>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProductForEdit">
-            <argument name="product" value="$createSimpleProduct$"/>
-        </actionGroup>
+        <amOnPage url="{{AdminProductEditPage.url($createSimpleProduct.id$)}}" stepKey="goToProductEditPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Add created attribute to the product -->
         <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
