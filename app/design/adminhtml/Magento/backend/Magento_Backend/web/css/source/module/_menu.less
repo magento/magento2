@@ -267,11 +267,11 @@
                 height: 100%;
             }
 
-            > ul[role="menu"] {
-                max-width:  ~'calc(100vw - @{menu__width})';
-                min-height: @submenu__height;
-                overflow-y: hidden;
+            > ul[role='menu'] {
                 overflow-x: auto;
+                overflow-y: hidden;
+                max-width: ~'calc(100vw - @{menu__width})';
+                min-height: @submenu__height;
             }
         }
 
