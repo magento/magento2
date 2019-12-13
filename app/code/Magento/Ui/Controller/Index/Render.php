@@ -92,7 +92,7 @@ class Render extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         if ($this->_request->getParam('namespace') === null) {
-            $this->_redirect('admin/noroute');
+            $this->_redirect('noroute');
 
             return;
         }
