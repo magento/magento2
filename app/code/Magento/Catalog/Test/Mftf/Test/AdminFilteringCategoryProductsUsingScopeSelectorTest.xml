@@ -131,7 +131,6 @@
              userInput="$$createProduct1.name$$" stepKey="seeProductName4"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"
              userInput="$$createProduct12.name$$" stepKey="seeProductName5"/>
-        <waitForText userInput="$$createCategory.name$$ (ID: 6) (2)" stepKey="seeCorrectProductCount"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
                  userInput="$$createProduct0.name$$" stepKey="dontSeeProductName"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
@@ -151,7 +150,6 @@
              userInput="$$createProduct2.name$$" stepKey="seeProductName6"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"
              userInput="$$createProduct12.name$$" stepKey="seeProductName7"/>
-        <waitForText userInput="$$createCategory.name$$ (ID: 6) (2)" stepKey="seeCorrectProductCount2"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
                  userInput="$$createProduct0.name$$" stepKey="dontSeeProductName2"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
