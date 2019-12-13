@@ -7,8 +7,11 @@
  * @api
  */
 define([
-    '../model/quote'
-], function (quote) {
+    'Magento_Checkout/js/model/quote',
+    'Magento_SalesRule/js/model/payment/discount-messages',
+    'Magento_Checkout/js/action/set-payment-information',
+    'Magento_Checkout/js/action/get-totals'
+], function (quote, messageContainer, setPaymentInformationAction, getTotalsAction) {
     'use strict';
 
     return function (paymentMethod) {
@@ -18,5 +21,15 @@ define([
             };
         }
         quote.paymentMethod(paymentMethod);
+        setPaymentInformationAction(
+            messageContainer,
+            {
+                method: paymentMethod.method
+            }
+        );
+
+        if (quote.totals()['coupon_code']) {
+            getTotalsAction([]);
+        }
     };
 });
