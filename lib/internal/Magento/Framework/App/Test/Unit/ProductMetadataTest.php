@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit;
 
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -20,16 +21,27 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
      */
     private $composerInformationMock;
 
+    /**
+     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheMock;
+
     protected function setUp()
     {
         $this->composerInformationMock = $this->getMockBuilder(\Magento\Framework\Composer\ComposerInformation::class)
             ->disableOriginalConstructor()->getMock();
+
+        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->productMetadata = $objectManager->getObject(ProductMetadata::class);
         $reflectionProperty = new \ReflectionProperty($this->productMetadata, 'composerInformation');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productMetadata, $this->composerInformationMock);
+
+        $reflectionProperty = new \ReflectionProperty($this->productMetadata, 'cache');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->productMetadata, $this->cacheMock);
     }
 
     /**
@@ -40,8 +52,18 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
     public function testGetVersion($packageList, $expectedVersion)
     {
         $this->composerInformationMock->expects($this->any())->method('getSystemPackages')->willReturn($packageList);
+        $this->cacheMock->expects($this->once())->method('save')->with($expectedVersion);
         $productVersion = $this->productMetadata->getVersion();
         $this->assertNotEmpty($productVersion, 'Empty product version');
+        $this->assertEquals($expectedVersion, $productVersion);
+    }
+
+    public function testGetVersionCached()
+    {
+        $expectedVersion = '1.2.3';
+        $this->composerInformationMock->expects($this->never())->method('getSystemPackages');
+        $this->cacheMock->expects($this->once())->method('load')->willReturn($expectedVersion);
+        $productVersion = $this->productMetadata->getVersion();
         $this->assertEquals($expectedVersion, $productVersion);
     }
 

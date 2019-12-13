@@ -13,9 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Composer\ComposerInformation;
 
 /**
- * Class ProductMetadata
- *
- * @package Magento\Framework\App
+ * Magento application product metadata
  */
 class ProductMetadata implements ProductMetadataInterface
 {
