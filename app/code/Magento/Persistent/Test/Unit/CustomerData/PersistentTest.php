@@ -25,17 +25,17 @@ class PersistentTest extends TestCase
     private $customerData;
 
     /**
-     * @var Session
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
      */
     private $persistentSessionHelperMock;
 
     /**
-     * @var View
+     * @var View|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerViewHelperMock;
 
     /**
-     * @var CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerRepositoryMock;
 
