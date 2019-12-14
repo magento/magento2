@@ -7,23 +7,45 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\Component;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Ui\Component\FilterFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Ui\Component\FilterFactory;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FilterFactoryTest extends TestCase
 {
+    /**
+     * Stub attribute
+     */
+    private const STUB_ATTRIBUTE = [
+        'attribute_code' => 'color',
+        'default_frontend_label' => 'Color',
+        'uses_source' => 'Color',
+        'source_model' => 'getSourceModel value',
+        'frontend_input' => 'select',
+        'all_options' => [
+            [
+                'value' => 1,
+                'label' => 'Black',
+            ],
+            [
+                'value' => 2,
+                'label' => 'White',
+            ]
+        ]
+    ];
+
     /**
      * @var FilterFactory
      */
     private $filterFactory;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentFactory|MockObject
      */
     private $componentFactoryMock;
 
@@ -32,7 +54,7 @@ class FilterFactoryTest extends TestCase
      */
     protected function setUp()
     {
-        $objectManager = new ObjectManagerHelper($this);
+        $objectManager = new ObjectManager($this);
 
         $this->componentFactoryMock = $this->createMock(UiComponentFactory::class);
 
@@ -53,43 +75,24 @@ class FilterFactoryTest extends TestCase
         $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
             ->setMethods(['usesSource', 'getSource'])
             ->getMockForAbstractClass();
-        $attributeMock->method('getAttributeCode')->willReturn('color');
-        $attributeMock->method('getDefaultFrontendLabel')->willReturn('Color');
-        $attributeMock->method('usesSource')->willReturn(true);
-        $attributeMock->method('getSourceModel')->willReturn('getSourceModel value');
-        $attributeMock->method('getFrontendInput')->willReturn('select');
+        $attributeMock->method('getAttributeCode')->willReturn(self::STUB_ATTRIBUTE['attribute_code']);
+        $attributeMock->method('getDefaultFrontendLabel')
+            ->willReturn(self::STUB_ATTRIBUTE['default_frontend_label']);
+        $attributeMock->method('usesSource')->willReturn(self::STUB_ATTRIBUTE['uses_source']);
+        $attributeMock->method('getSourceModel')->willReturn(self::STUB_ATTRIBUTE['source_model']);
+        $attributeMock->method('getFrontendInput')->willReturn(self::STUB_ATTRIBUTE['frontend_input']);
         $sourceMock = $this->createMock(SourceInterface::class);
         $attributeMock->method('getSource')->willReturn($sourceMock);
-        $sourceMock->method('getAllOptions')->willReturn(
-            [
-                [
-                    'value' => 1,
-                    'label' => 'Black',
-                ],
-                [
-                    'value' => 2,
-                    'label' => 'White',
-                ]
-            ]
-        );
+        $sourceMock->method('getAllOptions')->willReturn(self::STUB_ATTRIBUTE['all_options']);
         $this->componentFactoryMock->expects($this->once())
             ->method('create')
             ->with('color', 'filterSelect', [
                 'data' => [
                     'config' => [
-                        'options' => [
-                            [
-                                'value' => 1,
-                                'label' => 'Black',
-                            ],
-                            [
-                                'value' => 2,
-                                'label' => 'White',
-                            ]
-                        ],
+                        'options' => self::STUB_ATTRIBUTE['all_options'],
                         'caption' => (string)__('Select...'),
-                        'dataScope' => 'color',
-                        'label' => (string)__('Color'),
+                        'dataScope' => self::STUB_ATTRIBUTE['attribute_code'],
+                        'label' => (string)__(self::STUB_ATTRIBUTE['default_frontend_label']),
                     ]
                 ],
                 'context' => $contextMock
