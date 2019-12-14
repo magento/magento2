@@ -26,14 +26,9 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
     private $viewModel;
 
     /**
-     * @var StockConfigurationInterface|MockObject 
+     * @var StockConfigurationInterface|MockObject
      */
-    protected $stockConfiguration;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
+    protected $stockConfigurationMock;
 
     /**
      * @inheritdoc
@@ -41,14 +36,16 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
 
-        $this->stockConfiguration =
+        $objectManager = new ObjectManager($this);
+
+        $this->stockConfigurationMock =
             $this->getMockBuilder(StockConfigurationInterface::class)
             ->getMock();
 
-        $this->viewModel = $this->getObjectManager()->getObject(
+        $this->viewModel = $objectManager->getObject(
             AddToCompareAvailability::class,
             [
-                'stockConfiguration' => $this->stockConfiguration
+                'stockConfiguration' => $this->stockConfigurationMock
             ]
         );
     }
@@ -81,7 +78,7 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
             ->method('getQuantityAndStockStatus')
             ->willReturn($isInStock);
 
-        $this->stockConfiguration->expects($this->any())
+        $this->stockConfigurationMock->expects($this->any())
             ->method('isShowOutOfStock')
             ->willReturn($isShowOutOfStock);
 
@@ -90,7 +87,7 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Data provider for isAvailableForCompare()
-     * 
+     *
      * @return array
      */
     public function isAvailableForCompareDataProvider(): array
@@ -102,17 +99,5 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
             [1, false, [], false],
             [2, true, ['is_in_stock' => true], false]
         ];
-    }
-
-    /**
-     * @return ObjectManager
-     */
-    private function getObjectManager(): ObjectManager
-    {
-        if (null === $this->objectManager) {
-            $this->objectManager = new ObjectManager($this);
-        }
-
-        return $this->objectManager;
     }
 }
