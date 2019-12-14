@@ -57,10 +57,11 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
      * @param bool $isSalable
      * @param array $isInStock
      * @param bool $isShowOutOfStock
-     * @return boolean
+     * @param bool $expectedBool
+     * @return void
      * @dataProvider isAvailableForCompareDataProvider
      */
-    public function testIsAvailableForCompare($status, $isSalable, $isInStock, $isShowOutOfStock): bool
+    public function testIsAvailableForCompare($status, $isSalable, $isInStock, $isShowOutOfStock, $expectedBool): void
     {
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -82,7 +83,7 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
             ->method('isShowOutOfStock')
             ->willReturn($isShowOutOfStock);
 
-        return $this->viewModel->isAvailableForCompare($productMock);
+        $this->assertEquals($expectedBool, $this->viewModel->isAvailableForCompare($productMock));
     }
 
     /**
@@ -93,11 +94,11 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
     public function isAvailableForCompareDataProvider(): array
     {
         return [
-            [1, true, ['is_in_stock' => true], false],
-            [1, true, ['is_in_stock' => false], true],
-            [1, true, [], false],
-            [1, false, [], false],
-            [2, true, ['is_in_stock' => true], false]
+            [1, true, ['is_in_stock' => true], false, true],
+            [1, true, ['is_in_stock' => false], true, true],
+            [1, true, [], false, true],
+            [1, false, [], false, false],
+            [2, true, ['is_in_stock' => true], false, false]
         ];
     }
 }
