@@ -159,18 +159,14 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
             [
                 'updatedAt' => $updatedAt,
                 'refreshStatsLink' => $refreshStatsLink,
-                'data' => str_replace(
-                    '"',
-                    '&quot;',
-                    json_encode(
+                'dataPost' => json_encode(
+                    [
+                        'action' => $directRefreshLink,
+                        'data' =>
                         [
-                                'action' => $directRefreshLink,
-                                'data' =>
-                                    [
-                                        'code' => $refreshCode
-                                    ]
-                            ]
-                    )
+                            'code' => $refreshCode
+                        ]
+                    ]
                 )
             ]
         );

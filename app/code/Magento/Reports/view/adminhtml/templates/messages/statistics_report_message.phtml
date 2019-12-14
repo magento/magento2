@@ -1,3 +1,17 @@
 <?php
-echo __('Last updated: ' . __($block->getData('updatedAt')) . '. To refresh last day\'s <a href="' . $block->getData('refreshStatsLink') . '">statistics</a>,' .
-        'click <a href="#2" data-post="' . $block->getData('data') . '">here</a>');
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<?= __(
+        'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
+        'click <a href="#2"><span data-post="%3">here</span></a>.',
+        $block->escapeHtml($block->getData('updatedAt')),
+        $block->escapeUrl($block->getData('refreshStatsLink')),
+        $block->escapeHtmlAttr($block->getData('dataPost'))
+    );
+?>
