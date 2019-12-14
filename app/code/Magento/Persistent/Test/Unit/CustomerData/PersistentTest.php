@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\CustomerData;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\CustomerData\Persistent;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\View;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Persistent\CustomerData\Persistent;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\Session as PersistentSession;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class PersistentTest extends TestCase
 {
