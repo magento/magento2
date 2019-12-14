@@ -1512,7 +1512,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 '$rowData' => [
                     'code' => str_repeat(
                         'a',
-                        Product::DB_MAX_VARCHAR_LENGTH - 1
+                        Product::DB_MAX_VARCHAR_LENGTH
                     ),
                 ],
             ],
@@ -1565,7 +1565,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 '$rowData' => [
                     'code' => str_repeat(
                         'a',
-                        Product::DB_MAX_TEXT_LENGTH - 1
+                        Product::DB_MAX_TEXT_LENGTH
                     ),
                 ],
             ],

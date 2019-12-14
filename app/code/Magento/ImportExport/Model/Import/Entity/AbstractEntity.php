@@ -32,9 +32,9 @@ abstract class AbstractEntity
 
     const DB_MAX_PACKET_DATA = 1048576;
 
-    const DB_MAX_VARCHAR_LENGTH = 256;
+    const DB_MAX_VARCHAR_LENGTH = 255;
 
-    const DB_MAX_TEXT_LENGTH = 65536;
+    const DB_MAX_TEXT_LENGTH = 65535;
 
     const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
     const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
@@ -654,7 +654,7 @@ abstract class AbstractEntity
         switch ($attrParams['type']) {
             case 'varchar':
                 $val = $this->string->cleanString($rowData[$attrCode]);
-                $valid = $this->string->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
+                $valid = $this->string->strlen($val) <= self::DB_MAX_VARCHAR_LENGTH;
                 break;
             case 'decimal':
                 $val = trim($rowData[$attrCode]);
@@ -674,7 +674,7 @@ abstract class AbstractEntity
                 break;
             case 'text':
                 $val = $this->string->cleanString($rowData[$attrCode]);
-                $valid = $this->string->strlen($val) < self::DB_MAX_TEXT_LENGTH;
+                $valid = $this->string->strlen($val) <= self::DB_MAX_TEXT_LENGTH;
                 break;
             default:
                 $valid = true;

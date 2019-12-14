@@ -71,11 +71,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     {
         $val = $this->string->cleanString($this->_rowData[$attrCode]);
         if ($type == 'text') {
-            $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
+            $valid = $this->string->strlen($val) <= Product::DB_MAX_TEXT_LENGTH;
         } else if ($attrCode == Product::COL_SKU) {
             $valid = $this->string->strlen($val) <= SKU::SKU_MAX_LENGTH;
         } else {
-            $valid = $this->string->strlen($val) < Product::DB_MAX_VARCHAR_LENGTH;
+            $valid = $this->string->strlen($val) <= Product::DB_MAX_VARCHAR_LENGTH;
         }
         if (!$valid) {
             $this->_addMessages([RowValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH]);
