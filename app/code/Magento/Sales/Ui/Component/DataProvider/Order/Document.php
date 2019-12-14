@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Ui\Component\DataProvider\Order;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class Document
@@ -43,10 +43,8 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      */
     public function getCustomAttribute($attributeCode)
     {
-        switch ($attributeCode) {
-            case self::$customerGroupAttributeCode:
-                $this->setCustomerGroupValue();
-                break;
+        if (self::$customerGroupAttributeCode === $attributeCode) {
+            $this->setCustomerGroupValue();
         }
         return parent::getCustomAttribute($attributeCode);
     }
