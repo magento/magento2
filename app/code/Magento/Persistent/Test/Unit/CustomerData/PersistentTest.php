@@ -16,26 +16,37 @@ use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\Session as PersistentSession;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class PersistentTest extends TestCase
 {
+    /**
+     * Stub customer id
+     */
+    private const STUB_CUSTOMER_ID = 1;
+
+    /**
+     * Stub customer name
+     */
+    private const STUB_CUSTOMER_NAME = 'Adam John';
+
     /**
      * @var Persistent
      */
     private $customerData;
 
     /**
-     * @var Session
+     * @var Session|MockObject
      */
     private $persistentSessionHelperMock;
 
     /**
-     * @var View
+     * @var View|MockObject
      */
     private $customerViewHelperMock;
 
     /**
-     * @var CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface|MockObject
      */
     private $customerRepositoryMock;
 
@@ -73,7 +84,7 @@ class PersistentTest extends TestCase
     /**
      * Test getSectionData() when customer doesn't login
      */
-    public function testGetSectionDataWithNotLogin()
+    public function testGetSectionDataWhenCustomerNotLoggedInReturnsEmptyArray()
     {
         $this->persistentSessionHelperMock->method('isPersistent')->willReturn(true);
 
@@ -92,16 +103,17 @@ class PersistentTest extends TestCase
         $this->persistentSessionHelperMock->method('isPersistent')->willReturn(true);
 
         $persistentSessionMock = $this->createPartialMock(PersistentSession::class, ['getCustomerId']);
-        $persistentSessionMock->method('getCustomerId')->willReturn(1);
+        $persistentSessionMock->method('getCustomerId')->willReturn(self::STUB_CUSTOMER_ID);
         $this->persistentSessionHelperMock->method('getSession')->willReturn($persistentSessionMock);
 
         $customerMock = $this->createMock(CustomerInterface::class);
         $this->customerRepositoryMock->method('getById')->with(1)->willReturn($customerMock);
-        $this->customerViewHelperMock->method('getCustomerName')->with($customerMock)->willReturn('Adam John');
+        $this->customerViewHelperMock->method('getCustomerName')->with($customerMock)
+            ->willReturn(self::STUB_CUSTOMER_NAME);
 
         $this->assertEquals(
             [
-                'fullname' => 'Adam John'
+                'fullname' => self::STUB_CUSTOMER_NAME
             ],
             $this->customerData->getSectionData()
         );
