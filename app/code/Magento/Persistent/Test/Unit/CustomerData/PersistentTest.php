@@ -107,7 +107,7 @@ class PersistentTest extends TestCase
         $this->persistentSessionHelperMock->method('getSession')->willReturn($persistentSessionMock);
 
         $customerMock = $this->createMock(CustomerInterface::class);
-        $this->customerRepositoryMock->method('getById')->with(1)->willReturn($customerMock);
+        $this->customerRepositoryMock->method('getById')->with(self::STUB_CUSTOMER_ID)->willReturn($customerMock);
         $this->customerViewHelperMock->method('getCustomerName')->with($customerMock)
             ->willReturn(self::STUB_CUSTOMER_NAME);
 
