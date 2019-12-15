@@ -16,8 +16,6 @@ use Magento\Sales\Helper\Reorder as ReorderHelper;
 
 /**
  * Abstract class for controllers Reorder(Customer) and Reorder(Guest)
- *
- * Class Magento\Sales\Controller\AbstractController\Reorder
  */
 abstract class Reorder extends Action\Action implements HttpPostActionInterface
 {

@@ -113,17 +113,23 @@ class ReorderTest extends TestCase
      */
     public function testExecuteWithReorderIsNotAllowed()
     {
+        $orderMock = $this->createMock(Order::class);
+        $orderMock->method('getId')->willReturn(self::STUB_ORDER_ID);
+
         $this->orderLoaderMock->method('load')
             ->with($this->requestMock)
             ->willReturn($this->resultRedirectFactoryMock);
-        $orderMock = $this->createMock(Order::class);
-        $orderMock->method('getId')->willReturn(self::STUB_ORDER_ID);
+
         $this->registryMock->expects($this->once())->method('registry')
             ->with('current_order')
             ->willReturn($orderMock);
 
+        $this->reorderHelperMock->method('canReorder')->with(self::STUB_ORDER_ID)
+            ->willReturn(false);
+
         $resultRedirectMock = $this->createMock(Redirect::class);
         $this->resultRedirectFactoryMock->expects($this->once())->method('create')->willReturn($resultRedirectMock);
+
         $this->reorderHelperMock->method('canReorder')->with(self::STUB_ORDER_ID)
             ->willReturn(false);
 
