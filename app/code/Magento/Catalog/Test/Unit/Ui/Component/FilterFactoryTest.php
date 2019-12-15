@@ -86,7 +86,7 @@ class FilterFactoryTest extends TestCase
         $sourceMock->method('getAllOptions')->willReturn(self::STUB_ATTRIBUTE['all_options']);
         $this->componentFactoryMock->expects($this->once())
             ->method('create')
-            ->with('color', 'filterSelect', [
+            ->with(self::STUB_ATTRIBUTE['attribute_code'], 'filterSelect', [
                 'data' => [
                     'config' => [
                         'options' => self::STUB_ATTRIBUTE['all_options'],
