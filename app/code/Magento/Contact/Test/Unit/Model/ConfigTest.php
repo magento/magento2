@@ -62,7 +62,7 @@ class ConfigTest extends TestCase
             ->with(config::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $this->assertTrue(true, $this->model->isEnabled());
+        $this->assertTrue($this->model->isEnabled());
     }
 
     /**
@@ -77,7 +77,7 @@ class ConfigTest extends TestCase
             ->with(config::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(false);
 
-        $this->assertFalse(false, $this->model->isEnabled());
+        $this->assertFalse($this->model->isEnabled());
     }
 
     /**
