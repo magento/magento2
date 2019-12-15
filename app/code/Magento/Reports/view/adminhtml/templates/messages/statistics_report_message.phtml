@@ -7,10 +7,19 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<?= /* @noEscape */ __(
-    'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
-    'click <a href="#2"><span data-post="%3">here</span></a>.',
-    $block->escapeHtml($block->getData('updatedAt')),
-    $block->escapeUrl($block->getData('refreshStatsLink')),
-    $block->escapeHtmlAttr($block->getData('dataPost'))
+<div>
+<?= $block->escapeHtml(
+    __(
+        'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, click',
+        $block->getData('updatedAt'),
+        $block->escapeUrl($block->getData('refreshStatsLink'))
+    ),
+    ['a']
 );
+?>
+    <a href="#2">
+        <span data-post="<?= $block->escapeHtmlAttr($block->getData('dataPost')) ?>">
+        <?= $block->escapeHtml(__('here')) ?>
+        </span>
+    </a>
+</div>
