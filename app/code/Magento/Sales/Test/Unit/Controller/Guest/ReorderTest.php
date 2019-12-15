@@ -24,6 +24,11 @@ use Magento\Sales\Model\Order;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test class for Reorder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ReorderTest extends TestCase
 {
     /**
