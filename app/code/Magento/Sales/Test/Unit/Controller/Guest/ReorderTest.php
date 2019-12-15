@@ -37,11 +37,6 @@ class ReorderTest extends TestCase
     private $reorder;
 
     /**
-     * @var Context|MockObject
-     */
-    private $contextMock;
-
-    /**
      * @var Registry|MockObject
      */
     private $registryMock;
@@ -76,7 +71,7 @@ class ReorderTest extends TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->createMock(Context::class);
+        $contextMock = $this->createMock(Context::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->orderLoaderMock = $this->createMock(OrderLoader::class);
         $this->requestMock = $this->createMock(RequestInterface::class);
@@ -84,10 +79,10 @@ class ReorderTest extends TestCase
         $this->reorderHelperMock = $this->createMock(ReorderHelper::class);
         $this->messageManagerMock = $this->createMock(MessageManagerInterface::class);
 
-        $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
-        $this->contextMock->expects($this->once())->method('getResultRedirectFactory')
+        $contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->once())->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
-        $this->contextMock->expects($this->once())->method('getMessageManager')
+        $contextMock->expects($this->once())->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
 
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
@@ -101,7 +96,7 @@ class ReorderTest extends TestCase
         $this->reorder = $objectManager->getObject(
             Reorder::class,
             [
-                'context' => $this->contextMock,
+                'context' => $contextMock,
                 'orderLoader' => $this->orderLoaderMock,
                 'registry' => $this->registryMock
             ]
