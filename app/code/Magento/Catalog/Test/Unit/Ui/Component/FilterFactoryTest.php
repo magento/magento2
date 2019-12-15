@@ -92,7 +92,7 @@ class FilterFactoryTest extends TestCase
                         'options' => self::STUB_ATTRIBUTE['all_options'],
                         'caption' => (string)__('Select...'),
                         'dataScope' => self::STUB_ATTRIBUTE['attribute_code'],
-                        'label' => (string)__(self::STUB_ATTRIBUTE['default_frontend_label']),
+                        'label' => self::STUB_ATTRIBUTE['default_frontend_label'],
                     ]
                 ],
                 'context' => $contextMock
