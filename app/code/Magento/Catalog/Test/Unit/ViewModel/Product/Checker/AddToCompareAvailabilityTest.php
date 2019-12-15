@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\ViewModel\Product\Checker;
 use Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Catalog\Model\Product;
-use \Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
