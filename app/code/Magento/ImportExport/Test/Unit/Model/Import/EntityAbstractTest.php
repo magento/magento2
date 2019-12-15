@@ -409,7 +409,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
      */
     public function attributeList()
     {
-        $longString = str_pad('', AbstractEntity::DB_MAX_TEXT_LENGTH, 'x');
+        $longString = str_pad('', AbstractEntity::DB_MAX_TEXT_LENGTH + 1, 'x');
 
         return [
             [$this->_getDataSet('test1', 'decimal', 1.5, 'test')],
@@ -418,7 +418,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
                     'test2',
                     'varchar',
                     'test string',
-                    substr($longString, 0, AbstractEntity::DB_MAX_VARCHAR_LENGTH)
+                    substr($longString, 0, AbstractEntity::DB_MAX_VARCHAR_LENGTH + 1)
                 )
             ],
             [
