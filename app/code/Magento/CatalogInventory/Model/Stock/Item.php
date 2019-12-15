@@ -260,6 +260,14 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
+     * @return bool|mixed
+     */
+    public function setShowDefaultNotificationMessage($notificationMessage)
+    {
+        return $this->_getData(static::SHOW_DEFAULT_NOTIFICATION_MESSAGE);
+    }
+
+    /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */

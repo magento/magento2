@@ -141,6 +141,12 @@ interface StockItemInterface extends ExtensibleDataInterface
     public function getShowDefaultNotificationMessage();
 
     /**
+     * @param $notificationMessage
+     * @return mixed
+     */
+    public function setShowDefaultNotificationMessage($notificationMessage);
+
+    /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
