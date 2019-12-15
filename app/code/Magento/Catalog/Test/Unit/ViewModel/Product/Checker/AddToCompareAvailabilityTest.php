@@ -11,6 +11,7 @@ namespace Magento\Catalog\Test\Unit\ViewModel\Product\Checker;
 use Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Catalog\Model\Product;
+use \Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -94,11 +95,11 @@ class AddToCompareAvailabilityTest extends \PHPUnit\Framework\TestCase
     public function isAvailableForCompareDataProvider(): array
     {
         return [
-            [1, true, ['is_in_stock' => true], false, true],
-            [1, true, ['is_in_stock' => false], true, true],
-            [1, true, [], false, true],
-            [1, false, [], false, false],
-            [2, true, ['is_in_stock' => true], false, false]
+            [Status::STATUS_ENABLED, true, ['is_in_stock' => true], false, true],
+            [Status::STATUS_ENABLED, true, ['is_in_stock' => false], true, true],
+            [Status::STATUS_ENABLED, true, [], false, true],
+            [Status::STATUS_ENABLED, false, [], false, false],
+            [Status::STATUS_DISABLED, true, ['is_in_stock' => true], false, false]
         ];
     }
 }
