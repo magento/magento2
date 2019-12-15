@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -14,7 +16,7 @@ $objectManager = Bootstrap::getObjectManager();
 $attributeRepository = $objectManager->get(AttributeRepositoryInterface::class);
 /** @var Attribute $attribute */
 $attribute = $objectManager->create(Attribute::class);
-/** @var $installer \Magento\Catalog\Setup\CategorySetup */
+/** @var $installer CategorySetup */
 $installer = $objectManager->create(CategorySetup::class);
 
 $attribute->setData(
@@ -37,7 +39,8 @@ $attribute->setData(
         'used_in_product_listing'       => 1,
         'used_for_sort_by'              => 0,
         'frontend_label'                => ['Boolean Attribute'],
-        'backend_type'                  => 'int'
+        'backend_type'                  => 'int',
+        'source_model'                  => Boolean::class
     ]
 );
 
