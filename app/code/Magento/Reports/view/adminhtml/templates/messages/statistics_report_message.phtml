@@ -7,19 +7,15 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<div>
 <?= $block->escapeHtml(
     __(
-        'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, click',
+        'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, click ',
         $block->getData('updatedAt'),
         $block->escapeUrl($block->getData('refreshStatsLink'))
     ),
     ['a']
 );
 ?>
-    <a href="#2">
-        <span data-post="<?= $block->escapeHtmlAttr($block->getData('dataPost')) ?>">
-        <?= $block->escapeHtml(__('here')) ?>
-        </span>
-    </a>
-</div>
+<a href="#2"
+   data-post="<?= $block->escapeHtmlAttr($block->getData('dataPost')) ?>"><?= $block->escapeHtml(__('here')) ?>
+</a><?= $block->escapeHtml(__('.')) ?>
