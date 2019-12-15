@@ -57,6 +57,8 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct"/>
             </createData>
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 1" stepKey="enableReportModule"/>
         </before>
         <after>
             <!-- Admin logout -->
@@ -75,6 +77,9 @@
 
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 0" stepKey="disableReportModule"/>
         </after>
 
         <!-- Login as customer -->

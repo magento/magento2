@@ -68,7 +68,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function countStores()
     {
-        return sizeof($this->_stores->getItems());
+        return count($this->_stores->getItems());
     }
 
     /**
@@ -88,8 +88,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Create data hash to ensure that we got valid
-     * data and it is not changed by some one else.
+     * Create data hash to ensure that we got valid data and it is not changed by some one else.
      *
      * @param string $data
      * @return string
@@ -97,6 +96,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getChartDataHash($data)
     {
         $secret = $this->_installDate;
+        // phpcs:disable Magento2.Security.InsecureFunction.FoundWithAlternative
         return md5($data . $secret);
     }
 }

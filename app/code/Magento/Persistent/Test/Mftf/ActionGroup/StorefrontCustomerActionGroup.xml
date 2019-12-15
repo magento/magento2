@@ -7,17 +7,21 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CustomerLoginOnStorefrontWithRememberMeChecked" extends="LoginToStorefrontActionGroup">
-        <checkOption selector="{{StorefrontCustomerSignInFormSection.rememberMe}}"
-                     before="clickSignInAccountButton"
-                     stepKey="checkRememberMe"/>
+        <annotations>
+            <description>EXTENDS: LoginToStorefrontActionGroup. Checks the 'Remember Me' checkbox.</description>
+        </annotations>
+
+        <checkOption selector="{{StorefrontCustomerSignInFormSection.rememberMe}}" before="clickSignInAccountButton" stepKey="checkRememberMe"/>
     </actionGroup>
 
     <actionGroup name="CustomerLoginOnStorefrontWithRememberMeUnChecked" extends="LoginToStorefrontActionGroup">
-        <uncheckOption selector="{{StorefrontCustomerSignInFormSection.rememberMe}}"
-                     before="clickSignInAccountButton"
-                     stepKey="unCheckRememberMe"/>
+        <annotations>
+            <description>EXTENDS: LoginToStorefrontActionGroup. Uncheck the 'Remember Me' checkbox.</description>
+        </annotations>
+
+        <uncheckOption selector="{{StorefrontCustomerSignInFormSection.rememberMe}}" before="clickSignInAccountButton" stepKey="unCheckRememberMe"/>
     </actionGroup>
 
     <actionGroup name="StorefrontRegisterCustomerRememberMe" extends="SignUpNewUserFromStorefrontActionGroup">

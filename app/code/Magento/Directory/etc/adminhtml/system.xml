@@ -43,12 +43,19 @@
                 </field>
                 <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
                 </field>
             </group>
             <group id="currencyconverterapi" translate="label" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Currency Converter API</label>
-                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API Key</label>
+                    <config_path>currency/currencyconverterapi/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
                 </field>
             </group>
             <group id="import" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -60,27 +67,45 @@
                 <field id="error_email" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Error Email Recipient</label>
                     <validate>validate-email</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="error_email_identity" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Error Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="error_email_template" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Error Email Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="frequency" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Frequency</label>
                     <source_model>Magento\Cron\Model\Config\Source\Frequency</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="service" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Service</label>
                     <source_model>Magento\Directory\Model\Currency\Import\Source\Service</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Currency\Cron</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="time" translate="label" type="time" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Start Time</label>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

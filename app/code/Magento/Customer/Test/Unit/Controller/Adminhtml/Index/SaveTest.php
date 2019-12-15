@@ -338,10 +338,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPostValue')
-            ->willReturnMap([
-                [null, null, $postValue],
-                [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
-            ]);
+            ->willReturnMap(
+                [
+                    [null, null, $postValue],
+                    [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
+                ]
+            );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPost')
             ->willReturnMap(
@@ -475,7 +477,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the customer.'))
             ->willReturnSelf();
 
@@ -542,10 +544,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getPostValue')
-            ->willReturnMap([
-                [null, null, $postValue],
-                [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
-            ]);
+            ->willReturnMap(
+                [
+                    [null, null, $postValue],
+                    [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
+                ]
+            );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPost')
             ->willReturnMap(
@@ -662,7 +666,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the customer.'))
             ->willReturnSelf();
 
@@ -723,10 +727,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getPostValue')
-            ->willReturnMap([
-                [null, null, $postValue],
-                [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
-            ]);
+            ->willReturnMap(
+                [
+                    [null, null, $postValue],
+                    [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
+                ]
+            );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPost')
             ->willReturnMap(
@@ -804,7 +810,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('register');
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->messageManagerMock->expects($this->once())
             ->method('addMessage')
@@ -812,10 +818,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->sessionMock->expects($this->once())
             ->method('setCustomerFormData')
-            ->with([
-                'customer' => $extractedData,
-                'subscription' => $subscription,
-            ]);
+            ->with(
+                [
+                    'customer' => $extractedData,
+                    'subscription' => $subscription,
+                ]
+            );
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
@@ -870,10 +878,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getPostValue')
-            ->willReturnMap([
-                [null, null, $postValue],
-                [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
-            ]);
+            ->willReturnMap(
+                [
+                    [null, null, $postValue],
+                    [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
+                ]
+            );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPost')
             ->willReturnMap(
@@ -951,7 +961,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('register');
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->messageManagerMock->expects($this->once())
             ->method('addMessage')
@@ -959,10 +969,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->sessionMock->expects($this->once())
             ->method('setCustomerFormData')
-            ->with([
-                'customer' => $extractedData,
-                'subscription' => $subscription,
-            ]);
+            ->with(
+                [
+                    'customer' => $extractedData,
+                    'subscription' => $subscription,
+                ]
+            );
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
@@ -1017,10 +1029,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getPostValue')
-            ->willReturnMap([
-                [null, null, $postValue],
-                [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
-            ]);
+            ->willReturnMap(
+                [
+                    [null, null, $postValue],
+                    [CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, null, $postValue['customer']],
+                ]
+            );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPost')
             ->willReturnMap(
@@ -1099,18 +1113,20 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('register');
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, __('Something went wrong while saving the customer.'));
 
         $this->sessionMock->expects($this->once())
             ->method('setCustomerFormData')
-            ->with([
-                'customer' => $extractedData,
-                'subscription' => $subscription,
-            ]);
+            ->with(
+                [
+                    'customer' => $extractedData,
+                    'subscription' => $subscription,
+                ]
+            );
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)

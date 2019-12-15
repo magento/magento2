@@ -5,9 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FillOutCMSPageContent">
+        <annotations>
+            <description>Fills out the Page details (Page Title, Content and URL Key) on the Admin Page creation/edit page. PLEASE NOTE: The values are Hardcoded using '_duplicatedCMSPage'.</description>
+        </annotations>
+
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_duplicatedCMSPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
         <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_duplicatedCMSPage.content}}" stepKey="fillFieldContent"/>

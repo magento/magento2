@@ -39,12 +39,16 @@
         <element name="variationLabel" type="text" selector="//div[@data-index='configurable-matrix']/label"/>
         <element name="stepsWizardTitle" type="text" selector="div.content:not([style='display: none;']) .steps-wizard-title"/>
         <element name="attributeEntityByName" type="text" selector="//div[@class='attribute-entity']//div[normalize-space(.)='{{attributeLabel}}']" parameterized="true"/>
+        <element name="fileUploaderInput" type="file" selector="//input[@type='file' and @class='file-uploader-input']" />
+        <element name="variationImageSource" type="text" selector="[data-index='configurable-matrix'] [data-index='thumbnail_image_container'] img[src*='{{imageName}}']" parameterized="true"/>
+        <element name="variationProductLinkByName" type="text" selector="//div[@data-index='configurable-matrix']//*[@data-index='name_container']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
     </section>
     <section name="AdminConfigurableProductFormSection">
         <element name="productWeight" type="input" selector=".admin__control-text[name='product[weight]']"/>
         <element name="productQuantity" type="input" selector=".admin__control-text[name='product[quantity_and_stock_status][qty]']"/>
         <element name="currentVariationsQuantityCells" type="button" selector="td[data-index='quantity_container']"/>
         <element name="rowByCode" type="textarea" selector="//span[contains(text(), '{{var1}}-{{var2}}')]//ancestor-or-self::tr" parameterized="true"/>
+        <element name="currentAttribute" type="text" selector="//fieldset[@class='admin__fieldset']/div[contains(@class, 'admin__field _disabled')]//span"/>
     </section>
     <section name="AdminConfigurableProductSelectAttributesSlideOut">
         <element name="grid" type="button" selector=".admin__data-grid-wrap tbody"/>

@@ -357,6 +357,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected function makeRequest($method, $uri, $params = [])
     {
         $this->_ch = curl_init();
+        $this->curlOption(CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FTP | CURLPROTO_FTPS);
         $this->curlOption(CURLOPT_URL, $uri);
         if ($method == 'POST') {
             $this->curlOption(CURLOPT_POST, 1);

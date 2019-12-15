@@ -15,6 +15,7 @@ use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 /**
  * Catalog entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -468,7 +469,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param AbstractAttribute $attribute
      * @param mixed $value New value of the attribute.
-     * @param array &$origData
+     * @param array $origData
      * @return bool
      */
     protected function _canUpdateAttribute(AbstractAttribute $attribute, $value, array &$origData)
@@ -560,15 +561,19 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $store = (int) $store;
         if ($typedAttributes) {
             foreach ($typedAttributes as $table => $_attributes) {
+                $defaultJoinCondition = [
+                    $connection->quoteInto('default_value.attribute_id IN (?)', array_keys($_attributes)),
+                    "default_value.{$this->getLinkField()} = e.{$this->getLinkField()}",
+                    'default_value.store_id = 0',
+                ];
+
                 $select = $connection->select()
-                    ->from(['default_value' => $table], ['attribute_id'])
-                    ->join(
-                        ['e' => $this->getTable($this->getEntityTable())],
-                        'e.' . $this->getLinkField() . ' = ' . 'default_value.' . $this->getLinkField(),
-                        ''
-                    )->where('default_value.attribute_id IN (?)', array_keys($_attributes))
-                    ->where("e.entity_id = :entity_id")
-                    ->where('default_value.store_id = ?', 0);
+                    ->from(['e' => $this->getTable($this->getEntityTable())], [])
+                    ->joinLeft(
+                        ['default_value' => $table],
+                        implode(' AND ', $defaultJoinCondition),
+                        []
+                    )->where("e.entity_id = :entity_id");
 
                 $bind = ['entity_id' => $entityId];
 
@@ -577,6 +582,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         'store_value.value IS NULL',
                         'default_value.value',
                         'store_value.value'
+                    );
+                    $attributeIdExpr = $connection->getCheckSql(
+                        'store_value.attribute_id IS NULL',
+                        'default_value.attribute_id',
+                        'store_value.attribute_id'
                     );
                     $joinCondition = [
                         $connection->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
@@ -587,23 +597,28 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     $select->joinLeft(
                         ['store_value' => $table],
                         implode(' AND ', $joinCondition),
-                        ['attr_value' => $valueExpr]
+                        ['attribute_id' => $attributeIdExpr, 'attr_value' => $valueExpr]
                     );
 
                     $bind['store_id'] = $store;
                 } else {
-                    $select->columns(['attr_value' => 'value'], 'default_value');
+                    $select->columns(
+                        ['attribute_id' => 'attribute_id', 'attr_value' => 'value'],
+                        'default_value'
+                    );
                 }
 
                 $result = $connection->fetchPairs($select, $bind);
                 foreach ($result as $attrId => $value) {
-                    $attrCode = $typedAttributes[$table][$attrId];
-                    $attributesData[$attrCode] = $value;
+                    if ($attrId !== '') {
+                        $attrCode = $typedAttributes[$table][$attrId];
+                        $attributesData[$attrCode] = $value;
+                    }
                 }
             }
         }
 
-        if (is_array($attributesData) && sizeof($attributesData) == 1) {
+        if (is_array($attributesData) && count($attributesData) == 1) {
             $attributesData = array_shift($attributesData);
         }
 

@@ -49,6 +49,7 @@
             <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
             <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
             <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
+            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
         </arguments>
     </virtualType>
     <virtualType name="elasticsearchFulltextSearchCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory">
@@ -71,6 +72,7 @@
             <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
             <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
             <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
+            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
         </arguments>
     </virtualType>
     <virtualType name="elasticsearchCategoryCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory">
@@ -93,6 +95,7 @@
             <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
             <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
             <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
+            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
         </arguments>
     </virtualType>
     <virtualType name="elasticsearchAdvancedCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory">
@@ -264,7 +267,7 @@
     </type>
     <virtualType name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\ConnectionManager" type="Magento\Elasticsearch\SearchAdapter\ConnectionManager">
         <arguments>
-            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory</argument>
+            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy</argument>
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </virtualType>
@@ -312,9 +315,6 @@
                 <item name="dynamicBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Dynamic</item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
-        <plugin name="stockedProductsFilterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\StockedProductsFilterPlugin"/>
     </type>
     <type name="Magento\Framework\Indexer\Config\DependencyInfoProvider">
         <plugin name="indexerDependencyUpdaterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\DependencyUpdaterPlugin"/>
@@ -478,7 +478,7 @@
             <argument name="indexTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter</argument>
             <argument name="fieldIndexResolver" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver</argument>
             <argument name="fieldTypeResolver" xsi:type="object">\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver</argument>
-            <argument name="fieldNameResolver" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface</argument>
+            <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
         </arguments>
     </virtualType>
     <virtualType name="elasticsearch5DynamicFieldProvider" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField">

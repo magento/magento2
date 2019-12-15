@@ -31,7 +31,7 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
             packaging.sendCreateLabelRequest();
         });
         packaging.setLabelCreatedCallback(function(response){
-            setLocation("<?php $block->escapeJs($block->escapeUrl($block->getUrl(
+            setLocation("<?= $block->escapeJs($block->escapeUrl($block->getUrl(
                 'sales/order/view',
                 ['order_id' => $block->getShipment()->getOrderId()]
             ))); ?>");

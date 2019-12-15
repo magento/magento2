@@ -17,16 +17,17 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17181"/>
-            </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteVirtualProduct">
+                <argument name="sku" value="{{virtualProductOutOfStock.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

@@ -85,9 +85,11 @@
                 </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="max_order_total" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Maximum Order Total</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="210" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>

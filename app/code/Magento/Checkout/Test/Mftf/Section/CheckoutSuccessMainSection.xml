@@ -14,9 +14,11 @@
         <element name="orderNumber" type="text" selector="div.checkout-success > p:nth-child(1) > span"/>
         <element name="orderNumber22" type="text" selector=".order-number>strong"/>
         <element name="orderLink" type="text" selector="a[href*=order_id].order-number" timeout="30"/>
+        <element name="orderLinks" type="text" selector="a[href*=order_id]" timeout="30"/>
         <element name="orderNumberText" type="text" selector=".checkout-success > p:nth-child(1)"/>
         <element name="continueShoppingButton" type="button" selector=".action.primary.continue" timeout="30"/>
         <element name="createAnAccount" type="button" selector="[data-bind*=&quot;i18n: 'Create an Account'&quot;]" timeout="30"/>
         <element name="printLink" type="button" selector=".print" timeout="30"/>
+        <element name="orderNumberWithoutLink" type="text" selector="//div[contains(@class, 'checkout-success')]//p/span"/>
     </section>
 </sections>

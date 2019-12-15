@@ -68,18 +68,15 @@ class SetPaymentMethodOnCart
         $paymentMethodCode = $paymentData['code'];
 
         $poNumber = $paymentData['purchase_order_number'] ?? null;
-        $additionalData = isset($paymentData['additional_data'])
-            ? $this->additionalDataProviderPool->getData($paymentMethodCode, $paymentData['additional_data'])
-            : [];
+        $additionalData = $this->additionalDataProviderPool->getData($paymentMethodCode, $paymentData);
 
         $payment = $this->paymentFactory->create(
             [
-                'data' =>
-                    [
-                        PaymentInterface::KEY_METHOD => $paymentMethodCode,
-                        PaymentInterface::KEY_PO_NUMBER => $poNumber,
-                        PaymentInterface::KEY_ADDITIONAL_DATA => $additionalData,
-                    ],
+                'data' => [
+                    PaymentInterface::KEY_METHOD => $paymentMethodCode,
+                    PaymentInterface::KEY_PO_NUMBER => $poNumber,
+                    PaymentInterface::KEY_ADDITIONAL_DATA => $additionalData,
+                ],
             ]
         );
 

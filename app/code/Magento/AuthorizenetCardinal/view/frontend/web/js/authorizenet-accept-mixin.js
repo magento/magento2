@@ -56,6 +56,8 @@ define([
             },
 
             /**
+             * Adds cardinal response JWT to payment additional data.
+             *
              * @returns {Object}
              */
             getData: function () {

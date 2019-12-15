@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="DeleteProductActionGroup">
+        <annotations>
+            <description>Deletes the provided Product Name from the Product grid page.</description>
+        </annotations>
         <arguments>
             <argument name="productName" defaultValue=""/>
         </arguments>
+
         <click stepKey="openCatalog" selector="{{AdminMenuSection.catalog}}"/>
         <waitForPageLoad stepKey="waitForCatalogSubmenu" time="5"/>
         <click stepKey="clickOnProducts" selector="{{CatalogSubmenuSection.products}}"/>

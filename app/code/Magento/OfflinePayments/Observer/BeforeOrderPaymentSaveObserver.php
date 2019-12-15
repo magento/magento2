@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * OfflinePayments Observer
- */
 namespace Magento\OfflinePayments\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -14,6 +11,9 @@ use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Model\Checkmo;
 
+/**
+ * Sets payment additional information.
+ */
 class BeforeOrderPaymentSaveObserver implements ObserverInterface
 {
     /**
