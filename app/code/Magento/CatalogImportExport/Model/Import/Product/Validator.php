@@ -10,7 +10,7 @@ use Magento\Framework\Validator\AbstractValidator;
 use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 
 /**
- * Class Validator
+ * The validator that contains all validators for import entity
  *
  * @api
  * @since 100.0.2
@@ -72,7 +72,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         $val = $this->string->cleanString($this->_rowData[$attrCode]);
         if ($type == 'text') {
             $valid = $this->string->strlen($val) <= Product::DB_MAX_TEXT_LENGTH;
-        } else if ($attrCode == Product::COL_SKU) {
+        } elseif ($attrCode == Product::COL_SKU) {
             $valid = $this->string->strlen($val) <= SKU::SKU_MAX_LENGTH;
         } else {
             $valid = $this->string->strlen($val) <= Product::DB_MAX_VARCHAR_LENGTH;

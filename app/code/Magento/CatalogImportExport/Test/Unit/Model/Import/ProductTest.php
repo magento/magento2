@@ -13,8 +13,8 @@ use Magento\ImportExport\Model\Import;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class ProductTest
- * @package Magento\CatalogImportExport\Test\Unit\Model\Import
+ * Tests for \Magento\CatalogImportExport\Model\Import\Product
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

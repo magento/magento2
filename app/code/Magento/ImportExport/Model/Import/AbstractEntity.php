@@ -15,8 +15,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Import entity abstract model
  *
- * @api
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -335,6 +333,8 @@ abstract class AbstractEntity
     }
 
     /**
+     * Gets Error Aggregator
+     *
      * @return ProcessingErrorAggregatorInterface
      */
     public function getErrorAggregator()
@@ -652,6 +652,8 @@ abstract class AbstractEntity
     }
 
     /**
+     * Gets the master attribute code
+     *
      * @return string the master attribute code to use in an import
      */
     public function getMasterAttributeCode()
