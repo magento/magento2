@@ -7,6 +7,7 @@ namespace Magento\Sales\Ui\Component\DataProvider\Order;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -27,6 +28,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
 
     /**
      * Document constructor.
+     *
      * @param AttributeValueFactory $attributeValueFactory
      * @param GroupRepositoryInterface $groupRepository
      */
@@ -40,6 +42,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     public function getCustomAttribute($attributeCode)
     {
@@ -48,10 +51,12 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         }
         return parent::getCustomAttribute($attributeCode);
     }
+
     /**
-     * Update customer group value
      * Method set group code instead id value
+     *
      * @return void
+     * @throws LocalizedException
      */
     private function setCustomerGroupValue()
     {
