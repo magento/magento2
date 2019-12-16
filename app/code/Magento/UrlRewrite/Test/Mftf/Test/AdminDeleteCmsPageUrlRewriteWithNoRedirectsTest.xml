@@ -40,7 +40,7 @@
         </actionGroup>
 
         <!--Delete the URL Rewrite for CMS Page with No redirects-->
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">

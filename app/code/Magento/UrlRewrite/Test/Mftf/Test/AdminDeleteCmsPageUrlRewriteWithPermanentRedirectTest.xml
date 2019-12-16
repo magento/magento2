@@ -40,7 +40,7 @@
         </actionGroup>
 
         <!-- Delete the URL Rewrite for CMS Page with permanent redirect-->
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deletePermanentUrlRewrite">
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deletePermanentUrlRewrite">
             <argument name="requestPath" value="permanentrequestpath.html"/>
         </actionGroup>
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
