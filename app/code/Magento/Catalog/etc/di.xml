@@ -238,11 +238,6 @@
             <argument name="imageUploader" xsi:type="object">Magento\Catalog\CategoryImageUpload</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Category\Attribute\Backend\Image">
-        <arguments>
-            <argument name="imageUploader" xsi:type="object">Magento\Catalog\CategoryImageUpload</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Session">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Catalog\Model\Session\Storage</argument>
