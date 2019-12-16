@@ -56,7 +56,9 @@ $viewModel = $block->getViewModel();
             </div>
         </div>
         <div class="field comment required">
-            <label class="label" for="comment"><span><?= $block->escapeHtml(__('What’s on your mind?')) ?></span></label>
+            <label class="label" for="comment">
+                <span><?= $block->escapeHtml(__('What’s on your mind?')) ?></span>
+            </label>
             <div class="control">
                 <textarea name="comment" 
                           id="comment" 
