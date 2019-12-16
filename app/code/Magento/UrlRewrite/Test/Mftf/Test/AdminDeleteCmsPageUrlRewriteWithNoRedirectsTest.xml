@@ -48,7 +48,7 @@
         </actionGroup>
 
         <!--Search and verify AssertUrlRewriteNotInGrid-->
-        <actionGroup ref="AdminSearchDeletedUrlRewrite" stepKey="searchDeletedUrlRewriteInGrid">
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedUrlRewriteInGrid">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
 
