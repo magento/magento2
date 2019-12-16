@@ -320,7 +320,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->will(
                 $this->returnCallback(
                     function ($class, $params = []) use ($imageUploaderMock) {
-                        if ($class == \Magento\Catalog\CategoryImageUpload::class) {
+                        if ($class == "\Magento\Catalog\CategoryImageUpload") {
                             return $imageUploaderMock;
                         }
 
