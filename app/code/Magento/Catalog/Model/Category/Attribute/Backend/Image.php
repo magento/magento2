@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
+use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\Uploader;
@@ -48,7 +49,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_logger;
 
     /**
-     * @var \Magento\Catalog\Model\ImageUploader
+     * @var ImageUploader
      */
     private $imageUploader;
 
@@ -67,18 +68,22 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
      * @param StoreManagerInterface $storeManager
+     * @param ImageUploader $imageUploader
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        ImageUploader $imageUploader = null
     ) {
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
         $this->_logger = $logger;
         $this->storeManager = $storeManager ??
             ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->imageUploader = $imageUploader ??
+            ObjectManager::getInstance()->get(ImageUploader::class);
     }
 
     /**
@@ -107,13 +112,13 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     private function checkUniqueImageName(string $imageName): string
     {
-        $imageUploader = $this->getImageUploader();
         $mediaDirectory = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $imageAbsolutePath = $mediaDirectory->getAbsolutePath(
-            $imageUploader->getBasePath() . DIRECTORY_SEPARATOR . $imageName
+            $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . $imageName
         );
 
-        $imageName = Uploader::getNewFilename($imageAbsolutePath);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $imageName = call_user_func([Uploader::class, 'getNewFilename'], $imageAbsolutePath);
 
         return $imageName;
     }
@@ -138,7 +143,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 /** @var StoreInterface $store */
                 $store = $this->storeManager->getStore();
                 $baseMediaDir = $store->getBaseMediaDir();
-                $newImgRelativePath = $this->getImageUploader()->moveFileFromTmp($imageName, true);
+                $newImgRelativePath = $this->imageUploader->moveFileFromTmp($imageName, true);
                 $value[0]['url'] = '/' . $baseMediaDir . '/' . $newImgRelativePath;
                 $value[0]['name'] = $value[0]['url'];
             } catch (\Exception $e) {
@@ -162,23 +167,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         return parent::beforeSave($object);
-    }
-
-    /**
-     * Get Instance of Category Image Uploader.
-     *
-     * @return \Magento\Catalog\Model\ImageUploader
-     *
-     * @deprecated 101.0.0
-     */
-    private function getImageUploader()
-    {
-        if ($this->imageUploader === null) {
-            $this->imageUploader = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get("\Magento\Catalog\CategoryImageUpload");
-        }
-
-        return $this->imageUploader;
     }
 
     /**
