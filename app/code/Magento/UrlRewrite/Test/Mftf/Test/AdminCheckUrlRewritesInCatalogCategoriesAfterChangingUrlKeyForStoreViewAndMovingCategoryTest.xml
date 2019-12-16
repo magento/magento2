@@ -29,6 +29,10 @@
                 <requiredEntity createDataKey="createSecondCategory"/>
             </createData>
 
+            <!-- Reindex and flush the cache -->
+            <magentoCLI command="indexer:reindex" stepKey="runReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+
             <!-- Log in to backend -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
