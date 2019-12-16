@@ -172,24 +172,25 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage "email" is not a valid email address.
+     * @dataProvider invalidEmailAddressDataProvider
+     *
+     * @param string $email
+     * @throws \Exception
      */
-    public function testCreateCustomerIfEmailIsNotValid()
+    public function testCreateCustomerIfEmailIsNotValid(string $email)
     {
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $currentPassword = 'test123#';
-        $newEmail = 'email';
+        $firstname = 'Richard';
+        $lastname = 'Rowe';
+        $password = 'test123#';
 
         $query = <<<QUERY
 mutation {
     createCustomer(
         input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            email: "{$newEmail}"
-            password: "{$currentPassword}"
+            firstname: "{$firstname}"
+            lastname: "{$lastname}"
+            email: "{$email}"
+            password: "{$password}"
             is_subscribed: true
         }
     ) {
@@ -203,7 +204,27 @@ mutation {
     }
 }
 QUERY;
+        $this->expectExceptionMessage('"' . $email . '" is not a valid email address.');
         $this->graphQlMutation($query);
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidEmailAddressDataProvider(): array
+    {
+        return [
+            ['plainaddress'],
+            ['jØrgen@somedomain.com'],
+            ['#@%^%#$@#$@#.com'],
+            ['@example.com'],
+            ['Joe Smith <email@example.com>'],
+            ['email.example.com'],
+            ['email@example@example.com'],
+            ['email@example.com (Joe Smith)'],
+            ['email@example'],
+            ['“email”@example.com'],
+        ];
     }
 
     /**
