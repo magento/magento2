@@ -416,7 +416,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please rename the folder using only letters, numbers, underscores and dashes.')
+                __('Please rename the folder using only Latin letters, numbers, underscores and dashes.')
             );
         }
 
