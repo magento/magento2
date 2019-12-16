@@ -233,14 +233,6 @@ QUERY;
     public function dataProviderSetPaymentMethodWithoutRequiredParameters(): array
     {
         return [
-            'missed_cart_id' => [
-                'payment_method: {code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"}',
-                'Field SetPaymentMethodOnCartInput.cart_id of required type String! was not provided.'
-            ],
-            'missed_payment_method' => [
-                'cart_id: "cart_id_value"',
-                'Field SetPaymentMethodOnCartInput.payment_method of required type PaymentMethodInput! was not provided'
-            ],
             'missed_payment_method_code' => [
                 'cart_id: "cart_id_value", payment_method: {code: ""}',
                 'Required parameter "code" for "payment_method" is missing.'
