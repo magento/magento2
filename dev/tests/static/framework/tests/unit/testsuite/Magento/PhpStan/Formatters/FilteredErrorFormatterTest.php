@@ -33,7 +33,7 @@ class FilteredErrorFormatterTest extends ErrorFormatterTestCase
      */
     public function testFormatErrors(
         string $message,
-        int $exitCode
+        int $exitCode,
         array $fileErrors,
         string $expected
     ): void {
