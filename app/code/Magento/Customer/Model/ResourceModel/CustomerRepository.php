@@ -7,24 +7,25 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
-use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Delegation\Data\NewOperation;
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -203,7 +204,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customer->setAddresses([]);
         $customerData = $this->extensibleDataObjectConverter->toNestedArray($customer, [], CustomerInterface::class);
         $customer->setAddresses($origAddresses);
-        /** @var Customer $customerModel */
+        /** @var CustomerModel $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());

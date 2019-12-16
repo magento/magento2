@@ -340,7 +340,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     public function passwordResetConfirmation(CustomerInterface $customer)
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $customer->getStoreId();
         if (!$storeId) {
             $storeId = $this->getWebsiteStoreId($customer);
         }

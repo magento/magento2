@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6092"/>
             <group value="LayeredNavigation"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="attribute"/>

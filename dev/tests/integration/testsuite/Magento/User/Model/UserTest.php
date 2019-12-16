@@ -6,7 +6,6 @@
 
 namespace Magento\User\Model;
 
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Encryption\Encryptor;
 
 /**
@@ -30,11 +29,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
     protected static $_newRole;
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * @var Encryptor
      */
     private $encryptor;
@@ -46,9 +40,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
         );
         $this->_dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Stdlib\DateTime::class
-        );
-        $this->serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            Json::class
         );
         $this->encryptor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             Encryptor::class
@@ -133,7 +124,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->_model->saveExtra(['test' => 'val']);
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $extra = $this->serializer->unserialize($this->_model->getExtra());
+        $extra = $this->_model->getExtra();
         $this->assertEquals($extra['test'], 'val');
     }
 

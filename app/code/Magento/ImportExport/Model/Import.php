@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -107,7 +108,7 @@ class Import extends AbstractModel
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
     /**
-     * default empty attribute value constant
+     * Import empty attribute default value
      */
     const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
     const DEFAULT_SIZE = 50;
@@ -464,8 +465,28 @@ class Import extends AbstractModel
     {
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
-        $this->importHistoryModel->updateReport($this);
+        //Validating images temporary directory path if the constraint has been provided
+        if ($this->hasData('images_base_directory')
+            && $this->getData('images_base_directory') instanceof Filesystem\Directory\ReadInterface
+        ) {
+            /** @var Filesystem\Directory\ReadInterface $imagesDirectory */
+            $imagesDirectory = $this->getData('images_base_directory');
+            if (!$imagesDirectory->isReadable()) {
+                $rootWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
+                $rootWrite->create($imagesDirectory->getAbsolutePath());
+            }
+            try {
+                $this->setData(
+                    self::FIELD_NAME_IMG_FILE_DIR,
+                    $imagesDirectory->getAbsolutePath($this->getData(self::FIELD_NAME_IMG_FILE_DIR))
+                );
+                $this->_getEntityAdapter()->setParameters($this->getData());
+            } catch (ValidatorException $exception) {
+                throw new LocalizedException(__('Images file directory is outside required directory'), $exception);
+            }
+        }
 
+        $this->importHistoryModel->updateReport($this);
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
         $result = $this->processImport();
@@ -547,9 +568,15 @@ class Import extends AbstractModel
         $entity = $this->getEntity();
         /** @var $uploader Uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
+        $uploader->setAllowedExtensions(['csv', 'zip']);
         $uploader->skipDbProcessing(true);
         $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
-        $result = $uploader->save($this->getWorkingDir(), $fileName);
+        try {
+            $result = $uploader->save($this->getWorkingDir(), $fileName);
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('The file cannot be uploaded.'));
+        }
+
         // phpcs:disable Magento2.Functions.DiscouragedFunction.Discouraged
         $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
 

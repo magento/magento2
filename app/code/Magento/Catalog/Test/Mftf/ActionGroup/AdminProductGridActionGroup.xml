@@ -389,7 +389,7 @@
         <waitForPageLoad stepKey="waitForGridLoad"/>
     </actionGroup>
 
-    <!--Filter and select the the product  -->
+    <!--Filter and select the product  -->
     <actionGroup name="filterAndSelectProduct">
         <annotations>
             <description>Goes to the Admin Products grid. Filters the Product grid by the provided Product SKU.</description>
@@ -422,5 +422,24 @@
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="waitForModalPopUp"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
         <waitForPageLoad stepKey="waitForGridLoad"/>
+    </actionGroup>
+
+    <actionGroup name="deleteAllProductsUsingProductGrid">
+        <annotations>
+            <description>Deletes all products in Admin Products grid page.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openAdminGridProductsPage"/>
+        <waitForPageLoad time="60" stepKey="waitForPageFullyLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clearGridFilters"/>
+
+        <conditionalClick selector="{{AdminProductGridSection.multicheckDropdown}}" dependentSelector="{{AdminDataGridTableSection.dataGridEmpty}}" visible="false" stepKey="openMulticheckDropdown"/>
+        <conditionalClick selector="{{AdminProductGridSection.multicheckOption('Select All')}}" dependentSelector="{{AdminDataGridTableSection.dataGridEmpty}}" visible="false" stepKey="selectAllProductsInGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitGridIsEmpty"/>
     </actionGroup>
 </actionGroups>

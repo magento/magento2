@@ -34,7 +34,7 @@
             <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!-- Go to the first product edit page -->
@@ -144,6 +144,8 @@
 
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Go to the admin grid and see the uploaded image -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex3"/>
@@ -186,7 +188,7 @@
         <after>
             <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!-- Go to the product edit page -->

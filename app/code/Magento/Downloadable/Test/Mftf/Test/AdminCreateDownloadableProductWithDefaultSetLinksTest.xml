@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateDownloadableProductWithLinkTest">
+    <test name="AdminCreateDownloadableProductWithDefaultSetLinksTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="Create Downloadable Product"/>
@@ -20,13 +20,17 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-
+            <!-- Reindex and clear page cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
@@ -72,6 +76,8 @@
 
         <!-- Save product -->
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Find downloadable product in grid -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>

@@ -70,6 +70,9 @@ class UpdateCustomer implements ResolverInterface
         if (empty($args['input']) || !is_array($args['input'])) {
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
+        if (isset($args['input']['date_of_birth'])) {
+            $args['input']['dob'] = $args['input']['date_of_birth'];
+        }
 
         $customer = $this->getCustomer->execute($context);
         $this->updateCustomerAccount->execute(

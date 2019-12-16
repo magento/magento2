@@ -27,6 +27,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Reports/_files/viewed_products.php
+     * @magentoConfigFixture default/reports/options/enabled 1
      */
     public function testGetItems()
     {

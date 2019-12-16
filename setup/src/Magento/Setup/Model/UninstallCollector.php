@@ -55,7 +55,7 @@ class UninstallCollector
         /** @var \Magento\Setup\Module\DataSetup $setup */
         $setup = $this->dataSetupFactory->create();
         $result = $setup->getConnection()->select()->from($setup->getTable('setup_module'), ['module']);
-        if (isset($filterModules) && sizeof($filterModules) > 0) {
+        if (isset($filterModules) && count($filterModules) > 0) {
             $result->where('module in( ? )', $filterModules);
         }
         // go through modules

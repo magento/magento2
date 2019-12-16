@@ -42,10 +42,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             "{$optionTable2}.option_id={$valueExpr} AND {$optionTable2}.store_id=?",
             $collection->getStoreId()
         );
-        $valueExpr = $connection->getCheckSql(
-            "{$optionTable2}.value_id IS NULL",
-            "{$optionTable1}.option_id",
-            "{$optionTable2}.option_id"
+        $valueIdExpr = $connection->getIfNullSql(
+            "{$optionTable2}.option_id",
+            "{$optionTable1}.option_id"
+        );
+        $valueExpr = $connection->getIfNullSql(
+            "{$optionTable2}.value",
+            "{$optionTable1}.value"
         );
 
         $collection->getSelect()->joinLeft(
@@ -55,7 +58,10 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->joinLeft(
             [$optionTable2 => $this->getTable('eav_attribute_option_value')],
             $tableJoinCond2,
-            [$attributeCode => $valueExpr]
+            [
+                $attributeCode => $valueIdExpr,
+                $attributeCode . '_value' => $valueExpr,
+            ]
         );
 
         return $this;

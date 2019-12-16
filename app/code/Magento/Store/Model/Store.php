@@ -53,7 +53,7 @@ class Store extends AbstractExtensibleModel implements
     const ENTITY = 'store';
 
     /**
-     * Custom entry point param
+     * Parameter used to determine app context.
      */
     const CUSTOM_ENTRY_POINT_PARAM = 'custom_entry_point';
 
@@ -104,7 +104,7 @@ class Store extends AbstractExtensibleModel implements
     const ADMIN_CODE = 'admin';
 
     /**
-     * Cache tag
+     * Tag to use to cache stores.
      */
     const CACHE_TAG = 'store';
 
