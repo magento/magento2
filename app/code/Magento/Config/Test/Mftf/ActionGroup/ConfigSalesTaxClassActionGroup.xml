@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SetTaxClassForShipping">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Sets 'Tax Class for Shipping' to 'Taxable Goods'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+        
         <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{SalesConfigSection.TaxClassesTab}}" dependentSelector="{{SalesConfigSection.CheckIfTaxClassesTabExpand}}" visible="true" stepKey="expandTaxClassesTab"/>
@@ -16,9 +20,14 @@
         <uncheckOption selector="{{SalesConfigSection.EnableTaxClassForShipping}}" stepKey="uncheckUseSystemValue"/>
         <selectOption selector="{{SalesConfigSection.ShippingTaxClass}}" userInput="Taxable Goods" stepKey="setShippingTaxClass"/>
         <click selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
     </actionGroup>
+    
     <actionGroup name="ResetTaxClassForShipping">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Sets 'Tax Class for Shipping' to 'None'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
         <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxConfigPagetoReset"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <conditionalClick selector="{{SalesConfigSection.TaxClassesTab}}" dependentSelector="{{SalesConfigSection.CheckIfTaxClassesTabExpand}}" visible="true" stepKey="openTaxClassTab"/>
@@ -28,10 +37,15 @@
         <click selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
     </actionGroup>
+    
     <actionGroup name="SetTaxApplyOnSetting">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Sets 'Apply Tax On' to the provided value. Clicks on the Save button</description>
+        </annotations>
         <arguments>
             <argument name="userInput" type="string"/>
         </arguments>
+        
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" visible="false" stepKey="openTaxCalcSettingsSection"/>
         <scrollTo selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" x="0" y="-80" stepKey="goToCheckbox"/>
         <uncheckOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" stepKey="enableApplyTaxOnSetting"/>
@@ -42,10 +56,15 @@
         <waitForPageLoad stepKey="waitForConfigSaved"/>
         <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
+    
     <actionGroup name="DisableTaxApplyOnOriginalPrice">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Sets 'Apply Tax On' to the provided value. Clicks on the Save button.</description>
+        </annotations>
         <arguments>
             <argument name="userInput" type="string"/>
         </arguments>
+        
         <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" visible="false" stepKey="openTaxCalcSettingsSection"/>

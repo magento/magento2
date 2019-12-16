@@ -43,10 +43,8 @@
             <data name="integration/data/identity_link_url" xsi:type="string">&lt;script&gt;alert(&apos;XSS&apos;)&lt;/script&gt;</data>
             <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertUrlValidationErrorGenerated" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
         </variation>
         <variation name="CreateIntegrationEntityTestVariation5" summary="Input fields with javascript tag" ticketId="MAGETWO-16819">
             <data name="integration/data/name" xsi:type="string">&lt;IMG SRC=javascript:alert(&apos;XSS-%isolation%&apos;)&gt;</data>
@@ -55,10 +53,8 @@
             <data name="integration/data/identity_link_url" xsi:type="string">&lt;IMG SRC=javascript:alert(&apos;XSS&apos;)&gt;</data>
             <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertUrlValidationErrorGenerated" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
         </variation>
         <variation name="CreateIntegrationEntityTestVariation6" summary="Input fields with single quote" ticketId="MAGETWO-16820">
             <data name="integration/data/name" xsi:type="string">name-%isolation%&apos; OR &apos;a&apos;=&apos;a</data>
@@ -67,10 +63,8 @@
             <data name="integration/data/identity_link_url" xsi:type="string">link&apos; OR &apos;a&apos;=&apos;a</data>
             <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertUrlValidationErrorGenerated" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
         </variation>
         <variation name="CreateIntegrationEntityTestVariation7" summary="Input fields with double quote" ticketId="MAGETWO-16820">
             <data name="integration/data/name" xsi:type="string">name-%isolation%&quot; OR &quot;a&quot;=&quot;a</data>
@@ -79,10 +73,8 @@
             <data name="integration/data/identity_link_url" xsi:type="string">link&quot; OR &quot;a&quot;=&quot;a</data>
             <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertUrlValidationErrorGenerated" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
         </variation>
         <variation name="CreateIntegrationEntityTestVariation8" summary="Input fields with single and double quote" ticketId="MAGETWO-16820">
             <data name="integration/data/name" xsi:type="string">name-%isolation%&quot; OR &apos;a&quot;=&apos;a</data>
@@ -91,10 +83,8 @@
             <data name="integration/data/identity_link_url" xsi:type="string">link&quot; OR &apos;a&quot;=&apos;a</data>
             <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertUrlValidationErrorGenerated" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
         </variation>
         <variation name="CreateIntegrationEntityTestVariation9" summary="Invalid Email: abc.example.com" ticketId="MAGETWO-16755">
             <data name="integration/data/name" xsi:type="string">Integration%isolation%</data>

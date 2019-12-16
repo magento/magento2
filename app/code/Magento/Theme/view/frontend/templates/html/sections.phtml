@@ -10,13 +10,12 @@
 
 $group = $block->getGroupName();
 $groupCss = $block->getGroupCss();
-$groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"tabs":{"openedState":"active"}}';
 ?>
 <?php if ($detailedInfoGroup = $block->getGroupChildNames($group, 'getChildHtml')) :?>
     <div class="sections <?= $block->escapeHtmlAttr($groupCss) ?>">
         <?php $layout = $block->getLayout(); ?>
         <div class="section-items <?= $block->escapeHtmlAttr($groupCss) ?>-items"
-             data-mage-init='<?= $block->escapeHtmlAttr($groupBehavior) ?>'>
+             data-mage-init='{"tabs":{"openedState":"active"}}'>
             <?php foreach ($detailedInfoGroup as $name) :?>
                 <?php
                     $html = $layout->renderElement($name);
@@ -30,7 +29,7 @@ $groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"
                      data-role="collapsible">
                     <a class="<?= $block->escapeHtmlAttr($groupCss) ?>-item-switch"
                        data-toggle="switch" href="#<?= $block->escapeHtmlAttr($alias) ?>">
-                        <?= $block->escapeHtml($label) ?>
+                        <?= /* @noEscape */ $label ?>
                     </a>
                 </div>
                 <div class="section-item-content <?= $block->escapeHtmlAttr($groupCss) ?>-item-content"

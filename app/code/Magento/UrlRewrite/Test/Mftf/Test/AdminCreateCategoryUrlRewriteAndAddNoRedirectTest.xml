@@ -29,7 +29,7 @@
         <!--Open Url Rewrite Index Page and update the Custom Url Rewrite, Store, Request Path, Redirect Type and Description -->
         <actionGroup ref="AdminAddUrlRewrite" stepKey="addUrlRewrite">
             <argument name="category" value="$$category.name$$"/>
-            <argument name="customUrlRewriteValue" value="For Category'"/>
+            <argument name="customUrlRewriteValue" value="For Category"/>
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="newrequestpath.html"/>
             <argument name="redirectTypeValue" value="No"/>

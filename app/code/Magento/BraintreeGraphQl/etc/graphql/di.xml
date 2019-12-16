@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="braintree" xsi:type="object">Magento\BraintreeGraphQl\Model\BraintreeDataProvider</item>
+                <item name="braintree_cc_vault" xsi:type="object">Magento\BraintreeGraphQl\Model\BraintreeVaultDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart">
+        <plugin name="braintree_generate_vault_nonce" type="Magento\BraintreeGraphQl\Plugin\SetVaultPaymentNonce" />
+    </type>
+</config>

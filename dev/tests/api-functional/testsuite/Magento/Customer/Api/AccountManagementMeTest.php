@@ -8,6 +8,7 @@ namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
@@ -23,6 +24,9 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
 {
     const RESOURCE_PATH = '/V1/customers/me';
     const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
+    const REPO_SERVICE = 'customerCustomerRepositoryV1';
+    const ACCOUNT_SERVICE = 'customerAccountManagementV1';
+    const SERVICE_VERSION = 'V1';
 
     /**
      * @var CustomerRepositoryInterface
@@ -60,12 +64,15 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
     private $dataObjectProcessor;
 
     /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $tokenService;
+
+    /**
      * Execute per test initialization.
      */
     public function setUp()
     {
-        $this->_markTestAsRestOnly();
-
         $this->customerRegistry = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\CustomerRegistry::class
         );
@@ -80,6 +87,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
 
         $this->customerHelper = new CustomerHelper();
         $this->customerData = $this->customerHelper->createSampleCustomer();
+        $this->tokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
 
         // get token
         $this->resetTokenForCustomerSampleData();
@@ -114,8 +122,17 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'token' => $this->token,
             ],
+            'soap' => [
+                'service' => self::ACCOUNT_SERVICE,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::ACCOUNT_SERVICE .'ChangePasswordById',
+                'token' => $this->token
+            ]
         ];
         $requestData = ['currentPassword' => 'test@123', 'newPassword' => '123@test'];
+        if (TESTS_WEB_API_ADAPTER === 'soap') {
+            $requestData['customerId'] = 0;
+        }
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
 
         $customerResponseData = $this->customerAccountManagement
@@ -141,6 +158,12 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'token' => $this->token,
             ],
+            'soap' => [
+                'service' => self::REPO_SERVICE,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::REPO_SERVICE .'SaveSelf',
+                'token' => $this->token
+            ]
         ];
         $requestData = ['customer' => $updatedCustomerData];
 
@@ -171,8 +194,18 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
                 'token' => $this->token,
             ],
+            'soap' => [
+                'service' => self::REPO_SERVICE,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::REPO_SERVICE .'GetSelf',
+                'token' => $this->token
+            ]
         ];
-        $customerDetailsResponse = $this->_webApiCall($serviceInfo);
+        $arguments = [];
+        if (TESTS_WEB_API_ADAPTER === 'soap') {
+            $arguments['customerId'] = 0;
+        }
+        $customerDetailsResponse = $this->_webApiCall($serviceInfo, $arguments);
 
         unset($expectedCustomerDetails['custom_attributes']);
         unset($customerDetailsResponse['custom_attributes']); //for REST
@@ -188,12 +221,28 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'token' => $this->token,
             ],
+            'soap' => [
+                'service' => self::ACCOUNT_SERVICE,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::ACCOUNT_SERVICE .'ActivateById',
+                'token' => $this->token
+            ]
         ];
-        $requestData = ['confirmationKey' => $this->customerData[CustomerInterface::CONFIRMATION]];
-        $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($this->customerData[CustomerInterface::ID], $customerResponseData[CustomerInterface::ID]);
-        // Confirmation key is removed after confirmation
-        $this->assertFalse(isset($customerResponseData[CustomerInterface::CONFIRMATION]));
+
+        $requestData = ['confirmationKey' => CustomerHelper::CONFIRMATION];
+        if (TESTS_WEB_API_ADAPTER === 'soap') {
+            $requestData['customerId'] = 0;
+        }
+
+        try {
+            $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
+            $this->assertEquals(
+                $this->customerData[CustomerInterface::ID],
+                $customerResponseData[CustomerInterface::ID]
+            );
+        } catch (\Exception $e) {
+            $this->fail('Customer is not activated.');
+        }
     }
 
     /**
@@ -220,6 +269,12 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
                 'token' => $this->token,
             ],
+            'soap' => [
+                'service' => self::ACCOUNT_SERVICE,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::ACCOUNT_SERVICE .'GetMyDefaultBillingAddress',
+                'token' => $this->token
+            ]
         ];
         $requestData = ['customerId' => $fixtureCustomerId];
         $addressData = $this->_webApiCall($serviceInfo, $requestData);
@@ -241,6 +296,12 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
                 'token' => $this->token,
             ],
+            'soap' => [
+                'service' => self::ACCOUNT_SERVICE,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::ACCOUNT_SERVICE .'GetMyDefaultShippingAddress',
+                'token' => $this->token
+            ]
         ];
         $requestData = ['customerId' => $fixtureCustomerId];
         $addressData = $this->_webApiCall($serviceInfo, $requestData);
@@ -324,14 +385,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
      */
     protected function resetTokenForCustomer($username, $password)
     {
-        // get customer ID token
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH_CUSTOMER_TOKEN,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-        ];
-        $requestData = ['username' => $username, 'password' => $password];
-        $this->token = $this->_webApiCall($serviceInfo, $requestData);
+        $this->token = $this->tokenService->createCustomerAccessToken($username, $password);
+        $this->customerRegistry->remove($this->customerRepository->get($username)->getId());
     }
 }

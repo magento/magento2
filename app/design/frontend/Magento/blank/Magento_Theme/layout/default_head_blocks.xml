@@ -10,11 +10,6 @@
         <css src="css/styles-m.css"/>
         <css src="css/styles-l.css" media="screen and (min-width: 768px)"/>
         <css src="css/print.css" media="print"/>
-        <font src="fonts/opensans/light/opensans-300.woff2"/>
-        <font src="fonts/opensans/regular/opensans-400.woff2"/>
-        <font src="fonts/opensans/semibold/opensans-600.woff2"/>
-        <font src="fonts/opensans/bold/opensans-700.woff2"/>
-        <font src="fonts/Luma-Icons.woff2"/>
         <meta name="format-detection" content="telephone=no"/>
     </head>
 </page>

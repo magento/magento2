@@ -8,7 +8,7 @@
 ?>
 <?php $_item = $block->getItem() ?>
 <tr id="order-item-row-<?= $block->escapeHtmlAttr($_item->getId()) ?>">
-    <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
+    <td class="col name" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>">
         <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
         <?php if ($_options = $block->getItemOptions()) : ?>
             <dl class="item-options links">
@@ -51,39 +51,39 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></td>
-    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+    <td class="col sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></td>
+    <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Price')) ?>">
         <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
+    <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>">
         <ul class="items-qty">
             <?php if ($block->getItem()->getQtyOrdered() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Ordered')) ?></span>
-                    <span class="content"><?= $block->escapeHtml($block->getItem()->getQtyOrdered()*1) ?></span>
+                    <span class="content"><?= (float)$block->getItem()->getQtyOrdered() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($block->getItem()->getQtyShipped() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Shipped')) ?></span>
-                    <span class="content"><?= $block->escapeHtml($block->getItem()->getQtyShipped() * 1) ?></span>
+                    <span class="content"><?= (float)$block->getItem()->getQtyShipped() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($block->getItem()->getQtyCanceled() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Canceled')) ?></span>
-                    <span class="content"><?= $block->escapeHtml($block->getItem()->getQtyCanceled()*1) ?></span>
+                    <span class="content"><?= (float)$block->getItem()->getQtyCanceled() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($block->getItem()->getQtyRefunded() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Refunded')) ?></span>
-                    <span class="content"><?= $block->escapeHtml($block->getItem()->getQtyRefunded()*1) ?></span>
+                    <span class="content"><?= (float)$block->getItem()->getQtyRefunded() * 1 ?></span>
                 </li>
             <?php endif; ?>
         </ul>
     </td>
-    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+    <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>
     </td>
 </tr>

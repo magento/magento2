@@ -1,0 +1,9 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="masonry-image-block" ko-style="$col.getStyles($row())" attr="'data-id': $col.getId($row())">
+    <img attr="src: $col.getUrl($row())" css="$col.getClasses($row())" click="function(){ expandPreview($row()) }" data-role="thumbnail"/>
+</div>

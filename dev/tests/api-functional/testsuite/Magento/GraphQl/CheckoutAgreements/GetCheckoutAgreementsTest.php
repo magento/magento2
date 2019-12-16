@@ -11,13 +11,8 @@ use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 use Magento\CheckoutAgreements\Model\Agreement as AgreementModel;
 use Magento\CheckoutAgreements\Model\AgreementFactory;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement;
-use Magento\Config\Model\ResourceModel\Config;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -26,34 +21,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class GetCheckoutAgreementsTest extends GraphQlAbstract
 {
     /**
-     * @var string
-     */
-    private $agreementsXmlConfigPath = 'checkout/options/enable_agreements';
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->objectManager = Bootstrap::getObjectManager();
-
-        // TODO: remove usage of the Config, use ConfigFixture instead https://github.com/magento/graphql-ce/issues/167
-        $this->config = $this->objectManager->get(Config::class);
-        $this->saveAgreementConfig(1);
-    }
-
-    /**
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
+     * @magentoConfigFixture default_store checkout/options/enable_agreements 1
      */
     public function testGetActiveAgreement()
     {
@@ -76,6 +46,7 @@ class GetCheckoutAgreementsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture fixture_second_store_store checkout/options/enable_agreements 1
      */
     public function testGetActiveAgreementOnSecondStore()
     {
@@ -103,6 +74,7 @@ class GetCheckoutAgreementsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture fixture_second_store_store checkout/options/enable_agreements 1
      */
     public function testGetActiveAgreementFromSecondStoreOnDefaultStore()
     {
@@ -133,11 +105,11 @@ class GetCheckoutAgreementsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
+     * @magentoConfigFixture default_store checkout/options/enable_agreements 0
      */
     public function testDisabledAgreements()
     {
         $query = $this->getQuery();
-        $this->saveAgreementConfig(0);
 
         $response = $this->graphQlQuery($query);
 
@@ -174,62 +146,16 @@ QUERY;
      */
     private function assignAgreementsToStore(string $storeCode, string $agreementsName): void
     {
-        $agreementsFactory = $this->objectManager->get(AgreementFactory::class);
+        $agreementsFactory = ObjectManager::getInstance()->get(AgreementFactory::class);
         /** @var Agreement $agreementsResource */
-        $agreementsResource = $this->objectManager->get(Agreement::class);
+        $agreementsResource = ObjectManager::getInstance()->get(Agreement::class);
         /** @var StoreManagerInterface $storeManager */
-        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $store = $storeManager->getStore($storeCode);
         /** @var AgreementModel $agreements */
         $agreements = $agreementsFactory->create();
         $agreementsResource->load($agreements, $agreementsName, AgreementInterface::NAME);
         $agreements->setData('stores', [$store->getId()]);
         $agreementsResource->save($agreements);
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->deleteAgreementConfig();
-    }
-
-    /**
-     * @param int $value
-     * @param StoreInterface $store
-     */
-    private function saveAgreementConfig(int $value): void
-    {
-        $this->config->saveConfig(
-            $this->agreementsXmlConfigPath,
-            $value,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            0
-        );
-
-        $this->reinitConfig();
-    }
-
-    /**
-     * Delete config
-     *
-     * @return void
-     */
-    private function deleteAgreementConfig(): void
-    {
-        $this->config->deleteConfig(
-            $this->agreementsXmlConfigPath,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            0
-        );
-
-        $this->reinitConfig();
-    }
-
-    private function reinitConfig(): void
-    {
-        /** @var ReinitableConfigInterface $config */
-        $config = $this->objectManager->get(ReinitableConfigInterface::class);
-        $config->reinit();
     }
 }

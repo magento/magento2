@@ -30,7 +30,7 @@
                 <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a cart price rule  -->
@@ -61,6 +61,9 @@
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitFormToReload1"/>
         <click selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" stepKey="expandCouponSection2"/>
+
+        <!-- Assert coupon codes grid header is correct -->
+        <see selector="{{AdminCartPriceRulesFormSection.couponGridUsedHeader}}" userInput="Used" stepKey="seeCorrectUsedHeader"/>
 
         <!-- Grab a coupon code and hold on to it for later -->
         <grabTextFrom selector="{{AdminCartPriceRulesFormSection.generatedCouponByIndex('1')}}" stepKey="grabCouponCode"/>

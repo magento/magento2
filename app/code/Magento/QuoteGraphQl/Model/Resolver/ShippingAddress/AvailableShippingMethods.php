@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * @inheritdoc
@@ -34,23 +34,15 @@ class AvailableShippingMethods implements ResolverInterface
     private $shippingMethodConverter;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param ShippingMethodConverter $shippingMethodConverter
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ExtensibleDataObjectConverter $dataObjectConverter,
-        ShippingMethodConverter $shippingMethodConverter,
-        StoreManagerInterface $storeManager
+        ShippingMethodConverter $shippingMethodConverter
     ) {
         $this->dataObjectConverter = $dataObjectConverter;
         $this->shippingMethodConverter = $shippingMethodConverter;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -81,7 +73,10 @@ class AvailableShippingMethods implements ResolverInterface
                     [],
                     ShippingMethodInterface::class
                 );
-                $methods[] = $this->processMoneyTypeData($methodData, $cart->getQuoteCurrencyCode());
+                $methods[] = $this->processMoneyTypeData(
+                    $methodData,
+                    $cart->getQuoteCurrencyCode()
+                );
             }
         }
         return $methods;
@@ -101,11 +96,8 @@ class AvailableShippingMethods implements ResolverInterface
             $data['amount'] = ['value' => $data['amount'], 'currency' => $quoteCurrencyCode];
         }
 
-        if (isset($data['base_amount'])) {
-            /** @var Currency $currency */
-            $currency = $this->storeManager->getStore()->getBaseCurrency();
-            $data['base_amount'] = ['value' => $data['base_amount'], 'currency' => $currency->getCode()];
-        }
+        /** @deprecated The field should not be used on the storefront */
+        $data['base_amount'] = null;
 
         if (isset($data['price_excl_tax'])) {
             $data['price_excl_tax'] = ['value' => $data['price_excl_tax'], 'currency' => $quoteCurrencyCode];

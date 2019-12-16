@@ -10,7 +10,6 @@ namespace Magento\SwatchesGraphQl\Plugin\Filters;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters;
 use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
-use Magento\Framework\GraphQl\Query\EnumLookup;
 
 /**
  * Plugin to add swatch data to filters data from filters data provider.
@@ -33,28 +32,20 @@ class DataProviderPlugin
     private $renderLayered;
 
     /**
-     * @var EnumLookup
-     */
-    private $enumLookup;
-
-    /**
-     * DataProviderPlugin constructor.
+     * Filters constructor.
      *
      * @param FiltersProvider $filtersProvider
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      * @param \Magento\Swatches\Block\LayeredNavigation\RenderLayered $renderLayered
-     * @param EnumLookup $enumLookup
      */
     public function __construct(
         FiltersProvider $filtersProvider,
         \Magento\Swatches\Helper\Data $swatchHelper,
-        \Magento\Swatches\Block\LayeredNavigation\RenderLayered $renderLayered,
-        EnumLookup $enumLookup
+        \Magento\Swatches\Block\LayeredNavigation\RenderLayered $renderLayered
     ) {
         $this->filtersProvider = $filtersProvider;
         $this->swatchHelper = $swatchHelper;
         $this->renderLayered = $renderLayered;
-        $this->enumLookup = $enumLookup;
     }
 
     /**
@@ -63,12 +54,19 @@ class DataProviderPlugin
      * @param Filters $subject
      * @param \Closure $proceed
      * @param string $layerType
+     * @param array|null $attributesToFilter
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
-    public function aroundGetData(Filters $subject, \Closure $proceed, string $layerType) : array
-    {
+    public function aroundGetData(
+        Filters $subject,
+        \Closure $proceed,
+        string $layerType,
+        $attributesToFilter = null
+    ) : array {
         $swatchFilters = [];
         /** @var AbstractFilter $filter */
         foreach ($this->filtersProvider->getFilters($layerType) as $filter) {
@@ -79,7 +77,7 @@ class DataProviderPlugin
             }
         }
 
-        $filtersData = $proceed($layerType);
+        $filtersData = $proceed($layerType, $attributesToFilter);
 
         foreach ($filtersData as $groupKey => $filterGroup) {
             /** @var AbstractFilter $swatchFilter */
@@ -89,12 +87,8 @@ class DataProviderPlugin
                     foreach ($filterGroup['filter_items'] as $itemKey => $filterItem) {
                         foreach ((array)$swatchData['swatches'] as $swatchKey => $swatchDataItem) {
                             if ($filterItem['value_string'] == $swatchKey) {
-                                $enumSwatchType = $this->enumLookup->getEnumValueFromField(
-                                    'SwatchTypeEnum',
-                                    $swatchDataItem['type']
-                                );
                                 $filtersData[$groupKey]['filter_items'][$itemKey]['swatch_data'] = [
-                                    'type' => $enumSwatchType,
+                                    'type' => $swatchDataItem['type'],
                                     'value' => $swatchDataItem['value']
                                 ];
                             }
@@ -106,4 +100,5 @@ class DataProviderPlugin
 
         return $filtersData;
     }
+    //phpcs:enable
 }

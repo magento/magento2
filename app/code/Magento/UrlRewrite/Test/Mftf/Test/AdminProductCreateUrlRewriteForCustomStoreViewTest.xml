@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductCreateUrlRewriteForCustomStoreViewTest">
+        <annotations>
+            <features value="UrlRewrite"/>
+            <stories value="Create Product"/>
+            <title value="Product custom URL Key is preserved when assigned to a Category"/>
+            <description value="Verify Product custom URL Key (for custom Store View) is preserved when assigned to a Category (with custom URL Key) alongside with another Product without custom URL Key"/>
+            <testCaseId value="MC-6463"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+            <group value="url_rewrite"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+               <requiredEntity createDataKey="createCategory" />
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProductForUrlRewrite">
+               <requiredEntity createDataKey="createCategory" />
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Create second store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <magentoCLI command="indexer:reindex" stepKey="runReindex"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct"  stepKey="deleteProduct" />
+            <deleteData createDataKey="createProductForUrlRewrite"  stepKey="deleteProductForUrlRewrite" />
+            <deleteData createDataKey="createCategory"  stepKey="deleteCategory" />
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearFilterForStores"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Step 1. Navigate as Admin on Product Page for edit product`s Url Key-->
+        <actionGroup ref="navigateToCreatedProductEditPage" stepKey="goToProductForUrlRewrite">
+            <argument name="product" value="$$createProductForUrlRewrite$$"/>
+        </actionGroup>
+        <!--Step 2. As Admin switch on Custom Store View from Precondition -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToCustomStore">
+            <argument name="storeView" value="customStore.name"/>
+        </actionGroup>
+        <!--Step 3. Set custom URL Key for product on Custom StoreView-->
+        <actionGroup ref="AdminProductFormUpdateUrlKeyActionGroup" stepKey="updateUrlKeyForProduct">
+            <argument name="newUrlKey" value="U2"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductWithNewUrl"/>
+        <!--Step 4. Set URL Key for created category -->
+        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
+            <argument name="Category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="ChangeSeoUrlKey" stepKey="updateUrlKeyForCategory">
+            <argument name="value" value="U1"/>
+        </actionGroup>
+        <!--Step 5. On Storefront Assert what URL Key for Category is changed and is correct as for Default Store View -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="onCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirect" stepKey="assertUrlCategoryOnDefaultStore">
+            <argument name="category" value="$$createCategory.name$$"/>
+            <argument name="newRequestPath" value="u1.html"/>
+        </actionGroup>
+        <!--Step 6. On Storefront Assert what URL Key for product is correct(as initial URL) -->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="navigateToProductInDefaultStore">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductUrlActionGroup" stepKey="checkProductUrl">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Step 7. On Storefront Assert what URL Key for product is correct for Default Store View (as initial URL) -->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="navigateToProductForUrlRewriteInDefaultStore">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="product" value="$$createProductForUrlRewrite$$"/>
+        </actionGroup>
+         <actionGroup ref="StorefrontCheckProductUrlActionGroup" stepKey="checkProductWithChangedUrl">
+            <argument name="productUrl" value="$$createProductForUrlRewrite.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Step 8. On Storefront switch on created Custom Store View -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreViewOnStorefront">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <!--Step 9. On Storefront Assert what URL Key for Category is changed and is correct for Custom Store View -->
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirect" stepKey="assertUrlCategoryOnCustomStore">
+            <argument name="category" value="$$createCategory.name$$"/>
+            <argument name="newRequestPath" value="u1.html"/>
+        </actionGroup>
+        <!--Step 10. On Storefront Assert what URL Key for product is correct for Custom Store View (as initial URL) -->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="navigateToProductInCustomStore">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductUrlActionGroup" stepKey="checkProductUrlOnCustomStore">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Step 11. On Storefront Assert what URL Key for product is changed and is correct for Custom Store View -->
+        <actionGroup ref="AssertStorefrontProductRedirect" stepKey="assertProductUrlRewriteInStoreFront">
+            <argument name="productName" value="$$createProductForUrlRewrite.name$$"/>
+            <argument name="productSku" value="$$createProductForUrlRewrite.sku$$"/>
+            <argument name="productRequestPath" value="u2.html"/>
+        </actionGroup>
+      </test>
+</tests>

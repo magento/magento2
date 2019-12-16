@@ -37,7 +37,7 @@ $formName = $block->getFormName();
                type="hidden"
                value="<?= $block->escapeHtmlAttr($typeData['value']) ?>"/>
         <?php
-} ?>
+    } ?>
 
     <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="image item<% if (data.disabled == 1) { %> hidden-for-front<% } %>"
@@ -61,7 +61,7 @@ $formName = $block->getFormName();
                    value="<%- data.label %>"/>
             <input type="hidden"
                    name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][disabled]"
-                   data-form-part="<?= $block->escapeHtmlAttr(formName) ?>"
+                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
                    value="<%- data.disabled %>"/>
             <input type="hidden"
                    name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][media_type]"
@@ -175,7 +175,7 @@ $formName = $block->getFormName();
                     <label class="admin__field-label">
                         <span><?= $block->escapeHtml(__('Image Size')) ?></span>
                     </label>
-                    <div class="admin__field-value" data-message="<?= $block->escapeHtmlAttr(_('{size}')) ?>"></div>
+                    <div class="admin__field-value" data-message="<?= $block->escapeHtmlAttr(__('{size}')) ?>"></div>
                 </div>
 
                 <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">

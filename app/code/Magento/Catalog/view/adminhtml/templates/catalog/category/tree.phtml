@@ -20,7 +20,7 @@
             <a href="#"
                onclick="tree.collapseTree(); return false;"><?= $block->escapeHtml(__('Collapse All')) ?></a>
             <span class="separator">|</span> <a href="#"
-                                                onclick="tree.expandTree(); return false;"><?= $block->escapeHtml(_('Expand All')) ?></a>
+                                                onclick="tree.expandTree(); return false;"><?= $block->escapeHtml(__('Expand All')) ?></a>
         <?php endif; ?>
     </div>
     <?php if ($block->getRoot()) :?>
@@ -507,8 +507,13 @@
                             })(jQuery);
                             this.closeModal();
                         }
-                    }]
-
+                    }],
+                    keyEventHandlers: {
+                        enterKey: function (event) {
+                            this.buttons[1].click();
+                            event.preventDefault();
+                        }
+                    }
                 }).trigger('openModal');
 
             }

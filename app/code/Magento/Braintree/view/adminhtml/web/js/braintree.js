@@ -295,10 +295,11 @@ define([
 
             self.$selector.validate().form();
             self.$selector.trigger('afterValidate.beforeSubmit');
-            $('body').trigger('processStop');
 
             // validate parent form
             if (self.$selector.validate().errorList.length) {
+                $('body').trigger('processStop');
+
                 return false;
             }
 

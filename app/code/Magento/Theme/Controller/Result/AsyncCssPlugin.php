@@ -41,7 +41,7 @@ class AsyncCssPlugin
     {
         $content = $subject->getContent();
 
-        if (strpos($content, '</body') !== false && $this->scopeConfig->isSetFlag(
+        if (\is_string($content) && strpos($content, '</body') !== false && $this->scopeConfig->isSetFlag(
             self::XML_PATH_USE_CSS_CRITICAL_PATH,
             ScopeInterface::SCOPE_STORE
         )) {

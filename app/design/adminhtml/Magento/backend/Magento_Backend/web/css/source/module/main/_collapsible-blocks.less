@@ -122,6 +122,11 @@
                 &:before {
                     content: @icon-expand-close__content;
                 }
+                &.active {
+                    &:before {
+                        content: @icon-expand-open__content;
+                    }
+                }
             }
         }
 
@@ -511,6 +516,11 @@
                     right: 0;
                     top: 0;
                 }
+      
+                .time-separator {
+                    font-size: 14px;
+                    padding-left: 5px;
+                } 
 
                 .tooltip-content {
                     background: @color-very-dark-gray-black2;

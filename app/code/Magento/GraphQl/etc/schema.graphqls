@@ -1,6 +1,46 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+directive @doc(description: String="") on QUERY
+    | MUTATION
+    | FIELD
+    | FRAGMENT_DEFINITION
+    | FRAGMENT_SPREAD
+    | INLINE_FRAGMENT
+    | SCHEMA
+    | SCALAR
+    | OBJECT
+    | FIELD_DEFINITION
+    | ARGUMENT_DEFINITION
+    | INTERFACE
+    | UNION
+    | ENUM
+    | ENUM_VALUE
+    | INPUT_OBJECT
+    | INPUT_FIELD_DEFINITION
+
+directive @resolver(class: String="") on QUERY
+    | MUTATION
+    | FIELD
+    | FRAGMENT_DEFINITION
+    | FRAGMENT_SPREAD
+    | INLINE_FRAGMENT
+    | SCHEMA
+    | SCALAR
+    | OBJECT
+    | FIELD_DEFINITION
+    | ARGUMENT_DEFINITION
+    | INTERFACE
+    | UNION
+    | ENUM
+    | ENUM_VALUE
+    | INPUT_OBJECT
+    | INPUT_FIELD_DEFINITION
+
+directive @typeResolver(class: String="") on INTERFACE | OBJECT
+
+directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
+
 type Query {
 }
 
@@ -9,7 +49,7 @@ type Mutation {
 
 input FilterTypeInput @doc(description: "FilterTypeInput specifies which action will be performed in a query ") {
     eq: String @doc(description: "Equals")
-    finset: [String] @doc(description: "Find in set. The value can contain a set of comma-separated values")
+    finset: [String] @deprecated (reason: "The finset filter is deprecated. Magento doesn't recomend to store comma separated values, therefore finset filter is redundant.")
     from: String @doc(description: "From. Must be used with 'to'")
     gt: String @doc(description: "Greater than")
     gteq: String @doc(description: "Greater than or equal to")
@@ -23,6 +63,20 @@ input FilterTypeInput @doc(description: "FilterTypeInput specifies which action 
     null: String @doc(description: "Is null")
     to: String@doc(description: "To. Must be used with 'from'")
     nin: [String] @doc(description: "Not in. The value can contain a set of comma-separated values")
+}
+
+input FilterEqualTypeInput @doc(description: "Defines a filter that matches the input exactly.") {
+    in: [String] @doc(description: "An array of values to filter on")
+    eq: String @doc(description: "A string to filter on")
+}
+
+input FilterRangeTypeInput @doc(description: "Defines a filter that matches a range of values, such as prices or dates.") {
+    from: String @doc(description: "The beginning of the range")
+    to: String @doc(description: "The end of the range")
+}
+
+input FilterMatchTypeInput @doc(description: "Defines a filter that performs a fuzzy search.") {
+    match: String @doc(description: "One or more words to filter on")
 }
 
 type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {

@@ -12,7 +12,7 @@ define([
     'Magento_Ui/js/model/messageList',
     'mage/translate',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/action/set-payment-information',
+    'Magento_Checkout/js/action/set-payment-information-extended',
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Braintree/js/view/payment/validator-handler'
 ], function (
@@ -22,7 +22,7 @@ define([
     messageList,
     $t,
     fullScreenLoader,
-    setPaymentInformationAction,
+    setPaymentInformationExtended,
     additionalValidators,
     validatorManager
 ) {
@@ -51,9 +51,10 @@ define([
             if (additionalValidators.validate()) {
                 fullScreenLoader.startLoader();
                 $.when(
-                    setPaymentInformationAction(
+                    setPaymentInformationExtended(
                         this.messageContainer,
-                        this.getData()
+                        this.getData(),
+                        true
                     )
                 ).done(this.done.bind(this))
                     .fail(this.fail.bind(this));

@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontFillCartDataActionGroup">
+        <annotations>
+            <description>Fills Cart Data with Braintree using the provided Data Entity.</description>
+        </annotations>
         <arguments>
             <argument name="cartData" defaultValue="PaymentAndShippingInfo"/>
         </arguments>
+
         <switchToIFrame selector="{{BraintreeConfigurationPaymentSection.cartFrame}}" stepKey="switchToIframe"/>
         <waitForElementVisible selector="{{BraintreeConfigurationPaymentSection.cartCode}}" stepKey="waitCartCodeElement"/>
         <fillField selector="{{BraintreeConfigurationPaymentSection.cartCode}}" userInput="{{cartData.cardNumber}}" stepKey="setCartCode"/>
@@ -28,5 +33,4 @@
         <fillField selector="{{BraintreeConfigurationPaymentSection.verificationNumber}}" userInput="{{cartData.cvv}}" stepKey="setVerificationNumber"/>
         <switchToIFrame stepKey="SwitchBackToWindow"/>
     </actionGroup>
-
 </actionGroups>

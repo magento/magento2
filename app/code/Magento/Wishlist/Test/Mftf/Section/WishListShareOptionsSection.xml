@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="WishListShareOptionsSection">
+        <element name="shareOptionsTab" type="button" selector="#wishlist_email-head"/>
+        <element name="shareOptionsTabIsExpanded" type="button" selector="#wishlist_email-head.open"/>
+        <element name="shareOptionsTabIsNotExpanded" type="button" selector="#wishlist_email-head"/>
+        <element name="emailTextLengthLimitInput" type="input" selector="#wishlist_email_text_limit"/>
+        <element name="emailTextLengthLimitMessage" type="text" selector="#wishlist_email_text_limit-error"/>
+        <element name="useSystemValueForWishListEmailTextLimit" type="checkbox" selector="#wishlist_email_text_limit_inherit"/>
+    </section>
+</sections>

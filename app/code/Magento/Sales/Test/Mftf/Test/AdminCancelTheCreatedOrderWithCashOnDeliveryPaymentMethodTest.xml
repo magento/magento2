@@ -26,7 +26,7 @@
             <magentoCLI command="config:set {{EnableCashOnDeliveryConfigData.path}} {{EnableCashOnDeliveryConfigData.value}}" stepKey="enableCashOnDeliveryPayment"/>
 
             <!--Set default flat rate shipping method settings-->
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
 
             <!--Create simple customer-->
             <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
