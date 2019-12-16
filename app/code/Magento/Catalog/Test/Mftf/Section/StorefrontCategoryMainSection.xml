@@ -34,5 +34,6 @@
         <element name="productsList" type="block" selector="#maincontent .column.main"/>
         <element name="productName" type="text" selector=".product-item-name"/>
         <element name="productOptionList" type="text" selector="#narrow-by-list"/>
+        <element name="productNameByPosition" type="text" selector=".products-grid li:nth-of-type({{position}}) .product-item-name a" parameterized="true"/>
     </section>
 </sections>

@@ -17,6 +17,7 @@
         </arguments>
 
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
@@ -213,6 +214,7 @@
         </arguments>
 
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
@@ -319,6 +321,11 @@
         <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" stepKey="checkRequired" userInput="{{attribute.is_required_admin}}"/>
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
     </actionGroup>
+    <actionGroup name="AdminCreateSearchableProductAttribute" extends="createProductAttribute" insertAfter="checkRequired">
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{StorefrontPropertiesSection.PageTitle}}" stepKey="waitTabLoad"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="setSearchable"/>
+    </actionGroup>
 
     <!-- Inputs text default value and attribute code-->
     <actionGroup name="createProductAttributeWithTextField" extends="createProductAttribute" insertAfter="checkRequired">
@@ -345,6 +352,23 @@
         <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueDate}}" userInput="{{date}}"/>
     </actionGroup>
 
+    <!-- Inputs datetime default value and attribute code-->
+    <actionGroup name="CreateProductAttributeWithDatetimeField" extends="createProductAttribute" insertAfter="checkRequired">
+        <annotations>
+            <description>EXTENDS: createProductAttribute. Fills in the Attribute Code and Default Value (Attribute Type: Date and Time Field).</description>
+        </annotations>
+        <arguments>
+            <argument name="date" type="string"/>
+        </arguments>
+
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="scrollToAdvancedSection"/>
+        <conditionalClick selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" dependentSelector="{{AdvancedAttributePropertiesSection.AttributeCode}}" visible="false" stepKey="openAdvancedSection"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" stepKey="waitForSlideOutAdvancedSection"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}" stepKey="fillCode"/>
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.defaultValueDatetime}}" stepKey="scrollToDefaultField"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.defaultValueDatetime}}" userInput="{{date}}" stepKey="fillDefaultValue"/>
+    </actionGroup>
+
     <!-- Creates dropdown option at row without saving-->
     <actionGroup name="createAttributeDropdownNthOption">
         <annotations>
@@ -369,5 +393,16 @@
         </annotations>
 
         <checkOption selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault(row)}}" stepKey="setAsDefault" after="fillStoreView"/>
+    </actionGroup>
+
+    <!-- Go to advanced attribute properties -->
+    <actionGroup name="AdminNavigateToProductAttributeAdvancedSection">
+        <annotations>
+            <description>Navigate and open Advanced Attribute Properties section on product attribute page</description>
+        </annotations>
+
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="scrollToSection"/>
+        <conditionalClick selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" dependentSelector="{{AdvancedAttributePropertiesSection.AttributeCode}}" visible="false" stepKey="openSection"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" stepKey="waitForSlideOutSection"/>
     </actionGroup>
 </actionGroups>
