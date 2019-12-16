@@ -59,7 +59,6 @@ class SetHasDownloadableProductsObserverTest extends TestCase
             ]
         );
 
-
         $this->setHasDownloadableProductsObserver = $this->objectManager->getObject(
             SetHasDownloadableProductsObserver::class,
             [
@@ -150,7 +149,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
     public function executeWithSessionNoDownloadableProductsDataProvider()
     {
         return [
-            'Order has once item is downloadable product' => [
+            'Order has one item is downloadable product' => [
                 [
                     [
                         DownloadableProductType::TYPE_DOWNLOADABLE,
