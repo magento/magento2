@@ -30,7 +30,8 @@ class MsrpPriceCalculatorTest extends TestCase
     public function testGetMsrpPriceValue($msrpPriceCalculators, $productMock, $expected)
     {
         $objectManager = new ObjectManager($this);
-        $pricing = $objectManager->getObject(MsrpPriceCalculator::class,
+        $pricing = $objectManager->getObject(
+            MsrpPriceCalculator::class,
             [
                 'msrpPriceCalculators' => $msrpPriceCalculators
             ]
@@ -52,7 +53,9 @@ class MsrpPriceCalculatorTest extends TestCase
                     [
                         'productType' => GroupedType::TYPE_CODE,
                         'priceCalculator' => $this->createPriceCalculatorMock(
-                            MsrpGroupedCalculator::class, 23.50)
+                            MsrpGroupedCalculator::class,
+                            23.50
+                        )
                     ]
                 ],
                 $this->createProductMock(GroupedType::TYPE_CODE, 0),
@@ -63,7 +66,9 @@ class MsrpPriceCalculatorTest extends TestCase
                     [
                         'productType' => GroupedType::TYPE_CODE,
                         'priceCalculator' => $this->createPriceCalculatorMock(
-                            MsrpGroupedCalculator::class, 0)
+                            MsrpGroupedCalculator::class,
+                            0
+                        )
                     ]
                 ],
                 $this->createProductMock(Type::TYPE_SIMPLE, 24.88),
