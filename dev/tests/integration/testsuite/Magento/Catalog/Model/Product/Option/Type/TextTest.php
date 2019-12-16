@@ -7,19 +7,25 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Catalog\Model\Product\Option;
+use Magento\Tests\NamingConvention\true\mixed;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test for customizable product option with "Text" type
  */
-class TextTest extends \PHPUnit\Framework\TestCase
+class TextTest extends TestCase
 {
+    const STUB_OPTION_DATA = ['id' => 11, 'type' => 'area'];
+
     /**
      * @var Text
      */
-    protected $model;
+    protected $optionText;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -28,10 +34,8 @@ class TextTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create(
-            Text::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->optionText = $this->objectManager->create(Text::class);
     }
 
     /**
@@ -52,11 +56,11 @@ class TextTest extends \PHPUnit\Framework\TestCase
             ['data' => $productOptionData]
         );
 
-        $this->model->setOption($productOption);
-        $this->model->setUserValue($optionValue);
-        $this->model->validateUserValue([]);
+        $this->optionText->setOption($productOption);
+        $this->optionText->setUserValue($optionValue);
+        $this->optionText->validateUserValue([]);
 
-        $this->assertSame($expectedOptionValue, $this->model->getUserValue());
+        $this->assertSame($expectedOptionValue, $this->optionText->getUserValue());
     }
 
     /**
@@ -67,38 +71,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
     public function optionValueDataProvider()
     {
         return [
-            [
-                // $productOptionData
-                ['id' => 11, 'type' => 'area'],
-                // $optionValue
-                'string string',
-                // $expectedOptionValue
-                'string string'
-            ],
-            [
-                // $productOptionData
-                ['id' => 11, 'type' => 'area'],
-                // $optionValue
-                "string \r\n string",
-                // $expectedOptionValue
-                "string \n string"
-            ],
-            [
-                // $productOptionData
-                ['id' => 11, 'type' => 'area'],
-                // $optionValue
-                "string \n\r string",
-                // $expectedOptionValue
-                "string \n string"
-            ],
-            [
-                // $productOptionData
-                ['id' => 11, 'type' => 'area'],
-                // $optionValue
-                "string \r string",
-                // $expectedOptionValue
-                "string \n string"
-            ]
+            [self::STUB_OPTION_DATA, 'string string', 'string string'],
+            [self::STUB_OPTION_DATA, "string \r\n string", "string \n string"],
+            [self::STUB_OPTION_DATA, "string \n\r string", "string \n string"],
+            [self::STUB_OPTION_DATA, "string \r string", "string \n string"]
         ];
     }
 }

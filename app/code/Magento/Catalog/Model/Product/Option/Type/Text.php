@@ -109,8 +109,8 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $value
      * @return string
      */
-    private function normalizeNewLineSymbols($value)
+    private function normalizeNewLineSymbols(string $value)
     {
-        return str_replace(["\r\n", "\n\r", "\r"], ["\n", "\n", "\n"], $value);
+        return str_replace(["\r\n", "\n\r", "\r"], "\n", $value);
     }
 }
