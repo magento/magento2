@@ -731,9 +731,9 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     public function setBilling(DataObject $request, $billing)
     {
         $request->setFirstname(
-            $billing->getFirstname()
+            str_replace("&", "and", $billing->getFirstname())
         )->setLastname(
-            $billing->getLastname()
+            str_replace("&", "and", $billing->getLastname())
         )->setStreet(
             implode(' ', $billing->getStreet())
         )->setCity(
@@ -759,9 +759,9 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     public function setShipping($request, $shipping)
     {
         $request->setShiptofirstname(
-            $shipping->getFirstname()
+            str_replace("&", "and", $shipping->getFirstname())
         )->setShiptolastname(
-            $shipping->getLastname()
+            str_replace("&", "and", $shipping->getLastname())
         )->setShiptostreet(
             implode(' ', $shipping->getStreet())
         )->setShiptocity(
