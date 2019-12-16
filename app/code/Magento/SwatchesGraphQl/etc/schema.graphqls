@@ -29,10 +29,10 @@ type SwatchData {
 }
 
 type ConfigurableProductOptionsValues {
-    swatch_data: SwatchDataInterface @doc(description: "Swatch data for configurable product option") @resolver (class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData")
+    swatch_data: SwatchDataInterface @doc(description: "Swatch data for configurable product option") @resolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData")
 }
 
-interface SwatchDataInterface {
+interface SwatchDataInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchDataTypeResolver") {
     value: String @doc(description: "Value of swatch item (HEX color code, image link or textual value)")
 }
 

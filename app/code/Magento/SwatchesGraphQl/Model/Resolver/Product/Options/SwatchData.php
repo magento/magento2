@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\SwatchesGraphQl\Model\Resolver\Product\Options;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -47,10 +45,6 @@ class SwatchData implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!array_key_exists('model', $value) || !$value['model'] instanceof ProductInterface) {
-            throw new LocalizedException(__('"model" value should be specified'));
-        }
-
-        return $this->swatchDataProvider->getData($value['value_index'], $value['model']);
+        return $this->swatchDataProvider->getData($value['value_index']);
     }
 }
