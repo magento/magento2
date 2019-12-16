@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class UrlBuilderTest
+ *
+ * Testing the UrlBuilder
  */
 class UrlBuilderTest extends TestCase
 {
@@ -141,7 +143,8 @@ class UrlBuilderTest extends TestCase
                             StoreManagerInterface::PARAM_NAME => $storeCode
                         ]
                     ]
-                ], [
+                ],
+                [
                     'stores/store/switch',
                     $urlParams
                 ]
