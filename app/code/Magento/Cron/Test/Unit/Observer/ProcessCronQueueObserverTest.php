@@ -8,6 +8,7 @@ namespace Magento\Cron\Test\Unit\Observer;
 use Magento\Cron\Model\Schedule;
 use Magento\Cron\Observer\ProcessCronQueueObserver;
 use Magento\Framework\App\State;
+use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\StatFactory;
 use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -106,6 +107,16 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scheduleResource;
+
+    /**
+     * @var StatFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $statFactory;
+
+    /**
+     * @var Stat|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stat;
 
     /**
      * @var int
