@@ -80,6 +80,7 @@
         <waitForPageLoad stepKey="waitForResultPage"/>
 
         <!-- Perform all assertions: assert refund success create message -->
+        <waitForElementVisible selector="{{AdminIndexManagementSection.successMessage}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the credit memo." stepKey="assertRefundSuccessCreateMessage"/>
 
         <!-- Assert Credit Memo button -->
