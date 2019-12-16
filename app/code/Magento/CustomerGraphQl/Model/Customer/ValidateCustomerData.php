@@ -70,7 +70,7 @@ class ValidateCustomerData
             );
         }
 
-        if (!$this->emailAddressValidator->isValid($customerData['email'])) {
+        if (isset($customerData['email']) && !$this->emailAddressValidator->isValid($customerData['email'])) {
             throw new GraphQlInputException(
                 __('"%1" is not a valid email address.', $customerData['email'])
             );
