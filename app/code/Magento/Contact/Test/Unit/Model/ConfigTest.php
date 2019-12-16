@@ -54,30 +54,29 @@ class ConfigTest extends TestCase
      * Test isEnabled()
      *
      * @return void
+     * @dataProvider isEnabledDataProvider
      */
-    public function testIsEnabled(): void
+    public function testIsEnabled($isSetFlag, $result): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(config::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE)
-            ->willReturn(true);
+            ->willReturn($isSetFlag);
 
-        $this->assertTrue($this->model->isEnabled());
+        $this->assertEquals($result, $this->model->isEnabled());
     }
 
     /**
-     * Test isNotEnabled()
+     * Data provider for isEnabled()
      *
-     * @return void
+     * @return array
      */
-    public function testIsNotEnabled(): void
+    public function isEnabledDataProvider(): array
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('isSetFlag')
-            ->with(config::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE)
-            ->willReturn(false);
-
-        $this->assertFalse($this->model->isEnabled());
+        return [
+            [true, true],
+            [false, false]
+        ];
     }
 
     /**
