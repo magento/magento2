@@ -106,6 +106,7 @@ class VariationHandler
             $this->fillSimpleProductData(
                 $newSimpleProduct,
                 $parentProduct,
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 array_merge($simpleProductData, $configurableAttribute)
             );
             $newSimpleProduct->save();

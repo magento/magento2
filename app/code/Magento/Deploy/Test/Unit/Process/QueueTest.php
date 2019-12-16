@@ -112,6 +112,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $package->expects($this->any())->method('getArea')->willReturn('area');
         $package->expects($this->any())->method('getPath')->willReturn('path');
         $package->expects($this->any())->method('getFiles')->willReturn([]);
+        $this->logger->expects($this->exactly(2))->method('info')->willReturnSelf();
 
         $this->appState->expects($this->once())->method('emulateAreaCode');
 

@@ -17,4 +17,14 @@
         <remove keyForRemoval="AssertProductPrice"/>
         <see userInput="{{product.price}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
     </actionGroup>
+    <actionGroup name="StorefrontAssertProductPriceOnCategoryPageActionGroup" extends="StorefrontAssertProductPriceOnProductPageActionGroup">
+        <annotations>
+            <description>Validate that the provided Product Price is correct on category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+
+        <see userInput="{{productPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(productName)}}" stepKey="seeProductPrice"/>
+    </actionGroup>
 </actionGroups>

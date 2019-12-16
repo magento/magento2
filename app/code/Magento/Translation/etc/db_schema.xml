@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="translation" resource="default" engine="innodb" comment="Translations">
         <column xsi:type="int" name="key_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Key Id of Translation"/>
+                comment="Key ID of Translation"/>
         <column xsi:type="varchar" name="string" nullable="false" length="255" default="Translate String"
                 comment="Translation String"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="varchar" name="translate" nullable="true" length="255" comment="Translate"/>
         <column xsi:type="varchar" name="locale" nullable="false" length="20" default="en_US" comment="Locale"/>
         <column xsi:type="bigint" name="crc_string" padding="20" unsigned="false" nullable="false" identity="false"

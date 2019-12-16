@@ -9,9 +9,8 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <actionGroup name="CheckingWithMinicartActionGroup">
-        <waitForPageLoad stepKey="waitForCheckoutCartPageLoad"/>
-        <click stepKey="clickOnCollapsibleDiv" selector="{{MinicartSection.clickOnCollapsibleDiv}}"/>
-        <click stepKey="clickOnShippingMethodRadioButton" selector="{{MinicartSection.shippingMethodRadioButton}}"/>
+        <click selector="{{MinicartSection.clickOnCollapsibleDiv}}" stepKey="clickOnCollapsibleDiv"/>
+        <click selector="{{MinicartSection.shippingMethodRadioButton}}" stepKey="clickOnShippingMethodRadioButton"/>
         <waitForPageLoad stepKey="waitForShippingPriceToBeChanged"/>
         <grabTextFrom selector="{{MinicartSection.shippingMethodRadioText}}" stepKey="shippingMethodRadioText"/>
         <grabTextFrom selector="{{MinicartSection.shippingMethodSubtotalPrice}}" stepKey="shippingMethodSubtotalPrice"/>

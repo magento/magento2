@@ -54,7 +54,6 @@ class Simple implements Fallback\ResolverInterface
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
-
         $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
         foreach ($params as $key => $param) {
             if ($param === null) {

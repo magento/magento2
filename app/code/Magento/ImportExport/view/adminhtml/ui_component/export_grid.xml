@@ -34,6 +34,9 @@
             </settings>
         </dataProvider>
     </dataSource>
+    <listingToolbar name="listing_top">
+        <paging name="listing_paging"/>
+    </listingToolbar>
     <columns name="export_grid_columns">
         <column name="file_name">
             <settings>

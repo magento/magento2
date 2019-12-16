@@ -1458,6 +1458,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ) {
                 if ($this->_isPriceGlobal) {
                     $prices[$nextOptionId][Store::DEFAULT_STORE_ID] = $priceData;
+                } else {
+                    $prices[$nextOptionId][$this->_rowStoreId] = $priceData;
                 }
             }
 
@@ -1693,7 +1695,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_rowIsMain = false;
         }
 
-        return [$this->_rowProductId, $this->_rowStoreId, $this->_rowType, $this->_rowIsMain];
+        return true;
     }
 
     /**
@@ -2084,7 +2086,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
             }
-            $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_STORE_VIEW_CODE];
+            if (isset($rowData[Product::COL_STORE_VIEW_CODE])) {
+                $options[$name][$k][self::COLUMN_STORE] = $rowData[Product::COL_STORE_VIEW_CODE];
+            }
             $k++;
         }
         $rowData['custom_options'] = $options;

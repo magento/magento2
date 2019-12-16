@@ -59,7 +59,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
 
     $priceElementId = $priceElementIdPrefix . $productId . $block->getIdSuffix();
     $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
-    $data = ['addToCart' => [
+    $data = [
         'origin'=> 'msrp',
         'popupId' => '#' . $popupId,
         'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
@@ -72,11 +72,11 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
         'closeButtonId' => '#map-popup-close',
         'addToCartUrl' => $addToCartUrl,
         'paymentButtons' => '[data-label=or]'
-    ]];
+    ];
     if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
-        $data['addToCart']['addToCartButton'] = '#product_addtocart_form [type=submit]';
+        $data['addToCartButton'] = '#product_addtocart_form [type=submit]';
     } else {
-        $data['addToCart']['addToCartButton'] = sprintf(
+        $data['addToCartButton'] = sprintf(
             'form:has(input[type="hidden"][name="product"][value="%s"]) button[type="submit"]',
             (int) $productId . ',' .
             sprintf(
@@ -91,7 +91,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
        id="<?= /* @noEscape */ ($popupId) ?>"
        class="action map-show-info"
        <?php //phpcs:disable ?>
-       data-mage-init='<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($data) ?>'>
+       data-mage-init='{"addToCart":<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($data) ?>}'>
         <?php //phpcs:enable ?>
         <?= $block->escapeHtml(__('Click for price')) ?>
     </a>

@@ -97,7 +97,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     public function setCronExpr($expr)
     {
         $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
-        if (sizeof($e) < 5 || sizeof($e) > 6) {
+        if (count($e) < 5 || count($e) > 6) {
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
 
@@ -168,7 +168,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         // handle modulus
         if (strpos($expr, '/') !== false) {
             $e = explode('/', $expr);
-            if (sizeof($e) !== 2) {
+            if (count($e) !== 2) {
                 throw new CronException(__('Invalid cron expression, expecting \'match/modulus\': %1', $expr));
             }
             if (!is_numeric($e[1])) {
@@ -187,7 +187,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         } elseif (strpos($expr, '-') !== false) {
             // handle range
             $e = explode('-', $expr);
-            if (sizeof($e) !== 2) {
+            if (count($e) !== 2) {
                 throw new CronException(__('Invalid cron expression, expecting \'from-to\' structure: %1', $expr));
             }
 

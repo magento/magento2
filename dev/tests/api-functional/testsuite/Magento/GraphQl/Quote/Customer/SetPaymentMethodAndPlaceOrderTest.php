@@ -78,9 +78,79 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
-        self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
-        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertArrayHasKey('code', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
+        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+
+        self::assertArrayHasKey('order', $response['placeOrder']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     *
+     * @dataProvider dataProviderSetPaymentOnCartWithException
+     * @param string $input
+     * @param string $message
+     * @throws \Exception
+     */
+    public function testSetPaymentOnCartWithException(string $input, string $message)
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
+
+        $query = <<<QUERY
+mutation {
+  setPaymentMethodAndPlaceOrder(
+    input: {
+      {$input}
+    }
+  ) {
+    order {
+      order_number
+    }
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage($message);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderSetPaymentOnCartWithException(): array
+    {
+        return [
+            'missed_cart_id' => [
+                'payment_method: {
+                  code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
+                  }',
+                'Field SetPaymentMethodAndPlaceOrderInput.cart_id of required type String! was not provided.',
+            ],
+            'missed_payment_method' => [
+                'cart_id: "cart_id_value"',
+                'Field SetPaymentMethodAndPlaceOrderInput.payment_method of required type PaymentMethodInput!'
+                . ' was not provided.',
+            ],
+            'place_order_with_out_of_stock_products' => [
+                'cart_id: "cart_id_value"
+                  payment_method: {
+                    code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
+                    }',
+                'Unable to place order: Some of the products are out of stock.',
+            ],
+        ];
     }
 
     /**
@@ -116,9 +186,14 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
-        self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
-        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertArrayHasKey('code', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
+        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+
+        self::assertArrayHasKey('order', $response['placeOrder']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
     }
 
     /**
@@ -224,14 +299,27 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
     ) : string {
         return <<<QUERY
 mutation {
-  setPaymentMethodAndPlaceOrder(input: {
-      cart_id: "$maskedQuoteId"
+  setPaymentMethodOnCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
       payment_method: {
-          code: "$methodCode"
+        code: "{$methodCode}"
       }
-  }) {    
+    }
+  ) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+  placeOrder(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+    }
+  ) {
     order {
-      order_id
+      order_number
     }
   }
 }

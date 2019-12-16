@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckInputFieldsDisabledAfterAppConfigDumpTest">
+        <!--Assert configuration are disabled in FedEx section-->
+        <comment userInput="Assert configuration are disabled in FedEx section" stepKey="commentSeeDisabledFedExConfigs"/>
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <conditionalClick selector="{{AdminShippingMethodFedExSection.carriersFedExTab}}" dependentSelector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" visible="false" stepKey="expandFedExTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" stepKey="waitFedExTabOpen"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" userInput="disabled" stepKey="grabFedExActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExActiveDisabled" stepKey="assertFedExActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExTitle}}" userInput="disabled" stepKey="grabFedExTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExTitleDisabled" stepKey="assertFedExTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExAccountId}}" userInput="disabled" stepKey="grabFedExAccountIdDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExAccountIdDisabled" stepKey="assertFedExAccountIdDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExMeterNumber}}" userInput="disabled" stepKey="grabFedExMeterNumberDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExMeterNumberDisabled" stepKey="assertFedExMeterNumberDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExKey}}" userInput="disabled" stepKey="grabFedExKeyDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExKeyDisabled" stepKey="assertFedExKeyDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExPassword}}" userInput="disabled" stepKey="grabFedExPasswordDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExPasswordDisabled" stepKey="assertFedExPasswordDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExSandboxMode}}" userInput="disabled" stepKey="grabFedExSandboxDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExSandboxDisabled" stepKey="assertFedExSandboxDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExShipmentRequestType}}" userInput="disabled" stepKey="grabFedExShipmentRequestTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExShipmentRequestTypeDisabled" stepKey="assertFedExShipmentRequestTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExPackaging}}" userInput="disabled" stepKey="grabFedExPackagingDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExPackagingDisabled" stepKey="assertFedExPackagingDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExDropoff}}" userInput="disabled" stepKey="grabFedExDropoffDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExDropoffDisabled" stepKey="assertFedExDropoffDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExUnitOfMeasure}}" userInput="disabled" stepKey="grabFedExUnitOfMeasureDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExUnitOfMeasureDisabled" stepKey="assertFedExUnitOfMeasureDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExMaxPackageWeight}}" userInput="disabled" stepKey="grabFedExMaxPackageWeightDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExMaxPackageWeightDisabled" stepKey="assertFedExMaxPackageWeightDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExHandlingType}}" userInput="disabled" stepKey="grabFedExHandlingTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExHandlingTypeDisabled" stepKey="assertFedExHandlingTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExHandlingAction}}" userInput="disabled" stepKey="grabFedExHandlingActionDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExHandlingActionDisabled" stepKey="assertFedExHandlingActionDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExSpecificErrMsg}}" userInput="disabled" stepKey="grabFedExSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExSpecificErrMsgDisabled" stepKey="assertFedExSpecificErrMsgDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExAllowSpecific}}" userInput="disabled" stepKey="grabFedExAllowSpecificDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExAllowSpecificDisabled" stepKey="assertFedExAllowSpecificDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExSpecificCountry}}" userInput="disabled" stepKey="grabFedExSpecificCountryDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExSpecificCountryDisabled" stepKey="assertFedExSpecificCountryDisabled"/>
+    </test>
+</tests>

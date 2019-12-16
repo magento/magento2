@@ -123,6 +123,8 @@ define([
             if (this.options.spConfig.inputsInitialized) {
                 this._setValuesByAttribute();
             }
+
+            this._setInitialOptionsLabels();
         },
 
         /**
@@ -155,6 +157,18 @@ define([
                     attributeId = element.id.replace(/[a-z]*/, '');
                     this.options.values[attributeId] = element.value;
                 }
+            }, this));
+        },
+
+        /**
+         * Set additional field with initial label to be used when switching between options with different prices.
+         * @private
+         */
+        _setInitialOptionsLabels: function () {
+            $.each(this.options.spConfig.attributes, $.proxy(function (index, element) {
+                $.each(element.options, $.proxy(function (optIndex, optElement) {
+                    this.options.spConfig.attributes[index].options[optIndex].initialLabel = optElement.label;
+                }, this));
             }, this));
         },
 
@@ -371,6 +385,8 @@ define([
                 prevConfig,
                 index = 1,
                 allowedProducts,
+                allowedProductsByOption,
+                allowedProductsAll,
                 i,
                 j,
                 finalPrice = parseFloat(this.options.spConfig.prices.finalPrice.amount),
@@ -379,7 +395,8 @@ define([
                 optionPrices = this.options.spConfig.optionPrices,
                 allowedOptions = [],
                 indexKey,
-                allowedProductMinPrice;
+                allowedProductMinPrice,
+                allowedProductsAllMinPrice;
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -398,35 +415,54 @@ define([
                     }
                 }
 
-                for (i = 0; i < options.length; i++) {
-                    allowedProducts = [];
-                    optionPriceDiff = 0;
+                if (prevConfig) {
+                    allowedProductsByOption = {};
+                    allowedProductsAll = [];
 
-                    /* eslint-disable max-depth */
-                    if (prevConfig) {
+                    for (i = 0; i < options.length; i++) {
+                        /* eslint-disable max-depth */
                         for (j = 0; j < options[i].products.length; j++) {
                             // prevConfig.config can be undefined
                             if (prevConfig.config &&
                                 prevConfig.config.allowedProducts &&
                                 prevConfig.config.allowedProducts.indexOf(options[i].products[j]) > -1) {
-                                allowedProducts.push(options[i].products[j]);
+                                if (!allowedProductsByOption[i]) {
+                                    allowedProductsByOption[i] = [];
+                                }
+                                allowedProductsByOption[i].push(options[i].products[j]);
+                                allowedProductsAll.push(options[i].products[j]);
                             }
                         }
-                    } else {
-                        allowedProducts = options[i].products.slice(0);
+                    }
 
-                        if (typeof allowedProducts[0] !== 'undefined' &&
-                            typeof optionPrices[allowedProducts[0]] !== 'undefined') {
-                            allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
-                            optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
-                            optionPriceDiff = optionFinalPrice - finalPrice;
+                    if (typeof allowedProductsAll[0] !== 'undefined' &&
+                        typeof optionPrices[allowedProductsAll[0]] !== 'undefined') {
+                        allowedProductsAllMinPrice = this._getAllowedProductWithMinPrice(allowedProductsAll);
+                        finalPrice = parseFloat(optionPrices[allowedProductsAllMinPrice].finalPrice.amount);
+                    }
+                }
 
-                            if (optionPriceDiff !== 0) {
-                                options[i].label = options[i].label + ' ' + priceUtils.formatPrice(
-                                    optionPriceDiff,
-                                    this.options.priceFormat,
-                                    true);
-                            }
+                for (i = 0; i < options.length; i++) {
+                    if (prevConfig && typeof allowedProductsByOption[i] === 'undefined') {
+                        continue; //jscs:ignore disallowKeywords
+                    }
+
+                    allowedProducts = prevConfig ? allowedProductsByOption[i] : options[i].products.slice(0);
+                    optionPriceDiff = 0;
+
+                    if (typeof allowedProducts[0] !== 'undefined' &&
+                        typeof optionPrices[allowedProducts[0]] !== 'undefined') {
+                        allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
+                        optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
+                        optionPriceDiff = optionFinalPrice - finalPrice;
+                        options[i].label = options[i].initialLabel;
+
+                        if (optionPriceDiff !== 0) {
+                            options[i].label += ' ' + priceUtils.formatPrice(
+                                optionPriceDiff,
+                                this.options.priceFormat,
+                                true
+                            );
                         }
                     }
 
