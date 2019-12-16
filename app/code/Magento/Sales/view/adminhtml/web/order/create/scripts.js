@@ -482,11 +482,6 @@ define([
         },
 
         switchPaymentMethod: function(method){
-            jQuery('#edit_form')
-                .off('submitOrder')
-                .on('submitOrder', function(){
-                    jQuery(this).trigger('realOrder');
-                });
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};
@@ -793,6 +788,20 @@ define([
                 this.gridProducts.unset(element.value);
             }
             grid.reloadParams = {'products[]':this.gridProducts.keys()};
+        },
+
+        productGridFilterKeyPress: function (grid, event) {
+            var returnKey = parseInt(Event.KEY_RETURN || 13, 10);
+
+            if (event.keyCode === returnKey) {
+                if (typeof event.stopPropagation === 'function') {
+                    event.stopPropagation();
+                }
+
+                if (typeof event.preventDefault === 'function') {
+                    event.preventDefault();
+                }
+            }
         },
 
         /**

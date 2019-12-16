@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="test_table" resource="default">
+        <!--Columns-->
+        <column xsi:type="smallint" identity="true" name="smallint" padding="3" nullable="true"/>
+        <column xsi:type="tinyint" name="tinyint" padding="7" nullable="true" unsigned="false"/>
+        <column xsi:type="bigint" name="bigint" default="0" padding="13" nullable="true" unsigned="false"/>
+        <column xsi:type="float" name="float" default="0" scale="4" precision="12"/>
+        <column xsi:type="decimal" name="double" default="11111111.111111" precision="14" scale="6"/>
+        <column xsi:type="decimal" name="decimal" default="0" scale="4" precision="15"/>
+        <column xsi:type="date" name="date"/>
+        <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="true"/>
+        <column xsi:type="datetime" name="datetime" default="0"/>
+        <column xsi:type="longtext" name="longtext"/>
+        <column xsi:type="mediumtext" name="mediumtext"/>
+        <column xsi:type="varchar" name="varchar" length="254" nullable="true"/>
+        <column xsi:type="mediumblob" name="mediumblob"/>
+        <column xsi:type="blob" name="blob"/>
+        <column xsi:type="boolean" name="boolean"/>
+        <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true"/>
+        <!--Constraints-->
+        <constraint xsi:type="unique" referenceId="TEST_TABLE_SMALLINT_BIGINT">
+            <column name="smallint"/>
+            <column name="bigint"/>
+        </constraint>
+        <!--Indexes-->
+        <index referenceId="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
+            <column name="tinyint"/>
+            <column name="bigint"/>
+        </index>
+    </table>
+</schema>
