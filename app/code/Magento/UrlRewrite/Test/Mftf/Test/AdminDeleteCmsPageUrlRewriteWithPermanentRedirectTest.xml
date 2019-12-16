@@ -48,7 +48,7 @@
         </actionGroup>
 
         <!-- Verify AssertPageByUrlRewriteIsNotFound -->
-        <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="assertPageByUrlRewriteIsNotFound">
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="assertPageByUrlRewriteIsNotFound">
             <argument name="requestPath" value="permanentrequestpath.html"/>
         </actionGroup>
     </test>

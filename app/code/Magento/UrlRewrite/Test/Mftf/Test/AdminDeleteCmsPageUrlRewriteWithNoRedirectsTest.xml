@@ -53,7 +53,7 @@
         </actionGroup>
 
         <!--Verify AssertPageByUrlRewriteIsNotFound-->
-        <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="assertPageByUrlRewriteIsNotFound">
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="assertPageByUrlRewriteIsNotFound">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
     </test>
