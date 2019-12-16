@@ -1569,6 +1569,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     continue;
                 }
 
+                $storeId = !empty($rowData[self::COL_STORE])
+                    ? $this->getStoreIdByCode($rowData[self::COL_STORE])
+                    : Store::DEFAULT_STORE_ID;
+                $rowExistingImages = $existingImages[$storeId][$rowSku] ?? [];
+                $rowStoreMediaGalleryValues = $rowExistingImages;
+                $rowExistingImages += $existingImages[Store::DEFAULT_STORE_ID][$rowSku] ?? [];
+
                 if (self::SCOPE_STORE == $rowScope) {
                     // set necessary data from SCOPE_DEFAULT row
                     $rowData[self::COL_TYPE] = $this->skuProcessor->getNewSku($rowSku)['type_id'];
@@ -1672,19 +1679,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 // 5. Media gallery phase
                 list($rowImages, $rowLabels) = $this->getImagesFromRow($rowData);
-                $storeId = !empty($rowData[self::COL_STORE])
-                    ? $this->getStoreIdByCode($rowData[self::COL_STORE])
-                    : Store::DEFAULT_STORE_ID;
                 $imageHiddenStates = $this->getImagesHiddenStates($rowData);
                 foreach (array_keys($imageHiddenStates) as $image) {
-                    if (array_key_exists($rowSku, $existingImages)
-                        && array_key_exists($image, $existingImages[$rowSku])
-                    ) {
-                        $rowImages[self::COL_MEDIA_IMAGE][] = $image;
+                    //Mark image as uploaded if it exists
+                    if (array_key_exists($image, $rowExistingImages)) {
                         $uploadedImages[$image] = $image;
                     }
-
-                    if (empty($rowImages)) {
+                    //Add image to hide to images list if it does not exist
+                    if (empty($rowImages[self::COL_MEDIA_IMAGE])
+                        || !in_array($image, $rowImages[self::COL_MEDIA_IMAGE])
+                    ) {
                         $rowImages[self::COL_MEDIA_IMAGE][] = $image;
                     }
                 }
@@ -1725,24 +1729,29 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             continue;
                         }
 
-                        if (isset($existingImages[$rowSku][$uploadedFile])) {
-                            $currentFileData = $existingImages[$rowSku][$uploadedFile];
+                        if (isset($rowExistingImages[$uploadedFile])) {
+                            $currentFileData = $rowExistingImages[$uploadedFile];
+                            $currentFileData['store_id'] = $storeId;
+                            $storeMediaGalleryValueExists = isset($rowStoreMediaGalleryValues[$uploadedFile]);
+                            if (array_key_exists($uploadedFile, $imageHiddenStates)
+                                && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
+                            ) {
+                                $imagesForChangeVisibility[] = [
+                                    'disabled' => $imageHiddenStates[$uploadedFile],
+                                    'imageData' => $currentFileData,
+                                    'exists' => $storeMediaGalleryValueExists
+                                ];
+                                $storeMediaGalleryValueExists = true;
+                            }
+
                             if (isset($rowLabels[$column][$columnImageKey])
                                 && $rowLabels[$column][$columnImageKey] !=
                                 $currentFileData['label']
                             ) {
                                 $labelsForUpdate[] = [
                                     'label' => $rowLabels[$column][$columnImageKey],
-                                    'imageData' => $currentFileData
-                                ];
-                            }
-
-                            if (array_key_exists($uploadedFile, $imageHiddenStates)
-                                && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
-                            ) {
-                                $imagesForChangeVisibility[] = [
-                                    'disabled' => $imageHiddenStates[$uploadedFile],
-                                    'imageData' => $currentFileData
+                                    'imageData' => $currentFileData,
+                                    'exists' => $storeMediaGalleryValueExists
                                 ];
                             }
                         } else {
