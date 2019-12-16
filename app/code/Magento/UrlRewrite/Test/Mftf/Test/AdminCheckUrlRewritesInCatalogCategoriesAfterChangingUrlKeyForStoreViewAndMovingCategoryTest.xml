@@ -80,7 +80,6 @@
         <!-- Assert category url with custom store view -->
         <amOnPage url="{{StorefrontHomePage.url}}$$createSecondCategory.name$$/{{SimpleRootSubCategory.url_key}}.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <dontSee userInput="$$createSecondSimpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
-        <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
+        <see userInput="$$createFirstSimpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeProductInCategory"/>
     </test>
 </tests>
