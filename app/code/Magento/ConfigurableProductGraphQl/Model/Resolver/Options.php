@@ -67,8 +67,6 @@ class Options implements ResolverInterface
         }
 
         $this->optionCollection->addProductId((int)$value[$linkField]);
-        // we need to add product model to the collection for using it in the SwatchData resolver
-        $this->optionCollection->addProductModel($value['model']);
 
         $result = function () use ($value, $linkField) {
             return $this->optionCollection->getAttributesByProductId((int)$value[$linkField]);

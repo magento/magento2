@@ -16,16 +16,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
-        <arguments>
-            <argument name="map" xsi:type="array">
-                <item name="SwatchTypeEnum" xsi:type="array">
-                    <item name="textual" xsi:type="string">0</item>
-                    <item name="color" xsi:type="string">1</item>
-                    <item name="image" xsi:type="string">2</item>
-                    <item name="empty" xsi:type="string">3</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
 </config>

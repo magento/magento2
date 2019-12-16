@@ -23,19 +23,27 @@ type SwatchLayerFilterItem implements LayerFilterItemInterface, SwatchLayerFilte
 
 }
 
-type ConfigurableProductOptionsValues {
-    swatch_data: SwatchData @doc(description: "Swatch data for configurable product option") @resolver (class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData")
-}
-
 type SwatchData {
-    type: SwatchTypeEnum @doc(description: "Type of swatch filter item: 0 - textual, 1 - color, 2 - image, 3 - empty")
-    value: String @doc(description: "Value of swatch item (HEX color code, image link or textual value)")
-    thumbnail: String @doc(description: "Thumbnail swatch image URL (actual for image type only)")
+    type: String @doc(description: "Type of swatch filter item: 1 - text, 2 - image")
+    value: String @doc(description: "Value for swatch item (text or image link)")
 }
 
-enum SwatchTypeEnum @doc(description: "Type of swatch enum") {
-    TEXTUAL
-    COLOR
-    IMAGE
-    EMPTY
+type ConfigurableProductOptionsValues {
+    swatch_data: SwatchDataInterface @doc(description: "Swatch data for configurable product option") @resolver (class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData")
+}
+
+interface SwatchDataInterface {
+    value: String @doc(description: "Value of swatch item (HEX color code, image link or textual value)")
+}
+
+type ImageSwatchData implements SwatchDataInterface {
+    thumbnail: String @doc(description: "Thumbnail swatch image URL")
+}
+
+type TextSwatchData implements SwatchDataInterface {
+
+}
+
+type ColorSwatchData implements SwatchDataInterface {
+
 }
