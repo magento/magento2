@@ -19,7 +19,7 @@
         </email>
         <current_password>
             <selector>input[name*=current-password]</selector>
-        </current_password>>
+        </current_password>
         <password>
             <selector>input[name*=current-password]</selector>
         </password>

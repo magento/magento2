@@ -56,7 +56,12 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         $this->addChild(
             'update_button',
             \Magento\Backend\Block\Widget\Button::class,
-            ['label' => __('Update Qty\'s'), 'class' => 'update-button', 'onclick' => $onclick]
+            ['label' => __('Update Qty\'s'), 'class' => 'update-button secondary', 'onclick' => $onclick]
+        );
+        $this->addChild(
+            'update_totals_button',
+            \Magento\Backend\Block\Widget\Button::class,
+            ['label' => __('Update Totals'), 'class' => 'update-totals-button secondary', 'onclick' => $onclick]
         );
 
         if ($this->getCreditmemo()->canRefund()) {
@@ -174,6 +179,16 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     public function getUpdateButtonHtml()
     {
         return $this->getChildHtml('update_button');
+    }
+
+    /**
+     * Get update totals button html
+     *
+     * @return string
+     */
+    public function getUpdateTotalsButtonHtml(): string
+    {
+        return $this->getChildHtml('update_totals_button');
     }
 
     /**

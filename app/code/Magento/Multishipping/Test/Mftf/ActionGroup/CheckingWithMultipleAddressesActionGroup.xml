@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <actionGroup name="CheckingWithSingleAddressActionGroup">
+        <click stepKey="clickOnCheckoutWithMultipleAddresses" selector="{{SingleShippingSection.checkoutWithMultipleAddresses}}"/>
+        <waitForPageLoad stepKey="waitForMultipleAddressPageLoad"/>
+        <click stepKey="goToShippingInformation" selector="{{SingleShippingSection.goToShippingInfo}}"/>
+        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+    </actionGroup>
+    <actionGroup name="CheckingWithMultipleAddressesActionGroup" extends="CheckingWithSingleAddressActionGroup">
+        <grabTextFrom stepKey="firstShippingAddressValue" selector="{{MultishippingSection.firstShippingAddressValue}}" after="waitForMultipleAddressPageLoad" />
+        <selectOption selector="{{MultishippingSection.firstShippingAddressOption}}" userInput="{$firstShippingAddressValue}" stepKey="selectFirstShippingMethod" after="firstShippingAddressValue" />
+        <waitForPageLoad stepKey="waitForSecondShippingAddresses" after="selectFirstShippingMethod" />
+        <grabTextFrom stepKey="secondShippingAddressValue" selector="{{MultishippingSection.secondShippingAddressValue}}" after="waitForSecondShippingAddresses" />
+        <selectOption selector="{{MultishippingSection.secondShippingAddressOption}}" userInput="{$secondShippingAddressValue}" stepKey="selectSecondShippingMethod" after="secondShippingAddressValue" />
+        <click stepKey="clickOnUpdateAddress" selector="{{SingleShippingSection.updateAddress}}" after="selectSecondShippingMethod" />
+        <waitForPageLoad stepKey="waitForShippingInformation" after="clickOnUpdateAddress" />
+    </actionGroup>
+</actionGroups>
+

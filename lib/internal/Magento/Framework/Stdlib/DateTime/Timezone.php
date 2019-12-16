@@ -196,11 +196,36 @@ class Timezone implements TimezoneInterface
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        $date = new \DateTime(is_numeric($date) ? '@' . $date : $date);
-        $date->setTimezone(new \DateTimeZone($timezone));
+        switch (true) {
+            case (empty($date)):
+                $date = new \DateTime('now', new \DateTimeZone($timezone));
+                break;
+            case ($date instanceof \DateTime):
+                $date = $date->setTimezone(new \DateTimeZone($timezone));
+                break;
+            case ($date instanceof \DateTimeImmutable):
+                $date = new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
+                break;
+            case (!is_numeric($date)):
+                $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
+                $formatter = new \IntlDateFormatter(
+                    $this->_localeResolver->getLocale(),
+                    \IntlDateFormatter::SHORT,
+                    $timeType,
+                    new \DateTimeZone($timezone)
+                );
+                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                $date = (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
+                break;
+            default:
+                $date = new \DateTime(is_numeric($date) ? '@' . $date : $date);
+                $date->setTimezone(new \DateTimeZone($timezone));
+        }
+
         if (!$includeTime) {
             $date->setTime(0, 0, 0);
         }
+
         return $date;
     }
 

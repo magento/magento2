@@ -11,6 +11,7 @@
             <group id="frontend" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <field id="swatches_per_product" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Swatches per Product</label>
+                    <validate>validate-digits validate-zero-or-greater</validate>
                 </field>
                 <field id="show_swatches_in_product_list" translate="label" type="select" sortOrder="310" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Show Swatches in Product List</label>

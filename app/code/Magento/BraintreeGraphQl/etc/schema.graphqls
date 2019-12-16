@@ -1,0 +1,22 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    createBraintreeClientToken: String! @resolver(class: "\\Magento\\BraintreeGraphQl\\Model\\Resolver\\CreateBraintreeClientToken") @doc(description:"Creates Braintree Client Token for creating client-side nonce.")
+}
+
+input PaymentMethodInput {
+    braintree: BraintreeInput
+    braintree_cc_vault: BraintreeCcVaultInput
+}
+
+input BraintreeInput {
+    payment_method_nonce: String!
+    is_active_payment_token_enabler: Boolean!
+    device_data: String
+}
+
+input BraintreeCcVaultInput {
+    public_hash: String!
+    device_data: String
+}

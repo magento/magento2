@@ -37,7 +37,11 @@ class SetPurchaseOrderPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      */
     public function testSetPurchaseOrderPaymentMethodOnCartWithSimpleProduct()
     {
@@ -80,7 +84,11 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      *
      * @expectedException Exception
      * @expectedExceptionMessage Purchase order number is a required field.

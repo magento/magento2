@@ -6,8 +6,12 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateCustomRadioOptions">
+        <annotations>
+            <description>Adds a custom Radio Product Option with 3 Radio Options to a Product based on the provided Options.</description>
+        </annotations>
         <!-- ActionGroup will add a single custom option to a product -->
         <!-- You must already be on the product creation page -->
         <arguments>
@@ -15,6 +19,7 @@
             <argument name="productOption"/>
             <argument name="productOption2"/>
         </arguments>
+
         <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
         <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
 
@@ -38,9 +43,13 @@
 
     <!--Add a custom option of type "file" to a product-->
     <actionGroup name="AddProductCustomOptionFile">
+        <annotations>
+            <description>Add a custom File Product Option to a Product based on the provided File.</description>
+        </annotations>
         <arguments>
             <argument name="option" defaultValue="ProductOptionFile"/>
         </arguments>
+
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" stepKey="waitForOption"/>
@@ -52,10 +61,15 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceTypeByTitle(option.title)}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensionByTitle(option.title)}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
     </actionGroup>
+
     <actionGroup name="AddProductCustomOptionField">
+        <annotations>
+            <description>Add a custom Field Product Option to a Product based on the provided Option.</description>
+        </annotations>
         <arguments>
             <argument name="option" defaultValue="ProductOptionField"/>
         </arguments>
+
         <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToAddButtonOption"/>
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
@@ -68,10 +82,15 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceTypeByTitle(option.title)}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionSkuByTitle(option.title)}}" userInput="{{option.title}}" stepKey="fillSku"/>
     </actionGroup>
+
     <actionGroup name="importProductCustomizableOptions">
+        <annotations>
+            <description>Import custom Product Options for the provided Product Name.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+
         <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
         <waitForElementVisible selector="{{AdminProductImportOptionsSection.selectProductTitle}}" stepKey="waitForTitleVisible"/>
         <conditionalClick selector="{{AdminProductImportOptionsSection.resetFiltersButton}}" dependentSelector="{{AdminProductImportOptionsSection.resetFiltersButton}}" visible="true" stepKey="clickResetFilters"/>
@@ -82,16 +101,26 @@
         <checkOption selector="{{AdminProductImportOptionsSection.firstRowItemCheckbox}}"  stepKey="checkProductCheckbox"/>
         <click selector="{{AdminProductImportOptionsSection.importButton}}" stepKey="clickImport"/>
     </actionGroup>
+
     <actionGroup name="resetImportOptionFilter">
+        <annotations>
+            <description>Click on the Reset Filters button for the Import Options filters on the Product grid page.</description>
+        </annotations>
+
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
         <click selector="{{AdminProductImportOptionsSection.resetFiltersButton}}" stepKey="clickResetFilterButton"/>
     </actionGroup>
+
     <actionGroup name="checkCustomizableOptionImport">
+        <annotations>
+            <description>Validate that the Custom Product Option Import value is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="option" defaultValue="ProductOptionField"/>
             <argument name="optionIndex" type="string"/>
         </arguments>
+
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionTitleInput(optionIndex)}}" stepKey="grabOptionTitle"/>
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionPrice(optionIndex)}}" stepKey="grabOptionPrice"/>
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionSku(optionIndex)}}" stepKey="grabOptionSku"/>

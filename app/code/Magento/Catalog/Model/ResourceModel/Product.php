@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\AbstractModel;
@@ -607,7 +608,9 @@ class Product extends AbstractResource
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @param ProductEntity|object $object
      */
     public function validate($object)
     {
@@ -689,7 +692,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * Retrieve entity manager object
+     * Retrieve entity manager.
      *
      * @return EntityManager
      */
@@ -703,7 +706,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * Retrieve ProductWebsiteLink object
+     * Retrieve ProductWebsiteLink instance.
      *
      * @deprecated 101.1.0
      * @return ProductWebsiteLink
@@ -714,7 +717,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * Retrieve CategoryLink object
+     * Retrieve CategoryLink instance.
      *
      * @deprecated 101.1.0
      * @return Product\CategoryLink

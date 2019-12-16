@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add Configurable Product with Swatch attribute to the cart -->
+    <actionGroup name="StorefrontAddProductWithSwatchesToTheCartActionGroup" extends="StorefrontAddProductToCartWithQtyActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="productOption" type="string"/>
+        </arguments>
+        <remove keyForRemoval="seeSuccessSaveMessage"/>
+        <click selector="{{StorefrontProductInfoMainSection.visualSwatchOption(productOption)}}" after="waitForStorefrontProductPageLoad" stepKey="clickSelectOption"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." after="waitForSuccessMessage" stepKey="seeAddToCartSuccessMessage"/>
+    </actionGroup>
+
+    <!-- Update Configurable Product with Swatch attribute in the cart -->
+    <actionGroup name="StorefrontUpdateCartConfigurableProductWithSwatches">
+        <arguments>
+            <argument name="product"/>
+            <argument name="productOption" type="string"/>
+        </arguments>
+        <click selector="{{CheckoutCartProductSection.nthEditButton('1')}}" stepKey="clickEditConfigurableProductButton"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
+        <click selector="{{StorefrontProductInfoMainSection.visualSwatchOption(productOption)}}" stepKey="changeSwatchAttributeOption"/>
+        <click selector="{{StorefrontProductInfoMainSection.updateCart}}" stepKey="clickUpdateCartButton"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{product.name}} was updated in your shopping cart." stepKey="assertSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

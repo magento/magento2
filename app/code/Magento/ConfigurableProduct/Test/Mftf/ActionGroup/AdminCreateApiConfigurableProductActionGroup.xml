@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateApiConfigurableProductActionGroup">
+        <annotations>
+            <description>Creates a Configurable Product with 2 Product Options via the API.</description>
+        </annotations>
         <arguments>
             <argument name="productName" defaultValue="{{ApiConfigurableProductWithOutCategory.name}}" type="string"/>
         </arguments>
@@ -65,6 +68,10 @@
 
     <!-- Create the configurable product, children are not visible individually -->
     <actionGroup name="AdminCreateApiConfigurableProductWithHiddenChildActionGroup" extends="AdminCreateApiConfigurableProductActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateApiConfigurableProductActionGroup. Adds 2 Hidden Product Options.</description>
+        </annotations>
+
         <!-- Create the 2 children that will be a part of the configurable product -->
         <createData entity="ApiSimpleOneHidden" stepKey="createConfigChildProduct1">
             <requiredEntity createDataKey="createConfigProductAttribute"/>

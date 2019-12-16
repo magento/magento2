@@ -627,4 +627,7 @@
     <type name="Magento\Quote\Api\CartManagementInterface">
         <plugin name="order_cancellation" type="Magento\Braintree\Plugin\OrderCancellation"/>
     </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="disable_quote_address_validation" type="Magento\Braintree\Plugin\DisableQuoteAddressValidation"/>
+    </type>
 </config>

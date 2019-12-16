@@ -26,9 +26,10 @@ class MessageTest extends \PHPUnit\Framework\TestCase
 
         $part = $this->message->getBody()->getParts()[0];
         $this->assertEquals('text/html', $part->getType());
-        $this->assertEquals('8bit', $part->getEncoding());
+        $this->assertEquals('quoted-printable', $part->getEncoding());
         $this->assertEquals('utf-8', $part->getCharset());
         $this->assertEquals('body', $part->getContent());
+        $this->assertEquals('inline', $part->getDisposition());
     }
 
     public function testSetBodyText()
@@ -37,8 +38,9 @@ class MessageTest extends \PHPUnit\Framework\TestCase
 
         $part = $this->message->getBody()->getParts()[0];
         $this->assertEquals('text/plain', $part->getType());
-        $this->assertEquals('8bit', $part->getEncoding());
+        $this->assertEquals('quoted-printable', $part->getEncoding());
         $this->assertEquals('utf-8', $part->getCharset());
         $this->assertEquals('body', $part->getContent());
+        $this->assertEquals('inline', $part->getDisposition());
     }
 }

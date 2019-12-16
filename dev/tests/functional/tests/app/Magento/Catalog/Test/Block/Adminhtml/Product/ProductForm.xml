@@ -31,7 +31,7 @@
             </category_ids>
             <quantity_and_stock_status composite="1">
                 <qty>
-                    <selector>fieldset[data-index="quantity_and_stock_status_qty"] [name="product[quantity_and_stock_status][qty]"]</selector>
+                    <selector>fieldset[data-index="container_quantity_and_stock_status_qty"] [name="product[quantity_and_stock_status][qty]"]</selector>
                 </qty>
                 <is_in_stock>
                     <selector>[data-index="quantity_and_stock_status"] [name="product[quantity_and_stock_status][is_in_stock]"]</selector>

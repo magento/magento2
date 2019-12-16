@@ -10,10 +10,14 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Assert customer info in customers grid row -->
     <actionGroup name="AdminAssertCustomerInCustomersGrid">
+        <annotations>
+            <description>Validates that the provided Customer is present and correct in the Backend Customer grid page.</description>
+        </annotations>
         <arguments>
             <argument name="text" type="string"/>
             <argument name="row" type="string"/>
         </arguments>
+
         <see selector="{{AdminCustomerGridSection.gridRow(row)}}" userInput="{{text}}"  stepKey="seeCustomerInGrid"/>
     </actionGroup>
 </actionGroups>

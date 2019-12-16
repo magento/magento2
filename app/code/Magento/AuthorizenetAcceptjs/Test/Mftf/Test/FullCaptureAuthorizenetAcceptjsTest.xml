@@ -31,9 +31,11 @@
             </createData>
 
             <!--Configure Auth.net-->
+            <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
             <actionGroup ref="ConfigureAuthorizenetAcceptjs" stepKey="configureAuthorizenetAcceptjs">
                 <argument name="paymentAction" value="Authorize Only"/>
             </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
 
         </before>
         <after>

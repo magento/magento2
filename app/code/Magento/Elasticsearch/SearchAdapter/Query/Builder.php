@@ -6,6 +6,8 @@
 
 namespace Magento\Elasticsearch\SearchAdapter\Query;
 
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
 
@@ -18,7 +20,12 @@ use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elastics
 class Builder extends Elasticsearch5Builder
 {
     /**
-     * Set initial settings for query
+     * @var Sort
+     */
+    private $sortBuilder;
+
+    /**
+     * Set initial settings for query.
      *
      * @param RequestInterface $request
      * @return array
@@ -35,10 +42,23 @@ class Builder extends Elasticsearch5Builder
                 'from' => $request->getFrom(),
                 'size' => $request->getSize(),
                 'fields' => ['_id', '_score'],
-                'sort' => $this->sortBuilder->getSort($request),
+                'sort' => $this->getSortBuilder()->getSort($request),
                 'query' => [],
             ],
         ];
         return $searchQuery;
+    }
+
+    /**
+     * Get sort builder instance.
+     *
+     * @return Sort
+     */
+    private function getSortBuilder()
+    {
+        if (null === $this->sortBuilder) {
+            $this->sortBuilder = ObjectManager::getInstance()->get(Sort::class);
+        }
+        return $this->sortBuilder;
     }
 }

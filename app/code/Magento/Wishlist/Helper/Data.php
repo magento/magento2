@@ -639,6 +639,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $product = $item->getProduct();
         }
         $buyRequest = $item->getBuyRequest();
+        $fragment = [];
         if (is_object($buyRequest)) {
             $config = $buyRequest->getSuperProductConfig();
             if ($config && !empty($config['product_id'])) {
@@ -648,7 +649,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $this->_storeManager->getStore()->getStoreId()
                 );
             }
+            $fragment = $buyRequest->getSuperAttribute() ?? [];
+            if ($buyRequest->getQty()) {
+                $additional['_query']['qty'] = $buyRequest->getQty();
+            }
         }
-        return $product->getUrlModel()->getUrl($product, $additional);
+        $url = $product->getUrlModel()->getUrl($product, $additional);
+        if ($fragment) {
+            $url .= '#' . http_build_query($fragment);
+        }
+
+        return $url;
     }
 }

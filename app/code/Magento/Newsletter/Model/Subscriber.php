@@ -495,7 +495,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 $this->sendConfirmationSuccessEmail();
             }
             return $this->getStatus();
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($e->getMessage());

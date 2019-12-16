@@ -6,36 +6,42 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
-class TranslatedListsTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Locale\ConfigInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Locale\TranslatedLists;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TranslatedListsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Locale\TranslatedLists
+     * @var TranslatedLists
      */
     protected $listsModel;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ConfigInterface
+     * @var  MockObject | ConfigInterface
      */
     protected $mockConfig;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface
+     * @var  MockObject | ResolverInterface
      */
     protected $mockLocaleResolver;
 
     protected function setUp()
     {
-        $this->mockConfig = $this->getMockBuilder(\Magento\Framework\Locale\ConfigInterface::class)
+        $this->mockConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockLocaleResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
+        $this->mockLocaleResolver = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockLocaleResolver->expects($this->once())
             ->method('getLocale')
-            ->will($this->returnValue('en_US'));
+            ->willReturn('en_US');
 
-        $this->listsModel = new \Magento\Framework\Locale\TranslatedLists(
+        $this->listsModel = new TranslatedLists(
             $this->mockConfig,
             $this->mockLocaleResolver
         );
@@ -67,13 +73,13 @@ class TranslatedListsTest extends \PHPUnit\Framework\TestCase
 
         $this->mockConfig->expects($this->once())
             ->method('getAllowedCurrencies')
-            ->will($this->returnValue($allowedCurrencies));
+            ->willReturn($allowedCurrencies);
 
         $expectedResults = ['USD', 'EUR', 'GBP', 'UAH'];
 
         $currencyList = $this->listsModel->getOptionCurrencies();
         $currencyCodes = array_map(
-            function ($data) {
+            static function ($data) {
                 return $data['value'];
             },
             $currencyList
@@ -166,6 +172,6 @@ class TranslatedListsTest extends \PHPUnit\Framework\TestCase
         $allowedLocales = ['en_US', 'uk_UA', 'de_DE'];
         $this->mockConfig->expects($this->once())
             ->method('getAllowedLocales')
-            ->will($this->returnValue($allowedLocales));
+            ->willReturn($allowedLocales);
     }
 }

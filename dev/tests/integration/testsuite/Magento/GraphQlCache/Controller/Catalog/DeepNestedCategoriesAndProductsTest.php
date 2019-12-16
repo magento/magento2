@@ -23,9 +23,6 @@ class DeepNestedCategoriesAndProductsTest extends AbstractGraphqlCacheTest
     /** @var \Magento\GraphQl\Controller\GraphQl */
     private $graphql;
 
-    /** @var Http */
-    private $request;
-
     /**
      * @inheritdoc
      */
@@ -33,7 +30,6 @@ class DeepNestedCategoriesAndProductsTest extends AbstractGraphqlCacheTest
     {
         parent::setUp();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->get(Http::class);
     }
 
     /**
@@ -112,10 +108,8 @@ QUERY;
             $expectedCacheTags = array_merge($expectedCacheTags, ['cat_c_'.$uniqueCategoryId]);
         }
 
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setQueryValue('query', $query);
-        $response = $this->graphql->dispatch($this->request);
+        $request = $this->prepareRequest($query);
+        $response = $this->graphql->dispatch($request);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $this->assertEmpty(

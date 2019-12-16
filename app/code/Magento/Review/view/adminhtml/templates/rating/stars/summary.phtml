@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Review\Block\Adminhtml\Rating\Summary $block */
 ?>
-<?php if ($block->getRatingSummary()->getCount()): ?>
+<?php if ($block->getRatingSummary()->getCount()) : ?>
     <div class="rating-box">
         <div class="rating" style="width:<?= /* @noEscape */ ceil($block->getRatingSummary()->getSum() / ($block->getRatingSummary()->getCount())) ?>%;"></div>
     </div>
-<?php else: ?>
+<?php else : ?>
     <?= $block->escapeHtml(__("Rating isn't Available")) ?>
 <?php endif; ?>

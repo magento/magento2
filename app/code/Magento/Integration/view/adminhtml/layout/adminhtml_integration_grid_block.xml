@@ -49,6 +49,7 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="integration.grid.columnSet.activate" as="activate">
                         <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Activate</argument>
                             <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate</argument>
                             <argument name="index" xsi:type="string">activate</argument>
                             <argument name="id" xsi:type="string">activate</argument>
@@ -58,6 +59,7 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="integration.grid.columnSet.edit" as="edit">
                         <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Edit</argument>
                             <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Edit</argument>
                             <argument name="index" xsi:type="string">edit</argument>
                             <argument name="id" xsi:type="string">edit</argument>
@@ -67,6 +69,7 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="integration.grid.columnSet.delete" as="delete">
                         <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Delete</argument>
                             <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Delete</argument>
                             <argument name="class" xsi:type="string">action delete</argument>
                             <argument name="index" xsi:type="string">delete</argument>

@@ -17,7 +17,7 @@
         <element name="filters" type="button" selector="//div[@id='sales_order_view_tabs_order_invoices_content']//button[@data-action='grid-filter-expand']" timeout="30"/>
         <element name="applyFilters" type="button" selector="//div[@id='sales_order_view_tabs_order_invoices_content']//button[@data-action='grid-filter-apply']" timeout="30"/>
         <element name="invoiceId" type="input" selector="//div[@id='sales_order_view_tabs_order_invoices_content']//input[@name='increment_id']" timeout="30"/>
-        <element name="amountFrom" type="input" selector="[name='grand_total[from]']" timeout="30"/>
-        <element name="amountTo" type="input" selector="[name='grand_total[to]']" timeout="30"/>
+        <element name="amountFrom" type="input" selector="[name='base_grand_total[from]']" timeout="30"/>
+        <element name="amountTo" type="input" selector="[name='base_grand_total[to]']" timeout="30"/>
     </section>
 </sections>

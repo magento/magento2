@@ -5,9 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="clickViewAndEditCartFromMiniCart">
+        <annotations>
+            <description>Clicks on the Storefront Mini Shopping Cart icon. Clicks on the 'View and Edit Cart' link. Validates that the URL is present and correct. PLEASE NOTE: The URL is Hardcoded.</description>
+        </annotations>
+
         <scrollTo selector="{{StorefrontMinicartSection.showCart}}" stepKey="scrollToMiniCart"/>
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
@@ -15,10 +20,15 @@
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <seeInCurrentUrl url="checkout/cart" stepKey="seeInCurrentUrl"/>
     </actionGroup>
+    
     <actionGroup name="assertOneProductNameInMiniCart">
+        <annotations>
+            <description>Validates that the provided Product Name is present in the Storefront Mini Shopping Cart.</description>
+        </annotations>
         <arguments>
             <argument name="productName"/>
         </arguments>
+        
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productName}}" stepKey="seeInMiniCart"/>
@@ -26,9 +36,13 @@
 
     <!--Remove an item from the cart using minicart-->
     <actionGroup name="removeProductFromMiniCart">
+        <annotations>
+            <description>Removed the provided Product from the Storefront Mini Shopping Cart.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+        
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForMiniCartOpen"/>
         <click selector="{{StorefrontMinicartSection.deleteMiniCartItemByName(productName)}}" stepKey="clickDelete"/>
@@ -40,6 +54,10 @@
 
     <!--Check that the minicart is empty-->
     <actionGroup name="assertMiniCartEmpty">
+        <annotations>
+            <description>Validates that the provided Product Count appears in the Storefront Header next to the Shopping Cart icon. Clicks on the Mini Shopping Cart icon. Validates that the 'No Items' message is present and correct in the Storefront Mini Shopping Cart.</description>
+        </annotations>
+        
         <dontSeeElement selector="{{StorefrontMinicartSection.productCount}}" stepKey="dontSeeMinicartProductCount"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="expandMinicart"/>
         <see selector="{{StorefrontMinicartSection.minicartContent}}" userInput="You have no items in your shopping cart." stepKey="seeEmptyCartMessage"/>

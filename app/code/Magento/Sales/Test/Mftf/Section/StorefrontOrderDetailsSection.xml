@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontOrderDetailsSection">
+        <element name="orderDetailsBlock" type="block" selector=".block-order-details-view"/>
+        <element name="billingAddressBlock" type="block" selector=".box-order-billing-address > .box-content > address"/>
+        <element name="discountSalesRule" type="text" selector="tr.discount span.price"/>
+        <element name="grandTotalPrice" type="text" selector="tr.grand_total span.price"/>
+        <element name="paymentMethod" type="text" selector=".box-order-billing-method dt.title"/>
+        <element name="shippingMethod" type="text" selector=".box-order-shipping-method div.box-content"/>
+        <element name="productNameCell" type="text" selector="//*[contains(@class, 'product-item-name')]"/>
+     </section>
+</sections>

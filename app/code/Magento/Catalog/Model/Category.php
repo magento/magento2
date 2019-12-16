@@ -5,10 +5,13 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Profiler;
@@ -128,6 +131,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         'page_layout',
         'custom_layout_update',
         'custom_apply_to_products',
+        'custom_use_parent_settings',
     ];
 
     /**
@@ -210,6 +214,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @var \Magento\Framework\Api\MetadataServiceInterface
      */
     protected $metadataService;
+
+    /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -311,17 +325,21 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         return $this->customAttributesCodes;
     }
 
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     /**
      * Returns model resource
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated because resource models should be used directly
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     protected function _getResource()
     {
+        //phpcs:enable Generic.CodeAnalysis.UselessOverridingMethod
         return parent::_getResource();
     }
+    // phpcs:enable
 
     /**
      * Get flat resource model flag
@@ -433,7 +451,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if ($this->flatState->isFlatEnabled()) {
             $flatIndexer = $this->indexerRegistry->get(Indexer\Category\Flat\State::INDEXER_ID);
             if (!$flatIndexer->isScheduled()) {
-                $flatIndexer->reindexList([$this->getId(), $oldParentId, $parentId]);
+                $sameLevelCategories = explode(',', $this->getParentCategory()->getChildren());
+                $list = array_unique(array_merge($sameLevelCategories, [$this->getId(), $oldParentId, $parentId]));
+                $flatIndexer->reindexList($list);
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
@@ -606,11 +626,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 return $this->getData('url');
             }
 
-            $rewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::ENTITY_ID => $this->getId(),
-                UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::STORE_ID => $this->getStoreId(),
-            ]);
+            $rewrite = $this->urlFinder->findOneByData(
+                [
+                    UrlRewrite::ENTITY_ID => $this->getId(),
+                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::STORE_ID => $this->getStoreId(),
+                ]
+            );
             if ($rewrite) {
                 $this->setData('url', $this->getUrlInstance()->getDirectUrl($rewrite->getRequestPath()));
                 Profiler::stop('REWRITE: ' . __METHOD__);
@@ -912,6 +934,60 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t delete root category.'));
         }
         return parent::beforeDelete();
+    }
+
+    /**
+     * Get user context.
+     *
+     * @return UserContextInterface
+     */
+    private function getUserContext(): UserContextInterface
+    {
+        if (!$this->userContext) {
+            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
+        }
+
+        return $this->userContext;
+    }
+
+    /**
+     * Get authorization service.
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization(): AuthorizationInterface
+    {
+        if (!$this->authorization) {
+            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        }
+
+        return $this->authorization;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeSave()
+    {
+        //Validate changing of design.
+        $userType = $this->getUserContext()->getUserType();
+        if ((
+                $userType === UserContextInterface::USER_TYPE_ADMIN
+                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
+            )
+            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_category_design')
+        ) {
+            foreach ($this->_designAttributes as $attributeCode) {
+                $this->setData($attributeCode, $value = $this->getOrigData($attributeCode));
+                if (!empty($this->_data[self::CUSTOM_ATTRIBUTES])
+                    && array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])) {
+                    //In case custom attribute were used to update the entity.
+                    $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]->setValue($value);
+                }
+            }
+        }
+
+        return parent::beforeSave();
     }
 
     /**

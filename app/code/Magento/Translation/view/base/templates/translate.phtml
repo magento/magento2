@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Translation\Block\Js $block */
 ?>
-<?php if ($block->dictionaryEnabled()): ?>
+<?php if ($block->dictionaryEnabled()) : ?>
     <script>
         require.config({
             deps: [
@@ -28,7 +26,7 @@
 
                 <?php $version = $block->getTranslationFileVersion(); ?>
 
-                if (versionObj.version !== '<?= /* @escapeNotVerified */ $block->escapeJsQuote($version) ?>') {
+                if (versionObj.version !== '<?= $block->escapeJs($version) ?>') {
                     dependencies.push(
                         'text!<?= /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
                     );
@@ -44,7 +42,7 @@
                             $.localStorage.set(
                                 'mage-translation-file-version',
                                 {
-                                    version: '<?= /* @escapeNotVerified */ $block->escapeJsQuote($version) ?>'
+                                    version: '<?= $block->escapeJs($version) ?>'
                                 }
                             );
                         } else {

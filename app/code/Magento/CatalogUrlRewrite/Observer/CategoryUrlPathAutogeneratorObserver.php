@@ -9,7 +9,6 @@ use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Framework\Event\Observer;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
@@ -68,13 +67,15 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     {
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
-        $useDefaultAttribute = !$category->isObjectNew() && !empty($category->getData('use_default')['url_key']);
+        $useDefaultAttribute = !empty($category->getData('use_default')['url_key']);
         if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
             $this->updateUrlKey($category, $resultUrlKey);
-        } else if ($useDefaultAttribute) {
-            $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
-            $this->updateUrlKey($category, $resultUrlKey);
+        } elseif ($useDefaultAttribute) {
+            if (!$category->isObjectNew()) {
+                $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
+                $this->updateUrlKey($category, $resultUrlKey);
+            }
             $category->setUrlKey(null)->setUrlPath(null);
         }
     }

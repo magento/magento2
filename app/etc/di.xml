@@ -1771,4 +1771,13 @@
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPut"/>
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillRead"/>
     <preference for="Magento\Framework\MessageQueue\CallbackInvokerInterface" type="Magento\Framework\MessageQueue\CallbackInvoker"/>
+    <preference for="Magento\Framework\Mail\EmailMessageInterface"
+                type="Magento\Framework\Mail\EmailMessage" />
+    <preference for="Magento\Framework\Mail\MimeMessageInterface"
+                type="Magento\Framework\Mail\MimeMessage" />
+    <preference for="Magento\Framework\Mail\MimePartInterface"
+                type="Magento\Framework\Mail\MimePart" />
+    <type name="Magento\Framework\DB\Adapter\AdapterInterface">
+        <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
+    </type>
 </config>

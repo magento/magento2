@@ -123,9 +123,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Quote\Model\Quote\Item">
-        <plugin name="update_price_for_bundle_in_quote_item_option" type="Magento\Bundle\Plugin\UpdatePriceInQuoteItemOptions"/>
-    </type>
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
     </type>

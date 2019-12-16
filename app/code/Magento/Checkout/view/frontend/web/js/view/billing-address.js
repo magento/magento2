@@ -18,7 +18,7 @@ define([
     'Magento_Checkout/js/action/set-billing-address',
     'Magento_Ui/js/model/messageList',
     'mage/translate',
-    'Magento_Checkout/js/model/shipping-rates-validator'
+    'Magento_Checkout/js/model/billing-address-postcode-validator'
 ],
 function (
     ko,
@@ -35,7 +35,7 @@ function (
     setBillingAddressAction,
     globalMessageList,
     $t,
-    shippingRatesValidator
+    billingAddressPostcodeValidator
 ) {
     'use strict';
 
@@ -66,7 +66,7 @@ function (
             quote.paymentMethod.subscribe(function () {
                 checkoutDataResolver.resolveBillingAddress();
             }, this);
-            shippingRatesValidator.initFields(this.get('name') + '.form-fields');
+            billingAddressPostcodeValidator.initFields(this.get('name') + '.form-fields');
         },
 
         /**

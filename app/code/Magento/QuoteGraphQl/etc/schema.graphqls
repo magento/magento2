@@ -138,10 +138,6 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
-    additional_data: PaymentMethodAdditionalDataInput @doc(description: "Additional payment data")
-}
-
-input PaymentMethodAdditionalDataInput {
 }
 
 input SetGuestEmailOnCartInput {
@@ -198,9 +194,10 @@ type Cart {
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
     shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: BillingCartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
-    available_payment_methods: [AvailablePaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
+    available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
+    total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity")
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
@@ -247,7 +244,7 @@ type SelectedShippingMethod {
     carrier_title: String
     method_title: String
     amount: Money
-    base_amount: Money
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
 }
 
 type AvailableShippingMethod {
@@ -257,7 +254,7 @@ type AvailableShippingMethod {
     method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
     amount: Money!
-    base_amount: Money @doc(description: "Could be null if method is not available")
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
     price_excl_tax: Money!
     price_incl_tax: Money!
     available: Boolean!
@@ -317,7 +314,14 @@ type VirtualCartItem implements CartItemInterface @doc(description: "Virtual Car
 interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
     id: String!
     quantity: Float!
+    prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices")
     product: ProductInterface!
+}
+
+type CartItemPrices {
+    price: Money!
+    row_total: Money!
+    row_total_including_tax: Money!
 }
 
 type SelectedCustomizableOption {
@@ -331,7 +335,7 @@ type SelectedCustomizableOption {
 type SelectedCustomizableOptionValue {
     id: Int!
     label: String!
-    value: String
+    value: String!
     price: CartItemSelectedOptionValuePrice!
 }
 

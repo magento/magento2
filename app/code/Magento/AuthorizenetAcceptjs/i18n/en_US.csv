@@ -19,3 +19,4 @@ Authorize.net,Authorize.net
 "ccLast4","Last 4 Digits of Card"
 "There was an error while trying to process the refund.","There was an error while trying to process the refund."
 "This transaction cannot be refunded with its current status.","This transaction cannot be refunded with its current status."
+"The transaction has not been settled, a partial refund is not yet available.","The transaction has not been settled, a partial refund is not yet available."

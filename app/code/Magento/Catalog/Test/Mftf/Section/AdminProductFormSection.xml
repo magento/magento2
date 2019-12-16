@@ -66,7 +66,7 @@
         <element name="attributeRequiredInput" type="input" selector="//input[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
         <element name="attributeFieldError" type="text" selector="//*[@class='admin__field _required _error']/..//label[contains(.,'This is a required field.')]"/>
         <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
-        <element name="searchCategory" type="input" selector="//*[@data-index='category_ids']//input[contains(@class, 'multiselect-search')]"/>
+        <element name="searchCategory" type="input" selector="//*[@data-index='category_ids']//input[contains(@class, 'multiselect-search')]" timeout="30"/>
         <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true" timeout="30"/>
         <element name="done" type="button" selector="//*[@data-index='category_ids']//button[@data-action='close-advanced-select']" timeout="30"/>
         <element name="selectMultipleCategories" type="input" selector="//*[@data-index='container_category_ids']//*[contains(@class, '_selected')]"/>
@@ -84,6 +84,7 @@
     <section name="ProductDesignSection">
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
         <element name="LayoutDropdown" type="select" selector="select[name='product[page_layout]']"/>
+        <element name="productOptionsContainer" type="select" selector="select[name='product[options_container]']"/>
     </section>
     <section name="AdminProductFormRelatedUpSellCrossSellSection">
         <element name="relatedProductsHeader" type="button" selector=".admin__collapsible-block-wrapper[data-index='related']" timeout="30"/>
@@ -120,10 +121,10 @@
         <element name="InsertImageIcon" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-image']" parameterized="true"/>
         <element name="InsertTable" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-table']" parameterized="true"/>
         <element name="SpecialCharacter" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-charmap']" parameterized="true"/>
-        <element name="TinyMCE4" type="text" selector="//div[contains(@id, '{{var1}}')]//div[@class='mce-branding-powered-by']" parameterized="true"/>
+        <element name="TinyMCE4" type="text" selector="//div[contains(@id, '{{var1}}')]//*[contains(@class,'mce-branding')]" parameterized="true"/>
     </section>
     <section name="ProductDescriptionWYSIWYGToolbarSection">
-        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_description']//div[@class='mce-branding-powered-by']" />
+        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_description']//*[contains(@class,'mce-branding')]" />
         <element name="showHideBtn" type="button" selector="#toggleproduct_form_description"/>
         <element name="InsertImageBtn" type="button" selector="#buttonsproduct_form_description > .scalable.action-add-image.plugin" />
         <element name="Style" type="button" selector="//div[@id='editorproduct_form_description']//span[text()='Paragraph']" />
@@ -161,7 +162,7 @@
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
     <section name="ProductShortDescriptionWYSIWYGToolbarSection">
-        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_short_description']//div[@class='mce-branding-powered-by']" />
+        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_short_description']//*[contains(@class,'mce-branding')]" />
         <element name="InsertImageBtn" type="button" selector="#buttonsproduct_form_short_description > .scalable.action-add-image.plugin" />
         <element name="showHideBtn" type="button" selector="#toggleproduct_form_short_description"/>
         <element name="Style" type="button" selector="//div[@id='editorproduct_form_short_description']//span[text()='Paragraph']" />

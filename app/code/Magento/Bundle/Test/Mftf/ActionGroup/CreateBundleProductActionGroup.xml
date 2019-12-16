@@ -9,7 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateBasicBundleProduct">
-        <!--Prereq: Go to bundle product creation page-->
+        <annotations>
+            <description>Requires Navigation to the Product Creation page. Fills out Name, Sku, and SEO information using the BundleProduct Data Entity. PLEASE NOTE: The Action Group values are Hardcoded.</description>
+        </annotations>
+
+        <!--PreReq: Go to bundle product creation page-->
         <!--Product name and SKU-->
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
@@ -24,6 +28,9 @@
     </actionGroup>
 
     <actionGroup name="addBundleOptionWithTwoProducts">
+        <annotations>
+            <description>Requires Navigation to the Product Creation page. Adds Bundle Option with Two Products using the provided arguments. 'x' refers to Bundle option number. 'n' refers to the first number after x.</description>
+        </annotations>
         <arguments>
             <argument name="x" type="string"/>
             <argument name="n" type="string"/>
@@ -32,6 +39,7 @@
             <argument name="optionTitle" type="string"/>
             <argument name="inputType" type="string"/>
         </arguments>
+
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
         <scrollTo selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" stepKey="scrollUpABit"/>
         <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
@@ -58,6 +66,10 @@
     </actionGroup>
 
     <actionGroup name="addBundleOptionWithOneProduct" extends="addBundleOptionWithTwoProducts">
+        <annotations>
+            <description>Requires Navigation to the Product Creation page. Adds Bundle Option with One Product as specified in arguments. 'x' refers to Bundle option number. 'n' refers to the first number after x.</description>
+        </annotations>
+
         <remove keyForRemoval="openProductFilters2"/>
         <remove keyForRemoval="fillProductSkuFilter2"/>
         <remove keyForRemoval="clickApplyFilters2"/>
@@ -70,9 +82,13 @@
     </actionGroup>
 
     <actionGroup name="addBundleOptionWithTreeProducts" extends="addBundleOptionWithTwoProducts">
+        <annotations>
+            <description>Requires Navigation to the Product Creation page. Adds Bundle Option with Three Products using the provided arguments. 'x' refers to Bundle option number. 'n' refers to the first number after x.</description>
+        </annotations>
         <arguments>
             <argument name="prodTreeSku" type="string"/>
         </arguments>
+
         <remove keyForRemoval="fillQuantity1"/>
         <remove keyForRemoval="fillQuantity2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters3" after="selectProduct2"/>
@@ -87,12 +103,16 @@
     </actionGroup>
 
     <actionGroup name="addBundleOptionWithSixProducts" extends="addBundleOptionWithTwoProducts">
+        <annotations>
+            <description>Requires Navigation to Product Creation page. Adds Bundle Option with Six Products as specified in arguments. 'x' refers to Bundle option number. 'n' refers to the first number after x.</description>
+        </annotations>
         <arguments>
             <argument name="prodTreeSku" type="string"/>
             <argument name="prodFourSku" type="string"/>
             <argument name="prodFiveSku" type="string"/>
             <argument name="prodSixSku" type="string"/>
         </arguments>
+
         <remove keyForRemoval="fillQuantity1"/>
         <remove keyForRemoval="fillQuantity2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters3" after="selectProduct2"/>

@@ -6,13 +6,14 @@
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyCheckerInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
-use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\Data\Collection\Db\SizeResolverInterfaceFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -26,7 +27,6 @@ use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use Magento\Search\Model\EngineResolver;
 
 /**
  * Fulltext Collection
@@ -124,14 +124,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $totalRecordsResolverFactory;
 
     /**
-     * @var EngineResolverInterface
-     */
-    private $engineResolver;
-
-    /**
      * @var array
      */
     private $searchOrders;
+
+    /**
+     * @var DefaultFilterStrategyApplyCheckerInterface
+     */
+    private $defaultFilterStrategyApplyChecker;
 
     /**
      * Collection constructor
@@ -170,7 +170,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchCriteriaResolverFactory|null $searchCriteriaResolverFactory
      * @param SearchResultApplierFactory|null $searchResultApplierFactory
      * @param TotalRecordsResolverFactory|null $totalRecordsResolverFactory
-     * @param EngineResolverInterface|null $engineResolver
+     * @param DefaultFilterStrategyApplyCheckerInterface|null $defaultFilterStrategyApplyChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -209,7 +209,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
         SearchResultApplierFactory $searchResultApplierFactory = null,
         TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
-        EngineResolverInterface $engineResolver = null
+        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
         $this->queryFactory = $catalogSearchData;
         if ($searchResultFactory === null) {
@@ -255,8 +255,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ->get(SearchResultApplierFactory::class);
         $this->totalRecordsResolverFactory = $totalRecordsResolverFactory ?: ObjectManager::getInstance()
             ->get(TotalRecordsResolverFactory::class);
-        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()
-            ->get(EngineResolverInterface::class);
+        $this->defaultFilterStrategyApplyChecker = $defaultFilterStrategyApplyChecker ?: ObjectManager::getInstance()
+            ->get(DefaultFilterStrategyApplyChecker::class);
     }
 
     /**
@@ -393,8 +393,26 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
         $this->setSearchOrder($attribute, $dir);
-        if ($this->isCurrentEngineMysql()) {
+        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
             parent::setOrder($attribute, $dir);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add attribute to sort order.
+     *
+     * @param string $attribute
+     * @param string $dir
+     * @return $this
+     */
+    public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
+    {
+        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
+            parent::addAttributeToSort($attribute, $dir);
+        } else {
+            $this->setOrder($attribute, $dir);
         }
 
         return $this;
@@ -441,16 +459,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $direction = strtoupper($direction) == self::SORT_ORDER_ASC ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
 
         $this->searchOrders[$field] = $direction;
-    }
-
-    /**
-     * Check if current engine is MYSQL.
-     *
-     * @return bool
-     */
-    private function isCurrentEngineMysql()
-    {
-        return $this->engineResolver->getCurrentSearchEngine() === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
     }
 
     /**
@@ -580,7 +588,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * This changes need in backward compatible reasons for support dynamic improved algorithm
          * for price aggregation process.
          */
-        if ($this->isCurrentEngineMysql()) {
+        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
             parent::addCategoryFilter($category);
         } else {
             $this->_productLimitationPrice();
@@ -602,7 +610,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * This changes need in backward compatible reasons for support dynamic improved algorithm
          * for price aggregation process.
          */
-        if ($this->isCurrentEngineMysql()) {
+        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
             parent::setVisibility($visibility);
         }
 

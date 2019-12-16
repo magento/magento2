@@ -117,7 +117,6 @@ class UpdateCartItem
         }
         $cartItem->setQty($quantity);
         $this->validateCartItem($cartItem);
-        $this->cartItemRepository->save($cartItem);
     }
 
     /**

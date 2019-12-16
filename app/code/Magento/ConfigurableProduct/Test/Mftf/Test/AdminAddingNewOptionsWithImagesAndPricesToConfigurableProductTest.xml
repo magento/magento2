@@ -46,6 +46,7 @@
         <seeElement selector="{{AdminProductFormConfigurationsSection.attributeEntityByName($$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$)}}" stepKey="seeAttribute"/>
 
         <!--Create one color option via "Create New Value" link-->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue"/>
         <fillField userInput="{{colorDefaultProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>

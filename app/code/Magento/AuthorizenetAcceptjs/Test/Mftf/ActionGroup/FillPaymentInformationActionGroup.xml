@@ -5,9 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FillPaymentInformation">
+        <annotations>
+            <description>Fill Payment Method with Authorize.net</description>
+        </annotations>
+
         <click stepKey="clickOnAuthorizenetToggle" selector="{{AuthorizenetCheckoutSection.selectAuthorizenet}}"/>
         <waitForPageLoad stepKey="waitForCardDataSection"/>
         <fillField stepKey="fillCardNumber" selector="{{AuthorizenetCheckoutSection.cardInput}}" userInput="{{PaymentAndShippingInfo.cardNumber}}"/>
@@ -18,12 +23,16 @@
         <waitForPageLoad stepKey="waitForCheckout"/>
     </actionGroup>
 
-    <!-- Guest checkout Authorizenet fill billing address -->
+    <!-- Guest checkout Authorize.net fill billing address -->
     <actionGroup name="GuestCheckoutAuthorizenetFillBillingAddress">
+        <annotations>
+            <description>Fill Billing Address as Guest with Authorize.net</description>
+        </annotations>
         <arguments>
             <argument name="customer"/>
             <argument name="customerAddress"/>
         </arguments>
+
         <fillField selector="{{GuestAuthorizenetCheckoutSection.firstName}}" userInput="{{customer.firstName}}" stepKey="fillFirstName"/>
         <fillField selector="{{GuestAuthorizenetCheckoutSection.lastName}}" userInput="{{customer.lastName}}" stepKey="fillLastName"/>
         <fillField selector="{{GuestAuthorizenetCheckoutSection.street}}" userInput="{{customerAddress.street[0]}}" stepKey="fillStreet"/>

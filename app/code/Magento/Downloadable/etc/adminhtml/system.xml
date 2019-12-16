@@ -16,6 +16,7 @@
                 </field>
                 <field id="downloads_number" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Default Maximum Number of Downloads</label>
+                    <validate>validate-digits validate-zero-or-greater</validate>
                 </field>
                 <field id="shareable" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shareable</label>

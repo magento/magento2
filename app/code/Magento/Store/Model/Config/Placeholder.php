@@ -90,7 +90,7 @@ class Placeholder
 
             if ($url) {
                 $value = str_replace('{{' . $placeholder . '}}', $url, $value);
-            } elseif (strpos($value, $this->urlPlaceholder) !== false) {
+            } elseif (strpos($value, (string) $this->urlPlaceholder) !== false) {
                 $distroBaseUrl = $this->request->getDistroBaseUrl();
 
                 $value = str_replace($this->urlPlaceholder, $distroBaseUrl, $value);
@@ -115,7 +115,7 @@ class Placeholder
             $placeholder = $matches[1];
             if ($placeholder == 'unsecure_base_url' || $placeholder == 'secure_base_url' || strpos(
                 $value,
-                $this->urlPlaceholder
+                (string) $this->urlPlaceholder
             ) !== false
             ) {
                 return $placeholder;

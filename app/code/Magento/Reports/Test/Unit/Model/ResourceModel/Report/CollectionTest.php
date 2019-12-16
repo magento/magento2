@@ -6,49 +6,49 @@
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report;
 
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Reports\Model\ResourceModel\Report\Collection;
+use Magento\Reports\Model\ResourceModel\Report\Collection\Factory as ReportCollectionFactory;
 
+/**
+ * Class CollectionTest
+ *
+ * @covers \Magento\Reports\Model\ResourceModel\Report\Collection
+ */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Report\Collection
+     * @var Collection
      */
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $timezoneMock;
 
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $factoryMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\EntityFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
-            ->getMock();
-        $this->factoryMock = $this->getMockBuilder(
-            \Magento\Reports\Model\ResourceModel\Report\Collection\Factory::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->entityFactoryMock = $this->createMock(EntityFactory::class);
+        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
+        $this->factoryMock = $this->createMock(ReportCollectionFactory::class);
 
-        $this->timezoneMock
-            ->expects($this->any())
-            ->method('formatDateTime')
-            ->will($this->returnCallback([$this, 'formatDateTime']));
+        $this->timezoneMock->method('formatDate')
+            ->will($this->returnCallback([$this, 'formatDate']));
 
         $this->collection = new Collection(
             $this->entityFactoryMock,
@@ -131,7 +131,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testLoadData()
     {
         $this->assertInstanceOf(
-            \Magento\Reports\Model\ResourceModel\Report\Collection::class,
+            Collection::class,
             $this->collection->loadData()
         );
     }
@@ -182,14 +182,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param \DateTimeInterface $dateStart
      * @return string
      */
-    public function formatDateTime()
+    public function formatDate(\DateTimeInterface $dateStart): string
     {
-        $args = func_get_args();
-
-        $dateStart = $args[0];
-
         $formatter = new \IntlDateFormatter(
             "en_US",
             \IntlDateFormatter::SHORT,

@@ -81,7 +81,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'ms_Latn_MY', /*Malaysian (Malaysia)*/
         'nl_BE', /*Dutch (Belgium)*/
         'nl_NL', /*Dutch (Netherlands)*/
-        'nb_NO', /*Norwegian BokmГ_l (Norway)*/
+        'nb_NO', /*Norwegian Bokmål (Norway)*/
         'nn_NO', /*Norwegian Nynorsk (Norway)*/
         'pl_PL', /*Polish (Poland)*/
         'pt_BR', /*Portuguese (Brazil)*/

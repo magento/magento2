@@ -13,9 +13,8 @@
             <resource>Magento_Sales::three_d_secure</resource>
             <group id="cardinal" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                 <group id="config" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Configuration</label>
-                    <comment><![CDATA[For support contact <a href="mailto:support@cardinalcommerce.com">support@cardinalcommerce.com</a>.]]>
-                    </comment>
+                    <label>CardinalCommerce</label>
+                    <comment><![CDATA[Please visit <a href="https://www.cardinalcommerce.com/" target="_blank">www.cardinalcommerce.com</a> to get the CardinalCommerce credentials and find out more details about PSD2 SCA requirements. For support contact <a href="mailto:support@cardinalcommerce.com">support@cardinalcommerce.com</a>.]]></comment>
                     <field id="environment" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Environment</label>
                         <source_model>Magento\CardinalCommerce\Model\Adminhtml\Source\Environment</source_model>
