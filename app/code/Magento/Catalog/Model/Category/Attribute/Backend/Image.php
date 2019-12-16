@@ -117,7 +117,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . $imageName
         );
 
-        $imageName = Uploader::getNewFilename($imageAbsolutePath);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $imageName = call_user_func([Uploader::class, 'getNewFilename'], $imageAbsolutePath);
 
         return $imageName;
     }
