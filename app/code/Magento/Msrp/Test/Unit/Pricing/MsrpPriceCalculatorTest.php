@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Msrp\Test\Unit\Pricing;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Type as Type;
+use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedType;
 use Magento\Msrp\Pricing\MsrpPriceCalculator;
@@ -20,6 +20,36 @@ use PHPUnit\Framework\TestCase;
 class MsrpPriceCalculatorTest extends TestCase
 {
     /**
+     * @var MsrpPriceCalculator
+     */
+    private $pricing;
+
+    /**
+     * @var MsrpGroupedCalculator|MockObject
+     */
+    private $msrpGroupedCalculatorMock;
+
+    /**
+     * Prepare environment to test
+     */
+    protected function setUp()
+    {
+        $objectManager = new ObjectManager($this);
+        $this->msrpGroupedCalculatorMock = $this->createMock(MsrpGroupedCalculator::class);
+        $this->pricing = $objectManager->getObject(
+            MsrpPriceCalculator::class,
+            [
+                'msrpPriceCalculators' => [
+                    [
+                        'productType' => GroupedType::TYPE_CODE,
+                        'priceCalculator' => $this->msrpGroupedCalculatorMock
+                    ]
+                ]
+            ]
+        );
+    }
+
+    /**
      * Test getMrspPriceValue() with the data provider below
      *
      * @param array $msrpPriceCalculators
@@ -27,17 +57,12 @@ class MsrpPriceCalculatorTest extends TestCase
      * @param float $expected
      * @dataProvider getMsrpPriceValueDataProvider
      */
-    public function testGetMsrpPriceValue($msrpPriceCalculators, $productMock, $expected)
+    public function testGetMsrpPriceValue($msrpPriceCalculatorPrice, $productMock, $expected)
     {
-        $objectManager = new ObjectManager($this);
-        $pricing = $objectManager->getObject(
-            MsrpPriceCalculator::class,
-            [
-                'msrpPriceCalculators' => $msrpPriceCalculators
-            ]
-        );
+        $this->msrpGroupedCalculatorMock->expects($this->any())
+            ->method('getMsrpPriceValue')->willReturn($msrpPriceCalculatorPrice);
 
-        $this->assertEquals($expected, $pricing->getMsrpPriceValue($productMock));
+        $this->assertEquals($expected, $this->pricing->getMsrpPriceValue($productMock));
     }
 
     /**
@@ -48,47 +73,17 @@ class MsrpPriceCalculatorTest extends TestCase
     public function getMsrpPriceValueDataProvider()
     {
         return [
-            'Get Mrsp Price with grouped product and price calculator is also grouped product type' => [
-                [
-                    [
-                        'productType' => GroupedType::TYPE_CODE,
-                        'priceCalculator' => $this->createPriceCalculatorMock(
-                            MsrpGroupedCalculator::class,
-                            23.50
-                        )
-                    ]
-                ],
+            'Get Mrsp Price with product and msrp calculator and the same product type' => [
+                23.50,
                 $this->createProductMock(GroupedType::TYPE_CODE, 0),
                 23.50
             ],
-            'Get Mrsp Price with simple product and price calculator is grouped product type' => [
-                [
-                    [
-                        'productType' => GroupedType::TYPE_CODE,
-                        'priceCalculator' => $this->createPriceCalculatorMock(
-                            MsrpGroupedCalculator::class,
-                            0
-                        )
-                    ]
-                ],
-                $this->createProductMock(Type::TYPE_SIMPLE, 24.88),
+            'Get Mrsp Price with product and msrp calculator and the different product type' => [
+                24.88,
+                $this->createProductMock(ProductType::TYPE_SIMPLE, 24.88),
                 24.88
             ]
         ];
-    }
-
-    /**
-     * Create Price Calculator Mock
-     *
-     * @param string $class
-     * @param float $msrpPriceValue
-     * @return MockObject
-     */
-    private function createPriceCalculatorMock($class, $msrpPriceValue)
-    {
-        $priceCalculatorMock = $this->createMock($class);
-        $priceCalculatorMock->expects($this->any())->method('getMsrpPriceValue')->willReturn($msrpPriceValue);
-        return $priceCalculatorMock;
     }
 
     /**
