@@ -12,6 +12,8 @@ use Magento\Catalog\Model\Product\Option\Value as ProductOptionValueModel;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Framework\DataObject;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * DataProvider for grid on Import Custom Options modal panel
@@ -40,6 +42,11 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
     protected $productOptionValueModel;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -51,6 +58,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param MetadataPool|null $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -64,7 +72,8 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
         array $meta = [],
-        array $data = []
+        array $data = [],
+        MetadataPool $metadataPool = null
     ) {
         parent::__construct(
             $name,
@@ -80,6 +89,8 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
         $this->request = $request;
         $this->productOptionRepository = $productOptionRepository;
         $this->productOptionValueModel = $productOptionValueModel;
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()
+            ->get(MetadataPool::class);
     }
 
     /**
@@ -95,9 +106,16 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
                 $this->getCollection()->getSelect()->where('e.entity_id != ?', $currentProductId);
             }
 
+            try {
+                $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+                $linkField = $entityMetadata->getLinkField();
+            } catch (\Exception $e) {
+                $linkField = 'entity_id';
+            }
+
             $this->getCollection()->getSelect()->distinct()->join(
                 ['opt' => $this->getCollection()->getTable('catalog_product_option')],
-                'opt.product_id = e.entity_id',
+                'opt.product_id = e.' . $linkField,
                 null
             );
             $this->getCollection()->load();
