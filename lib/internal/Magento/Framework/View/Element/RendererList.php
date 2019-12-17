@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\Element;
 
 /**
- * Renderer List
+ * Get renderer by code
  *
  * @api
  */
