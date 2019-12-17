@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <section name="PaymentMethodSection">
-        <element name="goToReviewOrder" type="button" selector="//span[text()='Go to Review Your Order']"/>
+        <element name="goToReviewOrder" type="button" selector="#payment-continue"/>
     </section>
 </sections>

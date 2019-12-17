@@ -26,7 +26,7 @@
         <waitForPageLoad stepKey="waitForUserInput"/>
         <scrollTo selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="scrollToContinue"/>
         <click selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="clickContinueButton"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Message is added to queue, wait to get your file soon" stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue, wait to get your file soon" stepKey="seeSuccessMessage"/>
     </actionGroup>
 
     <!-- Export products without filtering -->
@@ -41,7 +41,7 @@
         <wait stepKey="waitForScroll" time="5"/>
         <click selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="clickContinueButton"/>
         <wait stepKey="waitForClick" time="5"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Message is added to queue, wait to get your file soon" stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file" stepKey="seeSuccessMessage"/>
     </actionGroup>
 
     <!-- Download first file in the grid -->

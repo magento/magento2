@@ -89,6 +89,13 @@
         <data key="apply">Percent of product price discount</data>
         <data key="discountAmount">50</data>
     </entity>
+    <entity name="SalesRuleWithFullDiscount" type="SalesRule">
+        <data key="name" unique="suffix">TestSalesRule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">100</data>
+    </entity>
     <entity name="CatPriceRule" type="SalesRule">
         <data key="name" unique="suffix">CartPriceRule</data>
         <data key="websites">Main Website</data>
@@ -456,5 +463,14 @@
         <data key="simple_free_shipping">0</data>
         <requiredEntity type="SalesRuleLabel">SalesRuleLabelDefault</requiredEntity>
         <requiredEntity type="SalesRuleLabel">SalesRuleLabelStore1</requiredEntity>
+    </entity>
+
+    <entity name="TestSalesRuleWithInvalidData" type="SalesRule">
+        <data key="userPerCustomer">one</data>
+        <data key="userPerCoupon">one</data>
+        <data key="priority">one</data>
+        <data key="discountStep">one</data>
+        <data key="discountAmount">one</data>
+        <data key="maximumQtyDiscount">one</data>
     </entity>
 </entities>

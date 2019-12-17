@@ -125,6 +125,10 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <!--TODO: REMOVE AFTER FIX MC-21717 -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush full_page" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -221,6 +225,10 @@
             <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"  />
             <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="specificCountryValue" />
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

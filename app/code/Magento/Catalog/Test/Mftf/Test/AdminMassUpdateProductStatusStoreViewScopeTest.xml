@@ -18,6 +18,157 @@
             <testCaseId value="MAGETWO-59361"/>
             <group value="Catalog"/>
             <group value="Product Attributes"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!--Create Website -->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+                <argument name="newWebsiteName" value="Second Website"/>
+                <argument name="websiteCode" value="second_website"/>
+            </actionGroup>
+
+            <!--Create Store -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="Second Website"/>
+                <argument name="storeGroupName" value="Second Store"/>
+                <argument name="storeGroupCode" value="second_store"/>
+            </actionGroup>
+
+            <!--Create Store view -->
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+            <waitForPageLoad stepKey="waitForSystemStorePage"/>
+            <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
+            <waitForPageLoad stepKey="waitForProductPageLoad"/>
+            <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
+            <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
+            <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+            <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+            <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
+            <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
+            <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
+            <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning" />
+            <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="dismissModal" />
+            <waitForPageLoad stepKey="waitForPageLoad2" time="180" />
+            <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" time="150" stepKey="waitForPageReolad"/>
+            <see userInput="You saved the store view." stepKey="seeSavedMessage" />
+
+            <!--Create a Simple Product 1 -->
+            <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct1">
+                <argument name="product" value="simpleProductForMassUpdate"/>
+                <argument name="website" value="Second Website"/>
+            </actionGroup>
+
+            <!--Create a Simple Product 2 -->
+            <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct2">
+                <argument name="product" value="simpleProductForMassUpdate2"/>
+                <argument name="website" value="Second Website"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+
+            <!--Delete Products -->
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
+                <argument name="productName" value="simpleProductForMassUpdate.name"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
+                <argument name="productName" value="simpleProductForMassUpdate2.name"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Search and select products -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+            <argument name="keyword" value="{{simpleProductForMassUpdate.keyword}}"/>
+        </actionGroup>
+        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+
+        <!-- Filter to Second Store View -->
+        <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreView" >
+            <argument name="customStore" value="'Second Store View'" />
+        </actionGroup>
+
+        <!-- Select Product 2 -->
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
+
+        <!-- Mass update attributes -->
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickOption"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Disable')}}" stepKey="clickDisabled"/>
+        <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+
+        <!-- Verify Product Statuses -->
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Enabled" stepKey="checkIfProduct1IsEnabled"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Disabled" stepKey="checkIfProduct2IsDisabled"/>
+
+        <!-- Filter to Default Store View -->
+        <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterDefaultStoreView">
+            <argument name="customStore" value="'Default'" />
+        </actionGroup>
+
+        <!-- Verify Product Statuses -->
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Enabled" stepKey="checkIfDefaultViewProduct1IsEnabled"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Enabled" stepKey="checkIfDefaultViewProduct2IsEnabled"/>
+
+        <!-- Assert on storefront default view with first product -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault">
+            <argument name="name" value="{{simpleProductForMassUpdate.name}}"/>
+            <argument name="description" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
+
+        <!-- Assert on storefront default view with second product -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefaultToSearchSecondProduct"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefaultWithSecondProduct">
+            <argument name="name" value="{{simpleProductForMassUpdate2.name}}"/>
+            <argument name="description" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefaultForSecondProduct"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefaultSecondProductResults"/>
+
+        <!--Enable the product in Default store view-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad2"/>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckboxDefaultStoreView"/>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckboxDefaultStoreView2"/>
+
+        <!-- Mass update attributes -->
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdownDefaultStoreView"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickOptionDefaultStoreView"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Disable')}}" stepKey="clickDisabledDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForBulkUpdatePageDefaultStoreView"/>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Disabled" stepKey="checkIfProduct2IsDisabledDefaultStoreView"/>
+
+        <!-- Assert on storefront default view -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault2"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault2">
+            <argument name="name" value="{{simpleProductForMassUpdate.name}}"/>
+            <argument name="description" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault2"/>
+        <see userInput="We can't find any items matching these search criteria." selector="{{StorefrontCatalogSearchAdvancedResultMainSection.message}}" stepKey="seeInDefault2"/>
+   </test>
+    <test name="AdminMassUpdateProductStatusStoreViewScopeMysqlTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Mass update product status"/>
+            <title value="Admin should be able to mass update product statuses in store view scope using the Mysql search engine"/>
+            <description value="Admin should be able to mass update product statuses in store view scope using the Mysql search engine"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-20471"/>
+            <group value="Catalog"/>
+            <group value="Product Attributes"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
@@ -147,5 +298,5 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault2"/>
         <see userInput="We can't find any items matching these search criteria." selector="{{StorefrontCatalogSearchAdvancedResultMainSection.message}}" stepKey="seeInDefault2"/>
-   </test>
+    </test>
 </tests>
