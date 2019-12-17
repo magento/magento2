@@ -105,4 +105,24 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->willReturn($baseMediaDir);
         $this->filter->mediaDirective($construction);
     }
+
+    /**
+     * Test using media directive with a URL path including schema.
+     *
+     * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
+     * @expectedException \InvalidArgumentException
+     */
+    public function testMediaDirectiveURL()
+    {
+        $baseMediaDir = 'pub/media';
+        $construction = [
+            '{{media url="http://wysiwyg/images/image.jpg"}}',
+            'media',
+            ' url="http://wysiwyg/images/../image.jpg"'
+        ];
+        $this->storeMock->expects($this->any())
+            ->method('getBaseMediaDir')
+            ->willReturn($baseMediaDir);
+        $this->filter->mediaDirective($construction);
+    }
 }

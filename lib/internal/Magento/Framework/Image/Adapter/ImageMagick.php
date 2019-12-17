@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+use Consolidation\OutputFormatters\Exception\InvalidFormatException;
+
+/**
+ * ImageMagick adapter.
+ */
 class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
     /**
@@ -70,6 +75,10 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function open($filename)
     {
+        if (!$this->validateURLScheme($filename)) {
+            throw new \InvalidArgumentException('Wrong file');
+        }
+
         $this->_fileName = $filename;
         $this->_checkCanProcess();
         $this->_getFileAttributes();
@@ -77,6 +86,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
         try {
             $this->_imageHandler = new \Imagick($this->_fileName);
         } catch (\ImagickException $e) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(sprintf('Unsupported image format. File: %s', $this->_fileName), $e->getCode(), $e);
         }
 
@@ -85,8 +95,24 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
-     * Save image to specific path.
-     * If some folders of path does not exist they will be created
+     * Checks for invalid URL schema if it exists
+     *
+     * @param $filename
+     * @return bool
+     */
+    private function validateURLScheme($filename) : bool
+    {
+        $allowed_schemes = ['ftp', 'http', 'https'];
+        $url = parse_url($filename);
+        if ($url && isset($url['scheme']) && !in_array($url['scheme'], $allowed_schemes)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Save image to specific path. If some folders of path does not exist they will be created
      *
      * @param null|string $destination
      * @param null|string $newName
@@ -124,6 +150,8 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
+     * Render image and return its binary contents
+     *
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      * @return string
      */
@@ -134,11 +162,12 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
-     * Change the image size
+     * Change the image size.
      *
      * @param null|int $frameWidth
      * @param null|int $frameHeight
      * @return void
+     * @throws \ImagickException
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -333,6 +362,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 );
             }
         } catch (\ImagickException $e) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unable to create watermark.', $e->getCode(), $e);
         }
 
@@ -351,6 +381,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     public function checkDependencies()
     {
         if (!class_exists('\Imagick', false)) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Required PHP extension 'Imagick' was not loaded.");
         }
     }
