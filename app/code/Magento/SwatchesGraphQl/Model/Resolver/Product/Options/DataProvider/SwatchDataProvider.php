@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\SwatchesGraphQl\Model\Resolver\Product\Options\DataProvider;
 
-use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Swatches\Helper\Data as SwatchData;
 use Magento\Swatches\Helper\Media as SwatchesMedia;
 use Magento\Swatches\Model\Swatch;
 
 /**
- * Swatch data provider
+ * Data provider for options swatches.
  */
 class SwatchDataProvider
 {
@@ -33,19 +32,19 @@ class SwatchDataProvider
      *
      * @param SwatchData $swatchHelper
      * @param SwatchesMedia $swatchMediaHelper
-     * @param UrlBuilder $imageUrlBuilder
      * @param EnumLookup $enumLookup
      */
     public function __construct(
         SwatchData $swatchHelper,
-        SwatchesMedia $swatchMediaHelper,
-        UrlBuilder $imageUrlBuilder
+        SwatchesMedia $swatchMediaHelper
     ) {
         $this->swatchHelper = $swatchHelper;
         $this->swatchMediaHelper = $swatchMediaHelper;
     }
 
     /**
+     * Returns swatch data by option ID.
+     *
      * @param string $optionId
      * @return array|null
      */

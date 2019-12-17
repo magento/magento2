@@ -29,6 +29,7 @@ $swatchTypes = ['swatch_image', 'swatch_thumb'];
 
 foreach ($swatchTypes as $swatchType) {
     $absolutePath = $mediaDirectory->getAbsolutePath($swatchesMedia->getSwatchCachePath($swatchType));
-    $swatchTypePath = $absolutePath . $swatchesMedia->getFolderNameSize($swatchType, $imageConfig) . '/' . $testImageName;
+    $swatchTypePath = $absolutePath . $swatchesMedia->getFolderNameSize($swatchType, $imageConfig)
+        . '/' . $testImageName;
     $mediaDirectory->delete($swatchTypePath);
 }
