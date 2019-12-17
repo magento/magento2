@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\SwatchesGraphQl\Model\Resolver\Product\Options\DataProvider;
 
-use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Swatches\Helper\Data as SwatchData;
 use Magento\Swatches\Helper\Media as SwatchesMedia;
 use Magento\Swatches\Model\Swatch;
@@ -32,7 +31,6 @@ class SwatchDataProvider
      *
      * @param SwatchData $swatchHelper
      * @param SwatchesMedia $swatchMediaHelper
-     * @param EnumLookup $enumLookup
      */
     public function __construct(
         SwatchData $swatchHelper,
