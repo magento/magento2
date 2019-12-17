@@ -6,8 +6,8 @@
 
 namespace Magento\Payment\Test\Unit\Model;
 
-use Magento\Payment\Model\MethodList;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\MethodList;
 
 class MethodListTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,6 +36,11 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
      */
     protected $specificationFactoryMock;
 
+    /**
+     * @var array $additionalChecks
+     */
+    private $additionalChecks;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -49,10 +54,14 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
 
         $this->specificationFactoryMock = $this->createMock(\Magento\Payment\Model\Checks\SpecificationFactory::class);
+
+        $this->additionalChecks = ['acme_custom_payment_method_check' => 'acme_custom_payment_method_check'];
+
         $this->methodList = $this->objectManager->getObject(
             \Magento\Payment\Model\MethodList::class,
             [
-                'specificationFactory' => $this->specificationFactoryMock
+                'specificationFactory' => $this->specificationFactoryMock,
+                'additionalChecks' => $this->additionalChecks
             ]
         );
 
@@ -68,6 +77,9 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Verify available payment methods
+     */
     public function testGetAvailableMethods()
     {
         $storeId = 1;
@@ -90,13 +102,17 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
 
         $this->specificationFactoryMock->expects($this->atLeastOnce())
             ->method('create')
-            ->with([
-                AbstractMethod::CHECK_USE_CHECKOUT,
-                AbstractMethod::CHECK_USE_FOR_COUNTRY,
-                AbstractMethod::CHECK_USE_FOR_CURRENCY,
-                AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
-            ])
-            ->will($this->returnValue($compositeMock));
+        ->with(
+            array_merge(
+                [
+                   AbstractMethod::CHECK_USE_CHECKOUT,
+                   AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                   AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                   AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
+                ],
+                $this->additionalChecks
+            )
+        )->will($this->returnValue($compositeMock));
 
         $methodMock = $this->getMockForAbstractClass(\Magento\Payment\Api\Data\PaymentMethodInterface::class);
         $this->paymentMethodList->expects($this->once())
