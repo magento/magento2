@@ -141,7 +141,7 @@ class Price
      */
     public function getPrice($product)
     {
-        return $product->getData('price');
+        return (float) $product->getData('price');
     }
 
     /**
@@ -154,7 +154,7 @@ class Price
      */
     public function getBasePrice($product, $qty = null)
     {
-        $price = (float) $product->getPrice();
+        $price = $product->getPrice();
         return min(
             $this->_applyTierPrice($product, $qty, $price),
             $this->_applySpecialPrice($product, $price)
@@ -262,7 +262,7 @@ class Price
 
         $tierPrice = $product->getTierPrice($qty);
         if (is_numeric($tierPrice)) {
-            $finalPrice = min($finalPrice, $tierPrice);
+            $finalPrice = min($finalPrice, (float) $tierPrice);
         }
         return $finalPrice;
     }

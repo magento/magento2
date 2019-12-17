@@ -585,9 +585,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getPrice()
     {
         if ($this->_calculatePrice || !$this->getData(self::PRICE)) {
-            return $this->getPriceModel()->getPrice($this);
+            return (float) $this->getPriceModel()->getPrice($this);
         } else {
-            return $this->getData(self::PRICE);
+            return (float) $this->getData(self::PRICE);
         }
     }
 
@@ -1240,7 +1240,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getSpecialPrice()
     {
-        return $this->_getData('special_price');
+        return (float) $this->_getData('special_price');
     }
 
     /**
