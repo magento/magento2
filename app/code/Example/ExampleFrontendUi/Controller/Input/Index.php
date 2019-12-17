@@ -7,17 +7,17 @@
  */
 declare(strict_types=1);
 
-namespace Example\ExampleFrontendUi\Controller\Index;
+namespace Example\ExampleFrontendUi\Controller\Input;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Controller\ResultInterface as ResultInterfaceAlias;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
- *  Helloworld page controller index
+ * Helloworld page controller input
  */
 class Index extends Action implements HttpGetActionInterface
 {
@@ -35,9 +35,9 @@ class Index extends Action implements HttpGetActionInterface
     }
 
     /**
-     * Index action
+     * Input\Index action
      *
-     * @return ResponseInterface|ResultInterface|PageFactory
+     * @return ResponseInterface|ResultInterfaceAlias|PageFactory
      */
     public function execute()
     {
