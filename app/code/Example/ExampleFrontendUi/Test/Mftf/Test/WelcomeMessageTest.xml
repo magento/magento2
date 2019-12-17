@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="WelcomeMessageTest">
+        <annotations>
+            <stories value="Output Welcome World!"/>
+            <title value="Checks greetings"/>
+            <description value="Checks greetings"/>
+            <severity value="CRITICAL"/>
+            <group value="example"/>
+        </annotations>
+
+        <amOnPage url="helloworld/index/index" stepKey="amOnLogoutPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="Hello World!" selector="{{StorefontWelcomeMessageMainSection.hello}}" stepKey="assertProductName"/>
+    </test>
+</tests>
