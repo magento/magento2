@@ -6,6 +6,8 @@
 namespace Magento\Indexer\Test\Unit\Controller\Adminhtml\Indexer;
 
 /**
+ * Mass invalidate Test
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassInvalidateTest extends \PHPUnit\Framework\TestCase
@@ -91,7 +93,9 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
+        $this->contextMock = $this->createPartialMock(
+            \Magento\Backend\App\Action\Context::class,
+            [
                 'getAuthorization',
                 'getSession',
                 'getActionFlag',
@@ -107,14 +111,17 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
                 'getObjectManager',
                 'getMessageManager',
                 'getResultRedirectFactory',
-            ]);
+            ]
+        );
 
         $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
 
-        $this->view = $this->createPartialMock(\Magento\Framework\App\ViewInterface::class, [
+        $this->view = $this->createPartialMock(
+            \Magento\Framework\App\ViewInterface::class,
+            [
                 'loadLayout',
                 'getPage',
                 'getConfig',
@@ -129,7 +136,8 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
                 'addActionLayoutHandles',
                 'setIsLayoutLoaded',
                 'isLayoutLoaded'
-            ]);
+            ]
+        );
 
         $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
