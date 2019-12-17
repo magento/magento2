@@ -34,6 +34,8 @@
         <fillField userInput="{{shippingRefund}}" selector="{{AdminCreditMemoTotalSection.refundShipping}}" stepKey="fillShipping"/>
         <fillField userInput="{{adjustmentRefund}}" selector="{{AdminCreditMemoTotalSection.adjustmentRefund}}" stepKey="fillAdjustmentRefund"/>
         <fillField userInput="{{adjustmentFee}}" selector="{{AdminCreditMemoTotalSection.adjustmentFee}}" stepKey="fillAdjustmentFee"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="waitForUpdateTotalsButton"/>
+        <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
         <checkOption selector="{{AdminCreditMemoTotalSection.emailCopy}}" stepKey="checkSendEmailCopy"/>
     </actionGroup>
     

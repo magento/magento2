@@ -65,6 +65,8 @@ class GetCartTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('id', $response['cart']);
+        self::assertEquals($maskedQuoteId, $response['cart']['id']);
         self::assertArrayHasKey('items', $response['cart']);
         self::assertCount(2, $response['cart']['items']);
 
@@ -192,7 +194,8 @@ QUERY;
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage Wrong store code specified for cart
+     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
+     * Please wait and try again later.
      */
     public function testGetCartWithWrongStore()
     {
@@ -255,6 +258,7 @@ QUERY;
         return <<<QUERY
 {
   cart(cart_id: "{$maskedQuoteId}") {
+    id
     items {
       id
       quantity

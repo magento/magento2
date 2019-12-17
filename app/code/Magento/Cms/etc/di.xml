@@ -243,4 +243,11 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutManagerInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager" />
+    <type name="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutRepositoryInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository" />
 </config>
