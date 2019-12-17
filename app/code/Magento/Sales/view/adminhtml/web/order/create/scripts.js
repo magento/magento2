@@ -478,12 +478,7 @@ define([
             return false;
         },
 
-        switchPaymentMethod: function (method) {
-            jQuery('#edit_form')
-                .off('submitOrder')
-                .on('submitOrder', function () {
-                    jQuery(this).trigger('realOrder');
-                });
+        switchPaymentMethod: function(method){
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};

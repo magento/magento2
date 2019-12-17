@@ -23,4 +23,14 @@
     <entity name="AdminShippingSettingsOriginStreetAddress2ConfigData">
         <data key="path">shipping/origin/street_line2</data>
     </entity>
+    <entity name="AdminFreeshippingActiveConfigData">
+        <data key="path">carriers/freeshipping/active</data>
+        <data key="enabled">1</data>
+        <data key="disabled">0</data>
+    </entity>
+    <entity name="AdminFreeshippingMinimumOrderAmountConfigData">
+        <data key="path">carriers/freeshipping/free_shipping_subtotal</data>
+        <data key="hundred">100</data>
+        <data key="default">0</data>
+    </entity>
 </entities>

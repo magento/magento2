@@ -10,9 +10,10 @@
     <operation name="CreateUserRole" dataType="user_role" type="create"
                auth="adminFormKey" url="/admin/user_role/saverole/" method="POST" successRegex="/messages-message-success/" returnRegex="" >
         <contentType>application/x-www-form-urlencoded</contentType>
-        <field key="rolename">string</field>
-        <field key="current_password">string</field>
-        <array key="resource">
+        <field key="rolename" required="true">string</field>
+        <field key="current_password" required="true">string</field>
+        <field key="all" required="true">integer</field>
+        <array key="resource" required="false">
             <value>string</value>
         </array>
     </operation>

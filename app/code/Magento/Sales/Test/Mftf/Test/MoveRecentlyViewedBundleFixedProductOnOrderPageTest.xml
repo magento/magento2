@@ -54,6 +54,9 @@
                 <requiredEntity createDataKey="createBundleOption"/>
                 <requiredEntity createDataKey="createSecondProduct"/>
             </createData>
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 1" stepKey="enableReportModule"/>
+
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
@@ -73,6 +76,9 @@
 
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 0" stepKey="disableReportModule"/>
         </after>
 
         <!-- Login as customer -->

@@ -28,6 +28,9 @@
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
         </before>
         <after>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteDefaultVirtualProduct">
+                <argument name="sku" value="{{updateVirtualProductSpecialPrice.sku}}"/>
+            </actionGroup>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
             <actionGroup ref="logout" stepKey="logout"/>

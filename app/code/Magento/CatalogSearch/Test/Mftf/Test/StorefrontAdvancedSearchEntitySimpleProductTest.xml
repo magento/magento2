@@ -19,12 +19,16 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Delete all products left by prev tests because it sensitive for search-->
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
             <!-- Create Data -->
             <createData entity="ABC_dfj_SimpleProduct" stepKey="createProduct"/>
         </before>
         <after>
             <!-- Delete data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logoutAdmin"/>
         </after>
 
         <!-- Perform reindex and flush cache -->
