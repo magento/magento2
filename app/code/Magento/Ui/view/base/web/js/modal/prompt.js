@@ -154,8 +154,7 @@ define([
          */
         closeModal: function (result) {
             var value;
-
-            if (result) {
+            if (result && !(result instanceof $.Event)) {
                 if (this.options.validation && !this.validate()) {
                     return false;
                 }
