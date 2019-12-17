@@ -1901,7 +1901,7 @@ XMLAuth;
             return ['00' => __('Customer Packaging')] + $containerTypes;
         } elseif ($countryShipper == self::USA_COUNTRY_ID
             && $countryRecipient == self::PUERTORICO_COUNTRY_ID
-            && ($method == '03' || $method == '02' || $method == '01')
+            && in_array($method, ['01', '02', '03'])
         ) {
             // Container types should be the same as for domestic
             $params->setCountryRecipient(self::USA_COUNTRY_ID);

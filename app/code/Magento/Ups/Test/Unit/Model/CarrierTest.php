@@ -423,13 +423,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                         'carriers/ups/allowed_methods',
                         ScopeInterface::SCOPE_STORE,
                         null,
-                        $allowedMethods
+                        $allowedMethods,
                     ],
                     [
                         'carriers/ups/type',
                         ScopeInterface::SCOPE_STORE,
                         null,
-                        $carrierType
+                        $carrierType,
                     ],
                     [
                         'carriers/ups/origin_shipment',
