@@ -53,10 +53,13 @@ class DataTest extends TestCase
     /**
      * Test for isGoogleAnalyticsAvailable()
      *
+     * @param string $value
+     * @param bool $flag
+     * @param bool $result
      * @return void
      * @dataProvider gaDataProvider
      */
-    public function testIsGoogleAnalyticsAvailable($value, $flag): void
+    public function testIsGoogleAnalyticsAvailable($value, $flag, $result): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
@@ -68,7 +71,7 @@ class DataTest extends TestCase
             ->with(HelperData::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE)
             ->willReturn($flag);
 
-        $this->assertEquals(($value && $flag), $this->helper->isGoogleAnalyticsAvailable());
+        $this->assertEquals($result, $this->helper->isGoogleAnalyticsAvailable());
     }
 
     /**
@@ -79,25 +82,27 @@ class DataTest extends TestCase
     public function gaDataProvider(): array
     {
         return [
-            ['GA-XXXX', true],
-            ['GA-XXXX', false],
-            ['', true]
+            ['GA-XXXX', true, true],
+            ['GA-XXXX', false, false],
+            ['', true, false]
         ];
     }
 
     /**
      * Test for isAnonymizedIpActive()
      *
+     * @param string $value
+     * @param bool $result
      * @return void
      * @dataProvider yesNoDataProvider
      */
-    public function testIsAnonymizedIpActive($value): void
+    public function testIsAnonymizedIpActive($value, $result): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(HelperData::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE)
             ->willReturn($value);
-        $this->assertEquals((bool) $value, $this->helper->isAnonymizedIpActive());
+        $this->assertEquals($result, $this->helper->isAnonymizedIpActive());
     }
 
     /**
@@ -108,8 +113,8 @@ class DataTest extends TestCase
     public function yesNoDataProvider(): array
     {
         return [
-            ['Yes' => '1'],
-            ['No' => '0']
+            ['Yes' => '1', 'result' => true],
+            ['No' => '0', 'result' => false]
         ];
     }
 }
