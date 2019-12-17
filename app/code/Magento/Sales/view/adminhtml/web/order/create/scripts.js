@@ -169,7 +169,7 @@ define([
         },
 
         selectAddress: function (el, container) {
-            id = el.value;
+            var id = el.value;
             if (id.length == 0) {
                 id = '0';
             }
