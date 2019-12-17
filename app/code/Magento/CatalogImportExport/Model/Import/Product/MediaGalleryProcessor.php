@@ -12,7 +12,6 @@ use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Store\Model\Store;
 
 /**
  * Process and saves images during import.
@@ -179,13 +178,15 @@ class MediaGalleryProcessor
         $insertData = [];
         foreach ($data as $datum) {
             $imageData = $datum['imageData'];
+            $exists = $datum['exists'] ?? true;
 
-            if ($imageData[$field] === null) {
+            if (!$exists) {
                 $insertData[] = [
                     $field => $datum[$field],
                     $this->getProductEntityLinkField() => $imageData[$this->getProductEntityLinkField()],
                     'value_id' => $imageData['value_id'],
-                    'store_id' => Store::DEFAULT_STORE_ID,
+                    'store_id' => $imageData['store_id'],
+                    'position' => $imageData['position'],
                 ];
             } else {
                 $this->connection->update(
@@ -196,7 +197,7 @@ class MediaGalleryProcessor
                     [
                         $this->getProductEntityLinkField() . ' = ?' => $imageData[$this->getProductEntityLinkField()],
                         'value_id = ?' => $imageData['value_id'],
-                        'store_id = ?' => Store::DEFAULT_STORE_ID,
+                        'store_id = ?' => $imageData['store_id'],
                     ]
                 );
             }
@@ -240,14 +241,15 @@ class MediaGalleryProcessor
         )->joinLeft(
             ['mgv' => $this->mediaGalleryValueTableName],
             sprintf(
-                '(mg.value_id = mgv.value_id AND mgv.%s = mgvte.%s AND mgv.store_id = %d)',
+                '(mgv.%s = mgvte.%s AND mg.value_id = mgv.value_id)',
                 $this->getProductEntityLinkField(),
-                $this->getProductEntityLinkField(),
-                Store::DEFAULT_STORE_ID
+                $this->getProductEntityLinkField()
             ),
             [
+                'store_id' => 'mgv.store_id',
                 'label' => 'mgv.label',
                 'disabled' => 'mgv.disabled',
+                'position' => 'mgv.position',
             ]
         )->joinInner(
             ['pe' => $this->productEntityTableName],
@@ -259,7 +261,9 @@ class MediaGalleryProcessor
         );
 
         foreach ($this->connection->fetchAll($select) as $image) {
-            $result[$image['sku']][$image['value']] = $image;
+            $storeId = $image['store_id'];
+            unset($image['store_id']);
+            $result[$storeId][$image['sku']][$image['value']] = $image;
         }
 
         return $result;
