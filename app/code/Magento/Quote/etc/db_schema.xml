@@ -11,7 +11,7 @@
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
@@ -27,7 +27,7 @@
         <column xsi:type="decimal" name="items_qty" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Items Qty"/>
         <column xsi:type="int" name="orig_order_id" padding="10" unsigned="true" nullable="true" identity="false"
-                default="0" comment="Orig Order Id"/>
+                default="0" comment="Orig Order ID"/>
         <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Store To Base Rate"/>
         <column xsi:type="decimal" name="store_to_quote_rate" scale="4" precision="12" unsigned="false" nullable="true"
@@ -43,11 +43,11 @@
                 default="0" comment="Base Grand Total"/>
         <column xsi:type="varchar" name="checkout_method" nullable="true" length="255" comment="Checkout Method"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Customer Id"/>
+                comment="Customer ID"/>
         <column xsi:type="int" name="customer_tax_class_id" padding="10" unsigned="true" nullable="true"
-                identity="false" comment="Customer Tax Class Id"/>
+                identity="false" comment="Customer Tax Class ID"/>
         <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="true" identity="false"
-                default="0" comment="Customer Group Id"/>
+                default="0" comment="Customer Group ID"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="255" comment="Customer Email"/>
         <column xsi:type="varchar" name="customer_prefix" nullable="true" length="40" comment="Customer Prefix"/>
         <column xsi:type="varchar" name="customer_firstname" nullable="true" length="255" comment="Customer Firstname"/>
@@ -63,7 +63,7 @@
                 identity="false" default="0" comment="Customer Is Guest"/>
         <column xsi:type="varchar" name="remote_ip" nullable="true" length="45" comment="Remote Ip"/>
         <column xsi:type="varchar" name="applied_rule_ids" nullable="true" length="255" comment="Applied Rule Ids"/>
-        <column xsi:type="varchar" name="reserved_order_id" nullable="true" length="64" comment="Reserved Order Id"/>
+        <column xsi:type="varchar" name="reserved_order_id" nullable="true" length="64" comment="Reserved Order ID"/>
         <column xsi:type="varchar" name="password_hash" nullable="true" length="255" comment="Password Hash"/>
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="255" comment="Coupon Code"/>
         <column xsi:type="varchar" name="global_currency_code" nullable="true" length="255"
@@ -103,19 +103,19 @@
     </table>
     <table name="quote_address" resource="checkout" engine="innodb" comment="Sales Flat Quote Address">
         <column xsi:type="int" name="address_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Address Id"/>
+                comment="Address ID"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Quote Id"/>
+                default="0" comment="Quote ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Customer Id"/>
+                comment="Customer ID"/>
         <column xsi:type="smallint" name="save_in_address_book" padding="6" unsigned="false" nullable="true"
                 identity="false" default="0" comment="Save In Address Book"/>
         <column xsi:type="int" name="customer_address_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Customer Address Id"/>
+                comment="Customer Address ID"/>
         <column xsi:type="varchar" name="address_type" nullable="true" length="10" comment="Address Type"/>
         <column xsi:type="varchar" name="email" nullable="true" length="255" comment="Email"/>
         <column xsi:type="varchar" name="prefix" nullable="true" length="40" comment="Prefix"/>
@@ -129,9 +129,9 @@
         <column xsi:type="varchar" name="city" nullable="true" length="255"/>
         <column xsi:type="varchar" name="region" nullable="true" length="255"/>
         <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Region Id"/>
+                comment="Region ID"/>
         <column xsi:type="varchar" name="postcode" nullable="true" length="20" comment="Postcode"/>
-        <column xsi:type="varchar" name="country_id" nullable="true" length="30" comment="Country Id"/>
+        <column xsi:type="varchar" name="country_id" nullable="true" length="30" comment="Country ID"/>
         <column xsi:type="varchar" name="telephone" nullable="true" length="255"/>
         <column xsi:type="varchar" name="fax" nullable="true" length="255"/>
         <column xsi:type="smallint" name="same_as_billing" padding="5" unsigned="true" nullable="false" identity="false"
@@ -195,10 +195,10 @@
                 comment="Shipping Incl Tax"/>
         <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
-        <column xsi:type="text" name="vat_id" nullable="true" comment="Vat Id"/>
+        <column xsi:type="text" name="vat_id" nullable="true" comment="Vat ID"/>
         <column xsi:type="smallint" name="vat_is_valid" padding="6" unsigned="false" nullable="true" identity="false"
                 comment="Vat Is Valid"/>
-        <column xsi:type="text" name="vat_request_id" nullable="true" comment="Vat Request Id"/>
+        <column xsi:type="text" name="vat_request_id" nullable="true" comment="Vat Request ID"/>
         <column xsi:type="text" name="vat_request_date" nullable="true" comment="Vat Request Date"/>
         <column xsi:type="smallint" name="vat_request_success" padding="6" unsigned="false" nullable="true"
                 identity="false" comment="Vat Request Success"/>
@@ -215,19 +215,19 @@
     </table>
     <table name="quote_item" resource="checkout" engine="innodb" comment="Sales Flat Quote Item">
         <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Item Id"/>
+                comment="Item ID"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Quote Id"/>
+                default="0" comment="Quote ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="int" name="parent_item_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Parent Item Id"/>
+                comment="Parent Item ID"/>
         <column xsi:type="smallint" name="is_virtual" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Is Virtual"/>
         <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku"/>
@@ -315,13 +315,13 @@
     </table>
     <table name="quote_address_item" resource="checkout" engine="innodb" comment="Sales Flat Quote Address Item">
         <column xsi:type="int" name="address_item_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Address Item Id"/>
+                comment="Address Item ID"/>
         <column xsi:type="int" name="parent_item_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Parent Item Id"/>
+                comment="Parent Item ID"/>
         <column xsi:type="int" name="quote_address_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Quote Address Id"/>
+                default="0" comment="Quote Address ID"/>
         <column xsi:type="int" name="quote_item_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Quote Item Id"/>
+                default="0" comment="Quote Item ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
@@ -349,13 +349,13 @@
         <column xsi:type="decimal" name="row_weight" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Row Weight"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="int" name="super_product_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Super Product Id"/>
+                comment="Super Product ID"/>
         <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Parent Product Id"/>
+                comment="Parent Product ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku"/>
         <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Image"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
@@ -413,11 +413,11 @@
     </table>
     <table name="quote_item_option" resource="checkout" engine="innodb" comment="Sales Flat Quote Item Option">
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Option Id"/>
+                comment="Option ID"/>
         <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Item Id"/>
+                comment="Item ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
         <column xsi:type="text" name="value" nullable="true" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -431,9 +431,9 @@
     </table>
     <table name="quote_payment" resource="checkout" engine="innodb" comment="Sales Flat Quote Payment">
         <column xsi:type="int" name="payment_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Payment Id"/>
+                comment="Payment ID"/>
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Quote Id"/>
+                default="0" comment="Quote ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
@@ -467,9 +467,9 @@
     </table>
     <table name="quote_shipping_rate" resource="checkout" engine="innodb" comment="Sales Flat Quote Shipping Rate">
         <column xsi:type="int" name="rate_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Rate Id"/>
+                comment="Rate ID"/>
         <column xsi:type="int" name="address_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Address Id"/>
+                default="0" comment="Address ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"

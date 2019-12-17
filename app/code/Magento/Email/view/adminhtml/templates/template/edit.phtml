@@ -12,9 +12,9 @@ use Magento\Framework\App\TemplateTypesInterface;
 <form action="<?= $block->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
     <?= $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset form-inline">
-        <legend class="admin__legend"><span><?= $block->escapeHtml(__('Load default template')) ?></span></legend><br>
-        <div class="admin__field">
-            <label class="admin__field-label" for="template_select"><?= $block->escapeHtml(__('Template')) ?></label>
+        <legend class="admin__legend"><span><?= $block->escapeHtml(__('Load Default Template')) ?></span></legend><br>
+        <div class="admin__field required">
+            <label class="admin__field-label" for="template_select"><span><?= $block->escapeHtml(__('Template')) ?></span></label>
             <div class="admin__field-control">
                 <select id="template_select" name="code" class="admin__control-select required-entry">
                     <?php foreach ($block->getTemplateOptions() as $group => $options) : ?>
@@ -48,7 +48,7 @@ use Magento\Framework\App\TemplateTypesInterface;
     <?= /* @noEscape */ $block->getFormHtml() ?>
 </form>
 
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="get" id="email_template_preview_form" target="_blank">
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form" target="_blank">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
@@ -153,6 +153,7 @@ require([
             } else {
                 $('preview_type').value = <?= (int) $block->getTemplateType() ?>;
             }
+
             if (typeof tinyMCE == 'undefined' || !tinyMCE.get('template_text')) {
                 $('preview_text').value = $('template_text').value;
             } else {

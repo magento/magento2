@@ -14,7 +14,6 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Zend_Db_Expr;
 
 /**
  * Stock item resource model
@@ -184,12 +183,16 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'is_in_stock = ' . Stock::STOCK_IN_STOCK,
             '(use_config_manage_stock = 1 AND 1 = ' . $this->stockConfiguration->getManageStock() . ')'
             . ' OR (use_config_manage_stock = 0 AND manage_stock = 1)',
-            '(' . $this->getBackordersExpr() .' = 0 AND qty <= ' . $this->getMinQtyExpr() . ')'
-            . ' OR (' . $this->getBackordersExpr() .' != 0 AND '
-            . $this->getMinQtyExpr() . ' != 0 AND qty <= ' . $this->getMinQtyExpr() . ')',
+            '(use_config_min_qty = 1 AND qty <= ' . $this->stockConfiguration->getMinQty() . ')'
+            . ' OR (use_config_min_qty = 0 AND qty <= min_qty)',
             'product_id IN (' . $select->assemble() . ')',
         ];
-
+        $backordersWhere = '(use_config_backorders = 0 AND backorders = ' . Stock::BACKORDERS_NO . ')';
+        if (Stock::BACKORDERS_NO == $this->stockConfiguration->getBackorders()) {
+            $where[] = $backordersWhere . ' OR use_config_backorders = 1';
+        } else {
+            $where[] = $backordersWhere;
+        }
         $connection->update($this->getMainTable(), $values, $where);
 
         $this->stockIndexerProcessor->markIndexerAsInvalid();
@@ -212,8 +215,8 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $where = [
             'website_id = ' . $websiteId,
             'stock_status_changed_auto = 1',
-            '(qty > ' . $this->getMinQtyExpr() . ')'
-            . ' OR (' . $this->getBackordersExpr() . ' != 0 AND ' . $this->getMinQtyExpr() . ' = 0)', // If infinite
+            '(use_config_min_qty = 1 AND qty > ' . $this->stockConfiguration->getMinQty() . ')'
+            . ' OR (use_config_min_qty = 0 AND qty > min_qty)',
             'product_id IN (' . $select->assemble() . ')',
         ];
         $manageStockWhere = '(use_config_manage_stock = 0 AND manage_stock = 1)';
@@ -301,12 +304,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Get Minimum Sale Quantity Expression.
+     * Get Minimum Sale Quantity Expression
      *
      * @param string $tableAlias
-     * @return Zend_Db_Expr
+     * @return \Zend_Db_Expr
      */
-    public function getMinSaleQtyExpr(string $tableAlias = ''): Zend_Db_Expr
+    public function getMinSaleQtyExpr(string $tableAlias = ''): \Zend_Db_Expr
     {
         if ($tableAlias) {
             $tableAlias .= '.';
@@ -318,26 +321,6 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $itemMinSaleQty;
-    }
-
-    /**
-     * Get Min Qty Expression
-     *
-     * @param string $tableAlias
-     * @return Zend_Db_Expr
-     */
-    public function getMinQtyExpr(string $tableAlias = ''): Zend_Db_Expr
-    {
-        if ($tableAlias) {
-            $tableAlias .= '.';
-        }
-        $itemBackorders = $this->getConnection()->getCheckSql(
-            $tableAlias . 'use_config_min_qty = 1',
-            $this->stockConfiguration->getMinQty(),
-            $tableAlias . 'min_qty'
-        );
-
-        return $itemBackorders;
     }
 
     /**

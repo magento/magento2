@@ -14,7 +14,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
 use Magento\Eav\Model\Config;
-use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Model\Product;
@@ -28,18 +27,52 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
  */
 class ProductSearchTest extends GraphQlAbstract
 {
     /**
+     * Verify that filters for non-existing category are empty
+     *
+     * @throws \Exception
+     */
+    public function testFilterForNonExistingCategory()
+    {
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "99999999"}}) {
+    filters {
+      name  
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey(
+            'filters',
+            $response['products'],
+            'Filters are missing in product query result.'
+        );
+
+        $this->assertEmpty(
+            $response['products']['filters'],
+            'Returned filters data set does not empty'
+        );
+    }
+
+    /**
      * Verify that layered navigation filters and aggregations are correct for product query
      *
      * Filter products by an array of skus
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterLn()
     {
+        $this->reIndexAndCleanCache();
         $query = <<<QUERY
 {
     products (
@@ -84,17 +117,37 @@ QUERY;
             $response['products'],
             'Filters are missing in product query result.'
         );
+
+        $expectedFilters = $this->getExpectedFiltersDataSet();
+        $actualFilters = $response['products']['filters'];
+        // presort expected and actual results as different search engines have different orders
+        usort($expectedFilters, [$this, 'compareFilterNames']);
+        usort($actualFilters, [$this, 'compareFilterNames']);
+
         $this->assertFilters(
-            $response,
-            $this->getExpectedFiltersDataSet(),
+            ['products' => ['filters' => $actualFilters]],
+            $expectedFilters,
             'Returned filters data set does not match the expected value'
         );
+    }
+
+    /**
+     * Compare arrays by value in 'name' field.
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    private function compareFilterNames(array $a, array $b)
+    {
+        return strcmp($a['name'], $b['name']);
     }
 
     /**
      *  Layered navigation for Configurable products with out of stock options
      * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -305,15 +358,17 @@ QUERY;
 
     /**
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function reIndexAndCleanCache() : void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
+        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+        $out = '';
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento indexer:reindex", $out);
         CacheCleaner::cleanAll();
     }
+
     /**
      * Filter products using an array of  multi select custom attributes
      *
@@ -676,9 +731,12 @@ QUERY;
                     'value'=> '13'
                 ],
             ];
+        // presort expected and actual results as different search engines have different orders
+        usort($expectedCategoryInAggregrations, [$this, 'compareLabels']);
+        usort($actualCategoriesFromResponse, [$this, 'compareLabels']);
         $categoryInAggregations = array_map(null, $expectedCategoryInAggregrations, $actualCategoriesFromResponse);
 
-//Validate the categories and sub-categories data in the filter layer
+        //Validate the categories and sub-categories data in the filter layer
         foreach ($categoryInAggregations as $index => $categoryAggregationsData) {
             $this->assertNotEmpty($categoryAggregationsData);
             $this->assertEquals(
@@ -692,6 +750,18 @@ QUERY;
                 'Products count in the category is incorrect'
             );
         }
+    }
+
+    /**
+     * Compare arrays by value in 'label' field.
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    private function compareLabels(array $a, array $b)
+    {
+        return strcmp($a['label'], $b['label']);
     }
 
     /**
@@ -982,6 +1052,7 @@ QUERY;
     /**
      * Verify product filtering using price range AND matching skus AND name sorted in DESC order
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1052,13 +1123,14 @@ QUERY;
      * expected - error is thrown
      * Actual - empty array
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
 
     public function testSearchWithFilterWithPageSizeEqualTotalCount()
     {
-
+        $this->reIndexAndCleanCache();
         $query
             = <<<QUERY
 {
@@ -1114,6 +1186,7 @@ QUERY;
     /**
      * Filtering for products and sorting using multiple sort parameters
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1486,18 +1559,24 @@ QUERY;
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
+        $this->assertCount(2, $response['products']['aggregations']);
         $productsInResponse = ['Blue briefs','Navy Blue Striped Shoes','Grey shorts'];
+        /** @var \Magento\Config\Model\Config $config */
+        $config = Bootstrap::getObjectManager()->get(\Magento\Config\Model\Config::class);
+        if (strpos($config->getConfigDataValue('catalog/search/engine'), 'elasticsearch') !== false) {
+            $this->markTestIncomplete('MC-20716');
+        }
         $count = count($response['products']['items']);
         for ($i = 0; $i < $count; $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
         }
-        $this->assertCount(2, $response['products']['aggregations']);
     }
 
     /**
      * Filtering for product with sku "equals" a specific value
      * If pageSize and current page are not requested, default values are returned
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1748,6 +1827,7 @@ QUERY;
     /**
      * No items are returned if the conditions are not met
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1807,6 +1887,7 @@ QUERY;
     /**
      * Asserts that exception is thrown when current page > totalCount of items returned
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1953,6 +2034,7 @@ QUERY;
     /**
      * Verify that invalid current page return an error
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @expectedException \Exception
      * @expectedExceptionMessage currentPage value must be greater than 0
@@ -1982,6 +2064,7 @@ QUERY;
     /**
      * Verify that invalid page size returns an error.
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @expectedException \Exception
      * @expectedExceptionMessage pageSize value must be greater than 0

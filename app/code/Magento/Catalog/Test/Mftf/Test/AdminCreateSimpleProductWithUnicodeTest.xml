@@ -22,7 +22,7 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
         </after>
 
@@ -31,6 +31,8 @@
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="ProductWithUnicode"/>
         </actionGroup>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="product" value="ProductWithUnicode"/>

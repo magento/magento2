@@ -19,6 +19,9 @@
             <group value="configurable_product"/>
         </annotations>
         <before>
+            <!-- Add downloadable domains -->
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+
             <!-- Create sample data:
                  1. Create simple products -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -128,6 +131,9 @@
             <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
     </before>
         <after>
+            <!-- Remove downloadable domains -->
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+
             <!-- Delete created data -->
             <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFisrtSimpleProduct"/>
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>

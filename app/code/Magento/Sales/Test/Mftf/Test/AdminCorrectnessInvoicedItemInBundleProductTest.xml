@@ -55,6 +55,9 @@
         <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
 
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Go to bundle product page-->
         <amOnPage url="{{StorefrontProductPage.url($$createCategory.name$$)}}" stepKey="navigateToBundleProductPage"/>
 

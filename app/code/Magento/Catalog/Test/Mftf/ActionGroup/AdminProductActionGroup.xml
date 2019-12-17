@@ -24,7 +24,7 @@
         <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, product.type_id)}}" stepKey="seeNewProductUrl"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeNewProductTitle"/>
     </actionGroup>
-    
+
     <!--Navigate to create product page directly via ID-->
     <actionGroup name="goToProductPageViaID">
         <annotations>
@@ -108,6 +108,12 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductSku"/>
     </actionGroup>
+    <actionGroup name="AdminFillProductCountryOfManufactureActionGroup">
+        <arguments>
+            <argument name="countryId" type="string" defaultValue="US"/>
+        </arguments>
+        <selectOption selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="{{countryId}}" stepKey="countryOfManufactureDropDown"/>
+    </actionGroup>
 
     <!--Check that required fields are actually required-->
     <actionGroup name="checkRequiredFieldsInProductForm">
@@ -182,6 +188,18 @@
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
         <waitForPageLoad time="30" stepKey="waitForPageRefresh"/>
         <click selector="{{AdminProductImagesSection.removeImageButton}}" stepKey="clickRemoveImage"/>
+    </actionGroup>
+
+    <!--Remove Product image by name-->
+    <actionGroup name="RemoveProductImageByName" extends="removeProductImage">
+        <annotations>
+            <description>Removes a Product Image on the Admin Products creation/edit page by name.</description>
+        </annotations>
+
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+        </arguments>
+        <click selector="{{AdminProductImagesSection.removeImageButtonForExactImage(image.fileName)}}" stepKey="clickRemoveImage"/>
     </actionGroup>
 
     <!-- Assert product image in Admin Product page -->
