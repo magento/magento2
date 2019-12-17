@@ -6,9 +6,16 @@
 namespace Magento\Customer\Controller;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 
-class Review extends \Magento\Framework\App\Action\Action
+/**
+ * Deprecated class which was in use as general class in Customer Account "My Product Reviews" tab.
+ *
+ * @deprecated Remove Customer module's dependency on Review. Non-used class.
+ * @see \Magento\Review\Controller\Customer
+ */
+class Review extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * @var PageFactory
@@ -28,6 +35,8 @@ class Review extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Main page in Customer Account "My Product Reviews" tab.
+     *
      * @return \Magento\Framework\View\Result\Page
      */
     public function execute()

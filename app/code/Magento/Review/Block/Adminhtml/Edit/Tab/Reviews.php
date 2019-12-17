@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
+declare(strict_types=1);
+
+namespace Magento\Review\Block\Adminhtml\Edit\Tab;
 
 /**
+ * Review tab in adminhtml area.
+ *
  * @api
- * @since 100.0.2
  */
 class Reviews extends \Magento\Review\Block\Adminhtml\Grid
 {
     /**
-     * Hide grid mass action elements
+     * Hide grid mass action elements.
      *
-     * @return \Magento\Customer\Block\Adminhtml\Edit\Tab\Reviews
+     * @return \Magento\Review\Block\Adminhtml\Edit\Tab\Reviews
      */
     protected function _prepareMassaction()
     {
@@ -28,6 +31,6 @@ class Reviews extends \Magento\Review\Block\Adminhtml\Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('customer/*/productReviews', ['_current' => true]);
+        return $this->getUrl('review/customer/productReviews', ['_current' => true]);
     }
 }
