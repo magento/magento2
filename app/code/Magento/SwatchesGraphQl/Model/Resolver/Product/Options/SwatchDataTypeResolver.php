@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SwatchesGraphQl\Model\Resolver\Product\Options;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\Swatches\Model\Swatch;
 
@@ -28,7 +29,7 @@ class SwatchDataTypeResolver implements TypeResolverInterface
             case Swatch::SWATCH_TYPE_VISUAL_IMAGE:
                 return 'ImageSwatchData';
             default:
-                return '';
+                throw new LocalizedException(__('Unsupported swatch type'));
         }
     }
 }

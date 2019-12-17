@@ -119,7 +119,7 @@ QUERY;
             $option['values'][1]['swatch_data']['value'],
             $this->swatchMediaHelper->getSwatchAttributeImage(Swatch::SWATCH_IMAGE_NAME, $imageName)
         );
-        $this->assertContains(
+        $this->assertEquals(
             $option['values'][1]['swatch_data']['thumbnail'],
             $this->swatchMediaHelper->getSwatchAttributeImage(Swatch::SWATCH_THUMBNAIL_NAME, $imageName)
         );
