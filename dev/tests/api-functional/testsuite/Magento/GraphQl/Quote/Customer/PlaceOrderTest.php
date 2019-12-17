@@ -106,7 +106,7 @@ class PlaceOrderTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     * @expectedExceptionMessage Field PlaceOrderInput.cart_id of required type String! was not provided.
      */
     public function testPlaceOrderIfCartIdIsMissed()
     {

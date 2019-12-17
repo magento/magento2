@@ -8,6 +8,15 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSwitchCurrencyActionGroup">
+        <arguments>
+            <argument name="currency" type="string" defaultValue="EUR"/>
+        </arguments>
+        <click selector="{{StorefrontSwitchCurrencyRatesSection.currencyToggle}}" stepKey="openToggle"/>
+        <waitForElementVisible selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="waitForCurrency"/>
+        <click selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="chooseCurrency"/>
+        <see selector="{{StorefrontSwitchCurrencyRatesSection.selectedCurrency}}" userInput="{{currency}}" stepKey="seeSelectedCurrency"/>
+    </actionGroup>
     <actionGroup name="StorefrontSwitchCurrency">
         <arguments>
             <argument name="currency" type="string" defaultValue="EUR"/>

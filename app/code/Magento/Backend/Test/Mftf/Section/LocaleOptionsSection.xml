@@ -15,5 +15,6 @@
         <element name="localeEnabled" type="select" selector="#general_locale_code:enabled"/>
         <element name="localeDisabled" type="select" selector="#general_locale_code[disabled=disabled]"/>
         <element name="useDefault" type="checkbox" selector="#general_locale_timezone_inherit"/>
+        <element name="defaultLocale" type="checkbox" selector="#general_locale_code_inherit"/>
     </section>
 </sections>

@@ -23,7 +23,9 @@
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-
+            <!-- Reindex and clear page cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
