@@ -63,6 +63,14 @@
                         <field id="engine">elasticsearch</field>
                     </depends>
                 </field>
+                <field id="elasticsearch_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Minimum Terms to Match</label>
+                    <depends>
+                        <field id="engine">elasticsearch</field>
+                    </depends>
+                    <comment><![CDATA[<a href="https://docs.magento.com/m2/ce/user_guide/catalog/search-elasticsearch.html">Learn more</a> about valid syntax.]]></comment>
+                    <backend_model>Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch</backend_model>
+                </field>
                 <!-- Elasticsearch 5.x -->
                 <field id="elasticsearch5_server_hostname" translate="label" type="text" sortOrder="61" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Elasticsearch Server Hostname</label>
@@ -116,6 +124,14 @@
                     <depends>
                         <field id="engine">elasticsearch5</field>
                     </depends>
+                </field>
+                <field id="elasticsearch5_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Minimum Terms to Match</label>
+                    <depends>
+                        <field id="engine">elasticsearch5</field>
+                    </depends>
+                    <comment><![CDATA[<a href="https://docs.magento.com/m2/ce/user_guide/catalog/search-elasticsearch.html">Learn more</a> about valid syntax.]]></comment>
+                    <backend_model>Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch</backend_model>
                 </field>
             </group>
         </section>

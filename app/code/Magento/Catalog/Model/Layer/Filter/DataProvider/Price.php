@@ -10,6 +10,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Data provider for price filter in layered navigation
+ */
 class Price
 {
     /**
@@ -103,6 +106,8 @@ class Price
     }
 
     /**
+     * Getter  for interval
+     *
      * @return array
      */
     public function getInterval()
@@ -111,6 +116,8 @@ class Price
     }
 
     /**
+     * Setter for interval
+     *
      * @param array $interval
      * @return void
      */
@@ -120,6 +127,10 @@ class Price
     }
 
     /**
+     * Retrieves price layered navigation modes
+     *
+     * @see RANGE_CALCULATION_AUTO
+     *
      * @return mixed
      */
     public function getRangeCalculationValue()
@@ -131,6 +142,8 @@ class Price
     }
 
     /**
+     * Retrieves range step
+     *
      * @return mixed
      */
     public function getRangeStepValue()
@@ -142,6 +155,8 @@ class Price
     }
 
     /**
+     * Retrieves one price interval
+     *
      * @return mixed
      */
     public function getOnePriceIntervalValue()
@@ -179,6 +194,8 @@ class Price
     }
 
     /**
+     * Retrieves Catalog Layer object
+     *
      * @return Layer
      */
     public function getLayer()
@@ -276,6 +293,8 @@ class Price
     }
 
     /**
+     * Retrieve list of prior filters
+     *
      * @param string $filterParams
      * @return array
      */
@@ -310,7 +329,7 @@ class Price
             return false;
         }
         foreach ($filter as $v) {
-            if ($v !== '' && $v !== '0' && (double)$v <= 0 || is_infinite((double)$v)) {
+            if ($v !== '' && $v !== '0' && (!is_numeric($v) || (double)$v <= 0 || is_infinite((double)$v))) {
                 return false;
             }
         }
@@ -339,6 +358,8 @@ class Price
     }
 
     /**
+     * Getter for prior intervals
+     *
      * @return array
      */
     public function getPriorIntervals()
@@ -347,6 +368,8 @@ class Price
     }
 
     /**
+     * Setter for prior intervals
+     *
      * @param array $priorInterval
      * @return void
      */
@@ -356,6 +379,8 @@ class Price
     }
 
     /**
+     * Get Resource model for price filter
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     public function getResource()
@@ -364,6 +389,8 @@ class Price
     }
 
     /**
+     * Retrieves additional request data
+     *
      * @return string
      */
     public function getAdditionalRequestData()
