@@ -16,6 +16,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -27,8 +29,10 @@ use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 
 /**
  * Class ProductTest
@@ -312,7 +316,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppIsolation enabled
-
      *
      * @return void
      */
@@ -384,14 +387,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function testSaveCustomOptionsWithMultipleStoreViews()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $objectManager->get(StoreManagerInterface::class);
         $storeCodes = [
             'admin',
             'default',
             'secondstore',
         ];
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        /** @var StoreManagerInterface $storeManager */
         $importFile = 'product_with_custom_options_and_multiple_store_views.csv';
         $sku = 'simple';
         $pathToFile = __DIR__ . '/_files/' . $importFile;
@@ -1185,7 +1188,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $product->load($id);
         $this->assertEquals('1', $product->getHasOptions());
 
-        $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->setCurrentStore('fixturestore');
+        $objectManager->get(StoreManagerInterface::class)->setCurrentStore('fixturestore');
 
         /** @var \Magento\Catalog\Model\Product $simpleProduct */
         $simpleProduct = $objectManager->create(\Magento\Catalog\Model\Product::class);
@@ -1572,6 +1575,49 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductLinksWithEmptyValue()
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/_files/products_to_import_with_product_links_with_empty_value.csv';
+        $filesystem = BootstrapHelper::getObjectManager()->create(Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setSource(
+            $source
+        )->setParameters(
+            [
+                'behavior' => Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product'
+            ]
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $objectManager = BootstrapHelper::getObjectManager();
+        $resource = $objectManager->get(ProductResource::class);
+        $productId = $resource->getIdBySku('simple');
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = BootstrapHelper::getObjectManager()->create(Product::class);
+        $product->load($productId);
+
+        $this->assertEmpty($product->getCrossSellProducts());
+        $this->assertEmpty($product->getUpSellProducts());
     }
 
     /**
@@ -2201,13 +2247,20 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * Load product by given product sku
      *
      * @param string $sku
+     * @param mixed $store
      * @return \Magento\Catalog\Model\Product
      */
-    private function getProductBySku($sku)
+    private function getProductBySku($sku, $store = null)
     {
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku($sku);
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
+        if ($store) {
+            /** @var StoreManagerInterface $storeManager */
+            $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+            $store = $storeManager->getStore($store);
+            $product->setStoreId($store->getId());
+        }
         $product->load($productId);
 
         return $product;
@@ -2727,5 +2780,57 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         /** @var $productAfterImport \Magento\Catalog\Model\Product */
         $productAfterImport = $this->getProductBySku('simple_new');
         $this->assertNotEquals('/no/exists/image/magento_image.jpg', $productAfterImport->getData('image'));
+    }
+
+    /**
+     * Tests that images are hidden only for a store view in "store_view_code".
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testHideImageForStoreView()
+    {
+        $expectedImageFile = '/m/a/magento_image.jpg';
+        $secondStoreCode = 'fixturestore';
+        $productSku = 'simple';
+        $this->importDataForMediaTest('import_hide_image_for_storeview.csv');
+        $product = $this->getProductBySku($productSku);
+        $imageItems = $product->getMediaGalleryImages()->getItems();
+        $this->assertCount(1, $imageItems);
+        $imageItem = array_shift($imageItems);
+        $this->assertEquals($expectedImageFile, $imageItem->getFile());
+        $product = $this->getProductBySku($productSku, $secondStoreCode);
+        $imageItems = $product->getMediaGalleryImages()->getItems();
+        $this->assertCount(0, $imageItems);
+    }
+
+    /**
+     * Test that images labels are updated only for a store view in "store_view_code".
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testChangeImageLabelForStoreView()
+    {
+        $expectedImageFile = '/m/a/magento_image.jpg';
+        $expectedLabelForDefaultStoreView = 'Image Alt Text';
+        $expectedLabelForSecondStoreView = 'Magento Logo';
+        $secondStoreCode = 'fixturestore';
+        $productSku = 'simple';
+        $this->importDataForMediaTest('import_change_image_label_for_storeview.csv');
+        $product = $this->getProductBySku($productSku);
+        $imageItems = $product->getMediaGalleryImages()->getItems();
+        $this->assertCount(1, $imageItems);
+        $imageItem = array_shift($imageItems);
+        $this->assertEquals($expectedImageFile, $imageItem->getFile());
+        $this->assertEquals($expectedLabelForDefaultStoreView, $imageItem->getLabel());
+        $product = $this->getProductBySku($productSku, $secondStoreCode);
+        $imageItems = $product->getMediaGalleryImages()->getItems();
+        $this->assertCount(1, $imageItems);
+        $imageItem = array_shift($imageItems);
+        $this->assertEquals($expectedImageFile, $imageItem->getFile());
+        $this->assertEquals($expectedLabelForSecondStoreView, $imageItem->getLabel());
     }
 }

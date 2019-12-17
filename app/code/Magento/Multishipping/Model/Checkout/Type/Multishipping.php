@@ -625,6 +625,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $addressId = $address->getId();
             if (isset($methods[$addressId])) {
                 $address->setShippingMethod($methods[$addressId]);
+                $address->setCollectShippingRates(true);
             } elseif (!$address->getShippingMethod()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Set shipping methods for all addresses. Verify the shipping methods and try again.')
