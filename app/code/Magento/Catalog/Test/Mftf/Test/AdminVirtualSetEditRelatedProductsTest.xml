@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3415"/>
             <group value="Catalog"/>
+            <skip>
+                <issueId value="MC-194"/>
+            </skip>
         </annotations>
         <before></before>
         <after>
