@@ -6,7 +6,7 @@
 namespace Magento\Indexer\Test\Unit\Controller\Adminhtml\Indexer;
 
 /**
- * Mass invalidate Test
+ * Test for Mass invalidate action
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
