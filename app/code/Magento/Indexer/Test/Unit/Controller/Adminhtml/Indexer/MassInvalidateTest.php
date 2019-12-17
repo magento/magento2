@@ -204,9 +204,6 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
                 ->method('addError')->with(__('Please select indexers.'))
                 ->will($this->returnValue(1));
         } else {
-            $this->objectManager->expects($this->any())
-                ->method('get')->with(\Magento\Framework\Indexer\IndexerRegistry::class)
-                ->will($this->returnValue($this->indexReg));
             $indexerInterface = $this->getMockForAbstractClass(
                 \Magento\Framework\Indexer\IndexerInterface::class,
                 ['invalidate'],
@@ -226,12 +223,16 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnValue(1));
 
             if ($exception) {
+                $this->indexReg->expects($this->any())
+                    ->method('get')->with(2)
+                    ->will($this->throwException($exception));
+
                 if ($exception instanceof \Magento\Framework\Exception\LocalizedException) {
-                    $this->messageManager->expects($this->exactly(1))
+                    $this->messageManager->expects($this->once())
                         ->method('addError')
                         ->with($exception->getMessage());
                 } else {
-                    $this->messageManager->expects($this->exactly(1))
+                    $this->messageManager->expects($this->once())
                         ->method('addException')
                         ->with($exception, "We couldn't invalidate indexer(s) because of an error.");
                 }
@@ -260,11 +261,11 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
                 'exception' => null,
             ],
             'set3' => [
-                'indexers' => [1],
+                'indexers' => [2],
                 'exception' => new \Magento\Framework\Exception\LocalizedException(__('Test Phrase')),
             ],
             'set4' => [
-                'indexers' => [1],
+                'indexers' => [2],
                 'exception' => new \Exception(),
             ]
         ];
