@@ -90,12 +90,12 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     /**
      * Checks for invalid URL schema if it exists
      *
-     * @param $filename
+     * @param string $filename
      * @return bool
      */
-    private function validateURLScheme($filename) : bool
+    private function validateURLScheme(string $filename) : bool
     {
-        $allowed_schemes = ['ftp', 'http', 'https'];
+        $allowed_schemes = ['ftp', 'ftps', 'http', 'https'];
         $url = parse_url($filename);
         if ($url && isset($url['scheme']) && !in_array($url['scheme'], $allowed_schemes)) {
             return false;

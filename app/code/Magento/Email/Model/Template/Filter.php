@@ -777,7 +777,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @return void
      * @throws MailException
      */
-    private function validateProtocolDirectiveHttpScheme($params) : void
+    private function validateProtocolDirectiveHttpScheme(array $params) : void
     {
         $parsed_http = parse_url($params['http']);
         $parsed_https = parse_url($params['https']);
