@@ -128,7 +128,7 @@ class Synchronizer
         uasort(
             $productsData,
             function (array $firstProduct, array $secondProduct) {
-                if (isset($firstProduct['added_at']) && isset($secondProduct['added_at'])) {
+                if (isset($firstProduct['added_at'], $secondProduct['added_at'])) {
                     return $firstProduct['added_at'] > $secondProduct['added_at'];
                 }
 
