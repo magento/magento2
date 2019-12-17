@@ -33,5 +33,6 @@ $regionResource = $objectManager->get(RegionResource::class);
 foreach ($regionData as $data) {
     /** @var RegionModel $region */
     $region = $objectManager->create(RegionModel::class);
+    $region->setData($data);
     $regionResource->save($region);
 }
