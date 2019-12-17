@@ -49,8 +49,11 @@
         <waitForPageLoad stepKey="waitForPageToSave"/>
         <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
         <!--Delete product attribute from product attribute grid -->
-        <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute">
-            <argument name="ProductAttributeCode" value="$$attribute.attribute_code$$"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$attribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+            <argument name="productAttributeCode" value="$$attribute.attribute_code$$"/>
         </actionGroup>
         <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
         <!--Confirm Attribute is not present in Product Attribute Grid -->

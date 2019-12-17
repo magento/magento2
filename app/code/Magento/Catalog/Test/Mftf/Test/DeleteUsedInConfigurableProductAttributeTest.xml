@@ -81,7 +81,7 @@
 
         <!-- Click Delete Attribute button -->
         <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
-            <argument name="ProductAttributeCode" value="$$productAttributeHandle.attribute_code$$"/>
+            <argument name="productAttributeCode" value="$$productAttributeHandle.attribute_code$$"/>
         </actionGroup>
 
         <!-- Should see error message: This attribute is used in configurable products.  -->

@@ -55,8 +55,11 @@
         <waitForPageLoad stepKey="waitForProductToLoad"/>
         <seeElement selector="{{AdminProductFormSection.newAddedAttribute($$attribute.attribute_code$$)}}" stepKey="seeProductAttributeIsAdded"/>
         <!--Delete product attribute from product attribute grid -->
-        <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute">
-            <argument name="ProductAttributeCode" value="$$attribute.attribute_code$$"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$attribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+            <argument name="productAttributeCode" value="$$attribute.attribute_code$$"/>
         </actionGroup>
         <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
         <!-- Confirm attribute is not present in product attribute grid -->

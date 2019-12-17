@@ -95,14 +95,14 @@
                 <argument name="productAttributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
             </actionGroup>
             <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
-                <argument name="ProductAttributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+                <argument name="productAttributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
             </actionGroup>
             <!-- Delete Second attribute -->
             <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openSecondProductAttributeFromSearchResultInGrid">
                 <argument name="productAttributeCode" value="$$createConfigProductAttribute2.attribute_code$$"/>
             </actionGroup>
             <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteSecondProductAttributeByAttributeCode">
-                <argument name="ProductAttributeCode" value="$$createConfigProductAttribute2.attribute_code$$"/>
+                <argument name="productAttributeCode" value="$$createConfigProductAttribute2.attribute_code$$"/>
             </actionGroup>
             <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <!-- Clear filters -->
