@@ -154,7 +154,7 @@ class Price
      */
     public function getBasePrice($product, $qty = null)
     {
-        $price = $product->getPrice();
+        $price = (float) $product->getPrice();
         return min(
             $this->_applyTierPrice($product, $qty, $price),
             $this->_applySpecialPrice($product, $price)
@@ -645,7 +645,7 @@ class Price
     ) {
         if ($specialPrice !== null && $specialPrice != false) {
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
-                $finalPrice = min($finalPrice, $specialPrice);
+                $finalPrice = min($finalPrice, (float) $specialPrice);
             }
         }
         return $finalPrice;
