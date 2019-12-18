@@ -17,6 +17,7 @@
         </arguments>
 
         <conditionalClick selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="false" stepKey="clickOnProductInCategory"/>
+        <scrollTo stepKey="scrollToProductGrid" selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" />
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickOnResetFilter"/>
         <fillField selector="{{AdminCategoryContentSection.productTableColumnSku}}" userInput="{{productSku}}" stepKey="fillSkuFilter"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
