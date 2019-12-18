@@ -3,79 +3,97 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Test class for \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable.
+ * Test class to check configurable product view behaviour
+ *
+ * @see \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
  *
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  */
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+class ConfigurableTest extends TestCase
 {
-    /**
-     * @var \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
-     */
-    protected $_block;
+    /** @var ObjectManagerInterface */
+    private $objectManager;
+
+    /** @var Configurable */
+    private $block;
+
+    /** @var Product */
+    private $product;
+
+    /** @var LayoutInterface */
+    private $layout;
+
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
+    /** @var SerializerInterface */
+    private $json;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @inheritdoc
      */
-    protected $_product;
-
     protected function setUp()
     {
-        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $this->_product->load(1);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\LayoutInterface::class
-        )->createBlock(
-            \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable::class
-        );
-        $this->_block->setProduct($this->_product);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->product = $this->productRepository->get('configurable');
+        $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->block = $this->layout->createBlock(Configurable::class);
+        $this->json = $this->objectManager->get(SerializerInterface::class);
+        $this->block->setProduct($this->product);
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testGetAllowAttributes()
+    public function testGetAllowAttributes(): void
     {
-        $attributes = $this->_block->getAllowAttributes();
-        $this->assertInstanceOf(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection::class,
-            $attributes
-        );
+        $attributes = $this->block->getAllowAttributes();
+        $this->assertInstanceOf(Collection::class, $attributes);
         $this->assertGreaterThanOrEqual(1, $attributes->getSize());
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testHasOptions()
+    public function testHasOptions(): void
     {
-        $this->assertTrue($this->_block->hasOptions());
+        $this->assertTrue($this->block->hasOptions());
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testGetAllowProducts()
+    public function testGetAllowProducts(): void
     {
-        $products = $this->_block->getAllowProducts();
+        $products = $this->block->getAllowProducts();
         $this->assertGreaterThanOrEqual(2, count($products));
         foreach ($products as $product) {
-            $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
+            $this->assertInstanceOf(Product::class, $product);
         }
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testGetJsonConfig()
+    public function testGetJsonConfig(): void
     {
-        $config = json_decode($this->_block->getJsonConfig(), true);
+        $config = $this->json->unserialize($this->block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
         $this->assertEquals(1, $config['productId']);
@@ -83,5 +101,73 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('template', $config);
         $this->assertArrayHasKey('prices', $config);
         $this->assertArrayHasKey('basePrice', $config['prices']);
+    }
+
+    /**
+     * @dataProvider expectedDataProvider
+     *
+     * @param string $label
+     * @param array $expectedConfig
+     * @return void
+     */
+    public function testConfigurableProductView(string $label, array $expectedConfig): void
+    {
+        $attributes = $this->block->decorateArray($this->block->getAllowAttributes());
+        $this->assertCount(1, $attributes);
+        $attribute = $attributes->getFirstItem();
+        $this->assertEquals($label, $attribute->getLabel());
+        $config = $this->json->unserialize($this->block->getJsonConfig())['attributes'] ?? null;
+        $this->assertNotNull($config);
+        $this->assertConfig(reset($config), $expectedConfig);
+    }
+
+    public function expectedDataProvider(): array
+    {
+        return [
+            [
+                'label' => 'Test Configurable',
+                'config_data' => [
+                    'label' => 'Test Configurable',
+                    'options' => [
+                        [
+                            'label' => 'Option 1',
+                            'sku' => 'simple_10',
+                        ],
+                        [
+                            'label' => 'Option 2',
+                            'sku' => 'simple_20',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Assert that data was generated
+     *
+     * @param array $data
+     * @param array $expectedData
+     * @return void
+     */
+    protected function assertConfig(array $data, array $expectedData): void
+    {
+        $this->assertEquals($expectedData['label'], $data['label']);
+        foreach ($data['options'] as $option) {
+            $found = false;
+            foreach ($expectedData['options'] as $expectedOption) {
+                $expectedProductId = $this->productRepository->get($expectedOption['sku'])->getId();
+                if ($option['label'] === $expectedOption['label']) {
+                    $this->assertEquals(
+                        [$expectedProductId],
+                        $option['products'],
+                        'Wrong product linked as option'
+                    );
+                    $found = true;
+                    break;
+                }
+            }
+            $this->assertTrue($found);
+        }
     }
 }
