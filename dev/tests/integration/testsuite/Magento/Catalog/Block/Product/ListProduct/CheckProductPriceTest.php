@@ -50,8 +50,8 @@ class CheckProductPriceTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->pageFactory = $this->objectManager->create(PageFactory::class);
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->pageFactory = $this->objectManager->get(PageFactory::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->customerSession = $this->objectManager->create(Session::class);
         parent::setUp();
     }
@@ -140,10 +140,7 @@ class CheckProductPriceTest extends TestCase
     {
         $priceHtml = $this->getProductPriceHtml('simple_product');
         $this->assertFinalPrice($priceHtml, 50.00);
-        $this->assertNotRegExp(
-            '/\$10/',
-            $priceHtml
-        );
+        $this->assertNotRegExp('/\$10/', $priceHtml);
         $this->customerSession->setCustomerId(1);
         try {
             $priceHtml = $this->getProductPriceHtml('simple_product');
@@ -299,7 +296,7 @@ class CheckProductPriceTest extends TestCase
      */
     private function getListProductBlock(): ListProduct
     {
-        $page = $this->pageFactory->create(PageFactory::class);
+        $page = $this->pageFactory->create();
         $page->addHandle([
             'default',
             'catalog_category_view',

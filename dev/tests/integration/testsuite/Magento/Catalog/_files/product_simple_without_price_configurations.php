@@ -12,11 +12,15 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
+/** @var WebsiteRepository $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepository::class);
+$baseWebsite = $websiteRepository->get('base');
 /** @var ProductInterface $productModel */
 $productModel = $objectManager->get(ProductInterface::class);
 /** @var ProductInterfaceFactory $productFactory */
@@ -28,7 +32,7 @@ $product = $productFactory->create(
         'data' => [
             'type_id' => Type::TYPE_SIMPLE,
             'attribute_set_id' => $productModel->getDefaultAttributeSetid(),
-            'website_ids' => [1],
+            'website_ids' => [$baseWebsite->getId()],
             'name' => 'Simple product',
             'sku' => 'simple_product',
             'price' => 50,

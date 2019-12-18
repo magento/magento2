@@ -10,9 +10,13 @@ use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Api\Data\RuleInterfaceFactory;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\Customer\Model\Group;
+use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var WebsiteRepository $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepository::class);
+$baseWebsite = $websiteRepository->get('base');
 /** @var IndexBuilder $indexBuilder */
 $indexBuilder = $objectManager->get(IndexBuilder::class);
 /** @var CatalogRuleRepositoryInterface $catalogRuleRepository */
@@ -26,7 +30,7 @@ $catalogRule = $catalogRuleFactory->create(
             RuleInterface::NAME => 'Test Catalog Rule for not logged user',
             'customer_group_ids' => Group::NOT_LOGGED_IN_ID,
             RuleInterface::DISCOUNT_AMOUNT => 10,
-            'website_ids' => [1],
+            'website_ids' => [$baseWebsite->getId()],
             RuleInterface::SIMPLE_ACTION => 'by_percent',
             RuleInterface::STOP_RULES_PROCESSING => false,
             RuleInterface::SORT_ORDER => 0,

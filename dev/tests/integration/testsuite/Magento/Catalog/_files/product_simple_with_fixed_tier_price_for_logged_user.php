@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
-use Magento\Customer\Model\Group;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 require __DIR__ . '/product_simple_without_price_configurations.php';
