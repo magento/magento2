@@ -25,7 +25,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Customer\Model\Customer;
 
 /**
- * Class Send
+ * Class Send Email Wishlist Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
