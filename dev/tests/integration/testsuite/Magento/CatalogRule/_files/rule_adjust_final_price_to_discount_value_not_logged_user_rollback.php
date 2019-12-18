@@ -19,7 +19,7 @@ $ruleRepository = $objectManager->create(CatalogRuleRepositoryInterface::class);
 /** @var CollectionFactory $ruleCollectionFactory */
 $ruleCollectionFactory = $objectManager->get(CollectionFactory::class);
 $ruleCollection = $ruleCollectionFactory->create();
-$ruleCollection->addFieldToFilter('name', ['eq' => 'Test Catalog Rule for not logged user']);
+$ruleCollection->addFieldToFilter('name', ['eq' => 'Rule adjust final price to discount value. Not logged user.']);
 $ruleCollection->setPageSize(1);
 /** @var Rule $rule */
 $rule = $ruleCollection->getFirstItem();

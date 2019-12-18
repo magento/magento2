@@ -27,7 +27,7 @@ $catalogRule = $catalogRuleFactory->create(
     [
         'data' => [
             RuleInterface::IS_ACTIVE => 1,
-            RuleInterface::NAME => 'Test Catalog Rule for not logged user',
+            RuleInterface::NAME => 'Rule adjust final price to discount value. Not logged user.',
             'customer_group_ids' => Group::NOT_LOGGED_IN_ID,
             RuleInterface::DISCOUNT_AMOUNT => 10,
             'website_ids' => [$baseWebsite->getId()],
