@@ -42,13 +42,12 @@ class ResetQuoteAddressesTest extends TestCase
     protected function setUp()
     {
         $this->quoteMock = $this->createPartialMock(Quote::class, [
-                'getAllAddresses',
-                'getAllVisibleItems',
-                'removeAddress',
-                'getExtensionAttributes',
-                'isVirtual',
-            ]
-        );
+            'getAllAddresses',
+            'getAllVisibleItems',
+            'removeAddress',
+            'getExtensionAttributes',
+            'isVirtual',
+        ]);
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->setMethods(
                 [
@@ -98,10 +97,7 @@ class ResetQuoteAddressesTest extends TestCase
             ->will($this->returnValue($quoteVisibleItems));
 
         if ($quoteHasAddresses) {
-            $address = $this->createPartialMock(Address::class, [
-                    'getId'
-                ]
-            );
+            $address = $this->createPartialMock(Address::class, ['getId']);
 
             $address->expects($this->any())
                 ->method('getId')
