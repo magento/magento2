@@ -215,6 +215,10 @@ define([
                 addToCartButton.removeClass(self.options.addToCartButtonDisabledClass);
                 addToCartButton.find('span').text(addToCartButtonTextDefault);
                 addToCartButton.attr('title', addToCartButtonTextDefault);
+                $([document.documentElement, document.body]).animate({
+                     scrollTop: $(self.options.messagesSelector).offset().top
+                     }, 500);
+                 }, 1000);
             }, 1000);
         }
     });
