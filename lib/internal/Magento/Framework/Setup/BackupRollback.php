@@ -24,6 +24,8 @@ class BackupRollback
 {
     /**
      * Default backup directory
+     *
+     * @const string
      */
     const DEFAULT_BACKUP_DIRECTORY = 'backups';
 
