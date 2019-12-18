@@ -404,7 +404,10 @@ define([
              * Toggle color upload chooser
              */
             $(document).on('click', '.swatch_window', function () {
-                $(this).next('div').toggle();
+                var currentElement = $(this).next('div');
+
+                jQuery('.swatch_sub-menu_container').not(currentElement).hide();
+                currentElement.toggle();
             });
         });
     };
