@@ -41,8 +41,7 @@ class ResetQuoteAddressesTest extends TestCase
      */
     protected function setUp()
     {
-        $this->quoteMock = $this->createPartialMock(Quote::class,
-            [
+        $this->quoteMock = $this->createPartialMock(Quote::class, [
                 'getAllAddresses',
                 'getAllVisibleItems',
                 'removeAddress',
@@ -99,8 +98,7 @@ class ResetQuoteAddressesTest extends TestCase
             ->will($this->returnValue($quoteVisibleItems));
 
         if ($quoteHasAddresses) {
-            $address = $this->createPartialMock(Address::class,
-                [
+            $address = $this->createPartialMock(Address::class, [
                     'getId'
                 ]
             );
