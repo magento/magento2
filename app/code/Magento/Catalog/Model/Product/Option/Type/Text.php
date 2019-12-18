@@ -10,6 +10,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option text type
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
