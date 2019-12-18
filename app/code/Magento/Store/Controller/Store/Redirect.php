@@ -128,5 +128,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             ];
             $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
         }
+
+        return null;
     }
 }
