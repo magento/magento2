@@ -1,0 +1,26 @@
+<div class="row clearfix">
+        <form name="form_message" method="POST" id="form_message">
+            <input type="text" name="message">
+            <input type="submit" id="Submit"  name="submit" value="Submit">
+        </form>
+</div>
+
+
+<script>
+    require(['jquery'],function(){
+        jQuery(document).ready(function() {
+            jQuery("#form_message").submit(function(){
+                var messageValue = jQuery("input[name='message']").val();
+                var url = "<?php echo $block->getBaseUrl() . 'helloworld/input/result' ?>";
+                jQuery.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {message:messageValue},
+                    showLoader: true,
+                    cache: false
+                });
+                return false;
+            });
+        });
+    });
+</script>

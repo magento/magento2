@@ -6,13 +6,9 @@
  */
 -->
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <title>Hello world Input Page</title>
-    </head>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="input.uicomponent" template="Example_ExampleFrontendUi::input.phtml"/>
-            <uiComponent name=""/>
+            <block class="Example\ExampleFrontendUi\Block\Input\Index" name="example.input" template="Example_ExampleFrontendUi::example_input.phtml"/>
         </referenceContainer>
     </body>
 </page>
