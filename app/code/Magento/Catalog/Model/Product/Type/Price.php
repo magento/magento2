@@ -141,7 +141,7 @@ class Price
      */
     public function getPrice($product)
     {
-        return (float) $product->getData('price');
+        return $product->getData('price');
     }
 
     /**
