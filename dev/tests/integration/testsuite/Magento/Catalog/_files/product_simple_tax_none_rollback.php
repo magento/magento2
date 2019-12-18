@@ -20,10 +20,11 @@ $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 try {
-    $product = $productRepository->get('simple-product-tax-none');
+    $product = $productRepository->get('simple-product-tax-none', false, null, true);
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
     // isolation on
 }
+$productRepository->cleanCache();
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
