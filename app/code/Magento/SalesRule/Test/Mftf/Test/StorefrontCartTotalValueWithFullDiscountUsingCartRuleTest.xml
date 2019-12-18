@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCartTotalValueWithFullDiscountUsingCartRuleTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Cart total with full discount"/>
+            <title value="Cart Total value when 100% discount applied through Cart Rule"/>
+            <description value="Cart Total value when 100% discount applied through Cart Rule"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-19524"/>
+            <useCaseId value="MC-17869"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <!-- log in -->
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <!-- Set configurations -->
+            <magentoCLI command="config:set carriers/tablerate/active 1"  stepKey="setShippingMethodEnabled"/>
+            <magentoCLI command="config:set carriers/tablerate/condition_name package_value"  stepKey="setShippingMethodConditionName"/>
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 1"  stepKey="setCatalogPrice"/>
+            <magentoCLI command="config:set tax/calculation/shipping_includes_tax 1"  stepKey="setSippingPrice"/>
+            <magentoCLI command="config:set tax/calculation/cross_border_trade_enabled 0"  stepKey="setCrossBorderTrade"/>
+            <magentoCLI command="config:set tax/calculation/discount_tax 1"  stepKey="setDiscount"/>
+            <magentoCLI command="config:set tax/cart_display/price 2"  stepKey="setPrice"/>
+            <magentoCLI command="config:set tax/cart_display/subtotal 2"  stepKey="setSubtotal"/>
+            <magentoCLI command="config:set carriers/freeshipping/active 1"  stepKey="setFreeShipping"/>
+            <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
+            <!-- Go to tax rule page -->
+            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
+            <waitForPageLoad stepKey="waitForTaxRatePage"/>
+            <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
+            <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
+            <!-- Add tax rule with 20% tax rate -->
+            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+                <argument name="taxCode" value="SimpleTaxNYRate"/>
+            </actionGroup>
+            <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <!-- Create cart price rule -->
+            <actionGroup ref="AdminCreateCartPriceRuleActionGroup" stepKey="createCartPriceRule">
+                <argument name="ruleName" value="SalesRuleWithFullDiscount"/>
+            </actionGroup>
+            <!-- Create 3 simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProductFirst">
+                <field key="price">5.10</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProductSecond">
+                <field key="price">5.10</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProductThird">
+                <field key="price">5.50</field>
+            </createData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <!-- Removed created Data -->
+            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
+            <waitForPageLoad stepKey="waitForRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="SampleRule"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Delete the tax rate that were created -->
+            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
+            <waitForPageLoad stepKey="waitForRatesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+                <argument name="name" value="{{SimpleTaxNYRate.state}}-{{SimpleTaxNYRate.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{SalesRuleWithFullDiscount.name}}"/>
+            </actionGroup>
+            <!-- Delete products -->
+            <deleteData createDataKey="createSimpleProductFirst" stepKey="deleteSimpleProductFirst"/>
+            <deleteData createDataKey="createSimpleProductSecond" stepKey="deleteSimpleProductSecond"/>
+            <deleteData createDataKey="createSimpleProductThird" stepKey="deleteSimpleProductThird"/>
+            <!-- Unset configuration -->
+            <magentoCLI command="config:set carriers/tablerate/active 0"  stepKey="unsetShippingMethodEnabled"/>
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 0"  stepKey="unsetCatalogPrice"/>
+            <magentoCLI command="config:set tax/calculation/shipping_includes_tax 0"  stepKey="unsetSippingPrice"/>
+            <magentoCLI command="config:set tax/calculation/cross_border_trade_enabled 1"  stepKey="unsetCrossBorderTrade"/>
+            <magentoCLI command="config:set tax/calculation/discount_tax 0"  stepKey="unsetDiscount"/>
+            <magentoCLI command="config:set tax/cart_display/price 1"  stepKey="unsetPrice"/>
+            <magentoCLI command="config:set tax/cart_display/subtotal 1"  stepKey="unsetSubtotal"/>
+            <magentoCLI command="config:set carriers/freeshipping/active 0"  stepKey="unsetFreeShipping"/>
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Add testing products to the cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductFirst.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantity"/>
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addProductToCard">
+            <argument name="productName" value="$$createSimpleProductFirst.name$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductSecond.custom_attributes[url_key]$$)}}" stepKey="goToSecondProductPage"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantityForTheSecondProduct"/>
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addSecondProductToCard">
+            <argument name="productName" value="$$createSimpleProductSecond.name$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductThird.custom_attributes[url_key]$$)}}" stepKey="goToThirdProductPage"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantityForTheThirdProduct"/>
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addThirdProductToCard">
+            <argument name="productName" value="$$createSimpleProductThird.name$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="6" stepKey="seeCartQuantity"/>
+        <!-- Go to the shopping cart page -->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.orderTotal}}" stepKey="waitForOrderTotalVisible"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectCountry"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForOrderTotalUpdate"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$29.00" stepKey="seeDiscountAmount"/>
+        <see selector="{{CheckoutCartSummarySection.subTotal}}" userInput="$29.00" stepKey="seeSubTotal"/>
+        <see selector="{{CheckoutCartSummarySection.orderTotal}}" userInput="0.00" stepKey="seeOrderTotal"/>
+    </test>
+</tests>

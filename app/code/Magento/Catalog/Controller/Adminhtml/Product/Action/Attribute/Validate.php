@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,7 +8,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute as AttributeAction;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class Validate
+ */
 class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
@@ -23,20 +26,29 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     protected $layoutFactory;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $eavConfig;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Eav\Model\Config $eavConfig = null
     ) {
         parent::__construct($context, $attributeHelper);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
+            ->get(\Magento\Eav\Model\Config::class);
     }
 
     /**
@@ -54,8 +66,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         try {
             if ($attributesData) {
                 foreach ($attributesData as $attributeCode => $value) {
-                    $attribute = $this->_objectManager->get(\Magento\Eav\Model\Config::class)
-                        ->getAttribute('catalog_product', $attributeCode);
+                    $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
                     if (!$attribute->getAttributeId()) {
                         unset($attributesData[$attributeCode]);
                         continue;

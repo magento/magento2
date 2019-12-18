@@ -67,6 +67,11 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}"  stepKey="clickOnNextButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnGenerateProductsButton"/>
         <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <!--Select any option in the Layered navigation and verify product image-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeOption">

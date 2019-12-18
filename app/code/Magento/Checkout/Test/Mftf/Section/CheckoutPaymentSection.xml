@@ -31,6 +31,7 @@
         <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active" timeout="30"/>
         <element name="checkMoneyOrderPayment" type="radio" selector="input#checkmo.radio" timeout="30"/>
         <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="30"/>
+        <element name="placeOrderWithoutTimeout" type="button" selector=".payment-method._active button.action.primary.checkout"/>
         <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[@data-role='title']" />
         <element name="orderSummarySubtotal" type="text" selector="//tr[@class='totals sub']//span[@class='price']" />
         <element name="orderSummaryShippingTotal" type="text" selector="//tr[@class='totals shipping excl']//span[@class='price']" />
@@ -52,6 +53,7 @@
         <element name="orderSummaryTotalIncluding" type="text" selector="//tr[@class='grand totals incl']//span[@class='price']" />
         <element name="orderSummaryTotalExcluding" type="text" selector="//tr[@class='grand totals excl']//span[@class='price']" />
         <element name="shippingAndBillingAddressSame" type="input" selector="#billing-address-same-as-shipping-braintree_cc_vault"/>
+        <element name="myShippingAndBillingAddressSame" type="input" selector=".billing-address-same-as-shipping-block"/>
         <element name="addressAction" type="button" selector="//span[text()='{{action}}']" parameterized="true"/>
         <element name="addressBook" type="button" selector="//a[text()='Address Book']"/>
         <element name="noQuotes" type="text" selector=".no-quotes-block"/>

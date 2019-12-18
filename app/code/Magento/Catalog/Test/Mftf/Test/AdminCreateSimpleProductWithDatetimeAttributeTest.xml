@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductWithDatetimeAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Datetime product attributes support"/>
+            <title value="Set datetime attribute to product"/>
+            <description value="Admin should be able to specify datetime attribute to product and find by them in product grid"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-21461"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createDatetimeAttribute" stepKey="deleteDatetimeAttribute"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Generate default value -->
+        <generateDate date="now" format="m/j/Y g:i A" stepKey="generateDefaultValue"/>
+        <generateDate date="now" format="M j, Y g:i:00 A" stepKey="generateDefaultGridValue"/>
+        <generateDate date="+1 minute" format="m/j/Y g:i A" stepKey="generateFilterToDate"/>
+        <!-- Create new datetime product attribute -->
+        <createData entity="DatetimeProductAttribute" stepKey="createDatetimeAttribute">
+            <field key="default_value">{$generateDefaultValue}</field>
+        </createData>
+        <!-- Open the new simple product page -->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductPage"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillDefaultProductFields"/>
+        <!-- Add datetime attribute -->
+        <actionGroup ref="addProductAttributeInProductModal" stepKey="addDatetimeAttribute">
+            <argument name="attributeCode" value="$createDatetimeAttribute.attribute_code$"/>
+        </actionGroup>
+        <!-- Flush config cache to reset product attributes in attribute set -->
+        <magentoCLI command="cache:flush" arguments="config" stepKey="flushConfigCache"/>
+        <!-- Save the product -->
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!-- Check default value -->
+        <scrollTo selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="goToAttributesSection"/>
+        <click selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="openAttributesSection"/>
+        <waitForElementVisible selector="{{AdminProductAttributesSection.attributeTextInputByCode($createDatetimeAttribute.attribute_code$)}}" stepKey="waitForSlideOutAttributes"/>
+        <seeInField selector="{{AdminProductAttributesSection.attributeTextInputByCode($createDatetimeAttribute.attribute_code$)}}" userInput="$generateDefaultValue" stepKey="checkDefaultValue"/>
+        <!-- Check datetime grid filter -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndexPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeFrom($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateDefaultValue}" stepKey="fillProductDatetimeFromFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeTo($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateFilterToDate}" stepKey="fillProductDatetimeToFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Name')}}" userInput="{{_defaultProduct.name}}" stepKey="checkAppliedDatetimeFilter"/>
+        <see selector="{{AdminDataGridTableSection.rowTemplateStrict(_defaultProduct.name)}}" userInput="{$generateDefaultGridValue}" stepKey="checkDefaultValueInGrid"/>
+    </test>
+</tests>
