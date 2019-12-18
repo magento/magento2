@@ -86,8 +86,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get display price for unit price including tax. The Weee amount will be added to unit price including tax
-     * depending on Weee display setting
+     * Get display price for unit price including tax.
+     *
+     * The Weee amount will be added to unit price including tax depending on Weee display setting.
      *
      * @return float
      */
@@ -107,8 +108,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get base price for unit price including tax. The Weee amount will be added to unit price including tax
-     * depending on Weee display setting
+     * Get base price for unit price including tax.
+     *
+     * The Weee amount will be added to unit price including tax depending on Weee display setting.
      *
      * @return float
      */
@@ -128,8 +130,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get display price for row total including tax. The Weee amount will be added to row total including tax
-     * depending on Weee display setting
+     * Get display price for row total including tax.
+     *
+     * The Weee amount will be added to row total including tax depending on Weee display setting.
      *
      * @return float
      */
@@ -149,8 +152,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get base price for row total including tax. The Weee amount will be added to row total including tax
-     * depending on Weee display setting
+     * Get base price for row total including tax.
+     *
+     * The Weee amount will be added to row total including tax depending on Weee display setting.
      *
      * @return float
      */
@@ -170,8 +174,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get display price for unit price excluding tax. The Weee amount will be added to unit price
-     * depending on Weee display setting
+     * Get display price for unit price excluding tax.
+     *
+     * The Weee amount will be added to unit price depending on Weee display setting.
      *
      * @return float
      */
@@ -191,8 +196,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get base price for unit price excluding tax. The Weee amount will be added to unit price
-     * depending on Weee display setting
+     * Get base price for unit price excluding tax.
+     *
+     * The Weee amount will be added to unit price depending on Weee display setting.
      *
      * @return float
      */
@@ -218,8 +224,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get display price for row total excluding tax. The Weee amount will be added to row total
-     * depending on Weee display setting
+     * Get display price for row total excluding tax.
+     *
+     * The Weee amount will be added to row total depending on Weee display setting.
      *
      * @return float
      */
@@ -239,8 +246,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get base price for row total excluding tax. The Weee amount will be added to row total
-     * depending on Weee display setting
+     * Get base price for row total excluding tax.
+     *
+     * The Weee amount will be added to row total depending on Weee display setting.
      *
      * @return float
      */
@@ -260,7 +268,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get final unit display price including tax, this will add Weee amount to unit price include tax
+     * Get final unit display price including tax.
+     *
+     * This will add Weee amount to unit price include tax.
      *
      * @return float
      */
@@ -276,7 +286,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get base final unit display price including tax, this will add Weee amount to unit price include tax
+     * Get base final unit display price including tax.
+     *
+     * This will add Weee amount to unit price include tax.
      *
      * @return float
      */
@@ -292,7 +304,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get final row display price including tax, this will add weee amount to rowTotalInclTax
+     * Get final row display price including tax.
+     *
+     * This will add weee amount to rowTotalInclTax.
      *
      * @return float
      */
@@ -308,7 +322,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get base final row display price including tax, this will add weee amount to rowTotalInclTax
+     * Get base final row display price including tax.
+     *
+     * This will add weee amount to rowTotalInclTax.
      *
      * @return float
      */
@@ -362,7 +378,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get final row display price excluding tax, this will add Weee amount to rowTotal
+     * Get final row display price excluding tax.
+     *
+     * This will add Weee amount to rowTotal.
      *
      * @return float
      */
@@ -378,7 +396,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Get base final row display price excluding tax, this will add Weee amount to rowTotal
+     * Get base final row display price excluding tax.
+     *
+     * This will add Weee amount to rowTotal.
      *
      * @return float
      */

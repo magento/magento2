@@ -12,10 +12,10 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="MAGETWO-91465"/>
-            <title value="Guest Checkout"/>
+            <title value="Guest Checkout - address State field should not allow just integer values"/>
             <description value="Address State field should not allow just integer values"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-93203"/>
+            <testCaseId value="MC-6223"/>
             <group value="checkout"/>
         </annotations>
         <before>

@@ -17,9 +17,11 @@
                 </field>
                 <field id="viewed_count" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Recently Viewed Products Count</label>
+                    <validate>validate-digits validate-zero-or-greater</validate>
                 </field>
                 <field id="compared_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Recently Compared Products Count</label>
+                    <validate>validate-digits validate-zero-or-greater</validate>
                 </field>
             </group>
         </section>

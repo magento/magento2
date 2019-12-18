@@ -13,5 +13,7 @@
         <element name="DiscountInput" type="input" selector="#discount-code"/>
         <element name="ApplyCodeBtn" type="button" selector="//span[text()='Apply Discount']"/>
         <element name="CancelCoupon" type="button" selector="//button[@value='Cancel Coupon']"/>
+        <element name="DiscountVerificationMsg" type="button" selector=".message-success div"/>
+        <element name="CancelCouponBtn" type="button" selector="#discount-form .action-cancel"/>
     </section>
 </sections>

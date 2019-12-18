@@ -78,6 +78,8 @@ class Loader
     public function load(array $exclude = [])
     {
         $result = [];
+        $excludeSet = array_flip($exclude);
+
         foreach ($this->getModuleConfigs() as list($file, $contents)) {
             try {
                 $this->parser->loadXML($contents);
@@ -93,7 +95,7 @@ class Loader
 
             $data = $this->converter->convert($this->parser->getDom());
             $name = key($data);
-            if (!in_array($name, $exclude)) {
+            if (!isset($excludeSet[$name])) {
                 $result[$name] = $data[$name];
             }
         }
@@ -126,16 +128,21 @@ class Loader
      *
      * @param array $origList
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @throws \Exception
      */
-    private function sortBySequence($origList)
+    private function sortBySequence(array $origList): array
     {
         ksort($origList);
+        $modules = $this->prearrangeModules($origList);
+
         $expanded = [];
-        foreach ($origList as $moduleName => $value) {
+        foreach (array_keys($modules) as $moduleName) {
+            $sequence = $this->expandSequence($origList, $moduleName);
+            asort($sequence);
+
             $expanded[] = [
                 'name' => $moduleName,
-                'sequence' => $this->expandSequence($origList, $moduleName),
+                'sequence_set' => array_flip($sequence),
             ];
         }
 
@@ -143,7 +150,7 @@ class Loader
         $total = count($expanded);
         for ($i = 0; $i < $total - 1; $i++) {
             for ($j = $i; $j < $total; $j++) {
-                if (in_array($expanded[$j]['name'], $expanded[$i]['sequence'])) {
+                if (isset($expanded[$i]['sequence_set'][$expanded[$j]['name']])) {
                     $temp = $expanded[$i];
                     $expanded[$i] = $expanded[$j];
                     $expanded[$j] = $temp;
@@ -160,6 +167,27 @@ class Loader
     }
 
     /**
+     * Prearrange all modules by putting those from Magento before the others
+     *
+     * @param array $modules
+     * @return array
+     */
+    private function prearrangeModules(array $modules): array
+    {
+        $breakdown = ['magento' => [], 'others' => []];
+
+        foreach ($modules as $moduleName => $moduleDetails) {
+            if (strpos($moduleName, 'Magento_') !== false) {
+                $breakdown['magento'][$moduleName] = $moduleDetails;
+            } else {
+                $breakdown['others'][$moduleName] = $moduleDetails;
+            }
+        }
+
+        return array_merge($breakdown['magento'], $breakdown['others']);
+    }
+
+    /**
      * Accumulate information about all transitive "sequence" references
      *
      * @param array $list
@@ -170,18 +198,19 @@ class Loader
      */
     private function expandSequence($list, $name, $accumulated = [])
     {
-        $accumulated[] = $name;
+        $accumulated[$name] = true;
         $result = $list[$name]['sequence'];
+        $allResults = [];
         foreach ($result as $relatedName) {
-            if (in_array($relatedName, $accumulated)) {
-                throw new \Exception("Circular sequence reference from '{$name}' to '{$relatedName}'.");
+            if (isset($accumulated[$relatedName])) {
+                throw new \LogicException("Circular sequence reference from '{$name}' to '{$relatedName}'.");
             }
             if (!isset($list[$relatedName])) {
                 continue;
             }
-            $relatedResult = $this->expandSequence($list, $relatedName, $accumulated);
-            $result = array_unique(array_merge($result, $relatedResult));
+            $allResults[] = $this->expandSequence($list, $relatedName, $accumulated);
         }
-        return $result;
+        $allResults[] = $result;
+        return array_unique(array_merge(...$allResults));
     }
 }

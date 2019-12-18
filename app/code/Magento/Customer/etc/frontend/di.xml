@@ -57,7 +57,7 @@
     <type name="Magento\Checkout\Block\Cart\Sidebar">
         <plugin name="customer_cart" type="Magento\Customer\Model\Cart\ConfigPlugin" />
     </type>
-    <type name="Magento\Framework\Session\SessionManager">
+    <type name="Magento\Framework\Session\SessionManagerInterface">
         <plugin name="session_checker" type="Magento\Customer\CustomerData\Plugin\SessionChecker" />
     </type>
     <type name="Magento\Authorization\Model\CompositeUserContext">
@@ -74,6 +74,36 @@
         <arguments>
             <argument name="expirableSectionNames" xsi:type="array">
                 <item name="cart" xsi:type="string">cart</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="customerAlreadyExistsErrorMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerAlreadyExistsErrorMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="confirmAccountSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/confirmAccountSuccessMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="customerVatShippingAddressSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerVatShippingAddressSuccessMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="customerVatBillingAddressSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerVatBillingAddressSuccessMessage.phtml</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>

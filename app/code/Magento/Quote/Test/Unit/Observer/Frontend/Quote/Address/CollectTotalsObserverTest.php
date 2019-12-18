@@ -199,7 +199,7 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getNotLoggedInGroup')
             ->will($this->returnValue($this->groupInterfaceMock));
         $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->will($this->returnValue(0));
+            ->method('getId')->will($this->returnValue(null));
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -220,9 +220,6 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(false)
         );
 
-        $groupMock = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue(null));
 
         /** Assertions */
@@ -314,6 +311,43 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerMock);
+        $this->model->execute($this->observerMock);
+    }
+
+    public function testDispatchWithAddressCustomerVatIdAndCountryId()
+    {
+        $customerCountryCode = "BE";
+        $customerVat = "123123123";
+        $defaultShipping = 1;
+
+        $customerAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $customerAddress->expects($this->any())
+            ->method("getVatId")
+            ->willReturn($customerVat);
+
+        $customerAddress->expects($this->any())
+            ->method("getCountryId")
+            ->willReturn($customerCountryCode);
+
+        $this->addressRepository->expects($this->once())
+            ->method("getById")
+            ->with($defaultShipping)
+            ->willReturn($customerAddress);
+
+        $this->customerMock->expects($this->atLeastOnce())
+            ->method("getDefaultShipping")
+            ->willReturn($defaultShipping);
+
+        $this->vatValidatorMock->expects($this->once())
+            ->method('isEnabled')
+            ->with($this->quoteAddressMock, $this->storeId)
+            ->will($this->returnValue(true));
+
+        $this->customerVatMock->expects($this->once())
+            ->method('isCountryInEU')
+            ->with($customerCountryCode)
+            ->willReturn(true);
+
         $this->model->execute($this->observerMock);
     }
 

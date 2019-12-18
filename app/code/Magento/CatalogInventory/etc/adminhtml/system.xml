@@ -55,7 +55,7 @@
                 </field>
                 <field id="max_sale_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Qty Allowed in Shopping Cart</label>
-                    <validate>validate-number</validate>
+                    <validate>validate-number validate-greater-than-zero</validate>
                 </field>
                 <field id="min_qty" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Out-of-Stock Threshold</label>

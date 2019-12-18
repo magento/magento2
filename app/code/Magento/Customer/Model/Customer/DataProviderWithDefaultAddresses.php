@@ -39,7 +39,6 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
     private static $forbiddenCustomerFields = [
         'password_hash',
         'rp_token',
-        'confirmation',
     ];
 
     /**
@@ -189,8 +188,7 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
             $meta[$attribute->getAttributeCode()] = $this->attributeMetadataResolver->getAttributesMeta(
                 $attribute,
                 $entityType,
-                $this->allowToShowHiddenAttributes,
-                $this->getRequestFieldName()
+                $this->allowToShowHiddenAttributes
             );
         }
         $this->attributeMetadataResolver->processWebsiteMeta($meta);

@@ -30,6 +30,13 @@
     transform: translateY(@value);
 }
 
+.translate(@x, @y) {
+    -webkit-transform: translate(@x, @y);
+    -ms-transform: translateY(@x, @y);
+    -o-transform: translateY(@x, @y);
+    transform: translateY(@x, @y);
+}
+
 .fotorama-shadow-gradient(@x, @y) {
     background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.2) 25%, rgba(0, 0, 0, 0.3) 75%, transparent), radial-gradient(farthest-side at @x @y, rgba(0, 0, 0, 0.4), transparent);
 }

@@ -9,11 +9,11 @@
     <script type="text/x-magento-init">
         {
             "#gift-options-cart": {
-                "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
             }
         }
     </script>
     <script>
-        window.giftOptionsConfig = <?= /* @escapeNotVerified */ $block->getGiftOptionsConfigJson() ?>;
+        window.giftOptionsConfig = <?= /* @noEscape */ $block->getGiftOptionsConfigJson() ?>;
     </script>
 </div>

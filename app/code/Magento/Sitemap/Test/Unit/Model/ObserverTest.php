@@ -118,7 +118,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getStoreId')
             ->willReturn($storeId);
 
-        $this->sitemapMock->expects($this->at(1))
+        $this->sitemapMock->expects($this->once())
             ->method('generateXml')
             ->willThrowException(new \Exception($exception));
 
@@ -129,17 +129,6 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
             ->willReturn('error-recipient@example.com');
-
-        $this->appEmulationMock->expects($this->at(0))
-            ->method('startEnvironmentEmulation')
-            ->with(
-                $storeId,
-                Area::AREA_FRONTEND,
-                true
-            );
-
-        $this->appEmulationMock->expects($this->at(1))
-            ->method('stopEnvironmentEmulation');
 
         $this->observer->scheduledGenerateSitemaps();
     }

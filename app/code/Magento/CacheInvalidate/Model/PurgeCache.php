@@ -118,6 +118,7 @@ class PurgeCache
     private function sendPurgeRequestToServers($socketAdapter, $servers, $formattedTagsChunk)
     {
         $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $formattedTagsChunk];
+        $unresponsiveServerError = [];
         foreach ($servers as $server) {
             $headers['Host'] = $server->getHost();
             try {
@@ -131,10 +132,30 @@ class PurgeCache
                 $socketAdapter->read();
                 $socketAdapter->close();
             } catch (\Exception $e) {
-                $this->logger->critical($e->getMessage(), compact('server', 'formattedTagsChunk'));
-                return false;
+                $unresponsiveServerError[] = "Cache host: " . $server->getHost() . ":" . $server->getPort() .
+                    "resulted in error message: " . $e->getMessage();
             }
         }
+
+        $errorCount = count($unresponsiveServerError);
+
+        if ($errorCount > 0) {
+            $loggerMessage = implode(" ", $unresponsiveServerError);
+
+            if ($errorCount == count($servers)) {
+                $this->logger->critical(
+                    'No cache server(s) could be purged ' . $loggerMessage,
+                    compact('server', 'formattedTagsChunk')
+                );
+                return false;
+            }
+
+            $this->logger->warning(
+                'Unresponsive cache server(s) hit' . $loggerMessage,
+                compact('server', 'formattedTagsChunk')
+            );
+        }
+
         $this->logger->execute(compact('servers', 'formattedTagsChunk'));
         return true;
     }

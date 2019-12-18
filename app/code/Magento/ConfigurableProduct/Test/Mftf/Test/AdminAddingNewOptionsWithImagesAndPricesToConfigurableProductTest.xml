@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddingNewOptionsWithImagesAndPricesToConfigurableProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Update product"/>
+            <title value="Adding new options with images and prices to Configurable Product"/>
+            <description value="Test case verifies possibility to add new options for configurable attribute for existing configurable product."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13339"/>
+            <group value="configurableProduct"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminCreateApiConfigurableProductActionGroup" stepKey="createConfigurableProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createConfigProductCreateConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
+                <argument name="productName" value="$$createConfigProductAttributeCreateConfigurableProduct.name$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open edit product page-->
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigProductCreateConfigurableProduct.id$$)}}" stepKey="goToProductEditPage"/>
+
+        <!--Open edit configuration wizard-->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickEditConfigurations"/>
+        <see userInput="Select Attributes" selector="{{AdminProductFormConfigurationsSection.stepsWizardTitle}}" stepKey="seeStepTitle"/>
+
+        <!--Click Next button-->
+        <actionGroup ref="AdminConfigurableWizardMoveToNextStepActionGroup" stepKey="navigateToAttributeValuesStep">
+            <argument name="title" value="Attribute Values"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductFormConfigurationsSection.attributeEntityByName($$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$)}}" stepKey="seeAttribute"/>
+
+        <!--Create one color option via "Create New Value" link-->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue"/>
+        <fillField userInput="{{colorDefaultProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>
+
+        <!--Click Next button-->
+        <actionGroup ref="AdminConfigurableWizardMoveToNextStepActionGroup" stepKey="navigateToBulkStep">
+            <argument name="title" value="Bulk Images, Price and Quantity"/>
+        </actionGroup>
+
+        <!--Select Apply unique images by attribute to each SKU and color attribute in dropdown in Images-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueImagesToEachSkus}}" stepKey="clickOnApplyUniqueImagesToEachSku"/>
+        <selectOption userInput="$$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$"
+                      selector="{{AdminCreateProductConfigurationsPanel.selectImagesButton}}" stepKey="selectAttributeOption"/>
+
+        <!-- Add images to configurable product attribute options -->
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionOne">
+            <argument name="image" value="ImageUpload"/>
+            <argument name="frontend_label" value="$$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$"/>
+            <argument name="label" value="$$getConfigAttributeOption1CreateConfigurableProduct.label$$"/>
+        </actionGroup>
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionTwo">
+            <argument name="image" value="ImageUpload_1"/>
+            <argument name="frontend_label" value="$$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$"/>
+            <argument name="label" value="$$getConfigAttributeOption2CreateConfigurableProduct.label$$"/>
+        </actionGroup>
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionThree">
+            <argument name="image" value="ImageUpload3"/>
+            <argument name="frontend_label" value="$$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$"/>
+            <argument name="label" value="{{colorDefaultProductAttribute1.name}}"/>
+        </actionGroup>
+
+        <!--Add prices to configurable product attribute options-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesToEachSkus}}" stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
+        <selectOption  userInput="$$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$"
+                       selector="{{AdminCreateProductConfigurationsPanel.selectAttribute}}" stepKey="selectAttributes"/>
+        <fillField userInput="10" selector="{{AdminCreateProductConfigurationsPanel.price($$getConfigAttributeOption1CreateConfigurableProduct.label$$)}}" stepKey="fillAttributePrice"/>
+        <fillField userInput="20" selector="{{AdminCreateProductConfigurationsPanel.price($$getConfigAttributeOption2CreateConfigurableProduct.label$$)}}" stepKey="fillAttributePrice1"/>
+        <fillField userInput="30" selector="{{AdminCreateProductConfigurationsPanel.price(colorDefaultProductAttribute1.name)}}" stepKey="fillAttributePrice2"/>
+
+        <!-- Add quantity to product attribute options -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
+
+        <!--Click Next button-->
+        <actionGroup ref="AdminConfigurableWizardMoveToNextStepActionGroup" stepKey="navigateToSummaryStep">
+            <argument name="title" value="Summary"/>
+        </actionGroup>
+
+        <!--Click Generate Configure button-->
+        <click selector="{{ConfigurableProductSection.generateConfigure}}" stepKey="clickGenerateConfigure"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!--Go to frontend and check image and price-->
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+
+        <actionGroup ref="AssertOptionImageAndPriceInStorefrontProductActionGroup" stepKey="assertFirstOptionImageAndPriceInStorefrontProductPage">
+            <argument name="label" value="$$getConfigAttributeOption1CreateConfigurableProduct.label$$"/>
+            <argument name="image" value="{{ImageUpload.filename}}"/>
+            <argument name="price" value="10"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertOptionImageAndPriceInStorefrontProductActionGroup" stepKey="assertSecondOptionImageAndPriceInStorefrontProductPage">
+            <argument name="label" value="$$getConfigAttributeOption2CreateConfigurableProduct.label$$"/>
+            <argument name="image" value="{{ImageUpload_1.filename}}"/>
+            <argument name="price" value="20"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertOptionImageAndPriceInStorefrontProductActionGroup" stepKey="assertThirdOptionImageAndPriceInStorefrontProductPage">
+            <argument name="label" value="{{colorDefaultProductAttribute1.name}}"/>
+            <argument name="image" value="{{ImageUpload3.filename}}"/>
+            <argument name="price" value="30"/>
+        </actionGroup>
+    </test>
+</tests>

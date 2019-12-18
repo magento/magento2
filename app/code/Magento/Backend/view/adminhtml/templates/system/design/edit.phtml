@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="design-edit-form">
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="design-edit-form">
     <?= $block->getBlockHtml('formkey') ?>
 </form>
 <script>

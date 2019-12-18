@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutWithDifferentShippingAndBillingAddressAndProductWithTierPricesTest">
+        <annotations>
+            <stories value="Checkout"/>
+            <title value="Verify checkout with different shipping and billing address and product with tier prices"/>
+            <description value="Checkout as a customer with different shipping and billing address and  product with tier prices"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14713"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">50.00</field>
+            </createData>
+            <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+                <argument name="productSku" value="$$simpleProduct.sku$$"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetAdvancedTierFixedPricing" stepKey="setTierPrice">
+                <argument name="website" value=""/>
+                <argument name="group" value=""/>
+                <argument name="quantity" value="3"/>
+                <argument name="price" value="Fixed"/>
+                <argument name="amount" value="24.00"/>
+            </actionGroup>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="enableGuestCheckout"/>
+
+            <!-- Sign out Customer from storefront -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="UKCustomer.email"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open Product page in StoreFront and assert product and price range -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Add product to the cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="3"/>
+        </actionGroup>
+
+        <!--Open View and edit -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+
+        <!-- Fill the Estimate Shipping and Tax section -->
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Fill the guest form -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryActionGroup" stepKey="fillGuestForm">
+                <argument name="customer" value="UKCustomer"/>
+                <argument name="customerAddress" value="updateCustomerUKAddress"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="waitForPlaceOrderButton"/>
+        <checkOption selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="selectBankTransfer"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="waitForElementToBeVisible"/>
+        <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
+        <conditionalClick selector="{{CheckoutShippingSection.editActiveAddressButton}}" dependentSelector="{{CheckoutShippingSection.editActiveAddressButton}}" visible="true" stepKey="clickEditButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+
+        <!-- Fill Billing Address -->
+        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
+
+        <!--Place order and Assert success message -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+
+        <!-- Assert Empty Mini Cart -->
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
+
+        <!-- Register customer after checkout -->
+        <actionGroup ref="StorefrontRegisterCustomerAfterCheckoutActionGroup" stepKey="registerCustomer"/>
+
+        <!-- Assert Billing Address in Storefront -->
+        <see selector="{{StorefrontCustomerAddressesSection.billingAddress}}" userInput="{{CustomerUKAddress.street[0]}}" stepKey="seeStreetNameInBillingAddress"/>
+        <see selector="{{StorefrontCustomerAddressesSection.billingAddress}}" userInput="{{CustomerUKAddress.city}}" stepKey="seeCityInBillingAddress"/>
+        <see selector="{{StorefrontCustomerAddressesSection.billingAddress}}" userInput="{{CustomerUKAddress.country}}" stepKey="seeCountryInBillingAddress"/>
+        <see selector="{{StorefrontCustomerAddressesSection.billingAddress}}" userInput="T: {{CustomerUKAddress.telephone}}" stepKey="seeTelephoneInBillingAddress"/>
+
+        <!-- Assert Shipping Address in Storefront -->
+        <see selector="{{StorefrontCustomerAddressesSection.shippingAddress}}" userInput="{{updateCustomerUKAddress.street[0]}}" stepKey="seeStreetNameInShippingAddress"/>
+        <see selector="{{StorefrontCustomerAddressesSection.shippingAddress}}" userInput="{{updateCustomerUKAddress.city}}" stepKey="seeCityInShippingAddress"/>
+        <see selector="{{StorefrontCustomerAddressesSection.shippingAddress}}" userInput="{{updateCustomerUKAddress.country}}" stepKey="seeCountryInShippingAddress"/>
+        <see selector="{{StorefrontCustomerAddressesSection.shippingAddress}}" userInput="T: {{updateCustomerUKAddress.telephone}}" stepKey="seeTelephoneInShippingAddress"/>
+
+        <!--Open Order Index Page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrderIndexPageToLoad"/>
+
+        <!-- Filter Order using orderId and assert order-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <!-- Assert Grand Total -->
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$87.00" stepKey="seeGrandTotal"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderStatus"/>
+
+        <!-- Ship the order and assert the status -->
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
+
+        <!-- Assert order buttons -->
+        <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
+    </test>
+</tests>

@@ -8,24 +8,20 @@ declare(strict_types=1);
 namespace Magento\VaultGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 
 /**
  * Delete Payment Token resolver, used for GraphQL mutation processing.
  */
 class DeletePaymentToken implements ResolverInterface
 {
-    /**
-     * @var CheckCustomerAccount
-     */
-    private $checkCustomerAccount;
-
     /**
      * @var PaymentTokenManagementInterface
      */
@@ -37,16 +33,13 @@ class DeletePaymentToken implements ResolverInterface
     private $paymentTokenRepository;
 
     /**
-     * @param CheckCustomerAccount $checkCustomerAccount
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
         PaymentTokenManagementInterface $paymentTokenManagement,
         PaymentTokenRepositoryInterface $paymentTokenRepository
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
         $this->paymentTokenManagement = $paymentTokenManagement;
         $this->paymentTokenRepository = $paymentTokenRepository;
     }
@@ -61,16 +54,16 @@ class DeletePaymentToken implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
+
         if (!isset($args['public_hash'])) {
             throw new GraphQlInputException(__('Specify the "public_hash" value.'));
         }
 
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
-
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        $token = $this->paymentTokenManagement->getByPublicHash($args['public_hash'], $currentUserId);
+        $token = $this->paymentTokenManagement->getByPublicHash($args['public_hash'], $context->getUserId());
         if (!$token) {
             throw new GraphQlNoSuchEntityException(
                 __('Could not find a token using public hash: %1', $args['public_hash'])

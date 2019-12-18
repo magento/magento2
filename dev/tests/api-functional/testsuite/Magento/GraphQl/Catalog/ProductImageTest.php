@@ -51,7 +51,6 @@ QUERY;
      */
     public function testProductWithoutBaseImage()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/239');
         $productSku = 'simple';
         $query = <<<QUERY
 {
@@ -61,12 +60,25 @@ QUERY;
             url
             label
         }
+        small_image {
+            url
+            label
+        }
     }
   }    
 }
 QUERY;
         $response = $this->graphQlQuery($query);
         self::assertEquals('Simple Product', $response['products']['items'][0]['image']['label']);
+        self::assertStringEndsWith(
+            'images/product/placeholder/image.jpg',
+            $response['products']['items'][0]['image']['url']
+        );
+        self::assertEquals('Simple Product', $response['products']['items'][0]['small_image']['label']);
+        self::assertStringEndsWith(
+            'images/product/placeholder/small_image.jpg',
+            $response['products']['items'][0]['small_image']['url']
+        );
     }
 
     /**
@@ -132,6 +144,6 @@ QUERY;
         curl_exec($connection);
         $responseStatus = curl_getinfo($connection, CURLINFO_HTTP_CODE);
 
-        return $responseStatus === 200 ? true : false;
+        return $responseStatus === 200;
     }
 }

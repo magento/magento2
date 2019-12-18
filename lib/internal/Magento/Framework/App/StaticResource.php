@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Debug;
 
 /**
  * Entry point for retrieving static resources like JS, CSS, images by requested public path
@@ -138,7 +139,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {
@@ -146,7 +147,15 @@ class StaticResource implements \Magento\Framework\AppInterface
         if ($bootstrap->isDeveloperMode()) {
             $this->response->setHttpResponseCode(404);
             $this->response->setHeader('Content-Type', 'text/plain');
-            $this->response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            $this->response->setBody(
+                $exception->getMessage() . "\n" .
+                Debug::trace(
+                    $exception->getTrace(),
+                    true,
+                    true,
+                    (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
+                )
+            );
             $this->response->sendResponse();
         } else {
             require $this->getFilesystem()->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');

@@ -35,11 +35,17 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             \Magento\Directory\Model\AllowedCountries::class,
             ['getAllowedCountries']
         );
+
+        $escaper = $this->objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
+
         $this->model = $this->objectManager->getObject(
             \Magento\Customer\Model\Address\Validator\Country::class,
             [
                 'directoryData' => $this->directoryDataMock,
                 'allowedCountriesReader' => $this->allowedCountriesReaderMock,
+                'escaper' => $escaper
             ]
         );
     }

@@ -20,6 +20,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
  * @api
  * @since 100.0.2
@@ -146,6 +147,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
+                    return false;
                 }
             }
         }

@@ -4,7 +4,5 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
-<a class="action multicheckout" href="<?= /* @escapeNotVerified */ $block->getCheckoutUrl() ?>"><span><?= /* @escapeNotVerified */ __('Check Out with Multiple Addresses') ?></span></a>
+<a class="action multicheckout" href="<?= $block->escapeUrl($block->getCheckoutUrl()) ?>"><span><?= $block->escapeHtml(__('Check Out with Multiple Addresses')) ?></span></a>

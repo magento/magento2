@@ -32,4 +32,9 @@
         <data key="region_code">UT</data>
         <data key="region_id">58</data>
     </entity>
+    <entity name="RegionAE" type="region">
+        <data key="region">Armed Forces Europe</data>
+        <data key="region_code">AFE</data>
+        <data key="region_id">9</data>
+    </entity>
 </entities>

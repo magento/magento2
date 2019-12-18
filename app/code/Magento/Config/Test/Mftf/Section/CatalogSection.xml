@@ -20,6 +20,15 @@
         <element name="flatCatalogCategoryCheckBox" type="checkbox" selector="#catalog_frontend_flat_catalog_category_inherit"/>
         <element name="flatCatalogCategory" type="select" selector="#catalog_frontend_flat_catalog_category"/>
         <element name="flatCatalogProduct" type="select" selector="#catalog_frontend_flat_catalog_product"/>
+        <element name="seo" type="button" selector="#catalog_seo-head"/>
+        <element name="CheckIfSeoTabExpand" type="button" selector="#catalog_seo-head:not(.open)"/>
+        <element name="GenerateUrlRewrites" type="select" selector="#catalog_seo_generate_category_product_rewrites"/>
         <element name="successMessage" type="text" selector="#messages"/>
+    </section>
+    <section name="GenerateUrlRewritesConfirm">
+        <element name="title" type="text" selector=".modal-popup.confirm h1.modal-title"/>
+        <element name="message" type="text" selector=".modal-popup.confirm div.modal-content"/>
+        <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
+        <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept" timeout="60"/>
     </section>
 </sections>

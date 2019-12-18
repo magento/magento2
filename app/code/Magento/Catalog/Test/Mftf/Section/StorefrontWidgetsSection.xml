@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontWidgetsSection">
+        <element name="widgetRecentlyViewedProductsGrid" type="block" selector=".block.widget.block-viewed-products-grid"/>
+        <element name="widgetRecentlyComparedProductsGrid" type="block" selector=".block.widget.block-compared-products-grid"/>
+        <element name="widgetRecentlyOrderedProductsGrid" type="block" selector=".block.block-reorder"/>
+        <element name="widgetCategoryLinkByName" type="text" selector="//div[contains(@class, 'block-category-link')]/a/span[contains(., '{{categoryName}}')]" parameterized="true"/>
+    </section>
+</sections>

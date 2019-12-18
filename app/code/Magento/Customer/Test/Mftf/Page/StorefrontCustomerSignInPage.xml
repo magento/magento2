@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontCustomerSignInPage" url="/customer/account/login/" area="storefront" module="Magento_Customer">
         <section name="StorefrontCustomerSignInFormSection" />
+        <section name="StorefrontCustomerLoginMessagesSection"/>
     </page>
 </pages>

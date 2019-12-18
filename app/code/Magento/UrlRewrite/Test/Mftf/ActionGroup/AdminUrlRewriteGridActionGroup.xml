@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSearchByRequestPath">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid based on the provided Redirect Path. Validates that the provided Redirect Path, Type and Target Path are present and correct in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="redirectPath" type="string"/>
+            <argument name="redirectType" type="string"/>
+            <argument name="targetPath" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{redirectPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{redirectPath}}" stepKey="seeTheRedirectPathForOldUrl"/>
+        <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{targetPath}}" stepKey="seeTheTargetPath"/>
+        <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="{{redirectType}}" stepKey="seeTheRedirectTypeForOldUrl"/>
+    </actionGroup>
+
+    <actionGroup name="AdminSearchUrlRewriteProductBySku">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid based on the provided Product SKU. Clicks on the 1st row in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="productSku" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteProductPage.url}}" stepKey="openUrlRewriteProductPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteProductPageToLoad"/>
+        <click selector="{{AdminUrlRewriteProductSection.resetFilter}}" stepKey="clickOnResetFilter"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteProductSection.skuFilter}}" userInput="{{productSku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminUrlRewriteProductSection.searchFilter}}" stepKey="clickOnSearchFilter"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <click selector="{{AdminUrlRewriteProductSection.productRow}}" stepKey="clickOnFirstRow"/>
+        <waitForPageLoad stepKey="waitForProductCategoryPageToLoad"/>
+    </actionGroup>
+
+    <actionGroup name="AdminSearchDeletedUrlRewrite">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid for the provided Request Path. Validates that it does NOT appear in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <see selector="{{AdminUrlRewriteIndexSection.emptyRecords}}" userInput="We couldn't find any records." stepKey="seeEmptyRecordMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminDeleteUrlRewrite">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Deletes the provided Request Path. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <click selector="{{AdminUrlRewriteIndexSection.editButton('1')}}" stepKey="clickOnEditButton"/>
+        <waitForPageLoad stepKey="waitForEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteEditSection.deleteButton}}" stepKey="clickOnDeleteButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="waitForOkButtonToVisible"/>
+        <click selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="clickOnOkButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <see selector="{{AdminUrlRewriteIndexSection.successMessage}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AssertPageByUrlRewriteIsNotFound">
+        <annotations>
+            <description>Validates that the provided Request Path does NOT exist on the Storefront. Validates that the 'Whoops' message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{requestPath}}" stepKey="amOnPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <see userInput="Whoops, our bad..." stepKey="seeWhoops"/>
+    </actionGroup>
+
+    <actionGroup name="AdminSearchAndSelectUrlRewriteInGrid">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid for the provided Request Path. Clicks on Edit.</description>
+        </annotations>
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+        
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <click selector="{{AdminUrlRewriteIndexSection.editButton('1')}}" stepKey="clickOnEditButton"/>
+        <waitForPageLoad stepKey="waitForEditPageToLoad"/>
+    </actionGroup>
+</actionGroups>

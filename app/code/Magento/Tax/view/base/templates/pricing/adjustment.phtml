@@ -3,18 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
 
-<?php if ($block->displayBothPrices()): ?>
-    <span id="<?= /* @escapeNotVerified */ $block->buildIdWithPrefix('price-excluding-tax-') ?>"
-          data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>"
-          data-price-amount="<?= /* @escapeNotVerified */ $block->getRawAmount() ?>"
+<?php if ($block->displayBothPrices()) : ?>
+    <span id="<?= $block->escapeHtmlAttr($block->buildIdWithPrefix('price-excluding-tax-')) ?>"
+          data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>"
+          data-price-amount="<?= /* @noEscape */ $block->getRawAmount() ?>"
           data-price-type="basePrice"
           class="price-wrapper price-excluding-tax">
-        <span class="price"><?= /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?></span></span>
+        <span class="price"><?= /* @noEscape */ $block->getDisplayAmountExclTax() ?></span></span>
 <?php endif; ?>

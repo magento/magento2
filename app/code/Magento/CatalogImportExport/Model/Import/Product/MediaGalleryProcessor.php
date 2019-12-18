@@ -12,7 +12,6 @@ use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Store\Model\Store;
 
 /**
  * Process and saves images during import.
@@ -179,13 +178,15 @@ class MediaGalleryProcessor
         $insertData = [];
         foreach ($data as $datum) {
             $imageData = $datum['imageData'];
+            $exists = $datum['exists'] ?? true;
 
-            if ($imageData[$field] === null) {
+            if (!$exists) {
                 $insertData[] = [
                     $field => $datum[$field],
                     $this->getProductEntityLinkField() => $imageData[$this->getProductEntityLinkField()],
                     'value_id' => $imageData['value_id'],
-                    'store_id' => Store::DEFAULT_STORE_ID,
+                    'store_id' => $imageData['store_id'],
+                    'position' => $imageData['position'],
                 ];
             } else {
                 $this->connection->update(
@@ -196,7 +197,7 @@ class MediaGalleryProcessor
                     [
                         $this->getProductEntityLinkField() . ' = ?' => $imageData[$this->getProductEntityLinkField()],
                         'value_id = ?' => $imageData['value_id'],
-                        'store_id = ?' => Store::DEFAULT_STORE_ID,
+                        'store_id = ?' => $imageData['store_id'],
                     ]
                 );
             }
@@ -240,14 +241,15 @@ class MediaGalleryProcessor
         )->joinLeft(
             ['mgv' => $this->mediaGalleryValueTableName],
             sprintf(
-                '(mg.value_id = mgv.value_id AND mgv.%s = mgvte.%s AND mgv.store_id = %d)',
+                '(mgv.%s = mgvte.%s AND mg.value_id = mgv.value_id)',
                 $this->getProductEntityLinkField(),
-                $this->getProductEntityLinkField(),
-                Store::DEFAULT_STORE_ID
+                $this->getProductEntityLinkField()
             ),
             [
+                'store_id' => 'mgv.store_id',
                 'label' => 'mgv.label',
                 'disabled' => 'mgv.disabled',
+                'position' => 'mgv.position',
             ]
         )->joinInner(
             ['pe' => $this->productEntityTableName],
@@ -259,7 +261,9 @@ class MediaGalleryProcessor
         );
 
         foreach ($this->connection->fetchAll($select) as $image) {
-            $result[$image['sku']][$image['value']] = $image;
+            $storeId = $image['store_id'];
+            unset($image['store_id']);
+            $result[$storeId][$image['sku']][$image['value']] = $image;
         }
 
         return $result;
@@ -285,6 +289,42 @@ class MediaGalleryProcessor
     }
 
     /**
+     * Get the last media position for each product from the given list
+     *
+     * @param int $storeId
+     * @param array $productIds
+     * @return array
+     */
+    private function getLastMediaPositionPerProduct(int $storeId, array $productIds): array
+    {
+        $result = [];
+        if ($productIds) {
+            $productKeyName = $this->getProductEntityLinkField();
+            // this result could be achieved by using GROUP BY. But there is no index on position column, therefore
+            // it can be slower than the implementation below
+            $positions = $this->connection->fetchAll(
+                $this->connection
+                    ->select()
+                    ->from($this->mediaGalleryValueTableName, [$productKeyName, 'position'])
+                    ->where("$productKeyName IN (?)", $productIds)
+                    ->where('value_id is not null')
+                    ->where('store_id = ?', $storeId)
+            );
+            // Make sure the result contains all product ids even if the product has no media files
+            $result = array_fill_keys($productIds, 0);
+            // Find the largest position for each product
+            foreach ($positions as $record) {
+                $productId = $record[$productKeyName];
+                $result[$productId] = $result[$productId] < $record['position']
+                    ? $record['position']
+                    : $result[$productId];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Save media gallery data per store.
      *
      * @param int $storeId
@@ -301,24 +341,30 @@ class MediaGalleryProcessor
     ) {
         $multiInsertData = [];
         $dataForSkinnyTable = [];
+        $lastMediaPositionPerProduct = $this->getLastMediaPositionPerProduct(
+            $storeId,
+            array_unique(array_merge(...array_values($valueToProductId)))
+        );
+
         foreach ($mediaGalleryData as $mediaGalleryRows) {
             foreach ($mediaGalleryRows as $insertValue) {
-                foreach ($newMediaValues as $value_id => $values) {
+                foreach ($newMediaValues as $valueId => $values) {
                     if ($values['value'] == $insertValue['value']) {
-                        $insertValue['value_id'] = $value_id;
+                        $insertValue['value_id'] = $valueId;
                         $insertValue[$this->getProductEntityLinkField()]
                             = array_shift($valueToProductId[$values['value']]);
-                        unset($newMediaValues[$value_id]);
+                        unset($newMediaValues[$valueId]);
                         break;
                     }
                 }
                 if (isset($insertValue['value_id'])) {
+                    $productId = $insertValue[$this->getProductEntityLinkField()];
                     $valueArr = [
                         'value_id' => $insertValue['value_id'],
                         'store_id' => $storeId,
-                        $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
+                        $this->getProductEntityLinkField() => $productId,
                         'label' => $insertValue['label'],
-                        'position' => $insertValue['position'],
+                        'position' => $lastMediaPositionPerProduct[$productId] + $insertValue['position'],
                         'disabled' => $insertValue['disabled'],
                     ];
                     $multiInsertData[] = $valueArr;

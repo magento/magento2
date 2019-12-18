@@ -13,11 +13,14 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Validator\EmailAddress as EmailValidator;
 use Magento\Newsletter\Controller\Subscriber as SubscriberController;
 use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -40,6 +43,11 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     private $emailValidator;
 
     /**
+     * @var SubscriptionManagerInterface
+     */
+    private $subscriptionManager;
+
+    /**
      * Initialize dependencies.
      *
      * @param Context $context
@@ -48,6 +56,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @param StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
      * @param CustomerAccountManagement $customerAccountManagement
+     * @param SubscriptionManagerInterface $subscriptionManager
      * @param EmailValidator $emailValidator
      */
     public function __construct(
@@ -57,9 +66,11 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         StoreManagerInterface $storeManager,
         CustomerUrl $customerUrl,
         CustomerAccountManagement $customerAccountManagement,
+        SubscriptionManagerInterface $subscriptionManager,
         EmailValidator $emailValidator = null
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
+        $this->subscriptionManager = $subscriptionManager;
         $this->emailValidator = $emailValidator ?: ObjectManager::getInstance()->get(EmailValidator::class);
         parent::__construct(
             $context,
@@ -131,7 +142,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     /**
      * New subscription action
      *
-     * @return void
+     * @return Redirect
      */
     public function execute()
     {
@@ -143,24 +154,53 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
 
-                $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
+                $websiteId = (int)$this->_storeManager->getStore()->getWebsiteId();
+                /** @var Subscriber $subscriber */
+                $subscriber = $this->_subscriberFactory->create()->loadBySubscriberEmail($email, $websiteId);
                 if ($subscriber->getId()
-                    && (int) $subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED
-                ) {
+                    && (int)$subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED) {
                     throw new LocalizedException(
                         __('This email address is already subscribed.')
                     );
                 }
 
-                $status = (int) $this->_subscriberFactory->create()->subscribe($email);
-                $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
+                $storeId = (int)$this->_storeManager->getStore()->getId();
+                $currentCustomerId = $this->getSessionCustomerId($email);
+                $subscriber = $currentCustomerId
+                    ? $this->subscriptionManager->subscribeCustomer($currentCustomerId, $storeId)
+                    : $this->subscriptionManager->subscribe($email, $storeId);
+                $message = $this->getSuccessMessage((int)$subscriber->getSubscriberStatus());
+                $this->messageManager->addSuccessMessage($message);
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        /** @var Redirect $redirect */
+        $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $redirectUrl = $this->_redirect->getRedirectUrl();
+        return $redirect->setUrl($redirectUrl);
+    }
+
+    /**
+     * Get customer id from session if he is owner of the email
+     *
+     * @param string $email
+     * @return int|null
+     */
+    private function getSessionCustomerId(string $email): ?int
+    {
+        if (!$this->_customerSession->isLoggedIn()) {
+            return null;
+        }
+
+        $customer = $this->_customerSession->getCustomerDataObject();
+        if ($customer->getEmail() !== $email) {
+            return null;
+        }
+
+        return (int)$this->_customerSession->getId();
     }
 
     /**
