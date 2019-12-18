@@ -78,19 +78,19 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
     public function testCalculatePrice()
     {
-        $this->assertSame(10, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01'));
-        $this->assertSame(8, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01'));
+        $this->assertSame(10.0, $this->_model->calculatePrice(10.0, 8.0, '1970-12-12 23:59:59', '1971-01-01 01:01:01'));
+        $this->assertSame(8.0, $this->_model->calculatePrice(10.0, 8.0, '1970-12-12 23:59:59', '2034-01-01 01:01:01'));
     }
 
     public function testCalculateSpecialPrice()
     {
         $this->assertSame(
-            10,
-            $this->_model->calculateSpecialPrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01')
+            10.0,
+            $this->_model->calculateSpecialPrice(10.0, 8.0, '1970-12-12 23:59:59', '1971-01-01 01:01:01')
         );
         $this->assertSame(
-            8,
-            $this->_model->calculateSpecialPrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01')
+            8.0,
+            $this->_model->calculateSpecialPrice(10.0, 8.0, '1970-12-12 23:59:59', '2034-01-01 01:01:01')
         );
     }
 

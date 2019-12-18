@@ -78,7 +78,7 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPrice()
     {
-        $this->assertEquals('test', $this->_model->getPrice(new DataObject(['price' => 'test'])));
+        $this->assertEquals(9.0, $this->_model->getPrice(new DataObject(['price' => '9.0'])));
     }
 
     /**
