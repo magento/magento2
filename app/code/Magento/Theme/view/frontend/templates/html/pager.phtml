@@ -20,7 +20,9 @@
         <p class="toolbar-amount">
             <span class="toolbar-number">
             <?php if ($block->getLastPageNum()>1) : ?>
-                <?= $block->escapeHtml(__('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum())) ?>
+                <?= $block->escapeHtml(
+                    __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum())
+                ) ?>
             <?php elseif ($block->getTotalNum() == 1) : ?>
                 <?= $block->escapeHtml(__('%1 Item', $block->getTotalNum())) ?>
             <?php else : ?>
