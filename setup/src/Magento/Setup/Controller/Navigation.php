@@ -10,6 +10,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\Cron\Status;
+use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
  * Class Navigation
@@ -33,13 +34,19 @@ class Navigation extends AbstractActionController
     protected $view;
 
     /**
+     * @var ObjectManagerProvider $objectManagerProvider
+     */
+    protected $objectManagerProvider;
+
+    /**
      * @param NavModel $navigation
      * @param Status $status
      */
-    public function __construct(NavModel $navigation, Status $status)
+    public function __construct(NavModel $navigation, Status $status, ObjectManagerProvider $objectManagerProvider)
     {
         $this->navigation = $navigation;
         $this->status = $status;
+        $this->objectManagerProvider = $objectManagerProvider;
         $this->view = new ViewModel;
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
@@ -75,8 +82,12 @@ class Navigation extends AbstractActionController
      */
     public function sideMenuAction()
     {
+        /** @var \Magento\Backend\Model\UrlInterface $backendUrl */
+        $backendUrl = $this->objectManagerProvider->get()->get(\Magento\Backend\Model\UrlInterface::class);
+
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
         $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
+        $this->view->setVariable('backendUrl', $backendUrl->getRouteUrl('adminhtml'));
         $this->view->setTerminal(true);
         return $this->view;
     }
