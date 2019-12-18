@@ -120,7 +120,7 @@
             <strong class="limiter-label"><?= $block->escapeHtml(__('Show')) ?></strong>
             <select id="limiter" data-mage-init='{"redirectUrl": {"event":"change"}}' class="limiter-options">
                 <?php foreach ($block->getAvailableLimit() as $_key => $_limit) : ?>
-                    <option value="<?= $block->escapeHtmlAttr($block->getLimitUrl($_key)) ?>"
+                    <option value="<?= $block->escapeUrl($block->getLimitUrl($_key)) ?>"
                         <?php if ($block->isLimitCurrent($_key)) : ?>
                         selected="selected"<?php endif ?>>
                         <?= $block->escapeHtml($_limit) ?>
