@@ -133,6 +133,24 @@ class ApplyCouponToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameter "coupon_code" is missing
+     */
+    public function testApplyEmptyCouponCodeToCustomerCart()
+    {
+        $couponCode = '';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $couponCode);
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @expectedException \Exception
      * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
