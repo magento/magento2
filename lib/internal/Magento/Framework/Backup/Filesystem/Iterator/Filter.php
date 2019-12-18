@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\Backup\Filesystem\Iterator;
+
+use Iterator;
 
 /**
  * Filter \Iterator
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\Backup\Filesystem\Iterator;
-
-use Iterator;
-
 class Filter extends \FilterIterator
 {
     /**
@@ -20,7 +19,7 @@ class Filter extends \FilterIterator
      *
      * @var array
      */
-    protected $_filters;
+    protected $filters;
 
     /**
      * Constructor
@@ -31,7 +30,7 @@ class Filter extends \FilterIterator
     public function __construct(Iterator $iterator, array $filters)
     {
         parent::__construct($iterator);
-        $this->_filters = $filters;
+        $this->filters = $filters;
     }
 
     /**
@@ -48,7 +47,7 @@ class Filter extends \FilterIterator
             return false;
         }
 
-        foreach ($this->_filters as $filter) {
+        foreach ($this->filters as $filter) {
             $filter = str_replace('\\', '/', $filter);
             if ($current === $filter || false !== strpos($current, $filter . '/')) {
                 return false;
