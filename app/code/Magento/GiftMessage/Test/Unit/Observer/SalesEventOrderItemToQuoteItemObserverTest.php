@@ -93,7 +93,10 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->messageFactoryMock = $this->createMock(MessageFactory::class);
+        $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->giftMessageHelperMock = $this->createMock(MessageHelper::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->eventMock = $this->createPartialMock(Event::class, ['getOrderItem', 'getQuoteItem']);
@@ -105,6 +108,18 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
         $this->orderMock = $this->createPartialMock(Order::class, ['getReordered']);
         $this->storeMock = $this->createMock(Store::class);
         $this->messageMock = $this->createMock(MessageModel::class);
+
+        $this->eventMock->expects($this->atLeastOnce())
+            ->method('getOrderItem')
+            ->willReturn($this->orderItemMock);
+
+        $this->orderItemMock->expects($this->atLeastOnce())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $this->observerMock->expects($this->atLeastOnce())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
 
         $objectManager = new ObjectManager($this);
 
@@ -118,79 +133,93 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
     }
 
     /**
-     * Tests duplicating gift message from order item to quote item
-     *
-     * @param bool $orderIsReordered
-     * @param bool $isMessagesAllowed
-     * @dataProvider giftMessageDataProvider
+     * Test when the order is reorder
      */
-    public function testExecute($orderIsReordered, $isMessagesAllowed)
+    public function testReorder()
     {
-        $this->eventMock->expects($this->atLeastOnce())
-            ->method('getOrderItem')
-            ->willReturn($this->orderItemMock);
+        $this->orderMock->expects($this->once())
+            ->method('getReordered')
+            ->willReturn(true);
 
-        $this->orderItemMock->expects($this->atLeastOnce())
-            ->method('getOrder')
-            ->willReturn($this->orderMock);
+        $this->giftMessageHelperMock->expects($this->never())
+            ->method('isMessagesAllowed');
 
-        $this->observerMock->expects($this->atLeastOnce())
-            ->method('getEvent')
-            ->willReturn($this->eventMock);
-
-        if (!$orderIsReordered && $isMessagesAllowed) {
-            $this->eventMock
-                ->expects($this->atLeastOnce())
-                ->method('getQuoteItem')
-                ->willReturn($this->quoteItemMock);
-            $this->orderMock->expects($this->once())
-                ->method('getReordered')
-                ->willReturn($orderIsReordered);
-            $this->orderItemMock->expects($this->once())
-                ->method('getGiftMessageId')
-                ->willReturn(self::STUB_MESSAGE_ID);
-            $this->giftMessageHelperMock->expects($this->once())
-                ->method('isMessagesAllowed')
-                ->willReturn($isMessagesAllowed);
-            $this->messageFactoryMock->expects($this->once())
-                ->method('create')
-                ->willReturn($this->messageMock);
-            $this->messageMock->expects($this->once())
-                ->method('load')
-                ->with(self::STUB_MESSAGE_ID)
-                ->willReturnSelf();
-            $this->messageMock->expects($this->once())
-                ->method('setId')
-                ->with(null)
-                ->willReturnSelf();
-            $this->messageMock->expects($this->once())
-                ->method('save')
-                ->willReturnSelf();
-            $this->messageMock->expects($this->once())
-                ->method('getId')
-                ->willReturn(self::STUB_NEW_MESSAGE_ID);
-            $this->quoteItemMock->expects($this->once())
-                ->method('setGiftMessageId')
-                ->with(self::STUB_NEW_MESSAGE_ID)
-                ->willReturnSelf();
-        }
+        $this->eventMock
+            ->expects($this->never())
+            ->method('getQuoteItem')
+            ->willReturn($this->quoteItemMock);
 
         /** Run observer */
         $this->observer->execute($this->observerMock);
     }
 
     /**
-     * Providing gift message data for test
-     *
-     * @return array
+     * Test when the order is new reorder and gift message is not allowed
      */
-    public function giftMessageDataProvider()
+    public function testNewOrderWhenGiftMessageIsNotAllowed()
     {
-        return [
-            'order is not reordered, messages is allowed' => [false, true],
-            'order is reordered, messages is allowed' => [true, true],
-            'order is reordered, messages is not allowed' => [true, false],
-            'order is not reordered, messages is not allowed' => [false, false]
-        ];
+        $this->orderMock->expects($this->once())
+            ->method('getReordered')
+            ->willReturn(false);
+
+        $this->giftMessageHelperMock->expects($this->once())
+            ->method('isMessagesAllowed')
+            ->willReturn(false);
+
+        $this->eventMock
+            ->expects($this->never())
+            ->method('getQuoteItem')
+            ->willReturn($this->quoteItemMock);
+
+        /** Run observer */
+        $this->observer->execute($this->observerMock);
+    }
+
+    /**
+     * Test when the order is new reorder and gift message is allowed
+     */
+    public function testNewOrderWhenGiftMessageIsAllowed()
+    {
+        $this->orderMock->expects($this->once())
+            ->method('getReordered')
+            ->willReturn(false);
+
+        $this->giftMessageHelperMock->expects($this->once())
+            ->method('isMessagesAllowed')
+            ->willReturn(true);
+
+        $this->eventMock
+            ->expects($this->atLeastOnce())
+            ->method('getQuoteItem')
+            ->willReturn($this->quoteItemMock);
+
+        $this->orderItemMock->expects($this->once())
+            ->method('getGiftMessageId')
+            ->willReturn(self::STUB_MESSAGE_ID);
+
+        $this->messageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->messageMock);
+        $this->messageMock->expects($this->once())
+            ->method('load')
+            ->with(self::STUB_MESSAGE_ID)
+            ->willReturnSelf();
+        $this->messageMock->expects($this->once())
+            ->method('setId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->messageMock->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
+        $this->messageMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(self::STUB_NEW_MESSAGE_ID);
+        $this->quoteItemMock->expects($this->once())
+            ->method('setGiftMessageId')
+            ->with(self::STUB_NEW_MESSAGE_ID)
+            ->willReturnSelf();
+
+        /** Run observer */
+        $this->observer->execute($this->observerMock);
     }
 }
