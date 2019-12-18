@@ -59,14 +59,14 @@ class CheckProductPriceTest extends TestCase
     /**
      * Assert that product price without additional price configurations will render as expected.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_without_price_configurations.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_tax_none.php
      *
      * @return void
      */
     public function testCheckProductPriceWithoutAdditionalPriceConfigurations(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
-        $this->assertFinalPrice($priceHtml, 50.00);
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
+        $this->assertFinalPrice($priceHtml, 205.00);
     }
 
     /**
@@ -92,8 +92,8 @@ class CheckProductPriceTest extends TestCase
      */
     public function testCheckFixedTierPrice(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
-        $this->assertFinalPrice($priceHtml, 50.00);
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
+        $this->assertFinalPrice($priceHtml, 205.00);
         $this->assertAsLowAsPrice($priceHtml, 40.00);
     }
 
@@ -106,9 +106,9 @@ class CheckProductPriceTest extends TestCase
      */
     public function testCheckPercentTierPrice(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
-        $this->assertFinalPrice($priceHtml, 50.00);
-        $this->assertAsLowAsPrice($priceHtml, 25.00);
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
+        $this->assertFinalPrice($priceHtml, 205.00);
+        $this->assertAsLowAsPrice($priceHtml, 102.50);
     }
 
     /**
@@ -120,9 +120,9 @@ class CheckProductPriceTest extends TestCase
      */
     public function testCheckFixedTierPriceForNotLoggedUser(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
         $this->assertFinalPrice($priceHtml, 30.00);
-        $this->assertRegularPrice($priceHtml, 50.00);
+        $this->assertRegularPrice($priceHtml, 205.00);
     }
 
     /**
@@ -138,14 +138,14 @@ class CheckProductPriceTest extends TestCase
      */
     public function testCheckFixedTierPriceForLoggedUser(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
-        $this->assertFinalPrice($priceHtml, 50.00);
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
+        $this->assertFinalPrice($priceHtml, 205.00);
         $this->assertNotRegExp('/\$10/', $priceHtml);
         $this->customerSession->setCustomerId(1);
         try {
-            $priceHtml = $this->getProductPriceHtml('simple_product');
+            $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
             $this->assertFinalPrice($priceHtml, 10.00);
-            $this->assertRegularPrice($priceHtml, 50.00);
+            $this->assertRegularPrice($priceHtml, 205.00);
         } finally {
             $this->customerSession->setCustomerId(null);
         }
@@ -155,7 +155,7 @@ class CheckProductPriceTest extends TestCase
      * Assert that price of product with catalog rule with action equal to "Apply as percentage of original"
      * is renders correctly.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_without_price_configurations.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_tax_none.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_apply_as_percentage_of_original_not_logged_user.php
      * @magentoDbIsolation disabled
      * @magentoAppArea frontend
@@ -164,16 +164,16 @@ class CheckProductPriceTest extends TestCase
      */
     public function testCheckPriceRendersCorrectlyWithApplyAsPercentageOfOriginalRule(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
-        $this->assertFinalPrice($priceHtml, 45.00);
-        $this->assertRegularPrice($priceHtml, 50.00);
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
+        $this->assertFinalPrice($priceHtml, 184.50);
+        $this->assertRegularPrice($priceHtml, 205.00);
     }
 
     /**
      * Assert that price of product with catalog rule with action equal to "Apply as fixed amount"
      * is renders correctly.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_without_price_configurations.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_tax_none.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_apply_as_fixed_amount_not_logged_user.php
      * @magentoDbIsolation disabled
      * @magentoAppArea frontend
@@ -182,16 +182,16 @@ class CheckProductPriceTest extends TestCase
      */
     public function testCheckPriceRendersCorrectlyWithApplyAsFixedAmountRule(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
-        $this->assertFinalPrice($priceHtml, 40.00);
-        $this->assertRegularPrice($priceHtml, 50.00);
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
+        $this->assertFinalPrice($priceHtml, 195.00);
+        $this->assertRegularPrice($priceHtml, 205.00);
     }
 
     /**
      * Assert that price of product with catalog rule with action equal to "Adjust final price to this percentage"
      * is renders correctly.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_without_price_configurations.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_tax_none.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_adjust_final_price_to_this_percentage_not_logged_user.php
      * @magentoDbIsolation disabled
      * @magentoAppArea frontend
@@ -200,16 +200,16 @@ class CheckProductPriceTest extends TestCase
      */
     public function testCheckPriceRendersCorrectlyWithAdjustFinalPriceToThisPercentageRule(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
-        $this->assertFinalPrice($priceHtml, 5.00);
-        $this->assertRegularPrice($priceHtml, 50.00);
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
+        $this->assertFinalPrice($priceHtml, 20.50);
+        $this->assertRegularPrice($priceHtml, 205.00);
     }
 
     /**
      * Assert that price of product with catalog rule with action equal to "Adjust final price to discount value"
      * is renders correctly.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_without_price_configurations.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_tax_none.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_adjust_final_price_to_discount_value_not_logged_user.php
      * @magentoDbIsolation disabled
      * @magentoAppArea frontend
@@ -218,9 +218,9 @@ class CheckProductPriceTest extends TestCase
      */
     public function testCheckPriceRendersCorrectlyWithAdjustFinalPriceToDiscountValueRule(): void
     {
-        $priceHtml = $this->getProductPriceHtml('simple_product');
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
         $this->assertFinalPrice($priceHtml, 10.00);
-        $this->assertRegularPrice($priceHtml, 50.00);
+        $this->assertRegularPrice($priceHtml, 205.00);
     }
 
     /**

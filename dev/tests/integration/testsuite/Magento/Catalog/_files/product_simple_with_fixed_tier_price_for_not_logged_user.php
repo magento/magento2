@@ -10,8 +10,9 @@ use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Customer\Model\Group;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
-require __DIR__ . '/product_simple_without_price_configurations.php';
+require __DIR__ . '/product_simple_tax_none.php';
 
+$product = $productRepository->get('simple-product-tax-none');
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 /** @var ProductTierPriceInterfaceFactory $tierPriceFactory */

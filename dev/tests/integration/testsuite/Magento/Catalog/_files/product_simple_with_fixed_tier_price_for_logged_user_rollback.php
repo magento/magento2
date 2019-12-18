@@ -5,4 +5,4 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/product_simple_without_price_configurations_rollback.php';
+require __DIR__ . '/product_simple_tax_none_rollback.php';
