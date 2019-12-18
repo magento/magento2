@@ -197,7 +197,6 @@ class MediaTest extends TestCase
         $this->responseMock->expects($this->once())
             ->method('sendResponse');
 
-        $this->isAllowed = true;
         $this->mediaModel = $this->getMediaModel();
 
         $this->mediaModel->catchException($bootstrap, $exception);
