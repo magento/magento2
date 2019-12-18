@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ObjectManager;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * DataProvider for grid on Import Custom Options modal panel
@@ -58,6 +59,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $modifiersPool
      * @param MetadataPool|null $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -73,6 +75,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
         array $addFilterStrategies = [],
         array $meta = [],
         array $data = [],
+        PoolInterface $modifiersPool = null,
         MetadataPool $metadataPool = null
     ) {
         parent::__construct(
@@ -83,7 +86,8 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
             $addFieldStrategies,
             $addFilterStrategies,
             $meta,
-            $data
+            $data,
+            $modifiersPool
         );
 
         $this->request = $request;
@@ -94,7 +98,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function getData()
