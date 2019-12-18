@@ -17,6 +17,21 @@ use PHPUnit\Framework\TestCase;
 class SynonymActionsTest extends TestCase
 {
     /**
+     * Stub synonym group id
+     */
+    private const STUB_SYNONYM_GROUP_ID = 1;
+
+    /**
+     * Synonym group delete url
+     */
+    private const SYNONYM_GROUP_DELETE_URL = 'http://localhost/magento2/admin/search/synonyms/delete/group_id/%d';
+
+    /**
+     * Synonym group edit url
+     */
+    private const SYNONYM_GROUP_EDIT_URL = 'http://localhost/magento2/admin/search/synonyms/edit/group_id/%d';
+
+    /**
      * @var SynonymActions
      */
     private $synonymActions;
@@ -72,31 +87,38 @@ class SynonymActionsTest extends TestCase
             'data' => [
                 'items' => [
                     [
-                        'group_id' => 1
+                        'group_id' => self::STUB_SYNONYM_GROUP_ID
                     ]
                 ]
             ]
         ];
+
         $expected = [
             'data' => [
                 'items' => [
                     [
-                        'group_id' => 1,
+                        'group_id' => self::STUB_SYNONYM_GROUP_ID,
                         'actions' => [
                             'delete' => [
-                                'href' => 'http://localhost/magento2/admin/search/synonyms/delete/group_id/1',
+                                'href' => sprintf(
+                                    self::SYNONYM_GROUP_DELETE_URL,
+                                    self::STUB_SYNONYM_GROUP_ID
+                                ),
                                 'label' => (string)__('Delete'),
                                 'confirm' => [
                                     'title' => (string)__('Delete'),
                                     'message' => (string)__(
                                         'Are you sure you want to delete synonym group with id: %1?',
-                                        1
+                                        self::STUB_SYNONYM_GROUP_ID
                                     )
                                 ],
                                 '__disableTmpl' => true
                             ],
                             'edit' => [
-                                'href' => 'http://localhost/magento2/admin/search/synonyms/edit/group_id/1',
+                                'href' => sprintf(
+                                    self::SYNONYM_GROUP_EDIT_URL,
+                                    self::STUB_SYNONYM_GROUP_ID
+                                ),
                                 'label' => (string)__('View/Edit'),
                                 '__disableTmpl' => true
                             ]
@@ -106,13 +128,18 @@ class SynonymActionsTest extends TestCase
             ]
         ];
 
-        $this->urlBuilderMock->expects($this->at(0))->method('getUrl')
-            ->with(SynonymActions::SYNONYM_URL_PATH_DELETE, ['group_id' => 1])
-            ->willReturn('http://localhost/magento2/admin/search/synonyms/delete/group_id/1');
-
-        $this->urlBuilderMock->expects($this->at(1))->method('getUrl')
-            ->with(SynonymActions::SYNONYM_URL_PATH_EDIT, ['group_id' => 1])
-            ->willReturn('http://localhost/magento2/admin/search/synonyms/edit/group_id/1');
+        $this->urlBuilderMock->method('getUrl')->will(
+            $this->returnValueMap([
+                [
+                    SynonymActions::SYNONYM_URL_PATH_DELETE, ['group_id' => self::STUB_SYNONYM_GROUP_ID],
+                    sprintf(self::SYNONYM_GROUP_DELETE_URL, self::STUB_SYNONYM_GROUP_ID)
+                ],
+                [
+                    SynonymActions::SYNONYM_URL_PATH_EDIT, ['group_id' => self::STUB_SYNONYM_GROUP_ID],
+                    sprintf(self::SYNONYM_GROUP_EDIT_URL, self::STUB_SYNONYM_GROUP_ID)
+                ]
+            ])
+        );
 
         /**
          * Assert Result
