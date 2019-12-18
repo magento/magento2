@@ -26,7 +26,7 @@ class Filter extends \FilterIterator
      * Constructor
      *
      * @param Iterator $iterator
-     * @param array $filters list of files to skip
+     * @param array $filters list of files or folders to skip
      */
     public function __construct(Iterator $iterator, array $filters)
     {
@@ -50,7 +50,7 @@ class Filter extends \FilterIterator
 
         foreach ($this->_filters as $filter) {
             $filter = str_replace('\\', '/', $filter);
-            if (false !== strpos($current, $filter)) {
+            if ($current === $filter || false !== strpos($current, $filter . '/')) {
                 return false;
             }
         }
