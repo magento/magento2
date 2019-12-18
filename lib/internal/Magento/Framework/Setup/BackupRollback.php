@@ -23,9 +23,8 @@ use Magento\Framework\Phrase;
 class BackupRollback
 {
     /**
-     * Default backup directory
      *
-     * @const string
+     * @const string Default backup directory
      */
     const DEFAULT_BACKUP_DIRECTORY = 'backups';
 
