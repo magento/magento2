@@ -7,10 +7,9 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Catalog\Model\Product\Option;
-use Magento\Tests\NamingConvention\true\mixed;
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for customizable product option with "Text" type
