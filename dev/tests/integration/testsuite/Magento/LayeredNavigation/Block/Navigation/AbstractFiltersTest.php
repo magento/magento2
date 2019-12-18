@@ -74,22 +74,9 @@ abstract class AbstractFiltersTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->categoryCollectionFactory = $this->objectManager->create(CollectionFactory::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
-        $layerResolver = $this->objectManager->create(Resolver::class);
-
-        if ($this->getLayerType() === Resolver::CATALOG_LAYER_SEARCH) {
-            $layerResolver->create(Resolver::CATALOG_LAYER_SEARCH);
-            $this->navigationBlock = $this->objectManager->create(
-                SearchNavigationBlock::class,
-                [
-                    'layerResolver' => $layerResolver,
-                ]
-            );
-        } else {
-            $this->navigationBlock = $this->objectManager->create(CategoryNavigationBlock::class);
-        }
-
         $this->attributeRepository = $this->objectManager->create(ProductAttributeRepositoryInterface::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->createNavigationBlockInstance();
     }
 
     /**
@@ -121,7 +108,7 @@ abstract class AbstractFiltersTest extends TestCase
         array $expectation,
         string $categoryName
     ): void {
-        $this->updateAttribute($this->getAttributeCode(), $attributeData);
+        $this->updateAttribute($attributeData);
         $this->updateProducts($products, $this->getAttributeCode());
         $this->clearInstanceAndReindexSearch();
         $category = $this->loadCategory($categoryName, Store::DEFAULT_STORE_ID);
@@ -150,7 +137,7 @@ abstract class AbstractFiltersTest extends TestCase
         array $attributeData,
         array $expectation
     ): void {
-        $this->updateAttribute($this->getAttributeCode(), $attributeData);
+        $this->updateAttribute($attributeData);
         $this->updateProducts($products, $this->getAttributeCode());
         $this->clearInstanceAndReindexSearch();
         $this->navigationBlock->getRequest()->setParams(['q' => 'Simple Product']);
@@ -188,15 +175,13 @@ abstract class AbstractFiltersTest extends TestCase
     /**
      * Updates attribute data.
      *
-     * @param string $attributeCode
      * @param array $data
      * @return void
      */
     protected function updateAttribute(
-        string $attributeCode,
         array $data
     ): void {
-        $attribute = $this->attributeRepository->get($attributeCode);
+        $attribute = $this->attributeRepository->get($this->getAttributeCode());
         $attribute->addData($data);
         $this->attributeRepository->save($attribute);
     }
@@ -226,14 +211,18 @@ abstract class AbstractFiltersTest extends TestCase
      *
      * @param array $products
      * @param string $attributeCode
+     * @param int $storeId
      * @return void
      */
-    protected function updateProducts(array $products, string $attributeCode): void
-    {
+    protected function updateProducts(
+        array $products,
+        string $attributeCode,
+        int $storeId = Store::DEFAULT_STORE_ID
+    ): void {
         $attribute = $this->attributeRepository->get($attributeCode);
 
         foreach ($products as $productSku => $stringValue) {
-            $product = $this->productRepository->get($productSku, false, Store::DEFAULT_STORE_ID, true);
+            $product = $this->productRepository->get($productSku, false, $storeId, true);
             $product->addData(
                 [$attribute->getAttributeCode() => $attribute->getSource()->getOptionId($stringValue)]
             );
@@ -274,5 +263,27 @@ abstract class AbstractFiltersTest extends TestCase
         $category->setStoreId($storeId);
 
         return $category;
+    }
+
+    /**
+     * Creates navigation block instance.
+     *
+     * @return void
+     */
+    protected function createNavigationBlockInstance(): void
+    {
+        $layerResolver = $this->objectManager->create(Resolver::class);
+
+        if ($this->getLayerType() === Resolver::CATALOG_LAYER_SEARCH) {
+            $layerResolver->create(Resolver::CATALOG_LAYER_SEARCH);
+            $this->navigationBlock = $this->objectManager->create(
+                SearchNavigationBlock::class,
+                [
+                    'layerResolver' => $layerResolver,
+                ]
+            );
+        } else {
+            $this->navigationBlock = $this->objectManager->create(CategoryNavigationBlock::class);
+        }
     }
 }
