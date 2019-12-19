@@ -59,7 +59,7 @@ class CategoryPageViewTest extends ProductPageViewTest
      */
     public function testCategoryPageTextSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $this->setAttributeUsedInProductListing('visual_swatch_attribute');
+        $this->setAttributeUsedInProductListing('text_swatch_attribute');
         $product = $this->productRepository->get('configurable');
         $this->block->setProduct($product);
         $result = $this->generateBlockData();
