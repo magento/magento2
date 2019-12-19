@@ -5,25 +5,45 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Address\Mapper;
-use Magento\Customer\Model\AddressRegistry;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Framework\DataObjectFactory as ObjectFactory;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Customer\Helper\View;
+use Magento\Customer\Model\Address\Mapper;
+use Magento\Customer\Model\AddressFactory;
+use Magento\Customer\Model\AddressRegistry;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
+use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
+use Magento\Framework\Exception\AbstractAggregateException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
 
 /**
  * Save customer action.
@@ -38,6 +58,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     private $emailNotification;
 
     /**
+     * @var SubscriptionManagerInterface
+     */
+    private $subscriptionManager;
+
+    /**
      * @var AddressRegistry
      */
     private $addressRegistry;
@@ -45,60 +70,62 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     /**
      * Constructor
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
-     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param \Magento\Customer\Helper\View $viewHelper
-     * @param \Magento\Framework\Math\Random $random
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param CustomerFactory $customerFactory
+     * @param AddressFactory $addressFactory
+     * @param FormFactory $formFactory
+     * @param SubscriberFactory $subscriberFactory
+     * @param View $viewHelper
+     * @param Random $random
      * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Mapper $addressMapper
      * @param AccountManagementInterface $customerAccountManagement
      * @param AddressRepositoryInterface $addressRepository
      * @param CustomerInterfaceFactory $customerDataFactory
      * @param AddressInterfaceFactory $addressDataFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param DataObjectProcessor $dataObjectProcessor
      * @param DataObjectHelper $dataObjectHelper
      * @param ObjectFactory $objectFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param PageFactory $resultPageFactory
+     * @param ForwardFactory $resultForwardFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param SubscriptionManagerInterface $subscriptionManager
      * @param AddressRegistry|null $addressRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Model\AddressFactory $addressFactory,
-        \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        \Magento\Customer\Helper\View $viewHelper,
-        \Magento\Framework\Math\Random $random,
+        Context $context,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        CustomerFactory $customerFactory,
+        AddressFactory $addressFactory,
+        FormFactory $formFactory,
+        SubscriberFactory $subscriberFactory,
+        View $viewHelper,
+        Random $random,
         CustomerRepositoryInterface $customerRepository,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         Mapper $addressMapper,
         AccountManagementInterface $customerAccountManagement,
         AddressRepositoryInterface $addressRepository,
         CustomerInterfaceFactory $customerDataFactory,
         AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        DataObjectProcessor $dataObjectProcessor,
         DataObjectHelper $dataObjectHelper,
         ObjectFactory $objectFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        LayoutFactory $resultLayoutFactory,
+        PageFactory $resultPageFactory,
+        ForwardFactory $resultForwardFactory,
+        JsonFactory $resultJsonFactory,
+        SubscriptionManagerInterface $subscriptionManager,
         AddressRegistry $addressRegistry = null
     ) {
         parent::__construct(
@@ -128,6 +155,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
             $resultForwardFactory,
             $resultJsonFactory
         );
+        $this->subscriptionManager = $subscriptionManager;
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
     }
 
@@ -186,7 +214,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         $formData = $metadataForm->compactData($formData);
 
         // Initialize additional attributes
-        /** @var \Magento\Framework\DataObject $object */
+        /** @var DataObject $object */
         $object = $this->_objectFactory->create(['data' => $this->getRequest()->getPostValue()]);
         $requestData = $object->getData($scope);
         foreach ($additionalAttributes as $attributeCode) {
@@ -196,7 +224,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         // Unset unused attributes
         $formAttributes = $metadataForm->getAttributes();
         foreach ($formAttributes as $attribute) {
-            /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute */
+            /** @var AttributeMetadataInterface $attribute */
             $attributeCode = $attribute->getAttributeCode();
             if ($attribute->getFrontendInput() != 'boolean'
                 && $formData[$attributeCode] === false
@@ -281,7 +309,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     /**
      * Save customer action
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -312,7 +340,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 $this->dataObjectHelper->populateWithArray(
                     $customer,
                     $customerData,
-                    \Magento\Customer\Api\Data\CustomerInterface::class
+                    CustomerInterface::class
                 );
 
                 $this->_eventManager->dispatch(
@@ -334,17 +362,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     $customerId = $customer->getId();
                 }
 
-                $isSubscribed = null;
-                if ($this->_authorization->isAllowed(null)) {
-                    $isSubscribed = $this->getRequest()->getPost('subscription');
-                }
-                if ($isSubscribed !== null) {
-                    if ($isSubscribed !== '0') {
-                        $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
-                    } else {
-                        $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);
-                    }
-                }
+                $this->updateSubscriptions($customer);
 
                 // After save
                 $this->_eventManager->dispatch(
@@ -364,7 +382,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 $this->_addSessionErrorMessages($messages);
                 $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
                 $returnToEdit = true;
-            } catch (\Magento\Framework\Exception\AbstractAggregateException $exception) {
+            } catch (AbstractAggregateException $exception) {
                 $errors = $exception->getErrors();
                 $messages = [];
                 foreach ($errors as $error) {
@@ -407,6 +425,34 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     }
 
     /**
+     * Update customer website subscriptions
+     *
+     * @param CustomerInterface $customer
+     * @return void
+     */
+    private function updateSubscriptions(CustomerInterface $customer): void
+    {
+        if (!$this->_authorization->isAllowed(null)) {
+            return;
+        }
+
+        $subscriptionStatus = (array)$this->getRequest()->getParam('subscription_status');
+        $subscriptionStore = (array)$this->getRequest()->getParam('subscription_store');
+        if (empty($subscriptionStatus)) {
+            return;
+        }
+
+        foreach ($subscriptionStatus as $websiteId => $status) {
+            $storeId = $subscriptionStore[$websiteId] ?? $customer->getStoreId();
+            if ($status) {
+                $this->subscriptionManager->subscribeCustomer((int)$customer->getId(), $storeId);
+            } else {
+                $this->subscriptionManager->unsubscribeCustomer((int)$customer->getId(), $storeId);
+            }
+        }
+    }
+
+    /**
      * Get email notification
      *
      * @return EmailNotificationInterface
@@ -415,7 +461,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     private function getEmailNotification()
     {
         if (!($this->emailNotification instanceof EmailNotificationInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+            return ObjectManager::getInstance()->get(
                 EmailNotificationInterface::class
             );
         }

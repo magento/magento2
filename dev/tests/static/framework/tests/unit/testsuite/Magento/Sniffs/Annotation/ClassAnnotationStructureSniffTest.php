@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\Sniffs\Annotation;
 
 class ClassAnnotationStructureSniffTest extends \PHPUnit\Framework\TestCase
@@ -63,8 +64,8 @@ class ClassAnnotationStructureSniffTest extends \PHPUnit\Framework\TestCase
     {
         $reportFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'phpcs_report.txt';
         $this->copyFile(
-            __DIR__ . DIRECTORY_SEPARATOR . '_files'. DIRECTORY_SEPARATOR,
-            TESTS_TEMP_DIR
+            __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR,
+            TESTS_TEMP_DIR . DIRECTORY_SEPARATOR
         );
         $codeSniffer = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(
             'Magento',
@@ -72,11 +73,11 @@ class ClassAnnotationStructureSniffTest extends \PHPUnit\Framework\TestCase
             new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper()
         );
         $result = $codeSniffer->run(
-            [TESTS_TEMP_DIR . $fileUnderTest]
+            [TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . $fileUnderTest]
         );
         $actual = file_get_contents($reportFile);
         $expected = file_get_contents(
-            TESTS_TEMP_DIR . $expectedReportFile
+            TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . $expectedReportFile
         );
         unlink($reportFile);
         $this->assertEquals(2, $result);
