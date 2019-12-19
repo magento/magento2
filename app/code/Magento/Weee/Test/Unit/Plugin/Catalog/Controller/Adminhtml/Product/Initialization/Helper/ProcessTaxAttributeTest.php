@@ -79,7 +79,7 @@ class ProcessTaxAttributeTest extends TestCase
         $this->resultMock->expects($this->any())->method('getAttributes')
             ->willReturn([]);
 
-        $this->resultMock->expects($this->never())->method('setData')->willReturnSelf();
+        $this->resultMock->expects($this->never())->method('setData');
 
         $this->plugin->afterInitializeFromData($this->subjectMock, $this->resultMock, $this->productMock, []);
     }
