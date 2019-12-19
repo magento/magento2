@@ -217,8 +217,7 @@ define([
                 addToCartButton.attr('title', addToCartButtonTextDefault);
                 $([document.documentElement, document.body]).animate({
                      scrollTop: $(self.options.messagesSelector).offset().top
-                     }, 500);
-                 }, 1000);
+                }, 500);
             }, 1000);
         }
     });
