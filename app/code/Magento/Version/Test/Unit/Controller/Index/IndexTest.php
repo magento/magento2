@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Version\Test\Unit\Controller\Index;
 
-use Magento\Version\Controller\Index\Index as VersionIndex;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Version\Controller\Index\Index as VersionIndex;
 use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
@@ -73,7 +73,7 @@ class IndexTest extends TestCase
     /**
      * Git Base version does not return information about version
      */
-    public function testGitBasedInstallationDoesNotReturnVersion()
+    public function testGitBasedInstallationDoesNotReturnVersion(): void
     {
         $this->productMetadataMock->expects($this->any())
             ->method('getVersion')
@@ -88,7 +88,7 @@ class IndexTest extends TestCase
     /**
      * Magento Community returns information about major and minor version of product
      */
-    public function testCommunityVersionDisplaysMajorMinorVersionAndEditionName()
+    public function testCommunityVersionDisplaysMajorMinorVersionAndEditionName(): void
     {
         $this->productMetadataMock->expects($this->any())->method('getVersion')->willReturn('2.3.3');
         $this->productMetadataMock->expects($this->any())->method('getEdition')->willReturn('Community');

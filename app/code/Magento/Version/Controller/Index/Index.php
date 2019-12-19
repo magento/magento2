@@ -4,12 +4,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Version\Controller\Index;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 
 /**
@@ -40,7 +41,7 @@ class Index extends Action implements HttpGetActionInterface
      *
      * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $version = $this->productMetadata->getVersion();
         $versionParts = explode('.', $version);
@@ -61,7 +62,7 @@ class Index extends Action implements HttpGetActionInterface
      * @param string $fullVersion
      * @return bool
      */
-    private function isGitBasedInstallation($fullVersion)
+    private function isGitBasedInstallation($fullVersion): bool
     {
         return 0 === strpos($fullVersion, self::DEV_PREFIX);
     }
