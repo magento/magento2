@@ -19,7 +19,7 @@ class AddSuffix
      * @param $result
      * @return string
      */
-    public function afterGetMessageData($result)
+    public function afterGetMessageData($result): string
     {
         return  $result->getMessage() . "_suffix";
     }

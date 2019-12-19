@@ -16,17 +16,28 @@ class AddPrefix
     /**
      * Add "prefix_"
      * @param $result
-     * @return void
+     * @return array
      */
-    public function beforeGetMessageData($result)
+    public function beforeGetMessageData($result): array
     {
         $message = "prefix_" . $result->getMessage();
         $result->setMessage($message);
-        return $result;
+        return [];
     }
 
-    /*public function aroundGetMessageData($subject, $proceed)
+    /**
+     * Wrap string into <h1> tags </h1>
+     *
+     * @param $subject
+     * @param $proceed
+     * @return string
+     */
+    public function aroundGetMessageData($subject, $proceed): string
     {
-       return $proceed;
-    }*/
+        $result = $proceed();
+        if ($result) {
+            $result = "<h1>" . $result . "</h1>";
+        }
+        return $result;
+    }
 }
