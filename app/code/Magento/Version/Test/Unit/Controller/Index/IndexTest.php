@@ -62,7 +62,7 @@ class IndexTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->model = $objectManager->getObject(
-            'Magento\Version\Controller\Index\Index',
+            VersionIndex::class,
             [
                 'context' => $this->contextMock,
                 'productMetadata' => $this->productMetadataMock
