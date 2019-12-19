@@ -80,6 +80,9 @@ class CustomerWishlistResolverTest extends TestCase
         ]);
     }
 
+    /**
+     * Verify if Authorization exception is being thrown when User not logged in
+     */
     public function testThrowExceptionWhenUserNotAuthorized(): void
     {
         // Given
@@ -99,6 +102,9 @@ class CustomerWishlistResolverTest extends TestCase
         );
     }
 
+    /**
+     * Verify if Wishlist instance is created for currently Authorized user
+     */
     public function testFactoryCreatesWishlistByAuthorizedCustomerId(): void
     {
         // Given
