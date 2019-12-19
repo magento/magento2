@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Version\Controller\Index;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
@@ -16,6 +17,8 @@ use Magento\Framework\App\ProductMetadataInterface;
  */
 class Index extends Action implements HttpGetActionInterface
 {
+    const DEV_PREFIX = 'dev-';
+
     /**
      * @var ProductMetadataInterface
      */
@@ -41,16 +44,14 @@ class Index extends Action implements HttpGetActionInterface
     {
         $version = $this->productMetadata->getVersion();
         $versionParts = explode('.', $version);
-        if ((!isset($versionParts[0]) || !isset($versionParts[1]))
-            || $this->isGitBasedInstallation($version)
-        ) {
+        if ($this->isGitBasedInstallation($version) || !$this->isCorrectVersion($versionParts)) {
             return;
         }
-        $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
+
         $this->getResponse()->setBody(
             $this->productMetadata->getName() . '/' .
-            $majorMinorVersion . ' (' .
-            $this->productMetadata->getEdition() . ')'
+            $this->getMajorMinorVersion($versionParts) .
+            ' (' . $this->productMetadata->getEdition() . ')'
         );
     }
 
@@ -62,7 +63,26 @@ class Index extends Action implements HttpGetActionInterface
      */
     private function isGitBasedInstallation($fullVersion)
     {
-        $versionParts = explode('-', $fullVersion);
-        return (isset($versionParts[0]) && $versionParts[0] == 'dev');
+        return 0 === strpos($fullVersion, self::DEV_PREFIX);
+    }
+
+    /**
+     * Verifies if the Magento version is correct
+     *
+     * @param array $versionParts
+     * @return bool
+     */
+    private function isCorrectVersion(array $versionParts): bool
+    {
+        return isset($versionParts[0]) && isset($versionParts[1]);
+    }
+
+    /**
+     * @param array $versionParts
+     * @return string
+     */
+    private function getMajorMinorVersion(array $versionParts): string
+    {
+        return $versionParts[0] . '.' . $versionParts[1];
     }
 }

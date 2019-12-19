@@ -12,11 +12,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class \Magento\Version\Test\Unit\Controller\Index\IndexTest
- */
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
      * @var VersionIndex
@@ -26,72 +24,80 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Context
      */
-    private $context;
+    private $contextMock;
 
     /**
      * @var ProductMetadataInterface
      */
-    private $productMetadata;
+    private $productMetadataMock;
 
     /**
      * @var ResponseInterface
      */
-    private $response;
+    private $responseMock;
 
     /**
      * Prepare test preconditions
      */
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder(Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
+        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getEdition', 'getVersion'])
             ->getMock();
 
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBody', 'sendResponse'])
             ->getMock();
 
-        $this->context->expects($this->any())
+        $this->contextMock->expects($this->any())
             ->method('getResponse')
-            ->willReturn($this->response);
+            ->willReturn($this->responseMock);
 
-        $helper = new ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->model = $helper->getObject(
+        $this->model = $objectManager->getObject(
             'Magento\Version\Controller\Index\Index',
             [
-                'context' => $this->context,
-                'productMetadata' => $this->productMetadata
+                'context' => $this->contextMock,
+                'productMetadata' => $this->productMetadataMock
             ]
         );
     }
 
     /**
-     * Test with Git Base version
+     * Git Base version does not return information about version
      */
-    public function testExecuteWithGitBase()
+    public function testGitBasedInstallationDoesNotReturnVersion()
     {
-        $this->productMetadata->expects($this->any())->method('getVersion')->willReturn('dev-2.3');
+        $this->productMetadataMock->expects($this->any())
+            ->method('getVersion')
+            ->willReturn('dev-2.3');
+
+        $this->responseMock->expects($this->never())
+            ->method('setBody');
+
         $this->assertNull($this->model->execute());
     }
 
     /**
-     * Test with Community Version
+     * Magento Community returns information about major and minor version of product
      */
-    public function testExecuteWithCommunityVersion()
+    public function testCommunityVersionDisplaysMajorMinorVersionAndEditionName()
     {
-        $this->productMetadata->expects($this->any())->method('getVersion')->willReturn('2.3.3');
-        $this->productMetadata->expects($this->any())->method('getEdition')->willReturn('Community');
-        $this->productMetadata->expects($this->any())->method('getName')->willReturn('Magento');
-        $this->response->expects($this->once())->method('setBody')
+        $this->productMetadataMock->expects($this->any())->method('getVersion')->willReturn('2.3.3');
+        $this->productMetadataMock->expects($this->any())->method('getEdition')->willReturn('Community');
+        $this->productMetadataMock->expects($this->any())->method('getName')->willReturn('Magento');
+
+        $this->responseMock->expects($this->once())->method('setBody')
             ->with('Magento/2.3 (Community)')
             ->will($this->returnSelf());
+
         $this->model->execute();
     }
 }
