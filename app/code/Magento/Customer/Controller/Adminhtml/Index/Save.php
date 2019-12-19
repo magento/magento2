@@ -217,6 +217,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         /** @var DataObject $object */
         $object = $this->_objectFactory->create(['data' => $this->getRequest()->getPostValue()]);
         $requestData = $object->getData($scope);
+        $formData = array_replace_recursive($formData,$requestData);
         foreach ($additionalAttributes as $attributeCode) {
             $formData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
         }
