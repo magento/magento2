@@ -15,6 +15,11 @@ use Magento\Framework\Indexer\IndexerRegistry;
 class MassInvalidate extends \Magento\Indexer\Controller\Adminhtml\Indexer implements HttpPostActionInterface
 {
     /**
+     * @var IndexerRegistry $indexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
      * @param Context $context
      * @param IndexerRegistry $indexerRegistry
      */

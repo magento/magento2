@@ -33,14 +33,6 @@
             <path>CHANGELOG.md</path>
         </item>
         <item>
-            <path>app/code/Magento/Indexer/Controller/Adminhtml/Indexer/MassChangelog.php</path>
-            <word>massChangelog</word>
-        </item>
-        <item>
-            <path>app/code/Magento/Indexer/Controller/Adminhtml/Indexer/MassChangelog.php</path>
-            <word>massChangelog</word>
-        </item>
-        <item>
             <path>composer.lock</path>
         </item>
         <item>
