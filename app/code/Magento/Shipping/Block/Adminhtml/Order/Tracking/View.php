@@ -43,7 +43,7 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      */
     protected function _prepareLayout()
     {
-        $onclick = "submitAndReloadArea($('shipment_tracking_info').parentNode, '" . $this->getSubmitUrl() . "')";
+        $onclick = "saveTrackingInfo($('shipment_tracking_info').parentNode, '" . $this->getSubmitUrl() . "')";
         $this->addChild(
             'save_button',
             \Magento\Backend\Block\Widget\Button::class,
@@ -86,7 +86,10 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     }
 
     /**
+     * Get carrier title
+     *
      * @param string $code
+     *
      * @return \Magento\Framework\Phrase|string|bool
      */
     public function getCarrierTitle($code)

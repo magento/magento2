@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -21,7 +23,7 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 class Customer extends AbstractCustomer
 {
     /**
-     * Attribute collection name
+     * Collection name attribute
      */
     const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
@@ -519,8 +521,10 @@ class Customer extends AbstractCustomer
                     );
                 } elseif ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
                     $processedData = $this->_prepareDataForUpdate($rowData);
+                    // phpcs:disable Magento2.Performance.ForeachArrayMerge
                     $entitiesToCreate = array_merge($entitiesToCreate, $processedData[self::ENTITIES_TO_CREATE_KEY]);
                     $entitiesToUpdate = array_merge($entitiesToUpdate, $processedData[self::ENTITIES_TO_UPDATE_KEY]);
+                    // phpcs:enable
                     foreach ($processedData[self::ATTRIBUTES_TO_SAVE_KEY] as $tableName => $customerAttributes) {
                         if (!isset($attributesToSave[$tableName])) {
                             $attributesToSave[$tableName] = [];
@@ -598,14 +602,18 @@ class Customer extends AbstractCustomer
                 $isFieldNotSetAndCustomerDoesNotExist =
                     !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
                 $isFieldSetAndTrimmedValueIsEmpty
-                    = isset($rowData[$attributeCode]) && '' === trim($rowData[$attributeCode]);
+                    = isset($rowData[$attributeCode]) && '' === trim((string)$rowData[$attributeCode]);
 
                 if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                     continue;
                 }
 
-                if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                if (isset($rowData[$attributeCode]) && strlen((string)$rowData[$attributeCode])) {
+                    if ($attributeParams['type'] == 'select') {
+                        continue;
+                    }
+
                     $this->isAttributeValid(
                         $attributeCode,
                         $attributeParams,

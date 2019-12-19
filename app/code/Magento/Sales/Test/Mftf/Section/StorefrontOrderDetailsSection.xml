@@ -12,6 +12,7 @@
         <element name="orderDetailsBlock" type="block" selector=".block-order-details-view"/>
         <element name="billingAddressBlock" type="block" selector=".box-order-billing-address > .box-content > address"/>
         <element name="discountSalesRule" type="text" selector="tr.discount span.price"/>
+        <element name="shippingTotalDescription" type="text" selector="#my-orders-table tr.shipping th.mark"/>
         <element name="grandTotalPrice" type="text" selector="tr.grand_total span.price"/>
         <element name="paymentMethod" type="text" selector=".box-order-billing-method dt.title"/>
         <element name="shippingMethod" type="text" selector=".box-order-shipping-method div.box-content"/>

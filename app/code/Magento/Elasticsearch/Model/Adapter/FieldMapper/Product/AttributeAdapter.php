@@ -116,6 +116,18 @@ class AttributeAdapter
     }
 
     /**
+     * Check if attribute is text type
+     *
+     * @return bool
+     */
+    public function isTextType(): bool
+    {
+        return in_array($this->getAttribute()->getBackendType(), ['varchar', 'static'], true)
+            && in_array($this->getFrontendInput(), ['text'], true)
+            && $this->getAttribute()->getIsVisible();
+    }
+
+    /**
      * Check if attribute has boolean type.
      *
      * @return bool

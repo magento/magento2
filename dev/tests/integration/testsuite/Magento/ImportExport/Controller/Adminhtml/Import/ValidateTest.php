@@ -93,7 +93,7 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             [
                 'file_name' => 'test.txt',
                 'mime-type' => 'text/csv',
-                'message' => '\'txt\' file extension is not supported',
+                'message' => 'The file cannot be uploaded.',
                 'delimiter' => ',',
             ],
             [

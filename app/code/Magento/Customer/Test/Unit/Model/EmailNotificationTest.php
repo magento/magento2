@@ -521,7 +521,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
 
         /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
         $customer = $this->createMock(CustomerInterface::class);
-        $customer->expects($this->any())
+        $customer->expects($this->once())
             ->method('getStoreId')
             ->willReturn($customerStoreId);
         $customer->expects($this->any())
@@ -537,11 +537,6 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
 
         $this->storeManagerMock->expects($this->at(0))
             ->method('getStore')
-            ->willReturn($this->storeMock);
-
-        $this->storeManagerMock->expects($this->at(1))
-            ->method('getStore')
-            ->with($customerStoreId)
             ->willReturn($this->storeMock);
 
         $this->customerRegistryMock->expects($this->once())

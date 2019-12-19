@@ -99,7 +99,11 @@
         <attachFile selector="{{AdminCategoryContentSection.uploadImageFile}}" userInput="{{image.file}}" stepKey="uploadFile"/>
         <waitForAjaxLoad time="30" stepKey="waitForAjaxUpload"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
-        <see selector="{{AdminCategoryContentSection.imageFileName}}" userInput="{{image.file}}" stepKey="seeImage"/>
+        <grabTextFrom selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="grabCategoryFileName"/>
+        <assertRegExp stepKey="assertEquals" message="pass">
+            <expectedResult type="string">/magento-logo(_[0-9]+)*?\.png$/</expectedResult>
+            <actualResult type="variable">grabCategoryFileName</actualResult>
+        </assertRegExp>
     </actionGroup>
 
     <!-- Remove image from category -->
@@ -128,7 +132,11 @@
         <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
-        <see selector="{{AdminCategoryContentSection.imageFileName}}" userInput="{{image.file}}" stepKey="seeImage"/>
+        <grabTextFrom selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="grabCategoryFileName"/>
+        <assertRegExp stepKey="assertEquals" message="pass">
+            <expectedResult type="string">/magento-logo(_[0-9]+)*?\.png$/</expectedResult>
+            <actualResult type="variable">grabCategoryFileName</actualResult>
+        </assertRegExp>
     </actionGroup>
 
     <!-- Action to navigate to Media Gallery. Used in tests to cleanup uploaded images -->
@@ -182,6 +190,18 @@
         <see selector="You deleted the category." stepKey="seeDeleteSuccess"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
         <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="dontSeeCategoryInTree"/>
+    </actionGroup>
+    <actionGroup name="AdminDeleteCategoryByName" extends="DeleteCategory">
+        <arguments>
+            <argument name="categoryName" type="string" defaultValue="category1"/>
+        </arguments>
+        <remove keyForRemoval="clickCategoryLink"/>
+        <remove keyForRemoval="dontSeeCategoryInTree"/>
+        <remove keyForRemoval="expandToSeeAllCategories"/>
+        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandAll}}" dependentSelector="{{AdminCategorySidebarTreeSection.categoryByName(categoryName)}}" visible="false" stepKey="expandCategories" after="waitForCategoryPageLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryByName(categoryName)}}" stepKey="clickCategory" after="expandCategories"/>
+        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandAll}}" dependentSelector="{{AdminCategorySidebarTreeSection.categoryByName(categoryName)}}" visible="false" stepKey="expandCategoriesToSeeAll" after="seeDeleteSuccess"/>
+        <dontSee selector="{{AdminCategorySidebarTreeSection.categoryByName(categoryName)}}" stepKey="dontSeeCategory" after="expandCategoriesToSeeAll"/>
     </actionGroup>
 
     <!-- Actions to fill out a new category from the product page-->
@@ -395,5 +415,45 @@
         <scrollToTopOfPage stepKey="scrollToTheTopOfPage"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCategoryAssignProduct">
+        <annotations>
+            <description>Requires navigation to category creation/edit page. Assign products to category - using "Products in Category" tab.</description>
+        </annotations>
+        <arguments>
+            <argument name="productSku" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="false" stepKey="clickOnProductInCategory"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickOnResetFilter"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnSku}}" userInput="{{productSku}}" stepKey="fillSkuFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+    </actionGroup>
+
+    <actionGroup name="DeleteDefaultCategoryChildren">
+        <annotations>
+            <description>Deletes all children categories of Default Root Category.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage"/>
+        <executeInSelenium function="function ($webdriver) use ($I) {
+            $children = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath('//ul[contains(@class, \'x-tree-node-ct\')]/li[@class=\'x-tree-node\' and contains(.,
+            \'{{DefaultCategory.name}}\')]/ul[contains(@class, \'x-tree-node-ct\')]/li//a'));
+            while (!empty($children)) {
+                $I->click('//ul[contains(@class, \'x-tree-node-ct\')]/li[@class=\'x-tree-node\' and contains(.,
+            \'{{DefaultCategory.name}}\')]/ul[contains(@class, \'x-tree-node-ct\')]/li//a');
+                $I->waitForPageLoad(30);
+                $I->click('#delete');
+                $I->waitForElementVisible('aside.confirm .modal-footer button.action-accept');
+                $I->click('aside.confirm .modal-footer button.action-accept');
+                $I->waitForPageLoad(30);
+                $I->waitForElementVisible('#messages div.message-success', 30);
+                $I->see('You deleted the category.', '#messages div.message-success');
+                $children = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath('//ul[contains(@class, \'x-tree-node-ct\')]/li[@class=\'x-tree-node\' and contains(.,
+            \'{{DefaultCategory.name}}\')]/ul[contains(@class, \'x-tree-node-ct\')]/li//a'));
+            }
+        }" stepKey="deleteAllChildCategories"/>
     </actionGroup>
 </actionGroups>
