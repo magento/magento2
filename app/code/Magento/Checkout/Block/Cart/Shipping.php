@@ -11,8 +11,8 @@ use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Customer\Model\Session as customerSession;
-use Magento\Checkout\Model\Session as checkoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -45,8 +45,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @param Context $context
-     * @param customerSession $customerSession
-     * @param checkoutSession $checkoutSession
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
      * @param CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
      * @param array $data
@@ -56,8 +56,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function __construct(
         Context $context,
-        customerSession $customerSession,
-        checkoutSession $checkoutSession,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
         CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
