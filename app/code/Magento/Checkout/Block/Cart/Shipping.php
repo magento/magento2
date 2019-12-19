@@ -16,6 +16,8 @@ use Magento\Checkout\Model\Session as checkoutSession;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Cart Shipping Block
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -107,6 +109,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get Serialized Checkout Config
+     *
      * @return bool|string
      * @since 100.2.0
      */

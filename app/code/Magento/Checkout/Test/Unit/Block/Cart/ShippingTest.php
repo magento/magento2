@@ -89,8 +89,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->layout = [
             'components' => [
-                'firstComponent' => ['param' => 'value'],
-                'secondComponent' => ['param' => 'value'],
+                'firstComponent' => ['param' => 'value']
             ]
         ];
 
@@ -153,11 +152,11 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     public function getJsLayoutDataProvider(): array
     {
         $layoutProcessed = $this->layout;
-        $layoutProcessed['components']['thirdComponent'] = ['param' => 'value'];
+        $layoutProcessed['components']['secondComponent'] = ['param' => 'value'];
         return [
             [
                 $layoutProcessed,
-                '{"components":{"firstComponent":{"param":"value"},"secondComponent":{"param":"value"},"thirdComponent":{"param":"value"}}}'
+                '{"components":{"firstComponent":{"param":"value"},"secondComponent":{"param":"value"}}}'
             ]
         ];
     }
