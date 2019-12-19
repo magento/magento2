@@ -100,7 +100,8 @@ class PageRepository implements PageRepositoryInterface
         StoreManagerInterface $storeManager,
         CollectionProcessorInterface $collectionProcessor = null,
         ?IdentityMap $identityMap = null
-    ) {
+    )
+    {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
         $this->pageCollectionFactory = $pageCollectionFactory;
@@ -111,30 +112,6 @@ class PageRepository implements PageRepositoryInterface
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->identityMap = $identityMap ?? ObjectManager::getInstance()->get(IdentityMap::class);
-    }
-
-    /**
-     * Validate new layout update values.
-     *
-     * @param Data\PageInterface $page
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    private function validateLayoutUpdate(Data\PageInterface $page): void
-    {
-        //Persisted data
-        $savedPage = $page->getId() ? $this->getById($page->getId()) : null;
-        //Custom layout update can be removed or kept as is.
-        if ($page->getCustomLayoutUpdateXml()
-            && (!$savedPage || $page->getCustomLayoutUpdateXml() !== $savedPage->getCustomLayoutUpdateXml())
-        ) {
-            throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
-        }
-        if ($page->getLayoutUpdateXml()
-            && (!$savedPage || $page->getLayoutUpdateXml() !== $savedPage->getLayoutUpdateXml())
-        ) {
-            throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
-        }
     }
 
     /**
@@ -152,9 +129,9 @@ class PageRepository implements PageRepositoryInterface
         }
         try {
             $this->validateLayoutUpdate($page);
-            if($page->getId()){
+            if ($page->getId()) {
                 $savedPage = $this->getById($page->getId());
-                $pageData = array_replace_recursive($savedPage->toArray(),$page->toArray());
+                $pageData = array_replace_recursive($savedPage->toArray(), $page->toArray());
                 $page->addData($pageData);
             }
             $this->resource->save($page);
@@ -241,6 +218,30 @@ class PageRepository implements PageRepositoryInterface
     public function deleteById($pageId)
     {
         return $this->delete($this->getById($pageId));
+    }
+
+    /**
+     * Validate new layout update values.
+     *
+     * @param Data\PageInterface $page
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function validateLayoutUpdate(Data\PageInterface $page): void
+    {
+        //Persisted data
+        $savedPage = $page->getId() ? $this->getById($page->getId()) : null;
+        //Custom layout update can be removed or kept as is.
+        if ($page->getCustomLayoutUpdateXml()
+            && (!$savedPage || $page->getCustomLayoutUpdateXml() !== $savedPage->getCustomLayoutUpdateXml())
+        ) {
+            throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
+        }
+        if ($page->getLayoutUpdateXml()
+            && (!$savedPage || $page->getLayoutUpdateXml() !== $savedPage->getLayoutUpdateXml())
+        ) {
+            throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
+        }
     }
 
     /**
