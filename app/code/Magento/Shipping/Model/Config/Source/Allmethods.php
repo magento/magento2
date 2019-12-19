@@ -5,6 +5,9 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
+/**
+ * @inheritdoc
+ */
 class Allmethods implements \Magento\Framework\Option\ArrayInterface
 {
     /**
@@ -33,6 +36,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * Return array of carriers.
+     *
      * If $isActiveOnlyFlag is set to true, will return only active carriers
      *
      * @param bool $isActiveOnlyFlag
@@ -59,7 +63,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
 
                 /** Check it $carrierMethods array was well formed */
                 if (!$methodCode) {
-                    continue;
+                     continue;
                 }
                 $methods[$carrierCode]['value'][] = [
                     'value' => $carrierCode . '_' . $methodCode,

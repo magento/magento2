@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Shipping\Test\Unit\Model;
+namespace Magento\Shipping\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
@@ -14,7 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Tests for Allmethods Class
  */
-class InfoTest extends \PHPUnit\Framework\TestCase
+class AllmethodsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeConfigInterface|MockObject $scopeConfig
