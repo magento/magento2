@@ -32,6 +32,11 @@ class ResetQuoteAddressesTest extends TestCase
     private const STUB_ITEM_ID = 1;
 
     /**
+     * @var int
+     */
+    private const STUB_SHIPPING_ASSIGNMENTS = 1;
+
+    /**
      * @var array
      */
     private const STUB_QUOTE_ITEMS = [1, 2];
@@ -133,7 +138,7 @@ class ResetQuoteAddressesTest extends TestCase
         if (!$isVirtualQuote && $extensionAttributes) {
             $this->extensionAttributesMock->expects($this->any())
                 ->method('getShippingAssignments')
-                ->willReturn($extensionAttributes);
+                ->willReturn([static::STUB_SHIPPING_ASSIGNMENTS]);
 
             $this->extensionAttributesMock->expects($this->once())
                 ->method('setShippingAssignments')
