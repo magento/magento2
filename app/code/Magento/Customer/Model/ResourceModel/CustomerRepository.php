@@ -247,14 +247,13 @@ class CustomerRepository implements CustomerRepositoryInterface
             $customer->setAddresses($delegatedNewOperation->getCustomer()->getAddresses());
         }
         if ($customer->getAddresses() !== null && !$customerModel->getData('ignore_validation_flag')) {
+            $existingAddressIds = [];
             if ($customer->getId()) {
                 $existingAddresses = $this->getById($customer->getId())->getAddresses();
                 $getIdFunc = function ($address) {
                     return $address->getId();
                 };
                 $existingAddressIds = array_map($getIdFunc, $existingAddresses);
-            } else {
-                $existingAddressIds = [];
             }
             $savedAddressIds = [];
             foreach ($customer->getAddresses() as $address) {

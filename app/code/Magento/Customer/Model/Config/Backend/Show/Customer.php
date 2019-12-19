@@ -94,12 +94,11 @@ class Customer extends \Magento\Framework\App\Config\Value
             $data = $valueConfig[''];
         }
 
+        $website = null;
+        $dataFieldPrefix = '';
         if ($this->getScope() == 'websites') {
             $website = $this->storeManager->getWebsite($this->getScopeCode());
             $dataFieldPrefix = 'scope_';
-        } else {
-            $website = null;
-            $dataFieldPrefix = '';
         }
 
         foreach ($this->_getAttributeObjects() as $attributeObject) {

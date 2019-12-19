@@ -103,9 +103,8 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\App\Config\ScopeConfigInterface::class
             );
-        } else {
-            return $this->scopeConfig;
         }
+        return $this->scopeConfig;
     }
 
     /**
@@ -222,9 +221,8 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                         $this->session->setUsername($login['username']);
                     }
                 }
-            } else {
-                $this->messageManager->addErrorMessage(__('A login and a password are required.'));
             }
+            $this->messageManager->addErrorMessage(__('A login and a password are required.'));
         }
 
         return $this->accountRedirect->getRedirect();

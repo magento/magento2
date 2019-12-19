@@ -92,10 +92,9 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
             }
             $this->messageManager->addSuccessMessage($this->getSuccessMessage($email));
             return $resultRedirect->setPath('*/*/');
-        } else {
-            $this->messageManager->addErrorMessage(__('Please enter your email.'));
-            return $resultRedirect->setPath('*/*/forgotpassword');
         }
+        $this->messageManager->addErrorMessage(__('Please enter your email.'));
+        return $resultRedirect->setPath('*/*/forgotpassword');
     }
 
     /**

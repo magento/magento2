@@ -117,9 +117,8 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 EmailNotificationInterface::class
             );
-        } else {
-            return $this->emailNotification;
         }
+        return $this->emailNotification;
     }
 
     /**

@@ -500,9 +500,8 @@ class AccountManagement implements AccountManagementInterface
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Customer\Model\AuthenticationInterface::class
             );
-        } else {
-            return $this->authentication;
         }
+        return $this->authentication;
     }
 
     /**
@@ -834,6 +833,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $hash = null;
         if ($password !== null) {
             $this->checkPasswordStrength($password);
             $customerEmail = $customer->getEmail();
@@ -845,8 +845,6 @@ class AccountManagement implements AccountManagementInterface
                 );
             }
             $hash = $this->createPasswordHash($password);
-        } else {
-            $hash = null;
         }
         return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl);
     }
@@ -1595,9 +1593,8 @@ class AccountManagement implements AccountManagementInterface
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 EmailNotificationInterface::class
             );
-        } else {
-            return $this->emailNotification;
         }
+        return $this->emailNotification;
     }
 
     /**

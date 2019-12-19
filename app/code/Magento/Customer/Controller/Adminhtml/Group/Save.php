@@ -108,8 +108,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 $resultRedirect->setPath('customer/group/edit', ['id' => $id]);
             }
             return $resultRedirect;
-        } else {
-            return $this->resultForwardFactory->create()->forward('new');
         }
+        return $this->resultForwardFactory->create()->forward('new');
     }
 }

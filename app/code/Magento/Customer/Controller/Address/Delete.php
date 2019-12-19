@@ -25,11 +25,10 @@ class Delete extends \Magento\Customer\Controller\Address implements HttpPostAct
         if ($addressId && $this->_formKeyValidator->validate($this->getRequest())) {
             try {
                 $address = $this->_addressRepository->getById($addressId);
+                $this->messageManager->addErrorMessage(__('We can\'t delete the address right now.'));
                 if ($address->getCustomerId() === $this->_getSession()->getCustomerId()) {
                     $this->_addressRepository->deleteById($addressId);
                     $this->messageManager->addSuccessMessage(__('You deleted the address.'));
-                } else {
-                    $this->messageManager->addErrorMessage(__('We can\'t delete the address right now.'));
                 }
             } catch (\Exception $other) {
                 $this->messageManager->addException($other, __('We can\'t delete the address right now.'));

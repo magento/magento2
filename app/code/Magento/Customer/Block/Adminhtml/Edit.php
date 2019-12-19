@@ -162,9 +162,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if ($customerId) {
             $customerData = $this->customerRepository->getById($customerId);
             return $this->escapeHtml($this->_viewHelper->getCustomerName($customerData));
-        } else {
-            return __('New Customer');
         }
+        return __('New Customer');
     }
 
     /**

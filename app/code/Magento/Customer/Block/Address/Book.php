@@ -212,9 +212,8 @@ class Book extends \Magento\Framework\View\Element\Template
         $customer = $this->getCustomer();
         if ($customer === null) {
             return null;
-        } else {
-            return $customer->getDefaultBilling();
         }
+        return $customer->getDefaultBilling();
     }
 
     /**
@@ -243,8 +242,7 @@ class Book extends \Magento\Framework\View\Element\Template
         $customer = $this->getCustomer();
         if ($customer === null) {
             return null;
-        } else {
-            return $customer->getDefaultShipping();
         }
+        return $customer->getDefaultShipping();
     }
 }

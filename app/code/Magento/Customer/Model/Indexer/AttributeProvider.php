@@ -117,12 +117,11 @@ class AttributeProvider implements FieldsetInterface
      */
     protected function getType(Attribute $attribute)
     {
+        $type = 'virtual';
         if ($attribute->canBeSearchableInGrid()) {
             $type = 'searchable';
         } elseif ($attribute->canBeFilterableInGrid()) {
             $type = 'filterable';
-        } else {
-            $type = 'virtual';
         }
 
         return $type;

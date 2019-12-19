@@ -89,15 +89,14 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
                 $resultRedirect->setPath('*/*/createpassword');
 
                 return $resultRedirect;
-            } else {
-                /** @var \Magento\Framework\View\Result\Page $resultPage */
-                $resultPage = $this->resultPageFactory->create();
-                $resultPage->getLayout()
-                           ->getBlock('resetPassword')
-                           ->setResetPasswordLinkToken($resetPasswordToken);
-
-                return $resultPage;
             }
+            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->getLayout()
+                       ->getBlock('resetPassword')
+                       ->setResetPasswordLinkToken($resetPasswordToken);
+
+            return $resultPage;
         } catch (\Exception $exception) {
             $this->messageManager->addErrorMessage(__('Your password reset link has expired.'));
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

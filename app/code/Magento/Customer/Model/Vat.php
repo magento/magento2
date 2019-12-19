@@ -266,7 +266,7 @@ class Vat
      */
     public function getCustomerVatClass($customerCountryCode, $vatValidationResult, $store = null)
     {
-        $vatClass = null;
+        $vatClass = self::VAT_CLASS_INVALID;
 
         $isVatNumberValid = $vatValidationResult->getIsValid();
 
@@ -278,8 +278,6 @@ class Vat
             $vatClass = self::VAT_CLASS_DOMESTIC;
         } elseif ($isVatNumberValid) {
             $vatClass = self::VAT_CLASS_INTRA_UNION;
-        } else {
-            $vatClass = self::VAT_CLASS_INVALID;
         }
 
         if (!$vatValidationResult->getRequestSuccess()) {

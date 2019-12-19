@@ -89,9 +89,8 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
                 $values[] = $this->_options[$val];
             }
             return $values;
-        } else {
-            return $this->_options[$value];
         }
+        return $this->_options[$value];
     }
 
     /**

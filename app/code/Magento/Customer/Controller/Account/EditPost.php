@@ -135,9 +135,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             return ObjectManager::getInstance()->get(
                 \Magento\Customer\Model\AuthenticationInterface::class
             );
-        } else {
-            return $this->authentication;
         }
+        return $this->authentication;
     }
 
     /**
@@ -152,9 +151,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             return ObjectManager::getInstance()->get(
                 EmailNotificationInterface::class
             );
-        } else {
-            return $this->emailNotification;
         }
+        return $this->emailNotification;
     }
 
     /**

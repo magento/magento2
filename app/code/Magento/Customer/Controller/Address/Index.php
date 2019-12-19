@@ -80,8 +80,7 @@ class Index extends \Magento\Customer\Controller\Address implements HttpGetActio
                 $block->setRefererUrl($this->_redirect->getRefererUrl());
             }
             return $resultPage;
-        } else {
-            return $this->resultRedirectFactory->create()->setPath('*/*/new');
         }
+        return $this->resultRedirectFactory->create()->setPath('*/*/new');
     }
 }

@@ -90,12 +90,11 @@ class Select extends AbstractData
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {
         $value = $this->_value;
+        $output = '';
         if ($format === ElementFactory::OUTPUT_FORMAT_JSON) {
             $output = $value;
         } elseif ($value != '') {
             $output = $this->_getOptionText($value);
-        } else {
-            $output = '';
         }
 
         return $output;

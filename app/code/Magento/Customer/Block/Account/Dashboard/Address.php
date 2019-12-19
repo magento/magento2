@@ -89,9 +89,8 @@ class Address extends \Magento\Framework\View\Element\Template
 
         if ($address) {
             return $this->_getAddressHtml($address);
-        } else {
-            return __('You have not set a default shipping address.');
         }
+        return __('You have not set a default shipping address.');
     }
 
     /**
@@ -109,9 +108,8 @@ class Address extends \Magento\Framework\View\Element\Template
 
         if ($address) {
             return $this->_getAddressHtml($address);
-        } else {
-            return __('You have not set a default billing address.');
         }
+        return __('You have not set a default billing address.');
     }
 
     /**
@@ -121,14 +119,13 @@ class Address extends \Magento\Framework\View\Element\Template
     {
         if (!$this->getCustomer()) {
             return '';
-        } else {
-            $address = $this->currentCustomerAddress->getDefaultShippingAddress();
-            $addressId = $address ? $address->getId() : null;
-            return $this->_urlBuilder->getUrl(
-                'customer/address/edit',
-                ['id' => $addressId]
-            );
         }
+        $address = $this->currentCustomerAddress->getDefaultShippingAddress();
+        $addressId = $address ? $address->getId() : null;
+        return $this->_urlBuilder->getUrl(
+            'customer/address/edit',
+            ['id' => $addressId]
+        );
     }
 
     /**
@@ -138,14 +135,13 @@ class Address extends \Magento\Framework\View\Element\Template
     {
         if (!$this->getCustomer()) {
             return '';
-        } else {
-            $address = $this->currentCustomerAddress->getDefaultBillingAddress();
-            $addressId = $address ? $address->getId() : null;
-            return $this->_urlBuilder->getUrl(
-                'customer/address/edit',
-                ['id' => $addressId]
-            );
         }
+        $address = $this->currentCustomerAddress->getDefaultBillingAddress();
+        $addressId = $address ? $address->getId() : null;
+        return $this->_urlBuilder->getUrl(
+            'customer/address/edit',
+            ['id' => $addressId]
+        );
     }
 
     /**

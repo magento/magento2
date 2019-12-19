@@ -19,8 +19,6 @@ define([
 
     if (isLoggedIn()) {
         customerData = window.customerData;
-    } else {
-        customerData = {};
     }
 
     return {

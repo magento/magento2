@@ -188,24 +188,18 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
      */
     protected function getSuccessMessage()
     {
+        $message = __('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName());
         if ($this->addressHelper->isVatValidationEnabled()) {
+            $addressType = "billing";
             if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
-                // @codingStandardsIgnoreStart
-                $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your shipping address for proper VAT calculation.',
-                    $this->urlModel->getUrl('customer/address/edit')
-                );
-                // @codingStandardsIgnoreEnd
-            } else {
-                // @codingStandardsIgnoreStart
-                $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your billing address for proper VAT calculation.',
-                    $this->urlModel->getUrl('customer/address/edit')
-                );
-                // @codingStandardsIgnoreEnd
+                $addressType = "shipping";
             }
-        } else {
-            $message = __('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName());
+            // @codingStandardsIgnoreStart
+            $message = __(
+                'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your ' . $addressType . ' address for proper VAT calculation.',
+                $this->urlModel->getUrl('customer/address/edit')
+            );
+            // @codingStandardsIgnoreEnd
         }
         return $message;
     }

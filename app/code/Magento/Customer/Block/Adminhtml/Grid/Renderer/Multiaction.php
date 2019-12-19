@@ -58,11 +58,9 @@ class Multiaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Act
                 $style = '';
                 $onClick = sprintf('onclick="return %s.configureItem(%s)"', $action['control_object'], $row->getId());
                 return sprintf('<a href="%s" %s %s>%s</a>', $action['url'], $style, $onClick, $action['caption']);
-            } else {
-                return false;
             }
-        } else {
-            return parent::_toLinkHtml($action, $row);
+            return false;
         }
+        return parent::_toLinkHtml($action, $row);
     }
 }

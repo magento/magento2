@@ -85,10 +85,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $groupId = $this->coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
         if ($groupId === null) {
             return __('New Customer Group');
-        } else {
-            $group = $this->groupRepository->getById($groupId);
-            return __('Edit Customer Group "%1"', $this->escapeHtml($group->getCode()));
         }
+        $group = $this->groupRepository->getById($groupId);
+        return __('Edit Customer Group "%1"', $this->escapeHtml($group->getCode()));
     }
 
     /**

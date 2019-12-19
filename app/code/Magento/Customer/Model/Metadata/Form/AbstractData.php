@@ -481,19 +481,13 @@ abstract class AbstractData
                 $params = $request->getParam($this->_requestScope);
             }
 
-            if (isset($params[$attrCode])) {
-                $value = $params[$attrCode];
-            } else {
-                $value = false;
-            }
-
+            $value = (isset($params[$attrCode])) ? $params[$attrCode] : false;
             if (!$this->_requestScopeOnly && $value === false) {
                 $value = $request->getParam($attrCode, false);
             }
-        } else {
-            $value = $request->getParam($attrCode, false);
+            return $value;
         }
-        return $value;
+        return $request->getParam($attrCode, false);
     }
 
     /**

@@ -11,15 +11,13 @@
     } else if (typeof define === "function" && define.amd) {
         define([], f)
     } else {
-        var g;
+        var g = this;
         if (typeof window !== "undefined") {
             g = window
         } else if (typeof global !== "undefined") {
             g = global
         } else if (typeof self !== "undefined") {
             g = self
-        } else {
-            g = this
         }
         g.zxcvbn = f()
     }

@@ -116,9 +116,8 @@ class CurrentCustomer
             && $this->layout->isCacheable()
         ) {
             return $this->getDepersonalizedCustomer();
-        } else {
-            return $this->getCustomerFromService();
         }
+        return $this->getCustomerFromService();
     }
 
     /**

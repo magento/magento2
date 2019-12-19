@@ -206,10 +206,9 @@ class Edit extends \Magento\Directory\Block\Data
         if ($title = $this->getData('title')) {
             return $title;
         }
+        $title = __('Add New Address');
         if ($this->getAddress()->getId()) {
             $title = __('Edit Address');
-        } else {
-            $title = __('Add New Address');
         }
         return $title;
     }
@@ -227,9 +226,8 @@ class Edit extends \Magento\Directory\Block\Data
 
         if ($this->getCustomerAddressCount()) {
             return $this->getUrl('customer/address');
-        } else {
-            return $this->getUrl('customer/account/');
         }
+        return $this->getUrl('customer/account/');
     }
 
     /**
@@ -377,9 +375,8 @@ class Edit extends \Magento\Directory\Block\Data
     {
         if ($this->getCustomerAddressCount()) {
             return $this->getUrl('customer/address');
-        } else {
-            return $this->getUrl('customer/account/');
         }
+        return $this->getUrl('customer/account/');
     }
 
     /**

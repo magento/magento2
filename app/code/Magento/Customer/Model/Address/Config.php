@@ -123,10 +123,9 @@ class Config extends ConfigData
             foreach ($this->get() as $typeCode => $typeConfig) {
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
                 $type = new DataObject();
+                $escapeHtml = false;
                 if (isset($typeConfig['escapeHtml'])) {
                     $escapeHtml = $typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1';
-                } else {
-                    $escapeHtml = false;
                 }
 
                 $type->setCode($typeCode)

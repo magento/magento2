@@ -418,9 +418,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 EmailNotificationInterface::class
             );
-        } else {
-            return $this->emailNotification;
         }
+        return $this->emailNotification;
     }
 
     /**

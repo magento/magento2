@@ -444,24 +444,18 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      */
     protected function getSuccessMessage()
     {
+        $message = __('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName());
         if ($this->addressHelper->isVatValidationEnabled()) {
+            $addressType = "billing";
             if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
-                // @codingStandardsIgnoreStart
-                $message = __(
-                    'If you are a registered VAT customer, please <a href="%1">click here</a> to enter your shipping address for proper VAT calculation.',
-                    $this->urlModel->getUrl('customer/address/edit')
-                );
-                // @codingStandardsIgnoreEnd
-            } else {
-                // @codingStandardsIgnoreStart
-                $message = __(
-                    'If you are a registered VAT customer, please <a href="%1">click here</a> to enter your billing address for proper VAT calculation.',
-                    $this->urlModel->getUrl('customer/address/edit')
-                );
-                // @codingStandardsIgnoreEnd
+                $addressType = "shipping";
             }
-        } else {
-            $message = __('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName());
+            // @codingStandardsIgnoreStart
+            $message = __(
+                'If you are a registered VAT customer, please <a href="%1">click here</a> to enter your ' . $addressType . ' address for proper VAT calculation.',
+                $this->urlModel->getUrl('customer/address/edit')
+            );
+            // @codingStandardsIgnoreEnd
         }
         return $message;
     }
@@ -475,10 +469,9 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     private function getMessageManagerSuccessMessage(): MessageInterface
     {
         if ($this->addressHelper->isVatValidationEnabled()) {
+            $identifier = 'customerVatBillingAddressSuccessMessage';
             if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
                 $identifier = 'customerVatShippingAddressSuccessMessage';
-            } else {
-                $identifier = 'customerVatBillingAddressSuccessMessage';
             }
 
             $message = $this->messageManager

@@ -53,12 +53,11 @@ class InlineEditUpdater
         if (in_array($frontendInput, $this->editableFields)) {
             $config = $column->getConfiguration();
             if (!(isset($config['editor']) && isset($config['editor']['editorType']))) {
+                $editorType = $frontendInput;
                 if (isset($config['editor']) && is_string($config['editor'])) {
                     $editorType = $config['editor'];
                 } elseif (isset($config['dataType'])) {
                     $editorType = $config['dataType'];
-                } else {
-                    $editorType = $frontendInput;
                 }
 
                 $config['editor'] = [

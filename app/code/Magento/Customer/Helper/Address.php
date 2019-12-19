@@ -167,9 +167,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if (is_string($renderer) && $renderer) {
             return $this->_blockFactory->createBlock($renderer, []);
-        } else {
-            return $renderer;
         }
+        return $renderer;
     }
 
     /**

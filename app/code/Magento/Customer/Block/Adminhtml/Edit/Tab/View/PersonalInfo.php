@@ -174,9 +174,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Customer\Model\CustomerRegistry::class
             );
-        } else {
-            return $this->customerRegistry;
         }
+        return $this->customerRegistry;
     }
 
     /**
