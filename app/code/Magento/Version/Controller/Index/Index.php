@@ -36,8 +36,7 @@ class Index extends Action implements HttpGetActionInterface
     }
 
     /**
-     * Sets the response body to ProductName/Major.MinorVersion (Edition). E.g.: Magento/0.42 (Community). Omits patch
-     * version from response
+     * Sets the response body to ProductName/Major.MinorVersion (Edition).
      *
      * @return void
      */
