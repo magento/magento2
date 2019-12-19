@@ -14,16 +14,34 @@ use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Customer\Model\Session as customerSession;
-use Magento\Checkout\Model\Session as checkoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  *  Unit Test for Magento\Checkout\Block\Cart\Shipping
  */
-class ShippingTest extends \PHPUnit\Framework\TestCase
+class ShippingTest extends TestCase
 {
+
+    /**
+     * Stub Preinitialized Componets
+     */
+    private const STUB_PREINITIALIZED_COMPONENTS = [
+        'components' => [
+            'firstComponent' => ['param' => 'value']
+        ]
+    ];
+
+    /**
+     * Stub Base URL
+     */
+    private const STUB_BASE_URL = 'baseurl';
+
     /**
      * @var Shipping
      */
@@ -35,12 +53,12 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     protected $contextMock;
 
     /**
-     * @var customerSession|MockObject
+     * @var CustomerSession|MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var checkoutSession|MockObject
+     * @var CheckoutSession|MockObject
      */
     protected $checkoutSessionMock;
 
@@ -57,7 +75,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     /**
      * @var StoreManagerInterface|MockObject
      */
-    protected $storeManagerMock;
+    protected $storeManagerInterfaceMock;
 
     /**
      * @var array
@@ -80,32 +98,26 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->customerSessionMock = $this->createMock(customerSession::class);
-        $this->checkoutSessionMock = $this->createMock(checkoutSession::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
+        $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
         $this->configProviderMock = $this->createMock(CompositeConfigProvider::class);
         $this->layoutProcessorMock = $this->createMock(LayoutProcessorInterface::class);
         $this->serializerMock = $this->createMock(JsonHexTag::class);
         $this->jsonHexTagSerializerMock = $this->createMock(JsonHexTag::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->layout = [
-            'components' => [
-                'firstComponent' => ['param' => 'value']
+        $this->storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
+        $this->layout = self::STUB_PREINITIALIZED_COMPONENTS;
+
+        $objectManager = new ObjectManager($this);
+        $this->block = $objectManager->getObject(
+            Shipping::class,
+            [
+                'configProvider' => $this->configProviderMock,
+                'layoutProcessors' => [$this->layoutProcessorMock],
+                'jsLayout' => $this->layout,
+                'serializer' => $this->serializerMock,
+                'jsonHexTagSerializer' => $this->jsonHexTagSerializerMock,
+                'storeManager' => $this->storeManagerInterfaceMock
             ]
-        ];
-
-        $this->contextMock->expects($this->once())
-            ->method('getStoreManager')
-            ->willReturn($this->storeManagerMock);
-
-        $this->block = new Shipping(
-            $this->contextMock,
-            $this->customerSessionMock,
-            $this->checkoutSessionMock,
-            $this->configProviderMock,
-            [$this->layoutProcessorMock],
-            ['jsLayout' => $this->layout],
-            $this->serializerMock,
-            $this->jsonHexTagSerializerMock
         );
     }
 
@@ -168,13 +180,13 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBaseUrl(): void
     {
-        $baseUrl = 'baseUrl';
-        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getBaseUrl']);
+        $baseUrl = self::STUB_BASE_URL;
+        $storeMock = $this->createPartialMock(Store::class, ['getBaseUrl']);
         $storeMock->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn($baseUrl);
 
-        $this->storeManagerMock->expects($this->once())
+        $this->storeManagerInterfaceMock->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
 
