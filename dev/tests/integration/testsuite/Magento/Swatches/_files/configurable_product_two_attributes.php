@@ -5,36 +5,34 @@
  */
 declare(strict_types=1);
 
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Eav\Model\Config;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/product_text_swatch_attribute.php';
 require __DIR__ . '/product_visual_swatch_attribute.php';
 
+/** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-
-$installer = $objectManager->create(CategorySetup::class);
-
-$eavConfig = $objectManager->get(Config::class);
-$attribute = $eavConfig->getAttribute(Product::ENTITY, 'text_swatch_attribute');
-$secondAttribute = $eavConfig->getAttribute(Product::ENTITY, 'visual_swatch_attribute');
+/** @var ProductAttributeRepositoryInterface $productAttributeRepository */
+$productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
+$attribute = $productAttributeRepository->get('text_swatch_attribute');
+$secondAttribute = $productAttributeRepository->get('visual_swatch_attribute');
 $options = $attribute->getOptions();
 $secondAttributeOptions = $secondAttribute->getOptions();
-
+/** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->create(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
-
+/** @var ProductAttributeRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $attributeValues = [];
 $secondAttributeValues = [];
@@ -42,6 +40,7 @@ $associatedProductIds = [];
 $associatedProductIdsViaSecondAttribute = [];
 $attributeSetId = $installer->getAttributeSetId(Product::ENTITY, 'Default');
 $productFactory = $objectManager->get(ProductFactory::class);
+$rootCategoryId = $baseWebsite->getDefaultStore()->getRootCategoryId();
 array_shift($options);
 array_shift($secondAttributeOptions);
 
@@ -49,7 +48,7 @@ foreach ($options as $option) {
     foreach ($secondAttributeOptions as $secondAttrOption) {
         $product = $productFactory->create();
         $product->setTypeId(ProductType::TYPE_SIMPLE)
-            ->setAttributeSetId($attributeSetId)
+            ->setAttributeSetId($product->getDefaultAttributeSetId())
             ->setWebsiteIds([$baseWebsite->getId()])
             ->setName('Configurable Option ' . $option->getLabel())
             ->setSku(
@@ -62,6 +61,7 @@ foreach ($options as $option) {
             ->setVisualSwatchAttribute($secondAttrOption->getValue())
             ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
             ->setStatus(Status::STATUS_ENABLED)
+            ->setCategoryIds([$rootCategoryId])
             ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
         $product = $productRepository->save($product, true);
         $associatedProductIds[] = $product->getId();
@@ -106,17 +106,12 @@ $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProduct
 $product->setExtensionAttributes($extensionConfigurableAttributes);
 
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setAttributeSetId($attributeSetId)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$baseWebsite->getId()])
     ->setName('Configurable Product')
     ->setSku('configurable')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
+    ->setCategoryIds([$rootCategoryId])
     ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
 $productRepository->save($product);
-
-$categoryLinkManagement = $objectManager->create(CategoryLinkManagementInterface::class);
-$categoryLinkManagement->assignProductToCategories(
-    $product->getSku(),
-    [$baseWebsite->getDefaultStore()->getRootCategoryId()]
-);

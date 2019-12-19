@@ -43,7 +43,8 @@ class CategoryPageViewTest extends ProductPageViewTest
         $this->setAttributeUsedInProductListing('visual_swatch_attribute');
         $product = $this->productRepository->get('configurable');
         $this->block->setProduct($product);
-        $result = $this->generateBlockData();
+        $result = $this->generateBlockJsonConfigData();
+        $this->checkResultIsNotEmpty($result);
         $this->assertConfig($result['json_config'], $expectedConfig);
         $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
     }
@@ -62,7 +63,8 @@ class CategoryPageViewTest extends ProductPageViewTest
         $this->setAttributeUsedInProductListing('text_swatch_attribute');
         $product = $this->productRepository->get('configurable');
         $this->block->setProduct($product);
-        $result = $this->generateBlockData();
+        $result = $this->generateBlockJsonConfigData();
+        $this->checkResultIsNotEmpty($result);
         $this->assertConfig($result['json_config'], $expectedConfig);
         $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
     }
@@ -82,7 +84,8 @@ class CategoryPageViewTest extends ProductPageViewTest
         $this->setAttributeUsedInProductListing('text_swatch_attribute');
         $product = $this->productRepository->get('configurable');
         $this->block->setProduct($product);
-        $result = $this->generateBlockData();
+        $result = $this->generateBlockJsonConfigData();
+        $this->checkResultIsNotEmpty($result);
         $this->assertConfig($result['json_config'], $expectedConfig);
         $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
     }
@@ -93,10 +96,10 @@ class CategoryPageViewTest extends ProductPageViewTest
      * @param string $attributeCode
      * @return void
      */
-    private function setAttributeUsedInProductListing(string $attributeCode)
+    private function setAttributeUsedInProductListing(string $attributeCode): void
     {
-        $attribute = $this->attributeRepository->get($attributeCode);
+        $attribute = $this->productAttributeRepository->get($attributeCode);
         $attribute->setUsedInProductListing('1');
-        $this->attributeRepository->save($attribute);
+        $this->productAttributeRepository->save($attribute);
     }
 }

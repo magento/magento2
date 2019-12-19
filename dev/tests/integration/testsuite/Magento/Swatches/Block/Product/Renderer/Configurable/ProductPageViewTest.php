@@ -38,7 +38,7 @@ class ProductPageViewTest extends TestCase
     protected $template;
 
     /** @var ProductAttributeRepositoryInterface */
-    protected $attributeRepository;
+    protected $productAttributeRepository;
 
     /** @var ProductRepositoryInterface */
     protected $productRepository;
@@ -65,7 +65,7 @@ class ProductPageViewTest extends TestCase
         $this->block = $this->layout->createBlock(Configurable::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
-        $this->attributeRepository = $this->objectManager->create(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository = $this->objectManager->create(ProductAttributeRepositoryInterface::class);
         $this->template = Configurable::SWATCH_RENDERER_TEMPLATE;
     }
 
@@ -93,7 +93,8 @@ class ProductPageViewTest extends TestCase
     {
         $product = $this->productRepository->get('configurable');
         $this->registerProduct($product);
-        $result = $this->generateBlockData();
+        $result = $this->generateBlockJsonConfigData();
+        $this->checkResultIsNotEmpty($result);
         $this->assertConfig($result['json_config'], $expectedConfig);
         $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
     }
@@ -153,7 +154,8 @@ class ProductPageViewTest extends TestCase
     {
         $product = $this->productRepository->get('configurable');
         $this->registerProduct($product);
-        $result = $this->generateBlockData();
+        $result = $this->generateBlockJsonConfigData();
+        $this->checkResultIsNotEmpty($result);
         $this->assertConfig($result['json_config'], $expectedConfig);
         $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
     }
@@ -212,7 +214,8 @@ class ProductPageViewTest extends TestCase
     {
         $product = $this->productRepository->get('configurable');
         $this->registerProduct($product);
-        $result = $this->generateBlockData();
+        $result = $this->generateBlockJsonConfigData();
+        $this->checkResultIsNotEmpty($result);
         $this->assertConfig($result['json_config'], $expectedConfig);
         $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
     }
@@ -333,11 +336,10 @@ class ProductPageViewTest extends TestCase
      *
      * @return array
      */
-    protected function generateBlockData(): array
+    protected function generateBlockJsonConfigData(): array
     {
         $this->block->setTemplate($this->template);
         $jsonConfig = $this->json->unserialize($this->block->getJsonConfig())['attributes'] ?? null;
-        $this->assertNotNull($jsonConfig);
         $jsonSwatchConfig = $this->json->unserialize($this->block->getJsonSwatchConfig());
 
         return ['json_config' => $jsonConfig, 'json_swatch_config' => $jsonSwatchConfig];
@@ -380,15 +382,28 @@ class ProductPageViewTest extends TestCase
     }
 
     /**
+     * Check result is not not empty
+     *
+     * @param array $result
+     */
+    protected function checkResultIsNotEmpty(array $result): void
+    {
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            $this->assertNotEmpty($item);
+        }
+    }
+
+    /**
      * Get product ids by skus
      *
-     * @param array $option
+     * @param array $skus
      * @return array
      */
-    private function getProductIdsBySkus(array $option): array
+    private function getProductIdsBySkus(array $skus): array
     {
         $productIds = [];
-        foreach ($option['skus'] as $sku) {
+        foreach ($skus as $sku) {
             try {
                 $productIds[] = $this->productRepository->get($sku)->getId();
             } catch (NoSuchEntityException $e) {
@@ -420,11 +435,11 @@ class ProductPageViewTest extends TestCase
      */
     private function checkOptions(array $actualDataItem, array $expectedItem): void
     {
-        foreach ($actualDataItem['options'] as $option) {
+        foreach ($expectedItem['options'] as $expectedItemKey => $expectedOption) {
             $found = false;
-            foreach ($expectedItem['options'] as $expectedItemKey => $expectedOption) {
+            foreach ($actualDataItem['options'] as $option) {
                 if ($option['label'] === $expectedOption['label']) {
-                    $productIds = $this->getProductIdsBySkus($expectedItem['options'][$expectedItemKey]);
+                    $productIds = $this->getProductIdsBySkus($expectedItem['options'][$expectedItemKey]['skus']);
                     $this->assertEquals(
                         $productIds,
                         $option['products'],

@@ -5,28 +5,25 @@
  */
 declare(strict_types=1);
 
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Eav\Model\Config;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/product_visual_swatch_attribute.php';
-/** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+
+/** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-/** @var CategorySetup $installer */
-$installer = $objectManager->create(CategorySetup::class);
-/** @var Config $eavConfig */
-$eavConfig = $objectManager->get(Config::class);
-$attribute = $eavConfig->getAttribute(Product::ENTITY, 'visual_swatch_attribute');
+/** @var ProductAttributeRepositoryInterface $productAttributeRepository */
+$productAttributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
+$attribute = $productAttributeRepository->get('visual_swatch_attribute');
 $options = $attribute->getOptions();
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->create(WebsiteRepositoryInterface::class);
@@ -37,13 +34,13 @@ $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $productFactory = $objectManager->get(ProductFactory::class);
 $attributeValues = [];
 $associatedProductIds = [];
-$attributeSetId = $installer->getAttributeSetId(Product::ENTITY, 'Default');
+$rootCategoryId = $baseWebsite->getDefaultStore()->getRootCategoryId();
 array_shift($options);
 
 foreach ($options as $option) {
     $product = $productFactory->create();
     $product->setTypeId(ProductType::TYPE_SIMPLE)
-        ->setAttributeSetId($attributeSetId)
+        ->setAttributeSetId($product->getDefaultAttributeSetId())
         ->setWebsiteIds([$baseWebsite->getId()])
         ->setName('Configurable Option ' . $option->getLabel())
         ->setSku(strtolower(str_replace(' ', '_', 'simple ' . $option->getLabel())))
@@ -51,6 +48,7 @@ foreach ($options as $option) {
         ->setVisualSwatchAttribute($option->getValue())
         ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(Status::STATUS_ENABLED)
+        ->setCategoryIds([$rootCategoryId])
         ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
     $product = $productRepository->save($product);
 
@@ -81,17 +79,12 @@ $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProduct
 $product->setExtensionAttributes($extensionConfigurableAttributes);
 
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setAttributeSetId($attributeSetId)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$baseWebsite->getId()])
     ->setName('Configurable Product')
     ->setSku('configurable')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
+    ->setCategoryIds([$rootCategoryId])
     ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
 $productRepository->save($product);
-/** @var CategoryLinkManagementInterface $categoryLinkManagement */
-$categoryLinkManagement = $objectManager->create(CategoryLinkManagementInterface::class);
-$categoryLinkManagement->assignProductToCategories(
-    $product->getSku(),
-    [$baseWebsite->getDefaultStore()->getRootCategoryId()]
-);

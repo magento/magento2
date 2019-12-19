@@ -5,25 +5,25 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Eav\Model\Config;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-/** @var Config $eavConfig */
-$eavConfig = $objectManager->get(Config::class);
-$options = $eavConfig->getAttribute(Product::ENTITY, 'text_swatch_attribute')->getOptions();
-$secondAttributeOptions = $eavConfig->getAttribute(Product::ENTITY, 'visual_swatch_attribute')->getOptions();
+/** @var ProductAttributeRepositoryInterface $productAttributeRepository */
+$productAttributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
+$options = $productAttributeRepository->get('text_swatch_attribute')->getOptions();
+$secondAttributeOptions = $productAttributeRepository->get('visual_swatch_attribute')->getOptions();
 array_shift($options);
 array_shift($secondAttributeOptions);
 $productsArray = [];
