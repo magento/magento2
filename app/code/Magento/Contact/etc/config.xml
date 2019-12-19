@@ -19,5 +19,10 @@
                 <email_template>contact_email_email_template</email_template>
             </email>
         </contact>
+        <web>
+            <default>
+                <cms_contact_page>contact</cms_contact_page>
+            </default>
+        </web>
     </default>
 </config>
