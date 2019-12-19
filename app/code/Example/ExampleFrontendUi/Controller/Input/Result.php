@@ -1,7 +1,13 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Example\ExampleFrontendUi\Controller\Input;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
@@ -13,7 +19,7 @@ use Magento\Framework\View\Result\PageFactory;
  * Message input result controller
  * @package Example\ExampleFrontendUi\Controller\Input
  */
-class Result extends \Magento\Framework\App\Action\Action
+class Result extends Action
 {
     /**
      * @var PageFactory
@@ -36,7 +42,7 @@ class Result extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     *
+     * Return post data and wrap Json
      *
      * @return ResponseInterface|Json|ResultInterface
      */
@@ -49,7 +55,7 @@ class Result extends \Magento\Framework\App\Action\Action
 
         $block = $resultPage->getLayout()
             ->createBlock('Example\ExampleFrontendUi\Block\Input\Index')
-            ->setTemplate('Example_ExampleFrontendUi::example_input.phtml')
+            ->setTemplate('Example_ExampleFrontendUi::example_result.phtml')
             ->setData('message', $message)
             ->toHtml();
 

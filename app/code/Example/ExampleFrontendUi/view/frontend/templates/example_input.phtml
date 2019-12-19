@@ -1,3 +1,9 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
 <div class="row clearfix">
         <form name="form_message" method="POST" id="form_message">
             <input type="text" name="message">
@@ -5,6 +11,8 @@
         </form>
 </div>
 
+
+<div id="result_form"></div>
 
 <script>
     require(['jquery'],function(){
@@ -17,7 +25,10 @@
                     type: "POST",
                     data: {message:messageValue},
                     showLoader: true,
-                    cache: false
+                    cache: false,
+                    success: function(response) {
+                            document.getElementById('result_form').innerHTML = response.output;
+                    },
                 });
                 return false;
             });
