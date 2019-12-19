@@ -78,6 +78,8 @@ class Index extends Action implements HttpGetActionInterface
     }
 
     /**
+     * Returns string only with Major and Minor version number
+     *
      * @param array $versionParts
      * @return string
      */
