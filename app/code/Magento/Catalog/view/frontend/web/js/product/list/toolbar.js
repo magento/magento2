@@ -8,6 +8,7 @@ define([
     'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
+        var isToolbarInitialized = false;
 
     /**
      * ProductListToolbarForm Widget - this widget is setting cookie and submitting form according to toolbar controls
@@ -34,14 +35,14 @@ define([
 
         /** @inheritdoc */
         _create: function () {
-            if (window.isToolbarLoaded) {
+            if (isToolbarInitialized) {
                 return;
             }
             this._bind($(this.options.modeControl), this.options.mode, this.options.modeDefault);
             this._bind($(this.options.directionControl), this.options.direction, this.options.directionDefault);
             this._bind($(this.options.orderControl), this.options.order, this.options.orderDefault);
             this._bind($(this.options.limitControl), this.options.limit, this.options.limitDefault);
-            window.isToolbarLoaded = true;
+            isToolbarInitialized = true;
         },
 
         /** @inheritdoc */
