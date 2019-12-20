@@ -1320,13 +1320,11 @@ XMLAuth;
             ? $this->configHelper->getCode('originShipment', $origin)
             : $this->configHelper->getCode('method');
 
-        $filteredMethods = array_filter($availableByTypeMethods, function ($methodCode) use ($allowedMethods) {
-            return in_array($methodCode, $allowedMethods);
-        }, ARRAY_FILTER_USE_KEY);
-
         $methods = [];
-        foreach ($filteredMethods as $methodCode => $methodData) {
-            $methods[$methodCode] = $methodData->getText();
+        foreach ($availableByTypeMethods as $methodCode => $methodData) {
+            if (in_array($methodCode, $allowedMethods)) {
+                $methods[$methodCode] = $methodData->getText();
+            }
         }
 
         return $methods;
