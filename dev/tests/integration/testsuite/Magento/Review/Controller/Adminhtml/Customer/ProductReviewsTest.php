@@ -26,6 +26,6 @@ class ProductReviewsTest extends AbstractBackendController
         $this->getRequest()->setPostValue(['id' => 1])->setMethod(Http::METHOD_POST);
         $this->dispatch('backend/review/customer/productReviews');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="reviwGrid"', $body);
+        $this->assertContains('<div id="reviewGrid"', $body);
     }
 }

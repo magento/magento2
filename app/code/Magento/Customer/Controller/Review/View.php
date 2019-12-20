@@ -6,7 +6,7 @@
  */
 namespace Magento\Customer\Controller\Review;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Customer\Controller\Review;
 
 /**
  * Deprecated class which was in use as view page in Customer Account "My Product Reviews" tab.
@@ -14,6 +14,6 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
  * @deprecated Remove Customer module's dependency on Review. Non-used class.
  * @see \Magento\Review\Controller\Customer\View
  */
-class View extends \Magento\Customer\Controller\Review implements HttpGetActionInterface
+class View extends Review
 {
 }

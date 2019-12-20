@@ -7,17 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Review\Block\Adminhtml\Edit\Tab;
 
+use Magento\Review\Block\Adminhtml\Grid;
+
 /**
  * Review tab in adminhtml area.
  *
  * @api
  */
-class Reviews extends \Magento\Review\Block\Adminhtml\Grid
+class Reviews extends Grid
 {
     /**
      * Hide grid mass action elements.
      *
-     * @return \Magento\Review\Block\Adminhtml\Edit\Tab\Reviews
+     * @return Reviews
      */
     protected function _prepareMassaction()
     {
