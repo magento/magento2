@@ -30,22 +30,22 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderPage">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
             <argument name="customer" value="$simpleCustomer$"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProduct">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProduct">
             <argument name="product" value="$createSimpleProduct$"/>
         </actionGroup>
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
             <argument name="customer" value="$simpleCustomer$"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
-        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
-        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
         <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipment"/>
         <actionGroup ref="submitShipmentIntoOrder" stepKey="submitShipment"/>
 

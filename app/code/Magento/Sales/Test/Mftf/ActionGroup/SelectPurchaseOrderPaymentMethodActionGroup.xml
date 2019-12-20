@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SelectPurchaseOrderPaymentMethodActionGroup" extends="SelectCheckMoneyPaymentMethodActionGroup">
+        <arguments>
+            <argument name="purchaseOrderNumber" type="string"/>
+        </arguments>
+        <remove keyForRemoval="checkCheckMoneyOption"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkPurchaseOrder}}" dependentSelector="{{AdminOrderFormPaymentSection.checkPurchaseOrder}}" visible="true" stepKey="checkPurchaseOrderOption" after="waitForPaymentOptions"/>
+        <fillField selector="{{AdminOrderFormPaymentSection.fieldPurchaseOrderNumber}}" userInput="{{purchaseOrderNumber}}" stepKey="fillPurchaseOrderNumber"/>
+    </actionGroup>
+</actionGroups>

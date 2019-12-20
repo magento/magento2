@@ -40,12 +40,12 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Step 1: Login as a Customer with remember me checked-->
-        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeChecked" stepKey="loginToStorefrontAccountWithRememberMeChecked">
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeCheckedActionGroup" stepKey="loginToStorefrontAccountWithRememberMeChecked">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!--Step 2: Open the Product Page and add the product to shopping cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsLoggedUser"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCartAsLoggedUser">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartAsLoggedUser">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <!--Step 3: Log out, reset persistent cookie and go to homepage-->
@@ -56,10 +56,10 @@
         <waitForPageLoad stepKey="waitHomePageLoadAfterResetCookie"/>
         <!--Step 4: Add the product to shopping cart and open cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsGuestUser"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCartAsGuestUser">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartAsGuestUser">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartBeforeChangeShippingAndTaxSection"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartBeforeChangeShippingAndTaxSection"/>
         <!--Step 5: Open Estimate Shipping and Tax block and fill the sections-->
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTax" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
@@ -69,7 +69,7 @@
         <!--Step 6: Go to Homepage-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePageAfterChangingShippingAndTaxSection"/>
         <!--Step 7: Go to shopping cart and check "Estimate Shipping and Tax" fields values are saved-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" after="goToHomePageAfterChangingShippingAndTaxSection" stepKey="goToShoppingCartAfterChangingShippingAndTaxSection"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" after="goToHomePageAfterChangingShippingAndTaxSection" stepKey="goToShoppingCartAfterChangingShippingAndTaxSection"/>
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTaxAfterChanging" />
         <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry" />
         <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion" />
