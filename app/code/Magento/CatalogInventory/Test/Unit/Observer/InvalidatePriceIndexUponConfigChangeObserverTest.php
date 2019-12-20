@@ -13,6 +13,7 @@ use Magento\CatalogInventory\Observer\InvalidatePriceIndexUponConfigChangeObserv
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,6 +54,7 @@ class InvalidatePriceIndexUponConfigChangeObserverTest extends TestCase
      */
     public function setUp()
     {
+        $objectManager = new ObjectManager($this);
         $this->priceIndexProcessorMock = $this->createMock(Processor::class);
         $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
@@ -62,8 +64,11 @@ class InvalidatePriceIndexUponConfigChangeObserverTest extends TestCase
             ->setMethods(['getChangedPaths'])
             ->getMock();
 
-        $this->observer = new InvalidatePriceIndexUponConfigChangeObserver(
-            $this->priceIndexProcessorMock
+        $this->observer = $objectManager->getObject(
+            InvalidatePriceIndexUponConfigChangeObserver::class,
+            [
+                'priceIndexProcessor' => $this->priceIndexProcessorMock
+            ]
         );
     }
 
