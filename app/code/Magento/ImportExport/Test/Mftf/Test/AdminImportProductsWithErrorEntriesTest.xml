@@ -25,7 +25,7 @@
             <!--Clear products grid filters-->
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
             <!--Delete all imported products-->
-            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
             <!--Logout from Admin page-->
             <actionGroup ref="logout" stepKey="logoutFromAdminPage"/>
         </after>
