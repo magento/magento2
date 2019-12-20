@@ -12,7 +12,8 @@ use Magento\Framework\App\RequestSafetyInterface;
 /**
  * Class Visitor
  *
- * @package Magento\Customer\Model
+ *  Used to track sessions of the logged in customers
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
