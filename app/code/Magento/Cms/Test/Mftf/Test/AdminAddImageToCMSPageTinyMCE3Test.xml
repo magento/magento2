@@ -47,13 +47,13 @@
         <click selector="{{MediaGallerySection.browseForImage}}" stepKey="clickBrowse"/>
         <switchToIFrame stepKey="switchOutOfIFrame"/>
         <waitForPageLoad stepKey="waitForPageToLoad" />
-        <actionGroup ref="CreateImageFolder" stepKey="CreateImageFolder">
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
             <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
-        <actionGroup ref="attachImage" stepKey="attachImage1">
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage1">
             <argument name="Image" value="ImageUpload"/>
         </actionGroup>
-        <actionGroup ref="saveImage" stepKey="insertImage"/>
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
         <!-- Switching back to the Edit/Insert Image iFrame-->
         <comment userInput="switching back to iFrame" stepKey="switchBackToIFrame"/>
         <executeJS function="document.querySelector('.clearlooks2 iframe').setAttribute('name', 'insert-image');" stepKey="makeIFrameInteractable2"/>

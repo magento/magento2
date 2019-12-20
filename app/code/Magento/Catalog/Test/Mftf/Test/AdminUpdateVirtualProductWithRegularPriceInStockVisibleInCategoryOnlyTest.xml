@@ -28,7 +28,7 @@
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
         </before>
         <after>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="updateVirtualProductRegularPrice"/>
             </actionGroup>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
