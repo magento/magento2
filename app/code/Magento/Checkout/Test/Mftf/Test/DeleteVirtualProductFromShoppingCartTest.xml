@@ -33,7 +33,7 @@
         <!-- Add virtual product to the cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartVirtualProductFromStorefrontProductPage">
             <argument name="productName" value="$$createVirtualProduct.name$$"/>
         </actionGroup>
 
