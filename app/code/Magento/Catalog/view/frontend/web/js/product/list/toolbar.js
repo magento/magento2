@@ -8,7 +8,8 @@ define([
     'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
-        var isToolbarInitialized = false;
+
+    var isToolbarInitialized = false;
 
     /**
      * ProductListToolbarForm Widget - this widget is setting cookie and submitting form according to toolbar controls
