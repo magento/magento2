@@ -7,30 +7,20 @@ declare(strict_types=1);
 
 namespace Example\ExamplePlugins\Plugin\Block\Input;
 
-/**
- * Class modifies message
- * @package Example\ExamplePlugins\Plugin\Block\Input
- */
-class AddPrefix
-{
-    /**
-     * Add "prefix_"
-     * @param $result
-     * @return array
-     */
-    public function beforeGetMessageData($result): array
-    {
-        $message = "prefix_" . $result->getMessage();
-        $result->setMessage($message);
-        return [];
-    }
+use Example\ExampleFrontendUi\Block\Input\Index;
 
+/**
+ * Wrap tags with output
+ */
+class WrapTagsToOutputPlugin
+{
     /**
      * Wrap string into <h1> tags </h1>
      *
-     * @param $subject
-     * @param $proceed
+     * @param Index $subject
+     * @param \Closure $proceed
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetMessageData($subject, $proceed): string
     {

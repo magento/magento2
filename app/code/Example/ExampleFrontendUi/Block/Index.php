@@ -15,7 +15,10 @@ use Magento\Framework\View\Element\Template;
  */
 class Index extends Template
 {
-    protected $message;
+    /**
+     * @var WelcomeMessageInterface
+     */
+    private $message;
 
     /**
      * @param Template\Context $context
@@ -32,7 +35,7 @@ class Index extends Template
     }
 
     /**
-     * Get Welcome message
+     * Get Welcome message.
      *
      * @return string
      */

@@ -7,17 +7,19 @@ declare(strict_types=1);
 
 namespace Example\ExamplePlugins\Plugin\Block\Input;
 
+use Example\ExampleFrontendUi\Block\Input\Index;
+
 /**
  * Class modifies message
- * @package Example\ExamplePlugins\Plugin\Block\Input
  */
-class AddSuffix
+class AddSuffixToOutputPlugin
 {
     /**
      * Add "_suffix"
      *
-     * @param $result
+     * @param Index $result
      * @return string
+     * @SuppressWarnings("PMD.UnusedFormalParameter")
      */
     public function afterGetMessageData($result): string
     {

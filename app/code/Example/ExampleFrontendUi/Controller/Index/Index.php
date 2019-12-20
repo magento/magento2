@@ -1,7 +1,5 @@
 <?php
 /**
- * Helloworld controller.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -17,7 +15,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
- *  Helloworld page controller index
+ *  Welcome massage controller.
  */
 class Index extends Action implements HttpGetActionInterface
 {
@@ -26,6 +24,10 @@ class Index extends Action implements HttpGetActionInterface
      */
     private $pageFactory;
 
+    /**
+     * @param Context $context
+     * @param PageFactory $pageFactory
+     */
     public function __construct(
         Context $context,
         PageFactory $pageFactory
@@ -35,7 +37,7 @@ class Index extends Action implements HttpGetActionInterface
     }
 
     /**
-     * Index action
+     * Create welcome message page.
      *
      * @return ResponseInterface|ResultInterface|PageFactory
      */

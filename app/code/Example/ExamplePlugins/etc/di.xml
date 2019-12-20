@@ -7,7 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
         <type name="Example\ExampleFrontendUi\Block\Input\Index">
-            <plugin name="before_around_message" type="Example\ExamplePlugins\Plugin\Block\Input\AddPrefix" sortOrder="10" disabled="false" />
-            <plugin name="after_message" type="Example\ExamplePlugins\Plugin\Block\Input\AddSuffix" sortOrder="20" disabled="false" />
+            <plugin name="add_prefix_to_output" type="Example\ExamplePlugins\Plugin\Block\Input\AddPrefixToOutputPlugin" disabled="false" />
+            <plugin name="wrap_tags_to_output" type="Example\ExamplePlugins\Plugin\Block\Input\WrapTagsToOutputPlugin" disabled="false" />
+            <plugin name="add_sufix_to_output" type="Example\ExamplePlugins\Plugin\Block\Input\AddSuffixToOutputPlugin" disabled="false" />
         </type>
 </config>

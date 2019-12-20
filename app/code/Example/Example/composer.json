@@ -1,0 +1,17 @@
+{
+    "name": "example/example",
+    "description": "Configure services for the output message",
+    "require": {
+        "example/exampleapi": "*"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Example\\Example\\": ""
+        }
+    }
+}
