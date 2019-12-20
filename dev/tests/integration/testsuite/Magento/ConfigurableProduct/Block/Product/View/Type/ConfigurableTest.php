@@ -153,14 +153,14 @@ class ConfigurableTest extends TestCase
      * @param array $expectedData
      * @return void
      */
-    protected function assertConfig(array $data, array $expectedData): void
+    private function assertConfig(array $data, array $expectedData): void
     {
         $this->assertEquals($expectedData['label'], $data['label']);
         foreach ($expectedData['options'] as $expectedOption) {
             $found = false;
             foreach ($data['options'] as $option) {
-                $expectedProductId = $this->productRepository->get($expectedOption['sku'])->getId();
                 if ($option['label'] === $expectedOption['label']) {
+                    $expectedProductId = $this->productRepository->get($expectedOption['sku'])->getId();
                     $this->assertEquals(
                         [$expectedProductId],
                         $option['products'],

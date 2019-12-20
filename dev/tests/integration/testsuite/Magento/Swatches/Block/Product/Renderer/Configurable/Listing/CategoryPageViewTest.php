@@ -41,12 +41,8 @@ class CategoryPageViewTest extends ProductPageViewTest
     public function testCategoryPageVisualSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->setAttributeUsedInProductListing('visual_swatch_attribute');
-        $product = $this->productRepository->get('configurable');
-        $this->block->setProduct($product);
         $result = $this->generateBlockJsonConfigData();
-        $this->checkResultIsNotEmpty($result);
-        $this->assertConfig($result['json_config'], $expectedConfig);
-        $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
+        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
     }
 
     /**
@@ -61,12 +57,8 @@ class CategoryPageViewTest extends ProductPageViewTest
     public function testCategoryPageTextSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->setAttributeUsedInProductListing('text_swatch_attribute');
-        $product = $this->productRepository->get('configurable');
-        $this->block->setProduct($product);
         $result = $this->generateBlockJsonConfigData();
-        $this->checkResultIsNotEmpty($result);
-        $this->assertConfig($result['json_config'], $expectedConfig);
-        $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
+        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
     }
 
     /**
@@ -82,12 +74,8 @@ class CategoryPageViewTest extends ProductPageViewTest
     {
         $this->setAttributeUsedInProductListing('visual_swatch_attribute');
         $this->setAttributeUsedInProductListing('text_swatch_attribute');
-        $product = $this->productRepository->get('configurable');
-        $this->block->setProduct($product);
         $result = $this->generateBlockJsonConfigData();
-        $this->checkResultIsNotEmpty($result);
-        $this->assertConfig($result['json_config'], $expectedConfig);
-        $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
+        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
     }
 
     /**

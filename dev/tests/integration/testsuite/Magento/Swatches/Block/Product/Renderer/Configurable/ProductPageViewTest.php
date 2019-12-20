@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Block\Product\Renderer\Configurable;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -40,17 +39,20 @@ class ProductPageViewTest extends TestCase
     /** @var ProductAttributeRepositoryInterface */
     protected $productAttributeRepository;
 
-    /** @var ProductRepositoryInterface */
-    protected $productRepository;
-
     /** @var LayoutInterface */
     protected $layout;
+
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
 
     /** @var Registry */
     private $registry;
 
     /** @var SerializerInterface */
     private $json;
+
+    /** @var ProductResource */
+    private $productResource;
 
     /**
      * @inheritdoc
@@ -66,21 +68,11 @@ class ProductPageViewTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->productAttributeRepository = $this->objectManager->create(ProductAttributeRepositoryInterface::class);
+        $this->productResource = $this->objectManager->create(ProductResource::class);
         $this->template = Configurable::SWATCH_RENDERER_TEMPLATE;
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        $this->registry->unregister('product');
-
-        parent::tearDown();
-    }
-
-    /**
-     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_text_swatch_attribute.php
      *
      * @dataProvider expectedTextSwatchDataProvider
@@ -91,12 +83,8 @@ class ProductPageViewTest extends TestCase
      */
     public function testProductPageTextSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $product = $this->productRepository->get('configurable');
-        $this->registerProduct($product);
         $result = $this->generateBlockJsonConfigData();
-        $this->checkResultIsNotEmpty($result);
-        $this->assertConfig($result['json_config'], $expectedConfig);
-        $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
+        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
     }
 
     /**
@@ -152,12 +140,8 @@ class ProductPageViewTest extends TestCase
      */
     public function testProductPageVisualSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $product = $this->productRepository->get('configurable');
-        $this->registerProduct($product);
         $result = $this->generateBlockJsonConfigData();
-        $this->checkResultIsNotEmpty($result);
-        $this->assertConfig($result['json_config'], $expectedConfig);
-        $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
+        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
     }
 
     /**
@@ -212,12 +196,8 @@ class ProductPageViewTest extends TestCase
      */
     public function testProductPageTwoAttributesView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $product = $this->productRepository->get('configurable');
-        $this->registerProduct($product);
         $result = $this->generateBlockJsonConfigData();
-        $this->checkResultIsNotEmpty($result);
-        $this->assertConfig($result['json_config'], $expectedConfig);
-        $this->assertSwatchConfig($result['json_swatch_config'], $expectedSwatchConfig);
+        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
     }
 
     /**
@@ -338,11 +318,28 @@ class ProductPageViewTest extends TestCase
      */
     protected function generateBlockJsonConfigData(): array
     {
+        $product = $this->productRepository->get('configurable');
+        $this->block->setProduct($product);
         $this->block->setTemplate($this->template);
         $jsonConfig = $this->json->unserialize($this->block->getJsonConfig())['attributes'] ?? null;
         $jsonSwatchConfig = $this->json->unserialize($this->block->getJsonSwatchConfig());
 
         return ['json_config' => $jsonConfig, 'json_swatch_config' => $jsonSwatchConfig];
+    }
+
+    /**
+     * Process test asserts
+     *
+     * @param $actualConfig
+     * @param $expectedConfig
+     * @param $expectedSwatchConfig
+     * @return void
+     */
+    protected function processAssert($actualConfig, $expectedConfig, $expectedSwatchConfig): void
+    {
+        $this->checkResultIsNotEmpty($actualConfig);
+        $this->assertConfig($actualConfig['json_config'], $expectedConfig);
+        $this->assertSwatchConfig($actualConfig['json_swatch_config'], $expectedSwatchConfig);
     }
 
     /**
@@ -352,7 +349,7 @@ class ProductPageViewTest extends TestCase
      * @param array $expectedData
      * @return void
      */
-    protected function assertSwatchConfig(array $actualData, array $expectedData): void
+    private function assertSwatchConfig(array $actualData, array $expectedData): void
     {
         foreach ($actualData as $actualDataItem) {
             $currentType = $this->json->unserialize($actualDataItem['additional_data'])['swatch_input_type'] ?? null;
@@ -372,11 +369,11 @@ class ProductPageViewTest extends TestCase
      * @param array $expectedData
      * @return void
      */
-    protected function assertConfig(array $actualData, array $expectedData): void
+    private function assertConfig(array $actualData, array $expectedData): void
     {
         foreach ($actualData as $actualDataItem) {
             $expectedItem = $expectedData[$actualDataItem['code']];
-            $this->assertEquals($expectedData[$actualDataItem['code']]['label'], $actualDataItem['label']);
+            $this->assertEquals($expectedItem['label'], $actualDataItem['label']);
             $this->checkOptions($actualDataItem, $expectedItem);
         }
     }
@@ -386,7 +383,7 @@ class ProductPageViewTest extends TestCase
      *
      * @param array $result
      */
-    protected function checkResultIsNotEmpty(array $result): void
+    private function checkResultIsNotEmpty(array $result): void
     {
         foreach ($result as $item) {
             $this->assertNotNull($item);
@@ -404,26 +401,10 @@ class ProductPageViewTest extends TestCase
     {
         $productIds = [];
         foreach ($skus as $sku) {
-            try {
-                $productIds[] = $this->productRepository->get($sku)->getId();
-            } catch (NoSuchEntityException $e) {
-                $this->fail(sprintf('The product with sku %s was not created', $sku));
-            }
+            $productIds[] = $this->productResource->getIdBySku($sku);
         }
 
         return $productIds;
-    }
-
-    /**
-     * Register product
-     *
-     * @param ProductInterface $product
-     * @return void
-     */
-    private function registerProduct(ProductInterface $product): void
-    {
-        $this->registry->unregister('product');
-        $this->registry->register('product', $product);
     }
 
     /**

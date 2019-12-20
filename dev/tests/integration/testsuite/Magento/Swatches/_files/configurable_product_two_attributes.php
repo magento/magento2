@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -30,7 +31,7 @@ $secondAttribute = $productAttributeRepository->get('visual_swatch_attribute');
 $options = $attribute->getOptions();
 $secondAttributeOptions = $secondAttribute->getOptions();
 /** @var WebsiteRepositoryInterface $websiteRepository */
-$websiteRepository = $objectManager->create(WebsiteRepositoryInterface::class);
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
 /** @var ProductAttributeRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
@@ -82,7 +83,7 @@ foreach ($secondAttributeOptions as $secondAttrOption) {
 }
 
 $allAttributes = [$attribute, $secondAttribute];
-$optionsFactory = $objectManager->create(Factory::class);
+$optionsFactory = $objectManager->get(Factory::class);
 
 foreach ($allAttributes as $attribute) {
     $configurableAttributesData[] =
@@ -99,8 +100,10 @@ foreach ($allAttributes as $attribute) {
 }
 
 $configurableOptions = $optionsFactory->create($configurableAttributesData);
-$product = $objectManager->create(Product::class);
-$extensionConfigurableAttributes = $product->getExtensionAttributes();
+$product = $productFactory->create();
+/** @var ProductExtensionFactory $extensionAttributesFactory */
+$extensionAttributesFactory = $objectManager->get(ProductExtensionFactory::class);
+$extensionConfigurableAttributes = $product->getExtensionAttributes() ?: $extensionAttributesFactory->create();
 $extensionConfigurableAttributes->setConfigurableProductOptions($configurableOptions);
 $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProductIds);
 $product->setExtensionAttributes($extensionConfigurableAttributes);
