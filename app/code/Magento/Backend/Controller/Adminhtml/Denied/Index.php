@@ -15,7 +15,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
  */
 class Index extends Denied implements HttpGet, HttpPost
 {
-
     /**
      * Check if user has permissions to access this controller
      *

@@ -22,12 +22,12 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
             <!--Create user role-->
-            <actionGroup ref="AdminFillUserRoleRequiredData" stepKey="fillUserRoleRequiredData">
+            <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
                 <argument name="User" value="adminRole"/>
                 <argument name="restrictedRole" value="Media Gallery"/>
             </actionGroup>
             <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
-            <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleStores">
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleStores">
                 <argument name="User" value="adminRole"/>
                 <argument name="restrictedRole" value="Media Gallery"/>
             </actionGroup>
