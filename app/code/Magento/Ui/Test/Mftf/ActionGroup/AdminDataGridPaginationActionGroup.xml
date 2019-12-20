@@ -21,6 +21,10 @@
         <waitForPageLoad stepKey="waitForGridLoad"/>
     </actionGroup>
 
+    <!--
+    NOTICE: adminDataGridSelectCustomPerPage is deprecated.
+            Please use AdminDataGridSelectCustomPerPageActionGroup instead.
+    -->
     <actionGroup name="adminDataGridSelectCustomPerPage">
         <annotations>
             <description>Sets the provided custom 'per page' display setting on an Admin Grid page.</description>
