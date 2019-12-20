@@ -208,6 +208,10 @@
         <seeInTitle userInput="{{product.name}}" stepKey="seeProductNameInTitle"/>
     </actionGroup>
 
+    <!--
+    NOTICE: generateConfigurationsByAttributeCode is deprecated.
+            Please use GenerateConfigurationsByAttributeCodeActionGroup instead.
+    -->
     <actionGroup name="generateConfigurationsByAttributeCode">
         <annotations>
             <description>Generates the Product Configurations for the provided Attribute Code on the Configurable Product creation/edit page.</description>
