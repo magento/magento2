@@ -318,7 +318,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      *
      * @param int $wishlistId
      * @param \Magento\Framework\View\Result\Layout $resultLayout
-     * @return mixed
      */
     protected function getRssLink($wishlistId, ResultLayout $resultLayout)
     {
