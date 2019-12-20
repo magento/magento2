@@ -47,7 +47,7 @@
                 <argument name="customStore" value="SecondStoreUnique"/>
             </actionGroup>
             <!--Save the updated Store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
             </actionGroup>
 
             <!--Search updated store view in grid and verify AssertStoreViewInGridMessage-->

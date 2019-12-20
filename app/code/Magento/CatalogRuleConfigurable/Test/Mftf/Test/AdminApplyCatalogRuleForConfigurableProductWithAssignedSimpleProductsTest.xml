@@ -178,7 +178,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Create price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createPriceRule">
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
         </actionGroup>
         <actionGroup ref="CatalogSelectCustomerGroupActionGroup" stepKey="addCustomerGroup">
