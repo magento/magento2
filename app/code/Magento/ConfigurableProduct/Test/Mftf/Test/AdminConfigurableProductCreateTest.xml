@@ -30,7 +30,7 @@
         </after>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
@@ -130,7 +130,7 @@
         <click selector="{{DropdownAttributeOptionsSection.deleteButton(1)}}" stepKey="deleteOption"/>
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid2"/>
-        <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+        <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="$grabTextFromContent"/>
         </actionGroup>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
