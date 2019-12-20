@@ -11,20 +11,22 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
+/** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-foreach (['simple_1','simple_2','simple_1_1','simple_1_2', 'simple_2_1','simple_2_2', 'configurable'] as $sku) {
+foreach (['simple_1', 'configurable'] as $sku) {
     try {
-        $product = $productRepository->get($sku, false, null, true);
+        $product = $productRepository->get($sku);
         $productRepository->delete($product);
     } catch (NoSuchEntityException $e) {
         //Product already removed
     }
 }
 
-require __DIR__ . '/configurable_attribute_rollback.php';
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+require __DIR__ . '/configurable_attribute_rollback.php';

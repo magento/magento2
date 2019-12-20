@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
@@ -12,18 +13,28 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/configurable_attribute.php';
 $objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-$productFactory = $objectManager->create(ProductFactory::class);
-$optionsFactory = $objectManager->create(Factory::class);
+/** @var ProductFactory $productFactory */
+$productFactory = $objectManager->get(ProductFactory::class);
+/** @var Factory $optionsFactory */
+$optionsFactory = $objectManager->get(Factory::class);
+/** @var  ProductExtensionInterfaceFactory $productExtensionAttributes */
+$productExtensionAttributesFactory = $objectManager->get(ProductExtensionInterfaceFactory::class);
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->create(WebsiteRepositoryInterface::class);
+$defaultWebsiteId = $websiteRepository->get('base')->getId();
 
 $option = $attribute->getSource()->getOptionId('Option 1');
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
+    ->setWebsiteIds([$defaultWebsiteId])
     ->setName('Configurable Option 1')
     ->setSku('simple_1')
     ->setPrice(10.00)
@@ -44,7 +55,7 @@ $configurableOptions = $optionsFactory->create(
         ],
     ]
 );
-$extensionConfigurableAttributes = $product->getExtensionAttributes();
+$extensionConfigurableAttributes = $product->getExtensionAttributes() ?: $productExtensionAttributesFactory->create();
 $extensionConfigurableAttributes->setConfigurableProductOptions($configurableOptions);
 $extensionConfigurableAttributes->setConfigurableProductLinks([$product->getId()]);
 
@@ -52,7 +63,7 @@ $configurableProduct = $productFactory->create();
 $configurableProduct->setExtensionAttributes($extensionConfigurableAttributes);
 $configurableProduct->setTypeId(Configurable::TYPE_CODE)
     ->setAttributeSetId($configurableProduct->getDefaultAttributeSetId())
-    ->setWebsiteIds([1])
+    ->setWebsiteIds([$defaultWebsiteId])
     ->setName('Configurable Product')
     ->setSku('configurable')
     ->setVisibility(Visibility::VISIBILITY_BOTH)

@@ -17,9 +17,10 @@ use Magento\Catalog\Model\Product\Type\Virtual;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -27,7 +28,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
- * @magentoDbIsolation disabled
+ * @magentoDbIsolation enabled
  */
 class ProductTest extends AbstractBackendController
 {
@@ -39,7 +40,7 @@ class ProductTest extends AbstractBackendController
     /**
      * @var ProductAttributeRepositoryInterface
      */
-    private $attributeRepository;
+    private $productAttributeRepository;
 
     /**
      * @var Registry
@@ -47,7 +48,7 @@ class ProductTest extends AbstractBackendController
     private $registry;
 
     /**
-     * @var Json
+     * @var SerializerInterface
      */
     private $jsonSerializer;
 
@@ -63,9 +64,9 @@ class ProductTest extends AbstractBackendController
     {
         parent::setUp();
         $this->productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
-        $this->attributeRepository = $this->_objectManager->create(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository = $this->_objectManager->create(ProductAttributeRepositoryInterface::class);
         $this->registry = $this->_objectManager->get(Registry::class);
-        $this->jsonSerializer = $this->_objectManager->get(Json::class);
+        $this->jsonSerializer = $this->_objectManager->get(SerializerInterface::class);
         $this->eavConfig = $this->_objectManager->get(Config::class);
     }
 
@@ -86,7 +87,7 @@ class ProductTest extends AbstractBackendController
             ]
         );
         $this->dispatch('backend/catalog/product/save');
-        $this->assertSessionMessages($this->equalTo(['You saved the product.']), MessageInterface::TYPE_SUCCESS);
+        $this->assertSessionMessages($this->equalTo([__('You saved the product.')]), MessageInterface::TYPE_SUCCESS);
         $this->assertRegistryConfigurableLinks($associatedProductIds);
         $this->assertConfigurableLinks('configurable', $associatedProductIds);
     }
@@ -101,10 +102,11 @@ class ProductTest extends AbstractBackendController
     {
         $this->serRequestParams($childProducts);
         $this->dispatch('backend/catalog/product/save');
-        $this->assertSessionMessages($this->equalTo(['You saved the product.']), MessageInterface::TYPE_SUCCESS);
+        $this->assertSessionMessages($this->equalTo([__('You saved the product.')]), MessageInterface::TYPE_SUCCESS);
         $this->assertChildProducts($childProducts);
         $this->assertConfigurableOptions('configurable', $childProducts);
         $this->assertConfigurableLinks('configurable', $this->getProductIds(array_keys($childProducts)));
+        $this->deleteProducts(array_merge(array_keys($childProducts), ['configurable']));
     }
 
     /**
@@ -174,6 +176,7 @@ class ProductTest extends AbstractBackendController
             'configurable',
             $this->getProductIds(array_merge($associatedProducts, array_keys($childProducts)))
         );
+        $this->deleteProducts(array_merge($associatedProducts, array_keys($childProducts)));
     }
 
     /**
@@ -483,11 +486,11 @@ class ProductTest extends AbstractBackendController
      */
     private function getAttribute(string $attributeCode): ProductAttributeInterface
     {
-        return $this->attributeRepository->get($attributeCode);
+        return $this->productAttributeRepository->get($attributeCode);
     }
 
     /**
-     * Returns product ids by sku list.
+     * Returns products by sku list.
      *
      * @param array $skuList
      * @return ProductInterface[]
@@ -516,5 +519,26 @@ class ProductTest extends AbstractBackendController
         }
 
         return $associatedProductIds;
+    }
+
+    /**
+     * @param array $skuList
+     * @return void
+     */
+    private function deleteProducts(array $skuList): void
+    {
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
+        foreach ($skuList as $sku) {
+            try {
+                $product = $this->productRepository->get($sku, false, null, true);
+                $this->productRepository->delete($product);
+            } catch (NoSuchEntityException $e) {
+                //Product already removed
+            }
+        }
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
     }
 }
