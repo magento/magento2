@@ -63,7 +63,8 @@ class ProductTest extends AbstractBackendController
     protected function setUp()
     {
         parent::setUp();
-        $this->productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->productAttributeRepository = $this->_objectManager->create(ProductAttributeRepositoryInterface::class);
         $this->registry = $this->_objectManager->get(Registry::class);
         $this->jsonSerializer = $this->_objectManager->get(SerializerInterface::class);
@@ -106,7 +107,6 @@ class ProductTest extends AbstractBackendController
         $this->assertChildProducts($childProducts);
         $this->assertConfigurableOptions('configurable', $childProducts);
         $this->assertConfigurableLinks('configurable', $this->getProductIds(array_keys($childProducts)));
-        $this->deleteProducts(array_merge(array_keys($childProducts), ['configurable']));
     }
 
     /**
@@ -157,7 +157,7 @@ class ProductTest extends AbstractBackendController
     }
 
     /**
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_one_simple.php
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_one_simple.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute_2.php
      * @dataProvider saveExistProductDataProvider
      * @param array $childProducts
@@ -176,7 +176,6 @@ class ProductTest extends AbstractBackendController
             'configurable',
             $this->getProductIds(array_merge($associatedProducts, array_keys($childProducts)))
         );
-        $this->deleteProducts(array_merge($associatedProducts, array_keys($childProducts)));
     }
 
     /**
@@ -323,6 +322,7 @@ class ProductTest extends AbstractBackendController
     private function assertRegistryConfigurableLinks(array $associatedProductIds): void
     {
         $product = $this->registry->registry('current_product');
+        $this->assertNotNull($product);
         $this->assertEquals(
             $associatedProductIds,
             array_values($product->getExtensionAttributes()->getConfigurableProductLinks() ?: []),
@@ -343,7 +343,7 @@ class ProductTest extends AbstractBackendController
             $this->assertEquals($expectedProduct['price'], $product->getPrice());
 
             if (!empty($expectedProduct['weight'])) {
-                $this->assertEquals($expectedProduct['weight'], (int)$product->getWeight());
+                $this->assertEquals($expectedProduct['weight'], (double)$product->getWeight());
                 $this->assertInstanceOf(Simple::class, $product->getTypeInstance());
             } else {
                 $this->assertInstanceOf(Virtual::class, $product->getTypeInstance());
@@ -519,26 +519,5 @@ class ProductTest extends AbstractBackendController
         }
 
         return $associatedProductIds;
-    }
-
-    /**
-     * @param array $skuList
-     * @return void
-     */
-    private function deleteProducts(array $skuList): void
-    {
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', true);
-
-        foreach ($skuList as $sku) {
-            try {
-                $product = $this->productRepository->get($sku, false, null, true);
-                $this->productRepository->delete($product);
-            } catch (NoSuchEntityException $e) {
-                //Product already removed
-            }
-        }
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', false);
     }
 }

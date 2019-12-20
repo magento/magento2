@@ -27,7 +27,7 @@ $optionsFactory = $objectManager->get(Factory::class);
 /** @var  ProductExtensionInterfaceFactory $productExtensionAttributes */
 $productExtensionAttributesFactory = $objectManager->get(ProductExtensionInterfaceFactory::class);
 /** @var WebsiteRepositoryInterface $websiteRepository */
-$websiteRepository = $objectManager->create(WebsiteRepositoryInterface::class);
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $defaultWebsiteId = $websiteRepository->get('base')->getId();
 
 $option = $attribute->getSource()->getOptionId('Option 1');
