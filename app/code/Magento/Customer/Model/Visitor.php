@@ -173,7 +173,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         if ($this->requestSafety->isSafeMethod()) {
             return $this;
         }
-        
+
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
@@ -199,6 +199,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         }
 
         try {
+            if ($this->session->getSessionId() && $this->getSessionId() != $this->session->getSessionId()) {
+                $this->setSessionId($this->session->getSessionId());
+            }
             $this->save();
             $this->_eventManager->dispatch('visitor_activity_save', ['visitor' => $this]);
             $this->session->setVisitorData($this->getData());
