@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 require __DIR__ . '/configurable_attribute.php';
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductFactory $productFactory */
 $productFactory = $objectManager->get(ProductFactory::class);
 /** @var Factory $optionsFactory */
