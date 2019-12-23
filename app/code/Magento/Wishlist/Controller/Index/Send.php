@@ -203,7 +203,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
                 $error = __('Please enter an email address.');
             } else {
                 if (count($emails) > $emailsLeft) {
-                    $error = __('Maximum of %1 Emails can be Sent.', $emailsLeft);
+                    $error = __('Maximum of %1 emails can be sent.', $emailsLeft);
                 } else {
                     foreach ($emails as $index => $email) {
                         $email = trim($email);
