@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckCustomizableOptionImportActionGroup">
+        <annotations>
+            <description>Validate that the Custom Product Option Import value is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="option" defaultValue="ProductOptionField"/>
+            <argument name="optionIndex" type="string"/>
+        </arguments>
+
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionTitleInput(optionIndex)}}" stepKey="grabOptionTitle"/>
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionPrice(optionIndex)}}" stepKey="grabOptionPrice"/>
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionSku(optionIndex)}}" stepKey="grabOptionSku"/>
+        <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionTitle" stepKey="assertOptionTitle"/>
+        <assertEquals expected="{{option.price}}" expectedType="string" actual="$grabOptionPrice" stepKey="assertOptionPrice"/>
+        <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionSku" stepKey="assertOptionSku"/>
+    </actionGroup>
+</actionGroups>
