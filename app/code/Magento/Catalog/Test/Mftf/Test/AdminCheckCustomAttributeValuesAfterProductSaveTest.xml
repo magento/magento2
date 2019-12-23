@@ -80,10 +80,12 @@
         <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertFirstAttributeOptionPresence">
             <argument name="attributeLabel" value="$createMultiSelectProductAttribute.attribute[frontend_labels][0][label]$"/>
             <argument name="attributeOptionLabel" value="$addFirstOptionToAttribute.option[store_labels][0][label]$"/>
+            <argument name="attributeOptionPosition" value="1"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertThirdAttributeOptionPresence">
             <argument name="attributeLabel" value="$createMultiSelectProductAttribute.attribute[frontend_labels][0][label]$"/>
             <argument name="attributeOptionLabel" value="$addThirdOptionToAttribute.option[store_labels][0][label]$"/>
+            <argument name="attributeOptionPosition" value="2"/>
         </actionGroup>
     </test>
 </tests>

@@ -15,11 +15,12 @@
         <arguments>
             <argument name="attributeLabel" type="string" defaultValue="{{ProductAttributeFrontendLabel.label}}"/>
             <argument name="attributeOptionLabel" type="string" defaultValue="{{Option1Store0.label}}"/>
+            <argument name="attributeOptionPosition" type="string" defaultValue="1"/>
         </arguments>
 
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(attributeLabel)}}" stepKey="waitForAttributeVisible"/>
         <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(attributeLabel)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandAttribute"/>
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" stepKey="waitForAttributeOptionsVisible"/>
-        <see selector="{{StorefrontCategorySidebarSection.activeFilterOptionItem}}" userInput="{{attributeOptionLabel}}" stepKey="assertAttributeOptionInLayeredNavigation"/>
+        <see selector="{{StorefrontCategorySidebarSection.activeFilterOptionItemByPosition(attributeOptionPosition)}}" userInput="{{attributeOptionLabel}}" stepKey="assertAttributeOptionInLayeredNavigation"/>
     </actionGroup>
 </actionGroups>
