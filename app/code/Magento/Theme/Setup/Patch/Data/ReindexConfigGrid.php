@@ -11,8 +11,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Theme\Model\Data\Design\Config;
 
 /**
- * Class ReindexConfigGrid
- * @package Magento\Theme\Setup\Patch
+ * Perform a full reindex to ensure the grid table exists
  */
 class ReindexConfigGrid implements DataPatchInterface
 {
@@ -38,6 +37,7 @@ class ReindexConfigGrid implements DataPatchInterface
     {
         $indexer = $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID);
         $indexer->reindexAll();
+        return $this;
     }
 
     /**

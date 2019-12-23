@@ -10,6 +10,9 @@ use Magento\Customer\Model\Customer;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
+/**
+ * Perform a full reindex to ensure the grid table exists
+ */
 class ReindexCustomerGrid implements DataPatchInterface
 {
     /**
@@ -34,6 +37,7 @@ class ReindexCustomerGrid implements DataPatchInterface
     {
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
+        return $this;
     }
 
     /**
