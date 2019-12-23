@@ -93,7 +93,7 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
                 'label' => __('Position'),
                 'title' => __('Position in Layered Navigation'),
                 'note' => __('Position of attribute in layered navigation block.'),
-                'class' => 'validate-digits'
+                'class' => 'integer'
             ]
         );
     }
