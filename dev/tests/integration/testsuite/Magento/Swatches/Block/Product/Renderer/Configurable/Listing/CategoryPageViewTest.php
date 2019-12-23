@@ -40,9 +40,7 @@ class CategoryPageViewTest extends ProductPageViewTest
      */
     public function testCategoryPageVisualSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $this->setAttributeUsedInProductListing('visual_swatch_attribute');
-        $result = $this->generateBlockJsonConfigData();
-        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
+        $this->checkProductViewCategoryPage($expectedConfig, $expectedSwatchConfig, ['visual_swatch_attribute']);
     }
 
     /**
@@ -56,9 +54,7 @@ class CategoryPageViewTest extends ProductPageViewTest
      */
     public function testCategoryPageTextSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $this->setAttributeUsedInProductListing('text_swatch_attribute');
-        $result = $this->generateBlockJsonConfigData();
-        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
+        $this->checkProductViewCategoryPage($expectedConfig, $expectedSwatchConfig, ['text_swatch_attribute']);
     }
 
     /**
@@ -72,22 +68,42 @@ class CategoryPageViewTest extends ProductPageViewTest
      */
     public function testCategoryPageTwoAttributesView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $this->setAttributeUsedInProductListing('visual_swatch_attribute');
-        $this->setAttributeUsedInProductListing('text_swatch_attribute');
-        $result = $this->generateBlockJsonConfigData();
-        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
+        $this->checkProductViewCategoryPage(
+            $expectedConfig,
+            $expectedSwatchConfig,
+            ['visual_swatch_attribute', 'text_swatch_attribute']
+        );
     }
 
     /**
-     * Set used in product listing attribute value to true
+     * Check configurable product view on category view page
      *
-     * @param string $attributeCode
+     * @param array $expectedConfig
+     * @param array $expectedSwatchConfig
+     * @param array $attributes
      * @return void
      */
-    private function setAttributeUsedInProductListing(string $attributeCode): void
+    private function checkProductViewCategoryPage(
+        array $expectedConfig,
+        array $expectedSwatchConfig,
+        array $attributes
+    ): void {
+        $this->setAttributeUsedInProductListing($attributes);
+        $this->checkProductView($expectedConfig, $expectedSwatchConfig);
+    }
+
+    /**
+     * Set used in product listing attributes value to true
+     *
+     * @param array $attributeCodes
+     * @return void
+     */
+    private function setAttributeUsedInProductListing(array $attributeCodes): void
     {
-        $attribute = $this->productAttributeRepository->get($attributeCode);
-        $attribute->setUsedInProductListing('1');
-        $this->productAttributeRepository->save($attribute);
+        foreach ($attributeCodes as $attributeCode) {
+            $attribute = $this->productAttributeRepository->get($attributeCode);
+            $attribute->setUsedInProductListing('1');
+            $this->productAttributeRepository->save($attribute);
+        }
     }
 }

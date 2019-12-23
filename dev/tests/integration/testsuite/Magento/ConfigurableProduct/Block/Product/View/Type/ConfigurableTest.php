@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -44,6 +45,9 @@ class ConfigurableTest extends TestCase
     /** @var SerializerInterface */
     private $json;
 
+    /** @var ProductResource */
+    private $productResource;
+
     /**
      * @inheritdoc
      */
@@ -56,6 +60,7 @@ class ConfigurableTest extends TestCase
         $this->block = $this->layout->createBlock(Configurable::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->block->setProduct($this->product);
+        $this->productResource = $this->objectManager->create(ProductResource::class);
     }
 
     /**
@@ -153,24 +158,21 @@ class ConfigurableTest extends TestCase
      * @param array $expectedData
      * @return void
      */
-    private function assertConfig(array $data, array $expectedData): void
+    private function assertConfig($data, $expectedData): void
     {
         $this->assertEquals($expectedData['label'], $data['label']);
-        foreach ($expectedData['options'] as $expectedOption) {
-            $found = false;
-            foreach ($data['options'] as $option) {
-                if ($option['label'] === $expectedOption['label']) {
-                    $expectedProductId = $this->productRepository->get($expectedOption['sku'])->getId();
-                    $this->assertEquals(
-                        [$expectedProductId],
-                        $option['products'],
-                        'Wrong product linked as option'
-                    );
-                    $found = true;
-                    break;
+        $skus = array_column($expectedData['options'], 'sku');
+        $idBySkuMap = $this->productResource->getProductsIdsBySkus($skus);
+        foreach ($expectedData['options'] as &$option) {
+            $sku = $option['sku'];
+            unset($option['sku']);
+            $option['products'] = [$idBySkuMap[$sku]];
+            foreach ($data['options'] as $actualOption) {
+                if ($option['label'] === $actualOption['label']) {
+                    unset($actualOption['id']);
+                    $this->assertEquals($option, $actualOption);
                 }
             }
-            $this->assertTrue($found);
         }
     }
 }

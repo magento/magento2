@@ -83,8 +83,7 @@ class ProductPageViewTest extends TestCase
      */
     public function testProductPageTextSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $result = $this->generateBlockJsonConfigData();
-        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
+        $this->checkProductView($expectedConfig, $expectedSwatchConfig);
     }
 
     /**
@@ -140,8 +139,7 @@ class ProductPageViewTest extends TestCase
      */
     public function testProductPageVisualSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $result = $this->generateBlockJsonConfigData();
-        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
+        $this->checkProductView($expectedConfig, $expectedSwatchConfig);
     }
 
     /**
@@ -196,8 +194,7 @@ class ProductPageViewTest extends TestCase
      */
     public function testProductPageTwoAttributesView(array $expectedConfig, array $expectedSwatchConfig): void
     {
-        $result = $this->generateBlockJsonConfigData();
-        $this->processAssert($result, $expectedConfig, $expectedSwatchConfig);
+        $this->checkProductView($expectedConfig, $expectedSwatchConfig);
     }
 
     /**
@@ -328,15 +325,15 @@ class ProductPageViewTest extends TestCase
     }
 
     /**
-     * Process test asserts
+     * Check configurable product view
      *
-     * @param $actualConfig
      * @param $expectedConfig
      * @param $expectedSwatchConfig
      * @return void
      */
-    protected function processAssert($actualConfig, $expectedConfig, $expectedSwatchConfig): void
+    protected function checkProductView($expectedConfig, $expectedSwatchConfig): void
     {
+        $actualConfig = $this->generateBlockJsonConfigData();
         $this->checkResultIsNotEmpty($actualConfig);
         $this->assertConfig($actualConfig['json_config'], $expectedConfig);
         $this->assertSwatchConfig($actualConfig['json_swatch_config'], $expectedSwatchConfig);
@@ -392,22 +389,6 @@ class ProductPageViewTest extends TestCase
     }
 
     /**
-     * Get product ids by skus
-     *
-     * @param array $skus
-     * @return array
-     */
-    private function getProductIdsBySkus(array $skus): array
-    {
-        $productIds = [];
-        foreach ($skus as $sku) {
-            $productIds[] = $this->productResource->getIdBySku($sku);
-        }
-
-        return $productIds;
-    }
-
-    /**
      * Check attribute options
      *
      * @param array $actualDataItem
@@ -417,20 +398,13 @@ class ProductPageViewTest extends TestCase
     private function checkOptions(array $actualDataItem, array $expectedItem): void
     {
         foreach ($expectedItem['options'] as $expectedItemKey => $expectedOption) {
-            $found = false;
+            $expectedSkus = array_values($expectedOption['skus']);
+            $expectedIds = array_values($this->productResource->getProductsIdsBySkus($expectedSkus));
             foreach ($actualDataItem['options'] as $option) {
                 if ($option['label'] === $expectedOption['label']) {
-                    $productIds = $this->getProductIdsBySkus($expectedItem['options'][$expectedItemKey]['skus']);
-                    $this->assertEquals(
-                        $productIds,
-                        $option['products'],
-                        'Wrong product linked as option'
-                    );
-                    $found = true;
-                    break;
+                    $this->assertEquals($expectedIds, $option['products'], 'Wrong product linked as option');
                 }
             }
-            $this->assertTrue($found);
         }
     }
 }
