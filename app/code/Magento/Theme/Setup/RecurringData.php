@@ -48,7 +48,7 @@ class RecurringData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $indexer = $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID);
-        $indexer->reindexAll();
+        $indexer->invalidate();
         $this->themeRegistration->register();
     }
 }
