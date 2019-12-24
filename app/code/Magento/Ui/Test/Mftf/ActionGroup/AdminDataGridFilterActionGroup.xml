@@ -8,7 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Search grid with keyword search-->
+    <!--
+    NOTICE: searchAdminDataGridByKeyword is deprecated.
+            Please use SearchAdminDataGridByKeywordActionGroup instead.
+    -->
     <actionGroup name="searchAdminDataGridByKeyword">
         <annotations>
             <description>Fills 'Search by keyword' on an Admin Grid page. Clicks on Submit Search.</description>
