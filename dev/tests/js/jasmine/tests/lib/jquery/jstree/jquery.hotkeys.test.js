@@ -15,15 +15,15 @@ define([
             inputNumberElement = $('<input type="number">');
 
         beforeAll(function () {
-            $(document).bind('keyup', 'right', function () {
-                // Change element body to track a trigger action
+            /**
+             * Insert text to the divElement
+             */
+            var addHtmlToDivElement = function () {
                 divElement.html(divBodyAfterTrigger);
-            });
+            };
 
-            $(document).bind('keyup', 'left', function () {
-                // Change element body to track a trigger action
-                divElement.html(divBodyAfterTrigger);
-            });
+            $(document).bind('keyup', 'right', addHtmlToDivElement);
+            $(document).bind('keyup', 'left', addHtmlToDivElement);
 
         });
 
@@ -38,7 +38,8 @@ define([
         });
 
         it('Check "left key" hotkey is not being processed when number input is focused', function () {
-            var keypress = $.Event("keyup");
+            var keypress = $.Event('keyup');
+
             keypress.which = 37; // "left arrow" key
             inputNumberElement.trigger(keypress);
 
@@ -46,7 +47,8 @@ define([
         });
 
         it('Check "right key" hotkey is not being processed when number input is focused', function () {
-            var keypress = $.Event("keyup");
+            var keypress = $.Event('keyup');
+
             keypress.which = 39; // "right arrow" key
             inputNumberElement.trigger(keypress);
 
@@ -54,7 +56,8 @@ define([
         });
 
         it('Check "left key" hotkey is being processed when registered on the page', function () {
-            var keypress = $.Event("keyup");
+            var keypress = $.Event('keyup');
+
             keypress.which = 37; // "left arrow" key
             divElement.trigger(keypress);
 
@@ -62,7 +65,8 @@ define([
         });
 
         it('Check "right key" hotkey is being processed when registered on the page', function () {
-            var keypress = $.Event("keyup");
+            var keypress = $.Event('keyup');
+
             keypress.which = 39; // "right arrow" key
             $('body').trigger(keypress);
 
