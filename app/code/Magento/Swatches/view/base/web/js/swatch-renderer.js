@@ -952,6 +952,8 @@ define([
 
             isShow = typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
 
+            $productPrice.find('span:first').toggleClass('special-price',isShow);
+
             $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
 
             if (typeof result != 'undefined' && result.tierPrices && result.tierPrices.length) {
