@@ -58,10 +58,6 @@ class DeleteCustomerAddress implements ResolverInterface
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
-        if (empty($args['id'])) {
-            throw new GraphQlInputException(__('Address "id" value should be specified'));
-        }
-
         $address = $this->getCustomerAddress->execute((int)$args['id'], $context->getUserId());
         $this->deleteCustomerAddress->execute($address);
         return true;

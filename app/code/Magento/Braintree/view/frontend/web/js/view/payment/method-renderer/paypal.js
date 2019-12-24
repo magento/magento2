@@ -17,7 +17,8 @@ define([
     'Magento_Vault/js/view/payment/vault-enabler',
     'Magento_Checkout/js/action/create-billing-address',
     'Magento_Braintree/js/view/payment/kount',
-    'mage/translate'
+    'mage/translate',
+    'Magento_Ui/js/model/messageList'
 ], function (
     $,
     _,
@@ -31,7 +32,8 @@ define([
     VaultEnabler,
     createBillingAddress,
     kount,
-    $t
+    $t,
+    globalMessageList
 ) {
     'use strict';
 
@@ -334,7 +336,7 @@ define([
             }
 
             return {
-                line1: address.street[0],
+                line1: _.isUndefined(address.street) || _.isUndefined(address.street[0]) ? '' : address.street[0],
                 city: address.city,
                 state: address.regionCode,
                 postalCode: address.postcode,
@@ -415,6 +417,18 @@ define([
          */
         onVaultPaymentTokenEnablerChange: function () {
             this.reInitPayPal();
+        },
+
+        /**
+         * Show error message
+         *
+         * @param {String} errorMessage
+         * @private
+         */
+        showError: function (errorMessage) {
+            globalMessageList.addErrorMessage({
+                message: errorMessage
+            });
         }
     });
 });

@@ -162,6 +162,9 @@ define([
             this._clearError();
             this._checkRegionRequired(country);
 
+            $(regionList).find('option:selected').removeAttr('selected');
+            regionInput.val('');
+
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
                 this._removeSelectOptions(regionList);

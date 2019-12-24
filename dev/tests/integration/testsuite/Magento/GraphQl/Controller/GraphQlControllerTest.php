@@ -167,7 +167,7 @@ QUERY;
         /** @var ProductInterface $product */
         $product = $productRepository->get('simple1');
         $query = <<<QUERY
-query GetProducts(\$filterInput:ProductFilterInput){
+query GetProducts(\$filterInput:ProductAttributeFilterInput){
     products(
         filter:\$filterInput
     ){

@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit;
 
+use Magento\Framework\Locale\ConfigInterface;
 use Magento\Framework\Setup\Lists;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class ListsTest extends \PHPUnit\Framework\TestCase
+class ListsTest extends TestCase
 {
     /**
      * @var Lists
      */
-    protected $lists;
+    private $lists;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ConfigInterface
+     * @var MockObject|ConfigInterface
      */
-    protected $mockConfig;
+    private $mockConfig;
 
     /**
      * @var array
      */
-    protected $expectedTimezones = [
+    private $expectedTimezones = [
         'Australia/Darwin',
         'America/Los_Angeles',
         'Europe/Kiev',
@@ -33,7 +37,7 @@ class ListsTest extends \PHPUnit\Framework\TestCase
     /**
      * @var array
      */
-    protected $expectedCurrencies = [
+    private $expectedCurrencies = [
         'USD',
         'EUR',
         'UAH',
@@ -43,23 +47,23 @@ class ListsTest extends \PHPUnit\Framework\TestCase
     /**
      * @var array
      */
-    protected $expectedLocales = [
-        'en_US',
-        'en_GB',
-        'uk_UA',
-        'de_DE',
+    private $expectedLocales = [
+        'en_US' => 'English (United States)',
+        'en_GB' => 'English (United Kingdom)',
+        'uk_UA' => 'Ukrainian (Ukraine)',
+        'de_DE' => 'German (Germany)',
+        'sr_Cyrl_RS' => 'Serbian (Cyrillic, Serbia)',
+        'sr_Latn_RS' => 'Serbian (Latin, Serbia)'
     ];
 
     protected function setUp()
     {
-        $this->mockConfig = $this->getMockBuilder(\Magento\Framework\Locale\ConfigInterface::class)
+        $this->mockConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockConfig->expects($this->any())
-            ->method('getAllowedLocales')
-            ->willReturn($this->expectedLocales);
-        $this->mockConfig->expects($this->any())
-            ->method('getAllowedCurrencies')
+        $this->mockConfig->method('getAllowedLocales')
+            ->willReturn(array_keys($this->expectedLocales));
+        $this->mockConfig->method('getAllowedCurrencies')
             ->willReturn($this->expectedCurrencies);
 
         $this->lists = new Lists($this->mockConfig);
@@ -73,13 +77,10 @@ class ListsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLocaleList()
     {
-        $locales = array_intersect($this->expectedLocales, array_keys($this->lists->getLocaleList()));
+        $locales = array_intersect($this->expectedLocales, $this->lists->getLocaleList());
         $this->assertEquals($this->expectedLocales, $locales);
     }
 
-    /**
-     * Test Lists:getCurrencyList() considering allowed currencies config values.
-     */
     public function testGetCurrencyList()
     {
         $currencies = array_intersect($this->expectedCurrencies, array_keys($this->lists->getCurrencyList()));

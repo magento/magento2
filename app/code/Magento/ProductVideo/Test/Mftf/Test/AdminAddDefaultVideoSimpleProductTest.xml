@@ -22,12 +22,12 @@
         </after>
 
         <!-- Add product video -->
-        <actionGroup ref="addProductVideo" stepKey="addProductVideo" after="fillMainProductForm"/>
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo" after="fillMainProductForm"/>
 
         <!-- Assert product video in admin product form -->
-        <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertProductVideoAdminProductPage" after="saveProductForm"/>
+        <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoAdminProductPage" after="saveProductForm"/>
 
         <!-- Assert product video in storefront product page -->
-        <actionGroup ref="assertProductVideoStorefrontProductPage" stepKey="assertProductVideoStorefrontProductPage" after="AssertProductInStorefrontProductPage"/>
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage" after="AssertProductInStorefrontProductPage"/>
     </test>
 </tests>
