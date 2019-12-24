@@ -29,6 +29,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($filters as $field => $value) {
             $fulltextCollection->addFieldToFilter($field, $value);
         }
+        if ($request == 'quick_search_container' && isset($filters['search_term'])) {
+            $fulltextCollection->addSearchFilter($filters['search_term']);
+        }
         $fulltextCollection->loadWithFilter();
         $items = $fulltextCollection->getItems();
         $this->assertCount($expectedCount, $items);
@@ -46,6 +49,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $fulltextCollection = $searchLayer->getProductCollection();
         foreach ($filters as $field => $value) {
             $fulltextCollection->addFieldToFilter($field, $value);
+        }
+        if (isset($filters['search_term'])) {
+            $fulltextCollection->addSearchFilter($filters['search_term']);
         }
         $fulltextCollection->loadWithFilter();
         $items = $fulltextCollection->getItems();
@@ -85,7 +91,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             /** @var  \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $fulltextCollection */
             $fulltextCollection = $searchLayer->getProductCollection();
 
-            $fulltextCollection->addFieldToFilter('search_term', 'shorts');
+            $fulltextCollection->addSearchFilter('shorts');
             $fulltextCollection->setOrder('relevance');
             $fulltextCollection->load();
             $items = $fulltextCollection->getItems();

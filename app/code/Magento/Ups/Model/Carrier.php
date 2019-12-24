@@ -9,7 +9,6 @@ namespace Magento\Ups\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Async\CallbackDeferred;
-use Magento\Framework\Async\ProxyDeferredFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
@@ -22,6 +21,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Ups\Helper\Config;
 use Magento\Shipping\Model\Shipment\Request as Shipment;
@@ -239,15 +239,16 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         //To use the correct result in the callback.
         $this->_result = $result = $this->_getQuotes();
 
-        return $this->deferredProxyFactory->createFor(
-            Result::class,
-            new CallbackDeferred(
-                function () use ($request, $result) {
-                    $this->_result = $result;
-                    $this->_updateFreeMethodQuote($request);
-                    return $this->getResult();
-                }
-            )
+        return $this->deferredProxyFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($request, $result) {
+                        $this->_result = $result;
+                        $this->_updateFreeMethodQuote($request);
+                        return $this->getResult();
+                    }
+                )
+            ]
         );
     }
 
@@ -782,19 +783,20 @@ XMLRequest;
             new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
         );
 
-        return $this->deferredProxyFactory->createFor(
-            Result::class,
-            new CallbackDeferred(
-                function () use ($httpResponse) {
-                    if ($httpResponse->get()->getStatusCode() >= 400) {
-                        $xmlResponse = '';
-                    } else {
-                        $xmlResponse = $httpResponse->get()->getBody();
-                    }
+        return $this->deferredProxyFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($httpResponse) {
+                        if ($httpResponse->get()->getStatusCode() >= 400) {
+                            $xmlResponse = '';
+                        } else {
+                            $xmlResponse = $httpResponse->get()->getBody();
+                        }
 
-                    return $this->_parseXmlResponse($xmlResponse);
-                }
-            )
+                        return $this->_parseXmlResponse($xmlResponse);
+                    }
+                )
+            ]
         );
     }
 
@@ -1099,6 +1101,7 @@ XMLAuth;
             $xmlRequest = <<<XMLAuth
 <?xml version="1.0" ?>
 <TrackRequest xml:lang="en-US">
+    <IncludeMailInnovationIndicator/>
     <Request>
         <RequestAction>Track</RequestAction>
         <RequestOption>1</RequestOption>

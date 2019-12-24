@@ -92,7 +92,7 @@
         <annotations>
             <description>Clears the Email, First Name, Last Name, Street Line 1, City, Postal Code and Phone fields when adding an Order and then verifies that they are required after attempting to Save.</description>
         </annotations>
-        
+
         <seeElement selector="{{AdminOrderFormAccountSection.requiredGroup}}" stepKey="seeCustomerGroupRequired"/>
         <seeElement selector="{{AdminOrderFormAccountSection.requiredEmail}}" stepKey="seeEmailRequired"/>
         <clearField selector="{{AdminOrderFormAccountSection.email}}" stepKey="clearEmailField"/>
@@ -117,7 +117,10 @@
         <see selector="{{AdminOrderFormPaymentSection.shippingError}}" userInput="This is a required field." stepKey="seeShippingMethodRequired"/>
     </actionGroup>
 
-    <!--Add a simple product to order-->
+    <!--
+    NOTICE: addSimpleProductToOrder is deprecated.
+            Please use AddSimpleProductToOrderActionGroup instead.
+    -->
     <actionGroup name="addSimpleProductToOrder">
         <annotations>
             <description>Adds the provided Simple Product to an Order. Fills in the provided Product Qty. Clicks on 'Add Selected Product(s) to Order'.</description>
@@ -181,7 +184,7 @@
         <annotations>
             <description>EXTENDS: addConfigurableProductToOrder. Selects the provided Option to the Configurable Product.</description>
         </annotations>
-        
+
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
     </actionGroup>
@@ -195,7 +198,7 @@
             <argument name="option"/>
             <argument name="quantity" type="string"/>
         </arguments>
-        
+
         <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
         <wait time="2" stepKey="waitForOptionsToLoad"/>
@@ -213,7 +216,7 @@
             <argument name="product"/>
             <argument name="quantity" type="string" defaultValue="1"/>
         </arguments>
-        
+
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterBundle"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
@@ -235,7 +238,7 @@
         <arguments>
             <argument name="price" type="string"/>
         </arguments>
-        
+
         <grabTextFrom selector="{{AdminOrderFormItemsSection.rowPrice('1')}}" stepKey="grabProductPriceFromGrid" after="clickOk"/>
         <assertEquals stepKey="assertProductPriceInGrid" message="Bundle product price in grid should be equal {{price}}" after="grabProductPriceFromGrid">
             <expectedResult type="string">{{price}}</expectedResult>
@@ -287,7 +290,10 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
-    <!--Fill customer billing address-->
+    <!--
+    NOTICE: fillOrderCustomerInformation is deprecated.
+            Please use FillOrderCustomerInformationActionGroup instead.
+    -->
     <actionGroup name="fillOrderCustomerInformation">
         <annotations>
             <description>Fills in the provided Customer and Address details on the Admin 'Create New Order for' page.</description>
@@ -307,7 +313,10 @@
         <fillField selector="{{AdminOrderFormBillingAddressSection.Phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
     </actionGroup>
 
-    <!--Select flat rate shipping method-->
+    <!--
+    NOTICE: orderSelectFlatRateShipping is deprecated.
+            Please use OrderSelectFlatRateShippingActionGroup instead.
+    -->
     <actionGroup name="orderSelectFlatRateShipping">
         <annotations>
             <description>Selects the 'Flat Rate' Shipping Method on the Admin 'Create New Order for' page.</description>
@@ -318,6 +327,22 @@
         <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.flatRateOption}}" stepKey="waitForShippingOptions"/>
         <selectOption selector="{{AdminOrderFormPaymentSection.flatRateOption}}" userInput="flatrate_flatrate" stepKey="checkFlatRate"/>
+    </actionGroup>
+
+    <actionGroup name="changeShippingMethod">
+        <annotations>
+            <description>Change Shipping Method on the Admin 'Create New Order for' page.</description>
+        </annotations>
+        <arguments>
+            <argument name="shippingMethod" defaultValue="flatrate_flatrate" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods1"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="waitForChangeShippingMethod"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods2"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.shippingMethod}}" stepKey="waitForShippingOptions2"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.shippingMethod}}" userInput="{{shippingMethod}}" stepKey="checkFlatRate"/>
     </actionGroup>
 
     <!--Select free shipping method-->
@@ -333,7 +358,10 @@
         <selectOption selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" userInput="freeshipping_freeshipping" stepKey="checkFreeShipping"/>
     </actionGroup>
 
-    <!--Check that customer information is correct in order-->
+    <!--
+    NOTICE: verifyBasicOrderInformation is deprecated.
+            Please use VerifyBasicOrderInformationActionGroup instead.
+    -->
     <actionGroup name="verifyBasicOrderInformation">
         <annotations>
             <description>Validates that the provided Customer, Shipping/Billing Address and Customer Group are present and correct on the Admin Orders view page.</description>
@@ -367,7 +395,10 @@
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country}}" stepKey="seeAddressCountry" after="seeShippingAddressCity"/>
     </actionGroup>
 
-    <!--Verify order information-->
+    <!--
+    NOTICE: verifyCreatedOrderInformation is deprecated.
+            Please use VerifyCreatedOrderInformationActionGroup instead.
+    -->
     <actionGroup name="verifyCreatedOrderInformation">
         <annotations>
             <description>Validates that the Success Message, Order Status (Pending) and Order ID are present and correct.</description>
@@ -450,7 +481,10 @@
         <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
 
-    <!--Cancel order that is in pending status-->
+    <!--
+    NOTICE: cancelPendingOrder is deprecated.
+            Please use CancelPendingOrderActionGroup instead.
+    -->
     <actionGroup name="cancelPendingOrder">
         <annotations>
             <description>Cancels the Pending Order on the Admin Orders view page. Validates that the provided Order Status is present and correct.</description>
@@ -475,7 +509,10 @@
         <dontSee selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="dontseeSkuInItemsOrdered"/>
     </actionGroup>
 
-    <!--Select Check Money payment method-->
+    <!--
+    NOTICE: adminDataGridSelectCustomPerPage is deprecated.
+            Please use AdminDataGridSelectCustomPerPageActionGroup instead.
+    -->
     <actionGroup name="SelectCheckMoneyPaymentMethod">
         <annotations>
             <description>Selects the 'Check / Money Order' Payment Method on the Admin Create New Order page.</description>
@@ -516,7 +553,7 @@
             <argument name="product"/>
             <argument name="customer"/>
         </arguments>
-        
+
         <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
         <waitForPageLoad stepKey="waitForNewOrderPageOpened"/>
         <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>

@@ -210,6 +210,11 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @param $dimensions
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
     private function getDimensionProviderMock($dimensions)
     {
         $dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)
@@ -233,6 +238,12 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
         return $dimensionProviderMock;
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
     private function getDimensionMock(string $name, string $value)
     {
         $dimensionMock = $this->getMockBuilder(Dimension::class)

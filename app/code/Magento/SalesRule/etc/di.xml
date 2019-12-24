@@ -30,6 +30,10 @@
                 type="Magento\SalesRule\Model\Data\CouponMassDeleteResult" />
     <preference for="Magento\SalesRule\Api\CouponManagementInterface"
                 type="Magento\SalesRule\Model\Service\CouponManagementService" />
+    <preference for="Magento\SalesRule\Api\Data\RuleDiscountInterface"
+                type="Magento\SalesRule\Model\Data\RuleDiscount" />
+    <preference for="Magento\SalesRule\Api\Data\DiscountDataInterface"
+                type="Magento\SalesRule\Model\Data\DiscountData" />
     <type name="Magento\SalesRule\Helper\Coupon">
         <arguments>
             <argument name="couponParameters" xsi:type="array">
@@ -178,14 +182,13 @@
             </argument>
         </arguments>
     </type>
-
     <type name="Magento\Quote\Model\Cart\CartTotalRepository">
         <plugin name="coupon_label_plugin" type="Magento\SalesRule\Plugin\CartTotalRepository" />
         <plugin name="update_quote_sales_rules" type="Magento\SalesRule\Plugin\UpdateQuoteSalesRules"/>
     </type>
-    <type name="Magento\Sales\Model\Order">
-        <plugin name="coupon_uses_increment_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrement" sortOrder="20"/>
+    <type name="Magento\Sales\Model\Service\OrderService">
         <plugin name="coupon_uses_decrement_plugin" type="Magento\SalesRule\Plugin\CouponUsagesDecrement" />
+        <plugin name="coupon_uses_increment_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrement" sortOrder="20"/>
     </type>
     <preference
             for="Magento\SalesRule\Model\Spi\CodeLimitManagerInterface"

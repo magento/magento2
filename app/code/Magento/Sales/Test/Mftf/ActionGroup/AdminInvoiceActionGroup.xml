@@ -73,6 +73,10 @@
         <waitForPageLoad stepKey="waitInvoicesGrid"/>
     </actionGroup>
 
+    <!--
+    NOTICE: goToInvoiceIntoOrder is deprecated.
+            Please use GoToInvoiceIntoOrderActionGroup instead.
+    -->
     <actionGroup name="goToInvoiceIntoOrder">
         <annotations>
             <description>Clicks on 'Invoice' on the Admin Orders view page. Validates that the URL and Page Title are correct.</description>
@@ -83,6 +87,10 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
     </actionGroup>
 
+    <!--
+    NOTICE: StartCreateInvoiceFromOrderPage is deprecated.
+            Please use StartCreateInvoiceFromOrderPageActionGroup instead.
+    -->
     <actionGroup name="StartCreateInvoiceFromOrderPage">
         <annotations>
             <description>Clicks on 'Invoice' on the Admin Orders view page. Validates that the URL and Page Title are correct.</description>
@@ -93,14 +101,18 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoicePageTitle"/>
     </actionGroup>
 
+    <!--
+    NOTICE: SubmitInvoice is deprecated.
+            Please use SubmitInvoiceActionGroup instead.
+    -->
     <actionGroup name="SubmitInvoice">
         <annotations>
             <description>Clicks on 'Submit Invoice' on the Admin 'New Invoice' page. Validates that the Success Message is present and correct. Validates that the Order ID appears in the URL.</description>
         </annotations>
 
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" stepKey="seeViewOrderPageInvoice"/>
     </actionGroup>

@@ -22,4 +22,10 @@
     <type name="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface">
         <plugin name="updateProductCustomOptionsAttributes" type="Magento\Catalog\Plugin\Model\Product\Option\UpdateProductCustomOptionsAttributes"/>
     </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="product_authorization" type="Magento\Catalog\Plugin\ProductAuthorization" />
+    </type>
+    <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
+        <plugin name="category_authorization" type="Magento\Catalog\Plugin\CategoryAuthorization" />
+    </type>
 </config>

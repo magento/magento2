@@ -20,6 +20,13 @@
             <group value="WYSIWYGDisabled"/>
         </annotations>
 
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="logout"/>
+        </after>
+
         <!-- A Cms page containing the New Products Widget gets created here via extends -->
 
         <!-- Create a Downloadable product to appear in the widget -->

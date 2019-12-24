@@ -130,10 +130,12 @@ class ParamsBuilder
         );
 
         if ($file) {
-            $size = $this->scopeConfig->getValue(
-                "design/watermark/{$type}_size",
-                ScopeInterface::SCOPE_STORE,
-                $scopeId
+            $size = explode(
+                'x',
+                $this->scopeConfig->getValue(
+                    "design/watermark/{$type}_size",
+                    ScopeInterface::SCOPE_STORE
+                )
             );
             $opacity = $this->scopeConfig->getValue(
                 "design/watermark/{$type}_imageOpacity",
@@ -145,8 +147,8 @@ class ParamsBuilder
                 ScopeInterface::SCOPE_STORE,
                 $scopeId
             );
-            $width = !empty($size['width']) ? $size['width'] : null;
-            $height = !empty($size['height']) ? $size['height'] : null;
+            $width = !empty($size['0']) ? $size['0'] : null;
+            $height = !empty($size['1']) ? $size['1'] : null;
 
             return [
                 'watermark_file' => $file,
