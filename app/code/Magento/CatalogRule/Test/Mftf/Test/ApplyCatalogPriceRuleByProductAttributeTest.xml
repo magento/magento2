@@ -140,49 +140,49 @@
         <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="Yes" stepKey="selectYes"/>
 
         <!-- Save the attribute -->
-        <actionGroup ref="saveProductAttribute" stepKey="saveAttribute"/>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute"/>
 
         <!-- Add this product attribute to Default attribute set -->
         <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
         <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
 
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="{{productAttributeDropdownTwoOptions.attribute_code}}"/>
         </actionGroup>
-        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
 
         <!-- First Simple Product: choose green as attribute value -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openFirstSimpleProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openFirstSimpleProduct">
             <argument name="productSku" value="$$createFirstProduct.sku$$"/>
         </actionGroup>
 
         <selectOption userInput="green" selector="{{AdminProductFormSection.customSelectField(productAttributeDropdownTwoOptions.attribute_code)}}" stepKey="selectGreen"/>
-        <actionGroup ref="saveProductForm" stepKey="saveFirstProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstProduct"/>
 
         <!-- Second Simple Product: choose red as attribute value -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openSecondSimpleProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openSecondSimpleProduct">
             <argument name="productSku" value="$$createSecondProduct.sku$$"/>
         </actionGroup>
 
         <selectOption userInput="red" selector="{{AdminProductFormSection.customSelectField(productAttributeDropdownTwoOptions.attribute_code)}}" stepKey="selectRed"/>
-        <actionGroup ref="saveProductForm" stepKey="saveSecondProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
 
         <!-- Configurable child product1: choose green as attribute value -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openConfigChild1Product">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigChild1Product">
             <argument name="productSku" value="$$createConfigChildProduct1.sku$$"/>
         </actionGroup>
 
         <selectOption userInput="green" selector="{{AdminProductFormSection.customSelectField(productAttributeDropdownTwoOptions.attribute_code)}}" stepKey="selectGreenAttr"/>
-        <actionGroup ref="saveProductForm" stepKey="saveConfigChild1Product"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigChild1Product"/>
 
         <!-- Configurable child product2: choose green as attribute value -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openConfigChild2Product">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigChild2Product">
             <argument name="productSku" value="$$createConfigChildProduct2.sku$$"/>
         </actionGroup>
 
         <selectOption userInput="green" selector="{{AdminProductFormSection.customSelectField(productAttributeDropdownTwoOptions.attribute_code)}}" stepKey="selectGreenAttribute"/>
-        <actionGroup ref="saveProductForm" stepKey="saveConfigChild2Product"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigChild2Product"/>
 
         <!-- Navigate to Marketing - Promotions - Catalog Price Rules -->
         <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="amOnCatalogPriceRule"/>

@@ -35,7 +35,7 @@
         </after>
         <!-- Navigate to category details page -->
         <comment userInput="Navigate to category details page" stepKey="navigateToAdminCategoryPage"/>
-        <actionGroup ref="goToAdminCategoryPageById" stepKey="goToAdminCategoryPage">
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage">
             <argument name="id" value="$$simpleCategory.id$$"/>
         </actionGroup>
         <!-- Open design tab and set layout -->
