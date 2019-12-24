@@ -383,7 +383,6 @@ class ProductPageViewTest extends TestCase
     private function checkResultIsNotEmpty(array $result): void
     {
         foreach ($result as $item) {
-            $this->assertNotNull($item);
             $this->assertNotEmpty($item);
         }
     }
