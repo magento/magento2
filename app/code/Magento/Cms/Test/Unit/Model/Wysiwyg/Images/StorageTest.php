@@ -7,6 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\Wysiwyg\Images;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection as StorageCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -538,5 +539,19 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->adapterFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($image);
 
         $this->assertEquals($result, $this->imagesStorage->uploadFile($targetPath, $type));
+    }
+
+    /**
+     * Test create directory with invalid name
+     */
+    public function testCreateDirectoryWithInvalidName()
+    {
+        $name = 'папка';
+        $path = '/tmp/path';
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(
+            (string)__('Please rename the folder using only Latin letters, numbers, underscores and dashes.')
+        );
+        $this->imagesStorage->createDirectory($name, $path);
     }
 }

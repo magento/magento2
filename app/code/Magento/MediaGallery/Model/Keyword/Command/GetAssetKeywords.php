@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Keyword\Command;
 
+use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\NotFoundException;
+use Psr\Log\LoggerInterface;
 
 /**
  * ClassGetAssetKeywords
@@ -32,17 +33,25 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
     private $assetKeywordFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * GetAssetKeywords constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param KeywordInterfaceFactory $assetKeywordFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        KeywordInterfaceFactory $assetKeywordFactory
+        KeywordInterfaceFactory $assetKeywordFactory,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->assetKeywordFactory = $assetKeywordFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -50,8 +59,8 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
      *
      * @param int $assetId
      *
-     * @return KeywordInterface[]
-     * @throws NotFoundException
+     * @return KeywordInterface[]|[]
+     * @throws IntegrationException
      */
     public function execute(int $assetId): array
     {
@@ -71,8 +80,9 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
 
             return $keywords;
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('An error occurred during get asset keywords: %1', $exception->getMessage());
-            throw new NotFoundException($message, $exception);
+            throw new IntegrationException($message, $exception);
         }
     }
 }
