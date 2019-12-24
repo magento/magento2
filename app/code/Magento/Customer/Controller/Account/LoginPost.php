@@ -221,8 +221,9 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                         $this->session->setUsername($login['username']);
                     }
                 }
+            } else {
+                $this->messageManager->addErrorMessage(__('A login and a password are required.'));
             }
-            $this->messageManager->addErrorMessage(__('A login and a password are required.'));
         }
 
         return $this->accountRedirect->getRedirect();
