@@ -32,6 +32,9 @@ class InstallDefaultContactUsCmsPage implements DataPatchInterface
  {{block class="Magento\Contact\Block\ContactForm" name="contactForm" template="Magento_Contact::form.phtml"}}
 EOD;
 
+    /** @var string index for stores scope config */
+    private const CONTACT_US_STORES = 'stores';
+
     /**
      * InstallDefaultContactUsCmsPage constructor.
      *
@@ -66,7 +69,8 @@ EOD;
             PageInterface::CONTENT_HEADING => 'Contact Us',
             PageInterface::CONTENT => self::CMS_PAGE_CONTENT,
             PageInterface::IS_ACTIVE => true,
-            PageInterface::SORT_ORDER => 0
+            PageInterface::SORT_ORDER => 0,
+            self::CONTACT_US_STORES => [0]
         ];
 
         try {

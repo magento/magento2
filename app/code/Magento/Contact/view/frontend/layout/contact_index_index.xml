@@ -11,9 +11,9 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Contact\Block\ContactForm" name="contactForm" template="Magento_Contact::form.phtml">
+            <referenceBlock name="contactForm">
                 <container name="form.additional.info" label="Form Additional Info"/>
-            </block>
+            </referenceBlock>
         </referenceContainer>
     </body>
 </page>

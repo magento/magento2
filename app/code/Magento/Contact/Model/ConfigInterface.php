@@ -34,6 +34,11 @@ interface ConfigInterface
     const XML_PATH_ENABLED = 'contact/contact/enabled';
 
     /**
+     * CMS contact us page config path
+     */
+    const XML_PATH_CMS_CONTACT_US_PAGE = 'web/default/cms_contact_page';
+
+    /**
      * Check if contacts module is enabled
      *
      * @return bool
