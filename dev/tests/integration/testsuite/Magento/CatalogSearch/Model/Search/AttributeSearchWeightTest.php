@@ -9,14 +9,12 @@ declare(strict_types=1);
 namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\Layer\Search as CatalogLayerSearch;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory;
-use Magento\Framework\Search\Request\Builder;
-use Magento\Framework\Search\Request\Config as RequestConfig;
-use Magento\Search\Model\Search;
+use Magento\TestFramework\Catalog\Model\Layer\QuickSearchByQuery;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,9 +40,9 @@ class AttributeSearchWeightTest extends TestCase
     private $collectedAttributesWeight = [];
 
     /**
-     * @var CatalogLayerSearch
+     * @var QuickSearchByQuery
      */
-    private $catalogLayerSearch;
+    private $quickSearchByQuery;
 
     /**
      * @inheritdoc
@@ -53,7 +51,7 @@ class AttributeSearchWeightTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productAttributeRepository = $this->objectManager->get(ProductAttributeRepositoryInterface::class);
-        $this->catalogLayerSearch = $this->objectManager->get(CatalogLayerSearch::class);
+        $this->quickSearchByQuery = $this->objectManager->get(QuickSearchByQuery::class);
         $this->collectCurrentProductAttributesWeights();
     }
 
@@ -85,9 +83,7 @@ class AttributeSearchWeightTest extends TestCase
         array $expectedProductNames
     ): void {
         $this->updateAttributesWeight($attributeWeights);
-        $this->removeInstancesCache();
-        $products = $this->findProducts($searchQuery);
-        $actualProductNames = $this->collectProductsName($products);
+        $actualProductNames = $this->collectProductsName($this->quickSearchByQuery->execute($searchQuery));
         $this->assertEquals($expectedProductNames, $actualProductNames, 'Products order is not as expected.');
     }
 
@@ -175,45 +171,17 @@ class AttributeSearchWeightTest extends TestCase
     /**
      * Get all names from founded products.
      *
-     * @param Product[] $products
+     * @param Collection $productsCollection
      * @return array
      */
-    protected function collectProductsName(array $products): array
+    protected function collectProductsName(Collection $productsCollection): array
     {
         $result = [];
-        foreach ($products as $product) {
+        foreach ($productsCollection as $product) {
             $result[] = $product->getName();
         }
 
         return $result;
-    }
-
-    /**
-     * Reindex catalogsearch fulltext index.
-     *
-     * @return void
-     */
-    protected function removeInstancesCache(): void
-    {
-        $this->objectManager->removeSharedInstance(RequestConfig::class);
-        $this->objectManager->removeSharedInstance(Builder::class);
-        $this->objectManager->removeSharedInstance(Search::class);
-        $this->objectManager->removeSharedInstance(CatalogLayerSearch::class);
-    }
-
-    /**
-     * Find products by search query.
-     *
-     * @param string $query
-     * @return Product[]
-     */
-    protected function findProducts(string $query): array
-    {
-        $testProductCollection = $this->catalogLayerSearch->getProductCollection();
-        $testProductCollection->addSearchFilter($query);
-        $testProductCollection->setOrder('relevance', 'desc');
-
-        return $testProductCollection->getItems();
     }
 
     /**
