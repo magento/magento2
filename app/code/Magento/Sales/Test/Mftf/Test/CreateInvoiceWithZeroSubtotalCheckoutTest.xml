@@ -62,12 +62,12 @@
         </after>
 
         <!-- Create order -->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!-- Add product to order -->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
 
@@ -77,7 +77,7 @@
         </actionGroup>
 
         <!-- Select Free shipping -->
-        <actionGroup ref="orderSelectFreeShipping" stepKey="selectFreeShippingOption"/>
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
 
         <!-- Submit order -->
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
@@ -88,7 +88,7 @@
         <!-- Open created order -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
         <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrdersGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
