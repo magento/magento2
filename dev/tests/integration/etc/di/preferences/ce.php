@@ -16,6 +16,8 @@ return [
     \Magento\Framework\App\Response\Http::class => \Magento\TestFramework\Response::class,
     \Magento\Framework\Interception\PluginListInterface::class =>
         \Magento\TestFramework\Interception\PluginList::class,
+    \Magento\Framework\Serialize\SerializerInterface::class =>
+        \Magento\TestFramework\Serialize\Serializer::class,
     \Magento\Framework\Interception\ObjectManager\ConfigInterface::class =>
         \Magento\TestFramework\ObjectManager\Config::class,
     \Magento\Framework\Interception\ObjectManager\Config\Developer::class =>

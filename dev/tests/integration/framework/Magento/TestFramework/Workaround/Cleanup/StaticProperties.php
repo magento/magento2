@@ -186,8 +186,8 @@ class StaticProperties
             ),
             function ($classFile) {
                 return StaticProperties::_isClassInCleanableFolders($classFile)
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                && strpos(file_get_contents($classFile), ' static ')  > 0;
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    && strpos(file_get_contents($classFile), ' static ')  > 0;
             }
         );
         $namespacePattern = '/namespace [a-zA-Z0-9\\\\]+;/';
