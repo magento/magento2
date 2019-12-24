@@ -396,12 +396,16 @@ class ProductPageViewTest extends TestCase
      */
     private function checkOptions(array $actualDataItem, array $expectedItem): void
     {
-        foreach ($expectedItem['options'] as $expectedItemKey => $expectedOption) {
+        foreach ($expectedItem['options'] as $expectedOption) {
             $expectedSkus = array_values($expectedOption['skus']);
             $expectedIds = array_values($this->productResource->getProductsIdsBySkus($expectedSkus));
             foreach ($actualDataItem['options'] as $option) {
                 if ($option['label'] === $expectedOption['label']) {
-                    $this->assertEquals($expectedIds, $option['products'], 'Wrong product linked as option');
+                    $this->assertEquals(
+                        sort($expectedIds),
+                        sort($option['products']),
+                        'Wrong product linked as option'
+                    );
                 }
             }
         }
