@@ -45,10 +45,10 @@
         <!--Open created product on Storefront and place for order-->
         <amOnPage url="{{StorefrontProductPage.url($$createNewProduct.custom_attributes[url_key]$$)}}" stepKey="goToNewProductPage"/>
         <waitForPageLoad stepKey="waitForNewProductPagePageLoad"/>
-        <actionGroup ref="StorefrontSwitchCurrency" stepKey="switchCurrency">
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchCurrency">
             <argument name="currency" value="RUB"/>
         </actionGroup>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontNewProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontNewProductPage">
             <argument name="productName" value="$$createNewProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutNewProductFromMinicart" />
@@ -61,7 +61,7 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabNewOrderNumber"/>
         <!--Open order and check rates display in one line-->
-        <actionGroup ref="OpenOrderById" stepKey="openNewOrderById">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openNewOrderById">
             <argument name="orderId" value="$grabNewOrderNumber"/>
         </actionGroup>
         <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="EUR / USD rate" stepKey="seeUSDandEURRate"/>

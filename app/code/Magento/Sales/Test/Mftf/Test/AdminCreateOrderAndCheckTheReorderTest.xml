@@ -28,19 +28,19 @@
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
             <argument name="productQty" value="{{SimpleProduct_25.quantity}}"/>
         </actionGroup>
         <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
