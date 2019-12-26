@@ -309,22 +309,6 @@ class ProductPageViewTest extends TestCase
     }
 
     /**
-     * Generate block config data
-     *
-     * @return array
-     */
-    protected function generateBlockJsonConfigData(): array
-    {
-        $product = $this->productRepository->get('configurable');
-        $this->block->setProduct($product);
-        $this->block->setTemplate($this->template);
-        $jsonConfig = $this->json->unserialize($this->block->getJsonConfig())['attributes'] ?? null;
-        $jsonSwatchConfig = $this->json->unserialize($this->block->getJsonSwatchConfig());
-
-        return ['json_config' => $jsonConfig, 'json_swatch_config' => $jsonSwatchConfig];
-    }
-
-    /**
      * Check configurable product view
      *
      * @param $expectedConfig
@@ -337,6 +321,23 @@ class ProductPageViewTest extends TestCase
         $this->checkResultIsNotEmpty($actualConfig);
         $this->assertConfig($actualConfig['json_config'], $expectedConfig);
         $this->assertSwatchConfig($actualConfig['json_swatch_config'], $expectedSwatchConfig);
+    }
+
+    /**
+     * Generate block config data
+     *
+     * @return array
+     */
+
+    private function generateBlockJsonConfigData(): array
+    {
+        $product = $this->productRepository->get('configurable');
+        $this->block->setProduct($product);
+        $this->block->setTemplate($this->template);
+        $jsonConfig = $this->json->unserialize($this->block->getJsonConfig())['attributes'] ?? [];
+        $jsonSwatchConfig = $this->json->unserialize($this->block->getJsonSwatchConfig());
+
+        return ['json_config' => $jsonConfig, 'json_swatch_config' => $jsonSwatchConfig];
     }
 
     /**
