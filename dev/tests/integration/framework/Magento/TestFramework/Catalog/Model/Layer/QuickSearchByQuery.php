@@ -34,13 +34,17 @@ class QuickSearchByQuery
      *
      * @param string $query
      * @param string $sortOrder
+     * @param string $sortedField
      * @return Collection
      */
-    public function execute(string $query, string $sortOrder = 'desc'): Collection
-    {
+    public function execute(
+        string $query,
+        string $sortedField = 'relevance',
+        string $sortOrder = 'desc'
+    ): Collection {
         $productCollection = $this->searchFactory->create()->getProductCollection();
         $productCollection->addSearchFilter($query);
-        $productCollection->setOrder('relevance', $sortOrder);
+        $productCollection->setOrder($sortedField, $sortOrder);
 
         return $productCollection;
     }
