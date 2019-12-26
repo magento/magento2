@@ -118,16 +118,7 @@ class Storage
         }
 
         $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
-
-        if (!$relativePath) {
-            return $result;
-        }
-
-        try {
-            $this->deleteMediAssetByDirectoryPath->execute($relativePath);
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-        }
+        $this->deleteMediAssetByDirectoryPath->execute($relativePath);
 
         return $result;
     }

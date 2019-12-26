@@ -60,9 +60,8 @@ class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface
         try {
             $this->validateDirectoryPath($directoryPath);
 
-            if (substr($directoryPath, -1) !== '/') {
-                $directoryPath .= '/';
-            }
+            // Make sure that the path has a trailing slash
+            $directoryPath = rtrim($directoryPath, '/') . '/';
 
             /** @var AdapterInterface $connection */
             $connection = $this->resourceConnection->getConnection();
@@ -86,8 +85,8 @@ class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface
      */
     private function validateDirectoryPath(string $directoryPath): void
     {
-        if (trim($directoryPath) === '') {
-            throw new LocalizedException(__('The directory path cannot be empty'));
+        if (!$directoryPath || trim($directoryPath) === '') {
+            throw new LocalizedException(__('Cannot remove assets, the directory path does not exist'));
         }
     }
 }
