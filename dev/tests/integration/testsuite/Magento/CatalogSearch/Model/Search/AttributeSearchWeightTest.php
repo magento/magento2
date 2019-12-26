@@ -3,18 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory;
 use Magento\TestFramework\Catalog\Model\Layer\QuickSearchByQuery;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -24,6 +25,8 @@ $objectManager = Bootstrap::getObjectManager();
 $optionsFactory = $objectManager->get(Factory::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+/** @var ProductExtensionInterfaceFactory $productExtensionFactory */
+$productExtensionFactory = $objectManager->get(ProductExtensionInterfaceFactory::class);
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
@@ -82,7 +85,7 @@ $configurableOptions = $optionsFactory->create(
         ],
     ]
 );
-$extensionConfigurableAttributes = $product->getExtensionAttributes();
+$extensionConfigurableAttributes = $product->getExtensionAttributes() ?? $productExtensionFactory->create();
 $extensionConfigurableAttributes->setConfigurableProductOptions($configurableOptions);
 $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProductIds);
 $product->setExtensionAttributes($extensionConfigurableAttributes);

@@ -9,9 +9,13 @@ namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteItem;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\TestCase;
 
@@ -31,9 +35,19 @@ class FindByUrlRewriteTest extends TestCase
     private $urlFinder;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
+
+    /**
+     * @var UrlRewriteCollectionFactory
+     */
+    private $urlRewriteCollectionFactory;
 
     /**
      * @inheritdoc
@@ -43,42 +57,191 @@ class FindByUrlRewriteTest extends TestCase
         $this->objectManger = Bootstrap::getObjectManager();
         $this->urlFinder = $this->objectManger->get(UrlFinderInterface::class);
         $this->productRepository = $this->objectManger->get(ProductRepositoryInterface::class);
+        $this->storeManager = $this->objectManger->get(StoreManagerInterface::class);
+        $this->urlRewriteCollectionFactory = $this->objectManger->get(UrlRewriteCollectionFactory::class);
         parent::setUp();
     }
 
     /**
-     * Assert that URL rewrite for child product of configurable was not created.
+     * Assert that product is available by URL rewrite with different visibility.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
+     * @dataProvider visibilityWithExpectedResultDataProvider
      * @magentoDbIsolation enabled
      *
+     * @param array $productsData
      * @return void
      */
-    public function testCheckUrlRewriteForChildWasNotCreated(): void
+    public function testCheckIsUrlRewriteForChildrenProductsAreCreated(array $productsData): void
     {
         $this->checkConfigurableUrlRewriteWasCreated();
-        $this->assertNull($this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => 'configurable-option-1.html']));
-        $this->assertNull($this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => 'configurable-option-2.html']));
+        $this->updateProductsVisibility($productsData);
+        $urlRewritesCollection = $this->getUrlRewritesCollectionByPaths([
+            'configurable-option-1.html',
+            'configurable-option-2.html',
+        ]);
+        $expectedCount = 0;
+        foreach ($productsData as $productData) {
+            $product = $this->productRepository->get($productData['sku']);
+            /** @var UrlRewriteItem $urlRewrite */
+            $urlRewrite = $urlRewritesCollection->getItemByColumnValue(
+                UrlRewrite::TARGET_PATH,
+                "catalog/product/view/id/{$product->getId()}"
+            );
+            if ($productData['url_rewrite_created']) {
+                $this->assertNotNull($urlRewrite);
+                $this->assertEquals($product->getId(), $urlRewrite->getEntityId());
+                $this->assertEquals('product', $urlRewrite->getEntityType());
+                $expectedCount++;
+            } else {
+                $this->assertNull($urlRewrite);
+            }
+        }
+        $this->assertCount($expectedCount, $urlRewritesCollection);
     }
 
     /**
-     * Assert that URL rewrite for one of child product of configurable was created.
+     * Return products visibility, expected result and other product additional data.
      *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
-     * @magentoDbIsolation enabled
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      *
+     * @return array
+     */
+    public function visibilityWithExpectedResultDataProvider(): array
+    {
+        return [
+            'visibility_for_both_product_only_catalog' => [
+                [
+                    [
+                        'sku' => 'Simple option 1',
+                        'visibility' => Visibility::VISIBILITY_IN_CATALOG,
+                        'url_rewrite_created' => true,
+                    ],
+                    [
+                        'sku' => 'Simple option 2',
+                        'visibility' => Visibility::VISIBILITY_IN_CATALOG,
+                        'url_rewrite_created' => true,
+                    ],
+                ],
+            ],
+            'visibility_for_both_product_catalog_search' => [
+                [
+                    [
+                        'sku' => 'Simple option 1',
+                        'visibility' => Visibility::VISIBILITY_BOTH,
+                        'url_rewrite_created' => true,
+                    ],
+                    [
+                        'sku' => 'Simple option 2',
+                        'visibility' => Visibility::VISIBILITY_BOTH,
+                        'url_rewrite_created' => true,
+                    ],
+                ],
+            ],
+            'visibility_for_both_product_only_search' => [
+                [
+                    [
+                        'sku' => 'Simple option 1',
+                        'visibility' => Visibility::VISIBILITY_IN_SEARCH,
+                        'url_rewrite_created' => true,
+                    ],
+                    [
+                        'sku' => 'Simple option 2',
+                        'visibility' => Visibility::VISIBILITY_IN_SEARCH,
+                        'url_rewrite_created' => true,
+                    ],
+                ],
+            ],
+            'visibility_for_both_product_not_visible_individuality' => [
+                [
+                    [
+                        'sku' => 'Simple option 1',
+                        'visibility' => Visibility::VISIBILITY_NOT_VISIBLE,
+                        'url_rewrite_created' => false,
+                    ],
+                    [
+                        'sku' => 'Simple option 2',
+                        'visibility' => Visibility::VISIBILITY_NOT_VISIBLE,
+                        'url_rewrite_created' => false,
+                    ],
+                ],
+            ],
+            'visibility_for_one_product_only_catalog' => [
+                [
+                    [
+                        'sku' => 'Simple option 1',
+                        'visibility' => Visibility::VISIBILITY_IN_CATALOG,
+                        'url_rewrite_created' => true,
+                    ],
+                    [
+                        'sku' => 'Simple option 2',
+                        'visibility' => Visibility::VISIBILITY_NOT_VISIBLE,
+                        'url_rewrite_created' => false,
+                    ],
+                ],
+            ],
+            'visibility_for_one_product_catalog_search' => [
+                [
+                    [
+                        'sku' => 'Simple option 1',
+                        'visibility' => Visibility::VISIBILITY_BOTH,
+                        'url_rewrite_created' => true,
+                    ],
+                    [
+                        'sku' => 'Simple option 2',
+                        'visibility' => Visibility::VISIBILITY_NOT_VISIBLE,
+                        'url_rewrite_created' => false,
+                    ],
+                ],
+            ],
+            'visibility_for_one_product_only_search' => [
+                [
+                    [
+                        'sku' => 'Simple option 1',
+                        'visibility' => Visibility::VISIBILITY_IN_SEARCH,
+                        'url_rewrite_created' => true,
+                    ],
+                    [
+                        'sku' => 'Simple option 2',
+                        'visibility' => Visibility::VISIBILITY_NOT_VISIBLE,
+                        'url_rewrite_created' => false,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Update products visibility.
+     *
+     * @param array $productsData
      * @return void
      */
-    public function testCheckUrlRewriteForOneOfChildWasCreated(): void
+    private function updateProductsVisibility(array $productsData): void
     {
-        $this->checkConfigurableUrlRewriteWasCreated();
-        $childProduct = $this->productRepository->get('Simple option 1');
-        $childProduct->setVisibility(Visibility::VISIBILITY_BOTH);
-        $this->productRepository->save($childProduct);
-        $childUrlRewrite = $this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => 'configurable-option-1.html']);
-        $this->assertNotNull($childUrlRewrite);
-        $this->assertEquals($childUrlRewrite->getTargetPath(), "catalog/product/view/id/{$childProduct->getId()}");
-        $this->assertNull($this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => 'configurable-option-2.html']));
+        foreach ($productsData as $productData) {
+            $product = $this->productRepository->get($productData['sku']);
+            $product->setVisibility($productData['visibility']);
+            $this->productRepository->save($product);
+        }
+    }
+
+    /**
+     * Get URL rewrite collection by requested products paths.
+     *
+     * @param array $requestPaths
+     * @param string $storeCode
+     * @return UrlRewriteCollection
+     */
+    private function getUrlRewritesCollectionByPaths(
+        array $requestPaths,
+        string $storeCode = 'default'
+    ): UrlRewriteCollection {
+        $collection = $this->urlRewriteCollectionFactory->create();
+        $collection->addStoreFilter($storeCode);
+        $collection->addFieldToFilter(UrlRewrite::REQUEST_PATH, ['in' => $requestPaths]);
+
+        return $collection;
     }
 
     /**
