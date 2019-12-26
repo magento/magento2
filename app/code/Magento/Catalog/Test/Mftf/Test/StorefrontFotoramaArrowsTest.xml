@@ -47,7 +47,7 @@
         <actionGroup ref="addProductImage" stepKey="addThirdImageToProduct">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
 
         <!-- Assert product in storefront product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openCreatedProductPage">
