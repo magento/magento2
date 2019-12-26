@@ -25,21 +25,11 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPage"/>
-        <scrollTo selector="{{StorefrontCustomerFooterSection.footerBlock}}" stepKey="scrollToFooter"/>
-        <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerFooterSection.formSubscribe}}"
-                   stepKey="giveEmail"/>
-        <click selector="{{StorefrontCustomerFooterSection.buttonSubscribe}}" stepKey="clickSubscribeButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see selector="{{StorefrontCustomerMessagesSection.successMessage}}"
-             userInput="Thank you for your subscription." stepKey="checkSuccessMessage"/>
-
-        <amOnPage url="{{AdminNewsletterSubscriberPage.url}}" stepKey="amOnNewsletterSubscribersPage"/>
-        <see selector="{{AdminNewsletterSubscriberGridSection.email('1')}}" userInput="{{Simple_US_Customer.email}}"
-             stepKey="checkEmail"/>
-        <see selector="{{AdminNewsletterSubscriberGridSection.type('1')}}" userInput="Guest" stepKey="checkType"/>
-        <see selector="{{AdminNewsletterSubscriberGridSection.firstName('1')}}" userInput="" stepKey="checkFirstName"/>
-        <see selector="{{AdminNewsletterSubscriberGridSection.lastName('1')}}" userInput="" stepKey="checkLastName"/>
+        <actionGroup ref="StorefrontSubscribeForNewsletterActionGroup" stepKey="subscribeForNewsletter">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckNewsletterSubscriberGuestActionGroup" stepKey="checkSubscribedForNewsletter">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
     </test>
 </tests>

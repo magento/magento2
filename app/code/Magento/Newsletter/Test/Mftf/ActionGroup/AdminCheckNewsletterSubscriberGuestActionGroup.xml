@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCheckNewsletterSubscriberGuestActionGroup">
+        <annotations>
+            <description>Go to the Admin Page and check Customer is subscribed for newsletter as guest.</description>
+        </annotations>
+
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+
+        <amOnPage url="{{AdminNewsletterSubscriberPage.url}}" stepKey="amOnNewsletterSubscribersPage"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.email('1')}}" userInput="{{customer.email}}"
+             stepKey="checkEmail"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.type('1')}}" userInput="Guest" stepKey="checkType"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.firstName('1')}}" userInput="" stepKey="checkFirstName"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.lastName('1')}}" userInput="" stepKey="checkLastName"/>
+    </actionGroup>
+</actionGroups>

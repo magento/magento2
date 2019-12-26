@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSubscribeForNewsletterActionGroup">
+        <annotations>
+            <description>Go to the Storefront Page and subscribe for newsletter by email.</description>
+        </annotations>
+
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+        <scrollTo selector="{{StorefrontCustomerFooterSection.footerBlock}}" stepKey="scrollToFooter"/>
+        <fillField userInput="{{customer.email}}" selector="{{StorefrontCustomerFooterSection.formSubscribe}}"
+                   stepKey="giveEmail"/>
+        <click selector="{{StorefrontCustomerFooterSection.buttonSubscribe}}" stepKey="clickSubscribeButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see selector="{{StorefrontCustomerMessagesSection.successMessage}}"
+             userInput="Thank you for your subscription." stepKey="checkSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
