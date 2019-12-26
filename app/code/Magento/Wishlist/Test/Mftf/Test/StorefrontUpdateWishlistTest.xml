@@ -43,11 +43,11 @@
             <argument name="productVar" value="$$product$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" stepKey="checkProductInWishlist">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" stepKey="checkProductInWishlist">
             <argument name="productVar" value="$$product$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCustomerEditProductInWishlist" stepKey="updateProductInWishlist">
+        <actionGroup ref="StorefrontCustomerEditProductInWishlistActionGroup" stepKey="updateProductInWishlist">
             <argument name="product" value="$$product$$"/>
             <argument name="description" value="some text"/>
             <argument name="quantity" value="2"/>

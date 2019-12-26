@@ -28,13 +28,13 @@
         </before>
 
         <!--Go to configuration general page-->
-        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigurationGeneralPage"/>
+        <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigurationGeneralPage"/>
 
         <!--Open country options section-->
         <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="clickOnStoreInformation"/>
 
         <!--Select top destinations country-->
-        <actionGroup ref="SelectTopDestinationsCountry" stepKey="selectTopDestinationsCountry">
+        <actionGroup ref="SelectTopDestinationsCountryActionGroup" stepKey="selectTopDestinationsCountry">
             <argument name="countries" value="Countries"/>
         </actionGroup>
 
@@ -51,19 +51,19 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
 
         <!--Verify country options in checkout top destination section-->
-        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry">
+        <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry">
             <argument name="country" value="Bahamas"/>
             <argument name="placeNumber" value="2"/>
         </actionGroup>
 
         <!--Go to configuration general page-->
-        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigurationGeneralPage2"/>
+        <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigurationGeneralPage2"/>
 
         <!--Open country options section-->
         <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="clickOnStoreInformation2"/>
 
         <!--Deselect top destinations country-->
-        <actionGroup ref="UnSelectTopDestinationsCountry" stepKey="unSelectTopDestinationsCountry">
+        <actionGroup ref="UnSelectTopDestinationsCountryActionGroup" stepKey="unSelectTopDestinationsCountry">
             <argument name="countries" value="Countries"/>
         </actionGroup>
 
@@ -71,7 +71,7 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
 
         <!--Verify country options is shown by default-->
-        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry2">
+        <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry2">
             <argument name="country" value="Afghanistan"/>
             <argument name="placeNumber" value="2"/>
         </actionGroup>

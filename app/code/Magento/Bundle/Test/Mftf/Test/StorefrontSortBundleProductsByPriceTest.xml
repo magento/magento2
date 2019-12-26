@@ -156,7 +156,7 @@
         </actionGroup>
 
         <!-- Switch category view to List mode -->
-        <actionGroup ref="StorefrontSwitchCategoryViewToListMode" stepKey="switchCategoryViewToListMode"/>
+        <actionGroup ref="StorefrontSwitchCategoryViewToListModeActionGroup" stepKey="switchCategoryViewToListMode"/>
 
         <!-- Sort products By Price -->
         <actionGroup ref="StorefrontCategoryPageSortProductActionGroup" stepKey="sortProductByPrice"/>

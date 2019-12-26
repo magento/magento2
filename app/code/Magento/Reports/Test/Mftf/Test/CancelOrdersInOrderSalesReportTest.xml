@@ -62,7 +62,7 @@
         </actionGroup>
 
         <!-- Cancel order -->
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder"/>
 
         <!-- Generate Order report for statuses  -->
         <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage1"/>
