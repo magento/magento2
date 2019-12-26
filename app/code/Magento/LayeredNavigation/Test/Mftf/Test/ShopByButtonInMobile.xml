@@ -47,7 +47,7 @@
         <comment userInput="Go to simple product edit page and set the product attribute to a value" stepKey="commentProductAttributeEdit" />
         <amOnPage url="{{AdminProductEditPage.url($$simpleProduct1.id$$)}}" stepKey="goToEditPage"/>
         <selectOption selector="{{AdminProductFormSection.customSelectField($$attribute.attribute[attribute_code]$$)}}" userInput="option1" stepKey="selectAttribute"/>
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
         <!-- Check storefront mobile view for shop by button is functioning as expected -->
         <comment userInput="Check storefront mobile view for shop by button is functioning as expected" stepKey="commentCheckShopByButton" />
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
