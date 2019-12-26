@@ -108,6 +108,14 @@
                 .actions-primary {
                     display: inline-block;
                     vertical-align: middle;
+                    
+                    > .stock.unavailable {
+					    line-height: 1;
+                        padding: @indent__s 11px;
+                        color: @color-orange-red1;
+                        border: 1px solid @color-orange-red1;
+                        font-weight: @font-weight__semibold;
+					}
                 }
             }
 
