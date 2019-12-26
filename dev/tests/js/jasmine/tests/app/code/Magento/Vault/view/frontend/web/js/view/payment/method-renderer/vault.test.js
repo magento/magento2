@@ -88,7 +88,7 @@ define([
             expect(vault.isPlaceOrderActionAllowed()).toBeFalsy();
         });
 
-        it('Payment method exist but place order action is not allowed', function () {
+        it('Payment method exists, but place order action is not allowed', function () {
             vault.selectPaymentMethod();
             expect(mocks['Magento_Checkout/js/model/quote'].paymentMethod().method).toEqual('vaultIndex');
 
@@ -99,7 +99,7 @@ define([
 
         });
 
-        it('Billing address exist but there is no selected payment method', function () {
+        it('Billing address exists, but there is no selected payment method', function () {
             mocks['Magento_Checkout/js/model/quote'].billingAddress(billingAddress);
 
             expect(vault.isButtonActive()).toBeFalsy();
