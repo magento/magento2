@@ -59,7 +59,7 @@ class VariationHandlerTest extends TestCase
         $this->variationHandler = $this->objectManager->create(VariationHandler::class);
         $this->product = $this->productRepository->get('configurable');
         $this->product->setTypeInstance($this->objectManager->create(Configurable::class));
-        $this->stockRegistry = Bootstrap::getObjectManager()->get(StockRegistryInterface::class);
+        $this->stockRegistry = $this->objectManager->get(StockRegistryInterface::class);
     }
 
     /**
@@ -74,7 +74,7 @@ class VariationHandlerTest extends TestCase
         ->setSmallImage('some_test_image.jpg')
         ->setThumbnail('some_test_image.jpg')
         ->setSwatchImage('some_test_image.jpg')
-        ->setNewVariationsAttributeSetId(4);
+        ->setNewVariationsAttributeSetId($this->product->getDefaultAttributeSetId());
         $generatedProducts = $this->variationHandler->generateSimpleProducts($this->product, $productsData);
         $this->assertEquals(3, count($generatedProducts));
         foreach ($generatedProducts as $productId) {

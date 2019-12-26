@@ -268,7 +268,7 @@ class HelperTest extends TestCase
         $attribute = $this->productAttributeRepository->get('test_configurable');
 
         foreach ($childProducts as $sku => $product) {
-            $simpleProduct = $this->getProduct($sku);
+            $simpleProduct = $this->productRepository->get($sku);
             $attributeValue = $simpleProduct->getData('test_configurable');
             foreach ($product['images'] as $image => $roles) {
                 foreach ($roles as $role) {
@@ -336,17 +336,6 @@ class HelperTest extends TestCase
         }
 
         return ['images' => $images];
-    }
-
-    /**
-     * Returns product by sku.
-     *
-     * @param string $sku
-     * @return ProductInterface
-     */
-    private function getProduct(string $sku): ProductInterface
-    {
-        return $this->productRepository->get($sku);
     }
 
     /**
