@@ -101,7 +101,7 @@ class HelperTest extends TestCase
         $this->productRepository->cleanCache();
         $this->productResource =$this->objectManager->get(ProductResource::class);
         $this->productAttributeRepository = $this->objectManager->create(ProductAttributeRepositoryInterface::class);
-        $this->jsonSerializer = $this->objectManager->create(SerializerInterface::class);
+        $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
         $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
         $this->config = $this->objectManager->get(Config::class);
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)->getDirectoryWrite(DirectoryList::MEDIA);
@@ -130,12 +130,12 @@ class HelperTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @dataProvider initializeWithExistChildImagesDataProvider
+     * @dataProvider initializeWithExistingChildImagesDataProvider
      * @param array $childProducts
      * @param array $expectedImages
      * @return void
      */
-    public function testInitializeWithExistChildImages(array $childProducts, array $expectedImages): void
+    public function testInitializeWithExistingChildImages(array $childProducts, array $expectedImages): void
     {
         $this->updateChildProductsImages(
             [
@@ -248,7 +248,7 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function initializeWithExistChildImagesDataProvider(): array
+    public function initializeWithExistingChildImagesDataProvider(): array
     {
         $dataProvider = $this->initializeDataProvider();
         unset($dataProvider['children_with_different_images'], $dataProvider['children_with_different_image_roles']);
@@ -348,7 +348,8 @@ class HelperTest extends TestCase
     {
         $simpleIds = $this->configurableProduct->getExtensionAttributes()->getConfigurableProductLinks();
         $criteria = $this->searchCriteriaBuilder->addFilter('entity_id', $simpleIds, 'in')->create();
-        foreach ($this->productRepository->getList($criteria)->getItems() as $simpleProduct) {
+        $products = $this->productRepository->getList($criteria)->getItems();
+        foreach ($products as $simpleProduct) {
             $simpleProduct->setStoreId(Store::DEFAULT_STORE_ID)
                 ->setImage($imageNames[$simpleProduct->getSku()])
                 ->setSmallImage($imageNames[$simpleProduct->getSku()])

@@ -58,7 +58,6 @@ class VariationHandlerTest extends TestCase
         $this->productRepository->cleanCache();
         $this->variationHandler = $this->objectManager->create(VariationHandler::class);
         $this->product = $this->productRepository->get('configurable');
-        $this->product->setTypeInstance($this->objectManager->create(Configurable::class));
         $this->stockRegistry = $this->objectManager->get(StockRegistryInterface::class);
     }
 
@@ -71,10 +70,10 @@ class VariationHandlerTest extends TestCase
     public function testGenerateSimpleProducts(array $productsData): void
     {
         $this->product->setImage('some_test_image.jpg')
-        ->setSmallImage('some_test_image.jpg')
-        ->setThumbnail('some_test_image.jpg')
-        ->setSwatchImage('some_test_image.jpg')
-        ->setNewVariationsAttributeSetId($this->product->getDefaultAttributeSetId());
+            ->setSmallImage('some_test_image.jpg')
+            ->setThumbnail('some_test_image.jpg')
+            ->setSwatchImage('some_test_image.jpg')
+            ->setNewVariationsAttributeSetId($this->product->getDefaultAttributeSetId());
         $generatedProducts = $this->variationHandler->generateSimpleProducts($this->product, $productsData);
         $this->assertEquals(3, count($generatedProducts));
         foreach ($generatedProducts as $productId) {
