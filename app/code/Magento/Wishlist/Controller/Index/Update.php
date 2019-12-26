@@ -11,7 +11,7 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Class Update
+ * Controller for updating wishlists
  */
 class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
 {
