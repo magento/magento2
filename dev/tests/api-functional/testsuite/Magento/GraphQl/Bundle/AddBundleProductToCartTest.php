@@ -368,6 +368,6 @@ mutation {
 }
 QUERY;
 
-        $response = $this->graphQlMutation($query);
+        $this->graphQlMutation($query);
     }
 }
