@@ -88,10 +88,10 @@ class AddSimpleProductsToCart implements ResolverInterface
     /**
      * Validate Items Types
      *
-     * @param $cartItem
+     * @param array $cartItem
      * @throws GraphQlInputException
      */
-    protected function validationItemTypes($cartItem)
+    protected function validationItemTypes(array $cartItem)
     {
         $values = $errorTypes = [];
 
@@ -100,7 +100,7 @@ class AddSimpleProductsToCart implements ResolverInterface
         }
 
         $product = $this->productRepository->get($cartItem['data']['sku'], false, null, true);
-        $optionsCollection = $product->getTypeInstance(true)->getOptionsCollection($product);
+        $optionsCollection = $product->getTypeInstance()->getOptionsCollection($product);
 
         foreach ($optionsCollection as $options) {
             $type = $options->getType();
