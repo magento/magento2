@@ -8,23 +8,20 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontConfigurableProductCategoryViewChildOnlyTest">
+    <test name="StorefrontShouldSeeOnlyConfigurableProductChildAssignedToSeparateCategoryTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="View configurable product child in storefront"/>
-            <title value="DEPRECATED It should be possible to only view the child product of a configurable product"/>
+            <stories value="View products"/>
+            <title value="It should be possible to only view the child product of a configurable product"/>
             <description value="Create configurable product, add to category such that only child variation is visible in category"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5832"/>
-            <group value="ConfigurableProduct"/>
-            <skip>
-                <issueId value="DEPRECATED">Use StorefrontShouldSeeOnlyConfigurableProductChildAssignedToSeparateCategoryTest instead</issueId>
-            </skip>
+            <group value="configurable_product"/>
         </annotations>
         <before>
             <!-- Create the category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <createData entity="ApiCategory" stepKey="secondCategory"/>
+            <createData entity="_defaultCategory" stepKey="secondCategory"/>
 
             <!-- Create an attribute with two options to be used in the first child product -->
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
@@ -85,45 +82,53 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
             <deleteData createDataKey="secondCategory" stepKey="deleteSecondCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-
         <!-- Go to the product page for the first product -->
-        <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
-        <waitForPageLoad stepKey="waitForProductGridLoad"/>
-        <actionGroup stepKey="searchForSimpleProduct" ref="FilterProductGridBySku2ActionGroup">
-            <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
+        <actionGroup ref="goToProductPageViaID" stepKey="openConfigChildProduct1Page">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
         </actionGroup>
-        <actionGroup stepKey="openProductEditPage" ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup"/>
+
         <!-- Edit the visibility the first simple product -->
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="Catalog, Search" stepKey="selectVisibilityCatalogSearch"/>
         <!--Add to category-->
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$secondCategory.name$$]" stepKey="addProductToCategory"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="addProductToCategoryAndSaveProduct">
+            <argument name="categoryName" value="$$secondCategory.name$$"/>
+        </actionGroup>
+
+        <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="reindexSearchIndex"/>
 
         <!-- Go to storefront to view child product -->
-        <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
-        <waitForPageLoad stepKey="waitForStorefront"/>
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$secondCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
-        <waitForPageLoad stepKey="waitForStorefrontCategory"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigChildProduct1.name$$)}}" stepKey="seeChildProductInCategory"/>
-        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigChildProduct2.name$$)}}" stepKey="dontSeeOtherChildProduct"/>
-        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$)}}" stepKey="dontSeeParentProduct"/>
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigChildProduct1.name$$)}}" stepKey="clickProductName"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <seeInCurrentUrl url="$$createConfigChildProduct1.custom_attributes[url_key]$$" stepKey="seeProductPageIsAccessible"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productName($$createConfigChildProduct1.name$$)}}" stepKey="seeProductNameOnProductPage"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToSecondCategoryStorefront">
+            <argument name="category" value="$$secondCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="seeChildProductInCategory">
+            <argument name="product" value="$createConfigChildProduct1$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="dontSeeOtherChildProduct">
+            <argument name="productName" value="$$createConfigChildProduct2.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="dontSeeParentProduct">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCategoryPageOpenProductActionGroup" stepKey="openConfigChildProductFromCategoryPage">
+            <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageNameAndUrlActionGroup" stepKey="checkStorefrontConfigChildProductPage">
+            <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
+            <argument name="productUrl" value="$$createConfigChildProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
     </test>
 </tests>
