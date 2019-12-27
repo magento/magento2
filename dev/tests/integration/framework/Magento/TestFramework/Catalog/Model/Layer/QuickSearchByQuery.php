@@ -33,8 +33,8 @@ class QuickSearchByQuery
      * Flush search instances cache and find products by search query.
      *
      * @param string $query
-     * @param string $sortOrder
      * @param string $sortedField
+     * @param string $sortOrder
      * @return Collection
      */
     public function execute(
