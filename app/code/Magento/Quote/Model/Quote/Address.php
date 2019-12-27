@@ -39,7 +39,6 @@ use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
 use Magento\Quote\Model\Quote\Address\TotalFactory;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory;
-use Magento\SalesRule\Model\Rule;
 use Magento\Shipping\Model\CarrierFactoryInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -119,7 +118,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method float getShippingInclTax()
  * @method Address setShippingInclTax(float $value)
  * @method float getBaseShippingInclTax()
- * @method Rule[] getCartFixedRules()
+ * @method \Magento\SalesRule\Model\Rule[] getCartFixedRules()
  * @method int[] getAppliedRuleIds()
  * @method Address setBaseShippingInclTax(float $value)
  *
