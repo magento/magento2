@@ -12,8 +12,8 @@ use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
-use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Result\Page;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -31,11 +31,6 @@ class RenderConfigurableOptionsTest extends TestCase
      * @var ObjectManager
      */
     private $objectManager;
-
-    /**
-     * @var EncoderInterface
-     */
-    private $jsonEncoder;
 
     /**
      * @var Data
@@ -63,17 +58,22 @@ class RenderConfigurableOptionsTest extends TestCase
     private $page;
 
     /**
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->jsonEncoder = $this->objectManager->get(EncoderInterface::class);
         $this->configurableHelper = $this->objectManager->get(Data::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->configurableAttributeData = $this->objectManager->get(ConfigurableAttributeData::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->page = $this->objectManager->create(Page::class);
+        $this->json = $this->objectManager->get(Json::class);
         parent::setUp();
     }
 
@@ -97,7 +97,7 @@ class RenderConfigurableOptionsTest extends TestCase
         $attributesJson = str_replace(
             ['[', ']'],
             ['\[', '\]'],
-            $this->jsonEncoder->encode($confAttrData['attributes'])
+            $this->json->serialize($confAttrData['attributes'])
         );
         $optionsHtml = $this->getConfigurableOptionsHtml('Configurable product');
         $this->assertRegExp("/\"spConfig\": {\"attributes\":{$attributesJson}/", $optionsHtml);

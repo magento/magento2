@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Model\Stock\ItemFactory;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -27,6 +27,8 @@ $optionsFactory = $objectManager->get(Factory::class);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductExtensionInterfaceFactory $productExtensionFactory */
 $productExtensionFactory = $objectManager->get(ProductExtensionInterfaceFactory::class);
+/** @var ProductFactory $productFactory */
+$productFactory = $objectManager->get(ProductFactory::class);
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
@@ -42,8 +44,7 @@ foreach ($options as $option) {
         continue;
     }
     [$productSku, $productPrice, $productDescription] = array_shift($simpleProductsData);
-    /** @var Product $product */
-    $product = $objectManager->create(Product::class);
+    $product = $productFactory->create();
     $product->isObjectNew(true);
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setAttributeSetId($product->getDefaultAttributeSetId())
@@ -64,7 +65,7 @@ foreach ($options as $option) {
     ];
     $associatedProductIds[] = $product->getId();
 }
-$product = $objectManager->create(Product::class);
+$product = $productFactory->create();
 $product->isObjectNew(true);
 $product->setTypeId(Configurable::TYPE_CODE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())

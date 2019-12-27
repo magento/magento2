@@ -16,7 +16,7 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test cases related to find configurable product via quick search.
+ * Test cases related to find configurable product via quick search using mysql search engine.
  *
  * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
  * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
@@ -59,19 +59,7 @@ class QuickSearchTest extends TestCase
      *
      * @return void
      */
-    public function testChildProductsHasNotFoundedByQueryUsingMysql(): void
-    {
-        $this->checkThatOnlyConfigurableProductIsAvailableBySearch('Configurable Option');
-    }
-
-    /**
-     * Assert that configurable child products has not found by query using Elasticsearch 6.0+ search engine.
-     *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     *
-     * @return void
-     */
-    public function testChildProductsHasNotFoundedByQueryUsingElasticsearch(): void
+    public function testChildProductsHasNotFoundedByQuery(): void
     {
         $this->checkThatOnlyConfigurableProductIsAvailableBySearch('Configurable Option');
     }
@@ -87,26 +75,7 @@ class QuickSearchTest extends TestCase
      * @param bool $expectedResult
      * @return void
      */
-    public function testOneOfChildIsAvailableBySearchUsingMysql(int $visibility, bool $expectedResult): void
-    {
-        $this->checkThatOnlyConfigurableProductIsAvailableBySearch('Configurable Option');
-        $this->updateProductVisibility($visibility);
-        $this->checkProductAvailabilityInSearch($expectedResult);
-        $this->checkThatOnlyConfigurableProductIsAvailableBySearch('White');
-    }
-
-    /**
-     * Assert that child product of configurable will be available by search after
-     * set to product visibility by catalog and search using Elasticsearch 6.0+ search engine.
-     *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @dataProvider productAvailabilityInSearchByVisibilityDataProvider
-     *
-     * @param int $visibility
-     * @param bool $expectedResult
-     * @return void
-     */
-    public function testOneOfChildIsAvailableBySearchUsingElasticsearch(int $visibility, bool $expectedResult): void
+    public function testOneOfChildIsAvailableBySearch(int $visibility, bool $expectedResult): void
     {
         $this->checkThatOnlyConfigurableProductIsAvailableBySearch('Configurable Option');
         $this->updateProductVisibility($visibility);
@@ -148,19 +117,7 @@ class QuickSearchTest extends TestCase
      *
      * @return void
      */
-    public function testSearchByOptionValueUsingMysql(): void
-    {
-        $this->checkThatOnlyConfigurableProductIsAvailableBySearch('Option 1');
-    }
-
-    /**
-     * Assert that configurable product was found by option value using Elasticsearch 6.0+ search engine.
-     *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     *
-     * @return void
-     */
-    public function testSearchByOptionValueUsingElasticsearch(): void
+    public function testSearchByOptionValue(): void
     {
         $this->checkThatOnlyConfigurableProductIsAvailableBySearch('Option 1');
     }
@@ -172,7 +129,7 @@ class QuickSearchTest extends TestCase
      *
      * @return void
      */
-    private function checkThatOnlyConfigurableProductIsAvailableBySearch(string $searchQuery): void
+    protected function checkThatOnlyConfigurableProductIsAvailableBySearch(string $searchQuery): void
     {
         $searchResult = $this->quickSearchByQuery->execute($searchQuery);
         $this->assertCount(1, $searchResult->getItems());
@@ -187,7 +144,7 @@ class QuickSearchTest extends TestCase
      * @param int $visibility
      * @return void
      */
-    private function updateProductVisibility(int $visibility): void
+    protected function updateProductVisibility(int $visibility): void
     {
         $childProduct = $this->productRepository->get('Simple option 1');
         $childProduct->setVisibility($visibility);
@@ -200,7 +157,7 @@ class QuickSearchTest extends TestCase
      * @param bool $firstChildIsVisible
      * @return void
      */
-    private function checkProductAvailabilityInSearch(bool $firstChildIsVisible): void
+    protected function checkProductAvailabilityInSearch(bool $firstChildIsVisible): void
     {
         $searchResult = $this->quickSearchByQuery->execute('Black');
         $this->assertNotNull($searchResult->getItemByColumnValue(Product::SKU, 'Configurable product'));

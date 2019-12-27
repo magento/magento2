@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
@@ -35,9 +35,9 @@ class FindByUrlRewriteTest extends TestCase
     private $urlFinder;
 
     /**
-     * @var StoreManagerInterface
+     * @var ProductResource
      */
-    private $storeManager;
+    private $productResource;
 
     /**
      * @var ProductRepositoryInterface
@@ -56,8 +56,8 @@ class FindByUrlRewriteTest extends TestCase
     {
         $this->objectManger = Bootstrap::getObjectManager();
         $this->urlFinder = $this->objectManger->get(UrlFinderInterface::class);
+        $this->productResource = $this->objectManger->get(ProductResource::class);
         $this->productRepository = $this->objectManger->get(ProductRepositoryInterface::class);
-        $this->storeManager = $this->objectManger->get(StoreManagerInterface::class);
         $this->urlRewriteCollectionFactory = $this->objectManger->get(UrlRewriteCollectionFactory::class);
         parent::setUp();
     }
@@ -72,25 +72,23 @@ class FindByUrlRewriteTest extends TestCase
      * @param array $productsData
      * @return void
      */
-    public function testCheckIsUrlRewriteForChildrenProductsAreCreated(array $productsData): void
+    public function testCheckIsUrlRewriteForChildrenProductsHasCreated(array $productsData): void
     {
         $this->checkConfigurableUrlRewriteWasCreated();
         $this->updateProductsVisibility($productsData);
-        $urlRewritesCollection = $this->getUrlRewritesCollectionByPaths([
-            'configurable-option-1.html',
-            'configurable-option-2.html',
-        ]);
+        $productIdsBySkus = $this->getProductIdsBySkus($productsData);
+        $urlRewritesCollection = $this->getUrlRewritesCollectionByProductIds($productIdsBySkus);
         $expectedCount = 0;
         foreach ($productsData as $productData) {
-            $product = $this->productRepository->get($productData['sku']);
+            $productId = $productIdsBySkus[$productData['sku']];
             /** @var UrlRewriteItem $urlRewrite */
             $urlRewrite = $urlRewritesCollection->getItemByColumnValue(
                 UrlRewrite::TARGET_PATH,
-                "catalog/product/view/id/{$product->getId()}"
+                "catalog/product/view/id/{$productId}"
             );
             if ($productData['url_rewrite_created']) {
                 $this->assertNotNull($urlRewrite);
-                $this->assertEquals($product->getId(), $urlRewrite->getEntityId());
+                $this->assertEquals($productId, $urlRewrite->getEntityId());
                 $this->assertEquals('product', $urlRewrite->getEntityType());
                 $expectedCount++;
             } else {
@@ -227,19 +225,20 @@ class FindByUrlRewriteTest extends TestCase
     }
 
     /**
-     * Get URL rewrite collection by requested products paths.
+     * Get URL rewrite collection by product ids.
      *
-     * @param array $requestPaths
+     * @param int[] $productIds
      * @param string $storeCode
      * @return UrlRewriteCollection
      */
-    private function getUrlRewritesCollectionByPaths(
-        array $requestPaths,
+    private function getUrlRewritesCollectionByProductIds(
+        array $productIds,
         string $storeCode = 'default'
     ): UrlRewriteCollection {
         $collection = $this->urlRewriteCollectionFactory->create();
         $collection->addStoreFilter($storeCode);
-        $collection->addFieldToFilter(UrlRewrite::REQUEST_PATH, ['in' => $requestPaths]);
+        $collection->addFieldToFilter(UrlRewrite::ENTITY_TYPE, ['eq' => 'product']);
+        $collection->addFieldToFilter(UrlRewrite::ENTITY_ID, ['in' => $productIds]);
 
         return $collection;
     }
@@ -254,7 +253,8 @@ class FindByUrlRewriteTest extends TestCase
         $configurableProduct = $this->productRepository->get('Configurable product');
         $configurableUrlRewrite = $this->urlFinder->findOneByData(
             [
-                UrlRewrite::REQUEST_PATH => 'configurable-product-with-two-child.html'
+                UrlRewrite::ENTITY_TYPE => 'product',
+                UrlRewrite::ENTITY_ID => $configurableProduct->getId(),
             ]
         );
         $this->assertNotNull($configurableUrlRewrite);
@@ -262,5 +262,18 @@ class FindByUrlRewriteTest extends TestCase
             $configurableUrlRewrite->getTargetPath(),
             "catalog/product/view/id/{$configurableProduct->getId()}"
         );
+    }
+
+    /**
+     * Load all product ids by skus.
+     *
+     * @param array $productsData
+     * @return array
+     */
+    private function getProductIdsBySkus(array $productsData): array
+    {
+        $skus = array_column($productsData, 'sku');
+
+        return $this->productResource->getProductsIdsBySkus($skus);
     }
 }

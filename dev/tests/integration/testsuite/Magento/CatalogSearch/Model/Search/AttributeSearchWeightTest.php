@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory;
 use Magento\TestFramework\Catalog\Model\Layer\QuickSearchByQuery;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -81,7 +79,7 @@ class AttributeSearchWeightTest extends TestCase
         array $expectedProductNames
     ): void {
         $this->updateAttributesWeight($attributeWeights);
-        $actualProductNames = $this->collectProductsName($this->quickSearchByQuery->execute($searchQuery));
+        $actualProductNames = $this->quickSearchByQuery->execute($searchQuery)->getColumnValues('name');
         $this->assertEquals($expectedProductNames, $actualProductNames, 'Products order is not as expected.');
     }
 
@@ -158,28 +156,9 @@ class AttributeSearchWeightTest extends TestCase
     {
         foreach ($attributeWeights as $attributeCode => $weight) {
             $attribute = $this->productAttributeRepository->get($attributeCode);
-
-            if ($attribute) {
-                $attribute->setSearchWeight($weight);
-                $this->productAttributeRepository->save($attribute);
-            }
+            $attribute->setSearchWeight($weight);
+            $this->productAttributeRepository->save($attribute);
         }
-    }
-
-    /**
-     * Get all names from founded products.
-     *
-     * @param Collection $productsCollection
-     * @return array
-     */
-    protected function collectProductsName(Collection $productsCollection): array
-    {
-        $result = [];
-        foreach ($productsCollection as $product) {
-            $result[] = $product->getName();
-        }
-
-        return $result;
     }
 
     /**
