@@ -16,7 +16,7 @@
             <argument name="product"/>
         </arguments>
 
-        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="waitForProduct"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="waitForProduct"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{product.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
         <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->

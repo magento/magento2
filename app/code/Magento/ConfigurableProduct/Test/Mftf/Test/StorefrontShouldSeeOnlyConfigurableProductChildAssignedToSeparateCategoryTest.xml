@@ -97,7 +97,7 @@
         </after>
 
         <!-- Go to the product page for the first product -->
-        <actionGroup ref="goToProductPageViaID" stepKey="openConfigChildProduct1Page">
+        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openConfigChildProduct1Page">
             <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
         </actionGroup>
 
