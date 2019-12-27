@@ -306,5 +306,7 @@ class Quote extends AbstractDb
         if (!$object->isPreventSaving()) {
             return parent::save($object);
         }
+
+        return $this;
     }
 }
