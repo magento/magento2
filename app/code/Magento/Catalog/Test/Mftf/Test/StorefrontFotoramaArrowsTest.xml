@@ -38,13 +38,13 @@
         </actionGroup>
 
         <!-- Add images to product -->
-        <actionGroup ref="addProductImage" stepKey="addFirstImageToProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageToProduct">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
-        <actionGroup ref="addProductImage" stepKey="addSecondImageToProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageToProduct">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
-        <actionGroup ref="addProductImage" stepKey="addThirdImageToProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addThirdImageToProduct">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
