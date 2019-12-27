@@ -24,10 +24,10 @@
             <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 1" />
             <createData entity="SimpleTwo" stepKey="createSimpleProduct1"/>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct2"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage1">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage1">
                 <argument name="product" value="$$createSimpleProduct1$$"/>
             </actionGroup>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage2">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage2">
                 <argument name="product" value="$$createSimpleProduct2$$"/>
             </actionGroup>
         </before>

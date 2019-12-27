@@ -65,7 +65,7 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="addProductToCheckoutPage" stepKey="addProductToCheckoutPage">
+        <actionGroup ref="AddProductToCheckoutPageActionGroup" stepKey="addProductToCheckoutPage">
             <argument name="Category" value="$$createPreReqCategory$$"/>
         </actionGroup>
         <!--set ID for iframe of PayPal group button-->
