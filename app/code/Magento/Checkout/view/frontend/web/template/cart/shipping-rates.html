@@ -24,7 +24,8 @@
                                 checked: $parents[1].selectedShippingMethod,
                                 attr: {
                                         value: carrier_code + '_' + method_code,
-                                        id: 's_method_' + carrier_code + '_' + method_code
+                                        id: 's_method_' + carrier_code + '_' + method_code,
+                                        disabled: false
                                         }
                                 "/>
                     <label class="label" data-bind="attr: {for: 's_method_' + carrier_code + '_' + method_code}">
