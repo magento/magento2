@@ -129,7 +129,7 @@ class QuickSearchTest extends TestCase
      *
      * @return void
      */
-    protected function checkThatOnlyConfigurableProductIsAvailableBySearch(string $searchQuery): void
+    private function checkThatOnlyConfigurableProductIsAvailableBySearch(string $searchQuery): void
     {
         $searchResult = $this->quickSearchByQuery->execute($searchQuery);
         $this->assertCount(1, $searchResult->getItems());
@@ -144,7 +144,7 @@ class QuickSearchTest extends TestCase
      * @param int $visibility
      * @return void
      */
-    protected function updateProductVisibility(int $visibility): void
+    private function updateProductVisibility(int $visibility): void
     {
         $childProduct = $this->productRepository->get('Simple option 1');
         $childProduct->setVisibility($visibility);
@@ -157,7 +157,7 @@ class QuickSearchTest extends TestCase
      * @param bool $firstChildIsVisible
      * @return void
      */
-    protected function checkProductAvailabilityInSearch(bool $firstChildIsVisible): void
+    private function checkProductAvailabilityInSearch(bool $firstChildIsVisible): void
     {
         $searchResult = $this->quickSearchByQuery->execute('Black');
         $this->assertNotNull($searchResult->getItemByColumnValue(Product::SKU, 'Configurable product'));

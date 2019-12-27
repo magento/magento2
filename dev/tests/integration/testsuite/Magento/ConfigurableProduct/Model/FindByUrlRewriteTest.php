@@ -14,7 +14,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteItem;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\TestCase;
@@ -28,11 +27,6 @@ class FindByUrlRewriteTest extends TestCase
      * @var ObjectManager
      */
     private $objectManger;
-
-    /**
-     * @var UrlFinderInterface
-     */
-    private $urlFinder;
 
     /**
      * @var ProductResource
@@ -55,7 +49,6 @@ class FindByUrlRewriteTest extends TestCase
     protected function setUp()
     {
         $this->objectManger = Bootstrap::getObjectManager();
-        $this->urlFinder = $this->objectManger->get(UrlFinderInterface::class);
         $this->productResource = $this->objectManger->get(ProductResource::class);
         $this->productRepository = $this->objectManger->get(ProductRepositoryInterface::class);
         $this->urlRewriteCollectionFactory = $this->objectManger->get(UrlRewriteCollectionFactory::class);
@@ -251,13 +244,8 @@ class FindByUrlRewriteTest extends TestCase
     private function checkConfigurableUrlRewriteWasCreated(): void
     {
         $configurableProduct = $this->productRepository->get('Configurable product');
-        $configurableUrlRewrite = $this->urlFinder->findOneByData(
-            [
-                UrlRewrite::ENTITY_TYPE => 'product',
-                UrlRewrite::ENTITY_ID => $configurableProduct->getId(),
-            ]
-        );
-        $this->assertNotNull($configurableUrlRewrite);
+        $configurableUrlRewrite = $this->getUrlRewritesCollectionByProductIds([$configurableProduct->getId()])
+            ->getFirstItem();
         $this->assertEquals(
             $configurableUrlRewrite->getTargetPath(),
             "catalog/product/view/id/{$configurableProduct->getId()}"
