@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Smetana_Third::partner" title="Partners" module="Smetana_Third" sortOrder="10" action="smetana_third_admin/partner" resource="Smetana_Third::partner"/>
+    </menu>
+</config>

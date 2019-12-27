@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="partner_listing_data_source" xsi:type="string">Smetana\Third\Model\ResourceModel\Partner\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Smetana\Third\Model\ResourceModel\Partner\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">smetana_partner</argument>
+            <argument name="eventPrefix" xsi:type="string">smetana_partner_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">partner_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Smetana\Third\Model\ResourceModel\Partner</argument>
+        </arguments>
+    </type>
+    <virtualType name="PartnerGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PartnerGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Smetana\Third\Model\ResourceModel\Partner\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">PartnerGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="product_repository_partner" type="Smetana\Third\Plugin\ProductRepository" />
+    </type>
+    <type name="Magento\Catalog\Api\Data\ProductInterface">
+        <plugin name="product_partner" type="Smetana\Third\Plugin\Product" />
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ProductDataProvider">
+        <plugin name="after_get_product_data" type="Smetana\Third\Plugin\AddProductData" />
+    </type>
+    <preference for="Smetana\Third\Api\Data\PartnerSearchResultInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Smetana\Third\Api\Data\PartnerInterface" type="Smetana\Third\Model\Partner" />
+    <preference for="Smetana\Third\Api\PartnerRepositoryInterface" type="Smetana\Third\Model\PartnerRepository" />
+</config>
