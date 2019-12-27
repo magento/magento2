@@ -385,6 +385,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function clear()
     {
         $this->searchResult = null;
+        $this->setFlag('has_category_filter', false);
+
         return parent::clear();
     }
 
@@ -394,6 +396,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected function _reset()
     {
         $this->searchResult = null;
+        $this->setFlag('has_category_filter', false);
+
         return parent::_reset();
     }
 
