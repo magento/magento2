@@ -26,7 +26,7 @@
                 <argument name="group" value="Product Details"/>
                 <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
             </actionGroup>
-            <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProductWithCustomAttributeSet" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
