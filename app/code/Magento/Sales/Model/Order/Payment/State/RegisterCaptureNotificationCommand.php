@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\StatusResolver;
 /**
  * Class RegisterCaptureNotificationCommand
  *
- * @package Magento\Sales\Model\Order\Payment\State
+ * Command that Register Capture Notification
  */
 class RegisterCaptureNotificationCommand implements CommandInterface
 {
