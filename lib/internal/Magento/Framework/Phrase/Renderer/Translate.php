@@ -1,7 +1,5 @@
 <?php
 /**
- * Translate Phrase renderer
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +9,9 @@ use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\TranslateInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Translate Phrase renderer
+ */
 class Translate implements RendererInterface
 {
     /**
@@ -50,8 +51,7 @@ class Translate implements RendererInterface
     {
         $text = end($source);
         /* If phrase contains escaped quotes then use translation for phrase with non-escaped quote */
-        $text = str_replace('\"', '"', $text);
-        $text = str_replace("\\'", "'", $text);
+        $text = strtr($text, ['\"' => '"', "\\'" => "'"]);
 
         try {
             $data = $this->translator->getData();
