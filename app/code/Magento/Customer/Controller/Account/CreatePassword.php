@@ -17,9 +17,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Class CreatePassword
- *
- * @package Magento\Customer\Controller\Account
+ * Controller for front-end customer password reset form
  */
 class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
 {

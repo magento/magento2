@@ -8,9 +8,7 @@ namespace Magento\User\Controller\Adminhtml\Auth;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
- * Class ResetPassword
- *
- * @package Magento\User\Controller\Adminhtml\Auth
+ * Controller for admin user password reset form
  */
 class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth implements HttpGetActionInterface
 {
