@@ -28,7 +28,7 @@
         </after>
 
         <!--Create the Category Url Rewrite-->
-        <actionGroup ref="AdminAddUrlRewrite" stepKey="addUrlRewriteSecondTime">
+        <actionGroup ref="AdminAddUrlRewriteActionGroup" stepKey="addUrlRewriteSecondTime">
             <argument name="category" value="$$category.name$$"/>
             <argument name="customUrlRewriteValue" value="For Category"/>
             <argument name="storeValue" value="Default Store View"/>
@@ -38,7 +38,7 @@
         </actionGroup>
 
         <!--Delete the Category Url Rewrite-->
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewriteSecondTime">
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewriteSecondTime">
             <argument name="requestPath" value="newrequestpath.html"/>
         </actionGroup>
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessageSecondTime">
@@ -46,7 +46,7 @@
         </actionGroup>
 
         <!--Verify AssertPageByUrlRewriteIsNotFound-->
-        <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="checkUrlOnFrontendSecondTime">
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="checkUrlOnFrontendSecondTime">
             <argument name="requestPath" value="newrequestpath.html"/>
         </actionGroup>
 

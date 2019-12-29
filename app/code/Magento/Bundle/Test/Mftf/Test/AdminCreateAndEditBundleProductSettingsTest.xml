@@ -42,15 +42,15 @@
         </after>
 
         <!-- Create new bundle product -->
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createBundleProduct">
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createBundleProduct">
             <argument name="productType" value="bundle"/>
         </actionGroup>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainProductFields"/>
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainProductFields"/>
 
         <!-- Add the bundle option to the product -->
-        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption">
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$createSimpleProduct.sku$$"/>
@@ -75,7 +75,7 @@
         </actionGroup>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
@@ -101,7 +101,7 @@
         </actionGroup>
 
         <!-- Assert product in assigned to Website -->
-        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
             <argument name="website" value="$createWebsite.website[name]$"/>
         </actionGroup>
 
@@ -122,7 +122,7 @@
         <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
@@ -137,7 +137,7 @@
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
 
         <!-- Delete created bundle product -->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>
@@ -184,15 +184,15 @@
         </after>
 
         <!-- Create new bundle product -->
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createBundleProduct">
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createBundleProduct">
             <argument name="productType" value="bundle"/>
         </actionGroup>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainProductFields"/>
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainProductFields"/>
 
         <!-- Add first bundle option to the product -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addFirstBundleOption">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addFirstBundleOption">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
@@ -202,7 +202,7 @@
         </actionGroup>
 
         <!-- Add second bundle option to the product -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addSecondBundleOption">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addSecondBundleOption">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
             <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
@@ -212,7 +212,7 @@
         </actionGroup>
 
         <!-- Add third bundle option to the product -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addThirdBundleOption">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addThirdBundleOption">
             <argument name="x" value="2"/>
             <argument name="n" value="3"/>
             <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
@@ -227,7 +227,7 @@
         </actionGroup>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="saveWithThreeOptions"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveWithThreeOptions"/>
 
         <!-- Open created product -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
@@ -238,17 +238,17 @@
         </actionGroup>
 
         <!-- Remove second option -->
-        <actionGroup ref="deleteBundleOptionByIndex" stepKey="deleteSecondOption">
+        <actionGroup ref="DeleteBundleOptionByIndexActionGroup" stepKey="deleteSecondOption">
             <argument name="deleteIndex" value="1"/>
         </actionGroup>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveWithTwoOptions"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!-- Delete created bundle product -->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>

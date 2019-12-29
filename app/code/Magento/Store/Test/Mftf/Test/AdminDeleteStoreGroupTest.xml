@@ -39,7 +39,7 @@
         </actionGroup>
 
         <!--Verify deleted Store group is not present in grid and verify AssertStoreGroupNotInGrid message-->
-        <actionGroup ref="AssertStoreNotInGrid" stepKey="verifyDeletedStoreGroupNotInGrid">
+        <actionGroup ref="AssertStoreNotInGridActionGroup" stepKey="verifyDeletedStoreGroupNotInGrid">
             <argument name="storeGroupName" value="{{customStore.name}}"/>
         </actionGroup>
 
