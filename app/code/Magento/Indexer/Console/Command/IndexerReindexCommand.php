@@ -76,6 +76,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     {
         $returnValue = Cli::RETURN_FAILURE;
         foreach ($this->getIndexers($input) as $indexer) {
+            $output->write($indexer->getTitle() . ' ');
             try {
                 $this->validateIndexerStatus($indexer);
                 $startTime = microtime(true);
@@ -90,8 +91,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                     }
                 }
                 $resultTime = microtime(true) - $startTime;
+
                 $output->writeln(
-                    $indexer->getTitle() . ' index has been rebuilt successfully in ' . gmdate('H:i:s', $resultTime)
+                    __('index has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', $resultTime)])
                 );
                 $returnValue = Cli::RETURN_SUCCESS;
             } catch (LocalizedException $e) {
@@ -111,7 +113,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function getIndexers(InputInterface $input)
     {
-        $indexers =  parent::getIndexers($input);
+        $indexers = parent::getIndexers($input);
         $allIndexers = $this->getAllIndexers();
         if (!array_diff_key($allIndexers, $indexers)) {
             return $indexers;
