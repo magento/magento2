@@ -97,9 +97,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Send Email'),
                     'class' => 'send-email',
-                    'onclick' => 'confirmSetLocation(\'' . __(
+                    'onclick' => 'confirmSetLocation(\'' . $this->_escaper->escapeJs(__(
                         'Are you sure you want to send an invoice email to customer?'
-                    ) . '\', \'' . $this->getEmailUrl() . '\')'
+                    )) . '\', \'' . $this->getEmailUrl() . '\')'
                 ]
             );
         }

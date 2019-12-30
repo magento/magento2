@@ -35,7 +35,9 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
         }
 
         if ($this->_authorization->isAllowed('Magento_Backend::flush_cache_storage')) {
-            $message = __('The cache storage may contain additional data. Are you sure that you want to flush it?');
+            $message = $this->_escaper->escapeJs(
+                __('The cache storage may contain additional data. Are you sure that you want to flush it?')
+            );
             $this->buttonList->add(
                 'flush_system',
                 [

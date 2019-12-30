@@ -67,7 +67,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         $agreement = $this->_getBillingAgreement();
         if ($agreement && $agreement->canCancel() && $this->_isAllowed('Magento_Paypal::actions_manage')) {
-            $confirmText = __('Are you sure you want to do this?');
+            $confirmText = $this->_escaper->escapeJs(__('Are you sure you want to do this?'));
             $this->buttonList->add(
                 'cancel',
                 [
