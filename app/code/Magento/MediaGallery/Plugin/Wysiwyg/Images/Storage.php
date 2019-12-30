@@ -104,7 +104,7 @@ class Storage
      * Delete media data after the folder delete action from Wysiwyg
      *
      * @param StorageSubject $subject
-     * @param null $result
+     * @param mixed $result
      * @param string $path
      *
      * @return null
