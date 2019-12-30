@@ -56,11 +56,17 @@ class ExportGridActions extends Column
                 $name = $this->getData('name');
                 if (isset($item['file_name'])) {
                     $item[$name]['view'] = [
-                        'href' => $this->urlBuilder->getUrl(Download::URL, ['_query' => ['filename' => $item['file_name']]]),
+                        'href' => $this->urlBuilder->getUrl(
+                            Download::URL,
+                            ['_query' => ['filename' => $item['file_name']]]
+                        ),
                         'label' => __('Download')
                     ];
                     $item[$name]['delete'] = [
-                        'href' => $this->urlBuilder->getUrl(Delete::URL, ['_query' => ['filename' => $item['file_name']]]),
+                        'href' => $this->urlBuilder->getUrl(
+                            Delete::URL,
+                            ['_query' => ['filename' => $item['file_name']]]
+                        ),
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete'),
