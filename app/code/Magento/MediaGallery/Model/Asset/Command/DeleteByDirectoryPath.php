@@ -16,6 +16,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class DeleteByDirectoryPath
+ *
+ * Remove asset(s) that correspond the provided directory path
  */
 class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface
 {
@@ -48,7 +50,7 @@ class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface
     }
 
     /**
-     * Delete media asset by path
+     * Delete media asset(s) by path
      *
      * @param string $directoryPath
      *
