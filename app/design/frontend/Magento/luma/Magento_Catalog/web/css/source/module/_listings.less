@@ -110,11 +110,10 @@
                     vertical-align: middle;
                     
                     > .stock.unavailable {
-                        border: 1px solid @color-orange-red1;
-                        color: @color-orange-red1;
-                        font-weight: @font-weight__semibold;
                         line-height: 1;
-                        padding: @indent__s 11px;
+                        padding-bottom: @indent__s;
+                        padding-top: @indent__s;
+                        padding-right: 24px;
                     }
                 }
             }
@@ -424,7 +423,19 @@
     }
 }
 
-//
+//  
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .product-item-actions {
+        .actions-primary {
+            display: block;
+        }
+    }
+}
+
+//  
 //  Desktop
 //  _____________________________________________
 
