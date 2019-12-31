@@ -128,8 +128,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         $dependentIndexers = [[]];
 
         foreach ($indexers as $indexer) {
-            array_push($relatedIndexers, $this->getRelatedIndexerIds($indexer->getId()));
-            array_push($dependentIndexers, $this->getDependentIndexerIds($indexer->getId()));
+            $relatedIndexers[] = $this->getRelatedIndexerIds($indexer->getId());
+            $dependentIndexers[] = $this->getDependentIndexerIds($indexer->getId());
         }
 
         $relatedIndexers = array_merge(...$relatedIndexers);
@@ -162,16 +162,15 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * @param string $indexerId
      * @return array
      */
-    private function getRelatedIndexerIds(string $indexerId)
+    private function getRelatedIndexerIds(string $indexerId): array
     {
         $relatedIndexerIds = [[]];
         foreach ($this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($indexerId) as $relatedIndexerId) {
-            array_push($relatedIndexerIds, [$relatedIndexerId], $this->getRelatedIndexerIds($relatedIndexerId));
+            $relatedIndexerIds[] = [$relatedIndexerId];
+            $relatedIndexerIds[] = $this->getRelatedIndexerIds($relatedIndexerId);
         }
 
-        $relatedIndexerIds = array_merge(...$relatedIndexerIds);
-
-        return array_unique($relatedIndexerIds);
+        return array_unique(array_merge(...$relatedIndexerIds));
     }
 
     /**
@@ -180,13 +179,14 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * @param string $indexerId
      * @return array
      */
-    private function getDependentIndexerIds(string $indexerId)
+    private function getDependentIndexerIds(string $indexerId): array
     {
         $dependentIndexerIds = [[]];
         foreach (array_keys($this->getConfig()->getIndexers()) as $id) {
             $dependencies = $this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($id);
             if (array_search($indexerId, $dependencies) !== false) {
-                array_push($dependentIndexerIds, [$id], $this->getDependentIndexerIds($id));
+                $dependentIndexerIds[] = [$id];
+                $dependentIndexerIds[] = $this->getDependentIndexerIds($id);
             }
         }
 
