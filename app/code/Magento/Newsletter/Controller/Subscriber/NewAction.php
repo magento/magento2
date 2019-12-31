@@ -104,25 +104,15 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     /**
      * Validates that if the current user is a guest, that they can subscribe to a newsletter.
      *
-     * @throws LocalizedException
-     * @return void
+     * @return boolean
      */
     protected function validateGuestSubscription()
     {
-        if ($this->_objectManager->get(ScopeConfigInterface::class)
+        return $this->_objectManager->get(ScopeConfigInterface::class)
                 ->getValue(
                     Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
                     ScopeInterface::SCOPE_STORE
-                ) != 1
-            && !$this->_customerSession->isLoggedIn()
-        ) {
-            throw new LocalizedException(
-                __(
-                    'Sorry, but the administrator denied subscription for guests. Please <a href="%1">register</a>.',
-                    $this->_customerUrl->getRegisterUrl()
-                )
-            );
-        }
+                ) == 1 && $this->_customerSession->isLoggedIn();
     }
 
     /**
@@ -151,26 +141,31 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
 
             try {
                 $this->validateEmailFormat($email);
-                $this->validateGuestSubscription();
-                $this->validateEmailAvailable($email);
 
-                $websiteId = (int)$this->_storeManager->getStore()->getWebsiteId();
-                /** @var Subscriber $subscriber */
-                $subscriber = $this->_subscriberFactory->create()->loadBySubscriberEmail($email, $websiteId);
-                if ($subscriber->getId()
-                    && (int)$subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED) {
-                    throw new LocalizedException(
-                        __('This email address is already subscribed.')
-                    );
+                if ($this->validateGuestSubscription()) {
+                    $this->validateEmailAvailable($email);
+
+                    $websiteId = (int)$this->_storeManager->getStore()->getWebsiteId();
+                    /** @var Subscriber $subscriber */
+                    $subscriber = $this->_subscriberFactory->create()->loadBySubscriberEmail($email, $websiteId);
+                    if ($subscriber->getId()
+                        && (int)$subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED) {
+                        throw new LocalizedException(
+                            __('This email address is already subscribed.')
+                        );
+                    }
+
+                    $storeId = (int)$this->_storeManager->getStore()->getId();
+                    $currentCustomerId = $this->getSessionCustomerId($email);
+                    $subscriber = $currentCustomerId
+                        ? $this->subscriptionManager->subscribeCustomer($currentCustomerId, $storeId)
+                        : $this->subscriptionManager->subscribe($email, $storeId);
+                    $message = $this->getSuccessMessage((int)$subscriber->getSubscriberStatus());
+                    $this->messageManager->addSuccessMessage($message);
+                } else {
+                    $data = ['registerUrl' => $this->_customerUrl->getRegisterUrl()];
+                    $this->messageManager->addComplexErrorMessage('guestSubscriptionDeniedMessage', $data);
                 }
-
-                $storeId = (int)$this->_storeManager->getStore()->getId();
-                $currentCustomerId = $this->getSessionCustomerId($email);
-                $subscriber = $currentCustomerId
-                    ? $this->subscriptionManager->subscribeCustomer($currentCustomerId, $storeId)
-                    : $this->subscriptionManager->subscribe($email, $storeId);
-                $message = $this->getSuccessMessage((int)$subscriber->getSubscriberStatus());
-                $this->messageManager->addSuccessMessage($message);
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
