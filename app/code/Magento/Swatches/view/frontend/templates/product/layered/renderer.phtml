@@ -15,7 +15,7 @@
      attribute-id="<?= $block->escapeHtmlAttr($swatchData['attribute_id']) ?>">
     <div class="swatch-attribute-options clearfix">
         <?php foreach ($swatchData['options'] as $option => $label) : ?>
-            <a href="<?= $block->escapeUrl($label['link']) ?>"
+            <a href="<?= $block->escapeUrl($label['link']) ?>" rel="nofollow"
                aria-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                class="swatch-option-link-layered">
                 <?php if (isset($swatchData['swatches'][$option]['type'])) : ?>
