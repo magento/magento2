@@ -15,7 +15,7 @@
             <title value="It should be possible to only view the child product of a configurable product"/>
             <description value="Create configurable product, add to category such that only child variation is visible in category"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-5832"/>
+            <testCaseId value="MC-25651"/>
             <group value="configurable_product"/>
         </annotations>
         <before>
