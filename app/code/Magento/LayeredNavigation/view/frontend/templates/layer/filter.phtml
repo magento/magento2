@@ -18,7 +18,7 @@
     <?php foreach ($filterItems as $filterItem) : ?>
         <li class="item">
             <?php if ($filterItem->getCount() > 0) : ?>
-                <a href="<?= $block->escapeUrl($filterItem->getUrl()) ?>">
+                <a href="<?= $block->escapeUrl($filterItem->getUrl()) ?>" rel="nofollow">
                     <?= /* @noEscape */ $filterItem->getLabel() ?>
                     <?php if ($this->helper(\Magento\Catalog\Helper\Data::class)->shouldDisplayProductCountOnLayer()) : ?>
                         <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
