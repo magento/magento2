@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Json
+ *
+ * Json Factory
  */
 class Json implements FactoryInterface
 {
