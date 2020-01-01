@@ -50,7 +50,7 @@ class DateRange extends Range
      */
     protected function applyFilterByType($type, $value)
     {
-        if (!empty($value)) {
+        if (!empty($value) && is_numeric($value)) {
             $value = $this->wrappedComponent->convertDate($value);
 
             $filter = $this->filterBuilder->setConditionType($type)
