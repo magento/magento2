@@ -1,8 +1,9 @@
 <?php
 namespace Smetana\Third\Plugin;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\ProductDataProvider;
+use Smetana\Third\Api\Data\PartnerInterface;
 use Magento\Framework\Registry;
+use Magento\Catalog\Ui\DataProvider\Product\Form\ProductDataProvider;
 
 /**
  * Class add data to product
@@ -42,7 +43,7 @@ class AddProductData
 
         if (!is_null($partner) && !empty($partner->getData())) {
             if ($partner->getProductId() == $product->getId()) {
-                $data[$product->getId()]['product']['partner_name'] = $partner->getPartnerId();
+                $data[$product->getId()]['product']['partner'][PartnerInterface::PARTNER_NAME] = $partner->getPartnerId();
             }
         }
 

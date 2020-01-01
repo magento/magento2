@@ -80,10 +80,10 @@ class Product
      */
     public function afterSave(Data\ProductInterface $entity): Data\ProductInterface
     {
-        if (!is_null($entity->getData(PartnerInterface::PARTNER_NAME))) {
+        if (!is_null($entity->getData(PartnerInterface::PARTNER_ID))) {
             /** @var PartnerInterface $partner */
             $partner = $this->partnerRepository->getById(
-                $entity->getData(PartnerInterface::PARTNER_NAME),
+                $entity->getData(PartnerInterface::PARTNER_ID),
                 PartnerInterface::PARTNER_ID
             );
             $partner->setProductId($entity->getId());
