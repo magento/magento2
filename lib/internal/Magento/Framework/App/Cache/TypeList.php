@@ -191,7 +191,12 @@ class TypeList implements TypeListInterface
      */
     public function cleanType($typeCode)
     {
-        $this->_getTypeInstance($typeCode)->clean();
+        $typeInstance = $this->_getTypeInstance($typeCode);
+
+        if ($typeInstance) {
+            $typeInstance->clean();
+        }
+
         $types = $this->_getInvalidatedTypes();
         unset($types[$typeCode]);
         $this->_saveInvalidatedTypes($types);

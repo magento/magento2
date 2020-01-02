@@ -163,7 +163,12 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
         $this->_typeList->invalidate([self::TYPE_KEY]);
     }
 
-    public function testCleanType()
+    /**
+     * @dataProvider cacheTypeConfigDataProvider
+     *
+     * @param array $cacheConfig
+     */
+    public function testCleanType(array $cacheConfig)
     {
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
@@ -173,7 +178,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('serializedData')
         );
         $this->_config->expects($this->once())->method('getType')->with(self::TYPE_KEY)->will(
-            $this->returnValue(['instance' => self::CACHE_TYPE])
+            $this->returnValue($cacheConfig)
         );
         unset($this->_typesArray[self::TYPE_KEY]);
         $this->serializerMock->expects($this->once())
@@ -185,6 +190,25 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
             TypeList::INVALIDATED_TYPES
         );
         $this->_typeList->cleanType(self::TYPE_KEY);
+    }
+
+    /**
+     * Cache config provider
+     *
+     * @return array
+     */
+    public function cacheTypeConfigDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'instance' => self::CACHE_TYPE
+                ],
+            ],
+            [
+                []
+            ]
+        ];
     }
 
     /**
