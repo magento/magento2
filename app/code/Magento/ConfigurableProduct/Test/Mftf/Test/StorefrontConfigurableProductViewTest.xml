@@ -23,7 +23,7 @@
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
             <!-- Create a configurable product via the UI -->
-            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
@@ -34,7 +34,7 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup stepKey="deleteProduct" ref="deleteProductBySku">
+            <actionGroup stepKey="deleteProduct" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="adminLogout"/>
@@ -65,7 +65,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
             <!-- Create a configurable product via the UI -->
-            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
@@ -103,7 +103,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
             <!-- Create a configurable product via the UI -->
-            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>

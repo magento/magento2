@@ -23,11 +23,11 @@
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!-- Create First StoreView  -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewEn">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewEn">
                 <argument name="storeView" value="customStoreEN"/>
             </actionGroup>
             <!-- Create Second StoreView -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewFr">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
             <!--Run full reindex and clear caches -->
