@@ -88,6 +88,7 @@ class Render extends \Magento\Framework\App\Action\Action
 
     /**
      * @inheritdoc
+     * phpstan:ignore "Method Magento\Ui\Controller\Index\Render::execute() should return *"
      */
     public function execute()
     {
