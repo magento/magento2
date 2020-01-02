@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Filters\Type;
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
- * Class DateRange
+ * Class responsible for Date Range Filter
  * @api
  * @since 100.0.2
  */

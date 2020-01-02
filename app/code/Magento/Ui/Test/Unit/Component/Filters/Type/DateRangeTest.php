@@ -183,6 +183,11 @@ class DateRangeTest extends \PHPUnit\Framework\TestCase
                 ['test_date' => ['from' => '', 'to' => '']],
                 null,
             ],
+            [
+                'test_date',
+                ['test_date' => ['from' => 'string', 'to' => 'string']],
+                null,
+            ]
         ];
     }
 }
