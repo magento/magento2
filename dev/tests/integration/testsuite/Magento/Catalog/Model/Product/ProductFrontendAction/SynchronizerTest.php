@@ -75,4 +75,32 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($productsData[$item->getProductId()]['added_at'], $item->getAddedAt());
         }
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     */
+    public function testSyncActionsWithoutActionsType(): void
+    {
+        $product1 = $this->productRepository->get('simple');
+        $product2 = $this->productRepository->get('simple2');
+        $product1Id = $product1->getId();
+        $product2Id = $product2->getId();
+        $productsData = [
+            $product1Id => [
+                'id' => $product1Id,
+                'name' => $product1->getName(),
+                'type' => $product1->getTypeId(),
+            ],
+            $product2Id => [
+                'id' => $product2Id,
+                'name' => $product2->getName(),
+                'type' => $product2->getTypeId(),
+            ],
+        ];
+
+        $this->synchronizer->syncActions($productsData, '');
+    }
 }
