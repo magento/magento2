@@ -97,17 +97,16 @@ abstract class AbstractGroupPrice extends Price
             );
             foreach ($this->_storeManager->getWebsites() as $website) {
                 /* @var $website \Magento\Store\Model\Website */
-                if ($website->getBaseCurrencyCode() != $baseCurrency) {
+                $websiteBaseCurrency = $website->getBaseCurrencyCode();
+                if ($websiteBaseCurrency !== $baseCurrency) {
                     $rate = $this->_currencyFactory->create()->load(
                         $baseCurrency
-                    )->getRate(
-                        $website->getBaseCurrencyCode()
-                    );
+                    )->getRate($websiteBaseCurrency);
                     if (!$rate) {
                         $rate = 1;
                     }
                     $this->_rates[$website->getId()] = [
-                        'code' => $website->getBaseCurrencyCode(),
+                        'code' => $websiteBaseCurrency,
                         'rate' => $rate,
                     ];
                 } else {
@@ -187,6 +186,7 @@ abstract class AbstractGroupPrice extends Price
             }
             $compare = implode(
                 '-',
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 array_merge(
                     [$priceRow['website_id'], $priceRow['cust_group']],
                     $this->_getAdditionalUniqueFields($priceRow)
@@ -210,6 +210,7 @@ abstract class AbstractGroupPrice extends Price
                     if ($price['website_id'] == 0) {
                         $compare = implode(
                             '-',
+                            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                             array_merge(
                                 [$price['website_id'], $price['cust_group']],
                                 $this->_getAdditionalUniqueFields($price)
@@ -234,6 +235,7 @@ abstract class AbstractGroupPrice extends Price
 
             $globalCompare = implode(
                 '-',
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 array_merge([0, $priceRow['cust_group']], $this->_getAdditionalUniqueFields($priceRow))
             );
             $websiteCurrency = $rates[$priceRow['website_id']]['code'];
@@ -279,6 +281,7 @@ abstract class AbstractGroupPrice extends Price
             if (!array_filter($v)) {
                 continue;
             }
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $key = implode('-', array_merge([$v['cust_group']], $this->_getAdditionalUniqueFields($v)));
             if ($v['website_id'] == $websiteId) {
                 $data[$key] = $v;
