@@ -79,7 +79,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     /**
      * Performs store redirect
      *
-     * @return ResponseInterface|ResultInterface
+     * @return ResponseInterface|ResultInterface|void
      * @throws NoSuchEntityException
      */
     public function execute()
