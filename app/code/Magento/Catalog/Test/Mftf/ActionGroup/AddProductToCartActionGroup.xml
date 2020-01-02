@@ -8,6 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--
+    NOTICE: AddSimpleProductToCart is deprecated.
+            Please use AddSimpleProductToCartActionGroup instead.
+    -->
     <actionGroup name="AddSimpleProductToCart">
         <annotations>
             <description>Navigates to the Storefront Product page. Then adds the Product to the Cart. Validates that the Success Message is present and correct.</description>
