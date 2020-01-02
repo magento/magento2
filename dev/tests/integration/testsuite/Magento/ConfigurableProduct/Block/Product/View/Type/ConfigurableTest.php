@@ -3,79 +3,103 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Test class for \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable.
+ * Tests class configurable options block on product page.
  *
  * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  */
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+class ConfigurableTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
+     * @var ObjectManagerInterface
      */
-    protected $_block;
+    private $objectManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var SerializerInterface
      */
-    protected $_product;
+    private $serializer;
 
+    /**
+     * @var Configurable
+     */
+    private $block;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var ProductInterface
+     */
+    private $product;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $this->_product->load(1);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\LayoutInterface::class
-        )->createBlock(
-            \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable::class
-        );
-        $this->_block->setProduct($this->_product);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->serializer = $this->objectManager->get(SerializerInterface::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+        $this->product = $this->productRepository->get('configurable');
+        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Configurable::class);
+        $this->block->setProduct($this->product);
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testGetAllowAttributes()
+    public function testGetAllowAttributes(): void
     {
-        $attributes = $this->_block->getAllowAttributes();
-        $this->assertInstanceOf(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection::class,
-            $attributes
-        );
+        $attributes = $this->block->getAllowAttributes();
+        $this->assertInstanceOf(Collection::class, $attributes);
         $this->assertGreaterThanOrEqual(1, $attributes->getSize());
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testHasOptions()
+    public function testHasOptions(): void
     {
-        $this->assertTrue($this->_block->hasOptions());
+        $this->assertTrue($this->block->hasOptions());
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testGetAllowProducts()
+    public function testGetAllowProducts(): void
     {
-        $products = $this->_block->getAllowProducts();
+        $products = $this->block->getAllowProducts();
         $this->assertGreaterThanOrEqual(2, count($products));
         foreach ($products as $product) {
-            $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
+            $this->assertInstanceOf(ProductInterface::class, $product);
         }
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testGetJsonConfig()
+    public function testGetJsonConfig(): void
     {
-        $config = json_decode($this->_block->getJsonConfig(), true);
+        $config = $this->serializer->unserialize($this->block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
         $this->assertEquals(1, $config['productId']);
@@ -83,5 +107,32 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('template', $config);
         $this->assertArrayHasKey('prices', $config);
         $this->assertArrayHasKey('basePrice', $config['prices']);
+        $this->assertArrayHasKey('images', $config);
+        $this->assertEquals(0, count($config['images']));
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_child_products_with_images.php
+     * @return void
+     */
+    public function testGetJsonConfigWithChildProductsImages(): void
+    {
+        $config = $this->serializer->unserialize($this->block->getJsonConfig());
+        $this->assertNotEmpty($config);
+        $this->assertArrayHasKey('images', $config);
+        $this->assertEquals(2, count($config['images']));
+        $i = 0;
+        foreach ($this->product->getExtensionAttributes()->getConfigurableProductLinks() as $productId) {
+            $i++;
+            $simpleProduct = $this->productRepository->getById($productId);
+            $resultImage = reset($config['images'][$productId]);
+            $this->assertContains($simpleProduct->getImage(), $resultImage['thumb']);
+            $this->assertContains($simpleProduct->getImage(), $resultImage['img']);
+            $this->assertContains($simpleProduct->getImage(), $resultImage['full']);
+            $this->assertEquals(true, $resultImage['isMain']);
+            $this->assertEquals('image', $resultImage['type']);
+            $this->assertEquals($i, $resultImage['position']);
+            $this->assertNull($resultImage['videoUrl']);
+        }
     }
 }
