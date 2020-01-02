@@ -91,50 +91,6 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @param string $input
-     * @param string $message
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
-     */
-    public function testUpdateWithMissedItemRequiredParameters(string $input, string $message)
-    {
-        $query = <<<QUERY
-mutation {
-  removeItemFromCart(
-    input: {
-      {$input}
-    }
-  ) {
-    cart {
-      items {
-        quantity
-      }
-    }
-  }
-}
-QUERY;
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
-    {
-        return [
-            'missed_cart_id' => [
-                'cart_item_id: 1',
-                'Field RemoveItemFromCartInput.cart_id of required type String! was not provided.'
-            ],
-            'missed_cart_item_id' => [
-                'cart_id: "test_quote"',
-                'Field RemoveItemFromCartInput.cart_item_id of required type Int! was not provided.'
-            ],
-        ];
-    }
-
-    /**
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php

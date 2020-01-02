@@ -10,7 +10,7 @@
     <system>
         <section id="catalog">
             <group id="search">
-                <!-- Elasticsearch 6.0+ -->
+                <!-- Elasticsearch 6.x -->
                 <field id="elasticsearch6_server_hostname" translate="label" type="text" sortOrder="71"
                        showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Elasticsearch Server Hostname</label>
