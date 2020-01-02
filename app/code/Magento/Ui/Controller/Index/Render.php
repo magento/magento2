@@ -88,7 +88,6 @@ class Render extends \Magento\Framework\App\Action\Action
 
     /**
      * @inheritdoc
-     * phpstan:ignore "Method Magento\Ui\Controller\Index\Render::execute() should return *"
      */
     public function execute()
     {
@@ -106,6 +105,8 @@ class Render extends \Magento\Framework\App\Action\Action
 
                 $contentType = $this->contentTypeResolver->resolve($component->getContext());
                 $this->getResponse()->setHeader('Content-Type', $contentType, true);
+
+                return;
             } else {
                 /** @var \Magento\Framework\Controller\Result\Json $resultJson */
                 $resultJson = $this->resultJsonFactory->create();
