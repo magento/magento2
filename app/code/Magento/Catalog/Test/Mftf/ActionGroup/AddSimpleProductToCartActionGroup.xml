@@ -8,11 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--
-    NOTICE: AddSimpleProductToCart is deprecated.
-            Please use AddSimpleProductToCartActionGroup instead.
-    -->
-    <actionGroup name="AddSimpleProductToCart">
+    <actionGroup name="AddSimpleProductToCartActionGroup">
         <annotations>
             <description>Navigates to the Storefront Product page. Then adds the Product to the Cart. Validates that the Success Message is present and correct.</description>
         </annotations>
@@ -29,11 +25,5 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProductAddedMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
-    </actionGroup>
-    <actionGroup name="StorefrontAddSimpleProductWithQtyActionGroup" extends="AddSimpleProductToCart">
-        <arguments>
-            <argument name="quantity" type="string" defaultValue="1"/>
-        </arguments>
-        <fillField userInput="{{quantity}}" selector="{{StorefrontProductPageSection.qtyInput}}" stepKey="fillProductQty" after="goToProductPage"/>
     </actionGroup>
 </actionGroups>
