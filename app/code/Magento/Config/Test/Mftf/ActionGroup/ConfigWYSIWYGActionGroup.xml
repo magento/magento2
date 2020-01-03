@@ -8,6 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--
+    NOTICE: EnabledWYSIWYG is deprecated.
+            Please use EnabledWYSIWYGActionGroup instead.
+    -->
     <actionGroup name="EnabledWYSIWYG">
         <annotations>
             <description>Enables the WYSIWYG Editor via the CLI.</description>
@@ -32,6 +36,10 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
     </actionGroup>
 
+    <!--
+    NOTICE: DisabledWYSIWYG is deprecated.
+            Please use DisabledWYSIWYGActionGroup instead.
+    -->
     <actionGroup name="DisabledWYSIWYG">
         <annotations>
             <description>Disables the WYSIWYG Editor via the CLI.</description>
