@@ -77,9 +77,9 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     }
 
     /**
-     * Performs store redirect
+     * Builds Redirect Url
      *
-     * @return ResponseInterface|ResultInterface
+     * @return ResponseInterface|\Magento\Framework\Controller\ResultInterface
      * @throws NoSuchEntityException
      */
     public function execute()
@@ -112,12 +112,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
                 StoreResolverInterface::PARAM_NAME => $targetStoreCode,
                 \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
             ];
-
-            if ($this->sidResolver->getUseSessionInUrl()) {
-                // allow customers to stay logged in during store switching
-                $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
-                $query[$sidName] = $this->session->getSessionId();
-            }
 
             $customerHash = $this->hashGenerator->generateHash($fromStore);
             $query = array_merge($query, $customerHash);

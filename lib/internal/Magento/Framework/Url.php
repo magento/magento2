@@ -111,7 +111,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @var bool
      */
-    protected $_useSession;
+    protected $_useSession = false;
 
     /**
      * Url security info list
@@ -292,10 +292,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getUseSession()
     {
-        if ($this->_useSession === null) {
-            $this->_useSession = $this->_sidResolver->getUseSessionInUrl();
-        }
-        return $this->_useSession;
+        return false;
     }
 
     /**
@@ -945,10 +942,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             }
         }
 
-        if ($noSid !== true) {
-            $this->_prepareSessionUrl($url);
-        }
-
         $query = $this->_getQuery($escapeQuery);
         if ($query) {
             $mark = strpos($url, '?') === false ? '?' : ($escapeQuery ? '&amp;' : '&');
@@ -972,18 +965,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $url
      *
      * @return \Magento\Framework\UrlInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareSessionUrl($url)
     {
-        if (!$this->getUseSession()) {
-            return $this;
-        }
-        $sessionId = $this->_session->getSessionIdForHost($url);
-        if ($this->_sidResolver->getUseSessionVar() && !$sessionId) {
-            $this->setQueryParam('___SID', $this->_isSecure() ? 'S' : 'U');
-        } elseif ($sessionId) {
-            $this->setQueryParam($this->_sidResolver->getSessionIdQueryParam($this->_session), $sessionId);
-        }
         return $this;
     }
 
@@ -1003,8 +988,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $port = '';
         }
         $url = $this->getScheme() . '://' . $this->getHost() . $port . $this->getPath();
-
-        $this->_prepareSessionUrl($url);
 
         $query = $this->_getQuery();
         if ($query) {
@@ -1118,7 +1101,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Return frontend redirect URL with SID and other session parameters if any
+     * Return frontend redirect URL without SID
      *
      * @param string $url
      *

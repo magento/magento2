@@ -511,13 +511,6 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->response->setRedirect($loginUrl);
         } else {
             $arguments = $this->_customerUrl->getLoginUrlParams();
-            if ($this->_createUrl()->getUseSession()) {
-                $arguments += [
-                    '_query' => [
-                        $this->sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId(),
-                    ]
-                ];
-            }
             $this->response->setRedirect(
                 $this->_createUrl()->getUrl(\Magento\Customer\Model\Url::ROUTE_ACCOUNT_LOGIN, $arguments)
             );
