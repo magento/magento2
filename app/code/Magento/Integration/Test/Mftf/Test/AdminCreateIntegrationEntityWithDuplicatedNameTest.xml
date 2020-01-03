@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateIntegrationEntityWithDuplicatedNameTest">
+        <annotations>
+            <features value="Integration"/>
+            <stories value="Creating System Integration With Duplicated Name"/>
+            <title value="Admin System Integration With Duplicated Name"/>
+            <description value="Admin Creates New Integration With Duplicated Name"/>
+            <group value="integration"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- TEST BODY -->
+        <!-- Navigate To Integrations Page -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
+        </actionGroup>
+        <!-- Click the "Add New Integration" button -->
+        <actionGroup ref="AdminNavigateToCreateIntegrationPageActionGroup" stepKey="clickAddNewIntegrationButton"/>
+        <!-- Create New Integration -->
+        <actionGroup ref="AdminCreatesNewIntegrationActionGroup" stepKey="createNewIntegration">
+            <argument name="name" value="Integration1"/>
+            <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        </actionGroup>
+        <!-- Submit The Form -->
+        <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheForm"/>
+        <!-- Click the "Add New Integration" button -->
+        <actionGroup ref="AdminNavigateToCreateIntegrationPageActionGroup" stepKey="clickAddNewIntegrationButtonSecondTime"/>
+        <!-- Create New Integration With Duplicated Name-->
+        <actionGroup ref="AdminCreatesNewIntegrationActionGroup" stepKey="createNewIntegrationWithDuplicatedName">
+            <argument name="name" value="Integration1"/>
+            <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        </actionGroup>
+        <!-- Submit The Form -->
+        <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheFormWithDuplicatedName"/>
+        <!-- See Error Message-->
+        <actionGroup ref="AssertAdminMessageCreateIntegrationEntityActionGroup" stepKey="seeErrorMessage">
+            <argument name="message" value="The integration with name &quot;Integration1&quot; exists."/>
+            <argument value="error" name="messageType"/>
+        </actionGroup>
+        <!-- END TEST BODY -->
+    </test>
+</tests>
