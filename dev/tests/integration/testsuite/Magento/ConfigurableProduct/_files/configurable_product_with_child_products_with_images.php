@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_image.php';
@@ -17,7 +18,7 @@ $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $firstSimple = $productRepository->get('simple_10');
 $secondSimple = $productRepository->get('simple_20');
 /** @var $firstSimple Product */
-$firstSimple->setStoreId(0)
+$firstSimple->setStoreId(Store::DEFAULT_STORE_ID)
     ->setImage('/m/a/magento_image.jpg')
     ->setSmallImage('/m/a/magento_image.jpg')
     ->setThumbnail('/m/a/magento_image.jpg')
@@ -38,7 +39,7 @@ $firstSimple->setStoreId(0)
     ->setCanSaveCustomOptions(true)
     ->save();
 /** @var $secondSimple Product */
-$secondSimple->setStoreId(0)
+$secondSimple->setStoreId(Store::DEFAULT_STORE_ID)
     ->setImage('/m/a/magento_thumbnail.jpg')
     ->setSmallImage('/m/a/magento_thumbnail.jpg')
     ->setThumbnail('/m/a/magento_thumbnail.jpg')

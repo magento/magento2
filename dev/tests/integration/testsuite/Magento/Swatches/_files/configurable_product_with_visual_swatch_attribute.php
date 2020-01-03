@@ -32,7 +32,7 @@ $productExtensionAttributesFactory = $objectManager->get(ProductExtensionInterfa
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $defaultWebsiteId = $websiteRepository->get('base')->getId();
 $attributeValues = $associatedProductIds = [];
-$options = $attribute->getSource()->getALLOptions();
+$options = $attribute->getSource()->getAllOptions();
 array_shift($options);
 foreach ($options as $option) {
     /** @var Product $product */

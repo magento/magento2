@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -36,6 +37,11 @@ class ConfigurableTest extends TestCase
     private $serializer;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchBuilder;
+
+    /**
      * @var Configurable
      */
     private $block;
@@ -58,6 +64,7 @@ class ConfigurableTest extends TestCase
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->serializer = $this->objectManager->get(SerializerInterface::class);
+        $this->searchBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->product = $this->productRepository->get('configurable');
@@ -109,7 +116,7 @@ class ConfigurableTest extends TestCase
         $this->assertArrayHasKey('prices', $config);
         $this->assertArrayHasKey('basePrice', $config['prices']);
         $this->assertArrayHasKey('images', $config);
-        $this->assertEquals(0, count($config['images']));
+        $this->assertCount(0, $config['images']);
     }
 
     /**
@@ -121,19 +128,34 @@ class ConfigurableTest extends TestCase
         $config = $this->serializer->unserialize($this->block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('images', $config);
-        $this->assertEquals(2, count($config['images']));
+        $this->assertCount(2, $config['images']);
+        $products = $this->getProducts(
+            $this->product->getExtensionAttributes()->getConfigurableProductLinks()
+        );
         $i = 0;
-        foreach ($this->product->getExtensionAttributes()->getConfigurableProductLinks() as $productId) {
+        foreach ($products as $simpleProduct) {
             $i++;
-            $simpleProduct = $this->productRepository->getById($productId);
-            $resultImage = reset($config['images'][$productId]);
+            $resultImage = reset($config['images'][$simpleProduct->getId()]);
             $this->assertContains($simpleProduct->getImage(), $resultImage['thumb']);
             $this->assertContains($simpleProduct->getImage(), $resultImage['img']);
             $this->assertContains($simpleProduct->getImage(), $resultImage['full']);
-            $this->assertEquals(true, $resultImage['isMain']);
+            $this->assertTrue($resultImage['isMain']);
             $this->assertEquals('image', $resultImage['type']);
             $this->assertEquals($i, $resultImage['position']);
             $this->assertNull($resultImage['videoUrl']);
         }
+    }
+
+    /**
+     * Returns products by ids list.
+     *
+     * @param array $productIds
+     * @return ProductInterface[]
+     */
+    private function getProducts(array $productIds): array
+    {
+        $criteria = $this->searchBuilder->addFilter('entity_id', $productIds, 'in')
+            ->create();
+        return $this->productRepository->getList($criteria)->getItems();
     }
 }
