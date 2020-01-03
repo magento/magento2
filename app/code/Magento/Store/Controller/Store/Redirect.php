@@ -94,5 +94,6 @@ class Redirect extends \Magento\Framework\App\Action\Action implements HttpGetAc
             ];
             $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
         }
+        // phpstan:ignore "Method Magento\Store\Controller\Store\Redirect::execute() should return *"
     }
 }
