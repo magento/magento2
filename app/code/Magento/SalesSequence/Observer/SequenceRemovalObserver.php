@@ -12,7 +12,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\SalesSequence\Model\Sequence\DeleteByStore;
 
 /**
- * Class SequenceRemovalObserver
+ * Observer for Sequence Removal.
  */
 class SequenceRemovalObserver implements ObserverInterface
 {

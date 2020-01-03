@@ -12,7 +12,7 @@ use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 
 /**
- * Class DeleteByStore
+ * Delete Sequence by Store.
  */
 class DeleteByStore
 {

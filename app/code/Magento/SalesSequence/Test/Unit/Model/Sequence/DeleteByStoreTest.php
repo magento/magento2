@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class DeleteByStoreTest
+ * Test for \Magento\SalesSequence\Model\Sequence\DeleteByStore class.
  */
 class DeleteByStoreTest extends TestCase
 {
