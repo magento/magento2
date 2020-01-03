@@ -210,35 +210,6 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Field UpdateCartItemsInput.cart_id of required type String! was not provided.
-     */
-    public function testUpdateWithMissedCartItemId()
-    {
-        $query = <<<QUERY
-mutation {
-  updateCartItems(input: {
-    cart_items: [
-      {
-        cart_item_id: 1
-        quantity: 2
-      }
-    ]  
-  }) {
-    cart {
-      items {
-        id
-        quantity
-      }
-    }
-  }
-}
-QUERY;
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
      * @param string $input
      * @param string $message
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
@@ -275,14 +246,6 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'missed_cart_items' => [
-                '',
-                'Field UpdateCartItemsInput.cart_items of required type [CartItemUpdateInput]! was not provided.'
-            ],
-            'missed_cart_item_id' => [
-                'cart_items: [{ quantity: 2 }]',
-                'Field CartItemUpdateInput.cart_item_id of required type Int! was not provided.'
-            ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
                 'Required parameter "quantity" for "cart_items" is missing.'
