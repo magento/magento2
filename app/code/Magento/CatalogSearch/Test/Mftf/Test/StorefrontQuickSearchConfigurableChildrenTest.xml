@@ -70,6 +70,9 @@
                 <requiredEntity createDataKey="createConfigurableProduct"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
+
+            <!-- Perform reindex -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
