@@ -57,7 +57,8 @@ class ConfigurableViewOnProductPageTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->block = $this->layout->createBlock(Configurable::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
+ * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_out_of_stock_children.php
  */
 class ConfigurableViewOnCategoryPageTest extends TestCase
 {
@@ -46,28 +48,35 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
     /**
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_out_of_stock_children.php
-     *
      * @return void
      */
     public function testOutOfStockProductWithEnabledConfigView(): void
     {
         $collection = $this->listingBlock->getLoadedProductCollection();
-        $this->assertEquals(1, $collection->getSize());
-        $this->assertCount(1, $collection->getItems());
+        $this->assertCollectionSize(1, $collection);
     }
 
     /**
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 0
-     *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_out_of_stock_children.php
      *
      * @return void
      */
     public function testOutOfStockProductWithDisabledConfigView(): void
     {
         $collection = $this->listingBlock->getLoadedProductCollection();
-        $this->assertEquals(0, $collection->getSize());
-        $this->assertCount(0, $collection->getItems());
+        $this->assertCollectionSize(0, $collection);
+    }
+
+    /**
+     * Check collection size
+     *
+     * @param int $expectedSize
+     * @param AbstractCollection $collection
+     * @return void
+     */
+    private function assertCollectionSize(int $expectedSize, AbstractCollection $collection): void
+    {
+        $this->assertEquals($expectedSize, $collection->getSize());
+        $this->assertCount($expectedSize, $collection->getItems());
     }
 }

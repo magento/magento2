@@ -34,6 +34,7 @@ class SalableTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
     }
 
     /**
