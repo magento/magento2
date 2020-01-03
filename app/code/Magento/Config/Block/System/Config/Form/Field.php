@@ -43,6 +43,10 @@ class Field extends \Magento\Backend\Block\Template implements
             $element->setDisabled(true);
         }
 
+        if ($element->getIsDisableInheritance()) {
+            $element->setReadonly(true);
+        }
+
         $html = '<td class="label"><label for="' .
             $element->getHtmlId() . '"><span' .
             $this->_renderScopeLabel($element) . '>' .

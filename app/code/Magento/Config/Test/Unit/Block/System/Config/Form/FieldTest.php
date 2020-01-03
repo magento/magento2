@@ -7,8 +7,6 @@ namespace Magento\Config\Test\Unit\Block\System\Config\Form;
 
 /**
  * Test how class render field html element in Stores Configuration
- *
- * @package Magento\Config\Test\Unit\Block\System\Config\Form
  */
 class FieldTest extends \PHPUnit\Framework\TestCase
 {
@@ -72,6 +70,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
                 'getCanUseDefaultValue',
                 'setDisabled',
                 'getTooltip',
+                'setReadonly'
             ]
         );
 
@@ -179,7 +178,8 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $this->_elementMock->expects($this->any())->method('getCanUseWebsiteValue')->will($this->returnValue(true));
         $this->_elementMock->expects($this->any())->method('getCanUseDefaultValue')->will($this->returnValue(true));
         $this->_elementMock->expects($this->once())->method('setDisabled')->with(true);
-        $this->_elementMock->expects($this->once())->method('getIsDisableInheritance')->willReturn(true);
+        $this->_elementMock->method('getIsDisableInheritance')->willReturn(true);
+        $this->_elementMock->method('setReadonly')->with(true);
 
         $expected = '<td class="use-default">';
         $expected .= '<input id="' .
