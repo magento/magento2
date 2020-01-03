@@ -22,8 +22,8 @@
         <fillField selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{taxRuleCode}}" stepKey="fillRuleName"/>
         <click selector="{{AdminTaxRulesSection.selectTaxRate(taxRateCode)}}" stepKey="selectTaxRate"/>
         <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings"/>
-        <click selector="{{AdminTaxRulesSection.selectTaxClass(taxableGoodsTaxClass.class_name)}}" stepKey="unSelectTaxClass"/>
-        <click selector="{{AdminTaxRulesSection.selectTaxClass(productTaxClassName)}}" stepKey="selectProductTaxClass"/>
+        <click selector="{{AdminTaxRulesSection.selectProductTaxClass(taxableGoodsTaxClass.class_name)}}" stepKey="unSelectTaxClass"/>
+        <click selector="{{AdminTaxRulesSection.selectProductTaxClass(productTaxClassName)}}" stepKey="selectProductTaxClass"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the tax rule." stepKey="verifyRuleSaved"/>

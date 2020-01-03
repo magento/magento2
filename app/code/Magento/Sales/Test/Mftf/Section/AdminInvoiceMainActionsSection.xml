@@ -12,6 +12,5 @@
         <element name="submitInvoice" type="button" selector=".action-default.scalable.save.submit-button.primary" timeout="60"/>
         <element name="openNewCreditMemoFromInvoice" type="button" selector=".action-default.scalable.credit-memo"/>
         <element name="submitNewRefundFromInvoice" type="button" selector=".action-default.scalable.save.submit-button refund primary"/>
-        <element name="submitShipment" type="button" selector=".action-default.scalable.save.submit-button.primary" timeout="30"/>
     </section>
 </sections>

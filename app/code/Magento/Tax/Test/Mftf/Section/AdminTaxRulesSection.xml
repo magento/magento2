@@ -35,6 +35,6 @@
         <element name="taxRateMultiSelectItems" type="block" selector=".mselect-list-item"/>
         <element name="taxRateNumber" type="button" selector="//div[@data-ui-id='tax-rate-form-fieldset-element-form-field-tax-rate']//div[@class='mselect-items-wrapper']//label[{{var}}]" parameterized="true"/>
         <element name="selectTaxRate" type="input" selector="//span[text()='{{taxCode}}']" parameterized="true"/>
-        <element name="selectTaxClass" type="input" selector="//div[contains(@class, 'field-tax_product_class')]//*[contains(@class, 'mselect-list-item') and contains(.,'{{taxClass}}')]" parameterized="true"/>
+        <element name="selectProductTaxClass" type="input" selector="//div[contains(@class, 'field-tax_product_class')]//*[contains(@class, 'mselect-list-item') and contains(.,'{{taxClass}}')]" parameterized="true"/>
     </section>
 </sections>

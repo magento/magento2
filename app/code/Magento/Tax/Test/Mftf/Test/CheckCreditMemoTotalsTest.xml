@@ -56,7 +56,7 @@
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitForPageLoad2"/>
-            <selectOption selector="{{AdminProductFormActionSection.selectTaxClass}}" userInput="NewTaxClass" stepKey="SetNewTaxClass" />
+            <selectOption selector="{{AdminProductFormActionSection.selectProductTaxClass}}" userInput="NewTaxClass" stepKey="SetNewTaxClass" />
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
             <!--Set configs-->
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToTaxConfigPage"/>
