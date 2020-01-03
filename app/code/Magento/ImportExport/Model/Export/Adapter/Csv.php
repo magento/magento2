@@ -52,6 +52,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
     {
         if (is_object($this->_fileHandler)) {
             $this->_fileHandler->close();
+            $this->_directoryHandle->delete($this->_destination);
         }
     }
 
