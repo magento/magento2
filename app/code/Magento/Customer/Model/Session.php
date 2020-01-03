@@ -19,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
  * @method string getNoReferer()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager
@@ -107,6 +108,11 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @var \Magento\Framework\App\Response\Http
      */
     protected $response;
+
+    /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
 
     /**
      * Session constructor.
