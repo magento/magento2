@@ -8,7 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Navigate to create product page from product grid page-->
+    <!--
+    NOTICE: goToCreateProductPage is deprecated.
+            Please use GoToCreateProductPageActionGroup instead.
+    -->
     <actionGroup name="goToCreateProductPage">
         <annotations>
             <description>Clicks on the 'Add Product' toggle on the Admin Products grid page. Clicks on the provided Product (Type).</description>
@@ -25,7 +28,10 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeNewProductTitle"/>
     </actionGroup>
 
-    <!--Navigate to create product page directly via ID-->
+    <!--
+    NOTICE: goToProductPageViaID is deprecated.
+            Please use GoToProductPageViaIDActionGroup instead.
+    -->
     <actionGroup name="goToProductPageViaID">
         <annotations>
             <description>Goes to the Product edit page for the provided Product ID.</description>
@@ -37,7 +43,10 @@
         <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProduct"/>
     </actionGroup>
 
-    <!-- Fill main fields in create product form using a product entity -->
+    <!--
+    NOTICE: fillMainProductForm is deprecated.
+            Please use FillMainProductFormActionGroup instead.
+    -->
     <actionGroup name="fillMainProductForm">
         <annotations>
             <description>Fills in the provided Product details (Name, SKU, Price, Quantity, Stock Status, Weight Type and Weight) on the Admin Products creation/edit page.</description>
@@ -56,7 +65,10 @@
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{product.weight}}" stepKey="fillProductWeight"/>
     </actionGroup>
 
-    <!-- Fill main fields in create product form using strings for flexibility -->
+    <!--
+    NOTICE: FillMainProductFormByString is deprecated.
+            Please use FillMainProductFormByStringActionGroup instead.
+    -->
     <actionGroup name="FillMainProductFormByString">
         <annotations>
             <description>Fills in the provided Product Name, SKU, Price, Quantity, Stock Status and Weight on the Admin Products creation/edit page.</description>
@@ -79,7 +91,10 @@
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{productWeight}}" stepKey="fillProductWeight"/>
     </actionGroup>
 
-    <!--Fill main fields in create product form with no weight, useful for virtual and downloadable products -->
+    <!--
+    NOTICE: fillMainProductFormNoWeight is deprecated.
+            Please use FillMainProductFormNoWeightActionGroup instead.
+    -->
     <actionGroup name="fillMainProductFormNoWeight">
         <annotations>
             <description>Fills in the provided Product details (Name, SKU, Price, Quantity, Stock Status and Weight Type) on the Admin Products creation/edit page.</description>
@@ -96,7 +111,10 @@
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectWeight"/>
     </actionGroup>
 
-    <!--Fill main fields in create product form with name and sku -->
+    <!--
+    NOTICE: fillProductNameAndSkuInProductForm is deprecated.
+            Please use FillProductNameAndSkuInProductForm instead.
+    -->
     <actionGroup name="fillProductNameAndSkuInProductForm">
         <annotations>
             <description>Fills in the provided Product details (Name and SKU) on the Admin Products creation and edit page.</description>
@@ -131,7 +149,10 @@
         <see selector="{{AdminProductFormSection.priceFieldError}}" userInput="This is a required field." stepKey="seePriceRequired"/>
     </actionGroup>
 
-    <!--Save product and see success message-->
+    <!--
+    NOTICE: saveProductForm is deprecated.
+            Please use SaveProductFormActionGroup instead.
+    -->
     <actionGroup name="saveProductForm">
         <annotations>
             <description>Clicks on the Save button. Validates that the Success Message is present and correct.</description>
