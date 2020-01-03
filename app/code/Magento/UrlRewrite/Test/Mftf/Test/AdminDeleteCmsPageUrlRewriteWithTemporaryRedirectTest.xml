@@ -40,7 +40,7 @@
         </actionGroup>
 
         <!-- Delete the URL Rewrite for CMS Page with with temporary redirect-->
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteTemporaryUrlRewrite">
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteTemporaryUrlRewrite">
             <argument name="requestPath" value="temporaryrequestpath.html"/>
         </actionGroup>
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
@@ -48,7 +48,7 @@
         </actionGroup>
 
         <!--Verify AssertPageByUrlRewriteIsNotFound-->
-        <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="assertPageByUrlRewriteIsNotFound">
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="assertPageByUrlRewriteIsNotFound">
             <argument name="requestPath" value="temporaryrequestpath.html"/>
         </actionGroup>
     </test>
