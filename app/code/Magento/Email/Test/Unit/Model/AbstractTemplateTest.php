@@ -69,9 +69,6 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         $this->design = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->appEmulation = $this->getMockBuilder(\Magento\Store\Model\App\Emulation::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,11 +147,11 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param        $variables array
-     * @param        $templateType string
-     * @param        $storeId int
-     * @param        $expectedVariables array
-     * @param        $expectedResult string
+     * @param $variables array
+     * @param $templateType string
+     * @param $storeId int
+     * @param $expectedVariables array
+     * @param $expectedResult string
      * @dataProvider getProcessedTemplateProvider
      */
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)

@@ -16,7 +16,6 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreResolver;
 use Magento\Framework\Session\SidResolverInterface;
-use Magento\Framework\Session\Generic as Session;
 
 /**
  * Builds correct url to target store (group) and performs redirect.
@@ -34,15 +33,10 @@ class Redirect extends \Magento\Framework\App\Action\Action implements HttpGetAc
     private $storeResolver;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @param Context $context
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreResolverInterface $storeResolver
-     * @param Session $session
+     * @param \Magento\Framework\Session\Generic $session
      * @param SidResolverInterface $sidResolver
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -50,19 +44,17 @@ class Redirect extends \Magento\Framework\App\Action\Action implements HttpGetAc
         Context $context,
         StoreRepositoryInterface $storeRepository,
         StoreResolverInterface $storeResolver,
-        Session $session,
+        \Magento\Framework\Session\Generic $session,
         SidResolverInterface $sidResolver
     ) {
         parent::__construct($context);
         $this->storeRepository = $storeRepository;
         $this->storeResolver = $storeResolver;
-        $this->session = $session;
     }
 
     /**
-     * Builds Redirect Url
+     * @inheritDoc
      *
-     * @return ResponseInterface|\Magento\Framework\Controller\ResultInterface
      * @throws NoSuchEntityException
      */
     public function execute()

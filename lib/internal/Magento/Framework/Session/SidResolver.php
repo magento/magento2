@@ -70,6 +70,7 @@ class SidResolver implements SidResolverInterface
      * @param string $scopeType
      * @param array $sidNameMap
      * @param State|null $appState
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -84,7 +85,6 @@ class SidResolver implements SidResolverInterface
         $this->request = $request;
         $this->sidNameMap = $sidNameMap;
         $this->_scopeType = $scopeType;
-        $this->appState = $appState ?: \Magento\Framework\App\ObjectManager::getInstance()->get(State::class);
     }
 
     /**

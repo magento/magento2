@@ -109,6 +109,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $response;
 
     /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
+
+    /**
      * Session constructor.
      *
      * @param \Magento\Framework\App\Request\Http $request
