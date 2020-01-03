@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class GroupActionsTest
+ *
+ * Testing GroupAction grid column
  */
 class GroupActionsTest extends TestCase
 {
