@@ -778,6 +778,7 @@ define([
          */
         _getSelectedOptionPriceIndex: function () {
             var allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
+
             if (_.isEmpty(allowedProduct)) {
                 return undefined;
             }
