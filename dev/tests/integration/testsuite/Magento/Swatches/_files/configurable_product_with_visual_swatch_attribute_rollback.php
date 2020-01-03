@@ -19,10 +19,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 foreach (['simple_option_1', 'simple_option_2','simple_option_3', 'configurable'] as $sku) {
     try {
-        $product = $productRepository->get($sku);
-        if ($product->getId()) {
-            $productRepository->delete($product);
-        }
+        $productRepository->deleteById($sku);
     } catch (NoSuchEntityException $e) {
         //Product already removed
     }

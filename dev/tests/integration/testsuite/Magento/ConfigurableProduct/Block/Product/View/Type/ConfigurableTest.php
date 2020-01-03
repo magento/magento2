@@ -55,6 +55,7 @@ class ConfigurableTest extends TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->serializer = $this->objectManager->get(SerializerInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);

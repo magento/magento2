@@ -39,7 +39,7 @@ foreach ($options as $option) {
     $product = $productFactory->create();
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setAttributeSetId($product->getDefaultAttributeSetId())
-        ->setWebsiteIds([1])
+        ->setWebsiteIds([$defaultWebsiteId])
         ->setName('Configurable Option' . $option['label'])
         ->setSku('simple_' . str_replace(' ', '_', $option['label']))
         ->setPrice(100)

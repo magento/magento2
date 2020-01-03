@@ -89,6 +89,7 @@ class ConfigurableTest extends TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->serializer = $this->objectManager->get(SerializerInterface::class);
         $this->swatchHelper = $this->objectManager->get(Media::class);
@@ -104,7 +105,7 @@ class ConfigurableTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swath_attribute.php
+     * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swatch_attribute.php
      * @return void
      */
     public function testGetJsonSwatchConfig(): void
@@ -123,13 +124,13 @@ class ConfigurableTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swath_attribute.php
+     * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swatch_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @return void
      */
     public function testGetJsonSwatchConfigUsedProductImage(): void
     {
-        $this->updateAttributeProductImageParam();
+        $this->updateAttributeUseProductImageFlag();
         $this->updateProductImage('simple_option_2', '/m/a/magento_image.jpg');
         $expectedOptions = $this->getDefaultOptionsList();
         $expectedOptions['option 2']['value'] = $this->imageUrlBuilder->getUrl(
@@ -148,12 +149,12 @@ class ConfigurableTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swath_attribute.php
+     * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swatch_attribute.php
      * @return void
      */
     public function testGetJsonSwatchConfigUsedEmptyProductImage(): void
     {
-        $this->updateAttributeProductImageParam();
+        $this->updateAttributeUseProductImageFlag();
         $expectedOptions = $this->getDefaultOptionsList();
         $expectedOptions['option 2']['value'] = $this->swatchHelper->getSwatchAttributeImage(
             Swatch::SWATCH_IMAGE_NAME,
@@ -170,6 +171,9 @@ class ConfigurableTest extends TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     private function getDefaultOptionsList(): array
     {
         return [
@@ -208,7 +212,7 @@ class ConfigurableTest extends TestCase
      *
      * @return void
      */
-    private function updateAttributeProductImageParam(): void
+    private function updateAttributeUseProductImageFlag(): void
     {
         $this->configurableAttribute->setData('use_product_image_for_swatch', 1);
         $this->configurableAttribute = $this->productAttributeRepository->save($this->configurableAttribute);
