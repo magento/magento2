@@ -71,7 +71,7 @@
             <!-- Login as Admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Add created attributes with options to Attribute Set -->
-            <actionGroup ref="AdminAddUnassignedAttributeToGroup" stepKey="createDefaultAttributeSet">
+            <actionGroup ref="AdminAddUnassignedAttributeToGroupActionGroup" stepKey="createDefaultAttributeSet">
                 <argument name="label" value="mySet"/>
                 <argument name="firstOption" value="$$createConfigProductAttribute.attribute_code$$"/>
                 <argument name="secondOption" value="$$createConfigProductAttribute2.attribute_code$$"/>
@@ -86,10 +86,10 @@
             <deleteData createDataKey="createThirdConfigurableProduct" stepKey="deleteThirdProduct"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <!-- Delete attribute set -->
-            <actionGroup ref="deleteAttributeSetByLabel" stepKey="deleteAttributeSet">
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
                 <argument name="label" value="mySet"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearAttributeSetsFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearAttributeSetsFilter"/>
             <!-- Delete First attribute -->
             <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
                 <argument name="productAttributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
@@ -104,8 +104,9 @@
             <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteSecondProductAttributeByAttributeCode">
                 <argument name="productAttributeCode" value="$$createConfigProductAttribute2.attribute_code$$"/>
             </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <!-- Clear filters -->
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductAttributesFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributesFilter"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilter"/>
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
@@ -114,19 +115,19 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad time="30" stepKey="wait1"/>
         <!-- Edit created first product as configurable product with options -->
-        <actionGroup ref="filterProductGridBySku" stepKey="filterGridByFirstProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridByFirstProduct">
             <argument name="product" value="$$createFirstConfigurableProduct$$"/>
         </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductFirst">
             <argument name="product" value="$$createFirstConfigurableProduct$$"/>
         </actionGroup>
-        <actionGroup ref="CreateConfigurableProductWithAttributeSet" stepKey="createProductFirst">
+        <actionGroup ref="CreateConfigurableProductWithAttributeSetActionGroup" stepKey="createProductFirst">
             <argument name="product" value="$$createFirstConfigurableProduct$$"/>
             <argument name="category" value="$$createCategory$$"/>
             <argument name="label" value="mySet"/>
             <argument name="option1" value="['option1', 'option2', 'option3', 'option4']"/>
         </actionGroup>
-        <actionGroup ref="AdminCreateConfigurationsForAttribute" stepKey="createConfigurationFirst">
+        <actionGroup ref="AdminCreateConfigurationsForAttributeActionGroup" stepKey="createConfigurationFirst">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
             <argument name="price" value="34"/>
         </actionGroup>
@@ -136,19 +137,19 @@
         <waitForPageLoad stepKey="waitForMessage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageFirst"/>
         <!-- Edit created second product as configurable product with options -->
-        <actionGroup ref="filterProductGridBySku" stepKey="filterGridBySecondProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridBySecondProduct">
             <argument name="product" value="$$createSecondConfigurableProduct$$"/>
         </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductSecond">
             <argument name="product" value="$$createSecondConfigurableProduct$$"/>
         </actionGroup>
-        <actionGroup ref="CreateConfigurableProductWithAttributeSet" stepKey="createProductSecond">
+        <actionGroup ref="CreateConfigurableProductWithAttributeSetActionGroup" stepKey="createProductSecond">
             <argument name="product" value="$$createSecondConfigurableProduct$$"/>
             <argument name="category" value="$$createCategory$$"/>
             <argument name="label" value="mySet"/>
             <argument name="option1" value="['option1', 'option2', 'option3']"/>
         </actionGroup>
-        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOption" stepKey="createConfigurationSecond">
+        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOptionActionGroup" stepKey="createConfigurationSecond">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
             <argument name="price" value="34"/>
             <argument name="attributeOption" value="option5"/>
@@ -159,19 +160,19 @@
         <waitForPageLoad stepKey="waitForSuccessMessage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageSecond"/>
         <!-- Edit created third product as configurable product with options -->
-        <actionGroup ref="filterProductGridBySku" stepKey="filterGridByThirdProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridByThirdProduct">
             <argument name="product" value="$$createThirdConfigurableProduct$$"/>
         </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductThird">
             <argument name="product" value="$$createThirdConfigurableProduct$$"/>
         </actionGroup>
-        <actionGroup ref="CreateConfigurableProductWithAttributeSet" stepKey="createProductThird">
+        <actionGroup ref="CreateConfigurableProductWithAttributeSetActionGroup" stepKey="createProductThird">
             <argument name="product" value="$$createThirdConfigurableProduct$$"/>
             <argument name="category" value="$$createCategory$$"/>
             <argument name="label" value="mySet"/>
             <argument name="option1" value="['option2', 'option3', 'option4']"/>
         </actionGroup>
-        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOption" stepKey="createConfigurationThird">
+        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOptionActionGroup" stepKey="createConfigurationThird">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
             <argument name="price" value="34"/>
             <argument name="attributeOption" value="option1"/>
@@ -181,13 +182,13 @@
         <waitForPageLoad stepKey="waitForProductPage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveConfigurableProductMessage"/>
         <!-- Create Simple product with options -->
-        <actionGroup ref="filterProductGridBySku" stepKey="filterGridBySimpleProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridBySimpleProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="CreateConfigurableProductWithAttributeSet" stepKey="createSimpleProduct">
+        <actionGroup ref="CreateConfigurableProductWithAttributeSetActionGroup" stepKey="createSimpleProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="category" value="$$createCategory$$"/>
             <argument name="label" value="mySet"/>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCategoryAssignProductActionGroup">
+        <annotations>
+            <description>Requires navigation to category creation/edit page. Assign products to category - using "Products in Category" tab.</description>
+        </annotations>
+        <arguments>
+            <argument name="productSku" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="false" stepKey="clickOnProductInCategory"/>
+        <scrollTo stepKey="scrollToProductGrid" selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" />
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickOnResetFilter"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnSku}}" userInput="{{productSku}}" stepKey="fillSkuFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+    </actionGroup>
+</actionGroups>

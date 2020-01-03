@@ -25,7 +25,7 @@
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
-            <actionGroup ref="DeleteCategory" stepKey="SecondLevelSubCat">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="SecondLevelSubCat">
                 <argument name="categoryEntity" value="SecondLevelSubCat"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
