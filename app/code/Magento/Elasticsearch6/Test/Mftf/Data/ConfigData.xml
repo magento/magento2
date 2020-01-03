@@ -10,7 +10,7 @@
     <entity name="SearchEngineElasticsearchConfigData">
         <data key="path">catalog/search/engine</data>
         <data key="scope_id">1</data>
-        <data key="label">Elasticsearch 6.0+</data>
+        <data key="label">Elasticsearch 6.x</data>
         <data key="value">elasticsearch6</data>
     </entity>
 </entities>

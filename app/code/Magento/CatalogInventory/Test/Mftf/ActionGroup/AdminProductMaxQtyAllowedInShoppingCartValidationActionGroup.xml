@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" extends="AdminProductSetMaxQtyAllowedInShoppingCartActionGroup">
+        <arguments>
+            <argument name="qty" type="string"/>
+            <argument name="errorMessage" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" after="clickDone" stepKey="waitProductValidationErrorMessageAppears"/>
+        <see selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" userInput="{{errorMessage}}" after="waitProductValidationErrorMessageAppears" stepKey="checkProductValidationErrorMessage"/>
+    </actionGroup>
+</actionGroups>
