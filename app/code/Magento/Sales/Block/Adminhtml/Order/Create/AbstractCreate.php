@@ -138,7 +138,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      */
     public function getItemPrice(Product $product)
     {
-        $price = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
+        $price = $product->getFinalPrice();
         return $this->convertPrice($price);
     }
 
