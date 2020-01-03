@@ -14,7 +14,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Copies the Authorize.net DirectPost configuration values to the new Accept.js module.
@@ -181,6 +180,10 @@ class CopyCurrentConfig implements DataPatchInterface
         string $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         int $scopeID = null
     ) {
+        if (!$this->valueExistInConfigTable($field, $scope, $scopeID)) {
+            return null;
+        }
+
         return $this->scopeConfig->getValue(
             sprintf(self::PAYMENT_PATH_FORMAT, self::DIRECTPOST_PATH, $field),
             $scope,
@@ -213,6 +216,28 @@ class CopyCurrentConfig implements DataPatchInterface
             $scope,
             $scopeID
         );
+    }
+
+    /**
+     * Check if value exist in config table
+     *
+     * @param string $field
+     * @param string $scope
+     * @param int $scopeID
+     * @return bool
+     */
+    private function valueExistInConfigTable(
+        string $field,
+        string $scope,
+        ?int $scopeID
+    ): bool {
+        $select = $this->moduleDataSetup->getConnection()->select()
+            ->from($this->moduleDataSetup->getTable('core_config_data'))
+            ->where('scope = ?', $scope)
+            ->where('scope_id = ?', $scopeID)
+            ->where('path = ?', sprintf(self::PAYMENT_PATH_FORMAT, self::DIRECTPOST_PATH, $field));
+
+        return (bool)$this->moduleDataSetup->getConnection()->fetchRow($select);
     }
 
     /**
