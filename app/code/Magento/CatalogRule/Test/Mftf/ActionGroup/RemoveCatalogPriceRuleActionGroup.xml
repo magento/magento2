@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="RemoveCatalogPriceRuleActionGroup" extends="OpenCatalogPriceRuleActionGroup">
+        <click selector="{{AdminMainActionsSection.delete}}" after="waitForPageLoad" stepKey="clickToDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" after="clickToDelete" stepKey="waitForElementVisible"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" after="waitForElementVisible" stepKey="clickToConfirm"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" after="clickToConfirm" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." after="waitForSuccessMessage" stepKey="verifyRuleIsDeleted"/>
+    </actionGroup>
+</actionGroups>

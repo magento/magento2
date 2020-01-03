@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSearchByRequestPathActionGroup">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid based on the provided Redirect Path. Validates that the provided Redirect Path, Type and Target Path are present and correct in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="redirectPath" type="string"/>
+            <argument name="redirectType" type="string"/>
+            <argument name="targetPath" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{redirectPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{redirectPath}}" stepKey="seeTheRedirectPathForOldUrl"/>
+        <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{targetPath}}" stepKey="seeTheTargetPath"/>
+        <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="{{redirectType}}" stepKey="seeTheRedirectTypeForOldUrl"/>
+    </actionGroup>
+</actionGroups>
