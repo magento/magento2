@@ -43,7 +43,7 @@ class FlushAllCacheObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
-            $this->purgeCache->sendPurgeRequest('.*');
+            $this->purgeCache->sendPurgeRequest(['.*']);
         }
     }
 }

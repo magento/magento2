@@ -53,6 +53,7 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
     public function testSendPurgeRequest($hosts)
     {
         $uris = [];
+        /** @var array $host */
         foreach ($hosts as $host) {
             $port = isset($host['port']) ? $host['port'] : \Magento\PageCache\Model\Cache\Server::DEFAULT_PORT;
             $uris[] = UriFactory::factory('')->setHost($host['host'])
@@ -81,7 +82,7 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock->expects($this->once())
             ->method('execute');
 
-        $this->assertTrue($this->model->sendPurgeRequest('tags'));
+        $this->assertTrue($this->model->sendPurgeRequest(['tags']));
     }
 
     /**
@@ -119,6 +120,6 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical');
 
-        $this->assertFalse($this->model->sendPurgeRequest('tags'));
+        $this->assertFalse($this->model->sendPurgeRequest(['tags']));
     }
 }

@@ -47,7 +47,7 @@ class FlushAllCacheObserverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(\Magento\PageCache\Model\Config::VARNISH)
         );
 
-        $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with('.*');
+        $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with(['.*']);
         $this->model->execute($this->observerMock);
     }
 }
