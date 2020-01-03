@@ -176,7 +176,6 @@
             .price-box {
                 display: table-cell;
                 vertical-align: top;
-                width: 1px;
 
                 .price-container {
                     > span {
@@ -1056,6 +1055,16 @@
             }
         }
     }
+
+    .product-info-main {
+        .product-info-price {
+            .price-box {
+                .price-container {
+                    font-size: 17px;
+                }
+            }
+        }
+    }
 }
 
 //
@@ -1099,6 +1108,16 @@
     .box-tocart {
         .paypal:first-of-type {
             margin-top: 13px;
+        }
+    }
+
+    .product-info-main {
+        .product-info-price {
+            .price-box {
+                .price-container {
+                    font-size: @font-size__xl;
+                }
+            }
         }
     }
 }
