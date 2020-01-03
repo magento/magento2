@@ -68,7 +68,7 @@ class GroupActions extends Column
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->escaper = $escaper;
-        $this->groupManagement = $groupManagement ?: ObjectManager::getInstance()->get(GroupManagementInterface::class);;
+        $this->groupManagement = $groupManagement ?: ObjectManager::getInstance()->get(GroupManagementInterface::class);
 
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
