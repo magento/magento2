@@ -40,7 +40,7 @@ class Csv extends AbstractAdapter
 
     /**
      * @param Filesystem $filesystem
-     * @param null $destination
+     * @param string $destination
      */
     public function __construct(Filesystem $filesystem, $destination = null)
     {
