@@ -1,18 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magefan_LoginAsCustomer" setup_version="2.2.1">
+    <module name="Magento_LoginAsCustomer" setup_version="2.2.1">
          <sequence>
          	<module name="Magento_Customer"/>
             <module name="Magento_Sales"/>
-            <module name="Magefan_Community"/>
+            <module name="Magento_Community"/>
         </sequence>
     </module>
 </config>

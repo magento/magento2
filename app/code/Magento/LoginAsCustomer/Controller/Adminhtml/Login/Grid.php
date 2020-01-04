@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Login;
+namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
 /**
  * LoginAsCustomer log grid action
@@ -31,6 +29,6 @@ class Grid extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_log');
+        return $this->_authorization->isAllowed('Magento_LoginAsCustomer::login_log');
     }
 }

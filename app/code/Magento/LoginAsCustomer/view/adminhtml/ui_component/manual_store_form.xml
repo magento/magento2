@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -17,7 +15,7 @@
     </argument>
     <settings>
         <buttons>
-            <button name="save" class="Magefan\LoginAsCustomer\Block\Adminhtml\Store\SaveButton"/>
+            <button name="save" class="Magento\LoginAsCustomer\Block\Adminhtml\Store\SaveButton"/>
         </buttons>
         <dataScope>data</dataScope>
         <deps>
@@ -28,7 +26,7 @@
         <settings>
             <submitUrl path="loginascustomer/login/login"/>
         </settings>
-        <dataProvider class="Magefan\LoginAsCustomer\Ui\DataProvider\Store\Form\StoreDataProvider"
+        <dataProvider class="Magento\LoginAsCustomer\Ui\DataProvider\Store\Form\StoreDataProvider"
                       name="manual_store_form_data_source">
             <settings>
                 <requestFieldName>entity_id</requestFieldName>

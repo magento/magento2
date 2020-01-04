@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Ihor Vansach (ihor@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Setup;
+namespace Magento\LoginAsCustomer\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -77,7 +75,7 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName('magefan_login_as_customer', ['admin_id']),
             ['admin_id']
         )->setComment(
-            'Magefan Login As Customer Table'
+            'Magento Login As Customer Table'
         );
         $installer->getConnection()->createTable($table);
 

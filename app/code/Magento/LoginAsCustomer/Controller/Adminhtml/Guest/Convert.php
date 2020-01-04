@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Guest;
+namespace Magento\LoginAsCustomer\Controller\Adminhtml\Guest;
 
 class Convert extends \Magento\Backend\App\Action
 {
@@ -41,7 +39,7 @@ class Convert extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        if ($this->moduleManager->isEnabled('Magefan_GuestToCustomer')) {
+        if ($this->moduleManager->isEnabled('Magento_GuestToCustomer')) {
             $this->_redirect('mfguesttocustomer/order/convert', [
                 'order_id' => $this->getRequest()->getParam('order_id')
             ]);

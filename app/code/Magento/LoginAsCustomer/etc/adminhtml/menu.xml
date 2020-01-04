@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magefan_LoginAsCustomer::login_log" title="Login As Customer Log" module="Magefan_LoginAsCustomer" parent="Magento_Customer::customer" sortOrder="40"  resource="Magefan_LoginAsCustomer::login_log" action="loginascustomer/login/" />
+        <add id="Magento_LoginAsCustomer::login_log" title="Login As Customer Log" module="Magento_LoginAsCustomer" parent="Magento_Customer::customer" sortOrder="40"  resource="Magento_LoginAsCustomer::login_log" action="loginascustomer/login/" />
     </menu>
 </config>

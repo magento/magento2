@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Model\ResourceModel\Login\Grid;
+namespace Magento\LoginAsCustomer\Model\ResourceModel\Login\Grid;
 
 /**
  * LoginAsCustomer collection
  */
-class Collection extends \Magefan\LoginAsCustomer\Model\ResourceModel\Login\Collection
+class Collection extends \Magento\LoginAsCustomer\Model\ResourceModel\Login\Collection
 {
     /**
      * Constructor

@@ -1,11 +1,9 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-namespace Magefan\LoginAsCustomer\Controller\Login;
+namespace Magento\LoginAsCustomer\Controller\Login;
 
 /**
  * LoginAsCustomer login action
@@ -13,22 +11,21 @@ namespace Magefan\LoginAsCustomer\Controller\Login;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magefan\LoginAsCustomer\Model\Login
+     * @var \Magento\LoginAsCustomer\Model\Login
      */
-    protected $login = null;
+    protected $loginModel = null;
 
     /**
      * Index constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magefan\LoginAsCustomer\Model\Login|null $login
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\LoginAsCustomer\Model\Login|null $loginModel
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magefan\LoginAsCustomer\Model\Login $login = null
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\LoginAsCustomer\Model\Login $loginModel = null
     ) {
         parent::__construct($context);
-        $objectManager = $this->_objectManager;
-        $this->login = $login ?: $objectManager->get(\Magefan\LoginAsCustomer\Model\Login::class);
+        $this->loginModel = $loginModel ?: $this->_objectManager->get(\Magento\LoginAsCustomer\Model\Login::class);
     }
     /**
      * Login as customer action
@@ -46,11 +43,11 @@ class Index extends \Magento\Framework\App\Action\Action
         try {
             /* Log in */
             $login->authenticateCustomer();
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('You are logged in as customer: %1', $login->getCustomer()->getName())
             );
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
         $this->_redirect('*/*/proceed');
@@ -58,22 +55,22 @@ class Index extends \Magento\Framework\App\Action\Action
 
     /**
      * Init login info
-     * @return false || \Magefan\LoginAsCustomer\Model\Login
+     * @return false || \Magento\LoginAsCustomer\Model\Login
      */
     protected function _initLogin()
     {
         $secret = $this->getRequest()->getParam('secret');
         if (!$secret) {
-            $this->messageManager->addError(__('Cannot login to account. No secret key provided.'));
+            $this->messageManager->addErrorMessage(__('Cannot login to account. No secret key provided.'));
             return false;
         }
 
-        $login = $this->login->loadNotUsed($secret);
+        $login = $this->loginModel->loadNotUsed($secret);
 
         if ($login->getId()) {
             return $login;
         } else {
-            $this->messageManager->addError(__('Cannot login to account. Secret key is not valid.'));
+            $this->messageManager->addErrorMessage(__('Cannot login to account. Secret key is not valid.'));
             return false;
         }
     }

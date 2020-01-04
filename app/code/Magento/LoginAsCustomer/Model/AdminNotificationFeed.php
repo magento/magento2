@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Model;
+namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
@@ -87,8 +85,8 @@ class AdminNotificationFeed extends \Magento\AdminNotification\Model\Feed
         $url = $this->_feedUrl . 'domain/' . urlencode($domain);
 
         $modulesParams = [];
-        foreach ($this->getMagefanModules() as $key => $module) {
-            $key = str_replace('Magefan_', '', $key);
+        foreach ($this->getMagentoModules() as $key => $module) {
+            $key = str_replace('Magento_', '', $key);
             $modulesParams[] = $key . ',' . $module['setup_version'];
         }
 
@@ -100,15 +98,15 @@ class AdminNotificationFeed extends \Magento\AdminNotification\Model\Feed
     }
 
     /**
-     * Get Magefan Modules Info
+     * Get Magento Modules Info
      *
      * @return $this
      */
-    protected function getMagefanModules()
+    protected function getMagentoModules()
     {
         $modules = [];
         foreach ($this->_moduleList->getAll() as $moduleName => $module) {
-            if (strpos($moduleName, 'Magefan_') !== false && $this->_moduleManager->isEnabled($moduleName)) {
+            if (strpos($moduleName, 'Magento_') !== false && $this->_moduleManager->isEnabled($moduleName)) {
                 $modules[$moduleName] = $module;
             }
         }

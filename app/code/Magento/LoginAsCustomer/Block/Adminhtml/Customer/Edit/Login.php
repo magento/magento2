@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Block\Adminhtml\Customer\Edit;
+namespace Magento\LoginAsCustomer\Block\Adminhtml\Customer\Edit;
 
 use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
@@ -43,7 +41,7 @@ class Login extends GenericButton implements ButtonProviderInterface
     {
         $customerId = $this->getCustomerId();
         $data = [];
-        $canModify = $customerId && $this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_button');
+        $canModify = $customerId && $this->_authorization->isAllowed('Magento_LoginAsCustomer::login_button');
         if ($canModify) {
             $data = [
                 'label' => __('Login As Customer'),

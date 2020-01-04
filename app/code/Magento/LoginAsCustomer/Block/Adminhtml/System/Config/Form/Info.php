@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Ihor Vansach (ihor@magefan.com). All rights reserved.
- * lease visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Block\Adminhtml\System\Config\Form;
+namespace Magento\LoginAsCustomer\Block\Adminhtml\System\Config\Form;
 
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Admin Login As Customer configurations information block
  */
-class Info extends \Magefan\Community\Block\Adminhtml\System\Config\Form\Info
+class Info extends \Magento\Community\Block\Adminhtml\System\Config\Form\Info
 {
     /**
      * Return extension url

@@ -1,21 +1,19 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Login;
+namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
 /**
  * Class Login
- * @package Magefan\LoginAsCustomer\Controller\Adminhtml\Login
+ * @package Magento\LoginAsCustomer\Controller\Adminhtml\Login
  */
 class Login extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magefan\LoginAsCustomer\Model\Login
+     * @var \Magento\LoginAsCustomer\Model\Login
      */
     protected $loginModel;
     /**
@@ -31,33 +29,33 @@ class Login extends \Magento\Backend\App\Action
      */
     protected $url = null;
     /**
-     * @var \Magefan\LoginAsCustomer\Model\Config
+     * @var \Magento\LoginAsCustomer\Model\Config
      */
     protected $config = null;
 
     /**
      * Login constructor.
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magefan\LoginAsCustomer\Model\Login|null $loginModel
+     * @param \Magento\LoginAsCustomer\Model\Login|null $loginModel
      * @param \Magento\Backend\Model\Auth\Session|null $authSession
      * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @param \Magento\Framework\Url|null $url
-     * @param \Magefan\LoginAsCustomer\Model\Config|null $config
+     * @param \Magento\LoginAsCustomer\Model\Config|null $config
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magefan\LoginAsCustomer\Model\Login $loginModel = null,
+        \Magento\LoginAsCustomer\Model\Login $loginModel = null,
         \Magento\Backend\Model\Auth\Session $authSession = null,
         \Magento\Store\Model\StoreManagerInterface $storeManager = null,
         \Magento\Framework\Url $url = null,
-        \Magefan\LoginAsCustomer\Model\Config $config = null
+        \Magento\LoginAsCustomer\Model\Config $config = null
     ) {
         parent::__construct($context);
-        $this->loginModel = $loginModel ?: $this->_objectManager->get(\Magefan\LoginAsCustomer\Model\Login::class);
+        $this->loginModel = $loginModel ?: $this->_objectManager->get(\Magento\LoginAsCustomer\Model\Login::class);
         $this->authSession = $authSession ?: $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class);
         $this->storeManager = $storeManager ?: $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
         $this->url = $url ?: $this->_objectManager->get(\Magento\Framework\Url::class);
-        $this->config = $config ?: $this->_objectManager->get(\Magefan\LoginAsCustomer\Model\Config::class);
+        $this->config = $config ?: $this->_objectManager->get(\Magento\LoginAsCustomer\Model\Config::class);
     }
     /**
      * Login as customer action
@@ -124,6 +122,6 @@ class Login extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_button');
+        return $this->_authorization->isAllowed('Magento_LoginAsCustomer::login_button');
     }
 }

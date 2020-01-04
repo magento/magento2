@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015-17 Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Model\Config\Source;
+namespace Magento\LoginAsCustomer\Model\Config\Source;
 
 /**
  * Class StoreViewLogin
- * @package Magefan\LoginAsCustomer\Model\Config\Source
+ * @package Magento\LoginAsCustomer\Model\Config\Source
  */
 class StoreViewLogin implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -23,7 +21,7 @@ class StoreViewLogin implements \Magento\Framework\Data\OptionSourceInterface
      * @const int
      */
     const MANUAL = 1;
-    
+
     /**
      * Options int
      *

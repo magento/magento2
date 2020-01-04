@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Login;
+namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
 /**
  * LoginAsCustomer log action
@@ -14,22 +12,21 @@ namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Login;
 class Index extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magefan\LoginAsCustomer\Model\Login
+     * @var \Magento\LoginAsCustomer\Model\Login
      */
-    protected $login = null;
+    protected $loginModel = null;
 
     /**
      * Index constructor.
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magefan\LoginAsCustomer\Model\Login|null $login
+     * @param \Magento\LoginAsCustomer\Model\Login|null $login
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magefan\LoginAsCustomer\Model\Login $login = null
+        \Magento\LoginAsCustomer\Model\Login $loginModel = null
     ) {
         parent::__construct($context);
-        $objectManager = $this->_objectManager;
-        $this->login = $login ?: $objectManager->get(\Magefan\LoginAsCustomer\Model\Login::class);
+        $this->loginModel = $loginModel ?: $this->_objectManager->get(\Magento\LoginAsCustomer\Model\Login::class);
     }
     /**
      * Login as customer log
@@ -43,10 +40,10 @@ class Index extends \Magento\Backend\App\Action
             return;
         }
 
-        $this->login->deleteNotUsed();
+        $this->loginModel->deleteNotUsed();
 
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magefan_LoginAsCustomer::login_log');
+        $this->_setActiveMenu('Magento_LoginAsCustomer::login_log');
         $title = __('Login As Customer Log ');
         $this->_view->getPage()->getConfig()->getTitle()->prepend($title);
         $this->_addBreadcrumb($title, $title);
@@ -60,6 +57,6 @@ class Index extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_log');
+        return $this->_authorization->isAllowed('Magento_LoginAsCustomer::login_log');
     }
 }

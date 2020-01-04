@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Ui\Component\Listing\Column;
+namespace Magento\LoginAsCustomer\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -60,7 +58,7 @@ abstract class AbstractColumn extends \Magento\Ui\Component\Listing\Columns\Colu
     {
 
         if (isset($dataSource['data']['items'])) {
-            $hidden = !$this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_button');
+            $hidden = !$this->_authorization->isAllowed('Magento_LoginAsCustomer::login_button');
             foreach ($dataSource['data']['items'] as &$item) {
                 if (!empty($item[$this->sourceColumnName])) {
                     $item[$this->getData('name')]['edit'] = [

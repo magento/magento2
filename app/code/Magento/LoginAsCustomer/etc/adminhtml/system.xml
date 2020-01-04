@@ -1,10 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -16,11 +14,11 @@
             <class>separator-top</class>
             <label>Login As Customer</label>
             <tab>magefan</tab>
-            <resource>Magefan_LoginAsCustomer::config_section</resource>
+            <resource>Magento_LoginAsCustomer::config_section</resource>
             <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Login As Customer Information</label>
                 <field id="version" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <frontend_model>Magefan\LoginAsCustomer\Block\Adminhtml\System\Config\Form\Info</frontend_model>
+                    <frontend_model>Magento\LoginAsCustomer\Block\Adminhtml\System\Config\Form\Info</frontend_model>
                 </field>
                 <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Extension</label>
@@ -28,7 +26,7 @@
                 </field>
                 <field id="key" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Product Key</label>
-                    <frontend_model>Magefan\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
+                    <frontend_model>Magento\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
                 </field>
                 <field id="disable_page_cache" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Disable Page Cache For Admin User</label>
@@ -42,7 +40,7 @@
                 </field>
                 <field id="store_view_login" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Store View To Login In</label>
-                    <source_model>Magefan\LoginAsCustomer\Model\Config\Source\StoreViewLogin</source_model>
+                    <source_model>Magento\LoginAsCustomer\Model\Config\Source\StoreViewLogin</source_model>
                     <comment><![CDATA[
                             Use "Manual Choose" option on multi-website Magento setup with enabled global Share Customer Accounts.
                             If set to "Manual Choose" then after click on "Login As Customer" admin will need to choose from a select box a store view to login in.

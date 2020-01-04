@@ -1,21 +1,19 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Plugin\Button;
+namespace Magento\LoginAsCustomer\Plugin\Button;
 
-use \Magefan\LoginAsCustomerAdvanced\Controller\Adminhtml\Order\Login as LoginController;
+use \Magento\LoginAsCustomerAdvanced\Controller\Adminhtml\Order\Login as LoginController;
 use \Magento\Backend\Block\Widget\Button\Toolbar\Interceptor;
 use \Magento\Framework\View\Element\AbstractBlock;
 use \Magento\Backend\Block\Widget\Button\ButtonList;
 
 /**
  * Class ToolbarPlugin
- * @package Magefan\LoginAsCustomerAdvanced\Plugin\Button
+ * @package Magento\LoginAsCustomerAdvanced\Plugin\Button
  */
 class ToolbarPlugin
 {
@@ -94,6 +92,6 @@ class ToolbarPlugin
      */
     protected function isAllowed()
     {
-        return $this->authorization->isAllowed('Magefan_LoginAsCustomer::login_button');
+        return $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
     }
 }

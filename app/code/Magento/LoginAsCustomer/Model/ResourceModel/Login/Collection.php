@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Model\ResourceModel\Login;
+namespace Magento\LoginAsCustomer\Model\ResourceModel\Login;
 
 /**
  * LoginAsCustomer collection
@@ -22,6 +20,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magefan\LoginAsCustomer\Model\Login', 'Magefan\LoginAsCustomer\Model\ResourceModel\Login');
+        $this->_init(\Magento\LoginAsCustomer\Model\Login::class, \Magento\LoginAsCustomer\Model\ResourceModel\Login::class);
     }
 }

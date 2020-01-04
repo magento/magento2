@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © Magefan (support@magefan.com). All rights reserved.
- * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
- *
- * Glory to Ukraine! Glory to the heroes!
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Login;
+namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
 /**
  * Class Manual
- * @package Magefan\LoginAsCustomer\Controller\Adminhtml\Login
+ * @package Magento\LoginAsCustomer\Controller\Adminhtml\Login
  */
 class Manual extends \Magento\Backend\App\Action
 {
@@ -20,7 +18,7 @@ class Manual extends \Magento\Backend\App\Action
     public function execute()
     {
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magefan_LoginAsCustomer::login_button');
+        $this->_setActiveMenu('Magento_LoginAsCustomer::login_button');
         $title = __('Store View To Login In ');
         $this->_view->getPage()->getConfig()->getTitle()->prepend($title);
         $this->_addBreadcrumb($title, $title);
@@ -34,6 +32,6 @@ class Manual extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_button');
+        return $this->_authorization->isAllowed('Magento_LoginAsCustomer::login_button');
     }
 }

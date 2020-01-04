@@ -9,7 +9,7 @@
     "autoload": {
         "files": [ "registration.php" ],
         "psr-4": {
-            "Magefan\\LoginAsCustomer\\": ""
+            "Magento\\LoginAsCustomer\\": ""
         }
     }
 }
