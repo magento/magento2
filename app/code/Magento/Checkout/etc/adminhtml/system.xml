@@ -23,7 +23,7 @@
                 </field>
                 <field id="display_billing_address_on" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Billing Address On</label>
-                    <source_model>\Magento\Checkout\Model\Adminhtml\BillingAddressDisplayOptions</source_model>
+                    <source_model>Magento\Checkout\Model\Adminhtml\BillingAddressDisplayOptions</source_model>
                 </field>
                 <field id="max_items_display_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Maximum Number of Items to Display in Order Summary</label>

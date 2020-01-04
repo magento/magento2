@@ -34,7 +34,7 @@
                 </item>
             </argument>
         </argument>
-        <dataProvider class="\Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider" name="recently_viewed_datasource">
+        <dataProvider class="Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider" name="recently_viewed_datasource">
             <settings>
                 <requestFieldName/>
                 <primaryFieldName/>

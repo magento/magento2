@@ -34,14 +34,14 @@
     <type name="Magento\Framework\MessageQueue\ExchangeFactory">
         <arguments>
             <argument name="exchangeFactories" xsi:type="array">
-                <item name="db" xsi:type="object">\Magento\MysqlMq\Model\Driver\ExchangeFactory</item>
+                <item name="db" xsi:type="object">Magento\MysqlMq\Model\Driver\ExchangeFactory</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\MessageQueue\Bulk\ExchangeFactory">
         <arguments>
             <argument name="exchangeFactories" xsi:type="array">
-                <item name="db" xsi:type="object">\Magento\MysqlMq\Model\Driver\Bulk\ExchangeFactory</item>
+                <item name="db" xsi:type="object">Magento\MysqlMq\Model\Driver\Bulk\ExchangeFactory</item>
             </argument>
         </arguments>
     </type>
@@ -54,7 +54,7 @@
     </type>
     <virtualType name="Magento\MysqlMq\Model\Driver\Bulk\ExchangeFactory" type="Magento\MysqlMq\Model\Driver\ExchangeFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">\Magento\MysqlMq\Model\Driver\Bulk\Exchange</argument>
+            <argument name="instanceName" xsi:type="string">Magento\MysqlMq\Model\Driver\Bulk\Exchange</argument>
         </arguments>
     </virtualType>
 </config>

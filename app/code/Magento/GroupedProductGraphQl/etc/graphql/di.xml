@@ -16,7 +16,7 @@
     <type name="Magento\CatalogGraphQl\Model\ProductLinkTypeResolverComposite">
         <arguments>
             <argument name="productLinksTypeNameResolvers" xsi:type="array">
-                <item name="grouped_product_link__type_resolver" xsi:type="object">\Magento\GroupedProductGraphQl\Model\GroupedProductLinksTypeResolver</item>
+                <item name="grouped_product_link__type_resolver" xsi:type="object">Magento\GroupedProductGraphQl\Model\GroupedProductLinksTypeResolver</item>
             </argument>
         </arguments>
     </type>

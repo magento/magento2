@@ -123,7 +123,7 @@
                 <model>PayflowProCreditCardVaultFacade</model>
                 <title>Stored Cards (Payflow Pro)</title>
                 <instant_purchase>
-                    <tokenFormat>\Magento\Paypal\Model\InstantPurchase\Payflow\Pro\TokenFormatter</tokenFormat>
+                    <tokenFormat>Magento\Paypal\Model\InstantPurchase\Payflow\Pro\TokenFormatter</tokenFormat>
                 </instant_purchase>
                 <group>paypal</group>
             </payflowpro_cc_vault>

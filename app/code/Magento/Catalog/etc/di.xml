@@ -6,46 +6,46 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Catalog\Api\Data\ProductInterface" type="Magento\Catalog\Model\Product" />
-    <preference for="Magento\Catalog\Api\ProductRepositoryInterface" type="Magento\Catalog\Model\ProductRepository" />
-    <preference for="Magento\Catalog\Api\CategoryAttributeRepositoryInterface" type="Magento\Catalog\Model\Category\AttributeRepository" />
-    <preference for="Magento\Catalog\Api\Data\CategoryAttributeInterface" type="Magento\Catalog\Model\Category\Attribute" />
-    <preference for="Magento\Catalog\Api\CategoryAttributeOptionManagementInterface" type="Magento\Catalog\Model\Category\Attribute\OptionManagement" />
-    <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" type="Magento\Catalog\Model\ProductTypes\Config" />
-    <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" type="Magento\Catalog\Model\ProductOptions\Config" />
-    <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite" />
-    <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite" />
-    <preference for="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface" type="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper" />
-    <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider" />
-    <preference for="Magento\Framework\Pricing\PriceInfoInterface" type="Magento\Framework\Pricing\PriceInfo\Base" />
-    <preference for="Magento\Framework\Pricing\PriceCurrencyInterface" type="Magento\Directory\Model\PriceCurrency" />
-    <preference for="Magento\Framework\Pricing\Adjustment\CalculatorInterface" type="Magento\Framework\Pricing\Adjustment\Calculator" />
-    <preference for="Magento\Catalog\Api\Data\CategoryInterface" type="Magento\Catalog\Model\Category" />
-    <preference for="Magento\Catalog\Api\CategoryManagementInterface" type="Magento\Catalog\Model\CategoryManagement" />
-    <preference for="Magento\Catalog\Api\CategoryRepositoryInterface" type="Magento\Catalog\Model\CategoryRepository" />
-    <preference for="Magento\Catalog\Api\Data\CategoryTreeInterface" type="Magento\Catalog\Model\Category" />
-    <preference for="Magento\Catalog\Api\ProductAttributeRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\Repository" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeInterface" type="Magento\Catalog\Model\ResourceModel\Eav\Attribute" />
-    <preference for="Magento\Catalog\Api\ProductTypeListInterface" type="Magento\Catalog\Model\ProductTypeList" />
-    <preference for="Magento\Catalog\Api\Data\ProductTypeInterface" type="Magento\Catalog\Model\ProductType" />
-    <preference for="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" type="Magento\Catalog\Model\Product\Gallery\GalleryManagement" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface" type="Magento\Catalog\Model\Product\Gallery\Entry" />
-    <preference for="Magento\Catalog\Api\ProductMediaAttributeManagementInterface" type="Magento\Catalog\Model\Product\Media\AttributeManagement" />
-    <preference for="Magento\Catalog\Api\ProductAttributeTypesListInterface" type="Magento\Catalog\Model\Product\Attribute\TypesList" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeTypeInterface" type="Magento\Catalog\Model\Product\Attribute\Type" />
-    <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository" />
-    <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
-    <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Catalog\Model\ProductAttributeSearchResults" />
-    <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Catalog\Model\CategoryAttributeSearchResults" />
-    <preference for="Magento\Catalog\Api\Data\ProductSearchResultsInterface" type="Magento\Catalog\Model\ProductSearchResults" />
-    <preference for="Magento\Catalog\Api\ProductAttributeManagementInterface" type="Magento\Catalog\Model\Product\Attribute\Management" />
-    <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement" />
-    <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository" />
-    <preference for="Magento\Catalog\Api\ProductManagementInterface" type="Magento\Catalog\Model\ProductManagement" />
-    <preference for="Magento\Catalog\Api\AttributeSetFinderInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetFinder" />
-    <preference for="Magento\Catalog\Api\CategoryListInterface" type="Magento\Catalog\Model\CategoryList" />
-    <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Catalog\Model\CategorySearchResults" />
+    <preference for="Magento\Catalog\Api\Data\ProductInterface" type="Magento\Catalog\Model\Product"/>
+    <preference for="Magento\Catalog\Api\ProductRepositoryInterface" type="Magento\Catalog\Model\ProductRepository"/>
+    <preference for="Magento\Catalog\Api\CategoryAttributeRepositoryInterface" type="Magento\Catalog\Model\Category\AttributeRepository"/>
+    <preference for="Magento\Catalog\Api\Data\CategoryAttributeInterface" type="Magento\Catalog\Model\Category\Attribute"/>
+    <preference for="Magento\Catalog\Api\CategoryAttributeOptionManagementInterface" type="Magento\Catalog\Model\Category\Attribute\OptionManagement"/>
+    <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" type="Magento\Catalog\Model\ProductTypes\Config"/>
+    <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" type="Magento\Catalog\Model\ProductOptions\Config"/>
+    <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite"/>
+    <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite"/>
+    <preference for="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface" type="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper"/>
+    <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider"/>
+    <preference for="Magento\Framework\Pricing\PriceInfoInterface" type="Magento\Framework\Pricing\PriceInfo\Base"/>
+    <preference for="Magento\Framework\Pricing\PriceCurrencyInterface" type="Magento\Directory\Model\PriceCurrency"/>
+    <preference for="Magento\Framework\Pricing\Adjustment\CalculatorInterface" type="Magento\Framework\Pricing\Adjustment\Calculator"/>
+    <preference for="Magento\Catalog\Api\Data\CategoryInterface" type="Magento\Catalog\Model\Category"/>
+    <preference for="Magento\Catalog\Api\CategoryManagementInterface" type="Magento\Catalog\Model\CategoryManagement"/>
+    <preference for="Magento\Catalog\Api\CategoryRepositoryInterface" type="Magento\Catalog\Model\CategoryRepository"/>
+    <preference for="Magento\Catalog\Api\Data\CategoryTreeInterface" type="Magento\Catalog\Model\Category"/>
+    <preference for="Magento\Catalog\Api\ProductAttributeRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\Repository"/>
+    <preference for="Magento\Catalog\Api\Data\ProductAttributeInterface" type="Magento\Catalog\Model\ResourceModel\Eav\Attribute"/>
+    <preference for="Magento\Catalog\Api\ProductTypeListInterface" type="Magento\Catalog\Model\ProductTypeList"/>
+    <preference for="Magento\Catalog\Api\Data\ProductTypeInterface" type="Magento\Catalog\Model\ProductType"/>
+    <preference for="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" type="Magento\Catalog\Model\Product\Gallery\GalleryManagement"/>
+    <preference for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface" type="Magento\Catalog\Model\Product\Gallery\Entry"/>
+    <preference for="Magento\Catalog\Api\ProductMediaAttributeManagementInterface" type="Magento\Catalog\Model\Product\Media\AttributeManagement"/>
+    <preference for="Magento\Catalog\Api\ProductAttributeTypesListInterface" type="Magento\Catalog\Model\Product\Attribute\TypesList"/>
+    <preference for="Magento\Catalog\Api\Data\ProductAttributeTypeInterface" type="Magento\Catalog\Model\Product\Attribute\Type"/>
+    <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository"/>
+    <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement"/>
+    <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository"/>
+    <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Catalog\Model\ProductAttributeSearchResults"/>
+    <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Catalog\Model\CategoryAttributeSearchResults"/>
+    <preference for="Magento\Catalog\Api\Data\ProductSearchResultsInterface" type="Magento\Catalog\Model\ProductSearchResults"/>
+    <preference for="Magento\Catalog\Api\ProductAttributeManagementInterface" type="Magento\Catalog\Model\Product\Attribute\Management"/>
+    <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement"/>
+    <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository"/>
+    <preference for="Magento\Catalog\Api\ProductManagementInterface" type="Magento\Catalog\Model\ProductManagement"/>
+    <preference for="Magento\Catalog\Api\AttributeSetFinderInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetFinder"/>
+    <preference for="Magento\Catalog\Api\CategoryListInterface" type="Magento\Catalog\Model\CategoryList"/>
+    <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Catalog\Model\CategorySearchResults"/>
     <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
     <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
     <preference for="Magento\Catalog\Api\ProductRenderListInterface" type="Magento\Catalog\Model\ProductRenderList"/>
@@ -53,38 +53,38 @@
     <preference for="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface" type="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver"/>
     <preference for="Magento\Catalog\Model\Product\Media\ConfigInterface" type="Magento\Catalog\Model\Product\Media\Config"/>
     <preference for="Magento\Framework\View\Asset\ContextInterface" type="Magento\Catalog\Model\View\Asset\Image\Context"/>
-    <preference for="Magento\Catalog\Api\TierPriceStorageInterface" type="Magento\Catalog\Model\Product\Price\TierPriceStorage" />
-    <preference for="Magento\Catalog\Api\Data\TierPriceInterface" type="Magento\Catalog\Model\Product\Price\TierPrice" />
-    <preference for="Magento\Catalog\Api\BasePriceStorageInterface" type="Magento\Catalog\Model\Product\Price\BasePriceStorage" />
-    <preference for="Magento\Catalog\Api\Data\BasePriceInterface" type="Magento\Catalog\Model\Product\Price\BasePrice" />
-    <preference for="Magento\Catalog\Api\CostStorageInterface" type="Magento\Catalog\Model\Product\Price\CostStorage" />
-    <preference for="Magento\Catalog\Api\Data\CostInterface" type="Magento\Catalog\Model\Product\Price\Cost" />
-    <preference for="Magento\Catalog\Api\SpecialPriceStorageInterface" type="Magento\Catalog\Model\Product\Price\SpecialPriceStorage" />
-    <preference for="Magento\Catalog\Api\Data\SpecialPriceInterface" type="Magento\Catalog\Model\Product\Price\SpecialPrice" />
-    <preference for="Magento\Catalog\Api\Data\PriceUpdateResultInterface" type="Magento\Catalog\Model\Product\Price\PriceUpdateResult" />
-    <preference for="Magento\Catalog\Api\SpecialPriceInterface" type="Magento\Catalog\Model\ResourceModel\Product\Price\SpecialPrice" />
-    <preference for="Magento\Catalog\Model\ProductIdLocatorInterface" type="Magento\Catalog\Model\ProductIdLocator" />
-    <preference for="Magento\Catalog\Api\Data\ProductRender\ButtonInterface" type="Magento\Catalog\Model\ProductRender\Button" />
-    <preference for="Magento\Catalog\Api\Data\ProductRender\ImageInterface" type="Magento\Catalog\Model\ProductRender\Image" />
-    <preference for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" type="Magento\Catalog\Model\ProductRender\PriceInfo" />
-    <preference for="Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface" type="Magento\Catalog\Model\ProductRender\FormattedPriceInfo" />
-    <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider" />
-    <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
-    <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
-    <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
-    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
-    <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
+    <preference for="Magento\Catalog\Api\TierPriceStorageInterface" type="Magento\Catalog\Model\Product\Price\TierPriceStorage"/>
+    <preference for="Magento\Catalog\Api\Data\TierPriceInterface" type="Magento\Catalog\Model\Product\Price\TierPrice"/>
+    <preference for="Magento\Catalog\Api\BasePriceStorageInterface" type="Magento\Catalog\Model\Product\Price\BasePriceStorage"/>
+    <preference for="Magento\Catalog\Api\Data\BasePriceInterface" type="Magento\Catalog\Model\Product\Price\BasePrice"/>
+    <preference for="Magento\Catalog\Api\CostStorageInterface" type="Magento\Catalog\Model\Product\Price\CostStorage"/>
+    <preference for="Magento\Catalog\Api\Data\CostInterface" type="Magento\Catalog\Model\Product\Price\Cost"/>
+    <preference for="Magento\Catalog\Api\SpecialPriceStorageInterface" type="Magento\Catalog\Model\Product\Price\SpecialPriceStorage"/>
+    <preference for="Magento\Catalog\Api\Data\SpecialPriceInterface" type="Magento\Catalog\Model\Product\Price\SpecialPrice"/>
+    <preference for="Magento\Catalog\Api\Data\PriceUpdateResultInterface" type="Magento\Catalog\Model\Product\Price\PriceUpdateResult"/>
+    <preference for="Magento\Catalog\Api\SpecialPriceInterface" type="Magento\Catalog\Model\ResourceModel\Product\Price\SpecialPrice"/>
+    <preference for="Magento\Catalog\Model\ProductIdLocatorInterface" type="Magento\Catalog\Model\ProductIdLocator"/>
+    <preference for="Magento\Catalog\Api\Data\ProductRender\ButtonInterface" type="Magento\Catalog\Model\ProductRender\Button"/>
+    <preference for="Magento\Catalog\Api\Data\ProductRender\ImageInterface" type="Magento\Catalog\Model\ProductRender\Image"/>
+    <preference for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" type="Magento\Catalog\Model\ProductRender\PriceInfo"/>
+    <preference for="Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface" type="Magento\Catalog\Model\ProductRender\FormattedPriceInfo"/>
+    <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider"/>
+    <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex"/>
+    <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory"/>
+    <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite"/>
+    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="Magento\Catalog\Model\MassAction"/>
+    <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria"/>
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
-        <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
+        <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log"/>
     </type>
     <type name="Magento\Catalog\Model\Category\DataProvider">
-        <plugin name="set_page_layout_default_value" type="Magento\Catalog\Model\Plugin\SetPageLayoutDefaultValue" />
+        <plugin name="set_page_layout_default_value" type="Magento\Catalog\Model\Plugin\SetPageLayoutDefaultValue"/>
     </type>
     <type name="Magento\Theme\Block\Html\Topmenu">
-        <plugin name="catalogTopmenu" type="Magento\Catalog\Plugin\Block\Topmenu" />
+        <plugin name="catalogTopmenu" type="Magento\Catalog\Plugin\Block\Topmenu"/>
     </type>
     <type name="Magento\Framework\Mview\View\StateInterface">
-        <plugin name="setStatusForMview" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState" />
+        <plugin name="setStatusForMview" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState"/>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState">
         <arguments>
@@ -180,7 +180,7 @@
     <type name="Magento\Catalog\Helper\Output">
         <arguments>
             <argument name="directivePatterns" xsi:type="array">
-                <item name="construct" xsi:type="const">\Magento\Framework\Filter\Template::CONSTRUCTION_PATTERN</item>
+                <item name="construct" xsi:type="const">Magento\Framework\Filter\Template::CONSTRUCTION_PATTERN</item>
             </argument>
         </arguments>
     </type>
@@ -250,25 +250,25 @@
     </type>
     <type name="Magento\Store\Model\ResourceModel\Website">
         <plugin name="invalidatePriceIndexerOnWebsite" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
-        <plugin name="categoryProductWebsiteAfterDelete" type="\Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>
+        <plugin name="categoryProductWebsiteAfterDelete" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
-        <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store" />
+        <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store"/>
         <plugin name="categoryStoreAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView"/>
         <plugin name="productAttributesStoreViewSave" type="Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup"/>
-        <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup" />
+        <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup"/>
         <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>
     </type>
     <type name="Magento\Customer\Api\GroupRepositoryInterface">
         <plugin name="invalidatePriceIndexerOnCustomerGroup" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup"/>
     </type>
     <type name="Magento\Indexer\Model\Config\Data">
-        <plugin name="indexerCategoryFlatConfigGet" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData" />
-        <plugin name="indexerProductFlatConfigGet" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData" />
+        <plugin name="indexerCategoryFlatConfigGet" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData"/>
+        <plugin name="indexerProductFlatConfigGet" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData"/>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\AbstractAction">
         <arguments>
@@ -276,7 +276,7 @@
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute\Set">
-        <plugin name="invalidateEavIndexerOnAttributeSetSave" type="Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet" />
+        <plugin name="invalidateEavIndexerOnAttributeSetSave" type="Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet"/>
     </type>
     <type name="Magento\Catalog\Helper\Product\Flat\Indexer">
         <arguments>
@@ -361,7 +361,7 @@
     </type>
     <type name="Magento\Catalog\Model\Product\ReservedAttributeList">
         <arguments>
-            <argument name="productModel" xsi:type="string">\Magento\Catalog\Model\Product</argument>
+            <argument name="productModel" xsi:type="string">Magento\Catalog\Model\Product</argument>
             <argument name="reservedAttributes" xsi:type="array">
                 <item name="position" xsi:type="string">position</item>
             </argument>
@@ -546,29 +546,29 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Config">
-        <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\ResourceModel\Config" />
+        <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\ResourceModel\Config"/>
     </type>
-    <preference for="Magento\Catalog\Api\ProductLinkTypeListInterface" type="Magento\Catalog\Model\Product\LinkTypeProvider" />
-    <preference for="Magento\Catalog\Api\Data\ProductLinkAttributeInterface" type="Magento\Catalog\Model\ProductLink\Attribute" />
-    <preference for="Magento\Catalog\Api\Data\ProductLinkTypeInterface" type="Magento\Catalog\Model\ProductLink\Type" />
-    <preference for="Magento\Catalog\Api\ProductLinkManagementInterface" type="Magento\Catalog\Model\ProductLink\Management" />
-    <preference for="Magento\Catalog\Api\Data\ProductLinkInterface" type="Magento\Catalog\Model\ProductLink\Link" />
-    <preference for="Magento\Catalog\Api\CategoryLinkManagementInterface" type="Magento\Catalog\Model\CategoryLinkManagement" />
-    <preference for="Magento\Catalog\Api\Data\ProductWebsiteLinkInterface" type="Magento\Catalog\Model\ProductWebsiteLink" />
-    <preference for="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" type="Magento\Catalog\Model\ProductWebsiteLinkRepository" />
-    <preference for="Magento\Catalog\Api\CategoryLinkRepositoryInterface" type="Magento\Catalog\Model\CategoryLinkRepository" />
-    <preference for="Magento\Catalog\Api\Data\ProductCustomOptionInterface" type="Magento\Catalog\Model\Product\Option" />
-    <preference for="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" type="Magento\Catalog\Model\Product\Option\Repository" />
-    <preference for="Magento\Catalog\Api\Data\ProductCustomOptionTypeInterface" type="Magento\Catalog\Model\Product\Option\Type" />
-    <preference for="Magento\Catalog\Api\ProductTierPriceManagementInterface" type="Magento\Catalog\Model\Product\TierPriceManagement" />
-    <preference for="Magento\Catalog\Api\ScopedProductTierPriceManagementInterface" type="Magento\Catalog\Model\Product\ScopedTierPriceManagement" />
-    <preference for="Magento\Catalog\Api\Data\ProductTierPriceInterface" type="Magento\Catalog\Model\Product\TierPrice" />
-    <preference for="Magento\Catalog\Api\Data\CategoryProductLinkInterface" type="Magento\Catalog\Model\CategoryProductLink" />
-    <preference for="Magento\Catalog\Api\ProductCustomOptionTypeListInterface" type="Magento\Catalog\Model\ProductOptions\TypeList" />
-    <preference for="Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface" type="Magento\Catalog\Model\Product\Option\Value" />
-    <preference for="Magento\Catalog\Api\Data\CustomOptionInterface" type="Magento\Catalog\Model\CustomOptions\CustomOption" />
-    <preference for="Magento\Catalog\Api\Data\ProductOptionInterface" type="Magento\Catalog\Model\ProductOption" />
-    <preference for="Magento\Catalog\Api\Data\CategoryLinkInterface" type="Magento\Catalog\Model\CategoryLink" />
+    <preference for="Magento\Catalog\Api\ProductLinkTypeListInterface" type="Magento\Catalog\Model\Product\LinkTypeProvider"/>
+    <preference for="Magento\Catalog\Api\Data\ProductLinkAttributeInterface" type="Magento\Catalog\Model\ProductLink\Attribute"/>
+    <preference for="Magento\Catalog\Api\Data\ProductLinkTypeInterface" type="Magento\Catalog\Model\ProductLink\Type"/>
+    <preference for="Magento\Catalog\Api\ProductLinkManagementInterface" type="Magento\Catalog\Model\ProductLink\Management"/>
+    <preference for="Magento\Catalog\Api\Data\ProductLinkInterface" type="Magento\Catalog\Model\ProductLink\Link"/>
+    <preference for="Magento\Catalog\Api\CategoryLinkManagementInterface" type="Magento\Catalog\Model\CategoryLinkManagement"/>
+    <preference for="Magento\Catalog\Api\Data\ProductWebsiteLinkInterface" type="Magento\Catalog\Model\ProductWebsiteLink"/>
+    <preference for="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" type="Magento\Catalog\Model\ProductWebsiteLinkRepository"/>
+    <preference for="Magento\Catalog\Api\CategoryLinkRepositoryInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
+    <preference for="Magento\Catalog\Api\Data\ProductCustomOptionInterface" type="Magento\Catalog\Model\Product\Option"/>
+    <preference for="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" type="Magento\Catalog\Model\Product\Option\Repository"/>
+    <preference for="Magento\Catalog\Api\Data\ProductCustomOptionTypeInterface" type="Magento\Catalog\Model\Product\Option\Type"/>
+    <preference for="Magento\Catalog\Api\ProductTierPriceManagementInterface" type="Magento\Catalog\Model\Product\TierPriceManagement"/>
+    <preference for="Magento\Catalog\Api\ScopedProductTierPriceManagementInterface" type="Magento\Catalog\Model\Product\ScopedTierPriceManagement"/>
+    <preference for="Magento\Catalog\Api\Data\ProductTierPriceInterface" type="Magento\Catalog\Model\Product\TierPrice"/>
+    <preference for="Magento\Catalog\Api\Data\CategoryProductLinkInterface" type="Magento\Catalog\Model\CategoryProductLink"/>
+    <preference for="Magento\Catalog\Api\ProductCustomOptionTypeListInterface" type="Magento\Catalog\Model\ProductOptions\TypeList"/>
+    <preference for="Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface" type="Magento\Catalog\Model\Product\Option\Value"/>
+    <preference for="Magento\Catalog\Api\Data\CustomOptionInterface" type="Magento\Catalog\Model\CustomOptions\CustomOption"/>
+    <preference for="Magento\Catalog\Api\Data\ProductOptionInterface" type="Magento\Catalog\Model\ProductOption"/>
+    <preference for="Magento\Catalog\Api\Data\CategoryLinkInterface" type="Magento\Catalog\Model\CategoryLink"/>
     <virtualType name="Magento\Catalog\Model\ResourceModel\Attribute\Collection" type="Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection">
     </virtualType>
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
@@ -871,7 +871,7 @@
         </arguments>
     </virtualType>
     <type name="Magento\Eav\Model\ResourceModel\ReadSnapshot">
-        <plugin name="catalogReadSnapshot" type="Magento\Catalog\Plugin\Model\ResourceModel\ReadSnapshotPlugin" />
+        <plugin name="catalogReadSnapshot" type="Magento\Catalog\Plugin\Model\ResourceModel\ReadSnapshotPlugin"/>
     </type>
     <type name="Magento\Framework\EntityManager\Operation\AttributePool">
         <arguments>
@@ -902,7 +902,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface" type="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite" />
+    <preference for="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface" type="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite"/>
     <type name="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite">
         <arguments>
             <argument name="linkedProductSelectBuilder" xsi:type="array">
@@ -950,7 +950,7 @@
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
     </type>
-    <preference for="Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface" type="Magento\Catalog\Model\ResourceModel\Product\CompositeWithWebsiteProcessor" />
+    <preference for="Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface" type="Magento\Catalog\Model\ResourceModel\Product\CompositeWithWebsiteProcessor"/>
     <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
         <arguments>
             <argument name="baseSelectProcessors" xsi:type="array">
@@ -1008,10 +1008,10 @@
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
         <arguments>
             <argument name="productProviders" xsi:type="array">
-                <item name="image" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image</item>
-                <item name="price" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Price</item>
-                <item name="url" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Url</item>
-                <item name="additional_info" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\AdditionalInfo</item>
+                <item name="image" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image</item>
+                <item name="price" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Price</item>
+                <item name="url" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Url</item>
+                <item name="additional_info" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\AdditionalInfo</item>
             </argument>
         </arguments>
     </type>
@@ -1035,7 +1035,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator" />
+    <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator"/>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
             <argument name="batchRowsCount" xsi:type="array">

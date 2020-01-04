@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
-    <view id="catalogsearch_fulltext" class="\Magento\CatalogSearch\Model\Indexer\Mview\Action" group="indexer">
+    <view id="catalogsearch_fulltext" class="Magento\CatalogSearch\Model\Indexer\Mview\Action" group="indexer">
         <subscriptions>
             <table name="catalog_product_entity" entity_column="entity_id" />
             <table name="catalog_product_entity_int" entity_column="entity_id" />

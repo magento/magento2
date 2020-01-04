@@ -89,7 +89,7 @@
                 <label translate="true">Status</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="\Magento\AsynchronousOperations\Ui\Component\Listing\Column\Actions">
+        <actionsColumn name="actions" class="Magento\AsynchronousOperations\Ui\Component\Listing\Column\Actions">
             <settings>
                 <indexField>id</indexField>
                 <label translate="true">Action</label>

@@ -129,7 +129,7 @@
     <type name="Magento\Quote\Model\Quote\Item\Repository">
         <arguments>
             <argument name="cartItemProcessors" xsi:type="array">
-                <item name="bundle" xsi:type="object">\Magento\Bundle\Model\CartItemProcessor\Proxy</item>
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\CartItemProcessor\Proxy</item>
             </argument>
         </arguments>
     </type>
@@ -158,7 +158,7 @@
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
         <arguments>
             <argument name="productProviders" xsi:type="array">
-                <item name="bundle_price" xsi:type="object">\Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice</item>
+                <item name="bundle_price" xsi:type="object">Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice</item>
             </argument>
         </arguments>
     </type>

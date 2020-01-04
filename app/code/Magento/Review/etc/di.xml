@@ -34,7 +34,7 @@
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
         <arguments>
             <argument name="productProviders" xsi:type="array">
-                <item name="review" xsi:type="object">\Magento\Review\Ui\DataProvider\Product\Listing\Collector\Review</item>
+                <item name="review" xsi:type="object">Magento\Review\Ui\DataProvider\Product\Listing\Collector\Review</item>
             </argument>
         </arguments>
     </type>

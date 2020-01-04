@@ -19,8 +19,8 @@
     <type name="Magento\PaypalGraphQl\Model\Plugin\Resolver\SetPaymentMethodOnCart">
         <arguments>
             <argument name="allowedPaymentMethodCodes" xsi:type="array">
-                <item name="paypal_express" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</item>
-                <item name="payflow_express" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</item>
+                <item name="paypal_express" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</item>
+                <item name="payflow_express" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</item>
             </argument>
         </arguments>
     </type>
@@ -28,8 +28,8 @@
     <type name="Magento\PaypalGraphQl\Model\Provider\Checkout">
         <arguments>
             <argument name="checkoutTypes" xsi:type="array">
-                <item name="paypal_express" xsi:type="string">\Magento\Paypal\Model\Express\Checkout</item>
-                <item name="payflow_express" xsi:type="string">\Magento\Paypal\Model\PayflowExpress\Checkout</item>
+                <item name="paypal_express" xsi:type="string">Magento\Paypal\Model\Express\Checkout</item>
+                <item name="payflow_express" xsi:type="string">Magento\Paypal\Model\PayflowExpress\Checkout</item>
             </argument>
         </arguments>
     </type>
@@ -37,8 +37,8 @@
     <type name="Magento\PaypalGraphQl\Model\Provider\Config">
         <arguments>
             <argument name="configTypes" xsi:type="array">
-                <item name="paypal_express" xsi:type="string">\Magento\Paypal\Model\Config</item>
-                <item name="payflow_express" xsi:type="string">\Magento\Paypal\Model\Config</item>
+                <item name="paypal_express" xsi:type="string">Magento\Paypal\Model\Config</item>
+                <item name="payflow_express" xsi:type="string">Magento\Paypal\Model\Config</item>
             </argument>
         </arguments>
     </type>
@@ -48,8 +48,8 @@
             <argument name="dataProviders" xsi:type="array">
                 <item name="payflow_link" xsi:type="object">Magento\PaypalGraphQl\Model\PayflowLinkAdditionalDataProvider</item>
                 <item name="payflow_advanced" xsi:type="object">Magento\PaypalGraphQl\Model\PayflowLinkAdditionalDataProvider</item>
-                <item name="payflowpro" xsi:type="object">\Magento\PaypalGraphQl\Model\PayflowProAdditionalDataProvider</item>
-                <item name="hosted_pro" xsi:type="object">\Magento\PaypalGraphQl\Model\HostedProAdditionalDataProvider</item>
+                <item name="payflowpro" xsi:type="object">Magento\PaypalGraphQl\Model\PayflowProAdditionalDataProvider</item>
+                <item name="hosted_pro" xsi:type="object">Magento\PaypalGraphQl\Model\HostedProAdditionalDataProvider</item>
             </argument>
         </arguments>
     </type>
