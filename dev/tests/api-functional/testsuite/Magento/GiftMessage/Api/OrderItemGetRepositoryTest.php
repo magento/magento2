@@ -11,22 +11,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class OrderItemGetRepositoryTest extends WebapiAbstract
 {
-
     const SERVICE_VERSION = 'V1';
-
-    const SERVICE_NAME = 'giftMessageItemRepositoryV1';
-
+    const SERVICE_NAME = 'salesOrderItemRepositoryV1';
     const RESOURCE_PATH = '/V1/orders/items/';
-
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $objectManager;
-
-    protected function setUp()
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-    }
 
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/order_with_message.php
@@ -36,8 +23,9 @@ class OrderItemGetRepositoryTest extends WebapiAbstract
      */
     public function testGet()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
         $items = $order->getItems();
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
         $orderItem = array_shift($items);
@@ -58,7 +46,7 @@ class OrderItemGetRepositoryTest extends WebapiAbstract
             'sender' => 'Romeo',
             'message' => 'I thought all for the best.',
         ];
-        $requestData = ["orderItemId" => $itemId];
+        $requestData = ['id' => $itemId];
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $resultMessage = $result['extension_attributes']['gift_message'];
         static::assertCount(5, $resultMessage);

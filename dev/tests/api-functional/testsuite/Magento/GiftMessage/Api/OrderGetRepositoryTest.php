@@ -12,9 +12,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class OrderGetRepositoryTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-
-    const SERVICE_NAME = 'giftMessageItemRepositoryV1';
-
+    const SERVICE_NAME = 'salesOrderRepositoryV1';
     const RESOURCE_PATH = '/V1/orders/';
 
     /**
@@ -45,7 +43,7 @@ class OrderGetRepositoryTest extends WebapiAbstract
             'sender' => 'Romeo',
             'message' => 'I thought all for the best.',
         ];
-        $requestData = ["orderId" => $orderId];
+        $requestData = ['id' => $orderId];
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $resultMessage = $result['extension_attributes']['gift_message'];
         static::assertCount(5, $resultMessage);
