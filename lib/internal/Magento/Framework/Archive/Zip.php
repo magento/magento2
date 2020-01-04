@@ -34,11 +34,11 @@ class Zip extends AbstractArchive implements ArchiveInterface
      */
     public function pack($source, $destination)
     {
-    $zip = new \ZipArchive();
-    $zip->open($destination, \ZipArchive::CREATE);
-    $zip->addFile($source, basename($source));
-    $zip->close();
-    return $destination;
+       $zip = new \ZipArchive();
+       $zip->open($destination, \ZipArchive::CREATE);
+       $zip->addFile($source, basename($source));
+       $zip->close();
+       return $destination;
     }
 
     /**
