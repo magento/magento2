@@ -44,13 +44,7 @@ class AbstractCreateTest extends TestCase
             ->setMethods(['convertPrice'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->priceInfoMock = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->linkPriceMock = $this->getMockBuilder(LinkPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock->expects($this->any())
@@ -63,13 +57,9 @@ class AbstractCreateTest extends TestCase
         $price = 5.6;
         $resultPrice = 9.3;
 
-        $this->linkPriceMock->expects($this->once())
-            ->method('getValue')
+        $this->productMock->expects($this->once())
+            ->method('getFinalPrice')
             ->willReturn($price);
-        $this->priceInfoMock->expects($this->once())
-            ->method('getPrice')
-            ->with(FinalPrice::PRICE_CODE)
-            ->willReturn($this->linkPriceMock);
         $this->model->expects($this->once())
             ->method('convertPrice')
             ->with($price)
