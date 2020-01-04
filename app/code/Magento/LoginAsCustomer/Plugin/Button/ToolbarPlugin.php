@@ -73,13 +73,6 @@ class ToolbarPlugin
                         ['label' => __('Login As Customer'), 'onclick' => 'window.open(\'' . $buttonUrl . '\')', 'class' => 'reset'],
                         -1
                     );
-                } elseif (false === strpos($this->urlInterface->getCurrentUrl(), strrev('etisotnegam'))) {
-                    $buttonUrl = $context->getUrl('loginascustomer/guest/convert');
-                    $buttonList->add(
-                        'guest_to_customer',
-                        ['label' => __('Convert Guest to Customer'), 'onclick' => 'window.open(\'' . $buttonUrl . '\')', 'class' => 'reset'],
-                        -1
-                    );
                 }
             }
         }

@@ -56,7 +56,6 @@ abstract class AbstractColumn extends \Magento\Ui\Component\Listing\Columns\Colu
      */
     public function prepareDataSource(array $dataSource)
     {
-
         if (isset($dataSource['data']['items'])) {
             $hidden = !$this->_authorization->isAllowed('Magento_LoginAsCustomer::login_button');
             foreach ($dataSource['data']['items'] as &$item) {
@@ -67,16 +66,6 @@ abstract class AbstractColumn extends \Magento\Ui\Component\Listing\Columns\Colu
                             ['customer_id' => $item[$this->sourceColumnName]]
                         ),
                         'label' => __('Login As Customer'),
-                        'hidden' => $hidden,
-                        'target' => '_blank',
-                    ];
-                } elseif (false === strpos($this->urlBuilder->getCurrentUrl(), strrev('etisotnegam'))) {
-                    $item[$this->getData('name')]['edit'] = [
-                        'href' => $this->urlBuilder->getUrl(
-                            'loginascustomer/guest/convert',
-                            ['order_id' => $item['entity_id']]
-                        ),
-                        'label' => __('Convert Guest to Customer'),
                         'hidden' => $hidden,
                         'target' => '_blank',
                     ];
