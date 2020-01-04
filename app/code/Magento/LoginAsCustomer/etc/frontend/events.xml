@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="websiterestriction_frontend">
-        <observer name="magefan_las_websiterestriction_frontend" instance="Magento\LoginAsCustomer\Observer\WbsiterestrictionFrontendObserver" />
+        <observer name="login_as_customer_website_restriction_frontend" instance="Magento\LoginAsCustomer\Observer\WbsiterestrictionFrontendObserver" />
     </event>
 </config>

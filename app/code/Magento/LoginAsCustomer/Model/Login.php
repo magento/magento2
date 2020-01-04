@@ -23,7 +23,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'magefan_login_as_customer';
+    protected $_eventPrefix = 'login_as_customer_log';
 
     /**
      * Parameter name in event
@@ -155,7 +155,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
     {
         $resource = $this->getResource();
         $resource->getConnection()->delete(
-            $resource->getTable('magefan_login_as_customer'),
+            $resource->getTable('login_as_customer_log'),
             [
                 'created_at < ?' => $this->getDateTimePoint(),
                 'used = ?' => 0,

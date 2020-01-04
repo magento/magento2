@@ -27,10 +27,10 @@ class InstallSchema implements InstallSchemaInterface
         $installer->startSetup();
 
         /**
-         * Create table 'magefan_login_as_customer'
+         * Create table 'login_as_customer_log'
          */
         $table = $installer->getConnection()->newTable(
-            $installer->getTable('magefan_login_as_customer')
+            $installer->getTable('login_as_customer_log')
         )->addColumn(
             'login_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -68,11 +68,11 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Creation Time'
         )->addIndex(
-            $installer->getIdxName('magefan_login_as_customer', ['customer_id']),
+            $installer->getIdxName('login_as_customer_log', ['customer_id']),
             ['customer_id']
         )
         ->addIndex(
-            $installer->getIdxName('magefan_login_as_customer', ['admin_id']),
+            $installer->getIdxName('login_as_customer_log', ['admin_id']),
             ['admin_id']
         )->setComment(
             'Magento Login As Customer Table'
