@@ -13,7 +13,7 @@ use Magento\Ui\Component\Filters\Type\DateRange;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 
 /**
- * Class DateRangeTest
+ * Class responsible for Date Range Filter Test
  */
 class DateRangeTest extends \PHPUnit\Framework\TestCase
 {
