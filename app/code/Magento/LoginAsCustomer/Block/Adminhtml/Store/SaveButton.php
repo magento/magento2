@@ -6,10 +6,12 @@
 
 namespace Magento\LoginAsCustomer\Block\Adminhtml\Store;
 
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+
 /**
  * Class SaveButton
  */
-class SaveButton extends \Magento\Community\Block\Adminhtml\Edit\SaveButton
+class SaveButton implements ButtonProviderInterface
 {
     /**
      * @return array
@@ -27,3 +29,4 @@ class SaveButton extends \Magento\Community\Block\Adminhtml\Edit\SaveButton
         ];
     }
 }
+
