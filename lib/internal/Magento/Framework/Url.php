@@ -292,6 +292,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getUseSession()
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return false;
     }
 
@@ -754,12 +756,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Add session param
-     *
-     * @return \Magento\Framework\UrlInterface
+     * @inheritDoc
      */
     public function addSessionParam()
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 

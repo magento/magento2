@@ -200,9 +200,6 @@ class SessionManager implements SessionManagerInterface
                     session_commit();
                     session_id($_SESSION['new_session_id']);
                 }
-                $sid = $this->sidResolver->getSid($this);
-                // potential custom logic for session id (ex. switching between hosts)
-                $this->setSessionId($sid);
                 session_start();
                 if (isset($_SESSION['destroyed'])
                     && $_SESSION['destroyed'] < time() - $this->sessionConfig->getCookieLifetime()
@@ -211,7 +208,7 @@ class SessionManager implements SessionManagerInterface
                 }
 
                 $this->validator->validate($this);
-                $this->renewCookie($sid);
+                $this->renewCookie(null);
 
                 register_shutdown_function([$this, 'writeClose']);
 

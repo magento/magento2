@@ -56,8 +56,6 @@ class CleanTargetUrl implements StoreSwitcherInterface
     public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
     {
         $targetUrl = $redirectUrl;
-        $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
-        $targetUrl = $this->urlHelper->removeRequestParam($targetUrl, $sidName);
         $targetUrl = $this->urlHelper->removeRequestParam($targetUrl, '___from_store');
         $targetUrl = $this->urlHelper->removeRequestParam($targetUrl, StoreResolverInterface::PARAM_NAME);
 

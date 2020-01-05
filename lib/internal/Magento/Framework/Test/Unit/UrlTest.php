@@ -175,17 +175,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetUseSession()
-    {
-        $model = $this->getUrlModel();
-
-        $model->setUseSession(false);
-        $this->assertFalse((bool)$model->getUseSession());
-
-        $model->setUseSession(true);
-        $this->assertFalse($model->getUseSession());
-    }
-
     public function testGetBaseUrlNotLinkType()
     {
         $model = $this->getUrlModel(
@@ -530,22 +519,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $this->routeParamsResolverMock->expects($this->never())->method('unsetData');
         $this->assertEquals('http://example.com', $model->getRouteUrl('http://example.com'));
-    }
-
-    public function testAddSessionParam()
-    {
-        $model = $this->getUrlModel([
-            'session' => $this->sessionMock,
-            'sidResolver' => $this->sidResolverMock,
-            'queryParamsResolver' => $this->queryParamsResolverMock,
-        ]);
-
-        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam')->with($this->sessionMock)
-            ->will($this->returnValue('sid'));
-        $this->sessionMock->expects($this->never())->method('getSessionId')->will($this->returnValue('session-id'));
-        $this->queryParamsResolverMock->expects($this->never())->method('setQueryParam')->with('sid', 'session-id');
-
-        $model->addSessionParam();
     }
 
     /**

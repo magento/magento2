@@ -23,13 +23,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class);
     }
 
-    public function testSetGetUseSession()
-    {
-        $this->assertFalse((bool)$this->model->getUseSession());
-        $this->model->setUseSession(false);
-        $this->assertFalse($this->model->getUseSession());
-    }
-
     public function testSetRouteFrontName()
     {
         $value = 'route';
