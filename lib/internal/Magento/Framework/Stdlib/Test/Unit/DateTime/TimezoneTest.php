@@ -135,10 +135,10 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
                 1635570000 // expected timestamp
             ],
             'Parse greek d/m/y date with time' => [
-                '30/10/2021, 12:00 π.μ.', // datetime
+                '30/10/2021, 12:01 π.μ.', // datetime
                 'el_GR', // locale
                 true, // include time
-                1635570000 // expected timestamp
+                1635570060 // expected timestamp
             ],
         ];
     }
