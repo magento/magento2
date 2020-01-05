@@ -354,6 +354,7 @@ class Timezone implements TimezoneInterface
      * @param string $timezone
      * @param string $locale
      * @return string
+     * @throws LocalizedException
      */
     private function appendTimeIfNeeded($date, $includeTime, $timezone, $locale)
     {
@@ -366,6 +367,16 @@ class Timezone implements TimezoneInterface
                 new \DateTimeZone($timezone)
             );
             $convertedDate = $formatterWithoutHour->parse($date);
+
+            if (!$convertedDate) {
+                throw new LocalizedException(
+                    new Phrase(
+                        'Could not append time to DateTime'
+                    )
+                );
+
+            }
+
             $formatterWithHour = new \IntlDateFormatter(
                 $locale,
                 \IntlDateFormatter::SHORT,
