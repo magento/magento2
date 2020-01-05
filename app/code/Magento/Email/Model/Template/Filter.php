@@ -268,6 +268,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setUseSessionInUrl($flag)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
 
         return $this;

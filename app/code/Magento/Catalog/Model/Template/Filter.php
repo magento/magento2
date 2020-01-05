@@ -14,8 +14,6 @@ namespace Magento\Catalog\Model\Template;
 
 /**
  * Work with catalog(store, website) urls
- *
- * @package Magento\Catalog\Model\Template
  */
 class Filter extends \Magento\Framework\Filter\Template
 {
@@ -86,6 +84,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setUseSessionInUrl($flag)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
 
         return $this;
@@ -129,6 +128,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()
                 ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];

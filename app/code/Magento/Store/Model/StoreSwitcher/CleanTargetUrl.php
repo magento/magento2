@@ -48,6 +48,8 @@ class CleanTargetUrl implements StoreSwitcherInterface
     }
 
     /**
+     * Generate target URL to switch stores through other mechanism then via URL params.
+     *
      * @param StoreInterface $fromStore store where we came from
      * @param StoreInterface $targetStore store where to go to
      * @param string $redirectUrl original url requested for redirect after switching
