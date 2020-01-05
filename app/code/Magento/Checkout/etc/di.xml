@@ -16,16 +16,16 @@
             <argument name="storage" xsi:type="object">Magento\Checkout\Model\Session\Storage</argument>
         </arguments>
     </type>
-    <preference for="Magento\Checkout\Api\GuestShippingInformationManagementInterface" type="Magento\Checkout\Model\GuestShippingInformationManagement" />
-    <preference for="Magento\Checkout\Api\ShippingInformationManagementInterface" type="Magento\Checkout\Model\ShippingInformationManagement" />
-    <preference for="Magento\Checkout\Api\Data\ShippingInformationInterface" type="Magento\Checkout\Model\ShippingInformation" />
-    <preference for="Magento\Checkout\Api\Data\PaymentDetailsInterface" type="Magento\Checkout\Model\PaymentDetails" />
-    <preference for="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" type="Magento\Checkout\Model\GuestPaymentInformationManagement" />
-    <preference for="Magento\Checkout\Api\PaymentInformationManagementInterface" type="Magento\Checkout\Model\PaymentInformationManagement" />
-    <preference for="Magento\Checkout\Api\Data\TotalsInformationInterface" type="Magento\Checkout\Model\TotalsInformation" />
-    <preference for="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" type="Magento\Checkout\Model\GuestTotalsInformationManagement" />
-    <preference for="Magento\Checkout\Api\TotalsInformationManagementInterface" type="Magento\Checkout\Model\TotalsInformationManagement" />
-    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator" />
+    <preference for="Magento\Checkout\Api\GuestShippingInformationManagementInterface" type="Magento\Checkout\Model\GuestShippingInformationManagement"/>
+    <preference for="Magento\Checkout\Api\ShippingInformationManagementInterface" type="Magento\Checkout\Model\ShippingInformationManagement"/>
+    <preference for="Magento\Checkout\Api\Data\ShippingInformationInterface" type="Magento\Checkout\Model\ShippingInformation"/>
+    <preference for="Magento\Checkout\Api\Data\PaymentDetailsInterface" type="Magento\Checkout\Model\PaymentDetails"/>
+    <preference for="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" type="Magento\Checkout\Model\GuestPaymentInformationManagement"/>
+    <preference for="Magento\Checkout\Api\PaymentInformationManagementInterface" type="Magento\Checkout\Model\PaymentInformationManagement"/>
+    <preference for="Magento\Checkout\Api\Data\TotalsInformationInterface" type="Magento\Checkout\Model\TotalsInformation"/>
+    <preference for="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" type="Magento\Checkout\Model\GuestTotalsInformationManagement"/>
+    <preference for="Magento\Checkout\Api\TotalsInformationManagementInterface" type="Magento\Checkout\Model\TotalsInformationManagement"/>
+    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator"/>
     <preference for="Magento\Checkout\Model\Cart\RequestInfoFilterInterface"
                 type="Magento\Checkout\Model\Cart\RequestInfoFilterComposite"/>
     <type name="Magento\Checkout\Model\Cart\RequestInfoFilter">

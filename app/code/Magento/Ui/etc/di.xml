@@ -6,15 +6,15 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface" type="Magento\Ui\Component\Wrapper\UiComponent" />
-    <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool" />
-    <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite" />
-    <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter" />
-    <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
-    <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
+    <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface" type="Magento\Ui\Component\Wrapper\UiComponent"/>
+    <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool"/>
+    <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite"/>
+    <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter"/>
+    <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager"/>
+    <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context"/>
     <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
     <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
-    <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Ui\Model\BookmarkSearchResults" />
+    <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Ui\Model\BookmarkSearchResults"/>
     <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Ui\Component\Wysiwyg\Config"/>
@@ -25,7 +25,7 @@
     <preference for="Magento\Ui\Config\Argument\ParserInterface" type="Magento\Ui\Config\Argument\Parser\Composite"/>
     <preference for="Magento\Ui\DataProvider\Modifier\PoolInterface" type="Magento\Ui\DataProvider\Modifier\Pool"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
-    <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
+    <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false"/>
     <type name="Magento\Framework\View\TemplateEngineFactory">
         <arguments>
             <argument name="engines" xsi:type="array">

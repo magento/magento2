@@ -32,7 +32,7 @@
         <comment userInput="Go to Configuration Page" stepKey="commentOpenConfigurationPage"/>
         <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage"/>
         <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterDefaultStoreView">
-            <argument name="customStore" value="'Default'" />
+            <argument name="customStore" value="'Default'"/>
         </actionGroup>
         <!-- Select Edit next to the Default Store View -->
         <comment userInput="Select Edit next to the Default Store View" stepKey="commentEditDefaultView"/>
@@ -45,9 +45,9 @@
         <!-- See Base, Thumbnail, Small image types are displayed -->
         <comment userInput="See Base, Thumbnail, Small image types are displayed" stepKey="commentSeeImageTypes"/>
         <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Base')}}" stepKey="seeElementBaseWatermark"/>
-        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkType('Thumbnail')}}" stepKey="waitForThumbnailVisible" />
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkType('Thumbnail')}}" stepKey="waitForThumbnailVisible"/>
         <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Thumbnail')}}" stepKey="seeElementThumbnailWatermark"/>
-        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkType('Small')}}" stepKey="waitForSmallVisible" />
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkType('Small')}}" stepKey="waitForSmallVisible"/>
         <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Small')}}" stepKey="seeElementSmallWatermark"/>
         <!-- See Swatch Image type is absent -->
         <comment userInput="See Swatch Image type is absent" stepKey="commentSeeTypeAbsent"/>

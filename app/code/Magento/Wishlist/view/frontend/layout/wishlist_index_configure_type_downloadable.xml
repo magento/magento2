@@ -13,7 +13,7 @@
             <block class="Magento\Framework\View\Element\Js\Components" name="downloadable_page_head_components" template="Magento_Downloadable::js/components.phtml"/>
         </referenceBlock>
         <referenceContainer name="product.info.main">
-            <block class="Magento\Downloadable\Block\Catalog\Product\Samples" name="product.info.downloadable.samples" as="samples" template="Magento_Downloadable::catalog/product/samples.phtml" after="product.price.tier" />
+            <block class="Magento\Downloadable\Block\Catalog\Product\Samples" name="product.info.downloadable.samples" as="samples" template="Magento_Downloadable::catalog/product/samples.phtml" after="product.price.tier"/>
         </referenceContainer>
         <referenceContainer name="product.info.type">
             <block class="Magento\Downloadable\Block\Catalog\Product\View\Type" name="product.info.downloadable" as="product_type_data" template="Magento_Downloadable::catalog/product/type.phtml">
@@ -41,7 +41,7 @@
                 </arguments>
             </block>
         </referenceContainer>
-        <move element="product.info" destination="content" after="product.info.media" />
-        <move element="product.info.social" destination="product.info.options.wrapper.bottom" after="-" />
+        <move element="product.info" destination="content" after="product.info.media"/>
+        <move element="product.info.social" destination="product.info.options.wrapper.bottom" after="-"/>
     </body>
 </page>

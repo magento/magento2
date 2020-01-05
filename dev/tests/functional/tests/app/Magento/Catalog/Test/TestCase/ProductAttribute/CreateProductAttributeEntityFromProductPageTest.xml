@@ -22,16 +22,16 @@
             <data name="attribute/data/is_html_allowed_on_front" xsi:type="string">Yes</data>
             <data name="attribute/data/is_visible_on_front" xsi:type="string">Yes</data>
             <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsGlobal" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnFrontend" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsHtmlAllowed" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsGlobal"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnFrontend"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsHtmlAllowed"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend"/>
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation2_Filterable">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -47,9 +47,9 @@
             <data name="assertProduct/data/name" xsi:type="string">Product name</data>
             <data name="assertProduct/data/sku" xsi:type="string">product-sku</data>
             <data name="assertProduct/data/price" xsi:type="string">35</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable"/>
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation3_Required">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -59,7 +59,7 @@
             <data name="attribute/data/attribute_code" xsi:type="string">attr_text_%isolation%</data>
             <data name="attribute/data/default_value_text" xsi:type="string">default_value_text%isolation%</data>
             <data name="sectionName" xsi:type="string">attributes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired"/>
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation4_Unique">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -69,7 +69,7 @@
             <data name="attribute/data/attribute_code" xsi:type="string">attr_text_%isolation%</data>
             <data name="attribute/data/default_value_text" xsi:type="string">default_value_text%isolation%</data>
             <data name="attribute/data/is_unique" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique"/>
         </variation>
     </testCase>
 </config>

@@ -125,7 +125,7 @@
         <see userInput="You saved the customer." stepKey="CustomerIsSaved"/>
 
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="ClearFilters"/>
         <waitForPageLoad stepKey="waitForFiltersClear"/>
 
@@ -294,7 +294,7 @@
         <!--TEST CASE #3-->
         <waitForPageLoad stepKey="WaitProductsDeleted1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
-        <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickToAddProduct4" />
+        <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickToAddProduct4"/>
         <click selector="{{OrdersGridSection.selectProduct($$product1.name$$)}}" stepKey="selectProduct9"/>
         <fillField selector="{{OrdersGridSection.setQuantity($$product1.name$$)}}" userInput="10" stepKey="AddProductQuantity10"/>
         <click selector="{{OrdersGridSection.addProductsToOrder}}" stepKey="addProductsToOrder3"/>

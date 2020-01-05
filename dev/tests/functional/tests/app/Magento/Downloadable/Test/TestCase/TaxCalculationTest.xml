@@ -30,9 +30,9 @@
             <data name="prices/tax" xsi:type="string">0.96</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">11.66</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">12.62</data>
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax" />
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax"/>
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax"/>
         </variation>
         <variation name="DownloadableTaxCalculationTestVariation2" summary="Downloadable product with catalog rule, customer tax greater than store tax and catalog price excluding tax" ticketId="MAGETWO-32076">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -50,9 +50,9 @@
             <data name="prices/tax" xsi:type="string">1.71</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">20.43</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">22.14</data>
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax" />
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendIncludingTax" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax"/>
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendIncludingTax"/>
         </variation>
         <variation name="DownloadableTaxCalculationTestVariation4" summary="Downloadable product with catalog rule, customer tax greater than store tax and catalog price including tax" ticketId="MAGETWO-32076">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -75,9 +75,9 @@
             <data name="prices/tax" xsi:type="string">1.27</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">15.18</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">16.45</data>
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax" />
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax"/>
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax"/>
         </variation>
         <variation name="DownloadableTaxCalculationTestVariation6" summary="Downloadable product with catalog rule, customer tax equals store tax and catalog price including tax" ticketId="MAGETWO-32076">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -94,9 +94,9 @@
             <data name="prices/subtotal_excl_tax" xsi:type="string">15.18</data>
             <data name="prices/tax" xsi:type="string">1.25</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">16.43</data>
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax" />
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableExcludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingTax" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax"/>
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertTaxCalculationAfterCheckoutDownloadableExcludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingTax"/>
         </variation>
     </testCase>
 </config>

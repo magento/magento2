@@ -11,6 +11,6 @@
             module="Magento_Swatches"
             class="Magento\Swatches\Test\Fixture\ConfigurableProduct"
             extends="\Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct"
-            >
+           >
     </fixture>
 </config>

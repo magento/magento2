@@ -12,8 +12,8 @@
             <data name="cms/data/title" xsi:type="string">CmsPageEdited%isolation%</data>
             <data name="cms/data/is_active" xsi:type="string">No</data>
             <data name="cms/data/content/content" xsi:type="string">cms_page_text_content_after_edit</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDisabledOnFrontend" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDisabledOnFrontend"/>
         </variation>
         <variation name="UpdateCmsPageEntityTestVariation2">
             <data name="tag" xsi:type="string">severity:S1</data>
@@ -21,9 +21,9 @@
             <data name="cms/data/identifier" xsi:type="string">cms_page_url_edited_%isolation%</data>
             <data name="cms/data/content_heading" xsi:type="string">Content Heading TextEdited</data>
             <data name="cms/data/content/content" xsi:type="string">cms_page_text_content_after_edit</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview"/>
         </variation>
     </testCase>
 </config>

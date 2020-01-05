@@ -7,7 +7,7 @@
 -->
 <mapping strict="0">
     <fields>
-        <name />
+        <name/>
         <is_active>
             <input>select</input>
         </is_active>
@@ -21,8 +21,8 @@
             <selector>[name="stores[]"]</selector>
             <input>multiselectgrouplist</input>
         </stores>
-        <checkbox_text />
-        <content />
-        <content_height />
+        <checkbox_text/>
+        <content/>
+        <content_height/>
     </fields>
 </mapping>

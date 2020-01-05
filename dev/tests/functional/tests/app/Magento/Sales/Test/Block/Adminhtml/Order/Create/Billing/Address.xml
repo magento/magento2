@@ -8,20 +8,20 @@
 <mapping strict="0">
     <wrapper>order[billing_address]</wrapper>
     <fields>
-        <firstname />
-        <lastname />
-        <company />
+        <firstname/>
+        <lastname/>
+        <company/>
         <street>
             <selector>[name='order[billing_address][street][0]']</selector>
         </street>
-        <city />
+        <city/>
         <country_id>
             <input>select</input>
         </country_id>
         <region_id>
             <input>select</input>
         </region_id>
-        <postcode />
-        <telephone />
+        <postcode/>
+        <telephone/>
     </fields>
 </mapping>

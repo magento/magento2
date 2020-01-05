@@ -46,13 +46,13 @@
             <data name="product/data/weight" xsi:type="string">2</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation3" summary="Create product with special price">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -69,13 +69,13 @@
             <data name="product/data/weight" xsi:type="string">2</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation4" summary="Create product with assigned products to options">
             <data name="tag" xsi:type="string">stable:no</data>
@@ -91,12 +91,12 @@
             <data name="product/data/weight" xsi:type="string">2</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation5" summary="Create Configurable Product and Assign it to Category" ticketId="MAGETWO-12620">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -110,10 +110,10 @@
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/weight" xsi:type="string">1</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation6" summary="Create Configurable Product with Creating New Category and New Attribute (Required Fields Only)" ticketId="MAGETWO-13361">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
@@ -126,10 +126,10 @@
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation7" summary="Verify that variation's SKU based on parent SKU">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -137,8 +137,8 @@
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsGeneratedSku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsGeneratedSku"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation8" summary="Assert notice that existing sku automatically changed when saving product with same sku">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -146,8 +146,8 @@
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">existing_sku</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAutoincrementedSkuNoticeMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAutoincrementedSkuNoticeMessage"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation9" summary="Create configurable product and assign it to custom website">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -158,8 +158,8 @@
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/website_ids/0/dataset" xsi:type="string">custom_store</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOnCustomWebsite" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOnCustomWebsite"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation10" summary="Create configurable product with tier price for one item">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -173,8 +173,8 @@
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductTierPriceOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductTierPriceOnProductPage"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation11" summary="Create Configurable Product with out of stock child" ticketId="MAGETWO-65660">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
@@ -188,12 +188,12 @@
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
             <data name="configData">display_out_of_stock_products</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductOutOfStockPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductOutOfStockPage"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation12" summary="Create Configurable Product with disabled child" ticketId="MAGETWO-65661">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
@@ -207,11 +207,11 @@
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
             <data name="configData">display_out_of_stock_products</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation13" summary="Create Configurable Product with one disabled child and with one out of stock child" ticketId="MAGETWO-65662">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
@@ -225,11 +225,11 @@
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
             <data name="configData">display_out_of_stock_products</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation14" summary="Create configurable product with images" ticketId="MAGETWO-41354">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -241,9 +241,9 @@
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/image/0/file" xsi:type="string">Magento/Catalog/Test/_files/test1.png</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductImages" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductImages"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation15" summary="Create Configurable Product with 1 out of stock and several in stock options with displaying out of stock ones" ticketId="MAGETWO-89274">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -258,9 +258,9 @@
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="outOfStockOption" xsi:type="string">SIZE_S</data>
             <data name="configData">display_out_of_stock_products</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnProductPage"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation16" summary="Create Configurable Product with 1 out of stock and several in stock options" ticketId="MAGETWO-69508">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -275,9 +275,9 @@
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="outOfStockOption" xsi:type="string">SIZE_S</data>
             <data name="configData">display_out_of_stock_products_rollback</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnProductPage"/>
         </variation>
     </testCase>
 </config>

@@ -27,8 +27,8 @@
         <variation name="ShoppingCartPagerTestForOneItemPerPageAnd20Products" summary="Verify Pager is presented on Shopping Cart page with non-default system configuration" ticketId="MAGETWO-63340">
             <data name="tag" xsi:type="string">severity:S2,mftf_migrated:yes</data>
             <data name="configData" xsi:type="string">one_item_per_page_on_shopping_cart</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersPresentInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersSummaryText" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersPresentInShoppingCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersSummaryText"/>
         </variation>
     </testCase>
 </config>

@@ -10,7 +10,7 @@
         <rules>
             <rule name="name_sku_and_price">
                 <entity_constraints>
-                    <constraint alias="eav_validator" class="Magento\Catalog\Model\Validator\Eav" >
+                    <constraint alias="eav_validator" class="Magento\Catalog\Model\Validator\Eav">
                         <!-- callback element should be empty -->
                         <callback method="someMethod" class="Magento\Catalog\Model\Validator\Eav" >some test</callback>
                     </constraint>

@@ -8,6 +8,6 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="test_table" resource="default" comment="Test Table">
-        <column xsi:type="int" name="page_id" nullable="false" identity="true" />
+        <column xsi:type="int" name="page_id" nullable="false" identity="true"/>
     </table>
 </schema>

@@ -19,7 +19,7 @@
             <useCaseId value="MAGETWO-96406"/>
             <group value="ConfigurableProduct"/>
             <skip>
-                <issueId value="MQE-1424" />
+                <issueId value="MQE-1424"/>
             </skip>
         </annotations>
 
@@ -43,10 +43,10 @@
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
             <waitForPageLoad time="30" stepKey="waitForPageCategoryLoad"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createRootCategory.name$$')}}" stepKey="clickOnDefaultRootCategory"/>
-            <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad" />
+            <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad"/>
             <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>
             <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="DeleteDefaultRootCategory"/>
-            <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
+            <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory"/>
             <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
             <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>

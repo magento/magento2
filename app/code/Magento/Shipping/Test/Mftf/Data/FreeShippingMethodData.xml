@@ -43,7 +43,7 @@
         <data key="value">Free</data>
     </entity>
     <entity name="freeShippingSubtotalDefault" type="free_shipping_subtotal">
-        <data key="value" />
+        <data key="value"/>
     </entity>
     <entity name="TaxIncludingDefault" type="tax_including">
         <data key="value">0</data>
@@ -55,13 +55,13 @@
         <data key="value">0</data>
     </entity>
     <entity name="freeSpecificcountryDefault" type="specificcountry">
-        <data key="value" />
+        <data key="value"/>
     </entity>
     <entity name="freeShowmethodDefault" type="showmethod">
         <data key="value">0</data>
     </entity>
     <entity name="freeSortOrderDefault" type="sort_order">
-        <data key="value" />
+        <data key="value"/>
     </entity>
     <!--Set Free Shipping Subtotal to 101-->
     <entity name="setFreeShippingSubtotal" type="free_shipping_method">

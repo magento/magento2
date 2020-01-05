@@ -16,9 +16,9 @@
             <data name="review/data/nickname" xsi:type="string">John</data>
             <data name="review/data/title" xsi:type="string">title %isolation%</data>
             <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
         </variation>
         <variation name="CreateProductReviewBackendEntityTestVariation2">
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
@@ -29,9 +29,9 @@
             <data name="review/data/nickname" xsi:type="string">Britney</data>
             <data name="review/data/title" xsi:type="string">title %isolation%</data>
             <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
         </variation>
         <variation name="CreateProductReviewBackendEntityTestVariation3">
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
@@ -42,9 +42,9 @@
             <data name="review/data/nickname" xsi:type="string">Michael</data>
             <data name="review/data/title" xsi:type="string">title %isolation%</data>
             <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
         </variation>
     </testCase>
 </config>

@@ -12,7 +12,7 @@
         <!-- Step 3: User adds products to cart -->
         <comment userInput="Start of adding products to cart" stepKey="startOfAddingProductsToCart" after="endOfBrowsingCatalog"/>
         <!-- Add Simple Product 1 to cart -->
-        <comment userInput="Add Simple Product 1 to cart" stepKey="commentAddSimpleProduct1ToCart" after="startOfAddingProductsToCart" />
+        <comment userInput="Add Simple Product 1 to cart" stepKey="commentAddSimpleProduct1ToCart" after="startOfAddingProductsToCart"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory" after="commentAddSimpleProduct1ToCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategoryloaded" after="cartClickCategory"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory" after="waitForCartCategoryloaded">
@@ -39,7 +39,7 @@
         </actionGroup>
 
         <!-- Add Simple Product 2 to cart -->
-        <comment userInput="Add Simple Product 2 to cart" stepKey="commentAddSimpleProduct2ToCart" after="cartAddProduct1ToCart" />
+        <comment userInput="Add Simple Product 2 to cart" stepKey="commentAddSimpleProduct2ToCart" after="cartAddProduct1ToCart"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory1" after="commentAddSimpleProduct2ToCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategory1loaded" after="cartClickCategory1"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForSimpleProduct2" after="waitForCartCategory1loaded">
@@ -93,7 +93,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartMinicartGrabSimpleProduct2PageImageSrc" stepKey="cartMinicartAssertSimpleProduct2PageImageNotDefault" after="cartMinicartGrabSimpleProduct2PageImageSrc"/>
 
         <!-- Check products in cart -->
-        <comment userInput="Check cart information" stepKey="commentCheckCartInformation" after="cartMinicartAssertSimpleProduct2PageImageNotDefault" />
+        <comment userInput="Check cart information" stepKey="commentCheckCartInformation" after="cartMinicartAssertSimpleProduct2PageImageNotDefault"/>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" after="commentCheckCartInformation"/>
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCart" after="cartOpenCart">
             <argument name="subtotal" value="480.00"/>
@@ -140,18 +140,18 @@
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartCartGrabSimpleProduct2PageImageSrc2" after="cartAssertCartProduct2Page"/>
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartCartGrabSimpleProduct2PageImageSrc2" stepKey="cartCartAssertSimpleProduct2PageImageNotDefault2" after="cartCartGrabSimpleProduct2PageImageSrc2"/>
-        <comment userInput="End of adding products to cart" stepKey="endOfAddingProductsToCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2" />
+        <comment userInput="End of adding products to cart" stepKey="endOfAddingProductsToCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2"/>
 
         <!-- Step 6: Check out -->
-        <comment userInput="Start of checking out" stepKey="startOfCheckingOut" after="endOfUsingCouponCode" />
+        <comment userInput="Start of checking out" stepKey="startOfCheckingOut" after="endOfUsingCouponCode"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" after="startOfCheckingOut"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection" after="guestGoToCheckoutFromMinicart">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
 
         <!-- Check order summary in checkout -->
-        <comment userInput="Check order summary in checkout" stepKey="commentCheckOrderSummaryInCheckout" after="guestCheckoutFillingShippingSection" />
+        <comment userInput="Check order summary in checkout" stepKey="commentCheckOrderSummaryInCheckout" after="guestCheckoutFillingShippingSection"/>
         <actionGroup ref="CheckOrderSummaryInCheckoutActionGroup" stepKey="guestCheckoutCheckOrderSummary" after="commentCheckOrderSummaryInCheckout">
             <argument name="subtotal" value="480.00"/>
             <argument name="shippingTotal" value="15.00"/>
@@ -160,47 +160,47 @@
         </actionGroup>
 
         <!-- Check ship to information in checkout -->
-        <comment userInput="Check ship to information in checkout" stepKey="commentCheckShipToInformationInCheckout" after="guestCheckoutCheckOrderSummary" />
+        <comment userInput="Check ship to information in checkout" stepKey="commentCheckShipToInformationInCheckout" after="guestCheckoutCheckOrderSummary"/>
         <actionGroup ref="CheckShipToInformationInCheckoutActionGroup" stepKey="guestCheckoutCheckShipToInformation" after="commentCheckShipToInformationInCheckout">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
 
         <!-- Check shipping method in checkout -->
-        <comment userInput="Check shipping method in checkout" stepKey="commentCheckShippingMethodInCheckout" after="guestCheckoutCheckShipToInformation" />
+        <comment userInput="Check shipping method in checkout" stepKey="commentCheckShippingMethodInCheckout" after="guestCheckoutCheckShipToInformation"/>
         <actionGroup ref="CheckShippingMethodInCheckoutActionGroup" stepKey="guestCheckoutCheckShippingMethod" after="commentCheckShippingMethodInCheckout">
-            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod" />
+            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod"/>
         </actionGroup>
 
         <!-- Verify Simple Product 1 is in checkout cart items -->
-        <comment userInput="Verify Simple Product 1 is in checkout cart items" stepKey="commentVerifySimpleProduct1IsInCheckoutCartItems" after="guestCheckoutCheckShippingMethod" />
+        <comment userInput="Verify Simple Product 1 is in checkout cart items" stepKey="commentVerifySimpleProduct1IsInCheckoutCartItems" after="guestCheckoutCheckShippingMethod"/>
         <actionGroup ref="CheckProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckSimpleProduct1InCartItems" after="commentVerifySimpleProduct1IsInCheckoutCartItems">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
 
         <!-- Verify Simple Product 2 is in checkout cart items -->
-        <comment userInput="Verify Simple Product 2 is in checkout cart items" stepKey="commentVerifySimpleProduct2IsInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct1InCartItems" />
+        <comment userInput="Verify Simple Product 2 is in checkout cart items" stepKey="commentVerifySimpleProduct2IsInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct1InCartItems"/>
         <actionGroup ref="CheckProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckSimpleProduct2InCartItems" after="commentVerifySimpleProduct2IsInCheckoutCartItems">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
 
-        <comment userInput="Place order with check money order payment" stepKey="commentPlaceOrderWithCheckMoneyOrderPayment" after="guestCheckoutCheckSimpleProduct2InCartItems" />
+        <comment userInput="Place order with check money order payment" stepKey="commentPlaceOrderWithCheckMoneyOrderPayment" after="guestCheckoutCheckSimpleProduct2InCartItems"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" after="commentPlaceOrderWithCheckMoneyOrderPayment"/>
         <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="guestSeeBillingAddress" after="guestSelectCheckMoneyOrderPayment">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder" after="guestSeeBillingAddress">
-            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
-        <comment userInput="End of checking out" stepKey="endOfCheckingOut" after="guestPlaceorder" />
+        <comment userInput="End of checking out" stepKey="endOfCheckingOut" after="guestPlaceorder"/>
     </test>
     <test name="EndToEndB2CGuestUserMysqlTest">
         <!-- Step 3: User adds products to cart -->
         <comment userInput="Start of adding products to cart" stepKey="startOfAddingProductsToCart" after="endOfBrowsingCatalog"/>
         <!-- Add Simple Product 1 to cart -->
-        <comment userInput="Add Simple Product 1 to cart" stepKey="commentAddSimpleProduct1ToCart" after="startOfAddingProductsToCart" />
+        <comment userInput="Add Simple Product 1 to cart" stepKey="commentAddSimpleProduct1ToCart" after="startOfAddingProductsToCart"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory" after="commentAddSimpleProduct1ToCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategoryloaded" after="cartClickCategory"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory" after="waitForCartCategoryloaded">
@@ -227,7 +227,7 @@
         </actionGroup>
 
         <!-- Add Simple Product 2 to cart -->
-        <comment userInput="Add Simple Product 2 to cart" stepKey="commentAddSimpleProduct2ToCart" after="cartAddProduct1ToCart" />
+        <comment userInput="Add Simple Product 2 to cart" stepKey="commentAddSimpleProduct2ToCart" after="cartAddProduct1ToCart"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory1" after="commentAddSimpleProduct2ToCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategory1loaded" after="cartClickCategory1"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForSimpleProduct2" after="waitForCartCategory1loaded">
@@ -281,7 +281,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartMinicartGrabSimpleProduct2PageImageSrc" stepKey="cartMinicartAssertSimpleProduct2PageImageNotDefault" after="cartMinicartGrabSimpleProduct2PageImageSrc"/>
 
         <!-- Check products in cart -->
-        <comment userInput="Check cart information" stepKey="commentCheckCartInformation" after="cartMinicartAssertSimpleProduct2PageImageNotDefault" />
+        <comment userInput="Check cart information" stepKey="commentCheckCartInformation" after="cartMinicartAssertSimpleProduct2PageImageNotDefault"/>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" after="commentCheckCartInformation"/>
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCart" after="cartOpenCart">
             <argument name="subtotal" value="480.00"/>
@@ -328,18 +328,18 @@
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartCartGrabSimpleProduct2PageImageSrc2" after="cartAssertCartProduct2Page"/>
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartCartGrabSimpleProduct2PageImageSrc2" stepKey="cartCartAssertSimpleProduct2PageImageNotDefault2" after="cartCartGrabSimpleProduct2PageImageSrc2"/>
-        <comment userInput="End of adding products to cart" stepKey="endOfAddingProductsToCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2" />
+        <comment userInput="End of adding products to cart" stepKey="endOfAddingProductsToCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2"/>
 
         <!-- Step 6: Check out -->
-        <comment userInput="Start of checking out" stepKey="startOfCheckingOut" after="endOfUsingCouponCode" />
+        <comment userInput="Start of checking out" stepKey="startOfCheckingOut" after="endOfUsingCouponCode"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" after="startOfCheckingOut"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection" after="guestGoToCheckoutFromMinicart">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
 
         <!-- Check order summary in checkout -->
-        <comment userInput="Check order summary in checkout" stepKey="commentCheckOrderSummaryInCheckout" after="guestCheckoutFillingShippingSection" />
+        <comment userInput="Check order summary in checkout" stepKey="commentCheckOrderSummaryInCheckout" after="guestCheckoutFillingShippingSection"/>
         <actionGroup ref="CheckOrderSummaryInCheckoutActionGroup" stepKey="guestCheckoutCheckOrderSummary" after="commentCheckOrderSummaryInCheckout">
             <argument name="subtotal" value="480.00"/>
             <argument name="shippingTotal" value="15.00"/>
@@ -348,40 +348,40 @@
         </actionGroup>
 
         <!-- Check ship to information in checkout -->
-        <comment userInput="Check ship to information in checkout" stepKey="commentCheckShipToInformationInCheckout" after="guestCheckoutCheckOrderSummary" />
+        <comment userInput="Check ship to information in checkout" stepKey="commentCheckShipToInformationInCheckout" after="guestCheckoutCheckOrderSummary"/>
         <actionGroup ref="CheckShipToInformationInCheckoutActionGroup" stepKey="guestCheckoutCheckShipToInformation" after="commentCheckShipToInformationInCheckout">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
 
         <!-- Check shipping method in checkout -->
-        <comment userInput="Check shipping method in checkout" stepKey="commentCheckShippingMethodInCheckout" after="guestCheckoutCheckShipToInformation" />
+        <comment userInput="Check shipping method in checkout" stepKey="commentCheckShippingMethodInCheckout" after="guestCheckoutCheckShipToInformation"/>
         <actionGroup ref="CheckShippingMethodInCheckoutActionGroup" stepKey="guestCheckoutCheckShippingMethod" after="commentCheckShippingMethodInCheckout">
-            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod" />
+            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod"/>
         </actionGroup>
 
         <!-- Verify Simple Product 1 is in checkout cart items -->
-        <comment userInput="Verify Simple Product 1 is in checkout cart items" stepKey="commentVerifySimpleProduct1IsInCheckoutCartItems" after="guestCheckoutCheckShippingMethod" />
+        <comment userInput="Verify Simple Product 1 is in checkout cart items" stepKey="commentVerifySimpleProduct1IsInCheckoutCartItems" after="guestCheckoutCheckShippingMethod"/>
         <actionGroup ref="CheckProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckSimpleProduct1InCartItems" after="commentVerifySimpleProduct1IsInCheckoutCartItems">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
 
         <!-- Verify Simple Product 2 is in checkout cart items -->
-        <comment userInput="Verify Simple Product 2 is in checkout cart items" stepKey="commentVerifySimpleProduct2IsInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct1InCartItems" />
+        <comment userInput="Verify Simple Product 2 is in checkout cart items" stepKey="commentVerifySimpleProduct2IsInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct1InCartItems"/>
         <actionGroup ref="CheckProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckSimpleProduct2InCartItems" after="commentVerifySimpleProduct2IsInCheckoutCartItems">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
 
-        <comment userInput="Place order with check money order payment" stepKey="commentPlaceOrderWithCheckMoneyOrderPayment" after="guestCheckoutCheckSimpleProduct2InCartItems" />
+        <comment userInput="Place order with check money order payment" stepKey="commentPlaceOrderWithCheckMoneyOrderPayment" after="guestCheckoutCheckSimpleProduct2InCartItems"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" after="commentPlaceOrderWithCheckMoneyOrderPayment"/>
         <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="guestSeeBillingAddress" after="guestSelectCheckMoneyOrderPayment">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder" after="guestSeeBillingAddress">
-            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
-        <comment userInput="End of checking out" stepKey="endOfCheckingOut" after="guestPlaceorder" />
+        <comment userInput="End of checking out" stepKey="endOfCheckingOut" after="guestPlaceorder"/>
     </test>
 </tests>

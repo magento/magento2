@@ -14,8 +14,8 @@
             <data name="urlRewrite/data/request_path" xsi:type="string">cat%isolation%-redirect.html</data>
             <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
             <data name="urlRewrite/data/description" xsi:type="string">End-to-end test</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect"/>
         </variation>
         <variation name="CreateCategoryRewriteEntityTestVariation2" summary="Create Category URL Rewrites with no redirect">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -24,8 +24,8 @@
             <data name="urlRewrite/data/request_path" xsi:type="string">test_request%isolation%</data>
             <data name="urlRewrite/data/redirect_type" xsi:type="string">No</data>
             <data name="urlRewrite/data/description" xsi:type="string">test description</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
         </variation>
         <variation name="CreateCategoryRewriteEntityTestVariation3" summary="Create Category URL Rewrites with Temporary redirect">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -34,9 +34,9 @@
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%</data>
             <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
             <data name="urlRewrite/data/description" xsi:type="string">test description</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect"/>
         </variation>
         <variation name="CreateCategoryRewriteEntityTestVariation4" summary="Create Category URL Rewrites with Permanent redirect">
             <data name="urlRewrite/data/entity_type" xsi:type="string">For Category</data>
@@ -44,9 +44,9 @@
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%</data>
             <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
             <data name="urlRewrite/data/description" xsi:type="string">test description</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect"/>
         </variation>
     </testCase>
 </config>

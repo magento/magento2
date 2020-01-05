@@ -17,8 +17,8 @@
             <data name="product/data/weight" xsi:type="string">50</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">657</data>
             <data name="product/data/country_of_manufacture" xsi:type="string">Ukraine</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
         </variation>
     </testCase>
 </config>

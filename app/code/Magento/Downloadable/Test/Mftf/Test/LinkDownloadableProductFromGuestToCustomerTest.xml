@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
-            <magentoCLI command="config:set {{EnableGuestCheckoutWithDownloadableItems.path}} {{EnableGuestCheckoutWithDownloadableItems.value}}" stepKey="enableGuestCheckoutWithDownloadableItems" />
+            <magentoCLI command="config:set {{EnableGuestCheckoutWithDownloadableItems.path}} {{EnableGuestCheckoutWithDownloadableItems.value}}" stepKey="enableGuestCheckoutWithDownloadableItems"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="DownloadableProductWithOneLink" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -30,7 +30,7 @@
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
-            <magentoCLI command="config:set {{DisableGuestCheckoutWithDownloadableItems.path}} {{DisableGuestCheckoutWithDownloadableItems.value}}" stepKey="disableGuestCheckoutWithDownloadableItems" />
+            <magentoCLI command="config:set {{DisableGuestCheckoutWithDownloadableItems.path}} {{DisableGuestCheckoutWithDownloadableItems.value}}" stepKey="disableGuestCheckoutWithDownloadableItems"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
@@ -43,7 +43,7 @@
             <argument name="productCount" value="1"/>
         </actionGroup>
         <!--Step 3: Go to checkout-->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <!--Step 4: Select Check/Money Order payment, fill required fields and click Update and Place Order-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
         <actionGroup ref="GuestCheckoutSelectPaymentAndFillNewBillingAddressActionGroup" stepKey="changeAddress">
@@ -55,7 +55,7 @@
         <waitForPageLoad stepKey="waitUpdateAddress"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
         <!--Step 5: Create customer account after placing order-->
         <actionGroup ref="StorefrontRegisterCustomerFromOrderSuccessPage" stepKey="createCustomerAfterPlaceOrder">

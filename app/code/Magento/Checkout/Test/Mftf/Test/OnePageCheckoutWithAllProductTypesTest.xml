@@ -122,7 +122,7 @@
 
         <!-- Add Configurable Product to cart  -->
         <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
-            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
             <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
             <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
             <argument name="qty" value="1"/>
@@ -176,10 +176,10 @@
         <!-- Fill customer address data -->
         <fillField selector="{{CheckoutShippingGuestInfoSection.company}}" userInput="{{CustomerAddressSimple.company}}" stepKey="fillCompany"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.street}}" userInput="{{CustomerAddressSimple.street}}" stepKey="fillStreet"/>
-        <fillField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="fillCity" />
+        <fillField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="fillCity"/>
         <selectOption selector="{{CheckoutShippingGuestInfoSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
-        <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="fillZipCode" />
-        <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="fillPhone" />
+        <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="fillZipCode"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="fillPhone"/>
 
         <!-- Click next button to open payment section -->
         <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNextBtn"/>
@@ -188,7 +188,7 @@
         <!-- Check order summary in checkout -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced" />
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Login as admin -->

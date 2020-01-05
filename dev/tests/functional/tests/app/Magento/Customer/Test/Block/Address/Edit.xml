@@ -7,14 +7,14 @@
 -->
 <mapping strict="0">
     <fields>
-        <firstname />
-        <lastname />
-        <company />
-        <telephone />
+        <firstname/>
+        <lastname/>
+        <company/>
+        <telephone/>
         <street>
             <selector>#street_1</selector>
         </street>
-        <city />
+        <city/>
         <country_id>
             <selector>#country</selector>
             <input>select</input>
@@ -22,7 +22,7 @@
         <region_id>
             <input>select</input>
         </region_id>
-        <region />
+        <region/>
         <postcode>
             <selector>#zip</selector>
         </postcode>

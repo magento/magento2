@@ -31,7 +31,7 @@
             </field>
             <field name="checkbox_text" xsi:type="string">test_checkbox%isolation%</field>
             <field name="content" xsi:type="string">TestMessage%isolation%</field>
-            <field name="content_height" xsi:type="string" />
+            <field name="content_height" xsi:type="string"/>
         </dataset>
 
         <dataset name="term_disabled_html">
@@ -46,7 +46,7 @@
             </field>
             <field name="checkbox_text" xsi:type="string">test_checkbox%isolation%</field>
             <field name="content" xsi:type="string">TestMessage%isolation%</field>
-            <field name="content_height" xsi:type="string" />
+            <field name="content_height" xsi:type="string"/>
         </dataset>
 
         <dataset name="term_enabled_text">
@@ -61,7 +61,7 @@
             </field>
             <field name="checkbox_text" xsi:type="string">test_checkbox%isolation%</field>
             <field name="content" xsi:type="string">TestMessage%isolation%</field>
-            <field name="content_height" xsi:type="string" />
+            <field name="content_height" xsi:type="string"/>
         </dataset>
     </repository>
 </config>

@@ -8,18 +8,18 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="first">
         <route id="test">
-            <module name="Some_ModuleName" before="Some_BeforeModuleName" />
+            <module name="Some_ModuleName" before="Some_BeforeModuleName"/>
         </route>
-        <route id="Some_ModuleName" frontName="test_test" >
+        <route id="Some_ModuleName" frontName="test_test">
             <module name="Some_ModuleName" after="Some_AfterModuleName"/>
         </route>
     </router>
     <router id="second">
         <route id="test">
-            <module name="Some_ModuleName" before="Some_BeforeModuleName" />
+            <module name="Some_ModuleName" before="Some_BeforeModuleName"/>
         </route>
         <route id="Some_ModuleName" frontName="test_test">
-            <module name="Some_ModuleName" />
+            <module name="Some_ModuleName"/>
         </route>
     </router>
 </config>

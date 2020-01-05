@@ -320,7 +320,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
-        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
         <see stepKey="seeTax3" selector="{{CheckoutPaymentSection.tax}}" userInput="$10.15"/>
@@ -431,7 +431,7 @@
 
         <!-- Assert that taxes are applied correctly for CA -->
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
-        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
         <see stepKey="seeTax3" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"/>

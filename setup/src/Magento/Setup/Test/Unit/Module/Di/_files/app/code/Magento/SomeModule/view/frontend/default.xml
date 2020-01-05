@@ -7,6 +7,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
     <referenceBlock name="root">
-        <block class="Magento\Backend\Block\Menu\Proxy" name="menu" as="menu" template="Magento_Backend::menu.phtml" />
+        <block class="Magento\Backend\Block\Menu\Proxy" name="menu" as="menu" template="Magento_Backend::menu.phtml"/>
     </referenceBlock>
 </layout>

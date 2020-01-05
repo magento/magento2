@@ -6,15 +6,15 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config" />
-    <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer" />
-    <preference for="Magento\Framework\Crontab\CrontabManagerInterface" type="Magento\Framework\Crontab\CrontabManager" />
-    <preference for="Magento\Framework\Crontab\TasksProviderInterface" type="Magento\Framework\Crontab\TasksProvider" />
+    <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config"/>
+    <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer"/>
+    <preference for="Magento\Framework\Crontab\CrontabManagerInterface" type="Magento\Framework\Crontab\CrontabManager"/>
+    <preference for="Magento\Framework\Crontab\TasksProviderInterface" type="Magento\Framework\Crontab\TasksProvider"/>
     <type name="Magento\Config\Model\Config\Structure\Converter">
-        <plugin name="cron_backend_config_structure_converter_plugin" type="Magento\Cron\Model\Backend\Config\Structure\Converter" />
+        <plugin name="cron_backend_config_structure_converter_plugin" type="Magento\Cron\Model\Backend\Config\Structure\Converter"/>
     </type>
     <type name="Magento\Framework\App\Config\Initial\Converter">
-        <plugin name="cron_system_config_initial_converter_plugin" type="Magento\Cron\Model\System\Config\Initial\Converter" />
+        <plugin name="cron_system_config_initial_converter_plugin" type="Magento\Cron\Model\System\Config\Initial\Converter"/>
     </type>
     <virtualType name="Magento\Cron\Model\VirtualLoggerHandler" type="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -52,7 +52,7 @@
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
-                <item name="crontab" xsi:type="null" />
+                <item name="crontab" xsi:type="null"/>
             </argument>
         </arguments>
     </type>

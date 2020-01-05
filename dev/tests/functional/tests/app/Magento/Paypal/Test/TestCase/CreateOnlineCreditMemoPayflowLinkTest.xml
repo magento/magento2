@@ -42,11 +42,11 @@
                 <item name="transactionType" xsi:type="string">Capture</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus"/>
         </variation>
     </testCase>
 </config>

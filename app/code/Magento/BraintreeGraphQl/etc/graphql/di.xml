@@ -15,6 +15,6 @@
         </arguments>
     </type>
     <type name="Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart">
-        <plugin name="braintree_generate_vault_nonce" type="Magento\BraintreeGraphQl\Plugin\SetVaultPaymentNonce" />
+        <plugin name="braintree_generate_vault_nonce" type="Magento\BraintreeGraphQl\Plugin\SetVaultPaymentNonce"/>
     </type>
 </config>

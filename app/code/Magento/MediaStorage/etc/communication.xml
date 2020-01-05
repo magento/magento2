@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
     <topic name="media.storage.catalog.image.resize" request="Magento\AsynchronousOperations\Api\Data\OperationInterface">
-        <handler name="media.storage.catalog.image.resize" type="Magento\MediaStorage\Model\ConsumerImageResize" method="process" />
+        <handler name="media.storage.catalog.image.resize" type="Magento\MediaStorage\Model\ConsumerImageResize" method="process"/>
     </topic>
 </config>

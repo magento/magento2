@@ -21,7 +21,7 @@
 
             <before>
                 <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
-                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
             </before>
 
             <after>

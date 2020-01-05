@@ -7,12 +7,12 @@
 -->
 <mapping strict="0">
     <fields>
-        <dbHost />
-        <dbUser />
-        <dbPassword />
+        <dbHost/>
+        <dbUser/>
+        <dbPassword/>
         <dbName>
             <selector>[name="dbname"]</selector>
         </dbName>
-        <dbTablePrefix />
+        <dbTablePrefix/>
     </fields>
 </mapping>

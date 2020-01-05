@@ -11,17 +11,17 @@
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView"/>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
         </variation>
         <variation name="AddProductVideoEntityTestVariation2" summary="Add vimeo video with all available fields filled in">
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="configData" xsi:type="string">play_if_base</data>
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView"/>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
         </variation>
     </testCase>
 </config>

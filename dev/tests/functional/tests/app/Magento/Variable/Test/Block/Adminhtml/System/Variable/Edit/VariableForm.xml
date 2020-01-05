@@ -8,12 +8,12 @@
 <mapping strict="0">
     <wrapper>variable</wrapper>
     <fields>
-        <code />
-        <name />
+        <code/>
+        <name/>
         <use_default_value>
             <input>select</input>
         </use_default_value>
-        <html_value />
-        <plain_value />
+        <html_value/>
+        <plain_value/>
     </fields>
 </mapping>

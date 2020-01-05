@@ -39,14 +39,14 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Directory\Model\Country\Postcode\ConfigInterface" type="Magento\Directory\Model\Country\Postcode\Config" />
-    <preference for="Magento\Directory\Model\Country\Postcode\ValidatorInterface" type="Magento\Directory\Model\Country\Postcode\Validator" />
-    <preference for="Magento\Directory\Api\CurrencyInformationAcquirerInterface" type="Magento\Directory\Model\CurrencyInformationAcquirer" />
-    <preference for="Magento\Directory\Api\Data\CurrencyInformationInterface" type="Magento\Directory\Model\Data\CurrencyInformation" />
-    <preference for="Magento\Directory\Api\Data\ExchangeRateInterface" type="Magento\Directory\Model\Data\ExchangeRate" />
-    <preference for="Magento\Directory\Api\CountryInformationAcquirerInterface" type="Magento\Directory\Model\CountryInformationAcquirer" />
-    <preference for="Magento\Directory\Api\Data\CountryInformationInterface" type="Magento\Directory\Model\Data\CountryInformation" />
-    <preference for="Magento\Directory\Api\Data\RegionInformationInterface" type="Magento\Directory\Model\Data\RegionInformation" />
+    <preference for="Magento\Directory\Model\Country\Postcode\ConfigInterface" type="Magento\Directory\Model\Country\Postcode\Config"/>
+    <preference for="Magento\Directory\Model\Country\Postcode\ValidatorInterface" type="Magento\Directory\Model\Country\Postcode\Validator"/>
+    <preference for="Magento\Directory\Api\CurrencyInformationAcquirerInterface" type="Magento\Directory\Model\CurrencyInformationAcquirer"/>
+    <preference for="Magento\Directory\Api\Data\CurrencyInformationInterface" type="Magento\Directory\Model\Data\CurrencyInformation"/>
+    <preference for="Magento\Directory\Api\Data\ExchangeRateInterface" type="Magento\Directory\Model\Data\ExchangeRate"/>
+    <preference for="Magento\Directory\Api\CountryInformationAcquirerInterface" type="Magento\Directory\Model\CountryInformationAcquirer"/>
+    <preference for="Magento\Directory\Api\Data\CountryInformationInterface" type="Magento\Directory\Model\Data\CountryInformation"/>
+    <preference for="Magento\Directory\Api\Data\RegionInformationInterface" type="Magento\Directory\Model\Data\RegionInformation"/>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

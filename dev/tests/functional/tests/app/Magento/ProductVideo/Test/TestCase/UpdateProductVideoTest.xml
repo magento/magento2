@@ -12,14 +12,14 @@
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/16342611</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
         </variation>
         <variation name="UpdateProductVideoTestVariation2" summary="Edit Vimeo URL" ticketId="MAGETWO-43656">
             <data name="productVideo/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://youtu.be/bpOSxM0rNPM</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
         </variation>
         <variation name="UpdateProductVideoTestVariation3" summary="Edit all available fields except URL" ticketId="MAGETWO-43661">
             <data name="productVideo/dataset" xsi:type="string">product_with_video_vimeo</data>
@@ -27,7 +27,7 @@
             <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Edit Test</data>
             <data name="product/data/media_gallery/images/0/video_description" xsi:type="string">This is an edit test</data>
             <data name="configData" xsi:type="string">play_if_base</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
         </variation>
         <variation name="UpdateProductVideoTestVariation4" summary="Edit all fields" ticketId="MAGETWO-43663">
             <data name="productVideo/dataset" xsi:type="string">product_with_video_vimeo</data>
@@ -36,7 +36,7 @@
             <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Edit Test</data>
             <data name="product/data/media_gallery/images/0/video_description" xsi:type="string">This is an edit test</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
         </variation>
         <variation name="GetVideoInfoTestVariation1" summary="Validate Youtube video info" ticketId="MAGETWO-43663">
             <data name="productVideo/dataset" xsi:type="string">product_with_video_youtube</data>
@@ -44,7 +44,7 @@
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://youtu.be/WMp2PvU2qi8</data>
             <data name="video/video_title" xsi:type="string">Foo Fighters - Congregation</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertGetVideoInfoDataIsCorrect" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertGetVideoInfoDataIsCorrect"/>
         </variation>
         <variation name="GetVideoInfoTestVariation2" summary="Validate Vimeo video info" ticketId="MAGETWO-43663">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
@@ -53,7 +53,7 @@
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776334</data>
             <data name="video/video_title" xsi:type="string">Foo Fighters - "Walk" - Official Music Video (HD)</data>
             <data name="configData" xsi:type="string">play_if_base</data>
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertGetVideoInfoDataIsCorrect" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertGetVideoInfoDataIsCorrect"/>
         </variation>
     </testCase>
 </config>

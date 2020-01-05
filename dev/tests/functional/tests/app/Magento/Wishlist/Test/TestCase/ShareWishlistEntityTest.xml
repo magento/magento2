@@ -11,7 +11,7 @@
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="sharingInfo/emails" xsi:type="string">JohnDoe123456789@example.com,JohnDoe987654321@example.com,JohnDoe123456abc@example.com</data>
             <data name="sharingInfo/message" xsi:type="string">Sharing message.</data>
-            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistShareMessage" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistShareMessage"/>
         </variation>
     </testCase>
 </config>

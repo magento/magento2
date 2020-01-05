@@ -12,7 +12,7 @@
             <container name="page.wrapper" as="page_wrapper" htmlTag="div" htmlClass="page-wrapper">
 
                 <container name="notices.wrapper" before="-" htmlClass="notices-wrapper" htmlTag="div">
-                    <container name="notifications" as="notifications" />
+                    <container name="notifications" as="notifications"/>
                     <container name="notification.window" as="notification_window" before="-"/>
                     <container name="global.notices" as="global_notices" after="notification.window"/>
                 </container>
@@ -39,7 +39,7 @@
                 </container>
                 <container name="js" as="js" label="JavaScript"/>
                 <container htmlTag="footer" htmlClass="page-footer">
-                    <container name="footer" htmlTag="div" htmlClass="page-footer-content row" />
+                    <container name="footer" htmlTag="div" htmlClass="page-footer-content row"/>
                 </container>
             </container>
             <container name="before.body.end" as="before_body_end" label="Before Body End" after="-"/>

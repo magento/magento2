@@ -21,7 +21,7 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
-            <createData entity="Simple_US_CA_Customer" stepKey="customer" />
+            <createData entity="Simple_US_CA_Customer" stepKey="customer"/>
         </before>
         <after>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
@@ -54,7 +54,7 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductGeneralGroup.quantity}}" stepKey="fillProductQuantity"/>
         <click selector="{{AdminProductFormSection.productStockStatus}}" stepKey="clickProductStockStatus"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{virtualProductGeneralGroup.visibility}}" stepKey="selectVisibility"/>
@@ -69,7 +69,7 @@
 
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="checkRetailCustomerTaxClass" />
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="checkRetailCustomerTaxClass"/>
         <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="fillVirtualProductName"/>
         <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
         <waitForPageLoad stepKey="waitForProductSearch"/>
@@ -90,7 +90,7 @@
         <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductGeneralGroup.quantity}}" stepKey="seeProductQuantity"/>
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{virtualProductGeneralGroup.status}}" stepKey="seeProductStockStatus"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
-        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories" />
+        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories"/>
         <assertEquals stepKey="assertSelectedCategories">
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
@@ -108,7 +108,7 @@
 
         <!-- Verify customer see created virtual product with tier price for general group(from above step) in storefront page with customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
-            <argument name="Customer" value="$$customer$$" />
+            <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>

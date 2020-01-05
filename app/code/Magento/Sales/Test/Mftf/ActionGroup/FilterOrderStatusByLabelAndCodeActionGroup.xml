@@ -13,7 +13,7 @@
             <argument name="statusLabel" type="string"/>
             <argument name="statusCode" type="string"/>
         </arguments>
-        <conditionalClick selector="{{AdminOrderStatusGridSection.resetFilter}}" dependentSelector="{{AdminOrderStatusGridSection.resetFilter}}" visible="true" stepKey="clearOrderStatusFilters" />
+        <conditionalClick selector="{{AdminOrderStatusGridSection.resetFilter}}" dependentSelector="{{AdminOrderStatusGridSection.resetFilter}}" visible="true" stepKey="clearOrderStatusFilters"/>
         <fillField selector="{{AdminOrderStatusGridSection.statusLabel}}" userInput="{{statusLabel}}" stepKey="fillStatusLabel"/>
         <fillField selector="{{AdminOrderStatusGridSection.statusCode}}" userInput="{{statusCode}}" stepKey="fillStatusCode"/>
         <click selector="{{AdminOrderStatusGridSection.search}}" stepKey="clickSearch"/>

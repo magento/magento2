@@ -28,7 +28,7 @@
         </arguments>
     </exchange>
 
-    <exchange name="magento-topic-based-exchange3" type="topic" connection="amqp" autoDelete="true" durable="false" internal="true" />
+    <exchange name="magento-topic-based-exchange3" type="topic" connection="amqp" autoDelete="true" durable="false" internal="true"/>
 
     <exchange name="magento-topic-based-exchange4" type="topic" connection="amqp">
         <binding id="wildcard1" destination="topic-queue1" destinationType="queue" topic="#">
@@ -36,11 +36,11 @@
                 <argument name="test" xsi:type="string">one</argument>
             </arguments>
         </binding>
-        <binding id="wildcard2" destination="topic-queue2" destinationType="queue" topic="*.*.*" />
+        <binding id="wildcard2" destination="topic-queue2" destinationType="queue" topic="*.*.*"/>
     </exchange>
 
     <exchange name="overlappingDeprecatedExchange" type="topic" connection="amqp">
-        <binding id="binding1" topic="overlapping.topic.declaration" destinationType="queue" destination="topology.config.queue" />
-        <binding id="binding2" topic="deprecated.config.async.string.topic" destinationType="queue" destination="topology.config.queue" />
+        <binding id="binding1" topic="overlapping.topic.declaration" destinationType="queue" destination="topology.config.queue"/>
+        <binding id="binding2" topic="deprecated.config.async.string.topic" destinationType="queue" destination="topology.config.queue"/>
     </exchange>
 </config>

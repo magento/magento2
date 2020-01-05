@@ -112,11 +112,11 @@
                 <set_scheduled>false</set_scheduled>
             </indexer>
         </indexers>
-        <xi:include href="../../config/searchTermsLarge.xml" />
-        <xi:include href="../../config/attributeSets.xml" />
-        <xi:include href="../../config/searchConfig.xml" />
-        <xi:include href="../../config/customerConfig.xml" />
-        <xi:include href="../../config/description.xml" />
-        <xi:include href="../../config/shortDescription.xml" />
+        <xi:include href="../../config/searchTermsLarge.xml"/>
+        <xi:include href="../../config/attributeSets.xml"/>
+        <xi:include href="../../config/searchConfig.xml"/>
+        <xi:include href="../../config/customerConfig.xml"/>
+        <xi:include href="../../config/description.xml"/>
+        <xi:include href="../../config/shortDescription.xml"/>
     </profile>
 </config>

@@ -23,8 +23,8 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses"/>
         </variation>
         <variation name="OnePageCheckoutUsingNonDefaultAddress" summary="Checkout as Customer using non default address" ticketId="MAGETWO-42602">
             <data name="tag" xsi:type="string">severity:S1, mftf_migrated:yes</data>
@@ -45,9 +45,9 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses"/>
         </variation>
         <variation name="OnePageCheckoutUsingNewAddress" summary="Checkout as Customer using New address" ticketId="MAGETWO-42601">
             <data name="tag" xsi:type="string">severity:S1, mftf_migrated:yes</data>
@@ -64,9 +64,9 @@
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses"/>
         </variation>
         <variation name="OnePageCheckoutTestVariation11" summary="Checkout as Customer using default address" ticketId="MAGETWO-42600, MAGETWO-42546">
             <data name="tag" xsi:type="string">severity:S1, mftf_migrated:yes</data>
@@ -86,9 +86,9 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo_specificcountry_gb</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses"/>
         </variation>
         <variation name="OnePageCheckoutTestVariation10" summary="One Page Checkout with all product types" ticketId="MAGETWO-17475">
             <data name="tag" xsi:type="string">severity:S0, mftf_migrated:yes</data>
@@ -108,8 +108,8 @@
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
     </testCase>
 </config>

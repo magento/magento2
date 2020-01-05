@@ -54,7 +54,7 @@
 
         <!-- Fill all required fields -->
         <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillNewShippingAddress">
-            <argument name="customer" value="Simple_Customer_Without_Address" />
+            <argument name="customer" value="Simple_Customer_Without_Address"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 

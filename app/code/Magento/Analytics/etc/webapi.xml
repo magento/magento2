@@ -10,7 +10,7 @@
     <route url="/V1/analytics/link" method="GET" secure="true">
         <service class="Magento\Analytics\Api\LinkProviderInterface" method="get"/>
         <resources>
-            <resource ref="Magento_Analytics::analytics_api" />
+            <resource ref="Magento_Analytics::analytics_api"/>
         </resources>
     </route>
 </routes>

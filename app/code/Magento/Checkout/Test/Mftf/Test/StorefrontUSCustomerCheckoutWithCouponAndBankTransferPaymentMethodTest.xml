@@ -70,7 +70,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->

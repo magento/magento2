@@ -7,6 +7,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="WidgetInstanceNew" area="Adminhtml" mca="admin/widget_instance/new/" module="Magento_Widget">
-        <block name="widgetForm" class="Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\WidgetForm" locator="[id='page:main-container']" strategy="css selector" />
+        <block name="widgetForm" class="Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\WidgetForm" locator="[id='page:main-container']" strategy="css selector"/>
     </page>
 </config>

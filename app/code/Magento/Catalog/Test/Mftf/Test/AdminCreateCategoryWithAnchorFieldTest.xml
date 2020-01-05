@@ -20,7 +20,7 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultBlock" stepKey="createDefaultCMSBlock"/>
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
@@ -63,7 +63,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
         <!--Verify the Category Title-->
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle"/>
         <!--Clear cache and reindex-->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>

@@ -10,14 +10,14 @@
     <scope id="global">
         <fieldset id="sales_convert_quote_address">
             <field name="company">
-                <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
+                <aspect name="to_order_address"/>
+                <aspect name="to_customer_address"/>
             </field>
             <field name="street_full">
-                <aspect name="to_order_address" targetField="street" />
+                <aspect name="to_order_address" targetField="street"/>
             </field>
             <field name="street">
-                <aspect name="to_customer_address" />
+                <aspect name="to_customer_address"/>
             </field>
         </fieldset>
     </scope>

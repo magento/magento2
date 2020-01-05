@@ -34,10 +34,10 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontCategoryIsChecked"/>
         <!--Verify InActive Category is created-->
-        <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="seeCategoryInTree" />
+        <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="seeCategoryInTree"/>
         <!--Verify Category is not listed store front page-->
         <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>

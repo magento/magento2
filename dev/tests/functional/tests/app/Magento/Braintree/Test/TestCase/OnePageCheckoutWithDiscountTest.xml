@@ -27,9 +27,9 @@
             <data name="configData" xsi:type="string">braintree, braintree_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
         </variation>
         <variation name="OnePageCheckoutWithDiscountTestVariation2" summary="Checkout with 100% discount and free shipping if Braintree through PayPal is enabled" ticketId="MAGETWO-59940">
             <data name="description" xsi:type="string">Use saved for Braintree credit card on checkout</data>
@@ -47,9 +47,9 @@
             <data name="configData" xsi:type="string">braintree, braintree_use_vault, freeshipping</data>
             <data name="status" xsi:type="string">Pending</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
         </variation>
     </testCase>
 </config>

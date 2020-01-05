@@ -15,9 +15,9 @@
             <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">-</data>
             <data name="integration/data/resources" xsi:type="string">-</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage"/>
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm"/>
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid"/>
         </variation>
         <variation name="UpdateIntegrationEntityTestVariation2">
             <data name="tag" xsi:type="string">stable:no</data>
@@ -28,9 +28,9 @@
             <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">Custom</data>
             <data name="integration/data/resources" xsi:type="string">Sales</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage"/>
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm"/>
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid"/>
         </variation>
         <variation name="UpdateIntegrationEntityTestVariation3">
             <data name="integration/data/name" xsi:type="string">Integration_%isolation%</data>
@@ -40,7 +40,7 @@
             <data name="integration/data/current_password" xsi:type="string">incorrect password</data>
             <data name="integration/data/resource_access" xsi:type="string">Custom</data>
             <data name="integration/data/resources" xsi:type="string">Sales</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertIncorrectUserPassword" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIncorrectUserPassword"/>
         </variation>
     </testCase>
 </config>

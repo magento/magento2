@@ -14,7 +14,7 @@
         </subnode>
         <subnode attributeThree = '60'>auto_formatted_by_ide_value_due_to_line_size_restriction
         </subnode>
-        <books attributeFive = '50' />
+        <books attributeFive = '50'/>
     </node_one>
     <multipleNode id="one" name="name1">
         <value>1</value>

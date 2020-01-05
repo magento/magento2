@@ -12,7 +12,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
-        <plugin name="Downloadable" type="Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable" />
+        <plugin name="Downloadable" type="Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable"/>
     </type>
     <virtualType name="context_for_downloadable" type="Magento\Framework\View\Element\Template\Context">
         <arguments>
@@ -25,7 +25,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\TypeTransitionManager">
-        <plugin name="downloadable_product_transition" type="Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable" />
+        <plugin name="downloadable_product_transition" type="Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable"/>
         <arguments>
             <argument name="compatibleTypes" xsi:type="array">
                 <item name="downloadable" xsi:type="const">Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE</item>
@@ -84,14 +84,14 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Downloadable\Api\LinkRepositoryInterface" type="Magento\Downloadable\Model\LinkRepository" />
-    <preference for="Magento\Downloadable\Api\SampleRepositoryInterface" type="Magento\Downloadable\Model\SampleRepository" />
-    <preference for="Magento\Downloadable\Api\Data\LinkInterface" type="Magento\Downloadable\Model\Link" />
-    <preference for="Magento\Downloadable\Api\Data\SampleInterface" type="Magento\Downloadable\Model\Sample" />
-    <preference for="Magento\Downloadable\Api\Data\File\ContentInterface" type="Magento\Downloadable\Model\File\Content" />
-    <preference for="Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="Magento\Downloadable\Model\File\ContentUploader" />
-    <preference for="Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
-    <preference for="Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="Magento\Downloadable\Model\DownloadableOption" />
+    <preference for="Magento\Downloadable\Api\LinkRepositoryInterface" type="Magento\Downloadable\Model\LinkRepository"/>
+    <preference for="Magento\Downloadable\Api\SampleRepositoryInterface" type="Magento\Downloadable\Model\SampleRepository"/>
+    <preference for="Magento\Downloadable\Api\Data\LinkInterface" type="Magento\Downloadable\Model\Link"/>
+    <preference for="Magento\Downloadable\Api\Data\SampleInterface" type="Magento\Downloadable\Model\Sample"/>
+    <preference for="Magento\Downloadable\Api\Data\File\ContentInterface" type="Magento\Downloadable\Model\File\Content"/>
+    <preference for="Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="Magento\Downloadable\Model\File\ContentUploader"/>
+    <preference for="Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="Magento\Downloadable\Model\Product\TypeHandler\TypeHandler"/>
+    <preference for="Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="Magento\Downloadable\Model\DownloadableOption"/>
     <preference for="Magento\Downloadable\Api\DomainManagerInterface" type="Magento\Downloadable\Model\DomainManager"/>
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>

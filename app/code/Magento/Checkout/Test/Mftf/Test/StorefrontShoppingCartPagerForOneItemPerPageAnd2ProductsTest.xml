@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Changing the number of items to display in cart-->
-            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 1" />
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 1"/>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct1"/>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct2"/>
             <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage1">
@@ -33,11 +33,11 @@
         </before>
         <after>
             <!--Set back the default number of items on cart which is 20-->
-            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteProduct2"/>
         </after>
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage" />
+        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage"/>
         <actionGroup ref="AssertToolbarTextIsVisibleInCartActionGroup" stepKey="VerifyPagerTextWithChangedConfiguration">
             <argument name="text" value="Items 1 to 1 of 2 total"/>
         </actionGroup>

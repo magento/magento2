@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_Backend::marketing_seo">
-                        <resource id="Magento_UrlRewrite::urlrewrite" title="URL Rewrites" translate="title" sortOrder="20" />
+                        <resource id="Magento_UrlRewrite::urlrewrite" title="URL Rewrites" translate="title" sortOrder="20"/>
                     </resource>
                 </resource>
             </resource>

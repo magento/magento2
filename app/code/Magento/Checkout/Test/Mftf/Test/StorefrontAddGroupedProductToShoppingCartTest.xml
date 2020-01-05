@@ -71,7 +71,7 @@
             <argument name="productName" value="$$simple1.name$$"/>
             <argument name="productSku" value="$$simple1.sku$$"/>
             <argument name="productPrice" value="$100.00"/>
-            <argument name="subtotal" value="$100.00" />
+            <argument name="subtotal" value="$100.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
 
@@ -80,7 +80,7 @@
             <argument name="productName" value="$$simple2.name$$"/>
             <argument name="productSku" value="$$simple2.sku$$"/>
             <argument name="productPrice" value="$200.00"/>
-            <argument name="subtotal" value="$400.00" />
+            <argument name="subtotal" value="$400.00"/>
             <argument name="qty" value="2"/>
         </actionGroup>
 
@@ -89,12 +89,12 @@
             <argument name="productName" value="$$simple3.name$$"/>
             <argument name="productSku" value="$$simple3.sku$$"/>
             <argument name="productPrice" value="$300.00"/>
-            <argument name="subtotal" value="$900.00" />
+            <argument name="subtotal" value="$900.00"/>
             <argument name="qty" value="3"/>
         </actionGroup>
 
         <!--Assert Shopping Cart Summary-->
-        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary">
             <argument name="subtotal" value="$1,400.00"/>
             <argument name="shipping" value="30.00"/>
             <argument name="total" value="1,430.00"/>
@@ -106,7 +106,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$simple3.name$$"/>
             <argument name="productPrice" value="$300.00"/>
-            <argument name="cartSubtotal" value="$1,400.00" />
+            <argument name="cartSubtotal" value="$1,400.00"/>
             <argument name="qty" value="3"/>
         </actionGroup>
 
@@ -114,7 +114,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct2MiniCart">
             <argument name="productName" value="$$simple2.name$$"/>
             <argument name="productPrice" value="$200.00"/>
-            <argument name="cartSubtotal" value="$1,400.00" />
+            <argument name="cartSubtotal" value="$1,400.00"/>
             <argument name="qty" value="2"/>
         </actionGroup>
 
@@ -122,7 +122,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct1MiniCart">
             <argument name="productName" value="$$simple1.name$$"/>
             <argument name="productPrice" value="$100.00"/>
-            <argument name="cartSubtotal" value="$1,400.00" />
+            <argument name="cartSubtotal" value="$1,400.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
     </test>

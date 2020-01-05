@@ -7,6 +7,6 @@
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <htmlContent name="reviews_content">
-        <block acl="Magento_Review::reviews_all" class="Magento\Review\Block\Adminhtml\ReviewTab" name="reviews" />
+        <block acl="Magento_Review::reviews_all" class="Magento\Review\Block\Adminhtml\ReviewTab" name="reviews"/>
     </htmlContent>
 </form>

@@ -15,7 +15,7 @@
             </data>
             <data name="gridStatus" xsi:type="string">Disable</data>
             <data name="product/data/status" xsi:type="string">No</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertUpdatedProductStatusInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertUpdatedProductStatusInGrid"/>
         </variation>
     </testCase>
 </config>

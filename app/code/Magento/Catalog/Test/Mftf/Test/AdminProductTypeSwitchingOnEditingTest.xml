@@ -61,7 +61,7 @@
         <waitForPageLoad stepKey="waitForStorefrontDownloadableProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertDownloadableProductInStock"/>
         <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkBlock}}" stepKey="scrollToLinksInStorefront"/>
-        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLinkWithMaxDownloads.title)}}" stepKey="seeDownloadableLink" />
+        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLinkWithMaxDownloads.title)}}" stepKey="seeDownloadableLink"/>
     </test>
     <test name="AdminDownloadableProductTypeSwitchingToSimpleProductTest" extends="AdminVirtualProductTypeSwitchingToDownloadableProductTest">
         <annotations>
@@ -95,6 +95,6 @@
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontSimpleProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertSimpleProductInStock"/>
-        <dontSeeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLinkWithMaxDownloads.title)}}" stepKey="dontSeeDownloadableLink" />
+        <dontSeeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLinkWithMaxDownloads.title)}}" stepKey="dontSeeDownloadableLink"/>
     </test>
 </tests>

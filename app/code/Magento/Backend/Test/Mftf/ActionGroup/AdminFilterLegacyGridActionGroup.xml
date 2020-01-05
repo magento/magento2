@@ -14,10 +14,10 @@
             <argument name="value" type="string"/>
             <argument name="button" type="string" defaultValue="{{AdminLegacyDataGridFilterSection.apply}}"/>
         </arguments>
-        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
-        <waitForPageLoad stepKey="waitForFilterReset" />
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters"/>
+        <waitForPageLoad stepKey="waitForFilterReset"/>
         <fillField selector="{{field}}" userInput="{{value}}" stepKey="fillFieldInFilter"/>
         <click selector="{{button}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForFiltersApply" />
+        <waitForPageLoad stepKey="waitForFiltersApply"/>
     </actionGroup>
 </actionGroups>

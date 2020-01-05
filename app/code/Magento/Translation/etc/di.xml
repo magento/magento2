@@ -6,13 +6,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
-    <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Translation\Model\Inline\Config" />
-    <preference for="Magento\Framework\Translate\Inline\ProviderInterface" type="Magento\Framework\Translate\Inline\Provider" />
-    <preference for="Magento\Framework\Translate\Inline\ParserInterface" type="Magento\Translation\Model\Inline\Parser" />
-    <preference for="Magento\Framework\Translate\ResourceInterface" type="Magento\Translation\Model\ResourceModel\Translate" />
-    <preference for="Magento\Framework\Translate\Inline\StateInterface" type="Magento\Framework\Translate\Inline\State" />
-    <preference for="Magento\Framework\Phrase\RendererInterface" type="Magento\Framework\Phrase\Renderer\Composite" />
+    <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline"/>
+    <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Translation\Model\Inline\Config"/>
+    <preference for="Magento\Framework\Translate\Inline\ProviderInterface" type="Magento\Framework\Translate\Inline\Provider"/>
+    <preference for="Magento\Framework\Translate\Inline\ParserInterface" type="Magento\Translation\Model\Inline\Parser"/>
+    <preference for="Magento\Framework\Translate\ResourceInterface" type="Magento\Translation\Model\ResourceModel\Translate"/>
+    <preference for="Magento\Framework\Translate\Inline\StateInterface" type="Magento\Framework\Translate\Inline\State"/>
+    <preference for="Magento\Framework\Phrase\RendererInterface" type="Magento\Framework\Phrase\Renderer\Composite"/>
     <preference for="Magento\Translation\Model\Js\DataProviderInterface" type="Magento\Translation\Model\Js\DataProvider"/>
     <preference for="Magento\Framework\Translate\Js\Config" type="Magento\Translation\Model\Js\Config"/>
     <type name="Magento\Framework\Translate\Inline">

@@ -18,11 +18,11 @@
             <testCaseId value="MAGETWO-84376"/>
         </annotations>
         <before>
-            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
-            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage"/>
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock"/>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
         </before>
         <actionGroup ref="AssignBlockToCMSPage" stepKey="assignBlockToCMSPage">
             <argument name="Block" value="$$createPreReqBlock$$"/>
@@ -31,10 +31,10 @@
         <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
-        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
-        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE"/>
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
         <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
@@ -48,10 +48,10 @@
             <argument name="Image" value="ImageUpload"/>
         </actionGroup>
         <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
-        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup" />
+        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup"/>
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad11" />
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
         <!--see image on Storefront-->
         <seeElement selector="{{StorefrontBlockSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontBlockSection.imageSource(ImageUpload.fileName)}}" stepKey="assertMediaSource"/>
@@ -60,8 +60,8 @@
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
             <waitForPageLoad stepKey="waitForGridReload"/>
-            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
-            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock"/>
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

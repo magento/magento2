@@ -31,22 +31,22 @@
         <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnBlocksCreationForm"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Verify Save&Duplicate button and Save&Close button-->
-        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1"/>
         <see selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
         <see selector="{{BlockNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
         <!--Create new CMS Block page-->
         <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent"/>
-        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
-        <click selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate" />
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <see userInput="You saved the block." stepKey="seeSavedBlockMsgOnForm"/>
         <see userInput="You duplicated the block." stepKey="seeDuplicatedBlockMsg"/>
         <!--Verify duplicated CMS Block Page-->
-        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable"/>
         <actionGroup ref="AssertBlockContent" stepKey="assertContent"/>
-        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn3" />
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn3"/>
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
         <see userInput="You saved the block." stepKey="seeSavedBlockMsgOnGrid"/>
-        <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage" />
+        <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage"/>
     </test>
 </tests>

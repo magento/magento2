@@ -33,9 +33,9 @@
             <data name="prices/tax" xsi:type="string">3.09</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">37.36</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">40.45</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax"/>
         </variation>
         <variation name="TaxCalculationTestVariation4">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -63,9 +63,9 @@
             <data name="prices/tax" xsi:type="string">21.79</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">129.30</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">151.09</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax"/>
         </variation>
         <variation name="TaxCalculationTestVariation5">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -93,9 +93,9 @@
             <data name="prices/tax" xsi:type="string">4.56</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">32.89</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">37.45</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax"/>
         </variation>
         <variation name="TaxCalculationTestVariation6">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -123,9 +123,9 @@
             <data name="prices/tax" xsi:type="string">23.42</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">137.71</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">161.13</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax"/>
         </variation>
         <variation name="TaxCalculationTestVariation9">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -153,9 +153,9 @@
             <data name="prices/tax" xsi:type="string">2.89</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">34.47</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">37.36</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax"/>
         </variation>
         <variation name="TaxCalculationTestVariation10">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -183,9 +183,9 @@
             <data name="prices/tax" xsi:type="string">12.47</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">148.86</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">161.33</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxCalculationAfterCheckoutExcludingIncludingTax"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax"/>
         </variation>
     </testCase>
 </config>

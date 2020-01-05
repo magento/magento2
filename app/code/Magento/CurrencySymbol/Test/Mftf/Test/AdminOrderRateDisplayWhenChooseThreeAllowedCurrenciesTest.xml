@@ -15,7 +15,7 @@
             <title value="Order rate converting currency for 'Base Currency' and 'Default Display Currency' displayed correct"/>
             <description value="Order rate converting currency for 'Base Currency' and 'Default Display Currency' displayed correct"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-17255" />
+            <testCaseId value="MC-17255"/>
             <useCaseId value="MAGETWO-67450"/>
             <group value="currency"/>
         </annotations>
@@ -51,13 +51,13 @@
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontNewProductPage">
             <argument name="productName" value="$$createNewProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutNewProductFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutNewProductFromMinicart"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutNewFillingShippingSection">
         </actionGroup>
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectNewCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectNewCheckMoneyOrderPayment"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceNewOrder">
-            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabNewOrderNumber"/>
         <!--Open order and check rates display in one line-->
@@ -66,7 +66,7 @@
         </actionGroup>
         <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="EUR / USD rate" stepKey="seeUSDandEURRate"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="RUB / USD rate:" stepKey="seeRUBandEURRate"/>
-        <grabMultiple selector="{{AdminOrderDetailsInformationSection.rate}}" stepKey="grabRates" />
+        <grabMultiple selector="{{AdminOrderDetailsInformationSection.rate}}" stepKey="grabRates"/>
         <assertEquals stepKey="assertRates">
             <actualResult type="variable">grabRates</actualResult>
             <expectedResult type="array">['EUR / USD rate:', 'RUB / USD rate:']</expectedResult>

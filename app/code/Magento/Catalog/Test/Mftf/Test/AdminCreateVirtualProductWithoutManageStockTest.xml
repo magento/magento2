@@ -46,7 +46,7 @@
         <checkOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="CheckUseConfigSettingsCheckBox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>

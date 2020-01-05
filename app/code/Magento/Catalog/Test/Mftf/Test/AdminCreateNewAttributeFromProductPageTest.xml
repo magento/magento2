@@ -31,21 +31,21 @@
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <actionGroup ref="AdminClickAddAttributeOnProductEditPageActionGroup" stepKey="clickAddAttribute"/>
-        <actionGroup ref="AdminClickCreateNewAttributeFromProductEditPageActionGroup" stepKey="clickCreateNewAttribute1" />
-        <actionGroup ref="AdminFillAttributeDataProductFormNewAttributeActionGroup" stepKey="fillAttributeData" />
+        <actionGroup ref="AdminClickCreateNewAttributeFromProductEditPageActionGroup" stepKey="clickCreateNewAttribute1"/>
+        <actionGroup ref="AdminFillAttributeDataProductFormNewAttributeActionGroup" stepKey="fillAttributeData"/>
 
         <click selector="{{AdminProductFormNewAttributeSection.saveInNewSet}}" stepKey="saveAttributeInSet"/>
         <actionGroup ref="AdminAssertProductEditPageCreateAttributeSaveInAttributeSetPopUpShownActionGroup" stepKey="assertPopUp"/>
         <click selector="{{ModalConfirmationSection.CancelButton}}" stepKey="cancelButton"/>
 
-        <actionGroup ref="AdminFillAttributeDataProductFormNewAttributeActionGroup" stepKey="emptyAttributeData" >
+        <actionGroup ref="AdminFillAttributeDataProductFormNewAttributeActionGroup" stepKey="emptyAttributeData">
             <argument name="attributeName" value=" "/>
             <argument name="attributeType" value=" "/>
         </actionGroup>
 
         <click selector="{{AdminProductFormNewAttributeSection.saveInNewSet}}" stepKey="clickSaveInSet"/>
         <see userInput="This is a required field." stepKey="seeThisIsRequiredField"/>
-        <dontSee userInput="Enter Name for New Attribute Set" stepKey="dontSeePopUp" />
+        <dontSee userInput="Enter Name for New Attribute Set" stepKey="dontSeePopUp"/>
 
     </test>
 </tests>

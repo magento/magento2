@@ -64,7 +64,7 @@
 
         <!-- Add configurable product to the cart  -->
         <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
-            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
             <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
             <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
             <argument name="qty" value="1"/>

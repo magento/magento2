@@ -9,9 +9,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminLegacyDataGridTableSection">
-        <element name="rowTemplateStrict" type="block" selector="//tbody/tr[td[text()[normalize-space()='{{text}}']]]" parameterized="true" />
-        <element name="rowTemplate" type="block" selector="//tbody/tr[td[contains(.,normalize-space('{{text}}'))]]" parameterized="true" />
-        <element name="columnTemplateStrict" type="block" selector="//tbody/tr[td[contains(.,normalize-space('{{text}}'))]]/td[@data-column='{{dataColumn}}']" parameterized="true" />
-        <element name="columnTemplate" type="block" selector="//tbody/tr[td[contains(.,normalize-space('{{text}}'))]]/td[@data-column='{{dataColumn}}']" parameterized="true" />
+        <element name="rowTemplateStrict" type="block" selector="//tbody/tr[td[text()[normalize-space()='{{text}}']]]" parameterized="true"/>
+        <element name="rowTemplate" type="block" selector="//tbody/tr[td[contains(.,normalize-space('{{text}}'))]]" parameterized="true"/>
+        <element name="columnTemplateStrict" type="block" selector="//tbody/tr[td[contains(.,normalize-space('{{text}}'))]]/td[@data-column='{{dataColumn}}']" parameterized="true"/>
+        <element name="columnTemplate" type="block" selector="//tbody/tr[td[contains(.,normalize-space('{{text}}'))]]/td[@data-column='{{dataColumn}}']" parameterized="true"/>
     </section>
 </sections>

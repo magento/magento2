@@ -124,7 +124,7 @@
 
         <!-- Add Configurable Product to the cart -->
         <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
-            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
             <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
             <argument name="productOption" value="$$getConfigAttributeOption2.label$$"/>
             <argument name="qty" value="2"/>
@@ -134,7 +134,7 @@
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Shopping Cart Summary -->
-        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary">
             <argument name="subtotal" value="$40.00"/>
             <argument name="shipping" value="10.00"/>
             <argument name="total" value="50.00"/>
@@ -145,7 +145,7 @@
             <argument name="productName" value="$$createConfigProduct.name$$"/>
             <argument name="productSku" value="$$createConfigChildProduct2.sku$$"/>
             <argument name="productPrice" value="$$createConfigChildProduct2.price$$"/>
-            <argument name="subtotal" value="$40.00" />
+            <argument name="subtotal" value="$40.00"/>
             <argument name="qty" value="2"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductOptionInCart">
@@ -159,7 +159,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertMiniCart">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
             <argument name="productPrice" value="$$createConfigChildProduct2.price$$"/>
-            <argument name="cartSubtotal" value="$40.00" />
+            <argument name="cartSubtotal" value="$40.00"/>
             <argument name="qty" value="2"/>
         </actionGroup>
     </test>

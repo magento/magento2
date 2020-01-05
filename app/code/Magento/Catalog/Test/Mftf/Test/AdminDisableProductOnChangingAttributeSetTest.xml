@@ -41,7 +41,7 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="DisableProductLabelActionGroup" stepKey="disableWhileChangingAttributeSet" >
+        <actionGroup ref="DisableProductLabelActionGroup" stepKey="disableWhileChangingAttributeSet">
             <argument name="createAttributeSet" value="$$createAttributeSet$$"/>
         </actionGroup>
 

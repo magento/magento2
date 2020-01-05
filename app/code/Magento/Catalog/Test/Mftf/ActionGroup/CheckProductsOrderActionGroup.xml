@@ -20,10 +20,10 @@
 
         <amOnPage url="{{page}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForPageLoad5" time="60"/>
-        <executeJS function="window.localStorage.clear()" stepKey="clearWidgetCache" />
+        <executeJS function="window.localStorage.clear()" stepKey="clearWidgetCache"/>
         <reloadPage stepKey="goToHomePageAfterCacheCleared"/>
         <waitForPageLoad stepKey="waitForPageLoad5AfterCacheCleared" time="60"/>
-        <waitForElement selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" time="120" stepKey="waitCompareWidgetLoad" />
+        <waitForElement selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" time="120" stepKey="waitCompareWidgetLoad"/>
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" userInput="alt" stepKey="grabFirstProductName1_1"/>
         <assertEquals  expected="{{product_1.name}}" actual="($grabFirstProductName1_1)" message="notExpectedOrder" stepKey="compare1"/>
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('2')}}" userInput="alt" stepKey="grabFirstProductName2_2"/>

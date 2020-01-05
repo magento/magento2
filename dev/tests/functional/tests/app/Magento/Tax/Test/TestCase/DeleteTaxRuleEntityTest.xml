@@ -16,9 +16,9 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="shipping/price" xsi:type="string">5</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessDeleteMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleNotInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsNotApplied" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessDeleteMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleNotInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsNotApplied"/>
         </variation>
     </testCase>
 </config>

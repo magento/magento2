@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_ImportExport:etc/import.xsd">
-    <entityType entity="catalog_product" name="downloadable" model="Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable" />
+    <entityType entity="catalog_product" name="downloadable" model="Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable"/>
 </config>

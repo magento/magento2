@@ -12,8 +12,8 @@
             <selector>#select_widget_type</selector>
             <input>select</input>
         </widget_type>
-        <anchor_text />
-        <title />
+        <anchor_text/>
+        <title/>
         <template>
             <input>select</input>
         </template>
@@ -27,9 +27,9 @@
         <show_pager>
             <input>select</input>
         </show_pager>
-        <products_count />
-        <cache_lifetime />
-        <page_size />
+        <products_count/>
+        <cache_lifetime/>
+        <page_size/>
         <show_attributes>
             <selector>
                 .control [name^="parameters[show_attributes]["]

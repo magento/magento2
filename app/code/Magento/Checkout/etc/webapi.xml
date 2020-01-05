@@ -12,7 +12,7 @@
     <route url="/V1/guest-carts/:cartId/shipping-information" method="POST">
         <service class="Magento\Checkout\Api\GuestShippingInformationManagementInterface" method="saveAddressInformation"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -20,7 +20,7 @@
     <route url="/V1/carts/mine/shipping-information" method="POST">
         <service class="Magento\Checkout\Api\ShippingInformationManagementInterface" method="saveAddressInformation"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -31,7 +31,7 @@
     <route url="/V1/carts/:cartId/shipping-information" method="POST">
         <service class="Magento\Checkout\Api\ShippingInformationManagementInterface" method="saveAddressInformation"/>
         <resources>
-            <resource ref="Magento_Cart::manage" />
+            <resource ref="Magento_Cart::manage"/>
         </resources>
     </route>
 
@@ -39,7 +39,7 @@
     <route url="/V1/carts/:cartId/totals-information" method="POST">
         <service class="Magento\Checkout\Api\TotalsInformationManagementInterface" method="calculate"/>
         <resources>
-            <resource ref="Magento_Cart::manage" />
+            <resource ref="Magento_Cart::manage"/>
         </resources>
     </route>
 
@@ -47,7 +47,7 @@
     <route url="/V1/guest-carts/:cartId/totals-information" method="POST">
         <service class="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" method="calculate"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
 
@@ -55,7 +55,7 @@
     <route url="/V1/carts/mine/totals-information" method="POST">
         <service class="Magento\Checkout\Api\TotalsInformationManagementInterface" method="calculate"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -66,21 +66,21 @@
     <route url="/V1/guest-carts/:cartId/payment-information" method="POST">
         <service class="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <!-- Guest place order with payment information saving -->
     <route url="/V1/guest-carts/:cartId/payment-information" method="GET">
         <service class="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" method="getPaymentInformation"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <!-- My place order with payment information saving -->
     <route url="/V1/carts/mine/payment-information" method="POST">
         <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -90,7 +90,7 @@
     <route url="/V1/carts/mine/payment-information" method="GET">
         <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="getPaymentInformation"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>
@@ -101,14 +101,14 @@
     <route url="/V1/guest-carts/:cartId/set-payment-information" method="POST">
         <service class="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" method="savePaymentInformation"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <!-- Managing My payment information -->
     <route url="/V1/carts/mine/set-payment-information" method="POST">
         <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="savePaymentInformation"/>
         <resources>
-            <resource ref="self" />
+            <resource ref="self"/>
         </resources>
         <data>
             <parameter name="cartId" force="true">%cart_id%</parameter>

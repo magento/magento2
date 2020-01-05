@@ -20,8 +20,8 @@
             <data name="cart/data/shipping_amount" xsi:type="string">5.00</data>
             <data name="cart/data/grand_total" xsi:type="string">565.00</data>
             <data name="requireReload" xsi:type="boolean">false</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertShippingMethodAvailableInCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertShippingMethodAvailableInCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart"/>
         </variation>
         <variation name="FreeShippingRuleUsesFreeShipping" summary="One Page Checkout With Free Shipping Enabled And Free Shipping Selected">
             <data name="configData" xsi:type="string">freeshipping_minimum_order_amount_100000</data>
@@ -36,8 +36,8 @@
             <data name="cart/data/shipping_amount" xsi:type="string">0.00</data>
             <data name="cart/data/grand_total" xsi:type="string">560.00</data>
             <data name="requireReload" xsi:type="boolean">false</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertShippingMethodAvailableInCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertShippingMethodAvailableInCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart"/>
         </variation>
         <variation name="FreeShippingRuleNoValidProduct" summary="One Page Checkout With No Valid Product For Free Shipping Rule">
             <data name="configData" xsi:type="string">freeshipping_minimum_order_amount_100000</data>
@@ -52,8 +52,8 @@
             <data name="cart/data/shipping_amount" xsi:type="string">5.00</data>
             <data name="cart/data/grand_total" xsi:type="string">565.00</data>
             <data name="requireReload" xsi:type="boolean">false</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertShippingMethodAvailableInCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertShippingMethodAvailableInCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart"/>
         </variation>
     </testCase>
 </config>

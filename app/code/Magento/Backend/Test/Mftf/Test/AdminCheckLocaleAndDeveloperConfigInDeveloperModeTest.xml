@@ -25,14 +25,14 @@
         </before>
 
         <!-- Go to the general configuration and make sure the locale dropdown is available and enabled -->
-        <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage" />
-        <scrollTo selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="scrollToLocaleSection" x="0" y="-80" />
+        <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage"/>
+        <scrollTo selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="scrollToLocaleSection" x="0" y="-80"/>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
         <seeElement selector="{{LocaleOptionsSection.localeEnabled}}" stepKey="seeEnabledLocaleDropdown"/>
 
         <!-- Go to the developer configuration and make sure the page is available -->
         <actionGroup ref="AdminOpenStoreConfigDeveloperPageActionGroup" stepKey="goToDeveloperConfigPage"/>
         <seeInCurrentUrl url="{{AdminConfigDeveloperPage.url}}" stepKey="seeDeveloperConfigUrl"/>
-        <seeElement selector="{{AdminConfigSection.navItemByTitle('Developer')}}" stepKey="assertDeveloperNavItemPresent" />
+        <seeElement selector="{{AdminConfigSection.navItemByTitle('Developer')}}" stepKey="assertDeveloperNavItemPresent"/>
     </test>
 </tests>

@@ -9,6 +9,6 @@
     <page name="OrdersReportPage" url="reports/report_sales/sales/" area="admin" module="Reports">
         <section name="OrderReportFilterSection"/>
         <section name="OrderReportMainSection"/>
-        <section name="GeneratedReportSection" />
+        <section name="GeneratedReportSection"/>
     </page>
 </pages>

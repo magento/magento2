@@ -66,10 +66,10 @@
             <argument name="product" value="$$createBundleProduct$$"/>
             <argument name="quantity" value="10"/>
         </actionGroup>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
-            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
 

@@ -17,9 +17,9 @@
         <three_d_secure>
             <cardinal>
                 <environment>production</environment>
-                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <org_unit_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <api_identifier backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <org_unit_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <api_identifier backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <debug>0</debug>
             </cardinal>
         </three_d_secure>

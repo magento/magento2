@@ -13,10 +13,10 @@
              repository_class="Magento\Sales\Test\Repository\OrderStatus"
              handler_interface="Magento\Sales\Test\Handler\OrderStatus\OrderStatusInterface"
              class="Magento\Sales\Test\Fixture\OrderStatus">
-        <field name="status" is_required="1" />
-        <field name="label" is_required="" />
-        <field name="state" is_required="1" />
-        <field name="is_default" is_required="" />
-        <field name="visible_on_front" is_required="" />
+        <field name="status" is_required="1"/>
+        <field name="label" is_required=""/>
+        <field name="state" is_required="1"/>
+        <field name="is_default" is_required=""/>
+        <field name="visible_on_front" is_required=""/>
     </fixture>
 </config>

@@ -30,7 +30,7 @@
         <!-- Steps -->
         <!-- Step 1: Go to Storefront as Customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$createCustomer$$" />
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!-- Step 2: Add virtual product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$)}}" stepKey="amOnPage"/>

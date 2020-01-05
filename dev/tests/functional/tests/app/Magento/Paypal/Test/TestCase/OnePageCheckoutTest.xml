@@ -26,10 +26,10 @@
                 <item name="Credit Card Type" xsi:type="string">Visa</item>
             </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation"/>
         </variation>
         <variation name="OnePageCheckoutPayflowProWithInternationalAVSFilter" summary="Place order via Payflow Pro with fraud filters triggering" ticketId="MAGETWO-37476">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
@@ -53,11 +53,11 @@
                 <item name="International AVS response" xsi:type="string">#N: No Details matched</item>
             </data>
             <data name="status" xsi:type="string">Processing</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation"/>
         </variation>
         <variation name="OnePageCheckoutPayflowProWithAVSStreetMatches" summary="Place Order via Payflow Pro with success AVS Street verification" ticketId="MAGETWO-37479">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
@@ -79,10 +79,10 @@
                 <item name="AVS Street Match" xsi:type="string">#Y: Yes. Matched Address and five-digit ZIP</item>
             </data>
             <data name="status" xsi:type="string">Processing</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation"/>
         </variation>
         <variation name="OnePageCheckoutPayPalPaymentsPro" summary="Guest Checkout using PayPal Payments Pro and Flat Rate" ticketId="MAGETWO-62039">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
@@ -98,10 +98,10 @@
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="configData" xsi:type="string">paypal_direct</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
         </variation>
         <variation name="OnePageCheckoutPayflowProWithAVSZIP" summary="Place order via Payflow Pro with success AVS ZIP verification" ticketId="MAGETWO-37482">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
@@ -118,9 +118,9 @@
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_avs_zip</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation"/>
         </variation>
         <variation name="OnePageCheckoutPayflowProWithCVVMatches" summary="Place order via Payflow Pro with success CVV verification" ticketId="MAGETWO-37484">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
@@ -139,10 +139,10 @@
             <data name="paymentInfo" xsi:type="array">
                 <item name="AVS Street Match" xsi:type="string">#Y: Matched (CVV2CSC)</item>
             </data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
         </variation>
     </testCase>
 </config>

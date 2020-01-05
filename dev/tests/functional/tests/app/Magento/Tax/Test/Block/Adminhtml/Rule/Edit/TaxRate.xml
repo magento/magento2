@@ -7,11 +7,11 @@
 -->
 <mapping strict="0">
     <fields>
-        <code />
-        <rate />
-        <tax_postcode />
-        <zip_from />
-        <zip_to />
+        <code/>
+        <rate/>
+        <tax_postcode/>
+        <zip_from/>
+        <zip_to/>
         <tax_region_id>
             <input>select</input>
         </tax_region_id>

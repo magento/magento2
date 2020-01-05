@@ -25,15 +25,15 @@
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
                 <field id="business_account" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/business_account"/>
                 <field id="api_authentication" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_authentication"/>
-                <field id="api_username" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_username" />
-                <field id="api_password" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_password" />
-                <field id="api_signature" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_signature" />
-                <field id="api_cert" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_cert" />
-                <field id="api_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_wizard" />
-                <field id="sandbox_flag" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/sandbox_flag" />
-                <field id="use_proxy" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/use_proxy" />
-                <field id="proxy_host" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/proxy_host" />
-                <field id="proxy_port" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/proxy_port" />
+                <field id="api_username" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_username"/>
+                <field id="api_password" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_password"/>
+                <field id="api_signature" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_signature"/>
+                <field id="api_cert" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_cert"/>
+                <field id="api_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_wizard"/>
+                <field id="sandbox_flag" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/sandbox_flag"/>
+                <field id="use_proxy" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/use_proxy"/>
+                <field id="proxy_host" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/proxy_host"/>
+                <field id="proxy_port" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/proxy_port"/>
             </group>
             <field id="pphs_enable" type="select" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1">
                 <label>Enable this Solution</label>
@@ -65,8 +65,8 @@
                             The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                             or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
                 </comment>
-                <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
-                <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />
+                <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id"/>
+                <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard"/>
                 <group id="pphs_settings_bml_homepage"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <label>Home Page</label>
                     <field id="bml_homepage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_display"/>
@@ -90,7 +90,7 @@
                 <group id="pphs_settings_bml_categorypage"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
                     <label>Catalog Category Page</label>
                     <field id="bml_categorypage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_display"/>
-                    <field id="pphs_bml_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_position" />
+                    <field id="pphs_bml_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_position"/>
                     <field id="pphs_bml_categorypage_size1" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30" type="select">
                         <label>Size</label>
                         <config_path>payment/paypal_express_bml/categorypage_size</config_path>
@@ -109,8 +109,8 @@
                 </group>
                 <group id="pphs_settings_bml_productpage"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                     <label>Catalog Product Page</label>
-                    <field id="bml_productpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_display" />
-                    <field id="pphs_bml_productpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_position" />
+                    <field id="bml_productpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_display"/>
+                    <field id="pphs_bml_productpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_position"/>
                     <field id="pphs_bml_productpage_size1" translate="label" type="select" showInWebsite="1" showInDefault="1" sortOrder="30">
                         <label>Size</label>
                         <config_path>payment/paypal_express_bml/productpage_size</config_path>
@@ -129,8 +129,8 @@
                 </group>
                 <group id="pphs_settings_bml_checkout"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
                     <label>Checkout Cart Page</label>
-                    <field id="bml_checkout_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_display" />
-                    <field id="pphs_bml_checkout_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_position" />
+                    <field id="bml_checkout_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_display"/>
+                    <field id="pphs_bml_checkout_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_position"/>
                     <field id="pphs_bml_checkout_size1" translate="label" type="select" showInWebsite="1" showInDefault="1" sortOrder="30">
                         <label>Size</label>
                         <config_path>payment/paypal_express_bml/checkout_size</config_path>
@@ -202,15 +202,15 @@
                 <group id="pphs_settlement_report" showInDefault="1" showInWebsite="1" sortOrder="50" translate="label">
                     <label>Settlement Report Settings</label>
                     <field id="heading_sftp" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/heading_sftp"/>
-                    <field id="settlement_reports_ftp_login" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_login" />
-                    <field id="settlement_reports_ftp_password" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_password" />
-                    <field id="settlement_reports_ftp_sandbox" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_sandbox" />
-                    <field id="settlement_reports_ftp_ip" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_ip" />
-                    <field id="settlement_reports_ftp_path" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_path" />
-                    <field id="heading_schedule" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/heading_schedule" />
-                    <field id="settlement_reports_active" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_active" />
-                    <field id="settlement_reports_schedule" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_schedule" />
-                    <field id="settlement_reports_time" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_time" />
+                    <field id="settlement_reports_ftp_login" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_login"/>
+                    <field id="settlement_reports_ftp_password" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_password"/>
+                    <field id="settlement_reports_ftp_sandbox" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_sandbox"/>
+                    <field id="settlement_reports_ftp_ip" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_ip"/>
+                    <field id="settlement_reports_ftp_path" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_path"/>
+                    <field id="heading_schedule" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/heading_schedule"/>
+                    <field id="settlement_reports_active" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_active"/>
+                    <field id="settlement_reports_schedule" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_schedule"/>
+                    <field id="settlement_reports_time" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_time"/>
                 </group>
             </group>
         </group>

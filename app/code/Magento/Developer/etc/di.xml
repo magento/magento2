@@ -110,8 +110,8 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="cssMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Css\CSSmin" />
-    <virtualType name="jsMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Js\JShrink" />
+    <virtualType name="cssMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Css\CSSmin"/>
+    <virtualType name="jsMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Js\JShrink"/>
     <virtualType name="cssMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
         <arguments>
             <argument name="adapter" xsi:type="object">cssMinificationAdapter</argument>

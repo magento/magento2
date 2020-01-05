@@ -17,7 +17,7 @@
         <carriers>
             <dhl>
                 <model>Magento\Dhl\Model\Carrier</model>
-                <account />
+                <account/>
                 <active>0</active>
                 <title>DHL</title>
                 <sallowspecific>0</sallowspecific>
@@ -26,8 +26,8 @@
                 <free_method>G</free_method>
                 <gateway_url>https://xmlpi-ea.dhl.com/XMLShippingServlet</gateway_url>
                 <sandbox_url>https://xmlpitest-ea.dhl.com/XMLShippingServlet</sandbox_url>
-                <id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <content_type>N</content_type>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <divide_order_weight>1</divide_order_weight>

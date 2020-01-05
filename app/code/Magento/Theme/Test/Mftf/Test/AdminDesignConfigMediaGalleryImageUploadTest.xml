@@ -26,7 +26,7 @@
         </after>
         <!--Edit Store View-->
         <comment userInput="Edit Store View" stepKey="editStoreViewComment"/>
-        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage"/>
         <waitForPageLoad stepKey="waitForPageload1"/>
         <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView"/>
         <waitForPageLoad stepKey="waitForPageload2"/>

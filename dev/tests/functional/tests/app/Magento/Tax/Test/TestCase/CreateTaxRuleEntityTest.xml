@@ -15,9 +15,9 @@
             <data name="taxRule/data/tax_customer_class/dataset/class_1" xsi:type="string">-</data>
             <data name="taxRule/data/tax_product_class/dataset/class_0" xsi:type="string">-</data>
             <data name="taxRule/data/tax_product_class/dataset/class_1" xsi:type="string">-</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation2">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -31,9 +31,9 @@
             <data name="taxRule/data/tax_product_class/dataset/class_1" xsi:type="string">-</data>
             <data name="taxRule/data/priority" xsi:type="string">1</data>
             <data name="taxRule/data/position" xsi:type="string">1</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation3">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -46,9 +46,9 @@
             <data name="taxRule/data/tax_customer_class/dataset/class_1" xsi:type="string">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataset/class_0" xsi:type="string">taxable_goods</data>
             <data name="taxRule/data/position" xsi:type="string">1</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation4">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -60,9 +60,9 @@
             <data name="taxRule/data/tax_product_class/dataset/class_0" xsi:type="string">taxable_goods</data>
             <data name="taxRule/data/tax_product_class/dataset/class_1" xsi:type="string">product_tax_class</data>
             <data name="taxRule/data/priority" xsi:type="string">1</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation5" summary="Create Tax Rule with New and Existing Tax Rate, Customer Tax Class, Product Tax Class" ticketId="MAGETWO-12438">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -74,9 +74,9 @@
             <data name="taxRule/data/tax_customer_class/dataset/class_1" xsi:type="string">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataset/class_0" xsi:type="string">taxable_goods</data>
             <data name="taxRule/data/tax_product_class/dataset/class_1" xsi:type="string">product_tax_class</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
         </variation>
     </testCase>
 </config>

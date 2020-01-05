@@ -28,11 +28,11 @@
                     <item name="value" xsi:type="number">0</item>
                 </item>
             </data>
-            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccessWithError" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserInGrid"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccessWithError"/>
         </variation>
     </testCase>
 </config>

@@ -10,6 +10,6 @@
     <event name="catalogsearch_query_save_after">
         <observer name="magento_advancedsearch_recommendations"
                   instance="Magento\AdvancedSearch\Model\Recommendations\SaveSearchQueryRelationsObserver"
-                 />
+                />
     </event>
 </config>

@@ -6,106 +6,106 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="DateTimeInterface" type="DateTime" />
-    <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
-    <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata" />
-    <preference for="Magento\Framework\EntityManager\HydratorInterface" type="Magento\Framework\EntityManager\Hydrator" />
-    <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
-    <preference for="Magento\Framework\Model\Entity\ScopeInterface" type="Magento\Framework\Model\Entity\Scope" />
-    <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor" />
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
-    <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\Framework\Search\Request\Aggregation\Status" />
+    <preference for="DateTimeInterface" type="DateTime"/>
+    <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog"/>
+    <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata"/>
+    <preference for="Magento\Framework\EntityManager\HydratorInterface" type="Magento\Framework\EntityManager\Hydrator"/>
+    <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier"/>
+    <preference for="Magento\Framework\Model\Entity\ScopeInterface" type="Magento\Framework\Model\Entity\Scope"/>
+    <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer"/>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor"/>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver"/>
+    <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\Framework\Search\Request\Aggregation\Status"/>
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Field"/>
     <preference for="Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface" type="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver"/>
-    <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
-    <preference for="Magento\Framework\App\PlainTextRequestInterface" type="Magento\Framework\App\Request\Http" />
-    <preference for="Magento\Framework\App\RequestContentInterface" type="Magento\Framework\App\Request\Http" />
-    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
-    <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http" />
-    <preference for="Magento\Framework\App\RouterListInterface" type="Magento\Framework\App\RouterList" />
-    <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Framework\App\FrontController" />
-    <preference for="Magento\Framework\App\CacheInterface" type="Magento\Framework\App\Cache\Proxy" />
-    <preference for="Magento\Framework\App\Cache\StateInterface" type="Magento\Framework\App\Cache\State" />
-    <preference for="Magento\Framework\App\Cache\TypeListInterface" type="Magento\Framework\App\Cache\TypeList" />
-    <preference for="Magento\Framework\App\ObjectManager\ConfigWriterInterface" type="Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem" />
-    <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
-    <preference for="Magento\Framework\View\DesignInterface" type="Magento\Theme\Model\View\Design\Proxy" />
-    <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme" />
-    <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver" />
-    <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
-    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="Magento\Framework\View\Asset\Bundle\Config" />
-    <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
-    <preference for="Magento\Framework\Locale\AvailableLocalesInterface" type="Magento\Framework\Locale\Deployed\Codes" />
-    <preference for="Magento\Framework\Locale\OptionInterface" type="Magento\Framework\Locale\Deployed\Options" />
-    <preference for="Magento\Framework\Lock\LockManagerInterface" type="Magento\Framework\Lock\Proxy" />
-    <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
-    <preference for="Magento\Framework\Api\Search\SearchResultInterface" type="Magento\Framework\Api\Search\SearchResult" />
+    <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http"/>
+    <preference for="Magento\Framework\App\PlainTextRequestInterface" type="Magento\Framework\App\Request\Http"/>
+    <preference for="Magento\Framework\App\RequestContentInterface" type="Magento\Framework\App\Request\Http"/>
+    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor"/>
+    <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http"/>
+    <preference for="Magento\Framework\App\RouterListInterface" type="Magento\Framework\App\RouterList"/>
+    <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Framework\App\FrontController"/>
+    <preference for="Magento\Framework\App\CacheInterface" type="Magento\Framework\App\Cache\Proxy"/>
+    <preference for="Magento\Framework\App\Cache\StateInterface" type="Magento\Framework\App\Cache\State"/>
+    <preference for="Magento\Framework\App\Cache\TypeListInterface" type="Magento\Framework\App\Cache\TypeList"/>
+    <preference for="Magento\Framework\App\ObjectManager\ConfigWriterInterface" type="Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem"/>
+    <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager"/>
+    <preference for="Magento\Framework\View\DesignInterface" type="Magento\Theme\Model\View\Design\Proxy"/>
+    <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme"/>
+    <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver"/>
+    <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config"/>
+    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="Magento\Framework\View\Asset\Bundle\Config"/>
+    <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists"/>
+    <preference for="Magento\Framework\Locale\AvailableLocalesInterface" type="Magento\Framework\Locale\Deployed\Codes"/>
+    <preference for="Magento\Framework\Locale\OptionInterface" type="Magento\Framework\Locale\Deployed\Options"/>
+    <preference for="Magento\Framework\Lock\LockManagerInterface" type="Magento\Framework\Lock\Proxy"/>
+    <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver"/>
+    <preference for="Magento\Framework\Api\Search\SearchResultInterface" type="Magento\Framework\Api\Search\SearchResult"/>
     <preference for="Magento\Framework\Api\Search\SearchCriteriaInterface" type="Magento\Framework\Api\Search\SearchCriteria"/>
-    <preference for="Magento\Framework\Api\Search\DocumentInterface" type="Magento\Framework\Api\Search\Document" />
-    <preference for="Magento\Framework\Api\Search\AggregationInterface" type="Magento\Framework\Search\Response\Aggregation" />
-    <preference for="Magento\Framework\App\RequestSafetyInterface" type="Magento\Framework\App\Request\Http" />
-    <preference for="\Magento\Framework\Setup\SchemaSetupInterface" type="\Magento\Setup\Module\Setup" />
-    <preference for="\Magento\Framework\Setup\ModuleDataSetupInterface" type="\Magento\Setup\Module\DataSetup" />
-    <preference for="Magento\Framework\App\ExceptionHandlerInterface" type="Magento\Framework\App\ExceptionHandler" />
+    <preference for="Magento\Framework\Api\Search\DocumentInterface" type="Magento\Framework\Api\Search\Document"/>
+    <preference for="Magento\Framework\Api\Search\AggregationInterface" type="Magento\Framework\Search\Response\Aggregation"/>
+    <preference for="Magento\Framework\App\RequestSafetyInterface" type="Magento\Framework\App\Request\Http"/>
+    <preference for="\Magento\Framework\Setup\SchemaSetupInterface" type="\Magento\Setup\Module\Setup"/>
+    <preference for="\Magento\Framework\Setup\ModuleDataSetupInterface" type="\Magento\Setup\Module\DataSetup"/>
+    <preference for="Magento\Framework\App\ExceptionHandlerInterface" type="Magento\Framework\App\ExceptionHandler"/>
     <type name="Magento\Store\Model\Store">
         <arguments>
             <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Api\ExtensionAttribute\JoinDataInterface" type="Magento\Framework\Api\ExtensionAttribute\JoinData" />
-    <preference for="Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface" type="Magento\Framework\Api\ExtensionAttribute\JoinProcessor" />
-    <preference for="Magento\Framework\Locale\ConfigInterface" type="Magento\Framework\Locale\Config" />
-    <preference for="Magento\Framework\Notification\NotifierInterface" type="Magento\Framework\Notification\NotifierPool" />
-    <preference for="Magento\Framework\UrlInterface" type="Magento\Framework\Url" />
-    <preference for="Magento\Framework\Url\EncoderInterface" type="Magento\Framework\Url\Encoder" />
-    <preference for="Magento\Framework\Url\DecoderInterface" type="Magento\Framework\Url\Decoder" />
-    <preference for="Magento\Framework\Data\Collection\Db\FetchStrategyInterface" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Query" />
-    <preference for="Magento\Framework\Config\ScopeInterface" type="Magento\Framework\Config\Scope" />
-    <preference for="Magento\Framework\Config\FileResolverInterface" type="Magento\Framework\App\Config\FileResolver" />
-    <preference for="Magento\Framework\Config\CacheInterface" type="Magento\Framework\App\Cache\Type\Config" />
-    <preference for="Magento\Framework\Config\ValidationStateInterface" type="Magento\Framework\App\Arguments\ValidationState" />
-    <preference for="Magento\Framework\Module\ModuleListInterface" type="Magento\Framework\Module\ModuleList" />
+    <preference for="Magento\Framework\Api\ExtensionAttribute\JoinDataInterface" type="Magento\Framework\Api\ExtensionAttribute\JoinData"/>
+    <preference for="Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface" type="Magento\Framework\Api\ExtensionAttribute\JoinProcessor"/>
+    <preference for="Magento\Framework\Locale\ConfigInterface" type="Magento\Framework\Locale\Config"/>
+    <preference for="Magento\Framework\Notification\NotifierInterface" type="Magento\Framework\Notification\NotifierPool"/>
+    <preference for="Magento\Framework\UrlInterface" type="Magento\Framework\Url"/>
+    <preference for="Magento\Framework\Url\EncoderInterface" type="Magento\Framework\Url\Encoder"/>
+    <preference for="Magento\Framework\Url\DecoderInterface" type="Magento\Framework\Url\Decoder"/>
+    <preference for="Magento\Framework\Data\Collection\Db\FetchStrategyInterface" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Query"/>
+    <preference for="Magento\Framework\Config\ScopeInterface" type="Magento\Framework\Config\Scope"/>
+    <preference for="Magento\Framework\Config\FileResolverInterface" type="Magento\Framework\App\Config\FileResolver"/>
+    <preference for="Magento\Framework\Config\CacheInterface" type="Magento\Framework\App\Cache\Type\Config"/>
+    <preference for="Magento\Framework\Config\ValidationStateInterface" type="Magento\Framework\App\Arguments\ValidationState"/>
+    <preference for="Magento\Framework\Module\ModuleListInterface" type="Magento\Framework\Module\ModuleList"/>
     <preference for="Magento\Framework\Component\ComponentRegistrarInterface" type="Magento\Framework\Component\ComponentRegistrar"/>
-    <preference for="Magento\Framework\Event\ConfigInterface" type="Magento\Framework\Event\Config" />
-    <preference for="Magento\Framework\Event\InvokerInterface" type="Magento\Framework\Event\Invoker\InvokerDefault" />
-    <preference for="Magento\Framework\Interception\PluginListInterface" type="Magento\Framework\Interception\PluginList\PluginList" />
-    <preference for="Magento\Framework\Event\ManagerInterface" type="Magento\Framework\Event\Manager\Proxy" />
-    <preference for="Magento\Framework\View\LayoutInterface" type="Magento\Framework\View\Layout" />
-    <preference for="Magento\Framework\View\Layout\ProcessorInterface" type="Magento\Framework\View\Model\Layout\Merge" />
-    <preference for="Magento\Framework\View\Layout\LayoutCacheKeyInterface" type="Magento\Framework\View\Model\Layout\CacheKey" />
-    <preference for="Magento\Framework\View\Url\ConfigInterface" type="Magento\Framework\View\Url\Config" />
-    <preference for="Magento\Framework\App\Route\ConfigInterface" type="Magento\Framework\App\Route\Config" />
-    <preference for="Magento\Framework\App\ResourceConnection\ConfigInterface" type="Magento\Framework\App\ResourceConnection\Config\Proxy" />
+    <preference for="Magento\Framework\Event\ConfigInterface" type="Magento\Framework\Event\Config"/>
+    <preference for="Magento\Framework\Event\InvokerInterface" type="Magento\Framework\Event\Invoker\InvokerDefault"/>
+    <preference for="Magento\Framework\Interception\PluginListInterface" type="Magento\Framework\Interception\PluginList\PluginList"/>
+    <preference for="Magento\Framework\Event\ManagerInterface" type="Magento\Framework\Event\Manager\Proxy"/>
+    <preference for="Magento\Framework\View\LayoutInterface" type="Magento\Framework\View\Layout"/>
+    <preference for="Magento\Framework\View\Layout\ProcessorInterface" type="Magento\Framework\View\Model\Layout\Merge"/>
+    <preference for="Magento\Framework\View\Layout\LayoutCacheKeyInterface" type="Magento\Framework\View\Model\Layout\CacheKey"/>
+    <preference for="Magento\Framework\View\Url\ConfigInterface" type="Magento\Framework\View\Url\Config"/>
+    <preference for="Magento\Framework\App\Route\ConfigInterface" type="Magento\Framework\App\Route\Config"/>
+    <preference for="Magento\Framework\App\ResourceConnection\ConfigInterface" type="Magento\Framework\App\ResourceConnection\Config\Proxy"/>
     <preference for="Magento\Framework\Oauth\OauthInterface" type="Magento\Framework\Oauth\Oauth"/>
-    <preference for="Magento\Framework\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Theme\Model\Theme\Domain\Physical" />
-    <preference for="Magento\Framework\View\Design\Theme\Domain\VirtualInterface" type="Magento\Theme\Model\Theme\Domain\Virtual" />
-    <preference for="Magento\Framework\View\Design\Theme\Domain\StagingInterface" type="Magento\Theme\Model\Theme\Domain\Staging" />
-    <preference for="Magento\Framework\Json\EncoderInterface" type="Magento\Framework\Json\Encoder" />
-    <preference for="Magento\Framework\Json\DecoderInterface" type="Magento\Framework\Json\Decoder" />
-    <preference for="Magento\Framework\Message\ManagerInterface" type="Magento\Framework\Message\Manager" />
-    <preference for="Magento\Framework\App\Config\ValueInterface" type="Magento\Framework\App\Config\Value" />
-    <preference for="Magento\Framework\Interception\ChainInterface" type="Magento\Framework\Interception\Chain\Chain" />
-    <preference for="Magento\Framework\Module\Output\ConfigInterface" type="Magento\Framework\Module\Output\Config" />
-    <preference for="Magento\Framework\View\Design\Theme\CustomizationInterface" type="Magento\Framework\View\Design\Theme\Customization" />
-    <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Framework\View\Asset\Config" />
-    <preference for="Magento\Framework\Image\Adapter\ConfigInterface" type="Magento\Framework\Image\Adapter\Config" />
-    <preference for="Magento\Framework\Image\Adapter\UploadConfigInterface" type="Magento\Framework\Image\Adapter\Config" />
-    <preference for="Magento\Framework\View\Design\Theme\Image\PathInterface" type="Magento\Theme\Model\Theme\Image\Path" />
-    <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Framework\Session\Config" />
-    <preference for="Magento\Framework\Session\SidResolverInterface" type="Magento\Framework\Session\SidResolver\Proxy" />
-    <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="Magento\Framework\Stdlib\Cookie\CookieScope" />
-    <preference for="Magento\Framework\Stdlib\Cookie\CookieReaderInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieReader" />
-    <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
-    <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate" />
-    <preference for="Magento\Framework\Config\ScopeListInterface" type="interceptionConfigScope" />
-    <preference for="Magento\Framework\View\Design\Theme\Label\ListInterface" type="Magento\Theme\Model\ResourceModel\Theme\Collection" />
-    <preference for="Magento\Framework\Mview\ConfigInterface" type="Magento\Framework\Mview\Config" />
-    <preference for="Magento\Framework\Mview\ViewInterface" type="Magento\Framework\Mview\View" />
-    <preference for="Magento\Framework\Mview\ProcessorInterface" type="Magento\Framework\Mview\Processor" />
-    <preference for="Magento\Framework\Mview\View\CollectionInterface" type="Magento\Framework\Mview\View\Collection" />
-    <preference for="Magento\Framework\Mview\View\SubscriptionInterface" type="Magento\Framework\Mview\View\Subscription" />
-    <preference for="Magento\Framework\Mview\View\ChangelogInterface" type="Magento\Framework\Mview\View\Changelog" />
+    <preference for="Magento\Framework\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Theme\Model\Theme\Domain\Physical"/>
+    <preference for="Magento\Framework\View\Design\Theme\Domain\VirtualInterface" type="Magento\Theme\Model\Theme\Domain\Virtual"/>
+    <preference for="Magento\Framework\View\Design\Theme\Domain\StagingInterface" type="Magento\Theme\Model\Theme\Domain\Staging"/>
+    <preference for="Magento\Framework\Json\EncoderInterface" type="Magento\Framework\Json\Encoder"/>
+    <preference for="Magento\Framework\Json\DecoderInterface" type="Magento\Framework\Json\Decoder"/>
+    <preference for="Magento\Framework\Message\ManagerInterface" type="Magento\Framework\Message\Manager"/>
+    <preference for="Magento\Framework\App\Config\ValueInterface" type="Magento\Framework\App\Config\Value"/>
+    <preference for="Magento\Framework\Interception\ChainInterface" type="Magento\Framework\Interception\Chain\Chain"/>
+    <preference for="Magento\Framework\Module\Output\ConfigInterface" type="Magento\Framework\Module\Output\Config"/>
+    <preference for="Magento\Framework\View\Design\Theme\CustomizationInterface" type="Magento\Framework\View\Design\Theme\Customization"/>
+    <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Framework\View\Asset\Config"/>
+    <preference for="Magento\Framework\Image\Adapter\ConfigInterface" type="Magento\Framework\Image\Adapter\Config"/>
+    <preference for="Magento\Framework\Image\Adapter\UploadConfigInterface" type="Magento\Framework\Image\Adapter\Config"/>
+    <preference for="Magento\Framework\View\Design\Theme\Image\PathInterface" type="Magento\Theme\Model\Theme\Image\Path"/>
+    <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Framework\Session\Config"/>
+    <preference for="Magento\Framework\Session\SidResolverInterface" type="Magento\Framework\Session\SidResolver\Proxy"/>
+    <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="Magento\Framework\Stdlib\Cookie\CookieScope"/>
+    <preference for="Magento\Framework\Stdlib\Cookie\CookieReaderInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieReader"/>
+    <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager"/>
+    <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate"/>
+    <preference for="Magento\Framework\Config\ScopeListInterface" type="interceptionConfigScope"/>
+    <preference for="Magento\Framework\View\Design\Theme\Label\ListInterface" type="Magento\Theme\Model\ResourceModel\Theme\Collection"/>
+    <preference for="Magento\Framework\Mview\ConfigInterface" type="Magento\Framework\Mview\Config"/>
+    <preference for="Magento\Framework\Mview\ViewInterface" type="Magento\Framework\Mview\View"/>
+    <preference for="Magento\Framework\Mview\ProcessorInterface" type="Magento\Framework\Mview\Processor"/>
+    <preference for="Magento\Framework\Mview\View\CollectionInterface" type="Magento\Framework\Mview\View\Collection"/>
+    <preference for="Magento\Framework\Mview\View\SubscriptionInterface" type="Magento\Framework\Mview\View\Subscription"/>
+    <preference for="Magento\Framework\Mview\View\ChangelogInterface" type="Magento\Framework\Mview\View\Changelog"/>
     <preference for="Magento\Framework\Api\MetadataServiceInterface" type="Magento\Framework\Api\DefaultMetadataService"/>
     <preference for="Magento\Framework\Api\MetadataObjectInterface" type="Magento\Framework\Api\AttributeMetadata"/>
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
@@ -114,104 +114,104 @@
     <preference for="Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface" type="Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
-    <preference for="Magento\Framework\Acl\Data\CacheInterface" type="Magento\Framework\Acl\Data\Cache" />
-    <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
-    <preference for="Magento\Framework\Setup\ModuleDataSetupInterface" type="Magento\Setup\Module\DataSetup" />
-    <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
-    <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
-    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
-    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Framework\Session\Generic" />
-    <preference for="Magento\Framework\App\Config\ScopeConfigInterface" type="Magento\Framework\App\Config" />
-    <preference for="Magento\Framework\App\Config\ReinitableConfigInterface" type="Magento\Framework\App\ReinitableConfig" />
-    <preference for="Magento\Framework\App\Config\MutableScopeConfigInterface" type="Magento\Framework\App\MutableScopeConfig" />
-    <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer" />
+    <preference for="Magento\Framework\Acl\Data\CacheInterface" type="Magento\Framework\Acl\Data\Cache"/>
+    <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area"/>
+    <preference for="Magento\Framework\Setup\ModuleDataSetupInterface" type="Magento\Setup\Module\DataSetup"/>
+    <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization"/>
+    <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy"/>
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator"/>
+    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Framework\Session\Generic"/>
+    <preference for="Magento\Framework\App\Config\ScopeConfigInterface" type="Magento\Framework\App\Config"/>
+    <preference for="Magento\Framework\App\Config\ReinitableConfigInterface" type="Magento\Framework\App\ReinitableConfig"/>
+    <preference for="Magento\Framework\App\Config\MutableScopeConfigInterface" type="Magento\Framework\App\MutableScopeConfig"/>
+    <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer"/>
     <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\Config\Converter\Dom"/>
-    <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Framework\App\DefaultPath\DefaultPath" />
-    <preference for="Magento\Framework\Encryption\EncryptorInterface" type="Magento\Framework\Encryption\Encryptor" />
-    <preference for="Magento\Framework\Filter\Encrypt\AdapterInterface" type="Magento\Framework\Filter\Encrypt\Basic" />
-    <preference for="Magento\Framework\Cache\ConfigInterface" type="Magento\Framework\Cache\Config" />
-    <preference for="Magento\Framework\View\Asset\MergeStrategyInterface" type="Magento\Framework\View\Asset\MergeStrategy\Direct" />
-    <preference for="Magento\Framework\App\ViewInterface" type="Magento\Framework\App\View" />
-    <preference for="Magento\Framework\Data\Collection\EntityFactoryInterface" type="Magento\Framework\Data\Collection\EntityFactory" />
-    <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
-    <preference for="Magento\Framework\Session\ValidatorInterface" type="Magento\Framework\Session\Validator" />
-    <preference for="Magento\Framework\Session\StorageInterface" type="Magento\Framework\Session\Storage" />
-    <preference for="Magento\Framework\App\Request\DataPersistorInterface" type="Magento\Framework\App\Request\DataPersistor" />
-    <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Framework\Url\RouteParamsResolver" />
-    <preference for="Magento\Framework\Url\RouteParamsPreprocessorInterface" type="Magento\Framework\Url\RouteParamsPreprocessorComposite" />
-    <preference for="Magento\Framework\Url\ModifierInterface" type="Magento\Framework\Url\ModifierComposite" />
-    <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
-    <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
-    <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
-    <preference for="Magento\Framework\Locale\CurrencyInterface" type="Magento\Framework\Locale\Currency" />
-    <preference for="Magento\Framework\CurrencyInterface" type="Magento\Framework\Currency" />
-    <preference for="Magento\Framework\Locale\FormatInterface" type="Magento\Framework\Locale\Format" />
-    <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver" />
-    <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone" />
-    <preference for="Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface" type="Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverter" />
-    <preference for="Magento\Framework\Communication\ConfigInterface" type="Magento\Framework\Communication\Config" />
-    <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\ModuleResource" />
-    <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
-    <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
-    <preference for="Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface" type="Magento\Framework\Model\ResourceModel\Db\TransactionManager" />
-    <preference for="Magento\Framework\Api\Data\ImageContentInterface" type="Magento\Framework\Api\ImageContent" />
-    <preference for="Magento\Framework\Api\ImageContentValidatorInterface" type="Magento\Framework\Api\ImageContentValidator" />
-    <preference for="Magento\Framework\Api\ImageProcessorInterface" type="Magento\Framework\Api\ImageProcessor" />
-    <preference for="Magento\Framework\Code\Reader\ClassReaderInterface" type="Magento\Framework\Code\Reader\ClassReader" />
+    <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Framework\App\DefaultPath\DefaultPath"/>
+    <preference for="Magento\Framework\Encryption\EncryptorInterface" type="Magento\Framework\Encryption\Encryptor"/>
+    <preference for="Magento\Framework\Filter\Encrypt\AdapterInterface" type="Magento\Framework\Filter\Encrypt\Basic"/>
+    <preference for="Magento\Framework\Cache\ConfigInterface" type="Magento\Framework\Cache\Config"/>
+    <preference for="Magento\Framework\View\Asset\MergeStrategyInterface" type="Magento\Framework\View\Asset\MergeStrategy\Direct"/>
+    <preference for="Magento\Framework\App\ViewInterface" type="Magento\Framework\App\View"/>
+    <preference for="Magento\Framework\Data\Collection\EntityFactoryInterface" type="Magento\Framework\Data\Collection\EntityFactory"/>
+    <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline"/>
+    <preference for="Magento\Framework\Session\ValidatorInterface" type="Magento\Framework\Session\Validator"/>
+    <preference for="Magento\Framework\Session\StorageInterface" type="Magento\Framework\Session\Storage"/>
+    <preference for="Magento\Framework\App\Request\DataPersistorInterface" type="Magento\Framework\App\Request\DataPersistor"/>
+    <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Framework\Url\RouteParamsResolver"/>
+    <preference for="Magento\Framework\Url\RouteParamsPreprocessorInterface" type="Magento\Framework\Url\RouteParamsPreprocessorComposite"/>
+    <preference for="Magento\Framework\Url\ModifierInterface" type="Magento\Framework\Url\ModifierComposite"/>
+    <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver"/>
+    <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver"/>
+    <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy"/>
+    <preference for="Magento\Framework\Locale\CurrencyInterface" type="Magento\Framework\Locale\Currency"/>
+    <preference for="Magento\Framework\CurrencyInterface" type="Magento\Framework\Currency"/>
+    <preference for="Magento\Framework\Locale\FormatInterface" type="Magento\Framework\Locale\Format"/>
+    <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver"/>
+    <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone"/>
+    <preference for="Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface" type="Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverter"/>
+    <preference for="Magento\Framework\Communication\ConfigInterface" type="Magento\Framework\Communication\Config"/>
+    <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\ModuleResource"/>
+    <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base"/>
+    <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue"/>
+    <preference for="Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface" type="Magento\Framework\Model\ResourceModel\Db\TransactionManager"/>
+    <preference for="Magento\Framework\Api\Data\ImageContentInterface" type="Magento\Framework\Api\ImageContent"/>
+    <preference for="Magento\Framework\Api\ImageContentValidatorInterface" type="Magento\Framework\Api\ImageContentValidator"/>
+    <preference for="Magento\Framework\Api\ImageProcessorInterface" type="Magento\Framework\Api\ImageProcessor"/>
+    <preference for="Magento\Framework\Code\Reader\ClassReaderInterface" type="Magento\Framework\Code\Reader\ClassReader"/>
     <preference for="Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface" type="Magento\Framework\Stdlib\DateTime\DateTimeFormatter"/>
     <preference for="Magento\Framework\Api\Search\SearchInterface" type="Magento\Framework\Search\Search"/>
-    <preference for="Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple" />
+    <preference for="Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple"/>
     <preference for="Cm\RedisSession\Handler\ConfigInterface" type="Magento\Framework\Session\SaveHandler\Redis\Config"/>
     <preference for="Cm\RedisSession\Handler\LoggerInterface" type="Magento\Framework\Session\SaveHandler\Redis\Logger"/>
     <preference for="Magento\Framework\EntityManager\MapperInterface" type="Magento\Framework\EntityManager\CompositeMapper"/>
     <preference for="Magento\Framework\Console\CommandListInterface" type="Magento\Framework\Console\CommandList"/>
-    <preference for="Magento\Framework\DataObject\IdentityGeneratorInterface" type="Magento\Framework\DataObject\IdentityService" />
-    <preference for="Magento\Framework\Serialize\SerializerInterface" type="Magento\Framework\Serialize\Serializer\Json" />
+    <preference for="Magento\Framework\DataObject\IdentityGeneratorInterface" type="Magento\Framework\DataObject\IdentityService"/>
+    <preference for="Magento\Framework\Serialize\SerializerInterface" type="Magento\Framework\Serialize\Serializer\Json"/>
     <preference for="Magento\Framework\App\Scope\ValidatorInterface" type="Magento\Framework\App\Scope\Validator"/>
-    <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Framework\App\ScopeResolver" />
-    <preference for="Magento\Framework\App\ScopeInterface" type="Magento\Framework\App\ScopeDefault" />
-    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Framework\View\Design\Theme\ThemeList" />
-    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Framework\View\Design\Theme\ThemeProvider" />
+    <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Framework\App\ScopeResolver"/>
+    <preference for="Magento\Framework\App\ScopeInterface" type="Magento\Framework\App\ScopeDefault"/>
+    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Framework\View\Design\Theme\ThemeList"/>
+    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Framework\View\Design\Theme\ThemeProvider"/>
     <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Framework\View\Asset\PreProcessor\ChainFactory"/>
-    <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler" />
+    <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler"/>
     <preference for="Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface" type="Magento\Framework\View\Asset\PreProcessor\Helper\Sort"/>
     <preference for="Magento\Framework\App\View\Deployment\Version\StorageInterface" type="Magento\Framework\App\View\Deployment\Version\Storage\File"/>
-    <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
-    <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
-    <preference for="Magento\Framework\App\FeedInterface" type="Magento\Framework\App\Feed" />
-    <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory" />
-    <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
+    <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon"/>
+    <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator"/>
+    <preference for="Magento\Framework\App\FeedInterface" type="Magento\Framework\App\Feed"/>
+    <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory"/>
+    <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider"/>
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
-    <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader" />
-    <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
-    <preference for="Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface" type="Magento\Framework\Setup\Declaration\Schema\SchemaConfig" />
-    <preference for="Magento\Framework\Setup\Declaration\Schema\DataSavior\DumpAccessorInterface" type="Magento\Framework\Setup\Declaration\Schema\FileSystem\Csv" />
-    <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherPool" />
-    <preference for="Magento\Framework\MessageQueue\BulkPublisherInterface" type="Magento\Framework\MessageQueue\Bulk\PublisherPool" />
-    <preference for="Magento\Framework\MessageQueue\MessageIdGeneratorInterface" type="Magento\Framework\MessageQueue\MessageIdGenerator" />
-    <preference for="Magento\Framework\MessageQueue\Consumer\ConfigInterface" type="Magento\Framework\MessageQueue\Consumer\Config" />
-    <preference for="Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInterface" type="Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler" />
-    <preference for="Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface" type="Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem" />
-    <preference for="Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface" type="Magento\Framework\MessageQueue\Consumer\Config\CompositeValidator" />
-    <preference for="Magento\Framework\MessageQueue\Consumer\Config\ReaderInterface" type="Magento\Framework\MessageQueue\Consumer\Config\CompositeReader" />
-    <preference for="Magento\Framework\Amqp\Topology\BindingInstallerInterface" type="Magento\Framework\Amqp\Topology\BindingInstaller" />
-    <preference for="Magento\Framework\MessageQueue\Topology\ConfigInterface" type="Magento\Framework\MessageQueue\Topology\Config" />
-    <preference for="Magento\Framework\MessageQueue\Topology\Config\ReaderInterface" type="Magento\Framework\MessageQueue\Topology\Config\CompositeReader" />
-    <preference for="Magento\Framework\MessageQueue\Topology\Config\ValidatorInterface" type="Magento\Framework\MessageQueue\Topology\Config\CompositeValidator" />
-    <preference for="Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface" type="Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem" />
-    <preference for="Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface" type="Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding" />
-    <preference for="Magento\Framework\MessageQueue\Publisher\ConfigInterface" type="Magento\Framework\MessageQueue\Publisher\Config" />
-    <preference for="Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface" type="Magento\Framework\MessageQueue\Publisher\Config\CompositeReader" />
-    <preference for="Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface" type="Magento\Framework\MessageQueue\Publisher\Config\CompositeValidator" />
-    <preference for="Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface" type="Magento\Framework\MessageQueue\Publisher\Config\PublisherConnection" />
-    <preference for="Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemInterface" type="Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem" />
-    <preference for="Magento\Framework\MessageQueue\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\ExchangeFactory" />
-    <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory" />
-    <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
+    <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader"/>
+    <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter"/>
+    <preference for="Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface" type="Magento\Framework\Setup\Declaration\Schema\SchemaConfig"/>
+    <preference for="Magento\Framework\Setup\Declaration\Schema\DataSavior\DumpAccessorInterface" type="Magento\Framework\Setup\Declaration\Schema\FileSystem\Csv"/>
+    <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherPool"/>
+    <preference for="Magento\Framework\MessageQueue\BulkPublisherInterface" type="Magento\Framework\MessageQueue\Bulk\PublisherPool"/>
+    <preference for="Magento\Framework\MessageQueue\MessageIdGeneratorInterface" type="Magento\Framework\MessageQueue\MessageIdGenerator"/>
+    <preference for="Magento\Framework\MessageQueue\Consumer\ConfigInterface" type="Magento\Framework\MessageQueue\Consumer\Config"/>
+    <preference for="Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInterface" type="Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler"/>
+    <preference for="Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface" type="Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem"/>
+    <preference for="Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface" type="Magento\Framework\MessageQueue\Consumer\Config\CompositeValidator"/>
+    <preference for="Magento\Framework\MessageQueue\Consumer\Config\ReaderInterface" type="Magento\Framework\MessageQueue\Consumer\Config\CompositeReader"/>
+    <preference for="Magento\Framework\Amqp\Topology\BindingInstallerInterface" type="Magento\Framework\Amqp\Topology\BindingInstaller"/>
+    <preference for="Magento\Framework\MessageQueue\Topology\ConfigInterface" type="Magento\Framework\MessageQueue\Topology\Config"/>
+    <preference for="Magento\Framework\MessageQueue\Topology\Config\ReaderInterface" type="Magento\Framework\MessageQueue\Topology\Config\CompositeReader"/>
+    <preference for="Magento\Framework\MessageQueue\Topology\Config\ValidatorInterface" type="Magento\Framework\MessageQueue\Topology\Config\CompositeValidator"/>
+    <preference for="Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface" type="Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem"/>
+    <preference for="Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface" type="Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding"/>
+    <preference for="Magento\Framework\MessageQueue\Publisher\ConfigInterface" type="Magento\Framework\MessageQueue\Publisher\Config"/>
+    <preference for="Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface" type="Magento\Framework\MessageQueue\Publisher\Config\CompositeReader"/>
+    <preference for="Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface" type="Magento\Framework\MessageQueue\Publisher\Config\CompositeValidator"/>
+    <preference for="Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface" type="Magento\Framework\MessageQueue\Publisher\Config\PublisherConnection"/>
+    <preference for="Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemInterface" type="Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem"/>
+    <preference for="Magento\Framework\MessageQueue\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\ExchangeFactory"/>
+    <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory"/>
+    <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory"/>
     <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
-    <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
-    <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
+    <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl"/>
+    <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false"/>
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
             <argument name="aclBuilder" xsi:type="object">Magento\Framework\Acl\Builder\Proxy</argument>
@@ -227,7 +227,7 @@
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
-    <preference for="Magento\AsynchronousOperations\Model\ConfigInterface" type="Magento\WebapiAsync\Model\Config\Proxy" />
+    <preference for="Magento\AsynchronousOperations\Model\ConfigInterface" type="Magento\WebapiAsync\Model\Config\Proxy"/>
     <type name="Magento\Framework\Communication\Config\CompositeReader">
         <arguments>
             <argument name="readers" xsi:type="array">
@@ -270,17 +270,17 @@
             <argument name="actionValidator" xsi:type="object">Magento\Framework\Model\ActionValidator\RemoveAction\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Api\FilterBuilder" shared="false" />
-    <type name="Magento\Framework\Api\SearchCriteriaBuilder" shared="false" />
-    <type name="Magento\Framework\View\Layout\Builder" shared="false" />
-    <type name="Magento\Framework\View\Page\Builder" shared="false" />
+    <type name="Magento\Framework\Api\FilterBuilder" shared="false"/>
+    <type name="Magento\Framework\Api\SearchCriteriaBuilder" shared="false"/>
+    <type name="Magento\Framework\View\Layout\Builder" shared="false"/>
+    <type name="Magento\Framework\View\Page\Builder" shared="false"/>
     <type name="Magento\Framework\Message\Manager">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Framework\Message\Session\Proxy</argument>
             <argument name="exceptionMessageFactory" xsi:type="object">Magento\Framework\Message\ExceptionMessageLookupFactory</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\BlockPool" shared="false" />
+    <type name="Magento\Framework\View\BlockPool" shared="false"/>
     <type name="Magento\Framework\App\Request\Http">
         <arguments>
             <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
@@ -291,7 +291,7 @@
             <argument name="sessionConfig" xsi:type="object">Magento\Framework\Session\Config\ConfigInterface\Proxy</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Session\SaveHandlerInterface" type="Magento\Framework\Session\SaveHandler" />
+    <preference for="Magento\Framework\Session\SaveHandlerInterface" type="Magento\Framework\Session\SaveHandler"/>
     <type name="Magento\Framework\Session\SaveHandlerFactory">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -384,14 +384,14 @@
             <argument name="translateInline" xsi:type="object">Magento\Framework\Translate\InlineInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Data\Structure" shared="false" />
-    <type name="Magento\Framework\View\Layout\Data\Structure" shared="false" />
+    <type name="Magento\Framework\Data\Structure" shared="false"/>
+    <type name="Magento\Framework\View\Layout\Data\Structure" shared="false"/>
     <type name="Magento\Theme\Model\View\Design">
         <arguments>
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Acl" shared="false" />
+    <type name="Magento\Framework\Acl" shared="false"/>
     <type name="Magento\Framework\App\ObjectManager\ConfigLoader">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
@@ -687,7 +687,7 @@
             <argument name="stateCollection" xsi:type="object" shared="false">Magento\Framework\Mview\View\State\CollectionInterface</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\View\Asset\Publisher" shared="false" />
+    <type name="Magento\Framework\App\View\Asset\Publisher" shared="false"/>
     <type name="Magento\Framework\View\Asset\PreProcessor\FileNameResolver">
         <arguments>
             <argument name="alternativeSources" xsi:type="array">
@@ -796,8 +796,8 @@
             <argument name="parser" xsi:type="object">Magento\Framework\Translate\Inline\ParserInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Layout\ScheduledStructure" shared="false" />
-    <type name="Magento\Framework\View\Page\Config\Structure" shared="false" />
+    <type name="Magento\Framework\View\Layout\ScheduledStructure" shared="false"/>
+    <type name="Magento\Framework\View\Page\Config\Structure" shared="false"/>
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container">
         <arguments>
             <argument name="buckets" xsi:type="array">
@@ -850,7 +850,7 @@
             <argument name="reader" xsi:type="object">Magento\Framework\Event\Config\Reader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Asset\Collection" shared="false" />
+    <type name="Magento\Framework\View\Asset\Collection" shared="false"/>
     <virtualType name="layoutFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
         <arguments>
             <argument name="subDir" xsi:type="string">layout</argument>
@@ -1205,7 +1205,7 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
-    <type name="Magento\Server\Reflection" shared="false" />
+    <type name="Magento\Server\Reflection" shared="false"/>
     <type name="Magento\Framework\Reflection\DataObjectProcessor">
         <arguments>
             <argument name="extensionAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\ExtensionAttributesProcessor\Proxy</argument>
@@ -1321,7 +1321,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor" />
+    <preference for="Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor"/>
     <type name="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
@@ -1736,13 +1736,13 @@
         </arguments>
     </type>
     <!-- \Magento\Framework\MessageQueue\Bulk\PublisherPool is @api -->
-    <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool" />
+    <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool"/>
     <type name="Magento\Framework\Session\Config">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
         </arguments>
     </type>
-    <virtualType name="CsrfRequestValidator" type="Magento\Framework\App\Request\CsrfValidator" />
+    <virtualType name="CsrfRequestValidator" type="Magento\Framework\App\Request\CsrfValidator"/>
     <virtualType name="RequestValidator" type="Magento\Framework\App\Request\CompositeValidator">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -1753,7 +1753,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <preference for="Magento\Framework\App\Request\ValidatorInterface" type="RequestValidator" />
+    <preference for="Magento\Framework\App\Request\ValidatorInterface" type="RequestValidator"/>
     <type name="Magento\Framework\App\Request\HttpMethodMap">
         <arguments>
             <argument name="map" xsi:type="array">
@@ -1784,19 +1784,19 @@
             <argument name="delayTimeout" xsi:type="number">20</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\HTTP\AsyncClientInterface" type="Magento\Framework\HTTP\AsyncClient\GuzzleAsyncClient" />
+    <preference for="Magento\Framework\HTTP\AsyncClientInterface" type="Magento\Framework\HTTP\AsyncClient\GuzzleAsyncClient"/>
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompare"/>
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPut"/>
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillRead"/>
     <preference for="Magento\Framework\MessageQueue\CallbackInvokerInterface" type="Magento\Framework\MessageQueue\CallbackInvoker"/>
     <preference for="Magento\Framework\Mail\EmailMessageInterface"
-                type="Magento\Framework\Mail\EmailMessage" />
+                type="Magento\Framework\Mail\EmailMessage"/>
     <preference for="Magento\Framework\Mail\MimeMessageInterface"
-                type="Magento\Framework\Mail\MimeMessage" />
+                type="Magento\Framework\Mail\MimeMessage"/>
     <preference for="Magento\Framework\Mail\MimePartInterface"
-                type="Magento\Framework\Mail\MimePart" />
+                type="Magento\Framework\Mail\MimePart"/>
     <type name="Magento\Framework\DB\Adapter\AdapterInterface">
-        <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
+        <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks"/>
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
     <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>

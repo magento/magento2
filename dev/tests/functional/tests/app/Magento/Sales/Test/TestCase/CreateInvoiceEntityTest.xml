@@ -23,16 +23,16 @@
             <data name="expectedOrdersQuantityOnDashboard" xsi:type="number">1</data>
             <data name="argumentsList/0" xsi:type="string">Quantity</data>
             <data name="configData" xsi:type="string">checkmo,enable_charts</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceWithShipmentSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedOrderOnDashboard" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGraphImageIsVisible" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertNoInvoiceButton" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesTab" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertNoShipButton" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsTab" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceWithShipmentSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedOrderOnDashboard"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGraphImageIsVisible"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertNoInvoiceButton"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesTab"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertNoShipButton"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsTab"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems"/>
         </variation>
         <variation name="CreateInvoiceEntityTestVariation2">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -55,11 +55,11 @@
                 </item>
             </data>
             <data name="configData" xsi:type="string">banktransfer</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesTab" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesTab"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend"/>
         </variation>
         <variation name="CreateInvoiceEntityTestVariationWithCashOnDeliveryPaymentMethod">
         <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -82,8 +82,8 @@
                 </item>
             </data>
             <data name="configData" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend"/>
         </variation>
         <variation name="CreateInvoiceEntityTestVariationWithPurchaseOrderPaymentMethod">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -107,8 +107,8 @@
                 </item>
             </data>
             <data name="configData" xsi:type="string">purchaseorder</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend"/>
         </variation>
         <variation name="CreateInvoiceEntityTestVariationWithZeroSubtotalCheckout">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -133,8 +133,8 @@
                 </item>
             </data>
             <data name="configData" xsi:type="string">zero_subtotal_checkout, freeshipping</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend"/>
         </variation>
     </testCase>
 </config>

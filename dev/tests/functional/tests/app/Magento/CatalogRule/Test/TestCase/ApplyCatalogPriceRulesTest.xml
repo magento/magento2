@@ -18,9 +18,9 @@
             <data name="productPrice/0/special" xsi:type="string">15</data>
             <data name="productPrice/0/sub_total" xsi:type="string">15</data>
             <data name="productPrice/0/regular" xsi:type="string">50</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
         </variation>
         <variation name="ApplySeveralCatalogRules_WithStopFurtherRules">
             <data name="catalogRules/0/dataset" xsi:type="string">catalog_price_rule_priority_0</data>
@@ -33,9 +33,9 @@
             <data name="productPrice/0/special" xsi:type="string">20</data>
             <data name="productPrice/0/sub_total" xsi:type="string">20</data>
             <data name="productPrice/0/regular" xsi:type="string">50</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
         </variation>
         <variation name="ApplyCatalogRules_WithExpireDate" summary="Apply Catalog Price rule with Expire Date and Catalog Price Rule with Start Date">
             <data name="catalogRules/0/dataset" xsi:type="string">active_catalog_price_rule_with_conditions</data>
@@ -47,9 +47,9 @@
             <data name="productPrice/0/special" xsi:type="string">45</data>
             <data name="productPrice/0/sub_total" xsi:type="string">45</data>
             <data name="productPrice/0/regular" xsi:type="string">50</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
         </variation>
         <variation name="ApplyCatalogRule_ForGuestUsers_ByProductAttribute_AdjustPriceToValue" summary="Apply Catalog Price Rule with Product Attribute in Condition" ticketId="MAGETWO-30095">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
@@ -67,9 +67,9 @@
             <data name="productPrice/0/special" xsi:type="string">99.99</data>
             <data name="productPrice/0/sub_total" xsi:type="string">99.99</data>
             <data name="productPrice/0/regular" xsi:type="string">560</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
         </variation>
         <variation name="ApplyCatalogRule_ForGuestUsers_AdjustPriceToPercentage" summary="Apply Catalog Price Rule for Guest Users with Adjust Price to Percentage" ticketId="MAGETWO-23036">
             <data name="products/0" xsi:type="string">catalogProductSimple::MAGETWO-23036</data>
@@ -86,9 +86,9 @@
             <data name="productPrice/0/special" xsi:type="string">90</data>
             <data name="productPrice/0/sub_total" xsi:type="string">90</data>
             <data name="productPrice/0/regular" xsi:type="string">100</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
         </variation>
         <variation name="ApplyCatalogRule_ForNewCustomerGroup" summary="Apply Catalog Price Rules to Specific Customer Group" ticketId="MAGETWO-12908">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -108,12 +108,12 @@
             <data name="productPrice/0/regular" xsi:type="string">10</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
         </variation>
         <variation name="ApplyCatalogRuleForSimpleProductWithCustomOptions" summary="Apply Catalog Rule for Simple Product With Custom Options" ticketId="MAGETWO-23038">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -146,8 +146,8 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
             <data name="payment/method" xsi:type="string">free</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout"/>
         </variation>
         <variation name="ApplyCatalogRuleForSimpleProductAndConfigurableProduct" summary="Apply Catalog Rule For Simple Product And Configurable Product" ticketId="MAGETWO-20616">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -175,8 +175,8 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
         </variation>
         <variation name="ApplyCatalogRuleForSimpleProductAndFixedMethod" summary="Apply Catalog Rule For Simple Product And Fixed Shipping Method" ticketId="MAGETWO-23039">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -196,8 +196,8 @@
             <data name="productPrice/0/sub_total" xsi:type="string">125</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
         </variation>
     </testCase>
 </config>

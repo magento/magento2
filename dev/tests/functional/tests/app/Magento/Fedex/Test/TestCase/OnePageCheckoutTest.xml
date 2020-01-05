@@ -21,10 +21,10 @@
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, fedex, shipping_origin_US_CA</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>
         <variation name="OnePageCheckoutFedexTestVariation2" summary="Use FedEx Online Shipping Carrier on Checkout as a Registered Customer" ticketId="MAGETWO-12849">
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
@@ -40,10 +40,10 @@
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, fedex, shipping_origin_US_CA</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>
     </testCase>
 </config>

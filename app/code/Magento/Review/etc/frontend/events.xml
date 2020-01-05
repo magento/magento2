@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="catalog_block_product_list_collection">
-        <observer name="review" instance="Magento\Review\Observer\CatalogProductListCollectionAppendSummaryFieldsObserver" shared="false" />
+        <observer name="review" instance="Magento\Review\Observer\CatalogProductListCollectionAppendSummaryFieldsObserver" shared="false"/>
     </event>
     <event name="controller_action_predispatch_review">
-        <observer name="catalog_review_enabled" instance="Magento\Review\Observer\PredispatchReviewObserver" />
+        <observer name="catalog_review_enabled" instance="Magento\Review\Observer\PredispatchReviewObserver"/>
     </event>
 </config>

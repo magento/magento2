@@ -63,7 +63,7 @@
         </actionGroup>
         <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
         <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="assertSuccessMessage">
-            <argument name="message" value="Thank you for registering with {{customStoreGroup.name}}." />
+            <argument name="message" value="Thank you for registering with {{customStoreGroup.name}}."/>
         </actionGroup>
 
         <!--Open product page and add to cart-->

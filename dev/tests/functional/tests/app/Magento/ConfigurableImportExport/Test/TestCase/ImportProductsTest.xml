@@ -9,11 +9,11 @@
     <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductsTest" summary="Import Configurable Products with Replace Behavior">
         <variation name="ImportProductVariation2" ticketId="MAGETWO-47719" summary="Import Configurable Product assigned to the default website with Replace Behavior">
             <data name="import/data/import_file/entities/2" xsi:type="string">configurableProduct::with_one_attribute</data>
-            <constraint name="Magento\ConfigurableImportExport\Test\Constraint\AssertImportedConfigurableProducts" />
+            <constraint name="Magento\ConfigurableImportExport\Test\Constraint\AssertImportedConfigurableProducts"/>
         </variation>
         <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Import Configurable Product with Replace Behavior">
             <data name="import/data/import_file/entities/1" xsi:type="string">configurableProduct::with_one_attribute</data>
-            <constraint name="Magento\ConfigurableImportExport\Test\Constraint\AssertImportedConfigurableProducts" />
+            <constraint name="Magento\ConfigurableImportExport\Test\Constraint\AssertImportedConfigurableProducts"/>
         </variation>
     </testCase>
 </config>

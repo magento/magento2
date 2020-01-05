@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="top.search">
-            <block class="Magento\Framework\View\Element\Template" name="advanced-search-link" template="Magento_CatalogSearch::advanced/link.phtml" />
+            <block class="Magento\Framework\View\Element\Template" name="advanced-search-link" template="Magento_CatalogSearch::advanced/link.phtml"/>
         </referenceBlock>
         <referenceBlock name="footer_links">
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="catalog-search-advanced-link">

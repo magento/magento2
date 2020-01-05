@@ -16,10 +16,10 @@
             <field name="description" handler="default" xsi:type="searchable">
                 <filter class="Magento\Framework\Search\Index\Filter\LowercaseFilter"/>
             </field>
-            <field name="visibility" handler="default" xsi:type="filterable" dataType="int" />
+            <field name="visibility" handler="default" xsi:type="filterable" dataType="int"/>
         </fieldset>
         <fieldset name="related" source="Magento\Framework\Search\Index\ResourceModel" provider="Magento\Framework\Search\Index\Fieldset\Default">
-            <reference fieldset="default" from="main_id" to="current_id" />
+            <reference fieldset="default" from="main_id" to="current_id"/>
             <field name="description_2" handler="default" xsi:type="searchable">
                 <filter class="Magento\Framework\Search\Index\Filter\LowercaseFilter"/>
             </field>
@@ -37,7 +37,7 @@
             <field name="description" handler="default" xsi:type="searchable">
                 <filter class="Magento\Framework\Search\Index\Filter\LowercaseFilter"/>
             </field>
-            <field name="visibility" handler="default" xsi:type="filterable" dataType="int" />
+            <field name="visibility" handler="default" xsi:type="filterable" dataType="int"/>
         </fieldset>
         <structure class="Magento\Framework\Search\Index\Structure"/>
         <saveHandler class="Magento\Framework\Search\Index\SaveHandler"/>

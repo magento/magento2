@@ -52,14 +52,14 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProductInMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="productPrice" value="$10.00"/>
-            <argument name="cartSubtotal" value="$30.00" />
+            <argument name="cartSubtotal" value="$30.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
 
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertVirtualProductInMiniCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
             <argument name="productPrice" value="$20.00"/>
-            <argument name="cartSubtotal" value="$30.00" />
+            <argument name="cartSubtotal" value="$30.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
 

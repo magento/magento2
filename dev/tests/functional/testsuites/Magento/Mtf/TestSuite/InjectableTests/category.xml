@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
     <rule scope="testsuite">
         <allow>
-            <namespace value="Magento\Catalog\Test\TestCase\Category" />
+            <namespace value="Magento\Catalog\Test\TestCase\Category"/>
         </allow>
     </rule>
 </config>

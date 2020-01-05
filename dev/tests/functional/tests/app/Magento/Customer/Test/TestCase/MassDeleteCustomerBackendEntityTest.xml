@@ -12,9 +12,9 @@
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="customersQty" xsi:type="string">3</data>
             <data name="customersQtyToDelete" xsi:type="string">2</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerMassDeleteSuccessMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerMassDeleteNotInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerMassDeleteInGrid" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerMassDeleteSuccessMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerMassDeleteNotInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerMassDeleteInGrid"/>
         </variation>
     </testCase>
 </config>

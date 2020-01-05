@@ -9,6 +9,6 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontCustomerWishlistPage" url="/wishlist/" area="storefront" module="Magento_Wishlist">
-        <section name="StorefrontCustomerWishlistSection" />
+        <section name="StorefrontCustomerWishlistSection"/>
     </page>
 </pages>

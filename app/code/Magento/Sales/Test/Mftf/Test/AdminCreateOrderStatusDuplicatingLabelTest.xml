@@ -14,7 +14,7 @@
             <title value="Create order status with duplicating label"/>
             <description value="Create an order status and get success message"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-15433" />
+            <testCaseId value="MC-15433"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>

@@ -36,7 +36,7 @@
         </after>
 
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!--Create bundle product-->
@@ -71,7 +71,7 @@
 
         <!--Creating Second bundle product-->
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage2" />
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage2"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad2"/>
 
         <!--Create bundle product 2-->

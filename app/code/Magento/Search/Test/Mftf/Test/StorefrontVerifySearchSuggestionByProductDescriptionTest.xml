@@ -84,7 +84,7 @@
         </actionGroup>
         <!-- Assert Search Term in grid -->
         <comment userInput="Check is search term in grid or not" stepKey="isSearchTermInGridComment"/>
-        <see stepKey="seeSearchTermInGrid" selector="{{AdminCatalogSearchTermIndexSection.gridRow}}" userInput="{{ApiProductDescription.value}}" />
+        <see stepKey="seeSearchTermInGrid" selector="{{AdminCatalogSearchTermIndexSection.gridRow}}" userInput="{{ApiProductDescription.value}}"/>
         <see selector="{{AdminCatalogSearchTermIndexSection.numberOfSearchTermResults}}"  userInput="1"  stepKey="seeNumberOfSearchTermResultInGrid"/>
     </test>
 </tests>

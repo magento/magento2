@@ -10,8 +10,8 @@
         <variation name="ConfigureSecureUrlsHttpForStorefrontHttpsForAdmin" summary="http for Storefront, https for Admin" ticketId="MAGETWO-35408">
             <data name="configData" xsi:type="string">disable_https_frontend_admin</data>
             <data name="navMenuPath" xsi:type="string">Marketing>Catalog Price Rule</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertHttpUsedOnFrontend" />
-            <constraint name="Magento\Backend\Test\Constraint\AssertHttpsUsedOnBackend" />
+            <constraint name="Magento\Backend\Test\Constraint\AssertHttpUsedOnFrontend"/>
+            <constraint name="Magento\Backend\Test\Constraint\AssertHttpsUsedOnBackend"/>
         </variation>
     </testCase>
 </config>

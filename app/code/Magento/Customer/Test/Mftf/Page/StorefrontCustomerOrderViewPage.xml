@@ -9,6 +9,6 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontCustomerOrderViewPage" url="sales/order/view/order_id/{{var1}}" area="storefront" module="Magento_Customer" parameterized="true">
-        <section name="StorefrontCustomerOrderSection" />
+        <section name="StorefrontCustomerOrderSection"/>
     </page>
 </pages>

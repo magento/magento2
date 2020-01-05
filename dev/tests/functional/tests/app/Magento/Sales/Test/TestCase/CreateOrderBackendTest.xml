@@ -20,9 +20,9 @@
             </data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <data name="configData" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock"/>
         </variation>
         <variation name="CreateOrderBackendTestVariation19" summary="'Reorder' button is not visible for customer if ordered item is out of stock" ticketId="MAGETWO-63924">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -37,9 +37,9 @@
             </data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <data name="configData" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertReorderButtonIsNotVisibleOnFrontend" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertReorderButtonIsNotVisibleOnFrontend"/>
         </variation>
     </testCase>
 </config>

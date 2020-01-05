@@ -38,7 +38,7 @@
         <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillRuleName"/>
         <fillField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="fillPostCode"/>
         <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="France" stepKey="selectCountry1"/>
-        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="Val-d'Oise" stepKey="selectState" />
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="Val-d'Oise" stepKey="selectState"/>
         <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="999" stepKey="fillRate"/>
         <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
@@ -48,7 +48,7 @@
         <!-- Create a tax rate for large postcodes and verify we see expected values on the tax rate grid page -->
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillTaxIdentifierField2"/>
-        <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="France" stepKey="selectCountry2" />
+        <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="France" stepKey="selectCountry2"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByPostCode}}" userInput="*" stepKey="seeTaxPostCode1"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
         <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow3"/>

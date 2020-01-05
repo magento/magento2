@@ -10,9 +10,9 @@
         <variation name="DeleteSearchTermEntityTestVariation1">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="searchTerm/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessDeleteMessage" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotInGrid" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotOnFrontend" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessDeleteMessage"/>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotInGrid"/>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotOnFrontend"/>
         </variation>
     </testCase>
 </config>

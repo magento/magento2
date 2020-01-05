@@ -14,15 +14,15 @@
              repository_class="Magento\CatalogSearch\Test\Repository\CatalogSearchQuery"
              handler_interface="Magento\CatalogSearch\Test\Handler\CatalogSearchQuery\CatalogSearchQueryInterface"
              class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery">
-        <field name="query_id" is_required="1" />
-        <field name="query_text" is_required="" source="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\QueryText" />
-        <field name="num_results" is_required="" />
-        <field name="popularity" is_required="" />
-        <field name="redirect" is_required="" />
-        <field name="store_id" is_required="" />
-        <field name="display_in_terms" is_required="" />
-        <field name="is_active" is_required="" />
-        <field name="is_processed" is_required="" />
-        <field name="updated_at" is_required="" />
+        <field name="query_id" is_required="1"/>
+        <field name="query_text" is_required="" source="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\QueryText"/>
+        <field name="num_results" is_required=""/>
+        <field name="popularity" is_required=""/>
+        <field name="redirect" is_required=""/>
+        <field name="store_id" is_required=""/>
+        <field name="display_in_terms" is_required=""/>
+        <field name="is_active" is_required=""/>
+        <field name="is_processed" is_required=""/>
+        <field name="updated_at" is_required=""/>
     </fixture>
 </config>

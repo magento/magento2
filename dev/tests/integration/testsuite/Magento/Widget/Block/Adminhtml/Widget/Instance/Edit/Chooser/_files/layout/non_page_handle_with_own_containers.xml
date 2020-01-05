@@ -5,6 +5,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <container name="container_one" label="Container One"/>
 </layout>

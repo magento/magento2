@@ -10,7 +10,7 @@
         <attribute name="class" value="page-with-filter"/>
         <referenceContainer name="sidebar.main">
             <block class="Magento\LayeredNavigation\Block\Navigation\Search" name="catalogsearch.leftnav" before="-" template="Magento_LayeredNavigation::layer/view.phtml">
-                <block class="Magento\LayeredNavigation\Block\Navigation\State" name="catalogsearch.navigation.state" as="state" />
+                <block class="Magento\LayeredNavigation\Block\Navigation\State" name="catalogsearch.navigation.state" as="state"/>
                 <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="catalogsearch.navigation.renderer" as="renderer" template="Magento_LayeredNavigation::layer/filter.phtml"/>
             </block>
         </referenceContainer>

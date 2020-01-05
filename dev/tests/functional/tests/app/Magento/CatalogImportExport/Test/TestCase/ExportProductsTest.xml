@@ -42,7 +42,7 @@
                 <item name="4" xsi:type="string">price</item>
                 <item name="5" xsi:type="string">url_key</item>
             </data>
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertExportProductDate" />
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertExportProductDate"/>
         </variation>
         <variation name="ExportProductsTestVariation3" summary="Export simple product with custom attribute" ticketId="MAGETWO-46121">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>

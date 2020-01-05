@@ -24,8 +24,8 @@
 
         <before>
             <!-- Enable Free Shipping Method and set Minimum Order Amount to 100-->
-            <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.enabled}}" stepKey="enableFreeShippingMethod" />
-            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.hundred}}" stepKey="setFreeShippingMethodMinimumOrderAmountToBe100" />
+            <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.enabled}}" stepKey="enableFreeShippingMethod"/>
+            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.hundred}}" stepKey="setFreeShippingMethodMinimumOrderAmountToBe100"/>
 
             <!--Set Fedex configs data-->
             <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} {{AdminFedexEnableForCheckoutConfigData.value}}" stepKey="enableCheckout"/>
@@ -72,8 +72,8 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault" />
-            <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.disabled}}" stepKey="disableFreeShippingMethod" />
+            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault"/>
+            <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.disabled}}" stepKey="disableFreeShippingMethod"/>
             <!--Reset configs-->
             <magentoCLI command="config:set {{AdminFedexDisableForCheckoutConfigData.path}} {{AdminFedexDisableForCheckoutConfigData.value}}" stepKey="disableCheckout"/>
             <magentoCLI command="config:set {{AdminFedexDisableSandboxModeConfigData.path}} {{AdminFedexDisableSandboxModeConfigData.value}}" stepKey="disableSandbox"/>
@@ -105,7 +105,7 @@
 
         <!-- Fill all required fields -->
         <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillNewShippingAddress">
-            <argument name="customer" value="Simple_Customer_Without_Address" />
+            <argument name="customer" value="Simple_Customer_Without_Address"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
@@ -120,7 +120,7 @@
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <!-- Select payment solution -->
-        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
 
         <!-- Apply Discount Coupon to the Order -->
@@ -176,7 +176,7 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
 
         <!-- Select payment solution -->
-        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution2" />
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution2"/>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
 
         <!-- Apply Discount Coupon to the Order -->

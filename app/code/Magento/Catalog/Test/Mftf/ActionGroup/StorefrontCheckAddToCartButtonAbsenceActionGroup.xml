@@ -12,7 +12,7 @@
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
         </arguments>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="checkAddToCartButtonAbsence"/>
     </actionGroup>
 </actionGroups>

@@ -10,6 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderGiftSection">
         <element name="orderItemGiftOptionsLink" type="text" selector="//table[contains(@class, 'edit-order-table')]//tbody[contains(.,'{{productName}}')]//a[contains(@class, 'action-link')]" parameterized="true"/>
-        <element name="orderItemGiftMessage" type="textarea" selector="#current_item_giftmessage_message" />
+        <element name="orderItemGiftMessage" type="textarea" selector="#current_item_giftmessage_message"/>
     </section>
 </sections>

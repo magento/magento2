@@ -11,9 +11,9 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Backend::convert">
-                        <resource id="Magento_ImportExport::import" title="Import" translate="title" sortOrder="10" />
-                        <resource id="Magento_ImportExport::export" title="Export" translate="title" sortOrder="20" />
-                        <resource id="Magento_ImportExport::history" title="Import History" translate="title" sortOrder="40" />
+                        <resource id="Magento_ImportExport::import" title="Import" translate="title" sortOrder="10"/>
+                        <resource id="Magento_ImportExport::export" title="Export" translate="title" sortOrder="20"/>
+                        <resource id="Magento_ImportExport::history" title="Import History" translate="title" sortOrder="40"/>
                     </resource>
                 </resource>
             </resource>

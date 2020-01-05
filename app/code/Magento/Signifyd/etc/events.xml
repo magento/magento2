@@ -7,12 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="checkout_submit_all_after">
-        <observer name="signifyd_place_order_observer" instance="Magento\Signifyd\Observer\PlaceOrder" />
+        <observer name="signifyd_place_order_observer" instance="Magento\Signifyd\Observer\PlaceOrder"/>
     </event>
     <event name="paypal_checkout_success">
-        <observer name="signifyd_place_order_checkout_success_observer" instance="Magento\Signifyd\Observer\PlaceOrder" />
+        <observer name="signifyd_place_order_checkout_success_observer" instance="Magento\Signifyd\Observer\PlaceOrder"/>
     </event>
     <event name="checkout_onepage_controller_success_action">
-        <observer name="signifyd_place_order_checkout_success_observer" instance="Magento\Signifyd\Observer\PlaceOrder" />
+        <observer name="signifyd_place_order_checkout_success_observer" instance="Magento\Signifyd\Observer\PlaceOrder"/>
     </event>
 </config>

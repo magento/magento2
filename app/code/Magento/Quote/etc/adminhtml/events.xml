@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_save_after_data_object">
-        <observer name="customer" instance="Magento\Quote\Observer\Backend\CustomerQuoteObserver" />
+        <observer name="customer" instance="Magento\Quote\Observer\Backend\CustomerQuoteObserver"/>
     </event>
 </config>

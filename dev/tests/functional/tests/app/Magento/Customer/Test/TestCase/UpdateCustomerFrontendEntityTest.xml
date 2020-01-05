@@ -21,9 +21,9 @@
             <data name="address/data/region_id" xsi:type="string">Colorado</data>
             <data name="address/data/telephone" xsi:type="string">555-888-111-999</data>
             <data name="address/data/postcode" xsi:type="string">12345</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
         <variation name="UpdateCustomerFrontendEntityTestVariation2" summary="Update customer information and add UK address, assert customer name and address on address book tab">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -40,10 +40,10 @@
             <data name="address/data/region" xsi:type="string">Region %isolation%</data>
             <data name="address/data/telephone" xsi:type="string">0123456789-02134567</data>
             <data name="address/data/postcode" xsi:type="string">12345</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerNameFrontend" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerNameFrontend"/>
         </variation>
         <variation name="UpdateCustomerFrontendEntityTestVariation3" summary="Update customer information and add France address">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -60,8 +60,8 @@
             <data name="address/data/region_id" xsi:type="string">Côtes-d'Armor</data>
             <data name="address/data/telephone" xsi:type="string">555-888-111-999</data>
             <data name="address/data/postcode" xsi:type="string">12345</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses"/>
         </variation>
         <variation name="UpdateCustomerFrontendEntityTestVariation4" summary="Register Customer. Update address" ticketId="MAGETWO-12394">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -78,8 +78,8 @@
             <data name="address/data/region_id" xsi:type="string">California</data>
             <data name="address/data/telephone" xsi:type="string">555-55-555-55</data>
             <data name="address/data/postcode" xsi:type="string">90230</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses"/>
         </variation>
     </testCase>
 </config>

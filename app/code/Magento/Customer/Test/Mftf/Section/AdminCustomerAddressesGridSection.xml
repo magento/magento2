@@ -17,7 +17,7 @@
         <element name="firstRowDeleteLink" type="text" selector="//tr[contains(@data-repeat-index, '0')]//a[contains(@data-action,'item-delete')]" timeout="30"/>
         <element name="firstRowCheckbox" type="checkbox" selector="//tr[contains(@data-repeat-index, '0')]//input[contains(@data-action, 'select-row')]"/>
         <element name="secondRowCheckbox" type="checkbox" selector="//tr[contains(@data-repeat-index, '1')]//input[contains(@data-action, 'select-row')]"/>
-        <element name="checkboxByName" type="checkbox" selector="//div[contains(text(),'{{customer}}')]/ancestor::tr[contains(@class, 'data-row')]//input[@class='admin__control-checkbox']" parameterized="true" />
+        <element name="checkboxByName" type="checkbox" selector="//div[contains(text(),'{{customer}}')]/ancestor::tr[contains(@class, 'data-row')]//input[@class='admin__control-checkbox']" parameterized="true"/>
         <element name="rowsInGrid" type="text" selector="//tr[contains(@class,'data-row')]"/>
         <element name="checkboxByRow" type="checkbox" selector="//tr[contains(@data-repeat-index, '{{row}}')]//input[contains(@data-action, 'select-row')]" parameterized="true"/>
         <element name="selectLinkByRow" type="text" selector="//tr[contains(@data-repeat-index, '{{row}}')]//button[@class='action-select']" parameterized="true"/>

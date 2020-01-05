@@ -150,5 +150,5 @@
     Please use "AdminDeleteUserViaCurlActionGroup".
     See how it works: app/code/Magento/User/Test/Mftf/ActionGroup/AdminDeleteUserViaCurlActionGroup.xml
 -->
-    <entity name="deleteUser" type="deleteUser" />
+    <entity name="deleteUser" type="deleteUser"/>
 </entities>

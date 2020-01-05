@@ -13,10 +13,10 @@
             <data name="status" xsi:type="string">Canceled</data>
             <data name="configData" xsi:type="string">checkmo</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertProductsQtyAfterOrderCancel" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductsQtyAfterOrderCancel"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CancelCreatedOrderTestVariationWithZeroSubtotalCheckout" summary="Cancel order with zero subtotal checkout payment method and check status on storefront">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -27,8 +27,8 @@
             <data name="status" xsi:type="string">Canceled</data>
             <data name="configData" xsi:type="string">zero_subtotal_checkout, freeshipping</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CancelCreatedOrderTestVariationWithBankTransferPaymentMethod" summary="Cancel order with bank transfer payment method and check status on storefront">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -36,8 +36,8 @@
             <data name="status" xsi:type="string">Canceled</data>
             <data name="configData" xsi:type="string">banktransfer</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CancelCreatedOrderTestVariationWithCashOnDeliveryPaymentMethod" summary="Cancel order with cash on delivery payment method and check status on storefront">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -45,8 +45,8 @@
             <data name="status" xsi:type="string">Canceled</data>
             <data name="configData" xsi:type="string">cashondelivery</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CancelCreatedOrderTestVariationWithPurchaseOrderPaymentMethod" summary="Cancel order with purchase order payment method and check status on storefront">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -55,16 +55,16 @@
             <data name="status" xsi:type="string">Canceled</data>
             <data name="configData" xsi:type="string">purchaseorder</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CancelCreatedOrderTestVariationProductQtyWithoutStockDecrease" summary="Check product qty after placing an order with Decrease Stock When Order is Placed = No" ticketId="MAGETWO-43321">
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::low_stock_product</data>
             <data name="configData" xsi:type="string">decrease_stock_after_order_no</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductsQtyAfterReorder" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductsQtyAfterReorder"/>
         </variation>
     </testCase>
 </config>

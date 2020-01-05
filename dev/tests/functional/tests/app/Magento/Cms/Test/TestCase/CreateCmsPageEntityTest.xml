@@ -15,9 +15,9 @@
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
             <data name="data/store_id" xsi:type="string">All Store Views</data>
             <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview"/>
         </variation>
         <variation name="CreateCmsPageEntityTestVariation2" summary="Create page for default store view">
             <data name="tag" xsi:type="string">severity:S1</data>
@@ -27,8 +27,8 @@
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
             <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm"/>
         </variation>
         <variation name="CreateCmsPageEntityTestVariation4" summary="Create disabled page">
             <data name="tag" xsi:type="string">severity:S3</data>
@@ -38,8 +38,8 @@
             <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="data/is_active" xsi:type="string">No</data>
             <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDisabledOnFrontend" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDisabledOnFrontend"/>
         </variation>
         <variation name="CreateCmsPageEntityTestVariation5" summary="Block Cache Exploit" ticketId="MAGETWO-48017">
             <data name="tag" xsi:type="string">severity:S2</data>
@@ -50,9 +50,9 @@
             <data name="data/is_active" xsi:type="string">Yes</data>
             <data name="data/content/content" xsi:type="string">\\{{block class=&apos;Magento\Framework\View\Element\Text&apos; text=&apos;bla bla bla&apos; cache_key=&apos;BACKEND_ACL_RESOURCES&apos; cache_lifetime=999\}}</data>
             <data name="displayContent" xsi:type="string">bla bla bla</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend"/>
         </variation>
         <variation name="CreateCmsPageEntityTestVariation6" summary="Create CMS page with single store mode" ticketId="MAGETWO-59654">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -62,9 +62,9 @@
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
             <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageFormSingleStoreMode" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageFormSingleStoreMode"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend"/>
         </variation>
     </testCase>
 </config>

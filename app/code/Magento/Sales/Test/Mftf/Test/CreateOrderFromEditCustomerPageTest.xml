@@ -207,8 +207,8 @@
         <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$createConfigChildProduct1.price$" stepKey="seeConfigurableProductSubtotal"/>
         <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$simpleProduct.price$" stepKey="seeFirstProductSubtotal"/>
         <see selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" userInput="$simpleProduct1.price$" stepKey="seeSecondProductSubtotal"/>
-        <see selector="{{AdminOrderTotalSection.subTotal}}"  userInput="{{AdminOrderMultipleProducts.subtotal}}" stepKey="checkSubtotal" />
-        <see selector="{{AdminOrderTotalSection.shippingAndHandling}}" userInput="{{AdminOrderMultipleProducts.shipping}}" stepKey="checkShippingAndHandling" />
-        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="{{AdminOrderMultipleProducts.grandTotal}}" stepKey="checkGrandTotal" />
+        <see selector="{{AdminOrderTotalSection.subTotal}}"  userInput="{{AdminOrderMultipleProducts.subtotal}}" stepKey="checkSubtotal"/>
+        <see selector="{{AdminOrderTotalSection.shippingAndHandling}}" userInput="{{AdminOrderMultipleProducts.shipping}}" stepKey="checkShippingAndHandling"/>
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="{{AdminOrderMultipleProducts.grandTotal}}" stepKey="checkGrandTotal"/>
     </test>
 </tests>

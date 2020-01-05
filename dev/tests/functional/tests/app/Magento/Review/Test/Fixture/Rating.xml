@@ -15,12 +15,12 @@
              repository_class="Magento\Review\Test\Repository\Rating"
              handler_interface="Magento\Review\Test\Handler\Rating\RatingInterface"
              class="Magento\Review\Test\Fixture\Rating">
-        <field name="rating_id" is_required="1" />
-        <field name="entity_id" is_required="" />
-        <field name="rating_code" is_required="" group="rating_information" />
-        <field name="position" is_required="" group="rating_information" />
-        <field name="is_active" is_required="" group="rating_information" />
-        <field name="stores" group="rating_information" />
-        <field name="options" group="rating_information" />
+        <field name="rating_id" is_required="1"/>
+        <field name="entity_id" is_required=""/>
+        <field name="rating_code" is_required="" group="rating_information"/>
+        <field name="position" is_required="" group="rating_information"/>
+        <field name="is_active" is_required="" group="rating_information"/>
+        <field name="stores" group="rating_information"/>
+        <field name="options" group="rating_information"/>
     </fixture>
 </config>

@@ -9,8 +9,8 @@
     <testCase name="Magento\Integration\Test\TestCase\ReAuthorizeTokensIntegrationEntityTest" summary="Re-Authorize Tokens for the Integration" ticketId="MAGETWO-29648">
         <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1">
             <data name="description" xsi:type="string">Re-authorize integration</data>
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessReauthorizeMessage" />
-            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensAfterReauthorize" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessReauthorizeMessage"/>
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensAfterReauthorize"/>
         </variation>
     </testCase>
 </config>

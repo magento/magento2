@@ -21,9 +21,9 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage"/>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout"/>
         </variation>
         <variation name="CreateTermEntityTestVariation2" summary="Create enabled term entity with HTML value">
             <data name="tag" xsi:type="string">severity:S3</data>
@@ -39,9 +39,9 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage"/>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout"/>
         </variation>
         <variation name="CreateTermEntityTestVariation3" summary="Create disabled term entity">
             <data name="tag" xsi:type="string">severity:S3</data>
@@ -57,9 +57,9 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage"/>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout"/>
         </variation>
         <variation name="CreateTermEntityTestVariation4" summary="Terms and conditions on multishipping" ticketId="MAGETWO-32499">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S3</data>
@@ -76,8 +76,8 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermRequireMessageOnMultishippingCheckout" />
-            <constraint name="Magento\Multishipping\Test\Constraint\AssertMultishippingOrderSuccessPlacedMessage" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermRequireMessageOnMultishippingCheckout"/>
+            <constraint name="Magento\Multishipping\Test\Constraint\AssertMultishippingOrderSuccessPlacedMessage"/>
         </variation>
     </testCase>
 </config>

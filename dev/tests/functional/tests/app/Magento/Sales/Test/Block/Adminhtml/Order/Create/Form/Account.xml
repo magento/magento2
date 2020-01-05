@@ -11,6 +11,6 @@
         <group_id>
             <input>select</input>
         </group_id>
-        <email />
+        <email/>
     </fields>
 </mapping>

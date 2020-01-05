@@ -76,15 +76,15 @@
         </after>
 
         <!-- Verify Configurable Product in checkout cart items -->
-        <comment userInput="Verify Configurable Product in checkout cart items" stepKey="commentVerifyConfigurableProductInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct2InCartItems" />
+        <comment userInput="Verify Configurable Product in checkout cart items" stepKey="commentVerifyConfigurableProductInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct2InCartItems"/>
         <actionGroup ref="CheckConfigurableProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckConfigurableProductInCartItems" after="commentVerifyConfigurableProductInCheckoutCartItems">
             <argument name="productVar" value="$$createConfigProduct$$"/>
-            <argument name="optionLabel" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$" />
-            <argument name="optionValue" value="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" />
+            <argument name="optionLabel" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="optionValue" value="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$"/>
         </actionGroup>
 
         <!-- Check configurable product in category -->
-        <comment userInput="Verify Configurable Product in category" stepKey="commentVerifyConfigurableProductInCategory" after="browseAssertSimpleProduct2ImageNotDefault" />
+        <comment userInput="Verify Configurable Product in category" stepKey="commentVerifyConfigurableProductInCategory" after="browseAssertSimpleProduct2ImageNotDefault"/>
         <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="browseAssertCategoryConfigProduct" after="commentVerifyConfigurableProductInCategory">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
@@ -94,7 +94,7 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabConfigProductImageSrc" stepKey="browseAssertConfigProductImageNotDefault" after="browseGrabConfigProductImageSrc"/>
 
         <!-- View Configurable Product -->
-        <comment userInput="View Configurable Product" stepKey="commentViewConfigurableProduct" after="browseAssertSimpleProduct2PageImageNotDefault" />
+        <comment userInput="View Configurable Product" stepKey="commentViewConfigurableProduct" after="browseAssertSimpleProduct2PageImageNotDefault"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory2" after="commentViewConfigurableProduct"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$)}}" stepKey="browseClickCategoryConfigProductView" after="clickCategory2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForConfigurableProductViewloaded" after="browseClickCategoryConfigProductView"/>
@@ -107,7 +107,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabConfigProductPageImageSrc" stepKey="browseAssertConfigProductPageImageNotDefault" after="browseGrabConfigProductPageImageSrc"/>
 
         <!-- Add Configurable Product to cart -->
-        <comment userInput="Add Configurable Product to cart" stepKey="commentAddConfigurableProductToCart" after="cartAddProduct2ToCart" />
+        <comment userInput="Add Configurable Product to cart" stepKey="commentAddConfigurableProductToCart" after="cartAddProduct2ToCart"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory2" after="commentAddConfigurableProductToCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategory2loaded" after="cartClickCategory2"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForConfigurableProduct" after="waitForCartCategory2loaded">
@@ -145,7 +145,7 @@
         </actionGroup>
 
         <!-- Check configurable product in minicart -->
-        <comment userInput="Check configurable product in minicart" stepKey="commentCheckConfigurableProductInMinicart" after="cartMinicartAssertSimpleProduct2PageImageNotDefault" />
+        <comment userInput="Check configurable product in minicart" stepKey="commentCheckConfigurableProductInMinicart" after="cartMinicartAssertSimpleProduct2PageImageNotDefault"/>
         <actionGroup ref="StorefrontOpenMinicartAndCheckConfigurableProductActionGroup" stepKey="cartOpenMinicartAndCheckConfigProduct" after="commentCheckConfigurableProductInMinicart">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct2$$"/>
@@ -166,7 +166,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartMinicartGrabConfigProductPageImageSrc" stepKey="cartMinicartAssertConfigProductPageImageNotDefault" after="cartMinicartGrabConfigProductPageImageSrc"/>
 
         <!-- Check configurable product in cart -->
-        <comment userInput="Check configurable product in cart" stepKey="commentCheckConfigurableProductInCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2" />
+        <comment userInput="Check configurable product in cart" stepKey="commentCheckConfigurableProductInCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2"/>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart2" after="commentCheckConfigurableProductInCart"/>
         <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="cartAssertCartConfigProduct" after="cartOpenCart2">
             <argument name="product" value="$$createConfigProduct$$"/>
@@ -189,7 +189,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartCartGrabConfigProductPageImageSrc" stepKey="cartCartAssertConfigProductPageImageNotDefault" after="cartCartGrabConfigProductPageImageSrc"/>
 
         <!-- Add Configurable Product to comparison -->
-        <comment userInput="Add Configurable Product to comparison" stepKey="commentAddConfigurableProductToComparison" after="compareAddSimpleProduct2ToCompare" />
+        <comment userInput="Add Configurable Product to comparison" stepKey="commentAddConfigurableProductToComparison" after="compareAddSimpleProduct2ToCompare"/>
         <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="compareAssertConfigProduct" after="commentAddConfigurableProductToComparison">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
@@ -202,13 +202,13 @@
         </actionGroup>
 
         <!-- Check configurable product in comparison sidebar -->
-        <comment userInput="Add Configurable Product in comparison sidebar" stepKey="commentAddConfigurableProductInComparisonSidebar" after="compareSimpleProduct2InSidebar" />
+        <comment userInput="Add Configurable Product in comparison sidebar" stepKey="commentAddConfigurableProductInComparisonSidebar" after="compareSimpleProduct2InSidebar"/>
         <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareConfigProductInSidebar" after="commentAddConfigurableProductInComparisonSidebar">
             <argument name="productVar" value="$$createConfigProduct$$"/>
         </actionGroup>
 
         <!-- Check configurable product on comparison page -->
-        <comment userInput="Add Configurable Product on comparison page" stepKey="commentAddConfigurableProductOnComparisonPage" after="compareAssertSimpleProduct2ImageNotDefaultInComparison" />
+        <comment userInput="Add Configurable Product on comparison page" stepKey="commentAddConfigurableProductOnComparisonPage" after="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
         <actionGroup ref="StorefrontCheckCompareConfigurableProductActionGroup" stepKey="compareAssertConfigProductInComparison" after="commentAddConfigurableProductOnComparisonPage">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
@@ -285,15 +285,15 @@
         </after>
 
         <!-- Verify Configurable Product in checkout cart items -->
-        <comment userInput="Verify Configurable Product in checkout cart items" stepKey="commentVerifyConfigurableProductInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct2InCartItems" />
+        <comment userInput="Verify Configurable Product in checkout cart items" stepKey="commentVerifyConfigurableProductInCheckoutCartItems" after="guestCheckoutCheckSimpleProduct2InCartItems"/>
         <actionGroup ref="CheckConfigurableProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckConfigurableProductInCartItems" after="commentVerifyConfigurableProductInCheckoutCartItems">
             <argument name="productVar" value="$$createConfigProduct$$"/>
-            <argument name="optionLabel" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$" />
-            <argument name="optionValue" value="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" />
+            <argument name="optionLabel" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="optionValue" value="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$"/>
         </actionGroup>
 
         <!-- Check configurable product in category -->
-        <comment userInput="Verify Configurable Product in category" stepKey="commentVerifyConfigurableProductInCategory" after="browseAssertSimpleProduct2ImageNotDefault" />
+        <comment userInput="Verify Configurable Product in category" stepKey="commentVerifyConfigurableProductInCategory" after="browseAssertSimpleProduct2ImageNotDefault"/>
         <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="browseAssertCategoryConfigProduct" after="commentVerifyConfigurableProductInCategory">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
@@ -303,7 +303,7 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabConfigProductImageSrc" stepKey="browseAssertConfigProductImageNotDefault" after="browseGrabConfigProductImageSrc"/>
 
         <!-- View Configurable Product -->
-        <comment userInput="View Configurable Product" stepKey="commentViewConfigurableProduct" after="browseAssertSimpleProduct2PageImageNotDefault" />
+        <comment userInput="View Configurable Product" stepKey="commentViewConfigurableProduct" after="browseAssertSimpleProduct2PageImageNotDefault"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory2" after="commentViewConfigurableProduct"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$)}}" stepKey="browseClickCategoryConfigProductView" after="clickCategory2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForConfigurableProductViewloaded" after="browseClickCategoryConfigProductView"/>
@@ -316,7 +316,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabConfigProductPageImageSrc" stepKey="browseAssertConfigProductPageImageNotDefault" after="browseGrabConfigProductPageImageSrc"/>
 
         <!-- Add Configurable Product to cart -->
-        <comment userInput="Add Configurable Product to cart" stepKey="commentAddConfigurableProductToCart" after="cartAddProduct2ToCart" />
+        <comment userInput="Add Configurable Product to cart" stepKey="commentAddConfigurableProductToCart" after="cartAddProduct2ToCart"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory2" after="commentAddConfigurableProductToCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategory2loaded" after="cartClickCategory2"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForConfigurableProduct" after="waitForCartCategory2loaded">
@@ -354,7 +354,7 @@
         </actionGroup>
 
         <!-- Check configurable product in minicart -->
-        <comment userInput="Check configurable product in minicart" stepKey="commentCheckConfigurableProductInMinicart" after="cartMinicartAssertSimpleProduct2PageImageNotDefault" />
+        <comment userInput="Check configurable product in minicart" stepKey="commentCheckConfigurableProductInMinicart" after="cartMinicartAssertSimpleProduct2PageImageNotDefault"/>
         <actionGroup ref="StorefrontOpenMinicartAndCheckConfigurableProductActionGroup" stepKey="cartOpenMinicartAndCheckConfigProduct" after="commentCheckConfigurableProductInMinicart">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct2$$"/>
@@ -375,7 +375,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartMinicartGrabConfigProductPageImageSrc" stepKey="cartMinicartAssertConfigProductPageImageNotDefault" after="cartMinicartGrabConfigProductPageImageSrc"/>
 
         <!-- Check configurable product in cart -->
-        <comment userInput="Check configurable product in cart" stepKey="commentCheckConfigurableProductInCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2" />
+        <comment userInput="Check configurable product in cart" stepKey="commentCheckConfigurableProductInCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2"/>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart2" after="commentCheckConfigurableProductInCart"/>
         <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="cartAssertCartConfigProduct" after="cartOpenCart2">
             <argument name="product" value="$$createConfigProduct$$"/>
@@ -398,7 +398,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartCartGrabConfigProductPageImageSrc" stepKey="cartCartAssertConfigProductPageImageNotDefault" after="cartCartGrabConfigProductPageImageSrc"/>
 
         <!-- Add Configurable Product to comparison -->
-        <comment userInput="Add Configurable Product to comparison" stepKey="commentAddConfigurableProductToComparison" after="compareAddSimpleProduct2ToCompare" />
+        <comment userInput="Add Configurable Product to comparison" stepKey="commentAddConfigurableProductToComparison" after="compareAddSimpleProduct2ToCompare"/>
         <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="compareAssertConfigProduct" after="commentAddConfigurableProductToComparison">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
@@ -411,13 +411,13 @@
         </actionGroup>
 
         <!-- Check configurable product in comparison sidebar -->
-        <comment userInput="Add Configurable Product in comparison sidebar" stepKey="commentAddConfigurableProductInComparisonSidebar" after="compareSimpleProduct2InSidebar" />
+        <comment userInput="Add Configurable Product in comparison sidebar" stepKey="commentAddConfigurableProductInComparisonSidebar" after="compareSimpleProduct2InSidebar"/>
         <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareConfigProductInSidebar" after="commentAddConfigurableProductInComparisonSidebar">
             <argument name="productVar" value="$$createConfigProduct$$"/>
         </actionGroup>
 
         <!-- Check configurable product on comparison page -->
-        <comment userInput="Add Configurable Product on comparison page" stepKey="commentAddConfigurableProductOnComparisonPage" after="compareAssertSimpleProduct2ImageNotDefaultInComparison" />
+        <comment userInput="Add Configurable Product on comparison page" stepKey="commentAddConfigurableProductOnComparisonPage" after="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
         <actionGroup ref="StorefrontCheckCompareConfigurableProductActionGroup" stepKey="compareAssertConfigProductInComparison" after="commentAddConfigurableProductOnComparisonPage">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>

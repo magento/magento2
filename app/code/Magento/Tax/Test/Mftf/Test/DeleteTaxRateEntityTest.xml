@@ -49,7 +49,7 @@
         <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
         <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
         <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
-        <wait stepKey="waitForSearch" time="5" />
+        <wait stepKey="waitForSearch" time="5"/>
         <dontSee selector="{{AdminTaxRuleFormSection.fieldTaxRate}}" userInput="$$initialTaxRate.code$$" stepKey="dontSeeInTaxRuleForm"/>
     </test>
 </tests>

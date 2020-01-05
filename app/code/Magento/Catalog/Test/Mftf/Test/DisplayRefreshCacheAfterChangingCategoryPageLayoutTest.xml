@@ -41,9 +41,9 @@
         <!-- Open design tab and set layout -->
         <comment userInput="Open design tab and set layout" stepKey="setLayoutAndSave"/>
         <click selector="{{CategoryDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
-        <waitForElementVisible selector="{{CategoryDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
-        <selectOption selector="{{CategoryDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="selectAnOption" />
-        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <waitForElementVisible selector="{{CategoryDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown"/>
+        <selectOption selector="{{CategoryDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="selectAnOption"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
         <waitForPageLoad stepKey="waitSaveToApply"/>
         <!-- See if warning message displays -->
         <actionGroup ref="AdminSystemMessagesWarningActionGroup" stepKey="seeWarningMessage">

@@ -44,13 +44,13 @@
             </password>
             <address>
                 <street_lines>2</street_lines>
-                <prefix_show />
-                <prefix_options />
-                <middlename_show />
-                <suffix_show />
-                <suffix_options />
-                <dob_show />
-                <gender_show />
+                <prefix_show/>
+                <prefix_options/>
+                <middlename_show/>
+                <suffix_show/>
+                <suffix_options/>
+                <dob_show/>
+                <gender_show/>
                 <telephone_show>req</telephone_show>
                 <company_show>opt</company_show>
                 <fax_show/>
@@ -78,8 +78,8 @@
 {{depend street2}}{{var street2}}<br />{{/depend}}
 {{depend street3}}{{var street3}}<br />{{/depend}}
 {{depend street4}}{{var street4}}<br />{{/depend}}
-{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br />
-{{var country}}<br />
+{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br/>
+{{var country}}<br/>
 {{depend telephone}}T: <a href="tel:{{var telephone}}">{{var telephone}}</a>{{/depend}}
 {{depend fax}}<br />F: {{var fax}}{{/depend}}
 {{depend vat_id}}<br />VAT: {{var vat_id}}{{/depend}}]]></html>

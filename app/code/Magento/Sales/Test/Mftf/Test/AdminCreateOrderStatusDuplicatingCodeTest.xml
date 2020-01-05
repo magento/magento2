@@ -14,7 +14,7 @@
             <title value="Create order status with duplicating code"/>
             <description value="Receive error when creating order status with the code which is already exist"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-15432" />
+            <testCaseId value="MC-15432"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>

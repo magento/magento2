@@ -29,7 +29,7 @@
         <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{taxRateWithInvalidPostCodeLength.code}}" stepKey="fillRuleName"/>
         <fillField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="{{taxRateWithInvalidPostCodeLength.tax_postcode}}" stepKey="fillPostCode"/>
         <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="{{taxRateWithInvalidPostCodeLength.tax_country}}" stepKey="selectCountry1"/>
-        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="{{taxRateWithInvalidPostCodeLength.tax_region}}" stepKey="selectState" />
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="{{taxRateWithInvalidPostCodeLength.tax_region}}" stepKey="selectState"/>
         <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="{{taxRateWithInvalidPostCodeLength.rate}}" stepKey="fillRate"/>
         <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
         <see selector="{{AdminTaxRateFormSection.fieldError('tax_postcode')}}" userInput="Please enter less or equal than 10 symbols." stepKey="seeErrorMessage"/>

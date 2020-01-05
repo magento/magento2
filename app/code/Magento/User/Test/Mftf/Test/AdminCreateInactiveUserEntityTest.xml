@@ -43,6 +43,6 @@
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{inactiveAdmin.username}}" stepKey="fillUsername"/>
         <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{inactiveAdmin.password}}" stepKey="fillPassword"/>
         <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
-        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeUserErrorMessage" />
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeUserErrorMessage"/>
     </test>
 </tests>

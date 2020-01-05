@@ -9,9 +9,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminCustomVariableInGridActionGroup">
         <arguments>
-            <argument name="variable" />
+            <argument name="variable"/>
         </arguments>
-        <see selector="{{AdminLegacyDataGridTableSection.rowTemplateStrict(variable.code)}}" userInput="{{variable.code}}" stepKey="seeVariableCode" />
-        <see selector="{{AdminLegacyDataGridTableSection.rowTemplateStrict(variable.code)}}" userInput="{{variable.name}}" stepKey="seeVariableName" />
+        <see selector="{{AdminLegacyDataGridTableSection.rowTemplateStrict(variable.code)}}" userInput="{{variable.code}}" stepKey="seeVariableCode"/>
+        <see selector="{{AdminLegacyDataGridTableSection.rowTemplateStrict(variable.code)}}" userInput="{{variable.name}}" stepKey="seeVariableName"/>
     </actionGroup>
 </actionGroups>

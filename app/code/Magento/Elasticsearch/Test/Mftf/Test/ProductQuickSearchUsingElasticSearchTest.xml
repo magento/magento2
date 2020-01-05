@@ -44,7 +44,7 @@
         </actionGroup>
         <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         <!--Navigate to storefront and do a quick search for the product -->
-        <comment userInput="Navigate to Storefront to check if quick search works" stepKey="commentCheckQuickSearch" />
+        <comment userInput="Navigate to Storefront to check if quick search works" stepKey="commentCheckQuickSearch"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
 
         <waitForPageLoad stepKey="waitForHomePageToLoad" time="30"/>

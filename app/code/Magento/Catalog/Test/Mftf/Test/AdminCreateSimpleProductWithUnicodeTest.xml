@@ -14,7 +14,7 @@
             <stories value="Create a Unicode Named Simple Product via Admin"/>
             <title value="Admin should be able to create a unicode named simple product"/>
             <description value="Admin should be able to create a unicode named simple product"/>
-            <severity value="MAJOR" />
+            <severity value="MAJOR"/>
             <testCaseId value="MC-105"/>
             <group value="product"/>
         </annotations>

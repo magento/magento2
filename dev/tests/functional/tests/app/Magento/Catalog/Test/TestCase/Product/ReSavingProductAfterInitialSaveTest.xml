@@ -20,7 +20,7 @@
             <data name="originalProduct/data/weight" xsi:type="string">7</data>
             <data name="productWithValidFromDate/data/news_from_date/pattern" xsi:type="string">m/d/y +1 day</data>
             <data name="productWithValidToDate/data/news_to_date/pattern" xsi:type="string">m/d/y +3 days</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
         </variation>
     </testCase>
 </config>

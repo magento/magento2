@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:TestFramework/Test/Unit/Unit/Utility/_files/valid.xsd">
     <block type="some_name">
-        <actions attribute="testName" />
+        <actions attribute="testName"/>
     </block>
 </config>

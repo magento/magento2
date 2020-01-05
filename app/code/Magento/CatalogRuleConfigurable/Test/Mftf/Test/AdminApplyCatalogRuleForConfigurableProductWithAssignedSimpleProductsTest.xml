@@ -141,7 +141,7 @@
 
             <!-- Create Customer -->
             <createData entity="SimpleUsCustomerWithNewCustomerGroup" stepKey="createCustomer">
-                <requiredEntity createDataKey="customerGroup" />
+                <requiredEntity createDataKey="customerGroup"/>
             </createData>
 
             <!-- Login as Admin -->

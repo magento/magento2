@@ -47,14 +47,14 @@
 
         <!--Assert updated product Url Rewrite in Grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
-            <argument name="redirectPath" value="{{_defaultProduct.name}}.html" />
-            <argument name="redirectType" value="Temporary (302)" />
+            <argument name="redirectPath" value="{{_defaultProduct.name}}.html"/>
+            <argument name="redirectType" value="Temporary (302)"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
 
         <!-- Assert initial product Url rewrite in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
-            <argument name="redirectPath" value="$$createProduct.name$$.html" />
+            <argument name="redirectPath" value="$$createProduct.name$$.html"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>

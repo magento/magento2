@@ -67,7 +67,7 @@
     </type>
 
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
-        <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
+        <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader"/>
     </type>
 
     <preference type="Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>

@@ -10,7 +10,7 @@
         <variation name="InstallTestVariation" summary="Magento analytics opt-in by default" ticketId="MAGETWO-86059">
             <data name="tag" xsi:type="string">severity:S1</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled"/>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin"/>
         </variation>
     </testCase>
 </config>

@@ -22,14 +22,14 @@
         <after>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
             <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
-            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
             <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
             <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
             <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
             <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
             <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
-            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad1" />
+            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad1"/>
             <selectOption userInput="Default Category" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionDefaultCategory"/>
             <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
             <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog2"/>
@@ -59,14 +59,14 @@
         </actionGroup>
         <!--Assign new created root category to store-->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
-        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
         <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
         <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
         <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
-        <waitForPageLoad stepKey="waitForPageAdminStoresGroupEditLoad" />
+        <waitForPageLoad stepKey="waitForPageAdminStoresGroupEditLoad"/>
         <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionCreatedNewRootCategory"/>
         <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog1"/>

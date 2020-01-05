@@ -23,9 +23,9 @@
         <element name="currentPassword" type="input" selector="#page_tabs_main_section_content input[name='current_password']"/>
 
         <element name="userRoleTab" type="button" selector="#page_tabs_roles_section"/>
-        <element name="search" type="button" selector="#page_tabs_roles_section_content #permissionsUserRolesGrid [data-action='grid-filter-apply']" />
-        <element name="resetFilter" type="button" selector="#page_tabs_roles_section_content #permissionsUserRolesGrid [data-action='grid-filter-reset']" />
-        <element name="roleFilterField" type="input" selector="#page_tabs_roles_section_content #permissionsUserRolesGrid input[name='role_name']" />
+        <element name="search" type="button" selector="#page_tabs_roles_section_content #permissionsUserRolesGrid [data-action='grid-filter-apply']"/>
+        <element name="resetFilter" type="button" selector="#page_tabs_roles_section_content #permissionsUserRolesGrid [data-action='grid-filter-reset']"/>
+        <element name="roleFilterField" type="input" selector="#page_tabs_roles_section_content #permissionsUserRolesGrid input[name='role_name']"/>
         <element name="roleRadiobutton" type="radio" selector="//table[@id='permissionsUserRolesGrid_table']//tr[./td[contains(@class, 'col-role_name') and contains(., '{{roleName}}')]]//input[@name='roles[]']" parameterized="true"/>
     </section>
 </sections>

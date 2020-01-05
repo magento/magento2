@@ -6,14 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Backend\Model\Authorization\RoleLocator" />
-    <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Backend\Model\Locale\Resolver" />
-    <preference for="Magento\Framework\App\Action\Context" type="Magento\Backend\App\Action\Context" />
-    <preference for="Magento\Framework\UrlInterface" type="Magento\Backend\Model\UrlInterface" />
-    <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
-    <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
-    <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
-    <preference for="Magento\Framework\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Backend\Model\Authorization\RoleLocator"/>
+    <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Backend\Model\Locale\Resolver"/>
+    <preference for="Magento\Framework\App\Action\Context" type="Magento\Backend\App\Action\Context"/>
+    <preference for="Magento\Framework\UrlInterface" type="Magento\Backend\Model\UrlInterface"/>
+    <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session"/>
+    <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath"/>
+    <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config"/>
+    <preference for="Magento\Framework\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory"/>
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
@@ -25,9 +25,9 @@
             <argument name="template" xsi:type="string">Magento_Theme::root.phtml</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\View\Layout\Reader\Block" type="Magento\Backend\Model\View\Layout\Reader\Block" />
-    <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed" />
-    <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Backend\Model\Session\AdminConfig" />
+    <preference for="Magento\Framework\View\Layout\Reader\Block" type="Magento\Backend\Model\View\Layout\Reader\Block"/>
+    <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed"/>
+    <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Backend\Model\Session\AdminConfig"/>
     <type name="Magento\Backend\App\Action\Context">
         <arguments>
             <argument name="helper" xsi:type="object">Magento\Backend\Helper\Data</argument>
@@ -60,8 +60,8 @@
         </arguments>
     </type>
     <type name="Magento\Backend\App\AbstractAction">
-        <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100" />
-        <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11" />
+        <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100"/>
+        <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11"/>
     </type>
     <type name="Magento\Store\App\Response\Redirect">
         <arguments>
@@ -69,7 +69,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\App\Action\Action">
-        <plugin name="storeCheck" disabled="true" />
+        <plugin name="storeCheck" disabled="true"/>
     </type>
     <type name="Magento\Framework\Message\Manager">
         <arguments>
@@ -131,14 +131,14 @@
             <argument name="xFrameOpt" xsi:type="const">Magento\Framework\App\Response\HeaderProvider\XFrameOptions::BACKEND_X_FRAME_OPT</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Backend\Model\AdminPathConfig" />
+    <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Backend\Model\AdminPathConfig"/>
     <type name="Magento\Framework\View\Page\Config">
         <arguments>
             <argument name="isIncludesAvailable" xsi:type="boolean">false</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Menu\Builder">
-        <plugin name="SetupMenuBuilder" type="Magento\Backend\Model\Setup\MenuBuilder" />
+        <plugin name="SetupMenuBuilder" type="Magento\Backend\Model\Setup\MenuBuilder"/>
     </type>
     <type name="Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction">
         <arguments>
@@ -168,6 +168,6 @@
             <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
         </arguments>
     </type>
-    <preference for="CsrfRequestValidator" type="Magento\Backend\App\Request\BackendValidator" />
-    <preference for="Magento\Backend\Model\Image\UploadResizeConfigInterface" type="Magento\Backend\Model\Image\UploadResizeConfig" />
+    <preference for="CsrfRequestValidator" type="Magento\Backend\App\Request\BackendValidator"/>
+    <preference for="Magento\Backend\Model\Image\UploadResizeConfigInterface" type="Magento\Backend\Model\Image\UploadResizeConfig"/>
 </config>

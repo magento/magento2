@@ -11,16 +11,16 @@
             <data name="tag" xsi:type="string">severity:S3, mftf_migrated:yes</data>
             <data name="storeGroup/dataset" xsi:type="string">custom</data>
             <data name="createBackup" xsi:type="string">Yes</data>
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteAndBackupMessages" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid" />
-            <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteAndBackupMessages"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid"/>
+            <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid"/>
         </variation>
         <variation name="DeleteStoreGroupEntityTestVariation2">
             <data name="tag" xsi:type="string">severity:S3, stable:no</data>
             <data name="storeGroup/dataset" xsi:type="string">custom</data>
             <data name="createBackup" xsi:type="string">No</data>
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteMessage" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteMessage"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid"/>
         </variation>
     </testCase>
 </config>

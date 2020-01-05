@@ -11,11 +11,11 @@
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="storeInitialA/dataset" xsi:type="string">custom_group_custom_store</data>
             <data name="storeInitialB/dataset" xsi:type="string">custom_group_custom_store</data>
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreForm" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreBackend" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreFrontend" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreForm"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreBackend"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreFrontend"/>
         </variation>
     </testCase>
 </config>

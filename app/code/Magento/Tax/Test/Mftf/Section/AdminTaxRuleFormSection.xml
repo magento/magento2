@@ -13,8 +13,8 @@
         <element name="taxIdentifier" type="input" selector="input.admin__control-text admin__action-multiselect-search" timeout="30"/>
         <element name="code" type="input" selector="#code"/>
         <element name="taxRateSearch" type="input" selector="input[data-role='advanced-select-text']"/>
-        <element name="taxRateSelected" type="input" selector="//span[contains(., '{{taxRateCode}}') and preceding-sibling::input[contains(@class, 'mselect-checked')]]" parameterized="true" />
-        <element name="taxRateOption" type="multiselect" selector="//*[@data-ui-id='tax-rate-form-fieldset-element-form-field-tax-rate']//span[.='{{taxRateCode}}']" parameterized="true" />
+        <element name="taxRateSelected" type="input" selector="//span[contains(., '{{taxRateCode}}') and preceding-sibling::input[contains(@class, 'mselect-checked')]]" parameterized="true"/>
+        <element name="taxRateOption" type="multiselect" selector="//*[@data-ui-id='tax-rate-form-fieldset-element-form-field-tax-rate']//span[.='{{taxRateCode}}']" parameterized="true"/>
         <element name="save" type="button" selector="#save" timeout="30"/>
         <element name="deleteRule" type="button" selector="#delete" timeout="30"/>
         <element name="ok" type="button" selector="button.action-primary.action-accept" timeout="30"/>

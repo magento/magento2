@@ -15,7 +15,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="wpp_usuk">wpp_usuk</argument>
                     <argument name="wps_express">wps_express</argument>
                     <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
@@ -94,7 +94,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="payflow_advanced">payflow_advanced</argument>
                     <argument name="wps_express">wps_express</argument>
                     <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
@@ -179,7 +179,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="payflow_advanced">payflow_advanced</argument>
                     <argument name="wpp_usuk">wpp_usuk</argument>
                     <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
@@ -228,7 +228,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="payflow_advanced">payflow_advanced</argument>
                     <argument name="wpp_usuk">wpp_usuk</argument>
                     <argument name="wps_express">wps_express</argument>
@@ -307,7 +307,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="payflow_advanced">payflow_advanced</argument>
                     <argument name="wpp_usuk">wpp_usuk</argument>
                     <argument name="wps_express">wps_express</argument>
@@ -387,7 +387,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="wps_express">wps_express</argument>
                 </predicate>
             </event>

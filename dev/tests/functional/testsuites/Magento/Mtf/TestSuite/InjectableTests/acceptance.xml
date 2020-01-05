@@ -9,20 +9,20 @@
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
     <rule scope="testcase">
         <allow>
-            <tag group="test_type" value="acceptance_test" />
+            <tag group="test_type" value="acceptance_test"/>
         </allow>
         <deny>
-            <tag group="stable" value="no" />
-            <tag group="mftf_migrated" value="yes" />
+            <tag group="stable" value="no"/>
+            <tag group="mftf_migrated" value="yes"/>
         </deny>
     </rule>
     <rule scope="variation">
         <allow>
-            <tag group="test_type" value="acceptance_test" />
+            <tag group="test_type" value="acceptance_test"/>
         </allow>
         <deny>
-            <tag group="stable" value="no" />
-            <tag group="mftf_migrated" value="yes" />
+            <tag group="stable" value="no"/>
+            <tag group="mftf_migrated" value="yes"/>
         </deny>
     </rule>
 </config>

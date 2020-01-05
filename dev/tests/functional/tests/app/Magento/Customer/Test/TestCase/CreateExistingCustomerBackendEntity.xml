@@ -10,7 +10,7 @@
         <variation name="CreateExistingCustomerBackendEntity1" summary="Create existing customer on Backend.">
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="issue" xsi:type="string">MAGETWO-81744: [Jenkins] Random fail of Requisition List Test and CreateExistingCustomerBackendEntity</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendDuplicateErrorMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendDuplicateErrorMessage"/>
         </variation>
     </testCase>
 </config>

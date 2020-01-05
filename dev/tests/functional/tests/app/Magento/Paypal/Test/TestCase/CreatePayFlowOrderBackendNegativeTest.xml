@@ -22,7 +22,7 @@
             <data name="creditCard/dataset" xsi:type="string">visa_empty</data>
             <data name="creditCardSave" xsi:type="string">Yes</data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_vault</data>
-            <constraint name="Magento\Payment\Test\Constraint\AssertCardRequiredFields" />
+            <constraint name="Magento\Payment\Test\Constraint\AssertCardRequiredFields"/>
         </variation>
     </testCase>
 </config>

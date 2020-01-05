@@ -18,6 +18,6 @@
         </arguments>
     </type>
     <type name="Magento\ExternalModule5\Some\Another\Class">
-        <plugin name="plugin" type="Magento\ExternalModule6\Some\Plugin\Class" />
+        <plugin name="plugin" type="Magento\ExternalModule6\Some\Plugin\Class"/>
     </type>
 </config>

@@ -6,6 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_types.xsd">
-    <type name="simple" isQty="true" />
-    <type name="virtual" isQty="true" />
+    <type name="simple" isQty="true"/>
+    <type name="virtual" isQty="true"/>
 </config>

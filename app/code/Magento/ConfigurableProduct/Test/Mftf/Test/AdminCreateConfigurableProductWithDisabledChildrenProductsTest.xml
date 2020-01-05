@@ -100,7 +100,7 @@
         </actionGroup>
 
          <!--Assert configurable attributes block is present on product page -->
-        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToSearchEngineTab" />
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToSearchEngineTab"/>
         <seeElement selector="{{AdminProductFormConfigurationsSection.createdConfigurationsBlock}}" stepKey="seeCreatedConfigurations"/>
         <see userInput="$$createSimpleProduct.name$$" selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" stepKey="seeProductNameInConfigurations"/>
 

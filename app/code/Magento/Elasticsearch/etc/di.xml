@@ -6,13 +6,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapperInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ResolverInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider" />
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapperInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver"/>
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver"/>
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver"/>
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ResolverInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver"/>
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter"/>
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter"/>
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider"/>
     <type name="Magento\Elasticsearch\Model\Config">
         <arguments>
             <argument name="engineList" xsi:type="array">
@@ -141,7 +141,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Elasticsearch\Model\Adapter\DataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver" />
+    <preference for="Magento\Elasticsearch\Model\Adapter\DataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver"/>
     <virtualType name="additionalFieldsProviderForElasticsearch" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
         <arguments>
             <argument name="fieldsProviders" xsi:type="array">
@@ -155,7 +155,7 @@
             <argument name="additionalFieldsProvider" xsi:type="object">additionalFieldsProviderForElasticsearch</argument>
         </arguments>
     </type>
-    <preference for="Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver" />
+    <preference for="Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver"/>
     <type name="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperFactory">
         <arguments>
             <argument name="dataMappers" xsi:type="array">
@@ -163,8 +163,8 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Builder" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig" />
+    <preference for="Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Builder"/>
+    <preference for="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig"/>
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">

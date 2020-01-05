@@ -22,7 +22,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductOne"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductTwo"/>
             <createData entity="ApiProductNameWithNoSpaces" stepKey="createProductThree"/>
@@ -100,7 +100,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductOne"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductTwo"/>
         </before>

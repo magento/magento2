@@ -16,8 +16,8 @@
             <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
         </variation>
     </testCase>
 </config>

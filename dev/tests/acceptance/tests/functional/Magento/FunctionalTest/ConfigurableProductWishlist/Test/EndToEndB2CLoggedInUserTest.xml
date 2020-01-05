@@ -11,7 +11,7 @@
     <test name="EndToEndB2CLoggedInUserTest">
         <!-- Step 5: Add products to wishlist -->
         <!-- Add Configurable Product to wishlist -->
-        <comment userInput="Add Configurable Product to wishlist" stepKey="commentAddConfigurableProductToWishlist" before="endOfAddingProductsToWishlist" />
+        <comment userInput="Add Configurable Product to wishlist" stepKey="commentAddConfigurableProductToWishlist" before="endOfAddingProductsToWishlist"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" after="commentAddConfigurableProductToWishlist" stepKey="wishlistGotoCategory3"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$)}}" after="wishlistGotoCategory3" stepKey="wishlistClickConfigurableProduct"/>
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" after="wishlistClickConfigurableProduct" stepKey="wishlistAddConfigurableProductToWishlist">

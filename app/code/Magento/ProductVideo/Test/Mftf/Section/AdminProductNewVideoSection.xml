@@ -21,6 +21,6 @@
         <element name="swatchCheckbox" type="checkbox" selector="#video_swatch_image"/>
         <element name="thumbnailCheckbox" type="checkbox" selector="#video_thumbnail"/>
         <element name="hideFromProductPageCheckbox" type="checkbox" selector="#new_video_disabled"/>
-        <element name="errorElement" type="text" selector="#{{inputName}}-error" parameterized="true" />
+        <element name="errorElement" type="text" selector="#{{inputName}}-error" parameterized="true"/>
     </section>
 </sections>

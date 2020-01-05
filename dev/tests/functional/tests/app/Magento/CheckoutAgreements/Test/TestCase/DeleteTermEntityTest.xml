@@ -15,9 +15,9 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage" />
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentInGrid" />
-            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage"/>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentInGrid"/>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout"/>
         </variation>
     </testCase>
 </config>

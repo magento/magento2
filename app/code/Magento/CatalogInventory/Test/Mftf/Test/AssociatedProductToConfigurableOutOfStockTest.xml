@@ -97,7 +97,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Order product with single quantity -->
-        <selectOption userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="configProductFillOption" />
+        <selectOption userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="configProductFillOption"/>
         <click stepKey="addSimpleProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
@@ -141,6 +141,6 @@
         <!-- Assert that product with single quantity is not available for order -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
-        <dontSee userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="assertOptionNotAvailable" />
+        <dontSee userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="assertOptionNotAvailable"/>
     </test>
 </tests>

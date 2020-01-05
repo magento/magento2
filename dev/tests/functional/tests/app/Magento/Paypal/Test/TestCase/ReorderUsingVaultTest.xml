@@ -28,10 +28,10 @@
                 <item name="Credit Card Type" xsi:type="string">Visa</item>
                 <item name="Credit Card Number" xsi:type="string">xxxx-1111</item>
             </data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation"/>
         </variation>
     </testCase>
 </config>

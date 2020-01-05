@@ -37,7 +37,7 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontCategoryIsChecked"/>
 
         <!--Verify Inactive Category is store front page-->
@@ -50,9 +50,9 @@
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoaded1"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>
-        <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="assertCategoryInTree" />
+        <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="assertCategoryInTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory1"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle1" />
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle1"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="assertCategoryIsInactive"/>
     </test>
 </tests>

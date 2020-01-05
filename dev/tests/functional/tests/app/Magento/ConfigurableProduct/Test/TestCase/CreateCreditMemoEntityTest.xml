@@ -24,8 +24,8 @@
             <data name="order/data/entity_id/products" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
             <data name="order/data/price/dataset" xsi:type="string">full_refund</data>
             <data name="configData" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductQtyDecreasedAfterCreditmemo" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductQtyDecreasedAfterCreditmemo"/>
         </variation>
     </testCase>
 </config>

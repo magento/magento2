@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <createData stepKey="category" entity="SimpleSubCategory"/>
-            <createData stepKey="product" entity="SimpleProduct" >
+            <createData stepKey="product" entity="SimpleProduct">
                 <requiredEntity createDataKey="category"/>
             </createData>
             <createData stepKey="customer" entity="Simple_US_Customer"/>
@@ -41,9 +41,9 @@
         <fillField  stepKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
         <waitForElementVisible stepKey="waitForButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-        <see stepKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-        <see stepKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-        <see stepKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
         <amOnPage stepKey="amOnWishlist" url="{{StorefrontCustomerWishlistPage.url}}"/>
         <waitForPageLoad stepKey="waitForWishlist"/>
         <see stepKey="seeWishlist" userInput="$$product.price$$" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName($$product.name$$)}}"/>

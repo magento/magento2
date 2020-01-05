@@ -101,7 +101,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductRegularPriceCustomOptions.status}}" stepKey="seeSimpleProductStockStatus"/>
         <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPriceCustomOptions.weight}}" stepKey="seeSimpleProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
-        <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="selectedCategories" />
+        <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="selectedCategories"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPriceCustomOptions.urlKey}}" stepKey="seeUrlKey"/>

@@ -14,7 +14,7 @@
             <argument name="message" type="string"/>
         </arguments>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitMessage" />
-        <see userInput="{{message}}" selector="{{AdminMessagesSection.success}}" stepKey="verifyMessage" />
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitMessage"/>
+        <see userInput="{{message}}" selector="{{AdminMessagesSection.success}}" stepKey="verifyMessage"/>
     </actionGroup>
 </actionGroups>

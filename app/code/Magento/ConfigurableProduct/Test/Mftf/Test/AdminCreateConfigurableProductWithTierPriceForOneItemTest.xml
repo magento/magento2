@@ -48,7 +48,7 @@
 
             <!--Add tier price in one product -->
             <createData entity="tierProductPrice" stepKey="addTierPrice">
-            <requiredEntity createDataKey="createFirstSimpleProduct" />
+            <requiredEntity createDataKey="createFirstSimpleProduct"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>

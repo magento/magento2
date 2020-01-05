@@ -30,14 +30,14 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to content->Design->Config page-->
-        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage"/>
         <waitForPageLoad stepKey="waitForPageloadToViewDesignConfigPage"/>
         <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoadToOpenStoreViewEditPage"/>
         <!--Click Upload logo in Transactional Emails and upload the image and preview it-->
-        <click selector="{{AdminDesignConfigSection.logoWrapperOpen}}" stepKey="openTab" />
+        <click selector="{{AdminDesignConfigSection.logoWrapperOpen}}" stepKey="openTab"/>
         <attachFile selector="{{AdminDesignConfigSection.logoUpload}}" userInput="{{MagentoLogo.file}}" stepKey="attachLogo"/>
-        <wait time="5" stepKey="waitingForLogoToUpload" />
+        <wait time="5" stepKey="waitingForLogoToUpload"/>
         <seeElement selector="{{AdminDesignConfigSection.logoPreview}}" stepKey="LogoPreviewIsVisible"/>
     </test>
 </tests>

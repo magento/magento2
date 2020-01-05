@@ -9,7 +9,7 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontCatalogSearchAdvancedFormPage" url="/catalogsearch/advanced/" area="storefront" module="Magento_CatalogSearch">
-        <section name="StorefrontCatalogSearchAdvancedFormSection" />
-        <section name="StorefrontQuickSearchSection" />
+        <section name="StorefrontCatalogSearchAdvancedFormSection"/>
+        <section name="StorefrontQuickSearchSection"/>
     </page>
 </pages>

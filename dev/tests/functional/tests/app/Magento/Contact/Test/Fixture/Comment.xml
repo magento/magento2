@@ -10,7 +10,7 @@
              module="Magento_Contact"
              repository_class="Magento\Contact\Test\Repository\Comment"
              class="Magento\Contact\Test\Fixture\Comment">
-        <field name="comment" is_required="0" />
-        <field name="customer" is_required="0" source="Magento\Contact\Test\Fixture\Comment\Customer" />
+        <field name="comment" is_required="0"/>
+        <field name="customer" is_required="0" source="Magento\Contact\Test\Fixture\Comment\Customer"/>
     </fixture>
 </config>

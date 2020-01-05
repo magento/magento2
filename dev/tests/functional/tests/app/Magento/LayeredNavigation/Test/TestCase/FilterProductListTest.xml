@@ -29,8 +29,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
-            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
+            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList"/>
         </variation>
         <variation name="FilterProductListTestVariation2" ticketId="MAGETWO-30617, MAGETWO-30702">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -63,8 +63,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
-            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
+            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList"/>
         </variation>
         <variation name="FilterProductListTestVariation3" ticketId="MAGETWO-30700, MAGETWO-30703">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -90,8 +90,8 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
-            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
+            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList"/>
         </variation>
         <variation name="FilterProductListTestVariation4" summary="Use sorting category filter when layered navigation is applied" ticketId="MAGETWO-42701">
             <data name="tag" xsi:type="string">test_type:mysql_search</data>
@@ -112,8 +112,8 @@
                 <item name="field" xsi:type="string">Product Name</item>
                 <item name="direction" xsi:type="string">asc</item>
             </data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
-            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertCategorySortingOnFilteredProductList" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
+            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertCategorySortingOnFilteredProductList"/>
         </variation>
         <variation name="FilterProductListTestVariation5" summary="Use Layered Navigation by Price" ticketId="MAGETWO-30615">
             <data name="configData" xsi:type="string">layered_navigation_manual_range_10</data>
@@ -146,7 +146,7 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList" />
+            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList"/>
         </variation>
     </testCase>
 </config>

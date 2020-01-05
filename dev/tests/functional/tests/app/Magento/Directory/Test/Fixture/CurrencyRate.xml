@@ -15,8 +15,8 @@
              repository_class="Magento\Directory\Test\Repository\CurrencyRate"
              handler_interface="Magento\Directory\Test\Handler\CurrencyRate\CurrencyRateInterface"
              class="Magento\Directory\Test\Fixture\CurrencyRate">
-        <field name="currency_from" is_required="1" />
-        <field name="currency_to" is_required="1" />
-        <field name="rate" is_required="1" />
+        <field name="currency_from" is_required="1"/>
+        <field name="currency_to" is_required="1"/>
+        <field name="rate" is_required="1"/>
     </fixture>
 </config>

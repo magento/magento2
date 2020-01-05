@@ -65,7 +65,7 @@
 
             <!--Go to store configuration page and verify AssertStoreBackend-->
             <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
-            <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad" />
+            <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad"/>
             <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
             <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
             <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{SecondStoreUnique.name}}" stepKey="seeAssertUpdateStoreViewInDefaultConfigDropdown"/>

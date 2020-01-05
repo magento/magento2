@@ -11,7 +11,7 @@
             <data name="initialSynonymGroup/dataset" xsi:type="string">prepareMerge</data>
             <data name="description" xsi:type="string">Delete Synonym Groups Successfully</data>
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
-            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupDeleteMessage" />
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupDeleteMessage"/>
         </variation>
     </testCase>
 </config>

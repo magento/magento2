@@ -11,7 +11,7 @@
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menu/0" xsi:type="string">Simple Product</data>
             <data name="menu/3" xsi:type="string">Virtual Product</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTypeOrderOnCreate" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTypeOrderOnCreate"/>
         </variation>
     </testCase>
 </config>

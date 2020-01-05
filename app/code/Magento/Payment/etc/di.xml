@@ -10,10 +10,10 @@
     <preference for="Magento\Payment\Api\Data\PaymentAdditionalInfoInterface" type="Magento\Payment\Model\PaymentAdditionalInfo"/>
     <preference for="Magento\Payment\Api\PaymentMethodListInterface" type="Magento\Payment\Model\PaymentMethodList"/>
     <preference for="Magento\Payment\Gateway\Validator\ResultInterface" type="Magento\Payment\Gateway\Validator\Result"/>
-    <preference for="Magento\Payment\Gateway\ConfigFactoryInterface" type="Magento\Payment\Gateway\Config\ConfigFactory" />
-    <preference for="Magento\Payment\Gateway\Command\CommandManagerPoolInterface" type="Magento\Payment\Gateway\Command\CommandManagerPool" />
-    <preference for="Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface" type="Magento\Payment\Gateway\Data\PaymentDataObjectFactory" />
-    <preference for="Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapperInterface" type="Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapper" />
+    <preference for="Magento\Payment\Gateway\ConfigFactoryInterface" type="Magento\Payment\Gateway\Config\ConfigFactory"/>
+    <preference for="Magento\Payment\Gateway\Command\CommandManagerPoolInterface" type="Magento\Payment\Gateway\Command\CommandManagerPool"/>
+    <preference for="Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface" type="Magento\Payment\Gateway\Data\PaymentDataObjectFactory"/>
+    <preference for="Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapperInterface" type="Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapper"/>
 
     <type name="Magento\Payment\Model\Config\Reader">
         <arguments>

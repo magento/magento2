@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreditMemosGridSection">
-        <element name="searchField" type="input" selector="//input[text() = 'Search by keyword']" />
+        <element name="searchField" type="input" selector="//input[text() = 'Search by keyword']"/>
         <element name="buttonSearch" type="button" selector=".data-grid-search-control-wrap > button.action-submit"/>
         <element name="clearFilters" type="button" selector="button.action-tertiary.action-clear"/>
         <element name="buttonFilters" type="button" selector=".data-grid-filters-action-wrap > button"/>

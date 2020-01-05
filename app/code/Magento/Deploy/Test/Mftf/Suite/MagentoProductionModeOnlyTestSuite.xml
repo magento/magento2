@@ -9,14 +9,14 @@
     <suite name="MagentoProductionModeOnlyTestSuite">
         <before>
             <!-- Command should be uncommented once MQE-1711 is resolved -->
-            <comment userInput="Command should be uncommented once MQE-1711 is resolved" stepKey="comment" />
+            <comment userInput="Command should be uncommented once MQE-1711 is resolved" stepKey="comment"/>
             <!-- <magentoCLI command="deploy:mode:set production" stepKey="enableProductionMode"/> -->
         </before>
         <include>
             <group name="production_mode_only"/>
         </include>
         <after>
-            <comment userInput="Command should be uncommented once MQE-1711 is resolved" stepKey="comment" />
+            <comment userInput="Command should be uncommented once MQE-1711 is resolved" stepKey="comment"/>
         </after>
     </suite>
 </suites>

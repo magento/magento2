@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminCustomVariableFormActionGroup">
         <arguments>
-            <argument name="variable" />
+            <argument name="variable"/>
         </arguments>
         <seeInField selector="{{AdminVariableFormSection.code}}" userInput="{{variable.code}}" stepKey="seeVariableCode"/>
         <seeInField selector="{{AdminVariableFormSection.name}}" userInput="{{variable.name}}" stepKey="seeVariableName"/>

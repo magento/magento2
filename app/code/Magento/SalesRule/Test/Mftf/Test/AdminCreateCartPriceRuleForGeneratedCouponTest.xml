@@ -83,7 +83,7 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
         <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader"/>
-        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField" />
+        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField"/>
         <fillField selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" userInput="{$grabCouponCode}" stepKey="fillCouponField"/>
         <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="clickApplyButton"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>

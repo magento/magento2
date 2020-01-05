@@ -14,9 +14,9 @@
             <data name="currencySymbolDefault" xsi:type="string">₴</data>
             <data name="currencySymbol/data/inherit_custom_currency_symbol" xsi:type="string">Yes</data>
             <data name="currencySymbol/data/custom_currency_symbol" xsi:type="string">-</data>
-            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage" next="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage" />
-            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage" next="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnCatalogPage" prev="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage" />
-            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnCatalogPage" prev="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage" />
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage" next="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage"/>
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage" next="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnCatalogPage" prev="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage"/>
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnCatalogPage" prev="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPage"/>
         </variation>
     </testCase>
 </config>

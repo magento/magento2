@@ -39,20 +39,20 @@
             <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
         </after>
         <!-- Go to default attribute set edit page and add the product attribute to the set -->
-        <comment userInput="Go to default attribute set edit page and add the product attribute to the set" stepKey="commentAttributeSetEdit" />
+        <comment userInput="Go to default attribute set edit page and add the product attribute to the set" stepKey="commentAttributeSetEdit"/>
         <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
         <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute($$attribute.attribute[attribute_code]$$)}}" selector2="{{AdminProductAttributeSetSection.attribute('Product Details')}}" stepKey="assignTestAttributes"/>
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickAttributeSetSave"/>
         <!-- Go to simple product edit page and set the product attribute to a value -->
-        <comment userInput="Go to simple product edit page and set the product attribute to a value" stepKey="commentProductAttributeEdit" />
+        <comment userInput="Go to simple product edit page and set the product attribute to a value" stepKey="commentProductAttributeEdit"/>
         <amOnPage url="{{AdminProductEditPage.url($$simpleProduct1.id$$)}}" stepKey="goToEditPage"/>
         <selectOption selector="{{AdminProductFormSection.customSelectField($$attribute.attribute[attribute_code]$$)}}" userInput="option1" stepKey="selectAttribute"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
         <!-- Check storefront mobile view for shop by button is functioning as expected -->
-        <comment userInput="Check storefront mobile view for shop by button is functioning as expected" stepKey="commentCheckShopByButton" />
+        <comment userInput="Check storefront mobile view for shop by button is functioning as expected" stepKey="commentCheckShopByButton"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageToLoad"/>
-        <submitForm selector="#search_mini_form" parameterArray="['q' => 'Test Simple Product']" stepKey="fillSearchBar" />
+        <submitForm selector="#search_mini_form" parameterArray="['q' => 'Test Simple Product']" stepKey="fillSearchBar"/>
         <resizeWindow width="600" height="800" stepKey="resizeWindow"/>
         <waitForPageLoad stepKey="waitForHomePageToLoad2"/>
         <seeElement selector="{{StorefrontCategorySidebarMobileSection.shopByButton}}" stepKey="seeShopByButton"/>

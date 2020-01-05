@@ -57,7 +57,7 @@
         <!--Conditions checker -->
         <element name="openList" type="button" selector="a.rule-chooser-trigger>img.v-middle.rule-chooser-trigger"/>
         <element name="searchSegmentName" type="input" selector="//div[@class='rule-chooser']//input[@name='grid_segment_name']"/>
-        <element name="searchButton" type="button" selector="div.admin__filter-actions>button.action-default.scalable.action-secondary" timeout="10" />
+        <element name="searchButton" type="button" selector="div.admin__filter-actions>button.action-default.scalable.action-secondary" timeout="10"/>
         <element name="selectAll" type="checkbox" selector="//*[@class='rule-chooser']//input[contains(@class, 'admin__control-checkbox')]" timeout="10"/>
         <element name="resetSearchFilter" type="button" selector="//div[@class='admin__filter-actions']//button[@title='Reset Filter']"/>
         <element name="setSegment" type="button" selector="//*[@class='rule-tree-wrapper']//a[@class='rule-param-apply']"/>

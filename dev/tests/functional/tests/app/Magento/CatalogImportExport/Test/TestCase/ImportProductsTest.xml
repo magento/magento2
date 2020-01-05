@@ -34,9 +34,9 @@
                 <item name="0" xsi:type="string">catalog_category_product</item>
                 <item name="1" xsi:type="string">catalog_product_category</item>
              </data>
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront"/>
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts"/>
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid"/>
         </variation>
         <variation name="ImportProductVariation2" ticketId="MAGETWO-47719" summary="Import Products assigned to different websites with Replace Behavior">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -55,9 +55,9 @@
                 <item name="0" xsi:type="string">catalog_category_product</item>
                 <item name="1" xsi:type="string">catalog_product_category</item>
             </data>
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront"/>
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts"/>
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid"/>
         </variation>
         <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Import Simple Product with custom options with Replace Behavior">
             <data name="tag" xsi:type="string">stable:no</data>
@@ -75,9 +75,9 @@
                 <item name="0" xsi:type="string">catalog_category_product</item>
                 <item name="1" xsi:type="string">catalog_product_category</item>
             </data>
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront"/>
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts"/>
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid"/>
             <data name="issue" xsi:type="string">MAGETWO-71397: Magento\CatalogImportExport\Test\TestCase\ImportProductsTest fails randomly</data>
         </variation>
     </testCase>

@@ -53,14 +53,14 @@
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
-            <argument name="redirectPath" value="$$createSimpleProduct.name$$.html" />
-            <argument name="redirectType" value="No" />
+            <argument name="redirectPath" value="$$createSimpleProduct.name$$.html"/>
+            <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
-            <argument name="redirectPath" value="{{_defaultProduct.urlKey}}.html" />
+            <argument name="redirectPath" value="{{_defaultProduct.urlKey}}.html"/>
             <argument name="redirectType" value="Temporary (302)"/>
             <argument name="targetPath" value="$$createSimpleProduct.name$$.html"/>
         </actionGroup>

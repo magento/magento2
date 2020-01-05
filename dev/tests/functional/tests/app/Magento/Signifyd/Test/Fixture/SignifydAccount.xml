@@ -11,7 +11,7 @@
              type="virtual"
              repository_class="Magento\Signifyd\Test\Repository\SignifydAccount"
              class="Magento\Signifyd\Test\Fixture\SignifydAccount">
-        <field name="email" />
-        <field name="password" />
+        <field name="email"/>
+        <field name="password"/>
     </fixture>
 </config>

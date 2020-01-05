@@ -13,7 +13,7 @@
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/name" xsi:type="string">abc_dfj</data>
             <data name="productSearch/data/sku" xsi:type="string">abc_dfj</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation2">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -21,7 +21,7 @@
             <data name="products/simple_1" xsi:type="string">-</data>
             <data name="products/simple_2" xsi:type="string">Yes</data>
             <data name="productSearch/data/name" xsi:type="string">adc_123</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation3">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -29,7 +29,7 @@
             <data name="products/simple_1" xsi:type="string">Yes</data>
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/name" xsi:type="string">abc</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation4">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -37,7 +37,7 @@
             <data name="products/simple_1" xsi:type="string">Yes</data>
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/sku" xsi:type="string">abc_dfj</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation5">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -45,7 +45,7 @@
             <data name="products/simple_1" xsi:type="string">Yes</data>
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/sku" xsi:type="string">abc</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation6">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -54,7 +54,7 @@
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/sku" xsi:type="string">abc</data>
             <data name="productSearch/data/description" xsi:type="string">adc_full</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation7">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -62,7 +62,7 @@
             <data name="products/simple_1" xsi:type="string">-</data>
             <data name="products/simple_2" xsi:type="string">Yes</data>
             <data name="productSearch/data/description" xsi:type="string">dfj_full</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation8">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -70,7 +70,7 @@
             <data name="products/simple_1" xsi:type="string">-</data>
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/short_description" xsi:type="string">dfj_short</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation9">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -78,7 +78,7 @@
             <data name="products/simple_1" xsi:type="string">Yes</data>
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/short_description" xsi:type="string">abc_short</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation10">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -86,7 +86,7 @@
             <data name="products/simple_1" xsi:type="string">Yes</data>
             <data name="products/simple_2" xsi:type="string">Yes</data>
             <data name="productSearch/data/price/value/price_to" xsi:type="string">100</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation11">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -95,7 +95,7 @@
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/price/value/price_from" xsi:type="string">50</data>
             <data name="productSearch/data/price/value/price_to" xsi:type="string">50</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation12">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -108,7 +108,7 @@
             <data name="productSearch/data/short_description" xsi:type="string">abc_short</data>
             <data name="productSearch/data/price/value/price_from" xsi:type="string">49</data>
             <data name="productSearch/data/price/value/price_to" xsi:type="string">500</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation13">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -121,19 +121,19 @@
             <data name="productSearch/data/short_description" xsi:type="string">abc_short</data>
             <data name="productSearch/data/price/value/price_from" xsi:type="string">49</data>
             <data name="productSearch/data/price/value/price_to" xsi:type="string">50</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation14">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="description" xsi:type="string">Negative product search</data>
             <data name="productSearch/data/name" xsi:type="string">Negative_product_search</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchNoResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchNoResult"/>
         </variation>
         <variation name="AdvancedSearchEntityTestVariation15" summary="Do Advanced Search without entering data" ticketId="MAGETWO-14859">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="issue" xsi:type="string">MAGETWO-18537: "Enter a search term and try again." error message is missed in Advanced Search</data>
-            <data name="productSearch/data/name" xsi:type="string" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchEmptyTerm" />
+            <data name="productSearch/data/name" xsi:type="string"/>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchEmptyTerm"/>
         </variation>
     </testCase>
 </config>

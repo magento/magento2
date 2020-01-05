@@ -10,7 +10,7 @@
     <indexer id="indexer_2" view_id="indexer_2"
              class="Magento\Module\IndexerSecond">
         <dependencies>
-            <indexer id="indexer_4" />
+            <indexer id="indexer_4"/>
         </dependencies>
     </indexer>
     <indexer id="indexer_3" view_id="indexer_3"

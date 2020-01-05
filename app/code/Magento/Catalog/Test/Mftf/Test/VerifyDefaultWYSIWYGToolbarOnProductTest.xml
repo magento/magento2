@@ -21,14 +21,14 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
         </before>
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
         <waitForPageLoad stepKey="wait"/>
-        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
-        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty"/>
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible1"/>
-        <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />
+        <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description"/>
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Style}}" stepKey="assertInfo2"/>
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Bold}}" stepKey="assertInfo3"/>
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Italic}}" stepKey="assertInfo4"/>
@@ -60,14 +60,14 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
         </before>
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
         <waitForPageLoad stepKey="wait"/>
-        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
-        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty"/>
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible2"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription" />
+        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Style}}" stepKey="assertInfo16"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bold}}" stepKey="assertInfo17"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Italic}}" stepKey="assertInfo18"/>

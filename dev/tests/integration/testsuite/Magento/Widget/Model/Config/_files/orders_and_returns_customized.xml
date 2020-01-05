@@ -7,7 +7,7 @@
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
-    <widget id="new_products" class="Magento\Sales\Block\Widget\Guest\Form" is_email_compatible="true" >
+    <widget id="new_products" class="Magento\Sales\Block\Widget\Guest\Form" is_email_compatible="true">
         <label translate="true">Orders and Returns</label>
         <description translate="true">Orders and Returns Search Form</description>
         <parameters>
@@ -24,10 +24,10 @@
         </parameters>
         <containers>
             <container name="left">
-                <template name="default" value="default_template" />
+                <template name="default" value="default_template"/>
             </container>
             <container name="right">
-                <template name="default" value="default_template" />
+                <template name="default" value="default_template"/>
             </container>
         </containers>
     </widget>

@@ -7,15 +7,15 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
-        <plugin name="configurable" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable" sortOrder="50" />
-        <plugin name="updateConfigurations" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations" sortOrder="60" />
-        <plugin name="cleanConfigurationTmpImages" type="Magento\ConfigurableProduct\Plugin\Product\Initialization\CleanConfigurationTmpImages" sortOrder="999" />
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable" sortOrder="50"/>
+        <plugin name="updateConfigurations" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations" sortOrder="60"/>
+        <plugin name="cleanConfigurationTmpImages" type="Magento\ConfigurableProduct\Plugin\Product\Initialization\CleanConfigurationTmpImages" sortOrder="999"/>
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Builder">
-        <plugin name="configurable" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin" sortOrder="50" />
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin" sortOrder="50"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Validator">
-        <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Product\Validator\Plugin" sortOrder="50" />
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Product\Validator\Plugin" sortOrder="50"/>
     </type>
     <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Block\Adminhtml\Order\Create\Sidebar" sortOrder="200"/>
@@ -26,7 +26,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product">
-        <plugin name="reload_attributes" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product" />
+        <plugin name="reload_attributes" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product"/>
     </type>
     <type name="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns">
         <arguments>
@@ -38,7 +38,7 @@
             <argument name="attributeRepository" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Attribute\Repository</argument>
         </arguments>
     </type>
-    <preference for="Magento\ConfigurableProduct\Model\AttributesListInterface" type="Magento\ConfigurableProduct\Model\AttributesList" />
+    <preference for="Magento\ConfigurableProduct\Model\AttributesListInterface" type="Magento\ConfigurableProduct\Model\AttributesList"/>
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">

@@ -11,10 +11,10 @@
         <selector>#integration_edit_tabs_info_section</selector>
         <strategy>css selector</strategy>
         <fields>
-            <name />
-            <email />
-            <endpoint />
-            <identity_link_url />
+            <name/>
+            <email/>
+            <endpoint/>
+            <identity_link_url/>
             <current_password>
                 <selector>[name='current_password']</selector>
                 <strategy>css selector</strategy>
@@ -22,9 +22,9 @@
             <key>
                 <selector>[name="consumer_key"]</selector>
             </key>
-            <consumer_secret />
-            <token />
-            <token_secret />
+            <consumer_secret/>
+            <token/>
+            <token_secret/>
         </fields>
     </integration_info>
     <api>

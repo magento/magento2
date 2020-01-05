@@ -38,7 +38,7 @@
         <selectOption selector="{{LayeredNavigationSection.NavigationStepCalculation}}" userInput="Manual" stepKey="selectOption"/>
         <uncheckOption selector="{{LayeredNavigationSection.PriceNavigationStepSystemValue}}" stepKey="uncheckUseStepSystemValue"/>
         <fillField selector="{{LayeredNavigationSection.PriceNavigationStep}}" userInput="102" stepKey="fillPriceNavStep"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
 
         <waitForElementVisible selector="{{LayeredNavigationSection.layeredNavigationBlock}}" stepKey="waitForLayeredNav"/>
@@ -48,7 +48,7 @@
         <!-- It is possible uncheck Use Default checkbox -->
         <checkOption selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="setStepCalculationToDefaultValue"/>
         <checkOption selector="{{LayeredNavigationSection.PriceNavigationStepSystemValue}}" stepKey="setPriceNavToDefaultValue"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
         <waitForPageLoad stepKey="waitForSaveSystemConfiguration"/>
     </test>
 </tests>

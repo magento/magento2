@@ -15,9 +15,9 @@
             <data name="urlRewrite/data/request_path" xsi:type="string">category_request_path%isolation%</data>
             <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
             <data name="urlRewrite/data/description" xsi:type="string">test_description_relative path</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomRedirect" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomRedirect"/>
         </variation>
         <variation name="CreateCustomUrlRewriteEntityTestVariation2">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -27,9 +27,9 @@
             <data name="urlRewrite/data/request_path" xsi:type="string">product_request_path%isolation%</data>
             <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
             <data name="urlRewrite/data/description" xsi:type="string">test_description_relative path</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomRedirect" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomRedirect"/>
         </variation>
     </testCase>
 </config>

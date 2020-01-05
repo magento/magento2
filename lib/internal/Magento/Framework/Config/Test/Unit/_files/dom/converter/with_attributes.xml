@@ -8,7 +8,7 @@
 <root>
     <node_one attributeOne = '10' attributeTwo = '20'>
         <subnode attributeThree = '30'>Value1</subnode>
-        <subnode attributeFour = '40' />
-        <books attributeFive = '50' />
+        <subnode attributeFour = '40'/>
+        <books attributeFive = '50'/>
     </node_one>
 </root>

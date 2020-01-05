@@ -14,9 +14,9 @@
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingMethod/shipping_service" xsi:type="string">Federal Express</data>
             <data name="shippingMethod/shipping_method" xsi:type="string">International Economy</data>
-            <data name="clearShippingAddress/postcode" xsi:type="string" />
-            <data name="clearShippingAddress/city" xsi:type="string" />
-            <data name="clearShippingAddress/country_id" xsi:type="string" />
+            <data name="clearShippingAddress/postcode" xsi:type="string"/>
+            <data name="clearShippingAddress/city" xsi:type="string"/>
+            <data name="clearShippingAddress/country_id" xsi:type="string"/>
             <data name="shippingAddresses/0/country_id" xsi:type="string">Kenya</data>
             <data name="shippingAddresses/1/country_id" xsi:type="string">Kenya</data>
             <data name="shippingAddresses/1/postcode" xsi:type="string">12345</data>

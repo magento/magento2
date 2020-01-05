@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate"/>
         </after>
 
         <!-- Search the tax rate on tax grid page -->
@@ -37,7 +37,7 @@
         <!-- Update 0.1 tax rate on the tax rate form page -->
         <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{taxRateCustomRateFrance.code}}" stepKey="fillTaxIdentifierField2"/>
         <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="{{taxRateCustomRateFrance.tax_country_id}}" stepKey="selectCountry1"/>
-        <wait time="10" stepKey="waitForRegionsLoaded" />
+        <wait time="10" stepKey="waitForRegionsLoaded"/>
         <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="{{taxRateCustomRateFrance.tax_region_id}}" stepKey="selectState"/>
         <fillField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="{{taxRateCustomRateFrance.tax_postcode}}" stepKey="fillPostCode"/>
         <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="{{taxRateCustomRateFrance.rate}}" stepKey="fillRate1"/>

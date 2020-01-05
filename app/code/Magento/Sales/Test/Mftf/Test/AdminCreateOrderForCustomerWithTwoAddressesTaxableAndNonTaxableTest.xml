@@ -44,19 +44,19 @@
             <argument name="product" value="$$product1$$"/>
         </actionGroup>
         <!--Step 2: Select taxable address as billing address-->
-        <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_CA.state}}" stepKey="selectTaxableAddress" />
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_CA.state}}" stepKey="selectTaxableAddress"/>
         <!--Step 3: Select FlatRate shipping method-->
         <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShippingMethod"/>
         <!--Step 4: Verify that tax is applied to the order-->
-        <seeElement selector="{{AdminOrderFormTotalSection.total('Tax')}}" stepKey="seeTax" />
+        <seeElement selector="{{AdminOrderFormTotalSection.total('Tax')}}" stepKey="seeTax"/>
         <!--Step 5: Select non taxable address as billing address-->
-        <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_TX.state}}" stepKey="selectNonTaxableAddress" />
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_TX.state}}" stepKey="selectNonTaxableAddress"/>
         <!--Step 6: Change shipping method to Free-->
         <actionGroup ref="ChangeShippingMethodActionGroup" stepKey="changeShippingMethod">
             <argument name="shippingMethod" value="freeshipping_freeshipping"/>
         </actionGroup>
         <!--Step 7: Verify that tax is not applied to the order-->
-        <dontSeeElement selector="{{AdminOrderFormTotalSection.total('Tax')}}" stepKey="dontSeeTax" />
+        <dontSeeElement selector="{{AdminOrderFormTotalSection.total('Tax')}}" stepKey="dontSeeTax"/>
         <after>
             <!--Delete product1-->
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>

@@ -17,7 +17,7 @@
             </block>
             <referenceBlock name="product.info.addto">
                 <block class="Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist" name="view.addto.wishlist"
-                       template="Magento_Wishlist::catalog/product/view/addto/wishlist.phtml" />
+                       template="Magento_Wishlist::catalog/product/view/addto/wishlist.phtml"/>
             </referenceBlock>
         </referenceContainer>
         <referenceContainer name="content.aside">

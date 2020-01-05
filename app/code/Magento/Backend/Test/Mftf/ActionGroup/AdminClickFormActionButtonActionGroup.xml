@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminClickFormActionButtonActionGroup">
         <arguments>
-            <argument name="buttonSelector" type="string" />
+            <argument name="buttonSelector" type="string"/>
         </arguments>
         <waitForElementVisible selector="{{buttonSelector}}" stepKey="waitForButton"/>
         <click selector="{{buttonSelector}}" stepKey="clickButton"/>

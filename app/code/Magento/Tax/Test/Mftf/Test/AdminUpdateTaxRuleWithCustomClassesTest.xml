@@ -33,8 +33,8 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData stepKey="deleteTaxRule" createDataKey="initialTaxRule" />
-            <deleteData stepKey="deleteTaxRate" createDataKey="taxRateWithZipRange" />
+            <deleteData stepKey="deleteTaxRule" createDataKey="initialTaxRule"/>
+            <deleteData stepKey="deleteTaxRate" createDataKey="taxRateWithZipRange"/>
             <deleteData stepKey="deleteCustomerTaxClass" createDataKey="createCustomerTaxClass"/>
             <deleteData stepKey="deleteProductTaxClass" createDataKey="createProductTaxClass"/>
         </after>
@@ -49,16 +49,16 @@
         <!-- Update tax rule with custom classes -->
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
         <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$taxRateWithZipRange.code$$" stepKey="fillTaxRateSearch"/>
-        <wait stepKey="waitForSearch" time="5" />
+        <wait stepKey="waitForSearch" time="5"/>
         <click selector="{{AdminTaxRuleFormSection.taxRateOption($$taxRateWithZipRange.code$$)}}" stepKey="clickSelectNeededItem"/>
         <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings"/>
         <scrollTo selector="{{AdminTaxRuleFormSection.additionalSettings}}" x="0" y="-80" stepKey="scrollToAdvancedSettings"/>
-        <wait stepKey="waitForAdditionalSettings" time="5" />
-        <conditionalClick selector="{{AdminTaxRuleFormSection.customerTaxClassOption(retailCustomerTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.customerTaxClassSelected(retailCustomerTaxClass.class_name)}}" visible="false" stepKey="checkRetailCustomerTaxClass" />
-        <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxableGoodsTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxableGoodsTaxClass.class_name)}}" visible="false" stepKey="checkTaxableGoodsTaxClass" />
+        <wait stepKey="waitForAdditionalSettings" time="5"/>
+        <conditionalClick selector="{{AdminTaxRuleFormSection.customerTaxClassOption(retailCustomerTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.customerTaxClassSelected(retailCustomerTaxClass.class_name)}}" visible="false" stepKey="checkRetailCustomerTaxClass"/>
+        <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxableGoodsTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxableGoodsTaxClass.class_name)}}" visible="false" stepKey="checkTaxableGoodsTaxClass"/>
         <click selector="{{AdminTaxRuleFormSection.productTaxClassOption($$productTaxClass.class_name$$)}}" stepKey="clickSelectProductTaxClass"/>
         <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="clickSaveTaxRule"/>
-        <waitForPageLoad stepKey="waitForTaxRuleSaved" />
+        <waitForPageLoad stepKey="waitForTaxRuleSaved"/>
         <!-- Verify we see success message -->
         <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="seeAssertTaxRuleSuccessMessage"/>
 
@@ -75,7 +75,7 @@
         <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings1"/>
         <scrollTo selector="{{AdminTaxRuleFormSection.additionalSettings}}" x="0" y="-80" stepKey="scrollToAdvancedSettings1"/>
         <seeElement selector="{{AdminTaxRuleFormSection.productTaxClassSelected($$productTaxClass.class_name$$)}}" stepKey="seeProductTaxClass"/>
-        <seeElement selector="{{AdminTaxRuleFormSection.customerTaxClassSelected(retailCustomerTaxClass.class_name)}}" stepKey="seeRetailCustomerTaxClass" />
-        <seeElement selector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxableGoodsTaxClass.class_name)}}" stepKey="seeTaxableGoodsTaxClass" />
+        <seeElement selector="{{AdminTaxRuleFormSection.customerTaxClassSelected(retailCustomerTaxClass.class_name)}}" stepKey="seeRetailCustomerTaxClass"/>
+        <seeElement selector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxableGoodsTaxClass.class_name)}}" stepKey="seeTaxableGoodsTaxClass"/>
     </test>
 </tests>

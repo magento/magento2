@@ -10,9 +10,9 @@
         <variation name="DeleteTaxRateEntityTestVariation1">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="taxRate/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessDeleteMessage" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInGrid" />
-            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInTaxRule" />
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessDeleteMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInGrid"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInTaxRule"/>
         </variation>
     </testCase>
 </config>

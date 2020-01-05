@@ -10,7 +10,7 @@
         <resources>
             <resource id="Test_Value::show_toolbar" title="Lorem ipsum" sortOrder="12">
                 <resource id="Test_Value::global_search" sortOrder="66" disabled="true">
-                    <resource id="Test_Value::dev" disabled="false" />
+                    <resource id="Test_Value::dev" disabled="false"/>
                 </resource>
             </resource>
         </resources>

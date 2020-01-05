@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="controller_action_noroute">
-        <observer name="cms" instance="Magento\Cms\Observer\NoRouteObserver" />
+        <observer name="cms" instance="Magento\Cms\Observer\NoRouteObserver"/>
     </event>
     <event name="controller_action_nocookies">
-        <observer name="cms" instance="Magento\Cms\Observer\NoCookiesObserver" />
+        <observer name="cms" instance="Magento\Cms\Observer\NoCookiesObserver"/>
     </event>
 </config>

@@ -18,12 +18,12 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout"/>
         </variation>
     </testCase>
 </config>

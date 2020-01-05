@@ -116,7 +116,7 @@
 
         <!-- Add Configurable Product to the cart -->
         <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
-            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
             <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
             <argument name="productOption" value="$$getConfigAttributeOption2.label$$"/>
             <argument name="qty" value="1"/>
@@ -143,7 +143,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->

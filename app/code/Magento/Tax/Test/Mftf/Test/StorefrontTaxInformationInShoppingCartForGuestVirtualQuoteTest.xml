@@ -55,25 +55,25 @@
         <!--  Step 3: Go to Shopping Cart -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
-        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
-        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.30" stepKey="checkTaxAmountCA" />
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.30" stepKey="checkTaxAmountCA"/>
         <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>
-        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA" />
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA"/>
         <!--  Step 5: Change Data -->
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="Switzerland" stepKey="selectSwitzerlandCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Aargau" stepKey="selectAargauRegion"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="1234" stepKey="inputPostCode"/>
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount" />
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount"/>
         <!--  Step 6: Change Data -->
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUnitedStatesCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="New York" stepKey="selectNewYorkRegion"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="12345" stepKey="inputPostCode2"/>
-        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary2" />
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary2"/>
         <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary2"/>
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.35" stepKey="checkTaxAmountNY" />
-        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.35" stepKey="checkTaxAmountNY"/>
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY"/>
     </test>
 </tests>

@@ -7,9 +7,9 @@
 -->
 <mapping strict="0">
     <fields>
-        <code />
-        <priority />
-        <position />
+        <code/>
+        <priority/>
+        <position/>
         <tax_rate>
             <selector>[class*="tax_rate"]</selector>
             <input>multiselectlist</input>

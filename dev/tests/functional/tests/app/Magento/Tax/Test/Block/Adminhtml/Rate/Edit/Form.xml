@@ -7,14 +7,14 @@
 -->
 <mapping strict="0">
     <fields>
-        <code />
-        <rate />
+        <code/>
+        <rate/>
         <zip_is_range>
             <input>checkbox</input>
         </zip_is_range>
-        <tax_postcode />
-        <zip_from />
-        <zip_to />
+        <tax_postcode/>
+        <zip_from/>
+        <zip_to/>
         <tax_country_id>
             <input>select</input>
         </tax_country_id>

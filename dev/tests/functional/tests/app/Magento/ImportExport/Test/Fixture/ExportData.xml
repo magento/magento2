@@ -12,9 +12,9 @@
              entity_type="importexport_importdata"
              repository_class="Magento\ImportExport\Test\Repository\ExportData"
              class="Magento\ImportExport\Test\Fixture\ExportData">
-        <field name="id" is_required="1" />
-        <field name="entity" is_required="" />
-        <field name="file_format" is_required="" />
+        <field name="id" is_required="1"/>
+        <field name="entity" is_required=""/>
+        <field name="file_format" is_required=""/>
         <field name="data_export" is_required="" source="Magento\ImportExport\Test\Fixture\ExportData\DataExport"/>
     </fixture>
 </config>

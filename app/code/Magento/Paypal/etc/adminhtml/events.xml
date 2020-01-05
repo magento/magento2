@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="payment_method_is_active">
-        <observer name="sales_billing_agreement" instance="Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver" />
+        <observer name="sales_billing_agreement" instance="Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver"/>
     </event>
 </config>

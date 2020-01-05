@@ -21,10 +21,10 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
-               <requiredEntity createDataKey="createCategory" />
+               <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="SimpleProduct" stepKey="createProductForUrlRewrite">
-               <requiredEntity createDataKey="createCategory" />
+               <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Create second store view -->
@@ -34,9 +34,9 @@
             <magentoCLI command="indexer:reindex" stepKey="runReindex"/>
         </before>
         <after>
-            <deleteData createDataKey="createProduct"  stepKey="deleteProduct" />
-            <deleteData createDataKey="createProductForUrlRewrite"  stepKey="deleteProductForUrlRewrite" />
-            <deleteData createDataKey="createCategory"  stepKey="deleteCategory" />
+            <deleteData createDataKey="createProduct"  stepKey="deleteProduct"/>
+            <deleteData createDataKey="createProductForUrlRewrite"  stepKey="deleteProductForUrlRewrite"/>
+            <deleteData createDataKey="createCategory"  stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>

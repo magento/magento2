@@ -15,8 +15,8 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">on_category</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">cmsStaticBlock</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetOnFrontendInCatalog" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetOnFrontendInCatalog"/>
         </variation>
         <variation name="CreateWidgetEntityTestVariation2">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S1, stable:no</data>
@@ -26,9 +26,9 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">for_cms_page_link</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">cmsPageLink</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetInGrid" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetCmsPageLink" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetInGrid"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetCmsPageLink"/>
         </variation>
         <variation name="CreateWidgetEntityTestVariation3">
             <data name="tag" xsi:type="string">severity:S1</data>
@@ -38,8 +38,8 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">for_viewed_products</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">recentlyViewedProducts</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetRecentlyViewedProducts" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetRecentlyViewedProducts"/>
         </variation>
         <variation name="CreateWidgetEntityTestVariation4">
             <data name="tag" xsi:type="string">severity:S1</data>
@@ -49,8 +49,8 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">for_compared_products</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">recentlyComparedProducts</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetRecentlyComparedProducts" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetRecentlyComparedProducts"/>
         </variation>
         <variation name="CreateWidgetEntityTestVariation5">
             <data name="tag" xsi:type="string">severity:S1, stable:no</data>
@@ -60,8 +60,8 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">for_category_link</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">catalogCategoryLink</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetCatalogCategoryLink" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetCatalogCategoryLink"/>
         </variation>
         <variation name="CreateWidgetEntityTestVariation6">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S1</data>
@@ -71,9 +71,9 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">on_product_link</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">catalogProductLink</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetOnFrontendInCatalog" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetProductLink" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetOnFrontendInCatalog"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetProductLink"/>
         </variation>
         <variation name="CreateWidgetEntityTestVariation7" summary="Assert widget with disabled block_html cache type">
             <data name="issue" xsi:type="string">MAGETWO-58146: There is no cache invalidate popup after creating widget with disabled block_html cache type</data>
@@ -85,11 +85,11 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">on_category</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">cmsStaticBlock</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheInvalidatePopUp" />
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheInvalidateNotice" />
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheStatus" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetOnFrontendInCatalog" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheInvalidatePopUp"/>
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheInvalidateNotice"/>
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheStatus"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetOnFrontendInCatalog"/>
         </variation>
         <variation name="CreateWidgetEntityTestVariation8" summary="Assert widget with invalidated block_html cache type">
             <data name="issue" xsi:type="string">MAGETWO-58146: There is no cache invalidate popup after creating widget with disabled block_html cache type</data>
@@ -101,11 +101,11 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">for_category_link</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">catalogCategoryLink</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheInvalidatePopUp" />
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheInvalidateNotice" />
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheStatus" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetAbsentOnFrontendHome" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheInvalidatePopUp"/>
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheInvalidateNotice"/>
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheStatus"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetAbsentOnFrontendHome"/>
         </variation>
         <variation name="CreateWidgetEntityTestVariation9" summary="Create Catalog New Products List type widget">
             <data name="tag" xsi:type="string">severity:S1, stable:no</data>
@@ -115,8 +115,8 @@
             <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
             <data name="widget/data/widget_instance/dataset" xsi:type="string">for_new_products_list</data>
             <data name="widget/data/parameters/dataset" xsi:type="string">catalogNewProductsList</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetCatalogNewProductsList" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetCatalogNewProductsList"/>
         </variation>
     </testCase>
 </config>

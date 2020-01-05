@@ -13,6 +13,6 @@
         <element name="messageProductAddedToCart" type="text"
                  selector="//main//div[contains(@class, 'messages')]//div[contains(@class, 'message')]/div[contains(text(), 'You added {{var1}} to your') and a[contains(., 'shopping cart')]]"
                  parameterized="true"
-        />
+       />
     </section>
 </sections>

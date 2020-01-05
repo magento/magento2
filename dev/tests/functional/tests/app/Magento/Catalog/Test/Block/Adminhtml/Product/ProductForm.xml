@@ -138,8 +138,8 @@
         <selector>[data-index='content']</selector>
         <strategy>css selector</strategy>
         <fields>
-            <description />
-            <short_description />
+            <description/>
+            <short_description/>
         </fields>
     </content>
     <attributes>

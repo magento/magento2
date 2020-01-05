@@ -14,7 +14,7 @@
             <data name="bestsellerReport/to" xsi:type="string">m/d/Y</data>
             <data name="bestsellerReport/show_empty_rows" xsi:type="string">No</data>
             <data name="date" xsi:type="string">Y</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertBestsellerReportResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertBestsellerReportResult"/>
         </variation>
         <variation name="BestsellerProductsReportEntityTestVariation2">
             <data name="order/dataset" xsi:type="string">virtual_big_qty</data>
@@ -23,7 +23,7 @@
             <data name="bestsellerReport/to" xsi:type="string">m/d/Y</data>
             <data name="bestsellerReport/show_empty_rows" xsi:type="string">Yes</data>
             <data name="date" xsi:type="string">n/Y</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertBestsellerReportResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertBestsellerReportResult"/>
         </variation>
         <variation name="BestsellerProductsReportEntityTestVariation3">
             <data name="order/dataset" xsi:type="string">simple_big_qty</data>
@@ -32,7 +32,7 @@
             <data name="bestsellerReport/to" xsi:type="string">m/d/Y +1 day</data>
             <data name="bestsellerReport/show_empty_rows" xsi:type="string">No</data>
             <data name="date" xsi:type="string">M d, Y</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertBestsellerReportResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertBestsellerReportResult"/>
         </variation>
     </testCase>
 </config>

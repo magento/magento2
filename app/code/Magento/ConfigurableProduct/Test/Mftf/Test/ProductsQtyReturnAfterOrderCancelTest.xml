@@ -61,7 +61,7 @@
 
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>

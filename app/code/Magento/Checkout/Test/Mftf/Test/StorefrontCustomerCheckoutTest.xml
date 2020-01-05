@@ -36,7 +36,7 @@
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$simpleuscustomer$$" />
+            <argument name="Customer" value="$$simpleuscustomer$$"/>
         </actionGroup>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage"/>
@@ -46,39 +46,39 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
         <click stepKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
-        <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
+        <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <waitForPageLoad stepKey="s39"/>
-        <waitForElement stepKey="s41" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
-        <see stepKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-        <click stepKey="s49" selector="{{CheckoutPaymentSection.placeOrder}}" />
+        <waitForElement stepKey="s41" selector="{{CheckoutPaymentSection.placeOrder}}" time="30"/>
+        <see stepKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}"/>
+        <click stepKey="s49" selector="{{CheckoutPaymentSection.placeOrder}}"/>
         <waitForPageLoad stepKey="s51"/>
         <grabTextFrom stepKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}"/>
-        <see stepKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
+        <see stepKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:"/>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
         <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
         <waitForPageLoad stepKey="s75"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFiltersIfPresent"/>
-        <fillField stepKey="s77" selector="{{AdminOrdersGridSection.search}}" userInput="{$s53}" />
+        <fillField stepKey="s77" selector="{{AdminOrdersGridSection.search}}" userInput="{$s53}"/>
         <waitForPageLoad stepKey="s78"/>
 
-        <click stepKey="s81" selector="{{AdminOrdersGridSection.submitSearch22}}" />
+        <click stepKey="s81" selector="{{AdminOrdersGridSection.submitSearch22}}"/>
         <waitForPageLoad stepKey="s831"/>
-        <click stepKey="s84" selector="{{AdminOrdersGridSection.firstRow}}" />
+        <click stepKey="s84" selector="{{AdminOrdersGridSection.firstRow}}"/>
         <waitForPageLoad stepKey="waitForOrderToLoad"/>
-        <see stepKey="s85" selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
-        <see stepKey="s87" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
-        <see stepKey="s89" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
-        <see stepKey="s91" selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-        <see stepKey="s93" selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-        <see stepKey="s95" selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
+        <see stepKey="s85" selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending"/>
+        <see stepKey="s87" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer"/>
+        <see stepKey="s89" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$"/>
+        <see stepKey="s91" selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}"/>
+        <see stepKey="s93" selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}"/>
+        <see stepKey="s95" selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$"/>
 
         <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
         <waitForPageLoad stepKey="s97"/>
@@ -88,7 +88,7 @@
         <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
         <click stepKey="s101" selector="{{AdminCustomerGridSection.firstRowEditLink}}"/>
         <click stepKey="s102" selector="{{AdminEditCustomerInformationSection.orders}}"/>
-        <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$" />
+        <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$"/>
     </test>
     <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRates">
         <annotations>
@@ -159,7 +159,7 @@
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$multiple_address_customer$$" />
+            <argument name="Customer" value="$$multiple_address_customer$$"/>
         </actionGroup>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage1"/>
@@ -169,18 +169,18 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded1"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage1"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity1"/>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
 
         <click stepKey="selectFirstShippingMethod1" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="waitForShippingMethodSelect1" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
-        <click stepKey="clickNextOnShippingMethodLoad1" selector="{{CheckoutShippingMethodsSection.next}}" />
+        <click stepKey="clickNextOnShippingMethodLoad1" selector="{{CheckoutShippingMethodsSection.next}}"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
-        <waitForElement stepKey="waitForPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
-        <see stepKey="seeBillingAddressIsCorrect1" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" />
-        <click stepKey="clickPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" />
+        <waitForElement stepKey="waitForPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" time="30"/>
+        <see stepKey="seeBillingAddressIsCorrect1" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}"/>
+        <click stepKey="clickPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}"/>
         <waitForPageLoad stepKey="waitForOrderSuccessPage1"/>
-        <see stepKey="seeSuccessMessage1" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
+        <see stepKey="seeSuccessMessage1" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:"/>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage2"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
@@ -189,7 +189,7 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded2"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage2"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity2"/>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
 
         <click selector="{{CheckoutShippingMethodsSection.shipHereButton}}" stepKey="changeShippingAddress"/>
         <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30" stepKey="waitForShippingMethodLoaderNotVisible"/>
@@ -201,7 +201,7 @@
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
-        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeBillingAddressIsCorrect2" />
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeBillingAddressIsCorrect2"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton2"/>
         <waitForPageLoad stepKey="waitForOrderSuccessPage2"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="seeSuccessMessage2"/>
@@ -221,9 +221,9 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="config:set checkout/options/display_billing_address_on 1"  stepKey="setShowBillingAddressOnPaymentPage" />
-            <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"  />
-            <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="specificCountryValue" />
+            <magentoCLI command="config:set checkout/options/display_billing_address_on 1"  stepKey="setShowBillingAddressOnPaymentPage"/>
+            <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue" />
+            <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="specificCountryValue"/>
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
 
             <!-- Perform reindex and flush cache -->
@@ -233,14 +233,14 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="allowSpecificValue" />
-            <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="specificCountryValue" />
-            <magentoCLI command="config:set checkout/options/display_billing_address_on 0" stepKey="setDisplayBillingAddressOnPaymentMethod" />
+            <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="allowSpecificValue"/>
+            <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="specificCountryValue"/>
+            <magentoCLI command="config:set checkout/options/display_billing_address_on 0" stepKey="setDisplayBillingAddressOnPaymentMethod"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
         </after>
         <!-- Login as Customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$simpleuscustomer$$" />
+            <argument name="Customer" value="$$simpleuscustomer$$"/>
         </actionGroup>
 
         <!-- Add product to cart -->
@@ -253,12 +253,12 @@
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
 
         <!-- Go to checkout page -->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="customerGoToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="customerGoToCheckoutFromMinicart"/>
 
         <!-- Select address -->
         <click stepKey="selectAddress" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="waitNextButton" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
-        <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}" />
+        <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}"/>
         <waitForPageLoad stepKey="waitBillingForm"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
         <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
@@ -271,11 +271,11 @@
             <argument name="Address" value="updateCustomerUKAddress"/>
             <argument name="classPrefix" value="[aria-hidden=false]"/>
         </actionGroup>
-        <click selector="{{CheckoutPaymentSection.addressAction('Update')}}" stepKey="clickUpdateBillingAddressButton" />
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="customerSelectCheckMoneyOrderPayment" />
+        <click selector="{{CheckoutPaymentSection.addressAction('Update')}}" stepKey="clickUpdateBillingAddressButton"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="customerSelectCheckMoneyOrderPayment"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceorder">
-            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
     </test>
 </tests>

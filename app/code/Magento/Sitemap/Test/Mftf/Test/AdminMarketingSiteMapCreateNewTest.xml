@@ -22,14 +22,14 @@
         </before>
         <after>
             <actionGroup ref="AdminMarketingSiteDeleteByNameActionGroup" stepKey="deleteSiteMap">
-                <argument name="filename" value="{{DefaultSiteMap.filename}}" />
+                <argument name="filename" value="{{DefaultSiteMap.filename}}"/>
             </actionGroup>
             <actionGroup ref="AssertSiteMapDeleteSuccessActionGroup" stepKey="assertDeleteSuccessMessage"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminMarketingSiteMapNavigateNewActionGroup" stepKey="navigateNewSiteMap"/>
         <actionGroup ref="AdminMarketingSiteMapFillFormActionGroup" stepKey="fillSiteMapForm">
-            <argument name="sitemap" value="DefaultSiteMap" />
+            <argument name="sitemap" value="DefaultSiteMap"/>
         </actionGroup>
         <actionGroup ref="AssertSiteMapCreateSuccessActionGroup" stepKey="seeSuccessMessage"/>
     </test>

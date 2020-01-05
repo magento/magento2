@@ -7,6 +7,6 @@
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <htmlContent name="customer_edit_tab_agreements_content">
-        <block class="Magento\Paypal\Block\Adminhtml\Customer\Edit\Tab\Agreement" name="customer_edit_tab_agreements" after="orders" />
+        <block class="Magento\Paypal\Block\Adminhtml\Customer\Edit\Tab\Agreement" name="customer_edit_tab_agreements" after="orders"/>
     </htmlContent>
 </form>

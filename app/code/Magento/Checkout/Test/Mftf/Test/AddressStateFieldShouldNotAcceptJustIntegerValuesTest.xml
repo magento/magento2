@@ -36,7 +36,7 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart"/>
         <selectOption stepKey="selectCounty" selector="{{CheckoutShippingSection.country}}" userInput="{{UK_Address.country_id}}"/>
         <waitForPageLoad stepKey="waitFormToReload"/>
         <fillField selector="{{CheckoutShippingSection.stateInput}}" userInput="1" stepKey="enterStateAsIntegerValue"/>

@@ -10,9 +10,9 @@
         <variation name="DeleteUsedInConfigurableProductAttributeTestVariation1">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/dataset" xsi:type="string">one_variation</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertUsedSuperAttributeImpossibleDeleteMessages" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertUsedSuperAttributeImpossibleDeleteMessages"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
         </variation>
     </testCase>
 </config>

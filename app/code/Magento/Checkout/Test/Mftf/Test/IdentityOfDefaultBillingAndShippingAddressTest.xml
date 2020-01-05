@@ -45,17 +45,17 @@
         <waitForPageLoad stepKey="waitForShippingSection"/>
 
         <!--Fill shipment form-->
-        <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="checkoutFillingShippingSection" >
-            <argument name="customerVar" value="Simple_US_Customer_NY" />
-            <argument name="customerAddressVar" value="US_Address_NY" />
+        <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="checkoutFillingShippingSection">
+            <argument name="customerVar" value="Simple_US_Customer_NY"/>
+            <argument name="customerAddressVar" value="US_Address_NY"/>
         </actionGroup>
 
         <!--Fill cart data-->
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
 
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeorder">
-            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
         <!--Go To My Account-->
         <amOnPage stepKey="goToMyAccountPage" url="/customer/account/"/>

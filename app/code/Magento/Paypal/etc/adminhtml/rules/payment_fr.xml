@@ -15,7 +15,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
             </event>
@@ -39,7 +39,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="payments_pro_hosted_solution_fr">payments_pro_hosted_solution_fr</argument>
                     <argument name="express_checkout_other">express_checkout_other</argument>
                 </predicate>
@@ -68,7 +68,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
             </event>

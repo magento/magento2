@@ -36,11 +36,11 @@
         <!-- Create a tax rate with range from 90001-96162 for zipCodes -->
         <click selector="{{AdminTaxRateGridSection.add}}" stepKey="clickAddNewTaxRateButton"/>
         <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillRuleName"/>
-        <checkOption selector="{{AdminTaxRateFormSection.zipRange}}" stepKey="checkZipRange" />
+        <checkOption selector="{{AdminTaxRateFormSection.zipRange}}" stepKey="checkZipRange"/>
         <fillField selector="{{AdminTaxRateFormSection.rangeFrom}}" userInput="90001" stepKey="fillZipFrom"/>
         <fillField selector="{{AdminTaxRateFormSection.rangeTo}}" userInput="96162" stepKey="fillZipTo"/>
         <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="United States" stepKey="selectCountry1"/>
-        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="California" stepKey="selectState" />
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="California" stepKey="selectState"/>
         <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput='15.5' stepKey="seeRate"/>
         <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
@@ -50,7 +50,7 @@
         <!-- Create a tax rate for zipCodeRange and verify we see expected values on the tax rate grid page -->
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillTaxIdentifierField2"/>
-        <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="United States" stepKey="selectCountry2" />
+        <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="United States" stepKey="selectCountry2"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByPostCode}}" userInput="90001-96162" stepKey="seeTaxPostCode1"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
         <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow3"/>

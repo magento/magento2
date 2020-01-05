@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
     <scenario name="LowStockProductsReportEntityTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Config" next="createProduct" />
-        <step name="createProduct" module="Magento_Catalog" />
+        <step name="setupConfiguration" module="Magento_Config" next="createProduct"/>
+        <step name="createProduct" module="Magento_Catalog"/>
     </scenario>
 </config>

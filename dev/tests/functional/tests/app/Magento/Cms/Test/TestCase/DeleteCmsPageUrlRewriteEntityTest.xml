@@ -10,21 +10,21 @@
         <variation name="DeleteCmsPageUrlRewriteEntityTestVariation1">
             <data name="tag" xsi:type="string">severity:S2,mftf_migrated:yes</data>
             <data name="urlRewrite/dataset" xsi:type="string">cms_default_no_redirect</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteNotInGrid" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteNotInGrid"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound"/>
         </variation>
         <variation name="DeleteCmsPageUrlRewriteEntityTestVariation2">
             <data name="tag" xsi:type="string">severity:S2,mftf_migrated:yes</data>
             <data name="urlRewrite/dataset" xsi:type="string">cms_default_permanent_redirect</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound"/>
         </variation>
         <variation name="DeleteCmsPageUrlRewriteEntityTestVariation3">
             <data name="tag" xsi:type="string">severity:S2,mftf_migrated:yes</data>
             <data name="urlRewrite/dataset" xsi:type="string">cms_default_temporary_redirect</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound"/>
         </variation>
     </testCase>
 </config>

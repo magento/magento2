@@ -63,7 +63,7 @@
 
         <!-- Checking the correctness of displayed custom options for user parameters on checkout -->
 
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
         <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
 

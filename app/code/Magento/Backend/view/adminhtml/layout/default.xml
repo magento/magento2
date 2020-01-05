@@ -56,10 +56,10 @@
         <referenceContainer name="footer">
             <container name="legal" htmlTag="div" htmlClass="footer-legal">
                 <container name="legal.copyright" htmlTag="p" htmlClass="copyright col-m-6">
-                    <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright" />
+                    <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
                 </container>
                 <container name="legal.system" htmlTag="div" htmlClass="footer-legal-system col-m-6">
-                    <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
+                    <block class="Magento\Backend\Block\Page\Footer" name="version" as="version"/>
                     <block class="Magento\Framework\View\Element\Template" name="privacyPolicy" as="privacyPolicy" template="Magento_Backend::page/privacyPolicy.phtml">
                         <arguments>
                             <argument name="privacypolicy_url" xsi:type="string">https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf</argument>
@@ -70,7 +70,7 @@
                             <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
                         </arguments>
                     </block>
-                    
+
                 </container>
             </container>
         </referenceContainer>

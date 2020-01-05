@@ -88,7 +88,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert Empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Register customer after checkout -->

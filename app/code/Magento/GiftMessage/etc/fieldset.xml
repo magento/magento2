@@ -10,7 +10,7 @@
     <scope id="global">
         <fieldset id="sales_convert_quote_address">
             <field name="gift_message_id">
-                <aspect name="to_order" />
+                <aspect name="to_order"/>
             </field>
         </fieldset>
     </scope>

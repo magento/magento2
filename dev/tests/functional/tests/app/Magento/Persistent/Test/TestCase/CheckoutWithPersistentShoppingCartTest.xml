@@ -11,7 +11,7 @@
             <data name="issue" xsi:type="string">MAGETWO-59976: Customer can't open Product on Storefront if Persistent Cart is enabled</data>
             <data name="customer/dataset" xsi:type="string">register_customer</data>
             <data name="configData" xsi:type="string">clearpersistence_on_signout</data>
-            <constraint name="Magento\Persistent\Test\Constraint\AssertCustomerIsRedirectedToCheckout" />
+            <constraint name="Magento\Persistent\Test\Constraint\AssertCustomerIsRedirectedToCheckout"/>
         </variation>
     </testCase>
 </config>

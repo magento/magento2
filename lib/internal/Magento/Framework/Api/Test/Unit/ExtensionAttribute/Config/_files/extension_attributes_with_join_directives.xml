@@ -11,7 +11,7 @@
             <join reference_table="library_account"
                   reference_field="customer_id"
                   join_on_field="id"
-                    >
+                   >
                 <field>library_card_id</field>
             </join>
         </attribute>
@@ -19,7 +19,7 @@
             <join reference_table="reviews"
                   reference_field="customer_id"
                   join_on_field="customer_id"
-                    >
+                   >
                 <field>comment</field>
                 <field>rating</field>
             </join>

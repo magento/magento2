@@ -20,7 +20,7 @@
     <preference for="Magento\GiftMessage\Api\OrderRepositoryInterface" type="Magento\GiftMessage\Model\OrderRepository"/>
     <preference for="Magento\GiftMessage\Api\OrderItemRepositoryInterface" type="Magento\GiftMessage\Model\OrderItemRepository"/>
     <preference for="Magento\GiftMessage\Api\Data\MessageInterface" type="Magento\GiftMessage\Model\Message"/>
-    <type name="Magento\GiftMessage\Model\Plugin\QuoteItem" shared="false" />
+    <type name="Magento\GiftMessage\Model\Plugin\QuoteItem" shared="false"/>
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="gift_message_quote_item_conversion" type="Magento\GiftMessage\Model\Plugin\QuoteItem"/>
     </type>

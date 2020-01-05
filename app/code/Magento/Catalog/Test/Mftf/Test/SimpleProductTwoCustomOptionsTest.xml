@@ -11,7 +11,7 @@
     <test name="SimpleProductTwoCustomOptionsTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Create simple product with two custom options" />
+            <stories value="Create simple product with two custom options"/>
             <title value="Admin should be able to create simple product with two custom options"/>
             <description value="Admin should be able to create simple product with two custom options"/>
             <severity value="AVERAGE"/>

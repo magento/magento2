@@ -9,13 +9,13 @@
     <testCase name="Magento\User\Test\TestCase\DeleteUserRoleEntityTest" summary="Delete Admin User Role Entity" ticketId="MAGETWO-23926">
         <variation name="DeleteUserRoleEntityTestVariation1">
             <data name="isDefaultUser" xsi:type="string">0</data>
-            <constraint name="Magento\User\Test\Constraint\AssertImpossibleDeleteYourOwnRole" />
-            <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid" />
+            <constraint name="Magento\User\Test\Constraint\AssertImpossibleDeleteYourOwnRole"/>
+            <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid"/>
         </variation>
         <variation name="DeleteUserRoleEntityTestVariation2">
             <data name="isDefaultUser" xsi:type="string">1</data>
-            <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessDeleteMessage" />
-            <constraint name="Magento\User\Test\Constraint\AssertRoleNotInGrid" />
+            <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessDeleteMessage"/>
+            <constraint name="Magento\User\Test\Constraint\AssertRoleNotInGrid"/>
         </variation>
     </testCase>
 </config>

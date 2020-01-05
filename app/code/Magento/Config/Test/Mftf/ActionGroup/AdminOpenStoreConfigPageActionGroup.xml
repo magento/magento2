@@ -13,7 +13,7 @@
             <description>Go to admin store configuration page.</description>
         </annotations>
 
-        <amOnPage url="{{AdminConfigPage.url}}" stepKey="openAdminStoreConfigPage" />
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <amOnPage url="{{AdminConfigPage.url}}" stepKey="openAdminStoreConfigPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

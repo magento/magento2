@@ -6,7 +6,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-login" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="styles" />
+    <update handle="styles"/>
     <body>
         <!-- @todo ui: - delete after bugfix -->
         <referenceContainer name="legal" remove="true"/>

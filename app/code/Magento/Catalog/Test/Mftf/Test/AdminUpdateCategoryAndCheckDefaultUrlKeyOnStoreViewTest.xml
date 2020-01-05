@@ -63,7 +63,7 @@
         <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization1"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
-        <seeInField selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="seeCategoryUrlKey" userInput="{{SimpleRootSubCategory.name_lwr}}2" />
+        <seeInField selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="seeCategoryUrlKey" userInput="{{SimpleRootSubCategory.name_lwr}}2"/>
         <!--Open Category in Store Front  Page-->
         <amOnPage url="/{{NewRootCategory.name}}/{{_defaultCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>

@@ -29,9 +29,9 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
             <data name="productQuantity/productForSalesRule1" xsi:type="string">1</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation2">
             <data name="address/data/country_id" xsi:type="string">United States</data>
@@ -56,9 +56,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">200.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">140.00</data>
             <data name="cartPrice/discount" xsi:type="string">70.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation3">
             <data name="address/data/country_id" xsi:type="string">United States</data>
@@ -82,9 +82,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">300.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">255.00</data>
             <data name="cartPrice/discount" xsi:type="string">60.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation4">
             <data name="address/data/country_id" xsi:type="string">United States</data>
@@ -110,9 +110,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">400.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">320.00</data>
             <data name="cartPrice/discount" xsi:type="string">100.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation5">
             <data name="address/data/country_id" xsi:type="string">United States</data>
@@ -139,9 +139,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">300.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">215.00</data>
             <data name="cartPrice/discount" xsi:type="string">100.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation6">
             <data name="tag" xsi:type="string">stable:no</data>
@@ -168,9 +168,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">150.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">80.00</data>
             <data name="cartPrice/discount" xsi:type="string">80.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
     </testCase>
 </config>

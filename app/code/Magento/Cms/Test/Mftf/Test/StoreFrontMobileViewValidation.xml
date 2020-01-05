@@ -28,7 +28,7 @@
         </after>
         <resizeWindow width="375" height="812" stepKey="resizeWindowToMobile"/>
         <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad6" />
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
          <!--Verifying that Footer is not in visible area by default as the CMS page has lots of content which will occupy entire visible area-->
         <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.footerTop}}').getBoundingClientRect().top" stepKey="topOfFooter"/>
         <assertGreaterThan stepKey="assertDefaultLoad">

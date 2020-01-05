@@ -11,7 +11,7 @@
     <test name="CheckNotVisibleProductInMinicartTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="MAGETWO-96422: Hidden Products are absent in Storefront Mini-Cart" />
+            <stories value="MAGETWO-96422: Hidden Products are absent in Storefront Mini-Cart"/>
             <title value="Not visible individually product in mini-shopping cart."/>
             <description value="To be sure that product in mini-shopping cart remains visible after admin makes it not visible individually"/>
             <severity value="MAJOR"/>

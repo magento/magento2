@@ -14,9 +14,9 @@
     <preference for="Magento\Store\Api\Data\WebsiteInterface" type="Magento\Store\Model\Website"/>
     <preference for="Magento\Store\Api\StoreWebsiteRelationInterface" type="Magento\Store\Model\StoreManager"/>
     <preference for="Magento\Store\Api\StoreResolverInterface" type="Magento\Store\Model\StoreResolver"/>
-    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
-    <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
-    <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect" />
+    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor"/>
+    <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager"/>
+    <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect"/>
     <preference for="Magento\Store\Api\StoreCookieManagerInterface" type="Magento\Store\Model\StoreCookieManager"/>
     <preference for="Magento\Store\Api\StoreConfigManagerInterface" type="Magento\Store\Model\Service\StoreConfigManager"/>
     <preference for="Magento\Store\Api\Data\StoreConfigInterface" type="Magento\Store\Model\Data\StoreConfig"/>
@@ -25,7 +25,7 @@
     <preference for="Magento\Framework\App\ScopeFallbackResolverInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
     <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
     <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
-    <preference for="Magento\Store\Model\StoreSwitcherInterface" type="Magento\Store\Model\StoreSwitcher" />
+    <preference for="Magento\Store\Model\StoreSwitcherInterface" type="Magento\Store\Model\StoreSwitcher"/>
     <type name="Magento\Framework\App\Http\Context">
         <arguments>
             <argument name="default" xsi:type="array">
@@ -61,11 +61,11 @@
         <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
-    <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
+    <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store"/>
+    <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig"/>
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" />
+        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design"/>
     </type>
     <type name="Magento\Framework\Url\SecurityInfo">
         <plugin name="storeUrlSecurityInfo" type="Magento\Store\Url\Plugin\SecurityInfo"/>
@@ -207,7 +207,7 @@
         <arguments>
             <argument name="areas" xsi:type="array">
                 <item name="frontend" xsi:type="array">
-                    <item name="frontName" xsi:type="null" />
+                    <item name="frontName" xsi:type="null"/>
                     <item name="router" xsi:type="string">standard</item>
                 </item>
             </argument>

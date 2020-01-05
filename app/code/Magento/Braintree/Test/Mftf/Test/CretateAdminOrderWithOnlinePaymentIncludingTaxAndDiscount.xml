@@ -74,7 +74,7 @@
         </after>
 
         <!-- Create a cart price rule with 10% discount for whole cart -->
-        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
+        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing"/>
         <waitForPageLoad stepKey="waitForMarketing"/>
         <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
         <waitForPageLoad stepKey="waitForCartPriceRules"/>

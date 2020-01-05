@@ -29,9 +29,9 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Webapi\Controller\Rest" />
-    <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed" />
-    <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
+    <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Webapi\Controller\Rest"/>
+    <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed"/>
+    <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false"/>
     <type name="Magento\Webapi\Controller\Rest">
         <arguments>
             <argument name="request" xsi:type="object">Magento\Framework\Webapi\Rest\Request\Proxy</argument>
@@ -40,9 +40,9 @@
             <argument name="oauthHelper" xsi:type="object">Magento\Framework\Oauth\Helper\Request\Proxy</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Webapi\Model\WebapiRoleLocator" />
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Webapi\Model\WebapiRoleLocator"/>
     <type name="Magento\Framework\Authorization">
-        <plugin name="guestAuthorization" type="Magento\Webapi\Model\Plugin\GuestAuthorization" />
+        <plugin name="guestAuthorization" type="Magento\Webapi\Model\Plugin\GuestAuthorization"/>
     </type>
 
     <!-- Configuration to check that the permissions are checked on fields -->
@@ -60,7 +60,7 @@
     </virtualType>
 
     <type name="Magento\Customer\Model\Authorization\CustomerSessionUserContext">
-        <plugin name="webApiCustomerSessionUserContext" type="Magento\Webapi\Model\Plugin\Authorization\CustomerSessionUserContext" />
+        <plugin name="webApiCustomerSessionUserContext" type="Magento\Webapi\Model\Plugin\Authorization\CustomerSessionUserContext"/>
     </type>
 
     <type name="Magento\Framework\Webapi\ServiceOutputProcessor">
@@ -70,7 +70,7 @@
     </type>
     <!-- End of configuration to check that permissions are checked on fields -->
 
-    <preference for="Magento\Webapi\Controller\Rest\RequestProcessorInterface" type="Magento\Webapi\Controller\Rest\RequestProcessorPool" />
+    <preference for="Magento\Webapi\Controller\Rest\RequestProcessorInterface" type="Magento\Webapi\Controller\Rest\RequestProcessorPool"/>
 
     <type name="Magento\Webapi\Controller\Rest\RequestProcessorPool">
         <arguments>

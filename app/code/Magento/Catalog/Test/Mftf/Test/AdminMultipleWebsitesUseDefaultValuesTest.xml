@@ -46,7 +46,7 @@
         <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickStoreViewSaveButton"/>
-        <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationModal" />
+        <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationModal"/>
         <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="AcceptNewStoreViewCreation"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
         <see userInput="You saved the store view." stepKey="seeSaveMessage"/>

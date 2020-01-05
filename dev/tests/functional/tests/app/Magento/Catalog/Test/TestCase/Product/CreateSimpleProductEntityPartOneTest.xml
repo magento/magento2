@@ -18,10 +18,10 @@
             <data name="product/data/visibility" xsi:type="string">Search</data>
             <data name="minQty" xsi:type="string">3</data>
             <data name="maxQty" xsi:type="string">5</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryMinAllowedQty" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryMaxAllowedQty" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryMinAllowedQty"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryMaxAllowedQty"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation13">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -35,12 +35,12 @@
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">62</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">139</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation14">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -54,12 +54,12 @@
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">63</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">140</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation15">
             <data name="description" xsi:type="string">Create product with tax class and group price</data>
@@ -72,12 +72,12 @@
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">64</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">141</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation16">
             <data name="description" xsi:type="string">Create product with tax class and check absent special price</data>
@@ -90,13 +90,13 @@
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">65</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">142</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation17">
             <data name="description" xsi:type="string">Create product without tax class and tier price</data>
@@ -110,13 +110,13 @@
             <data name="product/data/weight" xsi:type="string">66</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">143</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation18" summary="Create simple product with imported options" ticketId="MAGETWO-71386">
             <data name="description" xsi:type="string">Create product wit suite of custom options</data>
@@ -131,13 +131,13 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">options_suite</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_options_suite</data>
             <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation19" summary="Create product with cross-sell products" ticketId="MAGETWO-29081">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -150,10 +150,10 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/cross_sell_products/dataset" xsi:type="string">catalogProductSimple::default, configurableProduct::default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCrossSells" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCrossSells"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation20" summary="Create product with up-sell products" ticketId="MAGETWO-29105">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -166,10 +166,10 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/up_sell_products/dataset" xsi:type="string">catalogProductSimple::default, configurableProduct::default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductUpSells" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductUpSells"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation21" summary="Create product with related products" ticketId="MAGETWO-29352">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -182,10 +182,10 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/related_products/dataset" xsi:type="string">catalogProductSimple::default, configurableProduct::default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductRelatedProducts" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductRelatedProducts"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation22" summary="Can't Add Out of Stock Products to Shopping Cart" ticketId="MAGETWO-12423">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -197,8 +197,8 @@
             <data name="product/data/weight" xsi:type="string">68</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">0</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent"/>
         </variation>
     </testCase>
 </config>

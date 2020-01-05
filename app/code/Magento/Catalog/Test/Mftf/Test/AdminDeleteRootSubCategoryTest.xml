@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <createData entity="NewRootCategory" stepKey="rootCategory" />
+            <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="SimpleRootSubCategory" stepKey="category">
                 <requiredEntity createDataKey="rootCategory"/>
             </createData>
@@ -50,9 +50,9 @@
         <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="enableStatus"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreViewButton"/>
-        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
-        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning" />
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="dismissModal" />
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="dismissModal"/>
         <waitForElementNotVisible selector="{{AdminNewStoreViewActionsSection.loadingMask}}" stepKey="waitForElementVisible"/>
         <see userInput="You saved the store view." stepKey="seeSaveMessage1"/>
 

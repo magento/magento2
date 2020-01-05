@@ -10,13 +10,13 @@
     <route url="/V1/carts/licence" method="GET">
         <service class="Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="Magento_Sales::sales" />
+            <resource ref="Magento_Sales::sales"/>
         </resources>
     </route>
     <route url="/V1/carts/licence/list" method="GET">
         <service class="Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface" method="getList"/>
         <resources>
-            <resource ref="Magento_Sales::sales" />
+            <resource ref="Magento_Sales::sales"/>
         </resources>
     </route>
 </routes>

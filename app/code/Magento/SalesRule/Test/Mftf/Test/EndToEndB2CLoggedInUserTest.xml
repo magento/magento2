@@ -20,7 +20,7 @@
         </after>
 
         <!-- Step 6: User uses coupon codes -->
-        <comment userInput="Start of using coupon code" stepKey="startOfUsingCouponCode" after="endOfComparingProducts" />
+        <comment userInput="Start of using coupon code" stepKey="startOfUsingCouponCode" after="endOfComparingProducts"/>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="couponOpenCart" after="startOfUsingCouponCode"/>
 
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="couponApplyCoupon" after="couponOpenCart">

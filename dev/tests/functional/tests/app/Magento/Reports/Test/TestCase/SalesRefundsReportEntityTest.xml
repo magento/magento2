@@ -17,7 +17,7 @@
             <data name="refundsReport/to" xsi:type="string">m/d/Y 12:00 a+2 days</data>
             <data name="refundsReport/show_order_statuses" xsi:type="string">Any</data>
             <data name="refundsReport/show_empty_rows" xsi:type="string">Yes</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertRefundReportIntervalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertRefundReportIntervalResult"/>
         </variation>
         <variation name="SalesRefundsReportEntityTestVariation2">
             <data name="description" xsi:type="string">assert refunds month report</data>
@@ -29,7 +29,7 @@
             <data name="refundsReport/to" xsi:type="string">m/d/Y</data>
             <data name="refundsReport/show_order_statuses" xsi:type="string">Any</data>
             <data name="refundsReport/show_empty_rows" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertRefundReportIntervalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertRefundReportIntervalResult"/>
         </variation>
         <variation name="SalesRefundsReportEntityTestVariation3">
             <data name="description" xsi:type="string">assert refund Daily report</data>
@@ -41,7 +41,7 @@
             <data name="refundsReport/to" xsi:type="string">m/d/Y</data>
             <data name="refundsReport/show_order_statuses" xsi:type="string">Specified</data>
             <data name="refundsReport/show_empty_rows" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertRefundReportIntervalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertRefundReportIntervalResult"/>
         </variation>
     </testCase>
 </config>

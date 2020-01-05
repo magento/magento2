@@ -132,7 +132,7 @@
         <!-- Login Customer Storefront -->
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$createCustomer$$" />
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!-- Go to Product Page -->
@@ -158,7 +158,7 @@
 
         <!-- Checking the correctness of displayed custom options for user parameters on checkout -->
 
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
         <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
 
@@ -235,7 +235,7 @@
 
         <!-- Checking the correctness of displayed custom options for user parameters on checkout -->
 
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
 
         <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart1"/>
 
@@ -292,7 +292,7 @@
         <!-- Open tab Customizable Options -->
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad17"/>
-        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses4" />
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses4"/>
 
         <!-- Update Option Customizable Options and Option Value 1-->
 

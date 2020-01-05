@@ -13,6 +13,6 @@
             <argument name="filterInputName" type="string"/>
             <argument name="filterValue" type="string"/>
         </arguments>
-        <fillField selector="{{AdminDataGridFilterSection.inputFieldByNameAttrInGrid(filterInputName)}}" userInput="{{filterValue}}" stepKey="fillFilterInputField" />
+        <fillField selector="{{AdminDataGridFilterSection.inputFieldByNameAttrInGrid(filterInputName)}}" userInput="{{filterValue}}" stepKey="fillFilterInputField"/>
     </actionGroup>
 </actionGroups>

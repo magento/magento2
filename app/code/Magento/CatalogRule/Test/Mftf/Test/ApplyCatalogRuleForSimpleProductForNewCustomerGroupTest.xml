@@ -26,10 +26,10 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!-- Create new customer group -->
-            <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
+            <createData entity="CustomCustomerGroup" stepKey="customerGroup"/>
 
             <!--Creating customer-->
-            <createData entity="Simple_US_Customer" stepKey="createCustomer" >
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
                 <field key="group_id">$customerGroup.id$</field>
             </createData>
 

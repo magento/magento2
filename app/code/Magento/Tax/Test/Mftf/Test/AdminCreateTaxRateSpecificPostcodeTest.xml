@@ -37,8 +37,8 @@
         <!-- Create a tax rate with specific postcode -->
         <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillTaxIdentifierField1"/>
         <fillField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="180" stepKey="fillTaxPostCode"/>
-        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="Canada" stepKey="selectCountry" />
-        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="*" stepKey="selectState" />
+        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="Canada" stepKey="selectCountry"/>
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="*" stepKey="selectState"/>
         <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput='25' stepKey="seeRate"/>
         <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>

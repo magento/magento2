@@ -274,12 +274,12 @@
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
                     <item name="qty" xsi:type="string">13</item>
                     <item name="weight" xsi:type="string">1</item>
-                    <item name="sku" xsi:type="string" />
+                    <item name="sku" xsi:type="string"/>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
                     <item name="qty" xsi:type="string">13</item>
                     <item name="weight" xsi:type="string">2</item>
-                    <item name="sku" xsi:type="string" />
+                    <item name="sku" xsi:type="string"/>
                 </item>
             </field>
         </dataset>
@@ -678,19 +678,19 @@
             </field>
             <field name="bulk_images_price_quantity" xsi:type="array">
                 <item name="images" xsi:type="array">
-                    <item name="image_unique" xsi:type="string" />
+                    <item name="image_unique" xsi:type="string"/>
                     <item name="images" xsi:type="array">
                         <item name="1" xsi:type="string">Magento/Catalog/Test/_files/test2.png</item>
                         <item name="2" xsi:type="string">Magento/Catalog/Test/_files/test3.png</item>
                     </item>
                 </item>
                 <item name="price" xsi:type="array">
-                    <item name="price_attribute_unique" xsi:type="string" />
+                    <item name="price_attribute_unique" xsi:type="string"/>
                     <item name="xl_size_price" xsi:type="string">6</item>
                     <item name="xxl_size_price" xsi:type="string">8</item>
                 </item>
                 <item name="quantity" xsi:type="array">
-                    <item name="quantity_single" xsi:type="string" />
+                    <item name="quantity_single" xsi:type="string"/>
                     <item name="quantity" xsi:type="string">10000</item>
                 </item>
             </field>

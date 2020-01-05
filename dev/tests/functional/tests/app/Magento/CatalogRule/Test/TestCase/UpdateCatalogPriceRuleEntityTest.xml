@@ -12,11 +12,11 @@
             <data name="catalogPriceRule/data/name" xsi:type="string">New Catalog Price Rule Name %isolation%</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">No</data>
             <data name="saveAction" xsi:type="string">save</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNoticeMessage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNoticeMessage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage"/>
         </variation>
         <variation name="CatalogRule_Update_Name_Description_Status_Conditions_Action_DiscountAmount">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
@@ -38,13 +38,13 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout"/>
         </variation>
     </testCase>
 </config>

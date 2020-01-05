@@ -35,14 +35,14 @@
         </after>
         <!--Go to Storefront as Customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$createCustomer$$" />
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!-- Add simple product to cart and go to checkout-->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
         <!-- Click "+ New Address" and Fill new address-->
         <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="addAddress"/>

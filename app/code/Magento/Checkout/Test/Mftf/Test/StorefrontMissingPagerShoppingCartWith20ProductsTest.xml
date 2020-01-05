@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!--Set the default number of items on cart which is 20-->
-            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20"/>
             <createData entity="SimpleTwo" stepKey="simpleProduct1"/>
             <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem1">
                 <argument name="product" value="$$simpleProduct1$$"/>
@@ -126,8 +126,8 @@
             <deleteData createDataKey="simpleProduct20" stepKey="deleteCartItem20"/>
         </after>
         <!-- Go to the shopping cart and check if the pager is missing-->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage" />
-        <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText" >
+        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage"/>
+        <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText">
             <argument name="text" value="Items 1 to 20"/>
         </actionGroup>
     </test>

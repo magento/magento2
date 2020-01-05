@@ -7,54 +7,54 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Customer\Api\AddressRepositoryInterface"
-                type="Magento\Customer\Model\ResourceModel\AddressRepository" />
+                type="Magento\Customer\Model\ResourceModel\AddressRepository"/>
     <preference for="Magento\Customer\Api\CustomerRepositoryInterface"
-                type="Magento\Customer\Model\ResourceModel\CustomerRepository" />
+                type="Magento\Customer\Model\ResourceModel\CustomerRepository"/>
     <preference for="Magento\Customer\Api\GroupManagementInterface"
-                type="Magento\Customer\Model\GroupManagement" />
+                type="Magento\Customer\Model\GroupManagement"/>
     <preference for="Magento\Customer\Api\CustomerGroupConfigInterface"
-                type="Magento\Customer\Model\CustomerGroupConfig" />
+                type="Magento\Customer\Model\CustomerGroupConfig"/>
     <preference for="Magento\Customer\Api\GroupRepositoryInterface"
-                type="Magento\Customer\Model\ResourceModel\GroupRepository" />
-    <preference for="Magento\Customer\Api\Data\CustomerInterface" type="Magento\Customer\Model\Data\Customer" />
-    <preference for="Magento\Customer\Api\Data\AddressInterface" type="Magento\Customer\Model\Data\Address" />
-    <preference for="Magento\Customer\Api\Data\RegionInterface" type="Magento\Customer\Model\Data\Region" />
+                type="Magento\Customer\Model\ResourceModel\GroupRepository"/>
+    <preference for="Magento\Customer\Api\Data\CustomerInterface" type="Magento\Customer\Model\Data\Customer"/>
+    <preference for="Magento\Customer\Api\Data\AddressInterface" type="Magento\Customer\Model\Data\Address"/>
+    <preference for="Magento\Customer\Api\Data\RegionInterface" type="Magento\Customer\Model\Data\Region"/>
     <preference for="Magento\Customer\Api\Data\AttributeMetadataInterface"
-                type="Magento\Customer\Model\Data\AttributeMetadata" />
-    <preference for="Magento\Customer\Api\Data\GroupInterface" type="Magento\Customer\Model\Data\Group" />
-    <preference for="Magento\Customer\Api\Data\OptionInterface" type="Magento\Customer\Model\Data\Option" />
+                type="Magento\Customer\Model\Data\AttributeMetadata"/>
+    <preference for="Magento\Customer\Api\Data\GroupInterface" type="Magento\Customer\Model\Data\Group"/>
+    <preference for="Magento\Customer\Api\Data\OptionInterface" type="Magento\Customer\Model\Data\Option"/>
     <preference for="Magento\Customer\Api\Data\ValidationRuleInterface"
-                type="Magento\Customer\Model\Data\ValidationRule" />
+                type="Magento\Customer\Model\Data\ValidationRule"/>
     <preference for="Magento\Customer\Api\Data\ValidationResultsInterface"
-                type="Magento\Customer\Model\Data\ValidationResults" />
+                type="Magento\Customer\Model\Data\ValidationResults"/>
     <preference for="Magento\Customer\Api\Data\GroupSearchResultsInterface"
-                type="Magento\Customer\Model\GroupSearchResults" />
+                type="Magento\Customer\Model\GroupSearchResults"/>
     <preference for="Magento\Customer\Api\Data\CustomerSearchResultsInterface"
-                type="Magento\Customer\Model\CustomerSearchResults" />
+                type="Magento\Customer\Model\CustomerSearchResults"/>
     <preference for="Magento\Customer\Api\Data\AddressSearchResultsInterface"
-                type="Magento\Customer\Model\AddressSearchResults" />
+                type="Magento\Customer\Model\AddressSearchResults"/>
     <preference for="Magento\Customer\Api\AccountManagementInterface"
-                type="Magento\Customer\Model\AccountManagement" />
+                type="Magento\Customer\Model\AccountManagement"/>
     <preference for="Magento\Customer\Api\CustomerMetadataInterface"
-                type="Magento\Customer\Model\Metadata\CustomerCachedMetadata" />
+                type="Magento\Customer\Model\Metadata\CustomerCachedMetadata"/>
     <preference for="Magento\Customer\Api\AddressMetadataInterface"
-                type="Magento\Customer\Model\Metadata\AddressCachedMetadata" />
+                type="Magento\Customer\Model\Metadata\AddressCachedMetadata"/>
     <preference for="Magento\Customer\Api\CustomerMetadataManagementInterface"
-                type="Magento\Customer\Model\Metadata\CustomerMetadataManagement" />
+                type="Magento\Customer\Model\Metadata\CustomerMetadataManagement"/>
     <preference for="Magento\Customer\Api\AddressMetadataManagementInterface"
-                type="Magento\Customer\Model\Metadata\AddressMetadataManagement" />
+                type="Magento\Customer\Model\Metadata\AddressMetadataManagement"/>
     <preference for="Magento\Customer\Api\CustomerManagementInterface"
-                type="Magento\Customer\Model\CustomerManagement" />
+                type="Magento\Customer\Model\CustomerManagement"/>
     <preference for="Magento\Customer\Model\AuthenticationInterface"
-                type="Magento\Customer\Model\Authentication" />
+                type="Magento\Customer\Model\Authentication"/>
     <preference for="Magento\Customer\Model\EmailNotificationInterface"
-                type="Magento\Customer\Model\EmailNotification" />
+                type="Magento\Customer\Model\EmailNotification"/>
     <preference for="Magento\Customer\Api\CustomerNameGenerationInterface"
-                type="Magento\Customer\Helper\View" />
+                type="Magento\Customer\Helper\View"/>
     <preference for="Magento\Customer\Model\Address\CustomAttributeListInterface"
-                type="Magento\Customer\Model\Address\CustomAttributeList" />
+                type="Magento\Customer\Model\Address\CustomAttributeList"/>
     <preference for="Magento\Customer\Model\Customer\Source\GroupSourceInterface"
-                type="Magento\Customer\Model\Customer\Source\Group" />
+                type="Magento\Customer\Model\Customer\Source\Group"/>
     <preference for="Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface"
                 type="Magento\Customer\Model\Customer\Attribute\Source\Group"/>
     <preference for="Magento\Customer\Block\Account\SortLinkInterface"
@@ -472,7 +472,7 @@
     </type>
     <preference
             for="Magento\Customer\Api\AccountDelegationInterface"
-            type="Magento\Customer\Model\Delegation\AccountDelegation" />
+            type="Magento\Customer\Model\Delegation\AccountDelegation"/>
     <type name="Magento\Eav\Model\Config">
         <arguments>
             <argument name="attributesForPreload" xsi:type="array">

@@ -13,6 +13,6 @@
             <argument name="code" type="string"/>
         </arguments>
         <click selector="{{AdminLegacyDataGridTableSection.rowTemplateStrict(code)}}" stepKey="goToCustomVariableEditPage"/>
-        <waitForPageLoad stepKey="waitForVariableEditPageOpen" />
+        <waitForPageLoad stepKey="waitForVariableEditPageOpen"/>
     </actionGroup>
 </actionGroups>

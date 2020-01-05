@@ -33,7 +33,7 @@
                 <requiredEntity createDataKey="simpleSubCategory3"/>
             </createData>
             <!-- Set the configuration for Generate "category/product" URL Rewrites-->
-            <comment userInput="Enable config to generate category/product URL Rewrites " stepKey="commentEnableConfig" />
+            <comment userInput="Enable config to generate category/product URL Rewrites " stepKey="commentEnableConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
         </before>
         <after>
@@ -94,7 +94,7 @@
         <!-- Create 3 categories -->
         <before>
             <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
-            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig" />
+            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
@@ -111,7 +111,7 @@
                 <requiredEntity createDataKey="simpleSubCategory3"/>
             </createData>
             <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
-            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig" />
+            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
@@ -245,7 +245,7 @@
         </annotations>
         <before>
             <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
-            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig" />
+            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
@@ -255,7 +255,7 @@
                 <requiredEntity createDataKey="simpleSubCategory1"/>
             </createData>
             <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
-            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig" />
+            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>

@@ -12,7 +12,7 @@
             <join reference_table="admin_user"
                   join_on_field="store_id"
                   reference_field="user_id"
-                    >
+                   >
                 <field>firstname</field>
                 <field>lastname</field>
                 <field>email</field>
@@ -24,7 +24,7 @@
             <join reference_table="admin_user"
                   join_on_field="store_id"
                   reference_field="user_id"
-                    >
+                   >
                 <field>firstname</field>
                 <field>lastname</field>
                 <field>email</field>

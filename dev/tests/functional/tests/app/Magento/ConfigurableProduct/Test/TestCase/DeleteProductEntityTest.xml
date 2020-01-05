@@ -11,17 +11,17 @@
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products" xsi:type="string">configurableProduct::default</data>
             <data name="isRequired" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
         </variation>
         <variation name="DeleteProductEntityTestVariation10">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products" xsi:type="string">configurableProduct::with_one_option</data>
             <data name="isRequired" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
         </variation>
     </testCase>
 </config>

@@ -21,8 +21,8 @@
                 <item name="base_currency" xsi:type="string">$40.00</item>
             </data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
-            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertCurrencyRateAppliedOnProductPage" />
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertCurrencyRateAppliedOnProductPage"/>
         </variation>
     </testCase>
 </config>

@@ -69,7 +69,7 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
 
         <!-- Go to Sales > Orders > find out placed order and open -->
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId"/>
         <assertNotEmpty actual="$grabOrderId" stepKey="assertOrderIdIsNotEmpty" after="grabOrderId"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderId}"/>

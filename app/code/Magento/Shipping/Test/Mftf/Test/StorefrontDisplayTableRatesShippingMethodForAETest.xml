@@ -58,7 +58,7 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!--Proceed to Checkout from the mini cart-->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <!--Shipping Method: select table rate-->
         <actionGroup ref="AssertStoreFrontShippingMethodAvailableActionGroup" stepKey="assertShippingMethodAvailable">
             <argument name="shippingMethodName" value="Best Way"/>

@@ -75,7 +75,7 @@
             </createData>
             <magentoCLI command="config:set customer/online_customers/section_data_lifetime 1"
                         stepKey="setConfigForCartLifetime"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache" />
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -96,7 +96,7 @@
         </actionGroup>
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectOption"/>
-        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
         <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$createConfigProduct.name$$)}}" time="30" stepKey="assertMessage"/>
         <!--Disabled via admin panel-->
         <openNewTab stepKey="openNewTab"/>

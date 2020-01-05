@@ -12,7 +12,7 @@
         <element name="message" type="text"
                  selector="//main//div[contains(@class, 'messages')]//div[contains(@class, 'message')]/div[contains(text(), '{{var1}}')]"
                  parameterized="true"
-        />
-        <element name="messageByType" type="text" selector="[data-ui-id='message-{{messageType}}']" parameterized="true" />
+       />
+        <element name="messageByType" type="text" selector="[data-ui-id='message-{{messageType}}']" parameterized="true"/>
     </section>
 </sections>

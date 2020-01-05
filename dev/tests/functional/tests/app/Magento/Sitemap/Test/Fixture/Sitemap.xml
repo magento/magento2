@@ -14,11 +14,11 @@
              repository_class="Magento\Sitemap\Test\Repository\Sitemap"
              handler_interface="Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface"
              class="Magento\Sitemap\Test\Fixture\Sitemap">
-        <field name="sitemap_id" is_required="1" />
-        <field name="sitemap_type" is_required="" />
-        <field name="sitemap_filename" is_required="" />
-        <field name="sitemap_path" is_required="" />
-        <field name="sitemap_time" is_required="" />
-        <field name="store_id" is_required="" />
+        <field name="sitemap_id" is_required="1"/>
+        <field name="sitemap_type" is_required=""/>
+        <field name="sitemap_filename" is_required=""/>
+        <field name="sitemap_path" is_required=""/>
+        <field name="sitemap_time" is_required=""/>
+        <field name="store_id" is_required=""/>
     </fixture>
 </config>

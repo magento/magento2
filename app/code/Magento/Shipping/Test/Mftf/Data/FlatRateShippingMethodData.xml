@@ -60,12 +60,12 @@
         <data key="value">0</data>
     </entity>
     <entity name="flatRateSpecificcountryDefault" type="specificcountry">
-        <data key="value" />
+        <data key="value"/>
     </entity>
     <entity name="flatRateShowmethodDefault" type="showmethod">
         <data key="value">0</data>
     </entity>
     <entity name="flatRateSortOrderDefault" type="sort_order">
-        <data key="value" />
+        <data key="value"/>
     </entity>
 </entities>

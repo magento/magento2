@@ -14,8 +14,8 @@
             <data name="action" xsi:type="string">Cancel</data>
             <data name="ordersCount" xsi:type="string">1</data>
             <data name="resultStatuses" xsi:type="string">Canceled</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid"/>
         </variation>
         <variation name="MassOrdersUpdateTestVariation2">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -24,8 +24,8 @@
             <data name="action" xsi:type="string">Cancel</data>
             <data name="ordersCount" xsi:type="string">2</data>
             <data name="resultStatuses" xsi:type="string">Complete,Closed</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionFailMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionFailMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid"/>
         </variation>
         <variation name="MassOrdersUpdateTestVariation3">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -34,8 +34,8 @@
             <data name="action" xsi:type="string">Cancel</data>
             <data name="ordersCount" xsi:type="string">2</data>
             <data name="resultStatuses" xsi:type="string">Processing,Closed</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionFailMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelMassActionFailMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid"/>
         </variation>
         <variation name="MassOrdersUpdateTestVariation4">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -44,8 +44,8 @@
             <data name="action" xsi:type="string">Hold</data>
             <data name="ordersCount" xsi:type="string">2</data>
             <data name="resultStatuses" xsi:type="string">On Hold,On Hold</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderOnHoldSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderOnHoldSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid"/>
         </variation>
         <variation name="MassOrdersUpdateTestVariation5">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -54,8 +54,8 @@
             <data name="action" xsi:type="string">Hold</data>
             <data name="ordersCount" xsi:type="string">1</data>
             <data name="resultStatuses" xsi:type="string">Complete</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderOnHoldFailMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderOnHoldFailMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid"/>
         </variation>
         <variation name="MassOrdersUpdateTestVariation6">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -64,8 +64,8 @@
             <data name="action" xsi:type="string">Unhold</data>
             <data name="ordersCount" xsi:type="string">1</data>
             <data name="resultStatuses" xsi:type="string">Pending</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderReleaseSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderReleaseSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid"/>
         </variation>
         <variation name="MassOrdersUpdateTestVariation7">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -74,8 +74,8 @@
             <data name="action" xsi:type="string">Unhold</data>
             <data name="ordersCount" xsi:type="string">1</data>
             <data name="resultStatuses" xsi:type="string">Pending</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderReleaseFailMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderReleaseFailMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid"/>
         </variation>
     </testCase>
 </config>

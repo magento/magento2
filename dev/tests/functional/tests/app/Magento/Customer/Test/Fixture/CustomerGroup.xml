@@ -14,8 +14,8 @@
              repository_class="Magento\Customer\Test\Repository\CustomerGroup"
              handler_interface="Magento\Customer\Test\Handler\CustomerGroup\CustomerGroupInterface"
              class="Magento\Customer\Test\Fixture\CustomerGroup">
-        <field name="customer_group_code" is_required="1" />
-        <field name="tax_class_id" is_required="1" source="Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds" />
-        <field name="customer_group_id" />
+        <field name="customer_group_code" is_required="1"/>
+        <field name="tax_class_id" is_required="1" source="Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds"/>
+        <field name="customer_group_id"/>
     </fixture>
 </config>

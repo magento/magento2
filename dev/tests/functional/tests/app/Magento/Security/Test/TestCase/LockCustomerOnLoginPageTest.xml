@@ -13,7 +13,7 @@
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="incorrectPassword" xsi:type="string">incorrect password</data>
             <data name="attempts" xsi:type="string">6</data>
-            <constraint name="Magento\Security\Test\Constraint\AssertCustomerIsLocked" />
+            <constraint name="Magento\Security\Test\Constraint\AssertCustomerIsLocked"/>
         </variation>
     </testCase>
 </config>

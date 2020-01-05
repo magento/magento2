@@ -13,7 +13,7 @@
             <data name="disabledFields" xsi:type="array">
                 <item name="0" xsi:type="string">customer_group_code</item>
             </data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupFieldsDisabled" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupFieldsDisabled"/>
         </variation>
     </testCase>
 </config>

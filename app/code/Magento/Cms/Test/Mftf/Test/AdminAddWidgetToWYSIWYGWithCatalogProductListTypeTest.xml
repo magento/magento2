@@ -27,41 +27,41 @@
             </createData>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
         </before>
         <!--Main test-->
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
-        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
-        <waitForPageLoad stepKey="waitForPageLoad1" />
-        <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon"/>
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage"/>
         <!--see Insert Widget button disabled-->
-        <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
+        <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled"/>
         <!--see Cancel button enabled-->
-        <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
+        <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled"/>
         <!--Select "Widget Type"-->
-        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectCatalogProductsList" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
-        <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
-        <fillField selector="{{WidgetSection.NoOfProductToDisplay}}" userInput="5" stepKey="fillNoOfProduct" />
-        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Products Grid Template" stepKey="selectTemplate" />
-        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn" />
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectCatalogProductsList"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear"/>
+        <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled"/>
+        <fillField selector="{{WidgetSection.NoOfProductToDisplay}}" userInput="5" stepKey="fillNoOfProduct"/>
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Products Grid Template" stepKey="selectTemplate"/>
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn"/>
         <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible"/>
-        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Category" stepKey="selectCategoryCondition" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2" />
-        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam" />
-        <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
-        <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear4" />
-        <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory" />
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Category" stepKey="selectCategoryCondition"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2"/>
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam"/>
+        <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement"/>
+        <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear4"/>
+        <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory"/>
 
         <!-- Test that the "<" operand functions correctly -->
-        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn2" />
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn2"/>
         <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible2"/>
         <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Price" stepKey="selectPriceCondition"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3"/>
@@ -71,7 +71,7 @@
         <fillField selector="{{WidgetSection.RuleParamInput('2','2')}}" userInput="125" stepKey="fillMaxPrice"/>
 
         <!-- Test that the ">" operand functions correctly -->
-        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn3" />
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn3"/>
         <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible3"/>
         <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Price" stepKey="selectPriceCondition2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear5"/>
@@ -80,9 +80,9 @@
         <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam3"/>
         <fillField selector="{{WidgetSection.RuleParamInput('3','2')}}" userInput="1" stepKey="fillMinPrice"/>
 
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForPageLoad stepKey="wait6" />
-        <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget"/>
+        <waitForPageLoad stepKey="wait6"/>
+        <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
@@ -90,15 +90,15 @@
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
-        <waitForPageLoad stepKey="wait5" />
+        <waitForPageLoad stepKey="wait5"/>
         <!--see widget on Storefront-->
         <see userInput="Hello CMS Page!" stepKey="seeContent"/>
         <see userInput="$$createPreReqProduct1.name$$" stepKey="seeProductLink1"/>
         <see userInput="$$createPreReqProduct2.name$$" stepKey="seeProductLink2"/>
         <after>
-            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
-            <deleteData createDataKey="createPreReqProduct1" stepKey="deletePreReqProduct1" />
-            <deleteData createDataKey="createPreReqProduct2" stepKey="deletePreReqProduct2" />
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog"/>
+            <deleteData createDataKey="createPreReqProduct1" stepKey="deletePreReqProduct1"/>
+            <deleteData createDataKey="createPreReqProduct2" stepKey="deletePreReqProduct2"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Webapi\Model\ConfigInterface" type="Magento\Webapi\Model\Config" />
+    <preference for="Magento\Webapi\Model\ConfigInterface" type="Magento\Webapi\Model\Config"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -19,11 +19,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Xml\Generator" shared="false" />
-    <type name="Magento\Framework\Xml\Parser" shared="false" />
-    <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false" />
+    <type name="Magento\Framework\Xml\Generator" shared="false"/>
+    <type name="Magento\Framework\Xml\Parser" shared="false"/>
+    <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false"/>
     <type name="Magento\Integration\Model\ConfigBasedIntegrationManager">
-        <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager" />
+        <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager"/>
     </type>
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>

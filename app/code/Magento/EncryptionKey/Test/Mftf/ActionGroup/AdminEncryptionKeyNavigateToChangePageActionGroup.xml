@@ -12,7 +12,7 @@
         <annotations>
             <description>Navigate to change encryption key page.</description>
         </annotations>
-        <amOnPage url="{{AdminEncryptionKeyChangeFormPage.url}}" stepKey="navigateToChangeEncryptionPage" />
+        <amOnPage url="{{AdminEncryptionKeyChangeFormPage.url}}" stepKey="navigateToChangeEncryptionPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

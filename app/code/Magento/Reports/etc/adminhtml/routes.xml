@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="admin">
         <route id="reports" frontName="reports">
-            <module name="Magento_Reports" before="Magento_Reports" />
+            <module name="Magento_Reports" before="Magento_Reports"/>
         </route>
     </router>
 </config>

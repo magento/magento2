@@ -8,10 +8,10 @@
 <mapping strict="0">
     <wrapper>shipment</wrapper>
     <fields>
-        <comment_text />
-        <shipping_amount />
-        <adjustment_positive />
-        <adjustment_negative />
+        <comment_text/>
+        <shipping_amount/>
+        <adjustment_positive/>
+        <adjustment_negative/>
         <comment_customer_notify>
             <input>checkbox</input>
         </comment_customer_notify>

@@ -97,7 +97,7 @@
                 <field id="email_no_password_template" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Welcome Email Without Password</label>
                     <comment><![CDATA[
-                        This email will be sent instead of the Default Welcome Email, if a customer was created without password. <br /><br />
+                        This email will be sent instead of the Default Welcome Email, if a customer was created without password. <br /><br/>
                         Email template chosen based on theme fallback when "Default" option is selected.
                     ]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
@@ -118,7 +118,7 @@
                 <field id="email_confirmed_template" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Welcome Email</label>
                     <comment><![CDATA[
-                        This email will be sent instead of the Default Welcome Email, after account confirmation. <br /><br />
+                        This email will be sent instead of the Default Welcome Email, after account confirmation. <br /><br/>
                         Email template chosen based on theme fallback when "Default" option is selected.
                     ]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>

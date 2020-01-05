@@ -16,6 +16,6 @@
         <element name="loadTemplateButton" type="button" selector="#load" timeout="30"/>
         <element name="deleteTemplateButton" type="button" selector="#delete"/>
         <element name="previewTemplateButton" type="button" selector="#preview" timeout="30"/>
-        <element name="acceptPopupButton" type="button" selector=".action-accept" />
+        <element name="acceptPopupButton" type="button" selector=".action-accept"/>
     </section>
 </sections>

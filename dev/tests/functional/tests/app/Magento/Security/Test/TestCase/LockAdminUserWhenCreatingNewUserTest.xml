@@ -19,7 +19,7 @@
             <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
             <data name="user/data/current_password" xsi:type="string">incorrect password</data>
             <data name="attempts" xsi:type="string">4</data>
-            <constraint name="Magento\Security\Test\Constraint\AssertUserIsLocked" />
+            <constraint name="Magento\Security\Test\Constraint\AssertUserIsLocked"/>
         </variation>
     </testCase>
 </config>

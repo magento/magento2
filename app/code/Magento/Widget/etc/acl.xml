@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::content">
                     <resource id="Magento_Backend::content_elements">
-                        <resource id="Magento_Widget::widget_instance" title="Widgets" translate="title" sortOrder="50" />
+                        <resource id="Magento_Widget::widget_instance" title="Widgets" translate="title" sortOrder="50"/>
                     </resource>
                 </resource>
             </resource>

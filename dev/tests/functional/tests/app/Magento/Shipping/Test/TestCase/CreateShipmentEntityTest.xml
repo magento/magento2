@@ -17,12 +17,12 @@
             <data name="data/form_data/tracking/0/carrier_code" xsi:type="string">Custom Value</data>
             <data name="data/form_data/tracking/0/title" xsi:type="string">title</data>
             <data name="data/form_data/tracking/0/number" xsi:type="string">199</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsTab" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsGrid" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentItems" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertNoShipButton" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipTotalQuantity" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsTab"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsGrid"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentItems"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertNoShipButton"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipTotalQuantity"/>
         </variation>
         <variation name="CreateShipmentEntityTestVariation2" summary="Partial shipment">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -33,11 +33,11 @@
             <data name="data/form_data/tracking/0/carrier_code" xsi:type="string">-</data>
             <data name="data/form_data/tracking/0/title" xsi:type="string">-</data>
             <data name="data/form_data/tracking/0/number" xsi:type="string">-</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsTab" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsGrid" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentItems" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipTotalQuantity" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsTab"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsGrid"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentItems"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipTotalQuantity"/>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>

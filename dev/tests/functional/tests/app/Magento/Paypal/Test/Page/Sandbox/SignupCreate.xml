@@ -7,6 +7,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="SignupCreate" area="Sandbox" mca="https://www.sandbox.paypal.com/signup/create" module="Magento_Paypal">
-        <block name="signupCreateBlock" class="Magento\Paypal\Test\Block\Sandbox\SignupCreate" locator=".proceed" strategy="css selector" />
+        <block name="signupCreateBlock" class="Magento\Paypal\Test\Block\Sandbox\SignupCreate" locator=".proceed" strategy="css selector"/>
     </page>
 </config>

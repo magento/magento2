@@ -56,7 +56,7 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductOutOfStock.quantity}}" stepKey="fillVirtualProductQuantity"/>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{virtualProductOutOfStock.status}}" stepKey="selectStockStatusOutOfStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>

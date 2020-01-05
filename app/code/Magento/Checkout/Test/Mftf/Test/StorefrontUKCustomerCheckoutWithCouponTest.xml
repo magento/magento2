@@ -53,7 +53,7 @@
 
         <!-- Add Downloadable product to the cart -->
         <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToTheCart">
-            <argument name="productName" value="$$createDownloadableProduct.name$$" />
+            <argument name="productName" value="$$createDownloadableProduct.name$$"/>
         </actionGroup>
 
         <!--Open Product page in StoreFront and assert product and price range -->
@@ -105,7 +105,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
 
         <!-- Login to Admin Page -->

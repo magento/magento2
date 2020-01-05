@@ -27,7 +27,7 @@
         </arguments>
     </type>
     <type name="Magento\Customer\Controller\Ajax\Login">
-        <plugin name="captcha_validation" type="Magento\Captcha\Model\Customer\Plugin\AjaxLogin" sortOrder="50" />
+        <plugin name="captcha_validation" type="Magento\Captcha\Model\Customer\Plugin\AjaxLogin" sortOrder="50"/>
     </type>
     <type name="Magento\Captcha\Model\Customer\Plugin\AjaxLogin">
         <arguments>
@@ -37,6 +37,6 @@
         </arguments>
     </type>
     <type name="Magento\Checkout\Block\Cart\Sidebar">
-        <plugin name="login_captcha" type="Magento\Captcha\Model\Cart\ConfigPlugin" sortOrder="50" />
+        <plugin name="login_captcha" type="Magento\Captcha\Model\Cart\ConfigPlugin" sortOrder="50"/>
     </type>
 </config>

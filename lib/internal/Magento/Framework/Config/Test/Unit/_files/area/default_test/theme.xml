@@ -9,6 +9,6 @@
     <title>Test</title>
     <parent>default_default</parent>
     <media>
-        <preview_image />
+        <preview_image/>
     </media>
 </theme>

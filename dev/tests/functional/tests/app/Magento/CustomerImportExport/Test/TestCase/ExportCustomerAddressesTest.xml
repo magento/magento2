@@ -19,7 +19,7 @@
                 <item name="5" xsi:type="string">postcode</item>
                 <item name="6" xsi:type="string">telephone</item>
             </data>
-            <constraint name="Magento\CustomerImportExport\Test\Constraint\AssertExportCustomerAddresses" />
+            <constraint name="Magento\CustomerImportExport\Test\Constraint\AssertExportCustomerAddresses"/>
         </variation>
     </testCase>
 </config>

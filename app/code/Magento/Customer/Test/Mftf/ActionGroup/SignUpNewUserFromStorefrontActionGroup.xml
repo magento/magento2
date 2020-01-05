@@ -59,7 +59,7 @@
 
     <actionGroup name="SaveRegistrationFormActionGroup">
         <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
-        <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad" />
+        <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad"/>
     </actionGroup>
 
     <actionGroup name="AssertSignedUpNewsletterActionGroup">
@@ -117,10 +117,10 @@
         <arguments>
             <argument name="address"/>
         </arguments>
-        
+
         <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
-        
+
         <!--Verify customer default billing address-->
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultBillingAddressFirstnameAndLastname"/>
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.company}}" stepKey="seeAssertCustomerDefaultBillingAddressCompany"/>

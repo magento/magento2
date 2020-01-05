@@ -43,10 +43,10 @@
             <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
             <selectOption userInput="1" selector="{{AdminNewStoreSection.statusDropdown}}" stepKey="enableStoreViewStatus"/>
             <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickStoreViewSaveButton"/>
-            <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationModal" />
+            <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationModal"/>
             <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="AcceptNewStoreViewCreation"/>
             <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReolad"/>
-            <see userInput="You saved the store view." stepKey="seeSaveMessage" />
+            <see userInput="You saved the store view." stepKey="seeSaveMessage"/>
         </before>
         <after>
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>

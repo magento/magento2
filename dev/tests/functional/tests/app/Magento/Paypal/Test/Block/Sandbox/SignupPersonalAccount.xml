@@ -7,8 +7,8 @@
 -->
 <mapping strict="1">
     <fields>
-        <email />
-        <password />
+        <email/>
+        <password/>
         <confirm_password>
             <selector>[name=confirmPassword]</selector>
         </confirm_password>

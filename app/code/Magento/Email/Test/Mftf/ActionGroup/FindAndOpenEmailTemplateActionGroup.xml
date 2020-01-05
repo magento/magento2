@@ -13,7 +13,7 @@
             <argument name="template" defaultValue="EmailTemplate"/>
         </arguments>
 
-        <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateEmailTemplatePage" />
+        <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateEmailTemplatePage"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
         <fillField selector="{{AdminEmailTemplateIndexSection.searchTemplateField}}" userInput="{{template.templateName}}" stepKey="findCreatedTemplate"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>

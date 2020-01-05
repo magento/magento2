@@ -73,7 +73,7 @@
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="updatedurl" stepKey="fillUpdatedUrlInRedirectPathFilter"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
-        <see stepKey="seeTheRedirectType" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No" />
+        <see stepKey="seeTheRedirectType" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No"/>
         <see stepKey="seeTheTargetPath" selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="catalog/category/view/id/{$categoryId}"/>
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updatedurl.html" stepKey="seeTheRedirectPath"/>
 

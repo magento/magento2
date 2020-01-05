@@ -11,7 +11,7 @@
             <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Content > Widgets</data>
             <data name="pageTitle" xsi:type="string">Widgets</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
     </testCase>
 </config>

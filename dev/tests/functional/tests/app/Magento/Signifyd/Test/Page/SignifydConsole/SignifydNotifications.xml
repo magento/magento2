@@ -7,6 +7,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="SignifydNotifications" area="SignifydConsole" mca="https://app.signifyd.com/settings/notifications" module="Magento_Signifyd">
-        <block name="webhooksBlock" class="Magento\Signifyd\Test\Block\SignifydConsole\Webhooks" locator="[id=body]" strategy="css selector" />
+        <block name="webhooksBlock" class="Magento\Signifyd\Test\Block\SignifydConsole\Webhooks" locator="[id=body]" strategy="css selector"/>
     </page>
 </config>

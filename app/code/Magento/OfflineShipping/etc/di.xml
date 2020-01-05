@@ -9,5 +9,5 @@
     <type name="Magento\Checkout\Block\Cart\LayoutProcessor">
         <plugin name="checkout_cart_shipping_plugin" type="Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping"/>
     </type>
-    <preference for="Magento\Quote\Model\Quote\Address\FreeShippingInterface" type="Magento\OfflineShipping\Model\Quote\Address\FreeShipping" />
+    <preference for="Magento\Quote\Model\Quote\Address\FreeShippingInterface" type="Magento\OfflineShipping\Model\Quote\Address\FreeShipping"/>
 </config>

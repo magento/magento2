@@ -16,7 +16,7 @@
                             <method name="setOptions" class="Object">
                             </method>
                             <!-- attribute name is required for method element -->
-                            <method >
+                            <method>
                                 <argument>7</argument>
                             </method>
                         </constraint>

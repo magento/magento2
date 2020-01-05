@@ -15,7 +15,7 @@
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <waitForPageLoad stepKey="waitForPageScrollToTop" time="15"/>
         <click selector="{{AdminNewUserFormSection.userRoleTab}}" stepKey="openUserRoleTab"/>
-        <waitForPageLoad stepKey="waitForUserRoleTabOpened" />
+        <waitForPageLoad stepKey="waitForUserRoleTabOpened"/>
         <click selector="{{AdminNewUserFormSection.resetFilter}}" stepKey="resetGridFilter"/>
         <waitForPageLoad stepKey="waitForFiltersReset"/>
         <fillField selector="{{AdminNewUserFormSection.roleFilterField}}" userInput="{{role.name}}" stepKey="fillRoleFilterField"/>

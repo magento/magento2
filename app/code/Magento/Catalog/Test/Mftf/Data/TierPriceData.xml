@@ -54,7 +54,7 @@
         <data key="website_id">0</data>
         <data key="customer_group">ALL GROUPS</data>
         <data key="quantity">2</data>
-        <var key="sku" entityType="product2" entityKey="sku" />
+        <var key="sku" entityType="product2" entityKey="sku"/>
     </entity>
     <entity name="tierProductPriceDefault" type="catalogTierPrice">
         <data key="price">90.00</data>
@@ -62,6 +62,6 @@
         <data key="website_id">0</data>
         <data key="customer_group">ALL GROUPS</data>
         <data key="quantity">30</data>
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
     </entity>
 </entities>

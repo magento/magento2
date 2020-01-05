@@ -22,17 +22,17 @@
         <!-- Steps -->
         <!-- 1. Login to backend as admin user -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <waitForPageLoad stepKey="waitForAdminPageLoad" />
+        <waitForPageLoad stepKey="waitForAdminPageLoad"/>
 
         <!-- 2. Navigate to Customers > Customer Groups -->
-        <amOnPage url="{{AdminCustomerGroupPage.url}}" stepKey="amOnCustomerGroupPage" />
+        <amOnPage url="{{AdminCustomerGroupPage.url}}" stepKey="amOnCustomerGroupPage"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearFiltersIfTheySet"/>
 
         <!-- 3. Select system Customer Group specified in data set from grid -->
-        <click selector="{{AdminCustomerGroupMainSection.editButtonByCustomerGroupCode(NotLoggedInCustomerGroup.code)}}" stepKey="clickOnEditCustomerGroup" />
+        <click selector="{{AdminCustomerGroupMainSection.editButtonByCustomerGroupCode(NotLoggedInCustomerGroup.code)}}" stepKey="clickOnEditCustomerGroup"/>
 
         <!-- 4. Perform all assertions -->
-        <seeInField selector="{{AdminNewCustomerGroupSection.groupName}}" userInput="{{NotLoggedInCustomerGroup.code}}" stepKey="seeNotLoggedInTextInGroupName" />
-        <assertElementContainsAttribute selector="{{AdminNewCustomerGroupSection.groupName}}" attribute="disabled" expectedValue="true" stepKey="checkIfGroupNameIsDisabled" />
+        <seeInField selector="{{AdminNewCustomerGroupSection.groupName}}" userInput="{{NotLoggedInCustomerGroup.code}}" stepKey="seeNotLoggedInTextInGroupName"/>
+        <assertElementContainsAttribute selector="{{AdminNewCustomerGroupSection.groupName}}" attribute="disabled" expectedValue="true" stepKey="checkIfGroupNameIsDisabled"/>
     </test>
 </tests>

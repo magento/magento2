@@ -7,7 +7,7 @@
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <htmlContent name="orders_content">
-        <block acl="Magento_Sales::actions_view" class="Magento\Sales\Block\Adminhtml\CustomerOrdersTab" name="orders" />
+        <block acl="Magento_Sales::actions_view" class="Magento\Sales\Block\Adminhtml\CustomerOrdersTab" name="orders"/>
     </htmlContent>
     <htmlContent name="cart_content">
         <block acl="Magento_Cart::manage" class="Magento\Sales\Block\Adminhtml\ShoppingCartsTab" name="cart"/>

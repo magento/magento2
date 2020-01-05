@@ -61,7 +61,7 @@
         </actionGroup>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartBeforeChangeShippingAndTaxSection"/>
         <!--Step 5: Open Estimate Shipping and Tax block and fill the sections-->
-        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTax" />
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTax"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="selectUSCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="selectCaliforniaRegion"/>
@@ -70,9 +70,9 @@
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePageAfterChangingShippingAndTaxSection"/>
         <!--Step 7: Go to shopping cart and check "Estimate Shipping and Tax" fields values are saved-->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" after="goToHomePageAfterChangingShippingAndTaxSection" stepKey="goToShoppingCartAfterChangingShippingAndTaxSection"/>
-        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTaxAfterChanging" />
-        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry" />
-        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion" />
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTaxAfterChanging"/>
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry"/>
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion"/>
         <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
         <assertEquals  message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
             <expectedResult type="string">{{US_Address_CA.postcode}}</expectedResult>

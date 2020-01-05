@@ -30,10 +30,10 @@
         <!--Remove Magento page content-->
         <referenceContainer name="page.wrapper" remove="true"/>
         <referenceBlock name="translate" remove="true"/>
-        <referenceBlock name="theme.active.editor" remove="true" />
+        <referenceBlock name="theme.active.editor" remove="true"/>
         <referenceBlock name="requirejs-config" remove="true"/>
         <referenceContainer name="root">
-            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml" />
+            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml"/>
         </referenceContainer>
     </body>
 </page>

@@ -14,6 +14,6 @@
     </event>
 
     <event name="payment_method_assign_data_payflowpro">
-        <observer name="payflowpro_data_assigner" instance="Magento\Paypal\Observer\PayflowProAddCcData" />
+        <observer name="payflowpro_data_assigner" instance="Magento\Paypal\Observer\PayflowProAddCcData"/>
     </event>
 </config>

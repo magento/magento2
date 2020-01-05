@@ -20,11 +20,11 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_fixed_price</data>
             <data name="product/data/price/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation2">
             <data name="description" xsi:type="string">Create product with custom options(percent price)</data>
@@ -39,11 +39,11 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_percent_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_percent_price</data>
             <data name="product/data/price/dataset" xsi:type="string">drop_down_with_one_option_percent_price</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation3" summary="Create product with special price and custom options(fixed price)">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
@@ -55,18 +55,18 @@
             <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">52</data>
-            <data name="product/data/news_from_date" xsi:type="string" />
-            <data name="product/data/custom_design_from" xsi:type="string" />
+            <data name="product/data/news_from_date" xsi:type="string"/>
+            <data name="product/data/custom_design_from" xsi:type="string"/>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">659</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_fixed_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23029</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation4">
             <data name="description" xsi:type="string">Create product with special price and custom options(percent price)</data>
@@ -82,11 +82,11 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_percent_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_percent_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23030</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation5">
             <data name="description" xsi:type="string">Create product with group price and custom options(percent price)</data>
@@ -101,11 +101,11 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_percent_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_percent_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23030</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation6">
             <data name="description" xsi:type="string">Create product with group price and custom options(fixed price)</data>
@@ -120,11 +120,11 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_fixed_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23029</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation7">
             <data name="description" xsi:type="string">Create product with tier price and custom options(percent price)</data>
@@ -140,11 +140,11 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_percent_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23030</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">MAGETWO-23002</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation8">
             <data name="description" xsi:type="string">Create product with tier price and custom options(fixed price)</data>
@@ -160,11 +160,11 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_fixed_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23029</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">MAGETWO-23002</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation9">
             <data name="description" xsi:type="string">Create product without custom options</data>
@@ -176,10 +176,10 @@
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">58</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">665</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation10" summary="Create in stock product and check threshold" ticketId="MAGETWO-43345">
             <data name="issue" xsi:type="string">https://github.com/magento-engcom/msi/issues/1620</data>
@@ -203,9 +203,9 @@
                     <item name="expected" xsi:type="number">5</item>
                 </item>
             </data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryThreshold" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryThreshold"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation11">
             <data name="description" xsi:type="string">Create product that is out stock</data>
@@ -218,8 +218,8 @@
             <data name="product/data/weight" xsi:type="string">60</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">0</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
         </variation>
         <variation name="CreateSimpleProductWithFileOption" summary="Check that Compatible File Extensions are parsed correctly" ticketId="MAGETWO-89344">
             <data name="description" xsi:type="string">Create product with file option</data>
@@ -236,9 +236,9 @@
                     <item name="optionValue" xsi:type="string">jpg, gif, png</item>
                 </item>
             </data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCustomOptions" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertFileExtensionHints" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCustomOptions"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertFileExtensionHints"/>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation12" ticketId="MAGETWO-90368">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -252,8 +252,8 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/category_ids/new_category" xsi:type="string">yes</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory,default_subcategory</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductViewBreadcrumbsCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductViewBreadcrumbsCategory"/>
         </variation>
     </testCase>
 </config>

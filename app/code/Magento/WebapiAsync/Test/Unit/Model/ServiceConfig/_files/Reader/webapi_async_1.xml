@@ -12,7 +12,7 @@
     </service>
 
     <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="save">
-        <synchronousInvocationOnly />
+        <synchronousInvocationOnly/>
     </service>
 
     <route url="async/V1/products" method="POST" alias="asyncProducts"/>

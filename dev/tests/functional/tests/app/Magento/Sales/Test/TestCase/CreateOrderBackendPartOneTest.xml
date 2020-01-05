@@ -22,12 +22,12 @@
             <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Reorder, Cancel, Send Email, Invoice, Edit</data>
             <data name="configData" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertProductQtyDecreased" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductQtyDecreased"/>
         </variation>
         <variation name="CreateOrderBackendTestVariation2">
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Check/Money Order payment method</data>
@@ -42,10 +42,10 @@
             <data name="status" xsi:type="string">Pending</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Edit</data>
             <data name="configData" xsi:type="string">checkmo_specificcountry_gb</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CreateOrderBackendTestVariation3" ticketId="MAGETWO-45396" summary="Create order with simple product for registered US customer using Fixed shipping method and Bank Transfer payment method, check order in grid with applied date filter">
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
@@ -61,12 +61,12 @@
             <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Reorder, Invoice, Edit</data>
             <data name="configData" xsi:type="string">banktransfer</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderByDateInOrdersGrid" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderByDateInOrdersGrid"/>
         </variation>
         <variation name="CreateOrderBackendTestVariation4">
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Bank Transfer payment method</data>
@@ -82,10 +82,10 @@
             <data name="status" xsi:type="string">Pending</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Edit</data>
             <data name="configData" xsi:type="string">freeshipping_specificcountry_gb, banktransfer</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CreateOrderBackendTestVariation5">
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Purchase Order payment method</data>
@@ -103,11 +103,11 @@
             <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Invoice, Reorder, Edit</data>
             <data name="configData" xsi:type="string">purchaseorder</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend"/>
         </variation>
         <variation name="CreateOrderBackendTestVariation6" summary="Create Offline Order for Registered Customer in Admin" ticketId="MAGETWO-12395">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -124,8 +124,8 @@
                 <item name="grandTotal" xsi:type="string">21.91</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
         <variation name="CreateOrderBackendTestVariation7" summary="Create Order for New Customer in Admin with Offline Payment Method" ticketId="MAGETWO-12520">
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
@@ -142,9 +142,9 @@
                 <item name="grandTotal" xsi:type="string">21.91</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
     </testCase>
 </config>

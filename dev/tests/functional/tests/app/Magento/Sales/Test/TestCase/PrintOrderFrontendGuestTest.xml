@@ -28,12 +28,12 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderBillingAddress" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderPaymentMethod" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderProducts" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertSalesRuleOnPrintOrder" />
-            <constraint name="Magento\Shipping\Test\Constraint\AssertShippingMethodOnPrintOrder" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderBillingAddress"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderPaymentMethod"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderProducts"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertSalesRuleOnPrintOrder"/>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShippingMethodOnPrintOrder"/>
         </variation>
     </testCase>
 </config>

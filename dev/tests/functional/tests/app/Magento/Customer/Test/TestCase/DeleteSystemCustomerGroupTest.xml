@@ -9,11 +9,11 @@
     <testCase name="Magento\Customer\Test\TestCase\DeleteSystemCustomerGroupTest" summary="Delete system customer group" ticketId="MAGETWO-53576">
         <variation name="DeleteSystemCustomerGroup1" summary="Checks that NOT LOGGED IN Customer Group cannot be deleted">
             <data name="customerGroup/dataset" xsi:type="string">NOT_LOGGED_IN</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertNoDeleteForSystemCustomerGroup" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertNoDeleteForSystemCustomerGroup"/>
         </variation>
         <variation name="DeleteSystemCustomerGroup2" summary="Checks that General Customer Group cannot be deleted">
             <data name="customerGroup/dataset" xsi:type="string">General</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertNoDeleteForSystemCustomerGroup" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertNoDeleteForSystemCustomerGroup"/>
         </variation>
     </testCase>
 </config>

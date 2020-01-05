@@ -15,7 +15,7 @@
             <data name="viewsReport/from" xsi:type="string">m/d/Y -1 year</data>
             <data name="viewsReport/to" xsi:type="string">m/d/Y</data>
             <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult"/>
         </variation>
         <variation name="ViewedProductsReportEntityTestVariation2">
             <data name="description" xsi:type="string">View products on front and verify they all reflected in Month report.</data>
@@ -25,7 +25,7 @@
             <data name="viewsReport/from" xsi:type="string">m/d/Y -1 month</data>
             <data name="viewsReport/to" xsi:type="string">m/d/Y</data>
             <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult"/>
         </variation>
         <variation name="ViewedProductsReportEntityTestVariation3">
             <data name="description" xsi:type="string">View products on front and verify they all reflected in Day report.</data>
@@ -35,7 +35,7 @@
             <data name="viewsReport/from" xsi:type="string">m/d/Y -1 day</data>
             <data name="viewsReport/to" xsi:type="string">m/d/Y +1 day</data>
             <data name="viewsReport/show_empty_rows" xsi:type="string">Yes</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult"/>
         </variation>
     </testCase>
 </config>

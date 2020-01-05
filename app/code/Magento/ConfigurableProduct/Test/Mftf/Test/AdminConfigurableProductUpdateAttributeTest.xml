@@ -99,7 +99,7 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
-            <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
+            <deleteData createDataKey="createCategory" stepKey="deleteCatagory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
@@ -216,7 +216,7 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
-            <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
+            <deleteData createDataKey="createCategory" stepKey="deleteCatagory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
@@ -232,7 +232,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct">
-            <argument name="product" value="$$createConfigProduct$$" />
+            <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
 
         <!-- Open the wizard for editing configurations and fill out a new attribute -->

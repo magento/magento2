@@ -103,7 +103,7 @@
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <see selector="{{AdminProductAttributeGridSection.attributeCodeColumn}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="seeAttributeCode"/>
         <see selector="{{AdminProductAttributeGridSection.defaultLabelColumn}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeDefaultLabel"/>
         <see selector="{{AdminProductAttributeGridSection.isVisibleColumn}}" userInput="Yes" stepKey="seeIsVisibleColumn"/>

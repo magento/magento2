@@ -27,7 +27,7 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!--Go to Storefront as Customer-->
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-                <argument name="Customer" value="$$createCustomer$$" />
+                <argument name="Customer" value="$$createCustomer$$"/>
             </actionGroup>
         </before>
         <after>

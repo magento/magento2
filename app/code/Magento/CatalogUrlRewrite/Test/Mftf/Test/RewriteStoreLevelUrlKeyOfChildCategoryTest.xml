@@ -19,7 +19,7 @@
 
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
 
             <createData entity="_defaultCategory" stepKey="defaultCategory"/>
             <createData entity="SubCategoryWithParent" stepKey="subCategory">

@@ -28,10 +28,10 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <!-- Step 0: User signs up an account -->
-        <comment userInput="Start of signing up user account" stepKey="startOfSigningUpUserAccount" />
+        <comment userInput="Start of signing up user account" stepKey="startOfSigningUpUserAccount"/>
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
-        <comment userInput="End of signing up user account" stepKey="endOfSigningUpUserAccount" />
+        <comment userInput="End of signing up user account" stepKey="endOfSigningUpUserAccount"/>
     </test>
 </tests>

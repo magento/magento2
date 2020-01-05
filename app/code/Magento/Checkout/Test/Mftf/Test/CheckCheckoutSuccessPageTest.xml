@@ -121,7 +121,7 @@
         <dontSeeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeInvisiblePrint"/>
         <resizeWindow width="1360" height="1020" stepKey="maximizeWindowKey1"/>
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitVisiblePrint"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2" />
+        <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2"/>
 
         <!--See print page-->
         <click selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="clickPrintLink"/>
@@ -164,8 +164,8 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
 
         <!-- Checkout select Check/Money Order payment -->
@@ -200,8 +200,8 @@
         <!--Go to Checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection2">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
 
         <!-- Checkout select Check/Money Order payment -->

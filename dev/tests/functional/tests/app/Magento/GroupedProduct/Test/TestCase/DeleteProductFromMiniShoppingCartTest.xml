@@ -11,7 +11,7 @@
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">groupedProduct::default</data>
             <data name="deletedProductIndex" xsi:type="string">0</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>
     </testCase>
 </config>

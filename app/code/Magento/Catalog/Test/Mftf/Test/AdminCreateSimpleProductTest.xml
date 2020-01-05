@@ -58,15 +58,15 @@
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="DefaultProductLayout" />
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="DefaultProductLayout"/>
         <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="3 columns" stepKey="select3ColumnsLayout"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
         <waitForPageLoad stepKey="wait1"/>
         <click selector="{{ProductDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
-        <waitForElementVisible selector="{{ProductDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
-        <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected" />
+        <waitForElementVisible selector="{{ProductDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown"/>
+        <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected"/>
     </test>
 
     <test name="AdminCreateSimpleProductZeroPriceTest">

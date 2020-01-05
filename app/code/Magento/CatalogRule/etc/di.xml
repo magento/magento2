@@ -11,7 +11,7 @@
             <argument name="eventManager" xsi:type="object">Magento\Framework\Event\Manager\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogRule\Model\ResourceModel\Rule\Collection" shared="false" />
+    <type name="Magento\CatalogRule\Model\ResourceModel\Rule\Collection" shared="false"/>
     <type name="Magento\Catalog\Model\Product\PriceModifier\Composite">
         <arguments>
             <argument name="modifiers" xsi:type="array">
@@ -33,8 +33,8 @@
             </argument>
         </arguments>
     </virtualType>
-    <preference for="Magento\CatalogRule\Api\Data\RuleInterface" type="Magento\CatalogRule\Model\Rule" />
-    <preference for="Magento\CatalogRule\Api\CatalogRuleRepositoryInterface" type="Magento\CatalogRule\Model\CatalogRuleRepository" />
+    <preference for="Magento\CatalogRule\Api\Data\RuleInterface" type="Magento\CatalogRule\Model\Rule"/>
+    <preference for="Magento\CatalogRule\Api\CatalogRuleRepositoryInterface" type="Magento\CatalogRule\Model\CatalogRuleRepository"/>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
@@ -95,7 +95,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\CatalogRule\Api\Data\ConditionInterface" type="Magento\CatalogRule\Model\Data\Condition" />
+    <preference for="Magento\CatalogRule\Api\Data\ConditionInterface" type="Magento\CatalogRule\Model\Data\Condition"/>
     <virtualType name="Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap" type="Magento\Framework\DataObject">
         <arguments>
             <argument name="data" xsi:type="array">
@@ -126,7 +126,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface" type="Magento\CatalogRule\Model\Indexer\IndexerTableSwapper" />
+    <preference for="Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface" type="Magento\CatalogRule\Model\Indexer\IndexerTableSwapper"/>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface">
         <arguments>
             <argument name="priceModifiers" xsi:type="array">

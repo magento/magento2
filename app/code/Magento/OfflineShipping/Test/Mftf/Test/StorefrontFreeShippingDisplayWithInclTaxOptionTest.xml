@@ -50,7 +50,7 @@
         <waitForElementVisible selector="{{CheckoutPaymentSection.tax}}" stepKey="waitForOverviewVisible"/>
         <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
         <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
-        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
         <waitForPageLoad stepKey="waitForSelectCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>

@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
         <route id="shipping" frontName="shipping">
-            <module name="Magento_Shipping" />
+            <module name="Magento_Shipping"/>
         </route>
     </router>
 </config>

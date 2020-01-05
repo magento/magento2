@@ -44,7 +44,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
-            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate"/>
             <actionGroup ref="DisableTaxApplyOnOriginalPriceActionGroup" stepKey="setApplyTaxOffSetting">
                 <argument name="userInput" value="Custom price if available"/>
             </actionGroup>

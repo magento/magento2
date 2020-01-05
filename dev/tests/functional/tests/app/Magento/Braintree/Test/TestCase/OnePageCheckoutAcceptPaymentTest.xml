@@ -23,9 +23,9 @@
             <data name="configData" xsi:type="string">braintree,braintree_fraudprotection</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertAcceptPaymentSuccessMessagePresent" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAcceptPaymentMessageInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAcceptPaymentSuccessMessagePresent"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAcceptPaymentMessageInCommentsHistory"/>
         </variation>
         <variation name="OnePageCheckoutBraintreeAcceptPaymentVariation2" summary="Guest Checkout with Braintree Credit Card (Sale payment aciton) with Review Kount status" ticketId="MAGETWO-56023">
             <data name="products" xsi:type="array">
@@ -46,8 +46,8 @@
                 <item name="totalPaid" xsi:type="string">15.00</item>
             </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderTotalPaid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderTotalPaid"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
         </variation>
     </testCase>
 </config>

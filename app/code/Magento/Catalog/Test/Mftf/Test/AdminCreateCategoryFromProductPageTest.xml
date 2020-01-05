@@ -13,7 +13,7 @@
             <features value="Catalog"/>
             <stories value="Create/Edit Category in Admin"/>
             <title value="Admin should be able to create category from the product page"/>
-            <description value="Admin should be able to create category from the product page" />
+            <description value="Admin should be able to create category from the product page"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-234"/>
             <group value="Catalog"/>

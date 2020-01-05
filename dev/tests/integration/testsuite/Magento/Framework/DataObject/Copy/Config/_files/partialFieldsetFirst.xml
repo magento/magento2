@@ -14,7 +14,7 @@
             <field name="event_name">
             </field>
             <field name="event_description">
-                <aspect name="to_order_item" targetField="complexDescription" />
+                <aspect name="to_order_item" targetField="complexDescription"/>
             </field>
         </fieldset>
     </scope>

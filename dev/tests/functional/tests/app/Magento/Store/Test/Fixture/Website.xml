@@ -15,11 +15,11 @@
              repository_class="Magento\Store\Test\Repository\Website"
              handler_interface="Magento\Store\Test\Handler\Website\WebsiteInterface"
              class="Magento\Store\Test\Fixture\Website">
-        <field name="website_id" is_required="1" />
-        <field name="code" is_required="" />
-        <field name="name" is_required="" />
-        <field name="sort_order" is_required="" />
-        <field name="default_group_id" is_required="" />
-        <field name="is_default" is_required="" />
+        <field name="website_id" is_required="1"/>
+        <field name="code" is_required=""/>
+        <field name="name" is_required=""/>
+        <field name="sort_order" is_required=""/>
+        <field name="default_group_id" is_required=""/>
+        <field name="is_default" is_required=""/>
     </fixture>
 </config>

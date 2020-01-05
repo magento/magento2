@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_login">
-        <observer name="wishlist" instance="Magento\Wishlist\Observer\CustomerLogin" />
+        <observer name="wishlist" instance="Magento\Wishlist\Observer\CustomerLogin"/>
     </event>
     <event name="customer_logout">
-        <observer name="wishlist" instance="Magento\Wishlist\Observer\CustomerLogout" />
+        <observer name="wishlist" instance="Magento\Wishlist\Observer\CustomerLogout"/>
     </event>
 </config>

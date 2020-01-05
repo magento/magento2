@@ -6,17 +6,17 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Signifyd\Api\Data\CaseInterface" type="Magento\Signifyd\Model\CaseEntity" />
-    <preference for="Magento\Signifyd\Api\CaseRepositoryInterface" type="Magento\Signifyd\Model\CaseRepository" />
-    <preference for="Magento\Signifyd\Api\CaseManagementInterface" type="Magento\Signifyd\Model\CaseManagement" />
-    <preference for="Magento\Signifyd\Api\Data\CaseSearchResultsInterface" type="Magento\Signifyd\Model\CaseSearchResults" />
-    <preference for="Magento\Signifyd\Api\CaseCreationServiceInterface" type="Magento\Signifyd\Model\CaseServices\CreationService" />
-    <preference for="Magento\Signifyd\Api\GuaranteeCreationServiceInterface" type="Magento\Signifyd\Model\Guarantee\CreationService" />
-    <preference for="Magento\Signifyd\Api\GuaranteeCancelingServiceInterface" type="Magento\Signifyd\Model\Guarantee\CancelingService" />
-    <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
+    <preference for="Magento\Signifyd\Api\Data\CaseInterface" type="Magento\Signifyd\Model\CaseEntity"/>
+    <preference for="Magento\Signifyd\Api\CaseRepositoryInterface" type="Magento\Signifyd\Model\CaseRepository"/>
+    <preference for="Magento\Signifyd\Api\CaseManagementInterface" type="Magento\Signifyd\Model\CaseManagement"/>
+    <preference for="Magento\Signifyd\Api\Data\CaseSearchResultsInterface" type="Magento\Signifyd\Model\CaseSearchResults"/>
+    <preference for="Magento\Signifyd\Api\CaseCreationServiceInterface" type="Magento\Signifyd\Model\CaseServices\CreationService"/>
+    <preference for="Magento\Signifyd\Api\GuaranteeCreationServiceInterface" type="Magento\Signifyd\Model\Guarantee\CreationService"/>
+    <preference for="Magento\Signifyd\Api\GuaranteeCancelingServiceInterface" type="Magento\Signifyd\Model\Guarantee\CancelingService"/>
+    <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder"/>
 
-    <virtualType name="SignifydAvsDefaultMapper" type="Magento\Signifyd\Model\PredefinedVerificationCode" />
-    <virtualType name="SignifydCvvDefaultMapper" type="Magento\Signifyd\Model\PredefinedVerificationCode" />
+    <virtualType name="SignifydAvsDefaultMapper" type="Magento\Signifyd\Model\PredefinedVerificationCode"/>
+    <virtualType name="SignifydCvvDefaultMapper" type="Magento\Signifyd\Model\PredefinedVerificationCode"/>
 
     <type name="Magento\Signifyd\Model\PaymentVerificationFactory">
         <arguments>
@@ -97,9 +97,9 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Model\Order">
-        <plugin name="cancelGuaranteeAfterOrderCancel" type="Magento\Signifyd\Plugin\OrderPlugin" />
+        <plugin name="cancelGuaranteeAfterOrderCancel" type="Magento\Signifyd\Plugin\OrderPlugin"/>
     </type>
     <type name="Magento\Payment\Model\MethodInterface">
-        <plugin name="cancelGuaranteeAfterPaymentDeny" type="Magento\Signifyd\Plugin\PaymentPlugin" />
+        <plugin name="cancelGuaranteeAfterPaymentDeny" type="Magento\Signifyd\Plugin\PaymentPlugin"/>
     </type>
 </config>

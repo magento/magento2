@@ -57,7 +57,7 @@
             <!-- Delete created data -->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
             <deleteData createDataKey="createCustomerViaTheStorefront" stepKey="deleteCustomerViaTheStorefront"/>
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!-- Log out -->
             <comment userInput="Log out" stepKey="commentLogOut"/>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -74,8 +74,8 @@
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createProduct.name$$)}}" stepKey="moveMouseOverProduct" />
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createProduct.name$$)}}" stepKey="clickAddToCart" />
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createProduct.name$$)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createProduct.name$$)}}" stepKey="clickAddToCart"/>
         <waitForPageLoad stepKey="waitForProductBundlePage"/>
         <!-- See error message -->
         <comment userInput="See error message" stepKey="commentSeeErrorMessage"/>

@@ -11,13 +11,13 @@
         <arguments>
             <argument name="roleName" type="string"/>
         </arguments>
-        <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRolesGrid" />
-        <fillField selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{roleName}}" stepKey="enterRoleName" />
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch" />
-        <see selector="{{AdminDataGridTableSection.row('1')}}" userInput="{{roleName}}" stepKey="seeUserRole" />
+        <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRolesGrid"/>
+        <fillField selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{roleName}}" stepKey="enterRoleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <see selector="{{AdminDataGridTableSection.row('1')}}" userInput="{{roleName}}" stepKey="seeUserRole"/>
         <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="openRoleEditPage"/>
         <waitForPageLoad stepKey="waitForRoleEditPageLoad"/>
-        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword"/>
         <click selector="{{AdminEditRoleInfoSection.deleteButton}}" stepKey="deleteUserRole"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>

@@ -37,7 +37,7 @@
 
         <!-- Go to Frontend as Customer -->
          <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-             <argument name="Customer" value="$$createCustomer$$" />
+             <argument name="Customer" value="$$createCustomer$$"/>
          </actionGroup>
 
         <!-- Add product to cart -->
@@ -47,7 +47,7 @@
         </actionGroup>
 
         <!-- Go to checkout page -->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="customerGoToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="customerGoToCheckoutFromMinicart"/>
 
         <!--  *New Address* button on 1st checkout step -->
         <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="addNewAddress"/>
@@ -74,7 +74,7 @@
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="goNext"/>
 
         <!-- Select payment solution -->
-        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
 
         <!--Refresh Page and Place Order-->
         <reloadPage stepKey="reloadPage"/>

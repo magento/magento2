@@ -19,14 +19,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation2">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -39,14 +39,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation3">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -60,14 +60,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation4">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -78,12 +78,12 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation5">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -94,12 +94,12 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation6">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -113,13 +113,13 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation7">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -132,12 +132,12 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation8">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -149,12 +149,12 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation9">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -168,13 +168,13 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">options_suite</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation10">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -185,12 +185,12 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation11">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -204,14 +204,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
     </testCase>
 </config>

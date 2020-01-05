@@ -7,6 +7,6 @@
 -->
 <mapping strict="1">
     <fields>
-        <attribute_set_name />
+        <attribute_set_name/>
     </fields>
 </mapping>

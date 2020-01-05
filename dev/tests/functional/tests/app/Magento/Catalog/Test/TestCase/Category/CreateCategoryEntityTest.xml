@@ -13,8 +13,8 @@
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">RootCategory%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation2_RootCategory_AllFields">
             <data name="description" xsi:type="string">Create root category with all fields</data>
@@ -41,8 +41,8 @@
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
             <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
             <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation3_Subcategory_RequiredFields" summary="Create Category from Category page with Required Fields Only" ticketId="MAGETWO-12513">
             <data name="addCategory" xsi:type="string">addSubcategory</data>
@@ -51,9 +51,9 @@
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation4_Subcategory_AllFields">
             <data name="description" xsi:type="string">Create not anchor subcategory specifying all fields</data>
@@ -85,11 +85,11 @@
             <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
             <data name="filterByPath" xsi:type="string">request_path</data>
             <data name="redirectType" xsi:type="string">No</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation5_Anchor_MostOfFields">
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
@@ -114,10 +114,10 @@
             <data name="category/data/url_key" xsi:type="string">AnchorSubcategory%isolation%</data>
             <data name="category/data/meta_title" xsi:type="string">Anchor Subcategory Page Title</data>
             <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default, configurableProduct::default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation6_InactiveCategory">
             <data name="description" xsi:type="string">Create not active subcategory</data>
@@ -126,9 +126,9 @@
             <data name="category/data/is_active" xsi:type="string">No</data>
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">InactiveSubcategory%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryIsNotActive" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryIsNotActive"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation7_NotIncludedInMenu">
             <data name="description" xsi:type="string">Create not included in menu subcategory</data>
@@ -137,9 +137,9 @@
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/include_in_menu" xsi:type="string">No</data>
             <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation8_WithProducts" summary="Assign Products at the Category Level" ticketId="MAGETWO-16351">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
@@ -149,8 +149,8 @@
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
             <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation9_FiveNesting" summary="Create category with five nesting" ticketId="MAGETWO-48379">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
@@ -161,8 +161,8 @@
             <data name="category/data/description" xsi:type="string">Category Required</data>
             <data name="category/data/url_key" xsi:type="string">Category%isolation%</data>
             <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryBreadcrumbs" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryBreadcrumbs"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation10_InCustomRootCategory" summary="Create category in the custom root category that is used for custom website" ticketId="MAGETWO-12938">
             <data name="addCategory" xsi:type="string">addSubcategory</data>
@@ -170,8 +170,8 @@
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomWebsite" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomWebsite"/>
         </variation>
         <variation name="CreateCategoryEntityTestVariation11_ProductsGridFilter" summary="Apply category products grid filter">
             <data name="addCategory" xsi:type="string">addSubcategory</data>
@@ -180,8 +180,8 @@
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
             <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default, catalogProductSimple::not_visible_individually</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryProductsGridFilter" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryProductsGridFilter"/>
         </variation>
     </testCase>
 </config>

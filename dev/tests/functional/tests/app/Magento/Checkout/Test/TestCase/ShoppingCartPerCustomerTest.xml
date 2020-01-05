@@ -33,7 +33,7 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCartPerCustomer" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartPerCustomer"/>
         </variation>
     </testCase>
 </config>

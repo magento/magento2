@@ -36,13 +36,13 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Delete created data-->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
-            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
-            <waitForPageLoad stepKey="waitForRolesGridLoad" />
+            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid"/>
+            <waitForPageLoad stepKey="waitForRolesGridLoad"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
                 <argument name="role" value="adminRole"/>
             </actionGroup>
             <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
-            <waitForPageLoad stepKey="waitForUsersGridLoad" />
+            <waitForPageLoad stepKey="waitForUsersGridLoad"/>
             <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
                 <argument name="userName" value="{{admin2.username}}"/>
             </actionGroup>
@@ -55,7 +55,7 @@
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Stores"/>
         </actionGroup>
-        <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab" />
+        <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab"/>
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleStores">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Stores"/>
@@ -64,7 +64,7 @@
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Products"/>
         </actionGroup>
-        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton" />
+        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton"/>
         <see userInput="You saved the role." stepKey="seeUserRoleSavedMessage"/>
         <!--Create user and assign role to it-->
         <comment userInput="Create user and assign role to it" stepKey="commentCreateUser"/>

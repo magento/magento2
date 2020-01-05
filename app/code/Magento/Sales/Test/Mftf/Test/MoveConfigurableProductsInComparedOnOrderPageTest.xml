@@ -105,7 +105,7 @@
 
         <!-- Login as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
-            <argument name="Customer" value="$$createCustomer$$" />
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!-- Add first product to compare list -->

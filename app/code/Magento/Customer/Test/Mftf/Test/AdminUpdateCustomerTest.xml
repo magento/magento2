@@ -136,7 +136,7 @@
             <argument name="telephone" value="{{addressNoZipNoState.telephone}}"/>
         </actionGroup>
         <!-- Assert Customer Login Storefront -->
-        <actionGroup stepKey="login" ref="StorefrontAssertSuccessLoginToStorefront" after="checkDefaultShipping" >
+        <actionGroup stepKey="login" ref="StorefrontAssertSuccessLoginToStorefront" after="checkDefaultShipping">
             <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
     </test>
@@ -198,7 +198,7 @@
         </actionGroup>
         <actionGroup stepKey="resetFilterWhenDone" ref="AdminResetFilterInCustomerAddressGrid" after="checkAddressCountryInGrid"/>
         <!-- Assert Customer Login Storefront -->
-        <actionGroup stepKey="login" ref="StorefrontAssertSuccessLoginToStorefront" after="resetFilterWhenDone" >
+        <actionGroup stepKey="login" ref="StorefrontAssertSuccessLoginToStorefront" after="resetFilterWhenDone">
             <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
     </test>

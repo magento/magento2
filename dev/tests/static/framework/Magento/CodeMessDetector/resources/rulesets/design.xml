@@ -20,7 +20,7 @@ to restrict incoming requests by methods.
             ]]>
         </description>
         <priority>2</priority>
-        <properties />
+        <properties/>
         <example>
             <![CDATA[
 class PostOrder implements ActionInterface
@@ -45,7 +45,7 @@ rely on cookies and sessions. If you need to get current user use Magento\Author
             ]]>
         </description>
         <priority>2</priority>
-        <properties />
+        <properties/>
         <example>
             <![CDATA[
 class OrderProcessor

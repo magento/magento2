@@ -88,7 +88,7 @@
         <!-- Check to make sure that the configurable product shows up as in stock -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
-        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" />
+        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
 
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
@@ -209,7 +209,7 @@
         <!-- Check to make sure that the configurable product shows up as in stock -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
-        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" />
+        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
 
         <!-- Delete the first simple product -->
         <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
@@ -311,7 +311,7 @@
         <!-- Check to make sure that the configurable product shows up as in stock -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
-        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" />
+        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
 
         <!-- Delete the first simple product -->
         <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">

@@ -64,19 +64,19 @@
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="DefaultProductLayout" />
-        <seeOptionIsSelected selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="seeOneColumnSelected" />
-        <seeOptionIsSelected selector="{{DefaultLayoutsSection.productLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected1" />
-        <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected2" />
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="DefaultProductLayout"/>
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="seeOneColumnSelected"/>
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.productLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected1"/>
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected2"/>
         <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="2 columns with right bar" stepKey="selectColumnsWithRightBar"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPagePagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <waitForLoadingMaskToDisappear stepKey="wait2"/>
         <click selector="{{CmsDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
-        <waitForElementVisible selector="{{CmsDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
-        <seeOptionIsSelected selector="{{CmsDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="seeColumnsWithRightBar" />
+        <waitForElementVisible selector="{{CmsDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown"/>
+        <seeOptionIsSelected selector="{{CmsDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="seeColumnsWithRightBar"/>
     </test>
     <test name="AdminCreateDuplicatedCmsPageTest">
         <annotations>
@@ -98,22 +98,22 @@
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPageCreationForm"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Verify Save&Duplicate button and Save&Close button-->
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1"/>
         <see selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
         <see selector="{{CmsNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
         <!--Create new CMS Page page-->
         <actionGroup ref="FillOutCMSPageContent" stepKey="FillOutBlockContent"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
-        <click selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate" />
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2"/>
+        <click selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <see userInput="You saved the page." stepKey="seeSavedPageMsgOnForm"/>
         <see userInput="You duplicated the page." stepKey="seeDuplicatedPageMsg"/>
         <!--Verify duplicated CMS Page-->
-        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable"/>
         <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="assertContent"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn3" />
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn3"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
         <see userInput="You saved the page." stepKey="seeSavedCMSPageMsgOnGrid"/>
-        <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage" />
+        <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage"/>
     </test>
 </tests>

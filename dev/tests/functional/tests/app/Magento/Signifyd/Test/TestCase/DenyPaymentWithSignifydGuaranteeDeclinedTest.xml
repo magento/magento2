@@ -29,11 +29,11 @@
             <data name="signifydAccount/dataset" xsi:type="string">sandbox_default</data>
             <data name="signifydData/dataset" xsi:type="string">signifyd_guarantee_fraudulent</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test_single_flow, severity:S2</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertDenyPaymentMessageInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertDenyPaymentMessageInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect"/>
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory"/>
         </variation>
     </testCase>
 </config>

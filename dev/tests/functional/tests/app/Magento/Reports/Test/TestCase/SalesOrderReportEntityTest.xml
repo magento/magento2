@@ -17,9 +17,9 @@
             <data name="salesReport/show_order_statuses" xsi:type="string">Any</data>
             <data name="salesReport/show_empty_rows" xsi:type="string">Yes</data>
             <data name="salesReport/show_actual_columns" xsi:type="string">Yes</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertReportStatisticsNoticeMessage" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertReportStatisticsNoticeMessage"/>
         </variation>
         <variation name="SalesOrderReportEntityTestVariation2">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -31,8 +31,8 @@
             <data name="salesReport/show_order_statuses" xsi:type="string">Any</data>
             <data name="salesReport/show_empty_rows" xsi:type="string">No</data>
             <data name="salesReport/show_actual_columns" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult"/>
         </variation>
         <variation name="SalesOrderReportEntityTestVariation3">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -45,8 +45,8 @@
             <data name="salesReport/order_statuses" xsi:type="string">Processing</data>
             <data name="salesReport/show_empty_rows" xsi:type="string">No</data>
             <data name="salesReport/show_actual_columns" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult"/>
         </variation>
         <variation name="SalesOrderReportEntityTestVariation4">
             <data name="order/dataset" xsi:type="string">default</data>
@@ -58,9 +58,9 @@
             <data name="salesReport/show_order_statuses" xsi:type="string">Any</data>
             <data name="salesReport/show_empty_rows" xsi:type="string">Yes</data>
             <data name="salesReport/show_actual_columns" xsi:type="string">No</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
-            <constraint name="Magento\Reports\Test\Constraint\AssertReportStatisticsNoticeMessage" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult"/>
+            <constraint name="Magento\Reports\Test\Constraint\AssertReportStatisticsNoticeMessage"/>
         </variation>
     </testCase>
 </config>

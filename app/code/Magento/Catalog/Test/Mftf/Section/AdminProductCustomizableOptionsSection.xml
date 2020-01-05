@@ -35,7 +35,7 @@
         <element name="clickSelectPriceType" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody//tr[@data-repeat-index='{{var2}}']//span[text()='Price Type']/parent::label/parent::div/parent::div//select" parameterized="true"/>
         <element name="checkboxUseDefaultTitle" type="checkbox" selector="//span[text()='Option Title']/parent::label/parent::div/parent::div/div//input[@type='checkbox']"/>
         <element name="checkboxUseDefaultOption" type="checkbox" selector="//table[@data-index='values']//tbody//tr[@data-repeat-index='{{var1}}']//div[@class='admin__field-control']//input[@type='checkbox']" parameterized="true"/>
-        <element name="requiredCheckBox" type="checkbox" selector="input[name='product[options][{{index}}][is_require]']" parameterized="true" />
+        <element name="requiredCheckBox" type="checkbox" selector="input[name='product[options][{{index}}][is_require]']" parameterized="true"/>
         <element name="fillOptionValueSku" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//span[text()='SKU']/parent::label/parent::div/parent::div//div[@class='admin__field-control']/input" parameterized="true"/>
         <element name="fillOptionCompatibleFileExtensions" type="input" selector="input[name='product[options][{{index}}][file_extension]']" parameterized="true"/>
 
@@ -44,15 +44,15 @@
         <element name="optionPriceTypeByTitle" type="select" selector="//*[@data-index='options']//*[@data-role='collapsible-title' and contains(., '{{optionTitle}}')]/ancestor::tr//*[@data-index='price_type']//select" parameterized="true"/>
         <element name="optionSkuByTitle" type="input" selector="//*[@data-index='options']//*[@data-role='collapsible-title' and contains(., '{{optionTitle}}')]/ancestor::tr//*[@data-index='sku']//input" parameterized="true"/>
         <element name="optionFileExtensionByTitle" type="input" selector="//*[@data-index='options']//*[@data-role='collapsible-title' and contains(., '{{optionTitle}}')]/ancestor::tr//*[@data-index='file_extension']//input" parameterized="true"/>
-        <element name="lastOptionTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, '_required')]//input" />
-        <element name="lastOptionTypeParent" type="block" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__action-multiselect-text')]" />
+        <element name="lastOptionTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, '_required')]//input"/>
+        <element name="lastOptionTypeParent" type="block" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__action-multiselect-text')]"/>
         <element name="lastOptionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@name, '[price]')]"/>
         <element name="lastOptionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@name, '[price_type]')]"/>
         <!-- var 1 represents the option type that you want to select, i.e "radio buttons" -->
-        <element name="optionType" type="block" selector="//*[@data-index='custom_options']//label[text()='{{var1}}'][ancestor::*[contains(@class, '_active')]]" parameterized="true" />
+        <element name="optionType" type="block" selector="//*[@data-index='custom_options']//label[text()='{{var1}}'][ancestor::*[contains(@class, '_active')]]" parameterized="true"/>
         <element name="addValue" type="button" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@data-action='add_new_row']" timeout="30"/>
-        <element name="valueTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='title']//input" />
-        <element name="valuePrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='price']//input" />
+        <element name="valueTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='title']//input"/>
+        <element name="valuePrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='price']//input"/>
         <element name="optionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][price]']" parameterized="true"/>
         <element name="optionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{var}}][price_type]']" parameterized="true"/>
         <element name="optionSku" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][sku]']" parameterized="true"/>

@@ -13,7 +13,7 @@
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
                             <resource id="Magento_Catalog::config_catalog" title="Catalog Section" translate="title">
-                                <resource id="Magento_CatalogSearch::config_catalog_search" title="Catalog Search" translate="title" sortOrder="10" />
+                                <resource id="Magento_CatalogSearch::config_catalog_search" title="Catalog Search" translate="title" sortOrder="10"/>
                             </resource>
                         </resource>
                     </resource>

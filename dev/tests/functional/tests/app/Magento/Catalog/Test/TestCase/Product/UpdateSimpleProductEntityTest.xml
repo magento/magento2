@@ -18,11 +18,11 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">120.0000</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation2">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -35,9 +35,9 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">129.0000</data>
             <data name="product/data/visibility" xsi:type="string">Not Visible Individually</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation3">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -50,12 +50,12 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">25.0000</data>
             <data name="product/data/visibility" xsi:type="string">Catalog</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation4">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -68,12 +68,12 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">89.0000</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation5">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -86,12 +86,12 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">125.0000</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation6">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -104,9 +104,9 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">333.0000</data>
             <data name="product/data/status" xsi:type="string">No</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation7">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -119,10 +119,10 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">87</data>
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">333.0000</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteUpdatedProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteUpdatedProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation8" summary="Edit Simple Product" ticketId="MAGETWO-12428">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -132,15 +132,15 @@
             <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">133.00</data>
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation9" summary="Unassign Products from the Category" ticketId="MAGETWO-12417">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/category_ids/dataset" xsi:type="string"> -</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory"/>
         </variation>
         <variation name="EditSimpleProductTestVariation10" summary="Edit product with enabled flat" ticketId="MAGETWO-21125">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -150,9 +150,9 @@
             <data name="product/data/sku" xsi:type="string">sku_simple_product_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">1.99</data>
             <data name="product/data/attribute_set_id/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
         </variation>
         <variation name="EditSimpleProductTestVariation11" summary="Update simple product with custom option">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -165,9 +165,9 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_percent_price</data>
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">120.0000</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation12" summary="Verify data overriding on Store View level" ticketId="MAGETWO-50640">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -175,8 +175,8 @@
             <data name="store/dataset" xsi:type="string">custom</data>
             <data name="product/data/use_default_name" xsi:type="string">No</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNameOnDifferentStoreViews" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNameOnDifferentStoreViews"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation13" summary="Price overriding on Store View level" ticketId="MAGETWO-58861">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
@@ -185,13 +185,13 @@
             <data name="store/dataset" xsi:type="string">custom</data>
             <data name="product/data/use_default_price" xsi:type="string">No</data>
             <data name="product/data/price/value" xsi:type="string">9.99</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPriceOnDifferentStoreViews" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPriceOnDifferentStoreViews"/>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation14" summary="An error appears on open tier price with locale formatting" ticketId="MAGETWO-62076">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialProduct/dataset" xsi:type="string">simple_with_hight_tier_price</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductFormattingTierPrice" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductFormattingTierPrice"/>
         </variation>
     </testCase>
 </config>

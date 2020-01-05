@@ -175,7 +175,7 @@
         <waitForPageLoad stepKey="wait"/>
         <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
-        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
         <see userInput="This is a required field" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsError}}" stepKey="seeError"/>
     </test>
 

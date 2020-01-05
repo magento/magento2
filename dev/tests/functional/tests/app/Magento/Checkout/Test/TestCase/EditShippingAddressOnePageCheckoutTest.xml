@@ -22,9 +22,9 @@
             <data name="editBillingInformation" xsi:type="boolean">false</data>
             <data name="editSave" xsi:type="boolean">false</data>
             <data name="refresh" xsi:type="boolean">true</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertAdditionalAddressCreatedFrontend" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertAdditionalAddressCreatedFrontend"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses"/>
         </variation>
     </testCase>
 </config>

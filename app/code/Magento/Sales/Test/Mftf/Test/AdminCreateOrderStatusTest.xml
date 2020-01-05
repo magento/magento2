@@ -13,7 +13,7 @@
             <stories value="Create custom order status"/>
             <title value="Create custom order status"/>
             <description value="Tests opening admin order status page, create a new order status with success message"/>
-            <testCaseId value="MC-15431" />
+            <testCaseId value="MC-15431"/>
             <severity value="AVERAGE"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>

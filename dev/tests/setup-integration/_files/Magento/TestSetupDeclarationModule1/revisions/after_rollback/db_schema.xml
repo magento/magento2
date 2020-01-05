@@ -8,6 +8,6 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="store">
-        <column name="store_owner" xsi:type="varchar" length="255" comment="Store Owner Name" />
+        <column name="store_owner" xsi:type="varchar" length="255" comment="Store Owner Name"/>
     </table>
 </schema>

@@ -12,7 +12,7 @@
             <argument name="attributeLabel" type="string"/>
             <argument name="attributeValue" type="string"/>
         </arguments>
-        <see userInput="{{attributeLabel}}" selector="{{StorefrontProductMoreInformationSection.customAttributeLabel(attributeLabel)}}" stepKey="seeAttributeLabel" />
-        <see userInput="{{attributeValue}}" selector="{{StorefrontProductMoreInformationSection.customAttributeValue(attributeLabel)}}" stepKey="seeAttributeValue" />
+        <see userInput="{{attributeLabel}}" selector="{{StorefrontProductMoreInformationSection.customAttributeLabel(attributeLabel)}}" stepKey="seeAttributeLabel"/>
+        <see userInput="{{attributeValue}}" selector="{{StorefrontProductMoreInformationSection.customAttributeValue(attributeLabel)}}" stepKey="seeAttributeValue"/>
     </actionGroup>
 </actionGroups>

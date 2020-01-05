@@ -33,6 +33,6 @@
         <import_file>
             <input>upload</input>
         </import_file>
-        <import_images_file_dir />
+        <import_images_file_dir/>
     </fields>
 </mapping>

@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="cms_page_save_after">
-        <observer name="process_url_rewrite_saving" instance="Magento\CmsUrlRewrite\Observer\ProcessUrlRewriteSavingObserver" />
+        <observer name="process_url_rewrite_saving" instance="Magento\CmsUrlRewrite\Observer\ProcessUrlRewriteSavingObserver"/>
     </event>
 </config>

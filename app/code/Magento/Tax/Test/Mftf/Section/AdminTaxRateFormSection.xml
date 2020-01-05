@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminTaxRateFormSection">
-        <element name="taxIdentifier" type="input" selector="#code" />
+        <element name="taxIdentifier" type="input" selector="#code"/>
         <element name="deleteRate" type="button" selector="#delete" timeout="30"/>
         <element name="ok" type="button" selector="button.action-primary.action-accept" timeout="30"/>
         <element name="save" type="button" selector="#save" timeout="30"/>

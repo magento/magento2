@@ -36,15 +36,15 @@
                 <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <model>AuthorizenetAcceptjsFacade</model>
                 <email_customer>0</email_customer>
-                <login backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <login backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <order_status>processing</order_status>
                 <payment_action>authorize</payment_action>
                 <title>Credit Card (Authorize.Net)</title>
                 <cvv_enabled>1</cvv_enabled>
                 <public_client_key/>
-                <trans_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <trans_md5 backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <trans_signature_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <trans_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <trans_md5 backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <trans_signature_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <allowspecific>0</allowspecific>
                 <currency>USD</currency>
                 <environment>production</environment>

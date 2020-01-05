@@ -6,13 +6,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Mview\View\State\CollectionInterface" type="Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection" />
-    <preference for="Magento\Framework\Mview\View\StateInterface" type="Magento\Indexer\Model\Mview\View\State" />
-    <preference for="Magento\Framework\Indexer\ConfigInterface" type="Magento\Indexer\Model\Config" />
-    <preference for="Magento\Framework\Indexer\IndexerInterface" type="Magento\Indexer\Model\Indexer\DependencyDecorator" />
-    <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy" />
-    <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
-    <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
+    <preference for="Magento\Framework\Mview\View\State\CollectionInterface" type="Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection"/>
+    <preference for="Magento\Framework\Mview\View\StateInterface" type="Magento\Indexer\Model\Mview\View\State"/>
+    <preference for="Magento\Framework\Indexer\ConfigInterface" type="Magento\Indexer\Model\Config"/>
+    <preference for="Magento\Framework\Indexer\IndexerInterface" type="Magento\Indexer\Model\Indexer\DependencyDecorator"/>
+    <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy"/>
+    <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State"/>
+    <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false"/>
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
             <argument name="view" xsi:type="object" shared="false">Magento\Framework\Mview\View</argument>
@@ -61,13 +61,13 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Indexer\BatchSizeManagementInterface" type="Magento\Framework\Indexer\BatchSizeManagement" />
+    <preference for="Magento\Framework\Indexer\BatchSizeManagementInterface" type="Magento\Framework\Indexer\BatchSizeManagement"/>
     <type name="Magento\Indexer\Model\Indexer\DependencyDecorator">
         <arguments>
             <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Indexer\ActionInterface">
-        <plugin name="cache_cleaner_after_reindex" type="Magento\Indexer\Model\Indexer\CacheCleaner" />
+        <plugin name="cache_cleaner_after_reindex" type="Magento\Indexer\Model\Indexer\CacheCleaner"/>
     </type>
 </config>

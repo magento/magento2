@@ -9,7 +9,7 @@
     <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductsTest" summary="Import Bundle Product with Replace Behavior">
         <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Import Bundle Product with Replace Behavior">
             <data name="import/data/import_file/entities/3" xsi:type="string">bundleProduct::default_with_one_simple_product</data>
-            <constraint name="Magento\BundleImportExport\Test\Constraint\AssertImportedBundleProducts" />
+            <constraint name="Magento\BundleImportExport\Test\Constraint\AssertImportedBundleProducts"/>
         </variation>
     </testCase>
 </config>

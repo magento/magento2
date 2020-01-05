@@ -22,12 +22,12 @@
         <before>
             <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
             <createData entity="ApiSimplePrice100Qty100v2" stepKey="simpleProduct"/>
-            <createData entity="Simple_US_Utah_Customer" stepKey="customer" />
+            <createData entity="Simple_US_Utah_Customer" stepKey="customer"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct" />
-            <deleteData stepKey="deleteCustomer" createDataKey="customer" />
+            <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
         </after>
 
         <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
@@ -40,7 +40,7 @@
         <!-- Delete values on the tax rule form page -->
         <click selector="{{AdminTaxRuleFormSection.deleteRule}}" stepKey="clickDeleteRule"/>
         <click selector="{{AdminTaxRuleFormSection.ok}}" stepKey="clickOk"/>
-        <waitForPageLoad stepKey="waitForTaxRuleDeleted" />
+        <waitForPageLoad stepKey="waitForTaxRuleDeleted"/>
 
         <!-- Verify we see success message -->
         <see selector="{{AdminMessagesSection.success}}" userInput="The tax rule has been deleted." stepKey="seeAssertTaxRuleDeleteMessage"/>
@@ -55,24 +55,24 @@
 
         <!-- Verify customer don't tax on the store front product page -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
-            <argument name="Customer" value="$$customer$$" />
+            <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
-            <argument name="product" value="$$simpleProduct$$" />
-            <argument name="productCount" value="1" />
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productCount" value="1"/>
         </actionGroup>
-        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart" />
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
-            <argument name="address" value="US_Address_Utah" />
+            <argument name="address" value="US_Address_Utah"/>
         </actionGroup>
         <scrollTo selector="{{StorefrontProductPageSection.orderTotal}}" x="0" y="-80" stepKey="scrollToOrderTotal"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.subTotal}}" time="30" stepKey="waitSubtotalAppears"/>
         <see selector="{{StorefrontProductPageSection.subTotal}}" userInput="$100.00" stepKey="seeSubTotal"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.shipping}}" time="30" stepKey="waitShippingAppears"/>
         <see selector="{{StorefrontProductPageSection.shipping}}" userInput="$5.00" stepKey="seeShipping"/>
-        <dontSee selector="{{StorefrontProductPageSection.tax}}" stepKey="dontSeeAssertTaxAmount" />
+        <dontSee selector="{{StorefrontProductPageSection.tax}}" stepKey="dontSeeAssertTaxAmount"/>
         <see selector="{{StorefrontProductPageSection.orderTotal}}" userInput="$105.00" stepKey="seeAssertOrderTotal"/>
     </test>
 </tests>

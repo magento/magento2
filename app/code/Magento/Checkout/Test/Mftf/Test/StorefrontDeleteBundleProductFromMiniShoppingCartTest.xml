@@ -70,7 +70,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="productPrice" value="$10.00"/>
-            <argument name="cartSubtotal" value="$10.00" />
+            <argument name="cartSubtotal" value="$10.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
 

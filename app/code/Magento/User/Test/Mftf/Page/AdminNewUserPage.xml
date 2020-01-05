@@ -9,7 +9,7 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminNewUserPage" url="admin/user/new" area="admin" module="Magento_User">
-        <section name="AdminNewUserFormSection" />
-        <section name="AdminNewUserFormMessagesSection" />
+        <section name="AdminNewUserFormSection"/>
+        <section name="AdminNewUserFormMessagesSection"/>
     </page>
 </pages>

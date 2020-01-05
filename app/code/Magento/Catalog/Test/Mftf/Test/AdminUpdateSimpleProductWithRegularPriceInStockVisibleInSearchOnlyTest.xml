@@ -52,10 +52,10 @@
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductRegularPrice325InStock.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPrice325InStock.weight}}" stepKey="fillSimpleProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory"/>
         <waitForPageLoad stepKey="waitForCategory1"/>
         <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
         <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
@@ -88,7 +88,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductRegularPrice325InStock.status}}" stepKey="seeSimpleProductStockStatus"/>
         <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPrice325InStock.weight}}" stepKey="seeSimpleProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
-        <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="selectedCategories" />
+        <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="selectedCategories"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductRegularPrice325InStock.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>

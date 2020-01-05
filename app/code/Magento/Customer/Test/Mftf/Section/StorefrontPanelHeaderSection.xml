@@ -12,7 +12,7 @@
         <!-- Element name="WelcomeMessage" Deprecated due to incorrect naming convention please use name="welcomeMessage" -->
         <element name="WelcomeMessage" type="text" selector=".greet.welcome span"/>
 
-        <element name="welcomeMessage" type="text" selector="header>.panel .greet.welcome" />
+        <element name="welcomeMessage" type="text" selector="header>.panel .greet.welcome"/>
         <element name="createAnAccountLink" type="select" selector="//div[@class='panel wrapper']//li/a[contains(.,'Create an Account')]" timeout="30"/>
         <element name="notYouLink" type="button" selector=".greet.welcome span a"/>
         <element name="customerWelcome" type="text" selector=".panel.header .greet.welcome"/>

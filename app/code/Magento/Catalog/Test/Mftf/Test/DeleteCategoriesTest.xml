@@ -58,19 +58,19 @@
         </actionGroup>
         <!-- Change root category for Main Website Store. -->
         <amOnPage stepKey="s1" url="{{AdminSystemStorePage.url}}"/>
-        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad"/>
         <click stepKey="s2" selector="{{AdminStoresGridSection.resetButton}}"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterResetButton" time="10"/>
         <fillField stepKey="s4" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"/>
         <click stepKey="s5" selector="{{AdminStoresGridSection.searchButton}}"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
-        <click stepKey="s7" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" />
-        <waitForPageLoad stepKey="waitForPageAdminStoresGroupEditLoad" />
+        <click stepKey="s7" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}"/>
+        <waitForPageLoad stepKey="waitForPageAdminStoresGroupEditLoad"/>
         <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="{{NewRootCategory.name}}" stepKey="setNewCategoryForStoreGroup"/>
         <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModalSaveStoreGroup"/>
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptModal" />
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptModal"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageAdminStoresGridReload"/>
         <see userInput="You saved the store." stepKey="seeSavedMessage"/>
 
@@ -82,10 +82,10 @@
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPageAfterCLIReindexCommand"/>
         <waitForPageLoad time="30" stepKey="waitForPageCategoryLoadAfterCLIReindexCommand"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="clickOnDefaultRootCategory"/>
-        <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad" />
+        <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad"/>
         <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>
         <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="DeleteDefaultRootCategory"/>
-        <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
+        <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
         <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>
         <!-- Verify categories 1 and 3 their products. -->
@@ -156,7 +156,7 @@
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPageAfterStoreFrontProductsAssertions"/>
         <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadAfterStoreFrontProductsAssertions"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createNewRootCategoryA.name$$')}}" stepKey="clickOnNewRootCategoryA"/>
-        <waitForPageLoad stepKey="waitForPageNewRootCategoryALoad" />
+        <waitForPageLoad stepKey="waitForPageNewRootCategoryALoad"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryNameAsDefaultCategory"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryDefaultCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaveDefaultCategory"/>

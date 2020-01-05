@@ -11,7 +11,7 @@
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="description" xsi:type="string">Bundle Option with Three Drop-Down selections with qty</data>
             <data name="product/dataset" xsi:type="string">fixed_with_required_options_and_qty</data>
-            <constraint name="\Magento\Bundle\Test\Constraint\AssertBundleItemsSummaryOnProductPage" />
+            <constraint name="\Magento\Bundle\Test\Constraint\AssertBundleItemsSummaryOnProductPage"/>
         </variation>
     </testCase>
 </config>

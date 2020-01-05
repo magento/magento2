@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="EnablePayPalSolutionWithoutSaveActionGroup" >
+    <actionGroup name="EnablePayPalSolutionWithoutSaveActionGroup">
         <annotations>
             <description>Expands the 'OTHER PAYPAL PAYMENT SOLUTIONS' tab on the Admin Configuration page. Enables the provided PayPal Config type for the provided Country Code without saving.</description>
         </annotations>

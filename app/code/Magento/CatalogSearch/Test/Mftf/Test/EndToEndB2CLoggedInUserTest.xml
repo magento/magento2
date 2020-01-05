@@ -66,12 +66,12 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$searchGrabSimpleProduct2ImageSrc" stepKey="searchAssertSimpleProduct2ImageNotDefault" after="searchGrabSimpleProduct2ImageSrc"/>
 
         <!-- Quick Search with non-existent product name -->
-        <comment userInput="Quick Search with non-existent product name" stepKey="commentQuickSearchWithNonExistentProductName" after="searchAssertSimpleProduct2ImageNotDefault" />
+        <comment userInput="Quick Search with non-existent product name" stepKey="commentQuickSearchWithNonExistentProductName" after="searchAssertSimpleProduct2ImageNotDefault"/>
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchFillQuickSearchNonExistent" after="commentQuickSearchWithNonExistentProductName">
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="phrase" value="CONST.nonexistentProductName"/>
         </actionGroup>
         <see userInput="Your search returned no results." selector="{{StorefrontCatalogSearchMainSection.message}}" stepKey="searchAssertQuickSearchMessageNonExistent" after="searchFillQuickSearchNonExistent"/>
-        <comment userInput="End of searching products" stepKey="endOfSearchingProducts" after="searchAssertQuickSearchMessageNonExistent" />
+        <comment userInput="End of searching products" stepKey="endOfSearchingProducts" after="searchAssertQuickSearchMessageNonExistent"/>
     </test>
 </tests>

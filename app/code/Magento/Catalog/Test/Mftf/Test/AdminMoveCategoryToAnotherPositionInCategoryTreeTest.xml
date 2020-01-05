@@ -49,7 +49,7 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSecondLevelSubCategory"/>
         <waitForPageLoad stepKey="waitForSecondLevelCategoryToSave"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
-        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#" />
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
 
         <!-- Move Category to another position in category tree, but click cancel button -->
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SecondLevelSubCat.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="moveCategory"/>

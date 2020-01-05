@@ -12,9 +12,9 @@
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="attributeSet/data/assigned_attributes/dataset" xsi:type="string">default</data>
             <data name="product/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSetSuccessDeleteMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSetNotInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSetSuccessDeleteMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSetNotInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid"/>
         </variation>
     </testCase>
 </config>

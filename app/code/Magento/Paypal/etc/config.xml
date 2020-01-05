@@ -36,18 +36,18 @@
                 <mini_cart_page_button_color>gold</mini_cart_page_button_color>
             </style>
             <wpp>
-                <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <api_signature backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <api_username backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <api_signature backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <api_username backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <button_flavor>dynamic</button_flavor>
             </wpp>
             <wpuk>
-                <user backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <user backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
             </wpuk>
             <fetch_reports>
-                <ftp_login backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <ftp_password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <ftp_login backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <ftp_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <schedule>1</schedule>
                 <time>00,00,00</time>
             </fetch_reports>
@@ -98,8 +98,8 @@
                 <useccv>1</useccv>
                 <tender>C</tender>
                 <verbosity>HIGH</verbosity>
-                <user backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <user backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <group>paypal</group>
                 <verify_peer>1</verify_peer>
                 <date_delim></date_delim>
@@ -139,8 +139,8 @@
                 <model>Magento\Paypal\Model\Payflowlink</model>
                 <payment_action>Authorization</payment_action>
                 <verbosity>HIGH</verbosity>
-                <user backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <user backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <group>paypal</group>
                 <title>Credit Card (Payflow Link)</title>
                 <partner>PayPal</partner>
@@ -158,8 +158,8 @@
                 <model>Magento\Paypal\Model\Payflowadvanced</model>
                 <payment_action>Authorization</payment_action>
                 <verbosity>HIGH</verbosity>
-                <user backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <user backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <group>paypal</group>
                 <title>Credit Card (Payflow Advanced)</title>
                 <partner>PayPal</partner>

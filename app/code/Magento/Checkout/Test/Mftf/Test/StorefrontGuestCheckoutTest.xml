@@ -41,19 +41,19 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment"/>
         <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="guestSeeAddress">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
-            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
@@ -85,13 +85,13 @@
             <group value="checkout"/>
         </annotations>
         <before>
-            <magentoCLI stepKey="disableSidebar" command="config:set checkout/sidebar/display 0" />
+            <magentoCLI stepKey="disableSidebar" command="config:set checkout/sidebar/display 0"/>
         </before>
         <after>
-            <magentoCLI stepKey="enableSidebar" command="config:set checkout/sidebar/display 1" />
+            <magentoCLI stepKey="enableSidebar" command="config:set checkout/sidebar/display 1"/>
         </after>
-        <remove keyForRemoval="guestGoToCheckoutFromMinicart" />
-        <actionGroup ref="GoToCheckoutFromCartActionGroup" stepKey="guestGoToCheckoutFromCart" after="seeCartQuantity" />
+        <remove keyForRemoval="guestGoToCheckoutFromMinicart"/>
+        <actionGroup ref="GoToCheckoutFromCartActionGroup" stepKey="guestGoToCheckoutFromCart" after="seeCartQuantity"/>
     </test>
     <test name="StorefrontGuestCheckoutTestWithRestrictedCountriesForPayment">
         <annotations>
@@ -108,8 +108,8 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1" />
-            <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB" />
+            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1"/>
+            <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
@@ -117,8 +117,8 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 0" />
-            <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry ''" />
+            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 0"/>
+            <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry ''"/>
         </after>
 
         <!-- Add product to cart -->
@@ -131,25 +131,25 @@
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
 
         <!-- Go to checkout page -->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart"/>
 
         <!-- Fill US Address and verify that no payment available -->
         <actionGroup ref="GuestCheckoutWithSpecificCountryOptionForPaymentMethodActionGroup" stepKey="guestCheckoutFillingShippingSection">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
             <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
-        <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping" />
+        <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionWithoutRegionActionGroup" stepKey="guestCheckoutFillingShippingSectionUK">
-            <argument name="customerVar" value="CustomerEntityOne" />
-            <argument name="customerAddressVar" value="UK_Not_Default_Address" />
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="UK_Not_Default_Address"/>
         </actionGroup>
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
-            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
     </test>
 </tests>

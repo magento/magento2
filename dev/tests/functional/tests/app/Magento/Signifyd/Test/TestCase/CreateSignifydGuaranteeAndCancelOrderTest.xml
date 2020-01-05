@@ -28,13 +28,13 @@
             <data name="signifydAccount/dataset" xsi:type="string">sandbox_default</data>
             <data name="signifydData/dataset" xsi:type="string">signifyd_guarantee_approve</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test_single_flow, severity:S1</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertAwaitingSignifydGuaranteeInCommentsHistory" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory"/>
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory"/>
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertAwaitingSignifydGuaranteeInCommentsHistory"/>
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory"/>
         </variation>
         <variation name="CreateSignifydGuaranteeAndCancelOrderWithBraintreeVariation2"
                    summary="Cancel order placed within Braintree credit card with Signifyd declined guarantee."
@@ -56,12 +56,12 @@
             <data name="signifydAccount/dataset" xsi:type="string">sandbox_default</data>
             <data name="signifydData/dataset" xsi:type="string">signifyd_guarantee_decline</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test_single_flow, severity:S1</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertAwaitingSignifydGuaranteeInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory"/>
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory"/>
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertAwaitingSignifydGuaranteeInCommentsHistory"/>
         </variation>
     </testCase>
 </config>

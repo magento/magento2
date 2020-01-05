@@ -19,7 +19,7 @@
             </data>
             <data name="productUpdate/optionNumber" xsi:type="string">1</data>
             <data name="outOfStockOption" xsi:type="string">SIZE_S</data>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductAttributeOptionNotInLayeredNavigation" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductAttributeOptionNotInLayeredNavigation"/>
         </variation>
     </testCase>
 </config>

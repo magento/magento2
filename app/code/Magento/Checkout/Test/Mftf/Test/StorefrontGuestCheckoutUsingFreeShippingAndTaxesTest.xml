@@ -95,7 +95,7 @@
         </before>
         <after>
             <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
-                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}"/>
             </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
@@ -120,13 +120,13 @@
         <!-- Create a tax rule with defaults -->
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
         <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$createTaxRule.code$$" stepKey="fillTaxRateSearch"/>
-        <wait stepKey="waitForSearch" time="5" />
-        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$createTaxRule.code$$)}}" stepKey="selectNeededItem"  />
-        <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="saveTaxRule" />
-        <waitForPageLoad stepKey="waitForTaxRuleSaved" />
+        <wait stepKey="waitForSearch" time="5"/>
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$createTaxRule.code$$)}}" stepKey="selectNeededItem" />
+        <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="saveTaxRule"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSaved"/>
 
         <!-- Verify we see success message -->
-        <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="assertTaxRuleSuccessMessage" />
+        <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="assertTaxRuleSuccessMessage"/>
 
         <!--Open Product page in StoreFront and assert product and price range -->
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
@@ -140,7 +140,7 @@
 
         <!-- Add Configurable Product to the cart -->
         <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
-            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
             <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
             <argument name="productOption" value="$$getConfigAttributeOption1.label$$"/>
             <argument name="qty" value="1"/>
@@ -188,7 +188,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->

@@ -11,7 +11,7 @@
     <section name="InlineTranslationModeMiniCartSection">
         <element name="viewAndEditCart" type="text" selector=".action.viewcart span"/>
         <element name="visibleItemsCountText" type="text" selector=".items-total > span:nth-of-type(2)"/>
-        <element name="textCartSubtotal" type="text" selector=".subtotal .label span" />
+        <element name="textCartSubtotal" type="text" selector=".subtotal .label span"/>
         <element name="labelQty" type="text" selector=".details-qty label"/>
     </section>
 </sections>

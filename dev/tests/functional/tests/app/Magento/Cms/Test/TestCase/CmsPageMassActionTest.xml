@@ -13,8 +13,8 @@
             <data name="action" xsi:type="string">Disable</data>
             <data name="expectedStatus" xsi:type="string">Disabled</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesInGrid" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesDisabledOnFrontend" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesInGrid"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesDisabledOnFrontend"/>
         </variation>
     </testCase>
 </config>

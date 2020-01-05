@@ -54,8 +54,8 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0" />
-            <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 0" />
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0"/>
+            <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 0"/>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
@@ -92,7 +92,7 @@
        <!--Verify default number of products displayed in the grid view-->
         <comment userInput="Verify default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigPagePage"/>
-        <waitForPageLoad stepKey="waitForConfigPageLoad" />
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
         <conditionalClick selector="{{AdminCatalogStorefrontConfigSection.sectionHeader}}" dependentSelector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" visible="false" stepKey="openCatalogConfigStorefrontSection"/>
         <waitForElementVisible selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" stepKey="waitForSectionOpen"/>
         <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" userInput="12,24,36" stepKey="seeDefaultValueAllowedNumberProductsPerPage"/>

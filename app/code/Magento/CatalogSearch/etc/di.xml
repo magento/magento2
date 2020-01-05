@@ -6,11 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver" />
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver"/>
     <preference for="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider"/>
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor" />
-    <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider" />
-    <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor"/>
+    <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider"/>
+    <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options"/>
     <preference for="Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface" type="Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext"/>
     <preference for="Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
     <preference for="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface" type="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite"/>
@@ -39,7 +39,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Indexer\IndexStructureInterface" type="Magento\CatalogSearch\Model\Indexer\IndexStructureProxy" />
+    <preference for="Magento\Framework\Indexer\IndexStructureInterface" type="Magento\CatalogSearch\Model\Indexer\IndexStructureProxy"/>
     <type name="Magento\Catalog\Model\Indexer\Product\Full">
         <arguments>
             <argument name="indexerList" xsi:type="array">
@@ -79,7 +79,7 @@
         <plugin name="catalogsearchFulltextCategoryAssignment" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Category\Action\Rows"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
-        <plugin name="catalogsearchFulltextIndexerStoreView" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View" />
+        <plugin name="catalogsearchFulltextIndexerStoreView" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="catalogsearchFulltextIndexerStoreGroup" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group"/>
@@ -88,7 +88,7 @@
         <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
         <plugin name="catalogsearchAttributeSearchWeightCache" type="Magento\CatalogSearch\Model\Attribute\SearchWeight"/>
     </type>
-    <type name="Magento\Framework\Search\EntityMetadata" />
+    <type name="Magento\Framework\Search\EntityMetadata"/>
     <virtualType name="Magento\Framework\Search\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
         <arguments>
             <argument name="entityId" xsi:type="string">entity_id</argument>
@@ -105,7 +105,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
-        <plugin name="catalogSearchDynamicFields"  type="Magento\CatalogSearch\Model\Search\ReaderPlugin" />
+        <plugin name="catalogSearchDynamicFields"  type="Magento\CatalogSearch\Model\Search\ReaderPlugin"/>
     </type>
     <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
         <arguments>
@@ -131,9 +131,9 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Search\Model\SearchCollectionInterface" type="Magento\CatalogSearch\Model\ResourceModel\Search\Collection" />
+    <preference for="Magento\Search\Model\SearchCollectionInterface" type="Magento\CatalogSearch\Model\ResourceModel\Search\Collection"/>
     <type name="Magento\Catalog\Model\Layer\Search\CollectionFilter">
-        <plugin name="searchQuery" type="Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter" />
+        <plugin name="searchQuery" type="Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter"/>
     </type>
     <virtualType name="categoryFilterList" type="Magento\Catalog\Model\Layer\FilterList">
         <arguments>
@@ -243,7 +243,7 @@
             <!-- @deprecated parameter customerSession has been deprecated and not in used now -->
             <argument name="customerSession" xsi:type="null"/>
         </arguments>
-        <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
+        <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider"/>
     </type>
     <type name="Magento\Framework\Search\Adapter\Mysql\Mapper">
         <arguments>
@@ -368,7 +368,7 @@
         </arguments>
     </type>
     <type name="Magento\Config\Model\Config">
-        <plugin name="config_enable_eav_indexer" type="Magento\CatalogSearch\Plugin\EnableEavIndexer" />
+        <plugin name="config_enable_eav_indexer" type="Magento\CatalogSearch\Plugin\EnableEavIndexer"/>
     </type>
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>

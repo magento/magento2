@@ -11,7 +11,7 @@
         <container name="page.wrapper" as="page_wrapper" htmlTag="div" htmlClass="page-wrapper">
             <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="page-columns">
                 <container name="main.col" as="main-col" htmlId="container" htmlTag="div" htmlClass="main-col">
-                    <container name="content" as="content" />
+                    <container name="content" as="content"/>
                 </container>
             </container>
             <container name="js" as="js" label="JavaScript"/>

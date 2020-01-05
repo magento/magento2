@@ -10,12 +10,12 @@
         <variation name="MoveRecentlyViewedProductsOnOrderPageTestVariation1">
             <data name="tag" xsi:type="string">to_maintain:yes, mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">configurableProduct::default</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid"/>
         </variation>
         <variation name="MoveRecentlyViewedProductsOnOrderPageTestVariation2">
             <data name="tag" xsi:type="string">to_maintain:yes, mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid"/>
         </variation>
     </testCase>
 </config>

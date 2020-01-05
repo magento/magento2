@@ -11,17 +11,17 @@
             <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="store/dataset" xsi:type="string">custom</data>
             <data name="createBackup" xsi:type="string">Yes</data>
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteAndBackupMessages" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotInGrid" />
-            <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteAndBackupMessages"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotInGrid"/>
+            <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend"/>
         </variation>
         <variation name="DeleteStoreEntityTestVariation2">
             <data name="tag" xsi:type="string">severity:S2, stable:no</data>
             <data name="store/dataset" xsi:type="string">custom</data>
             <data name="createBackup" xsi:type="string">No</data>
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteMessage" />
-            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteMessage"/>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend"/>
         </variation>
     </testCase>
 </config>

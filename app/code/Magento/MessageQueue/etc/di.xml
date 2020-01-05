@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\MessageQueue\ConfigInterface" type="Magento\Framework\MessageQueue\Config\Proxy" />
-    <preference for="Magento\Framework\MessageQueue\LockInterface" type="Magento\Framework\MessageQueue\Lock" />
-    <preference for="Magento\Framework\MessageQueue\Lock\WriterInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock" />
-    <preference for="Magento\Framework\MessageQueue\Lock\ReaderInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock" />
+    <preference for="Magento\Framework\MessageQueue\ConfigInterface" type="Magento\Framework\MessageQueue\Config\Proxy"/>
+    <preference for="Magento\Framework\MessageQueue\LockInterface" type="Magento\Framework\MessageQueue\Lock"/>
+    <preference for="Magento\Framework\MessageQueue\Lock\WriterInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock"/>
+    <preference for="Magento\Framework\MessageQueue\Lock\ReaderInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock"/>
     <preference for="Magento\Framework\MessageQueue\EnvelopeInterface" type="Magento\Framework\MessageQueue\Envelope"/>
     <preference for="Magento\Framework\MessageQueue\ConsumerInterface" type="Magento\Framework\MessageQueue\Consumer"/>
     <preference for="Magento\Framework\MessageQueue\MergedMessageInterface" type="Magento\Framework\MessageQueue\MergedMessage"/>

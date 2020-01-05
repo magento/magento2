@@ -12,8 +12,8 @@
             <data name="issue" xsi:type="string">MAGETWO-68854: CustomAclPermissionTest Fails on Jenkins, marked as unstable</data>
             <data name="user/dataset" xsi:type="string">custom_admin_with_role_without_synonym</data>
             <data name="menuItem" xsi:type="string">Marketing > Search Synonyms</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertMenuItemNotVisible" />
-            <constraint name="Magento\Search\Test\Constraint\AssertSynonymRestrictedAccess" />
+            <constraint name="Magento\Backend\Test\Constraint\AssertMenuItemNotVisible"/>
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymRestrictedAccess"/>
         </variation>
     </testCase>
 </config>

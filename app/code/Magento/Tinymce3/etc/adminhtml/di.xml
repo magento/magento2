@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Cms\Model\Wysiwyg\Config"/>
     <type name="Magento\Widget\Model\Widget">
-        <plugin name="change_widget_placeholder" type="Magento\Tinymce3\Model\Plugin\Widget" />
+        <plugin name="change_widget_placeholder" type="Magento\Tinymce3\Model\Plugin\Widget"/>
     </type>
     <type name="Magento\Cms\Model\Wysiwyg\CompositeConfigProvider">
         <arguments>

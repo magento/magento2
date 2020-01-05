@@ -58,7 +58,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\Pricing\Render\PriceBox">
-        <plugin name="catalog_price_box_key" type="Magento\Catalog\Block\Category\Plugin\PriceBoxTags" />
+        <plugin name="catalog_price_box_key" type="Magento\Catalog\Block\Category\Plugin\PriceBoxTags"/>
     </type>
     <type name="Magento\Customer\CustomerData\SectionPool">
         <arguments>
@@ -118,6 +118,6 @@
     </type>
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="catalog_app_action_dispatch_controller_context_plugin"
-                type="Magento\Catalog\Plugin\Framework\App\Action\ContextPlugin" />
+                type="Magento\Catalog\Plugin\Framework\App\Action\ContextPlugin"/>
     </type>
 </config>

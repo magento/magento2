@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface" type="Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository" />
-    <preference for="Magento\CheckoutAgreements\Api\Data\AgreementInterface" type="Magento\CheckoutAgreements\Model\Agreement" />
-    <preference for="Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface" type="Magento\CheckoutAgreements\Model\CheckoutAgreementsList" />
+    <preference for="Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface" type="Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository"/>
+    <preference for="Magento\CheckoutAgreements\Api\Data\AgreementInterface" type="Magento\CheckoutAgreements\Model\Agreement"/>
+    <preference for="Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface" type="Magento\CheckoutAgreements\Model\CheckoutAgreementsList"/>
     <type name="Magento\CheckoutAgreements\Model\AgreementsValidator">
         <arguments>
             <argument name="list" xsi:type="array">
@@ -19,7 +19,7 @@
     <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
         <plugin name="validate-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation"/>
     </type>
-    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\CheckoutAgreements\Model\AgreementsValidator" />
+    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\CheckoutAgreements\Model\AgreementsValidator"/>
     <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
         <plugin name="validate-guest-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation"/>
     </type>

@@ -76,21 +76,21 @@
             <argument name="productName" value="$$createFirstProduct.name$$"/>
             <argument name="productSku" value="$$createFirstProduct.sku$$"/>
             <argument name="productPrice" value="$$createFirstProduct.price$$"/>
-            <argument name="subtotal" value="$$createFirstProduct.price$$" />
+            <argument name="subtotal" value="$$createFirstProduct.price$$"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertSecondProductItemInCheckOutCart">
             <argument name="productName" value="$$createSecondProduct.name$$"/>
             <argument name="productSku" value="$$createSecondProduct.sku$$"/>
             <argument name="productPrice" value="$$createSecondProduct.price$$"/>
-            <argument name="subtotal" value="$$createSecondProduct.price$$" />
+            <argument name="subtotal" value="$$createSecondProduct.price$$"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <switchToNextTab stepKey="switchToNextTab"/>
         <!-- Click 'Continue to Billing Information' and 'Go to Review Your Order' -->
         <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="goToBillingInformation"/>
         <see selector="{{ShipmentFormSection.shippingAddress}}" userInput="{{US_Address_NY.city}}" stepKey="seeBillingAddress"/>
-        <waitForElementVisible selector="{{StorefrontMultipleShippingMethodSection.goToReviewYourOrderButton}}" stepKey="waitForGoToReviewYourOrderVisible" />
+        <waitForElementVisible selector="{{StorefrontMultipleShippingMethodSection.goToReviewYourOrderButton}}" stepKey="waitForGoToReviewYourOrderVisible"/>
         <click selector="{{StorefrontMultipleShippingMethodSection.goToReviewYourOrderButton}}" stepKey="clickToGoToReviewYourOrderButton"/>
         <!-- Click 'Place Order' -->
         <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>

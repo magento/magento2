@@ -47,8 +47,8 @@
 
         <!--Assert category Url Rewrite in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByNewRequestPath">
-            <argument name="redirectPath" value="{{updateUrlRewrite.request_path}}" />
-            <argument name="redirectType" value="Temporary (302)" />
+            <argument name="redirectPath" value="{{updateUrlRewrite.request_path}}"/>
+            <argument name="redirectType" value="Temporary (302)"/>
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
         </actionGroup>
 

@@ -40,7 +40,7 @@
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$createCustomer$$" />
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">

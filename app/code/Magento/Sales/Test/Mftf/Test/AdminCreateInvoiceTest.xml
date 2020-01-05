@@ -76,14 +76,14 @@
         <waitForPageLoad stepKey="waitForInvoiceToBeCreated"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5"/>
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="seeInvoice1"/>
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="seeInvoice2"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrderInformationTabLoadingMask"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
         <amOnPage url="{{AdminInvoicesPage.url}}" stepKey="goToInvoices"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask6" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask6"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridInitial"/>
         <click selector="{{AdminInvoicesGridSection.filter}}" stepKey="clickFilters"/>
         <fillField selector="{{AdminInvoicesFiltersSection.orderNum}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum2"/>

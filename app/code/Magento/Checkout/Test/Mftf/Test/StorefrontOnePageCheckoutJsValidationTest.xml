@@ -14,10 +14,10 @@
             <stories value="Checkout"/>
             <title value="Js validation error messages must be absent for required fields after checkout start."/>
             <description value="Js validation error messages must be absent for required fields after checkout start."/>
-            <severity value="MAJOR" />
-            <testCaseId value="MC-18312" />
-            <group value="shoppingCart" />
-            <group value="mtf_migrated" />
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-18312"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

@@ -99,7 +99,7 @@
 
         <!--Go to Storefront and add product to cart and checkout from cart-->
         <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPage" />
+        <waitForPageLoad stepKey="waitForProductPage"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantity"/>
         <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="AddProductToCard">
             <argument name="productName" value="$$simpleProduct.name$$"/>

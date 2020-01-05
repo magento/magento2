@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminLoginMessagesSection">
-        <element name="messageByType" type="block" selector=".login-content .messages .message-{{messageType}}" parameterized="true" />
+        <element name="messageByType" type="block" selector=".login-content .messages .message-{{messageType}}" parameterized="true"/>
     </section>
 </sections>

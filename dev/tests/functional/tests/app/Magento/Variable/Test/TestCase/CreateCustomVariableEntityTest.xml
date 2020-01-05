@@ -13,10 +13,10 @@
             <data name="customVariable/data/name" xsi:type="string">variableName%isolation%</data>
             <data name="customVariable/data/html_value" xsi:type="string">&lt;h1&gt;variableName%isolation%&lt;/h1&gt;</data>
             <data name="customVariable/data/plain_value" xsi:type="string">&lt;p&gt;variablePlainText%isolation%&lt;/p&gt;</data>
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableSuccessSaveMessage" />
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInGrid" />
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableForm" />
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage" />
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableSuccessSaveMessage"/>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInGrid"/>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableForm"/>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage"/>
         </variation>
         <variation name="CreateCustomVariableEntityTestVariation2">
             <data name="tag" xsi:type="string">stable:no</data>
@@ -24,10 +24,10 @@
             <data name="customVariable/data/name" xsi:type="string">variableName%isolation%</data>
             <data name="customVariable/data/html_value" xsi:type="string">&lt;p&gt;variableName%isolation%&lt;/p&gt;</data>
             <data name="customVariable/data/plain_value" xsi:type="string">variablePlainText%isolation%</data>
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableSuccessSaveMessage" />
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInGrid" />
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableForm" />
-            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage" />
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableSuccessSaveMessage"/>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInGrid"/>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableForm"/>
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage"/>
         </variation>
     </testCase>
 </config>

@@ -9,9 +9,9 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="DeleteCustomerGroupTest">
-        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRuleForm" />
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRuleForm"/>
         <actionGroup ref="AssertCustomerGroupNotOnCatalogPriceRuleFormActionGroup" stepKey="assertCustomerGroupNotOnCatalogPriceRuleForm">
-            <argument name="customerGroup" value="$$customerGroup$$" />
+            <argument name="customerGroup" value="$$customerGroup$$"/>
         </actionGroup>
     </test>
 </tests>

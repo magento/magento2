@@ -515,7 +515,7 @@
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="productWithOptions" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <data key="file">magento.jpg</data>
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
@@ -529,44 +529,44 @@
         <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
     </entity>
     <entity name="productWithDateTimeOption" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <data key="file">magento.jpg</data>
         <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
     </entity>
     <entity name="productWithOptionRadiobutton" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionRadiobuttonWithTwoFixedOptions</requiredEntity>
     </entity>
     <entity name="productWithCustomOptions" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <data key="file">magento.jpg</data>
         <requiredEntity type="product_option">ProductOptionDropDown2</requiredEntity>
     </entity>
     <entity name="productWithFixedOptions" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <data key="file">magento.jpg</data>
         <requiredEntity type="product_option">ProductOptionRadioButton2</requiredEntity>
     </entity>
     <entity name="productWithOptions2" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
     <entity name="productWithDropdownOption" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
     </entity>
     <entity name="productWithDropdownAndFieldOptions" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
     </entity>
     <entity name="ProductWithTextFieldAndAreaOptions" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
     </entity>
     <entity name="ProductWithTextFieldAndAreaAndFileOptions" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
         <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
@@ -1152,11 +1152,11 @@
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
     <entity name="SimpleProductWithTwoOption" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
     </entity>
     <entity name="SimpleProductWithOption" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionPercentPriceDropDown</requiredEntity>
     </entity>
     <entity name="SimpleProductWithDescription" type="product">
@@ -1334,7 +1334,7 @@
         <data key="price">16.00</data>
     </entity>
     <entity name="ProductWithTwoTextFieldOptions" type="product">
-        <var key="sku" entityType="product" entityKey="sku" />
+        <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
     </entity>

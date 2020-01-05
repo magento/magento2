@@ -169,70 +169,70 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct11MiniCart">
             <argument name="productName" value="$$simpleProduct1.name$$"/>
             <argument name="productPrice" value="$10.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product2 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct2MiniCart">
             <argument name="productName" value="$$simpleProduct2.name$$"/>
             <argument name="productPrice" value="$20.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product3 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$simpleProduct3.name$$"/>
             <argument name="productPrice" value="$30.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product4 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct4MiniCart">
             <argument name="productName" value="$$simpleProduct4.name$$"/>
             <argument name="productPrice" value="$40.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product5 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct5MiniCart">
             <argument name="productName" value="$$simpleProduct5.name$$"/>
             <argument name="productPrice" value="$50.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product6 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct6MiniCart">
             <argument name="productName" value="$$simpleProduct6.name$$"/>
             <argument name="productPrice" value="$60.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product7 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct7MiniCart">
             <argument name="productName" value="$$simpleProduct7.name$$"/>
             <argument name="productPrice" value="$70.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product8 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct8MiniCart">
             <argument name="productName" value="$$simpleProduct8.name$$"/>
             <argument name="productPrice" value="$80.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product9 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct9MiniCart">
             <argument name="productName" value="$$simpleProduct9.name$$"/>
             <argument name="productPrice" value="$90.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <!--Assert Product10 in Mini Cart-->
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct10MiniCart">
             <argument name="productName" value="$$simpleProduct10.name$$"/>
             <argument name="productPrice" value="$100.00"/>
-            <argument name="cartSubtotal" value="$550.00" />
+            <argument name="cartSubtotal" value="$550.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
 

@@ -31,7 +31,7 @@
 
         <!--Create new customer on storefront and signup news letter-->
         <actionGroup ref="StorefrontCreateCustomerSignedUpNewsletterActionGroup" stepKey="createCustomer">
-            <argument name="customer" value="CustomerEntityOne" />
+            <argument name="customer" value="CustomerEntityOne"/>
         </actionGroup>
 
         <!--Assert verify created new customer in grid-->

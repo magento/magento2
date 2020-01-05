@@ -12,7 +12,7 @@
             <data name="product" xsi:type="string">catalogProductSimple::low_stock_product</data>
             <data name="configData" xsi:type="string">notify_stock_quantity_2</data>
             <data name="flushCache" xsi:type="boolean">true</data>
-            <constraint name="Magento\Reports\Test\Constraint\AssertLowStockProductInGrid" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertLowStockProductInGrid"/>
         </variation>
     </testCase>
 </config>

@@ -24,7 +24,7 @@
         <selector>#widget_instace_tabs_main_section</selector>
         <strategy>css selector</strategy>
         <fields>
-            <title />
+            <title/>
             <store_ids>
                 <input>multiselectgrouplist</input>
                 <selector>[id="store_ids"]</selector>

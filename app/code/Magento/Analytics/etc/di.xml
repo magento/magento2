@@ -6,14 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Analytics\ReportXML\ConfigInterface" type="Magento\Analytics\ReportXML\Config" />
-    <preference for="Magento\Analytics\Model\ConfigInterface" type="Magento\Analytics\Model\Config" />
-    <preference for="Magento\Analytics\Model\ReportWriterInterface" type="Magento\Analytics\Model\ReportWriter" />
-    <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider" />
-    <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link" />
-    <preference for="Magento\Analytics\Model\Connector\Http\ClientInterface" type="Magento\Analytics\Model\Connector\Http\Client\Curl" />
-    <preference for="Magento\Analytics\Model\ExportDataHandlerInterface" type="Magento\Analytics\Model\ExportDataHandlerNotification" />
-    <preference for="Magento\Analytics\Model\Connector\Http\ConverterInterface" type="Magento\Analytics\Model\Connector\Http\JsonConverter" />
+    <preference for="Magento\Analytics\ReportXML\ConfigInterface" type="Magento\Analytics\ReportXML\Config"/>
+    <preference for="Magento\Analytics\Model\ConfigInterface" type="Magento\Analytics\Model\Config"/>
+    <preference for="Magento\Analytics\Model\ReportWriterInterface" type="Magento\Analytics\Model\ReportWriter"/>
+    <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider"/>
+    <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link"/>
+    <preference for="Magento\Analytics\Model\Connector\Http\ClientInterface" type="Magento\Analytics\Model\Connector\Http\Client\Curl"/>
+    <preference for="Magento\Analytics\Model\ExportDataHandlerInterface" type="Magento\Analytics\Model\ExportDataHandlerNotification"/>
+    <preference for="Magento\Analytics\Model\Connector\Http\ConverterInterface" type="Magento\Analytics\Model\Connector\Http\JsonConverter"/>
     <type name="Magento\Analytics\Model\Connector">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -202,7 +202,7 @@
         </arguments>
     </type>
     <type name="Magento\Config\Model\Config\Backend\Baseurl">
-        <plugin name="updateAnalyticsSubscription" type="Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin" />
+        <plugin name="updateAnalyticsSubscription" type="Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin"/>
     </type>
     <virtualType name="SignUpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
         <arguments>

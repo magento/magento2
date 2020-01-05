@@ -13,13 +13,13 @@
              repository_class="Magento\CurrencySymbol\Test\Repository\CurrencySymbolEntity"
              handler_interface="Magento\CurrencySymbol\Test\Handler\CurrencySymbolEntity\CurrencySymbolEntityInterface"
              class="Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity">
-        <field name="config_id" is_required="1" />
-        <field name="scope" is_required="" />
-        <field name="scope_id" is_required="" />
-        <field name="path" is_required="" />
-        <field name="value" is_required="" />
-        <field name="inherit_custom_currency_symbol" />
-        <field name="custom_currency_symbol" />
-        <field name="code" />
+        <field name="config_id" is_required="1"/>
+        <field name="scope" is_required=""/>
+        <field name="scope_id" is_required=""/>
+        <field name="path" is_required=""/>
+        <field name="value" is_required=""/>
+        <field name="inherit_custom_currency_symbol"/>
+        <field name="custom_currency_symbol"/>
+        <field name="code"/>
     </fixture>
 </config>

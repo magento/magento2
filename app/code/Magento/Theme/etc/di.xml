@@ -6,13 +6,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\View\Design\Theme\ThemeInterface" type="Magento\Theme\Model\Theme" />
-    <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Theme\Model\Theme\File" />
-    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Theme\Model\Theme\ThemeProvider" />
-    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Theme\Model\Theme\FileProvider" />
-    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Theme\Model\Theme\Customization\Config" />
-    <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design" />
-    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
+    <preference for="Magento\Framework\View\Design\Theme\ThemeInterface" type="Magento\Theme\Model\Theme"/>
+    <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Theme\Model\Theme\File"/>
+    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Theme\Model\Theme\ThemeProvider"/>
+    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Theme\Model\Theme\FileProvider"/>
+    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Theme\Model\Theme\Customization\Config"/>
+    <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design"/>
+    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection"/>
     <preference for="Magento\Theme\Api\Data\DesignConfigInterface" type="Magento\Theme\Model\Data\Design\Config"/>
     <preference for="Magento\Theme\Api\Data\DesignConfigDataInterface" type="Magento\Theme\Model\Data\Design\Config\Data"/>
     <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface" type="Magento\Theme\Model\DesignConfigRepository"/>
@@ -58,7 +58,7 @@
     <type name="Magento\Framework\Url\ScopeInterface">
         <plugin name="urlSignature" type="Magento\Theme\Model\Url\Plugin\Signature"/>
     </type>
-    <type name="Magento\Theme\Model\Theme\Collection" shared="false" />
+    <type name="Magento\Theme\Model\Theme\Collection" shared="false"/>
     <type name="Magento\Theme\Model\View\Design">
         <arguments>
             <argument name="themes" xsi:type="array">

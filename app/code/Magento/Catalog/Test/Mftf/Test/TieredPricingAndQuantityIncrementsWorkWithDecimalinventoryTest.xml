@@ -29,7 +29,7 @@
             <deleteData createDataKey="createPreReqSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
         </after>
         <!--Step1. Login as admin. Go to Catalog > Products page. Filtering *prod1*. Open *prod1* to edit-->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
+        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>

@@ -20,9 +20,9 @@
             <data name="customer/data/dob" xsi:type="string">08/01/1986</data>
             <data name="customer/data/taxvat" xsi:type="string">123456789001</data>
             <data name="customer/data/gender" xsi:type="string">Male</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation2">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -41,9 +41,9 @@
             <data name="address/data/postcode" xsi:type="string">36303</data>
             <data name="address/data/telephone" xsi:type="string">334-200-4060</data>
             <data name="address/data/vat_id" xsi:type="string">U1234567890</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation3" summary="Address with alphanumeric zip">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -71,9 +71,9 @@
             <data name="address/data/postcode" xsi:type="string">KA26 1PF</data>
             <data name="address/data/telephone" xsi:type="string">999-777-111-2345</data>
             <data name="address/data/vat_id" xsi:type="string">987654321</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation4" summary="Address w/o zip/state required, default billing/shipping checked">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -92,9 +92,9 @@
             <data name="address/data/country_id" xsi:type="string">United Kingdom</data>
             <data name="address/data/telephone" xsi:type="string">334-200-4061</data>
             <data name="address/data/vat_id" xsi:type="string">U1234567891</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogin" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogin"/>
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation5" summary="Default billing/shipping unchecked">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -113,16 +113,16 @@
             <data name="address/data/country_id" xsi:type="string">United Kingdom</data>
             <data name="address/data/telephone" xsi:type="string">334-200-4061</data>
             <data name="address/data/vat_id" xsi:type="string">U1234567891</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation6" summary="Delete customer address">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">johndoe_with_multiple_addresses</data>
             <data name="customer/data/email" xsi:type="string">-</data>
             <data name="addressIndexToDelete" xsi:type="number">1</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertAddressDeletedFrontend" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertAddressDeletedFrontend"/>
         </variation>
     </testCase>
 </config>

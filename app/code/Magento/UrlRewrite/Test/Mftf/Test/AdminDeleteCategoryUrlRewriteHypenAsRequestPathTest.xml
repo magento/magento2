@@ -9,11 +9,11 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminDeleteCategoryUrlRewriteHypenAsRequestPathTest">
         <annotations>
-            <features value="UrlRewrite" />
+            <features value="UrlRewrite"/>
             <stories value="Delete custom URL rewrite"/>
             <title value="Delete category URL rewrite, hyphen as request path"/>
             <description value="Delete category URL rewrite, hyphen as request path"/>
-            <testCaseId value="MC-5348" />
+            <testCaseId value="MC-5348"/>
             <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
         </annotations>

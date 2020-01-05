@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface" type="Magento\Bundle\Test\Handler\BundleProduct\Webapi" />
+    <preference for="Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface" type="Magento\Bundle\Test\Handler\BundleProduct\Webapi"/>
 </config>

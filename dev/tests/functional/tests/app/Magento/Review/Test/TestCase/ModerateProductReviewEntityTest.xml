@@ -13,9 +13,9 @@
             <data name="review/data/nickname" xsi:type="string">Nick%isolation%</data>
             <data name="review/data/title" xsi:type="string">Title %isolation%</data>
             <data name="review/data/detail" xsi:type="string">Details %isolation%</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage"/>
         </variation>
         <variation name="ModerateProductReviewEntityTestVariation2">
             <data name="reviewInitial/dataset" xsi:type="string">frontend_review</data>
@@ -23,9 +23,9 @@
             <data name="review/data/nickname" xsi:type="string">Nick%isolation%</data>
             <data name="review/data/title" xsi:type="string">Title %isolation%</data>
             <data name="review/data/detail" xsi:type="string">Details %isolation%</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewNotOnProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewNotOnProductPage"/>
         </variation>
     </testCase>
 </config>

@@ -22,13 +22,13 @@
     <route url="/V1/configurable-products/variation" method="PUT">
         <service class="Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface" method="generateVariation"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/configurable-products/:sku/child" method="POST">
         <service class="Magento\ConfigurableProduct\Api\LinkManagementInterface" method="addChild"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/configurable-products/:sku/options/:id" method="GET">
@@ -44,21 +44,21 @@
         </resources>
     </route>
     <route url="/V1/configurable-products/:sku/options" method="POST">
-        <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="save" />
+        <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/configurable-products/:sku/options/:id" method="PUT">
-        <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="save" />
+        <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/configurable-products/:sku/options/:id" method="DELETE">
-        <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="deleteById" />
+        <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="deleteById"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
 </routes>

@@ -34,7 +34,7 @@
         <switchToNextTab stepKey="switchToInContentTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeCurrentUrlMatches regex="~\//www.sandbox.paypal.com/~" stepKey="seeCurrentUrlMatchesConfigPath1"/>
-        <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm" />
+        <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm"/>
         <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
         <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>

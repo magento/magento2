@@ -181,7 +181,7 @@
         <!--Verify configuration for default number of products displayed in the grid view-->
         <comment userInput="Verify configuration for default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigPagePage"/>
-        <waitForPageLoad stepKey="waitForConfigPageLoad" />
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
         <conditionalClick selector="{{AdminCatalogStorefrontConfigSection.sectionHeader}}" dependentSelector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" visible="false" stepKey="openCatalogConfigStorefrontSection"/>
         <waitForElementVisible selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" stepKey="waitForSectionOpen"/>
         <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" userInput="12,24,36" stepKey="seeDefaultValueAllowedNumberProductsPerPage"/>
@@ -197,10 +197,10 @@
         <!-- Check the drop-down at the bottom of page contains options -->
         <comment userInput="Check the drop-down at the bottom of page contains options" stepKey="commentCheckOptions"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToBottomToolbarSection"/>
-        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="12" stepKey="assertPerPageFirstValue" />
-        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="24" stepKey="selectPerPageSecondValue" />
-        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="24" stepKey="assertPerPageSecondValue" />
-        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="36" stepKey="selectPerPageThirdValue" />
-        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="36" stepKey="assertPerPageThirdValue" />
+        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="12" stepKey="assertPerPageFirstValue"/>
+        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="24" stepKey="selectPerPageSecondValue"/>
+        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="24" stepKey="assertPerPageSecondValue"/>
+        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="36" stepKey="selectPerPageThirdValue"/>
+        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="36" stepKey="assertPerPageThirdValue"/>
     </test>
 </tests>

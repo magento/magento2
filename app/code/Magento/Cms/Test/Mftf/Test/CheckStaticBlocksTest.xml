@@ -56,8 +56,8 @@
         <seeInCurrentUrl url="cms/block/new" stepKey="VerifyNewBlockPageIsOpened1"/>
         <!--Add new BLock with the same data-->
         <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent1"/>
-        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="Default Store View" stepKey="selectDefaultStoreView" />
-        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="{{customStore.name}}" stepKey="selectSecondStoreView1" />
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="Default Store View" stepKey="selectDefaultStoreView"/>
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="{{customStore.name}}" stepKey="selectSecondStoreView1"/>
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="ClickToSaveBlock1"/>
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <!--Verify that corresponding message is displayed-->

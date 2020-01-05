@@ -14,9 +14,9 @@
         </annotations>
         <arguments>
             <argument name="optionTitle" defaultValue="ProductOptionFile"/>
-            <argument name="file" defaultValue="MagentoLogo.file" />
+            <argument name="file" defaultValue="MagentoLogo.file"/>
         </arguments>
-        
+
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(optionTitle.title)}}" userInput="{{file}}" stepKey="attachFile"/>
     </actionGroup>
 </actionGroups>

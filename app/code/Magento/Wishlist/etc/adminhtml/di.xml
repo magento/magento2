@@ -22,6 +22,6 @@
         </arguments>
     </virtualType>
     <type name="Magento\Catalog\Model\ResourceModel\Product">
-        <plugin name="cleanups_wishlist_item_after_product_delete" type="Magento\Wishlist\Plugin\Model\ResourceModel\Product" />
+        <plugin name="cleanups_wishlist_item_after_product_delete" type="Magento\Wishlist\Plugin\Model\ResourceModel\Product"/>
     </type>
 </config>

@@ -10,9 +10,9 @@
         <resources>
             <resource id="Backend_Dummy1::all" title="Allow everything"/>
             <resource id="Backend_Dummy1::parent" title="Dummy Parent Resource">
-                <resource id="Backend_Dummy1::first" title="Dummy Resource #1" sortOrder="0" />
+                <resource id="Backend_Dummy1::first" title="Dummy Resource #1" sortOrder="0"/>
                 <resource id="Backend_Dummy1::second" title="Dummy Resource #2" sortOrder="10"/>
-                <resource id="Backend_Dummy1::third" title="Dummy Resource #3" sortOrder="50" />
+                <resource id="Backend_Dummy1::third" title="Dummy Resource #3" sortOrder="50"/>
             </resource>
         </resources>
     </acl>

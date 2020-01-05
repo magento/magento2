@@ -10,8 +10,8 @@
         <Status>
             <ActionStatus>Error</ActionStatus>
             <Condition>
-                <ConditionCode />
-                <ConditionData />
+                <ConditionCode/>
+                <ConditionData/>
             </Condition>
             <Condition>
                 <ConditionCode>123</ConditionCode>

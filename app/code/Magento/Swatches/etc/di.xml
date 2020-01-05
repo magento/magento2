@@ -10,16 +10,16 @@
         <plugin name="save_swatches_option_params" type="Magento\Swatches\Model\Plugin\EavAttribute"/>
     </type>
     <type name="Magento\Catalog\Block\Product\AbstractProduct">
-        <plugin name="add_product_object_to_image_data_array" type="Magento\Swatches\Model\Plugin\ProductImage" />
+        <plugin name="add_product_object_to_image_data_array" type="Magento\Swatches\Model\Plugin\ProductImage"/>
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="exclude_swatch_attribute" type="Magento\Swatches\Model\Plugin\Product" />
+        <plugin name="exclude_swatch_attribute" type="Magento\Swatches\Model\Plugin\Product"/>
     </type>
     <type name="Magento\LayeredNavigation\Block\Navigation\FilterRenderer">
-        <plugin name="swatches_layered_renderer" type="Magento\Swatches\Model\Plugin\FilterRenderer" sortOrder="1" />
+        <plugin name="swatches_layered_renderer" type="Magento\Swatches\Model\Plugin\FilterRenderer" sortOrder="1"/>
     </type>
     <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
-        <plugin name="add_swatch_attributes_to_configurable" type="Magento\Swatches\Model\Plugin\Configurable" />
+        <plugin name="add_swatch_attributes_to_configurable" type="Magento\Swatches\Model\Plugin\Configurable"/>
     </type>
     <type name="Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes">
         <arguments>

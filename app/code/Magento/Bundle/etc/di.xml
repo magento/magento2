@@ -6,15 +6,15 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Bundle\Api\ProductOptionTypeListInterface" type="Magento\Bundle\Model\OptionTypeList" />
-    <preference for="Magento\Bundle\Api\Data\OptionTypeInterface" type="Magento\Bundle\Model\Source\Option\Type" />
-    <preference for="Magento\Bundle\Api\ProductLinkManagementInterface" type="Magento\Bundle\Model\LinkManagement" />
-    <preference for="Magento\Bundle\Api\Data\LinkInterface" type="Magento\Bundle\Model\Link" />
-    <preference for="Magento\Bundle\Api\ProductOptionRepositoryInterface" type="Magento\Bundle\Model\OptionRepository" />
-    <preference for="Magento\Bundle\Api\ProductOptionManagementInterface" type="Magento\Bundle\Model\OptionManagement" />
-    <preference for="Magento\Bundle\Api\Data\OptionInterface" type="Magento\Bundle\Model\Option" />
-    <preference for="Magento\Bundle\Api\Data\BundleOptionInterface" type="Magento\Bundle\Model\BundleOption" />
-    <preference for="Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface" type="Magento\Bundle\Pricing\Adjustment\DefaultSelectionPriceListProvider" />
+    <preference for="Magento\Bundle\Api\ProductOptionTypeListInterface" type="Magento\Bundle\Model\OptionTypeList"/>
+    <preference for="Magento\Bundle\Api\Data\OptionTypeInterface" type="Magento\Bundle\Model\Source\Option\Type"/>
+    <preference for="Magento\Bundle\Api\ProductLinkManagementInterface" type="Magento\Bundle\Model\LinkManagement"/>
+    <preference for="Magento\Bundle\Api\Data\LinkInterface" type="Magento\Bundle\Model\Link"/>
+    <preference for="Magento\Bundle\Api\ProductOptionRepositoryInterface" type="Magento\Bundle\Model\OptionRepository"/>
+    <preference for="Magento\Bundle\Api\ProductOptionManagementInterface" type="Magento\Bundle\Model\OptionManagement"/>
+    <preference for="Magento\Bundle\Api\Data\OptionInterface" type="Magento\Bundle\Model\Option"/>
+    <preference for="Magento\Bundle\Api\Data\BundleOptionInterface" type="Magento\Bundle\Model\BundleOption"/>
+    <preference for="Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface" type="Magento\Bundle\Pricing\Adjustment\DefaultSelectionPriceListProvider"/>
     <type name="Magento\Bundle\Model\Source\Option\Type">
         <arguments>
             <argument name="options" xsi:type="array">
@@ -34,7 +34,7 @@
     </type>
     <virtualType name="Magento\Bundle\Pricing\Adjustment\Collection" type="Magento\Framework\Pricing\Adjustment\Collection">
     </virtualType>
-    <preference for="Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface" type="Magento\Bundle\Pricing\Adjustment\Calculator" />
+    <preference for="Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface" type="Magento\Bundle\Pricing\Adjustment\Calculator"/>
     <virtualType name="Magento\Bundle\Pricing\PriceInfo" type="Magento\Framework\Pricing\PriceInfo\Base">
         <arguments>
             <argument name="adjustmentCollection" xsi:type="object">Magento\Bundle\Pricing\Adjustment\Collection</argument>
@@ -83,13 +83,13 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
-        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
+        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100"/>
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
+        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100"/>
     </type>
     <type name="Magento\Sales\Model\Order\Item">
-        <plugin name="bundle" type="Magento\Bundle\Model\Sales\Order\Plugin\Item" sortOrder="100" />
+        <plugin name="bundle" type="Magento\Bundle\Model\Sales\Order\Plugin\Item" sortOrder="100"/>
     </type>
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>

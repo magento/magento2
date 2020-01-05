@@ -401,7 +401,7 @@
         </settings>
         <container name="conditions_apply_to" sortOrder="10">
             <htmlContent name="html_content">
-                <block name="conditions_apply_to" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions" />
+                <block name="conditions_apply_to" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions"/>
             </htmlContent>
         </container>
     </fieldset>

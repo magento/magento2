@@ -11,7 +11,7 @@
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">news_from_date</data>
             <data name="productAttribute/data/is_user_defined" xsi:type="string">Yes</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAbsenceDeleteAttributeButton" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAbsenceDeleteAttributeButton"/>
         </variation>
     </testCase>
 </config>

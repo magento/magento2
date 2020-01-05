@@ -47,14 +47,14 @@
 
         <!-- Assert updated CMS page Url Rewrite in Grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
-            <argument name="redirectPath" value="{{defaultCmsPage.title}}" />
-            <argument name="redirectType" value="Permanent (301)" />
+            <argument name="redirectPath" value="{{defaultCmsPage.title}}"/>
+            <argument name="redirectType" value="Permanent (301)"/>
             <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
         </actionGroup>
 
         <!--  Assert initial CMS page Url Rewrite in Grid-->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
-            <argument name="redirectPath" value="$$createCMSPage.identifier$$" />
+            <argument name="redirectPath" value="$$createCMSPage.identifier$$"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
         </actionGroup>

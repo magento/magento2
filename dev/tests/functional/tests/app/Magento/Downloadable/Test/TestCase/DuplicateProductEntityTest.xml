@@ -9,11 +9,11 @@
     <testCase name="Magento\Catalog\Test\TestCase\Product\DuplicateProductEntityTest" summary="Duplicate Product" ticketId="MAGETWO-23294">
         <variation name="DuplicateProductEntityTestVariation3" summary="Dublicate downloadable product">
             <data name="productType" xsi:type="string">downloadableProduct::default</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage" />
-            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableDuplicateForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicatedInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateIsNotDisplayingOnFrontend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage"/>
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableDuplicateForm"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicatedInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateIsNotDisplayingOnFrontend"/>
         </variation>
     </testCase>
 </config>

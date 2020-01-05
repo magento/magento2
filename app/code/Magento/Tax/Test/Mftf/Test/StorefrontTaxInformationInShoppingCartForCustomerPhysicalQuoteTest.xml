@@ -76,7 +76,7 @@
         <!--  Test Steps  -->
         <!--  Step 1: Go to Storefront as logged in Customer  -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$createCustomer$$" />
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!--  Step 2: Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
@@ -88,38 +88,38 @@
         <!--  Step 3: Go to Shopping Cart -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
-        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
-        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry" />
-        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion" />
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax"/>
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry"/>
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion"/>
         <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
         <assertEquals  message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
             <expectedResult type="string">{{US_Address_CA.postcode}}</expectedResult>
             <actualResult type="variable">grabTextPostCode</actualResult>
         </assertEquals>
-        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$10" stepKey="checkFPTAmountCA" />
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.83" stepKey="checkTaxAmountCA" />
-        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
+        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$10" stepKey="checkFPTAmountCA"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.83" stepKey="checkTaxAmountCA"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary"/>
         <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>
-        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA" />
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA"/>
         <!--  Step 5: Change Data -->
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="Switzerland" stepKey="selectSwitzerlandCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Aargau" stepKey="selectAargauRegion"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="1234" stepKey="inputPostCode"/>
         <!--  Step 6: Select shipping rate again(it need for get new totals request - performance reason) -->
         <click selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectflatRateShippingMethodShippingMethod"/>
-        <scrollTo selector="{{CheckoutCartSummarySection.taxAmount}}" stepKey="scrollToTaxSummary2" />
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount" />
-        <dontSeeElement selector="{{CheckoutCartSummarySection.amountFPT}}" stepKey="checkFPTIsNotDisplayed" />
+        <scrollTo selector="{{CheckoutCartSummarySection.taxAmount}}" stepKey="scrollToTaxSummary2"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount"/>
+        <dontSeeElement selector="{{CheckoutCartSummarySection.amountFPT}}" stepKey="checkFPTIsNotDisplayed"/>
         <!--  Step 7: Change Data -->
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUnitedStatesCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="New York" stepKey="selectNewYorkRegion"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="12345" stepKey="inputPostCode2"/>
         <!--  Step 8: Select shipping rate again(it need for get new totals request - performance reason) -->
         <click selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectflatRateShippingMethodShippingMethod2"/>
-        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary3" />
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary3"/>
         <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary3"/>
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.84" stepKey="checkTaxAmountNY" />
-        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
-        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$20" stepKey="checkFPTAmountNY" />
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.84" stepKey="checkTaxAmountNY"/>
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY"/>
+        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$20" stepKey="checkFPTAmountNY"/>
     </test>
 </tests>

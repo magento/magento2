@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Backend::tools">
                         <resource id="Magento_Backup::backup" title="Backups" translate="title" sortOrder="30">
-                            <resource id="Magento_Backup::rollback" title="Rollback" translate="title" />
+                            <resource id="Magento_Backup::rollback" title="Rollback" translate="title"/>
                         </resource>
                     </resource>
                 </resource>

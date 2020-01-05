@@ -11,19 +11,19 @@
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="flushButtonName" xsi:type="string">Flush Catalog Images Cache</data>
             <data name="successMessage" xsi:type="string">The image cache was cleaned.</data>
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheFlushSuccessMessage" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheFlushSuccessMessage"/>
         </variation>
         <variation name="FlushJavaScriptCSSCacheTest">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="flushButtonName" xsi:type="string">Flush JavaScript/CSS Cache</data>
             <data name="successMessage" xsi:type="string">The JavaScript/CSS cache has been cleaned.</data>
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheFlushSuccessMessage" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheFlushSuccessMessage"/>
         </variation>
         <variation name="FlushStaticFilesCacheTest">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="flushButtonName" xsi:type="string">Flush Static Files Cache</data>
             <data name="successMessage" xsi:type="string">The static files cache has been cleaned.</data>
-            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheFlushSuccessMessage" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheFlushSuccessMessage"/>
         </variation>
     </testCase>
 </config>

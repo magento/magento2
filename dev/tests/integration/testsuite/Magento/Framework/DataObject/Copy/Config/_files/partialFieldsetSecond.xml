@@ -10,10 +10,10 @@
     <scope id="global">
         <fieldset id="quote_convert_item">
             <field name="event_id">
-                <aspect name="to_order_item" />
+                <aspect name="to_order_item"/>
             </field>
             <field name="event_name">
-                <aspect name="to_order_item" />
+                <aspect name="to_order_item"/>
             </field>
             <field name="event_description">
             </field>

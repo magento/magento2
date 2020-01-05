@@ -43,7 +43,7 @@
         <see userInput="The customer does not have default billing address" selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="assertThatThereIsNoDefaultBillingAddress"/>
         <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesGridSection.rowsInGrid}}" stepKey="seeOnlyOneCustomerAddressesInGrid"/>
         <!--Step4. Click *Select* link in *Actions* column for target additional address-->
-        <click selector="{{AdminCustomerAddressesGridSection.firstRowSelectLink}}" stepKey="clickSelectElementFromRow" />
+        <click selector="{{AdminCustomerAddressesGridSection.firstRowSelectLink}}" stepKey="clickSelectElementFromRow"/>
         <!--Step4. Click *Set as default billing*-->
         <click selector="{{AdminCustomerAddressesGridSection.firstRowSetAsDefaultBillingLink}}" stepKey="clickOnSetAddressAsDefaultBilling"/>
         <!--Step5. Press *Ok* button on the pop-up-->

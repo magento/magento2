@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <createData entity="NewRootCategory" stepKey="rootCategory" />
+            <createData entity="NewRootCategory" stepKey="rootCategory"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>

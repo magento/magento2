@@ -18,10 +18,10 @@
             <data name="firstStore/dataset" xsi:type="string">custom</data>
             <data name="secondStore/dataset" xsi:type="string">custom</data>
             <data name="configData" xsi:type="string">category_flat</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryInNavigationMenu" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryInNavigationMenu"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
         </variation>
         <variation name="UpdateCategoryEntityFlatDataTestVariation2" summary="Include category to navigation menu">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -34,9 +34,9 @@
             <data name="firstStore/dataset" xsi:type="string">custom</data>
             <data name="secondStore/dataset" xsi:type="string">custom</data>
             <data name="configData" xsi:type="string">category_flat</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryInNavigationMenu" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryInNavigationMenu"/>
         </variation>
         <variation name="UpdateCategoryEntityFlatDataTestVariation3" summary="Update category and assert assigned products">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -48,9 +48,9 @@
             <data name="firstStore/dataset" xsi:type="string">custom</data>
             <data name="secondStore/dataset" xsi:type="string">custom</data>
             <data name="configData" xsi:type="string">category_flat</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
         </variation>
     </testCase>
 </config>

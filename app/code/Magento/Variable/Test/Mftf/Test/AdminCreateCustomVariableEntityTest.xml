@@ -27,7 +27,7 @@
         </after>
         <actionGroup ref="AdminOpenNewVariablePageActionGroup" stepKey="goToNewVariableAdminPage"/>
         <actionGroup ref="AdminFillVariableFormActionGroup" stepKey="fillInCustomVariableData">
-            <argument name="variable" value="SampleVariable" />
+            <argument name="variable" value="SampleVariable"/>
         </actionGroup>
         <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveCustomVariable">
             <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
@@ -42,7 +42,7 @@
             <argument name="variable" value="SampleVariable"/>
         </actionGroup>
         <actionGroup ref="AdminNavigateToVariablePageByCodeActionGroup" stepKey="openVariableEditPage">
-            <argument name="code" value="{{SampleVariable.code}}" />
+            <argument name="code" value="{{SampleVariable.code}}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminCustomVariableFormActionGroup" stepKey="assertCustomVariableForm">
             <argument name="variable" value="SampleVariable"/>

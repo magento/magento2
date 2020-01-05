@@ -12,8 +12,8 @@
             <features value="CmsPage"/>
             <title value="Create two CMS Pages and perform mass disable action"/>
             <description value="Admin should be able to perform mass actions to CMS pages"/>
-            <stories value="Admin Grid Mass Action" />
-            <testCaseId value="MC-14659" />
+            <stories value="Admin Grid Mass Action"/>
+            <testCaseId value="MC-14659"/>
             <severity value="CRITICAL"/>
             <group value="backend"/>
             <group value="CMSContent"/>
@@ -21,12 +21,12 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <createData entity="_defaultCmsPage" stepKey="firstCMSPage" />
-            <createData entity="_duplicatedCMSPage" stepKey="secondCMSPage" />
+            <createData entity="_defaultCmsPage" stepKey="firstCMSPage"/>
+            <createData entity="_duplicatedCMSPage" stepKey="secondCMSPage"/>
         </before>
         <after>
-            <deleteData createDataKey="firstCMSPage" stepKey="deleteFirstCMSPage" />
-            <deleteData createDataKey="secondCMSPage" stepKey="deleteSecondCMSPage" />
+            <deleteData createDataKey="firstCMSPage" stepKey="deleteFirstCMSPage"/>
+            <deleteData createDataKey="secondCMSPage" stepKey="deleteSecondCMSPage"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -44,31 +44,31 @@
 
         <!-- Disable Pages-->
         <actionGroup ref="AdminCMSPageMassActionSelectActionGroup" stepKey="disablePages">
-            <argument name="action" value="Disable" />
+            <argument name="action" value="Disable"/>
         </actionGroup>
 
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
-            <argument name="message" value="A total of 2 record(s) have been disabled." />
+            <argument name="message" value="A total of 2 record(s) have been disabled."/>
         </actionGroup>
 
         <!--Verify pages in Grid-->
         <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterGridByFirstCmsPageIdentifier">
-            <argument name="filterInputName" value="identifier" />
-            <argument name="filterValue" value="$$firstCMSPage.identifier$$" />
+            <argument name="filterInputName" value="identifier"/>
+            <argument name="filterValue" value="$$firstCMSPage.identifier$$"/>
         </actionGroup>
         <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFirstGridFilters"/>
         <actionGroup ref="AssertCMSPageInGridActionGroup" stepKey="assertFirstCmsPageInGrid">
-            <argument name="cmsPage" value="$$firstCMSPage$$" />
+            <argument name="cmsPage" value="$$firstCMSPage$$"/>
         </actionGroup>
 
         <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterGridBySecondCmsPageIdentifier">
-            <argument name="filterInputName" value="identifier" />
-            <argument name="filterValue" value="$$secondCMSPage.identifier$$" />
+            <argument name="filterInputName" value="identifier"/>
+            <argument name="filterValue" value="$$secondCMSPage.identifier$$"/>
         </actionGroup>
         <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applySecondGridFilters"/>
         <actionGroup ref="AssertCMSPageInGridActionGroup" stepKey="assertSecondCmsPageInGrid">
-            <argument name="cmsPage" value="$$secondCMSPage$$" />
+            <argument name="cmsPage" value="$$secondCMSPage$$"/>
         </actionGroup>
         <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersToIsolateTest"/>
 

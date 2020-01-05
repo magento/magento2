@@ -8,6 +8,6 @@
 <ruleset name="PHPCompatibilityMagento">
     <description>Magento 2 specific ruleset which checks for PHP cross version compatibility.</description>
     <rule ref="PHPCompatibility">
-        <exclude name="PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound" />
+        <exclude name="PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound"/>
     </rule>
 </ruleset>

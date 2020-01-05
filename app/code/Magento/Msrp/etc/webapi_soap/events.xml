@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_quote_collect_totals_after">
-        <observer name="catalog_msrp" instance="Magento\Msrp\Observer\Frontend\Quote\SetCanApplyMsrpObserver" />
+        <observer name="catalog_msrp" instance="Magento\Msrp\Observer\Frontend\Quote\SetCanApplyMsrpObserver"/>
     </event>
 </config>

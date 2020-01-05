@@ -38,7 +38,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!-- Add two bundle items -->

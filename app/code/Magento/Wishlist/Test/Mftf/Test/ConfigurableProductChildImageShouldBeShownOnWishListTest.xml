@@ -73,7 +73,7 @@
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
-        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="AssertWishlistProductImage" />
-        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="AssertWishlistSidebarProductImage" />
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="AssertWishlistProductImage"/>
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="AssertWishlistSidebarProductImage"/>
     </test>
 </tests>

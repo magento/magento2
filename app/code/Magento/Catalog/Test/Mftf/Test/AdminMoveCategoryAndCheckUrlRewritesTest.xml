@@ -47,7 +47,7 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory2"/>
         <waitForPageLoad stepKey="waitForSecondCategoryToSave2"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage2"/>
-        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#" />
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
 
         <!--Open Url Rewrite Page-->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
@@ -59,7 +59,7 @@
         <waitForPageLoad stepKey="waitForPageToLoad0"/>
 
         <!--Verify Category RedirectType-->
-        <see stepKey="verifyTheRedirectType" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No" />
+        <see stepKey="verifyTheRedirectType" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No"/>
 
         <!--Verify Redirect Path -->
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="verifyTheRedirectPath"/>
@@ -88,21 +88,21 @@
         <waitForPageLoad stepKey="waitForPageToLoad4"/>
 
         <!--Verify new Redirect Path after move -->
-        <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
+        <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html"/>
 
         <!--Verify new Target Path after move -->
-        <see stepKey="verifyTheTargetPathAfterMove" selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="catalog/category/view/id/{$categoryId}" />
+        <see stepKey="verifyTheTargetPathAfterMove" selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="catalog/category/view/id/{$categoryId}"/>
 
         <!--Verify new RedirectType after move -->
-        <see stepKey="verifyTheRedirectTypeAfterMove" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No" />
+        <see stepKey="verifyTheRedirectTypeAfterMove" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No"/>
 
         <!--Verify before move Redirect Path displayed with associated Target Path and Redirect Type-->
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="fillCategoryUrlKey2"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton2"/>
         <waitForPageLoad stepKey="waitForPageToLoad5"/>
-        <see stepKey="verifyTheRedirectTypeAfterMove1" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="Permanent (301)" />
-        <see stepKey="verifyTheRequestPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" />
-        <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
+        <see stepKey="verifyTheRedirectTypeAfterMove1" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="Permanent (301)"/>
+        <see stepKey="verifyTheRequestPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html"/>
+        <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html"/>
 
         <!--Verify before move Redirect Path directs to the category page-->
         <amOnPage url="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>

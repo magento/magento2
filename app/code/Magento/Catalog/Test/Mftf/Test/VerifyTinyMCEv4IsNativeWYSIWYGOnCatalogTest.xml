@@ -21,28 +21,28 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
         </before>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
         <waitForPageLoad stepKey="wait1"/>
-        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <waitForLoadingMaskToDisappear stepKey="wait2"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
-        <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
-        <seeElement selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" stepKey="seeShowHideBtn" />
+        <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <seeElement selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" stepKey="seeShowHideBtn"/>
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
         <executeJS function="tinyMCE.get('category_form_description').setContent('Hello World!');" stepKey="executeJSFillContent"/>
-        <click selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
-        <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage" />
+        <click selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage"/>
         <seeElement selector="{{TinyMCESection.InsertImageBtn}}" stepKey="insertImage"/>
-        <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget" />
-        <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable" />
+        <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget"/>
+        <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCatalog"/>
         <!-- Go to storefront product page, assert product content -->
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.CatalogDescription}}"  stepKey="waitForDesVisible" />
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.CatalogDescription}}"  stepKey="waitForDesVisible"/>
         <see userInput="Hello World!" selector="{{StorefrontCategoryMainSection.CatalogDescription}}" stepKey="assertCatalogDescription"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>

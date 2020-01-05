@@ -10,7 +10,7 @@
         <observer name="observer_name" instance="Some_Test_Value" disabled="false" shared="true"/>
     </event>
     <event name="authorization_roles_save_before">
-        <observer name="second_name" instance="Some_Test_Value_Two" />
+        <observer name="second_name" instance="Some_Test_Value_Two"/>
     </event>
     <event name="authorization_roles_save_before123">
         <observer name="second_name" instance="Some_Test_Value_Two"/>

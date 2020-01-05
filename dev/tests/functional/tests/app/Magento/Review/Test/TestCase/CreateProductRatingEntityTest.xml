@@ -11,17 +11,17 @@
             <data name="productRating/data/rating_code" xsi:type="string">productRating_%isolation%</data>
             <data name="productRating/data/stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="productRating/data/is_active" xsi:type="string">Yes</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
         </variation>
         <variation name="CreateProductRatingEntityTestVariation2">
             <data name="productRating/data/rating_code" xsi:type="string">productRating_%isolation%</data>
             <data name="productRating/data/stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="productRating/data/is_active" xsi:type="string">No</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInGrid" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInGrid"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage"/>
         </variation>
     </testCase>
 </config>

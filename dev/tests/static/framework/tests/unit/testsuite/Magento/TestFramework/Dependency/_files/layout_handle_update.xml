@@ -6,10 +6,10 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
-    <update handle="any_handle_name" />
+    <update handle="any_handle_name"/>
     <any_node>
         <update handle="singlechunk">
-            <update handle="router_name_action" />
+            <update handle="router_name_action"/>
         </update>
     </any_node>
 </layout>

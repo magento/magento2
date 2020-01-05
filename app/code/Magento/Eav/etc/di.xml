@@ -6,26 +6,26 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Eav\Model\Entity\Setup\PropertyMapperInterface" type="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite" />
-    <preference for="Magento\Eav\Model\Entity\AttributeLoaderInterface" type="Magento\Eav\Model\Entity\AttributeLoader" />
-    <preference for="Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface" type="Magento\Eav\Model\Entity\Attribute\UniqueValidator" />
-    <preference for="Magento\Eav\Api\Data\AttributeInterface" type="Magento\Eav\Model\Entity\Attribute" />
-    <preference for="Magento\Eav\Api\AttributeRepositoryInterface" type="Magento\Eav\Model\AttributeRepository" />
-    <preference for="Magento\Eav\Api\Data\AttributeGroupInterface" type="Magento\Eav\Model\Entity\Attribute\Group" />
-    <preference for="Magento\Eav\Api\AttributeGroupRepositoryInterface" type="Magento\Eav\Model\Attribute\GroupRepository" />
-    <preference for="Magento\Eav\Api\AttributeSetRepositoryInterface" type="Magento\Eav\Model\AttributeSetRepository" />
-    <preference for="Magento\Eav\Api\AttributeSetManagementInterface" type="Magento\Eav\Model\AttributeSetManagement" />
-    <preference for="Magento\Eav\Api\Data\AttributeSetInterface" type="Magento\Eav\Model\Entity\Attribute\Set" />
-    <preference for="Magento\Eav\Api\AttributeManagementInterface" type="Magento\Eav\Model\AttributeManagement" />
-    <preference for="Magento\Eav\Api\Data\AttributeFrontendLabelInterface" type="Magento\Eav\Model\Entity\Attribute\FrontendLabel" />
-    <preference for="Magento\Eav\Api\Data\AttributeOptionInterface" type="Magento\Eav\Model\Entity\Attribute\Option" />
-    <preference for="Magento\Eav\Api\AttributeOptionManagementInterface" type="Magento\Eav\Model\Entity\Attribute\OptionManagement" />
-    <preference for="Magento\Eav\Api\Data\AttributeOptionLabelInterface" type="Magento\Eav\Model\Entity\Attribute\OptionLabel" />
-    <preference for="Magento\Eav\Api\Data\AttributeValidationRuleInterface" type="Magento\Eav\Model\Entity\Attribute\ValidationRule" />
-    <preference for="Magento\Eav\Api\Data\AttributeSearchResultsInterface" type="Magento\Eav\Model\AttributeSearchResults" />
-    <preference for="Magento\Eav\Api\Data\AttributeSetSearchResultsInterface" type="Magento\Eav\Model\AttributeSetSearchResults" />
-    <preference for="Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface" type="Magento\Eav\Model\AttributeGroupSearchResults" />
-    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Eav\Model\TypeLocator" />
+    <preference for="Magento\Eav\Model\Entity\Setup\PropertyMapperInterface" type="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite"/>
+    <preference for="Magento\Eav\Model\Entity\AttributeLoaderInterface" type="Magento\Eav\Model\Entity\AttributeLoader"/>
+    <preference for="Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface" type="Magento\Eav\Model\Entity\Attribute\UniqueValidator"/>
+    <preference for="Magento\Eav\Api\Data\AttributeInterface" type="Magento\Eav\Model\Entity\Attribute"/>
+    <preference for="Magento\Eav\Api\AttributeRepositoryInterface" type="Magento\Eav\Model\AttributeRepository"/>
+    <preference for="Magento\Eav\Api\Data\AttributeGroupInterface" type="Magento\Eav\Model\Entity\Attribute\Group"/>
+    <preference for="Magento\Eav\Api\AttributeGroupRepositoryInterface" type="Magento\Eav\Model\Attribute\GroupRepository"/>
+    <preference for="Magento\Eav\Api\AttributeSetRepositoryInterface" type="Magento\Eav\Model\AttributeSetRepository"/>
+    <preference for="Magento\Eav\Api\AttributeSetManagementInterface" type="Magento\Eav\Model\AttributeSetManagement"/>
+    <preference for="Magento\Eav\Api\Data\AttributeSetInterface" type="Magento\Eav\Model\Entity\Attribute\Set"/>
+    <preference for="Magento\Eav\Api\AttributeManagementInterface" type="Magento\Eav\Model\AttributeManagement"/>
+    <preference for="Magento\Eav\Api\Data\AttributeFrontendLabelInterface" type="Magento\Eav\Model\Entity\Attribute\FrontendLabel"/>
+    <preference for="Magento\Eav\Api\Data\AttributeOptionInterface" type="Magento\Eav\Model\Entity\Attribute\Option"/>
+    <preference for="Magento\Eav\Api\AttributeOptionManagementInterface" type="Magento\Eav\Model\Entity\Attribute\OptionManagement"/>
+    <preference for="Magento\Eav\Api\Data\AttributeOptionLabelInterface" type="Magento\Eav\Model\Entity\Attribute\OptionLabel"/>
+    <preference for="Magento\Eav\Api\Data\AttributeValidationRuleInterface" type="Magento\Eav\Model\Entity\Attribute\ValidationRule"/>
+    <preference for="Magento\Eav\Api\Data\AttributeSearchResultsInterface" type="Magento\Eav\Model\AttributeSearchResults"/>
+    <preference for="Magento\Eav\Api\Data\AttributeSetSearchResultsInterface" type="Magento\Eav\Model\AttributeSetSearchResults"/>
+    <preference for="Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface" type="Magento\Eav\Model\AttributeGroupSearchResults"/>
+    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Eav\Model\TypeLocator"/>
 
     <type name="Magento\Eav\Model\Entity\Attribute\Config">
         <arguments>
@@ -45,11 +45,11 @@
         </arguments>
     </type>
     <type name="Magento\Eav\Model\ResourceModel\Entity\Attribute">
-        <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute" />
+        <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute"/>
     </type>
     <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
         <arguments>
-            <argument name="serviceTypeToEntityTypeMap" xsi:type="array" />
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array"/>
         </arguments>
     </type>
     <type name="Magento\Eav\Model\TypeLocator">
@@ -106,7 +106,7 @@
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\AbstractEntity">
-        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
+        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags"/>
     </type>
     <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>

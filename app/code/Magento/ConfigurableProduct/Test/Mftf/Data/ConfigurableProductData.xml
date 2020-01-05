@@ -74,7 +74,7 @@
         <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
     </entity>
     <entity name="ConfigurableProductAddChild" type="ConfigurableProductAddChild">
-        <var key="sku" entityKey="sku" entityType="product" />
+        <var key="sku" entityKey="sku" entityType="product"/>
         <var key="childSku" entityKey="sku" entityType="product2"/>
     </entity>
     <entity name="ConfigurableProductWithAttributeSet" type="product">

@@ -42,7 +42,7 @@
 
         <!-- Add Downloadable product to the cart -->
         <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToTheCart">
-            <argument name="productName" value="$$createDownloadableProduct.name$$" />
+            <argument name="productName" value="$$createDownloadableProduct.name$$"/>
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
@@ -54,7 +54,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertMiniCart">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
             <argument name="productPrice" value="$123.00"/>
-            <argument name="cartSubtotal" value="123.00" />
+            <argument name="cartSubtotal" value="123.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
 

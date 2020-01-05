@@ -7,13 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
-        <plugin name="Bundle" type="Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle" sortOrder="60" />
+        <plugin name="Bundle" type="Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle" sortOrder="60"/>
     </type>
     <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar">
         <plugin name="Bundle" type="Magento\Bundle\Block\Adminhtml\Order\Create\Sidebar" sortOrder="200"/>
     </type>
     <type name="Magento\Bundle\Model\ResourceModel\Selection\Collection">
-        <plugin name="Bundle" type="Magento\Bundle\Model\ResourceModel\Selection\Plugin\Collection" sortOrder="60" />
+        <plugin name="Bundle" type="Magento\Bundle\Model\ResourceModel\Selection\Plugin\Collection" sortOrder="60"/>
     </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <arguments>

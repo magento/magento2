@@ -76,9 +76,9 @@
 
         <actionGroup ref="SaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
-        <executeJS function="return '$createCategory.name$'.toLowerCase();" stepKey="categoryNameLower" />
-        <executeJS function="return '$createSimpleProductFirst.name$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />
-        <executeJS function="return '$createSimpleProductSecond.name$'.toLowerCase();" stepKey="simpleProductSecondNameLower" />
+        <executeJS function="return '$createCategory.name$'.toLowerCase();" stepKey="categoryNameLower"/>
+        <executeJS function="return '$createSimpleProductFirst.name$'.toLowerCase();" stepKey="simpleProductFirstNameLower"/>
+        <executeJS function="return '$createSimpleProductSecond.name$'.toLowerCase();" stepKey="simpleProductSecondNameLower"/>
 
         <!-- Make assertions on frontend -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>

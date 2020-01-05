@@ -10,7 +10,7 @@
         <variation name="AdvancedReportingButtonTest">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="advancedReportingLink" xsi:type="string">https://advancedreporting.rjmetrics.com/report</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPage" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPage"/>
         </variation>
     </testCase>
 </config>

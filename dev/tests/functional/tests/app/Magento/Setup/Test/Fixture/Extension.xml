@@ -12,8 +12,8 @@
              entity_type="extension"
              class="Magento\Setup\Test\Fixture\Extension"
              repository_class="Magento\Setup\Test\Repository\Extension">
-        <field name="extensionName" />
-        <field name="version" />
-        <field name="versionToUpdate" />
+        <field name="extensionName"/>
+        <field name="version"/>
+        <field name="versionToUpdate"/>
     </fixture>
 </config>

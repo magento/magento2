@@ -54,7 +54,7 @@
 
         <!--Fill Customer Information -->
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{Simple_US_Customer.email}}" stepKey="enterEmail"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
         <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{Simple_US_Customer.lastname}}" stepKey="enterLastName"/>
         <fillField selector="{{CheckoutPaymentSection.guestStreet}}" userInput="{{US_Address_TX.street[0]}}" stepKey="enterStreet"/>
@@ -69,7 +69,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->

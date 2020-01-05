@@ -9,7 +9,7 @@
     <testCase name="Magento\PageCache\Test\TestCase\FlushStaticFilesCacheButtonVisibilityTest" summary="Flush Static Files Cache button visibility" ticketId="MAGETWO-39934">
         <variation name="FlushStaticFilesCacheButtonVisibilityTest">
             <data name="tag" xsi:type="string">severity:S3, mftf_migrated:yes</data>
-            <constraint name="Magento\PageCache\Test\Constraint\AssertFlushStaticFilesCacheButtonVisibility" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertFlushStaticFilesCacheButtonVisibility"/>
         </variation>
     </testCase>
 </config>

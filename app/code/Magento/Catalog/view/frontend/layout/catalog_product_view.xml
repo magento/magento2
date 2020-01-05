@@ -9,10 +9,10 @@
     <head>
         <css src="mage/gallery/gallery.css"/>
     </head>
-    <update handle="catalog_product_opengraph" />
+    <update handle="catalog_product_opengraph"/>
     <update handle="page_calendar"/>
     <body>
-        <attribute name="itemtype" value="http://schema.org/Product" />
+        <attribute name="itemtype" value="http://schema.org/Product"/>
         <attribute name="itemscope" value="itemscope"/>
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Catalog::js/components.phtml"/>
@@ -50,7 +50,7 @@
                             </arguments>
                         </block>
                     </container>
-                    <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="Magento_Catalog::product/view/review.phtml" after="product.info.stock.sku" />
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="Magento_Catalog::product/view/review.phtml" after="product.info.stock.sku"/>
                     <block class="Magento\Catalog\Pricing\Render" name="product.price.final">
                         <arguments>
                             <argument name="price_render" xsi:type="string">product.price.render.default</argument>
@@ -91,7 +91,7 @@
                     <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="product-social-links">
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="Magento_Catalog::product/view/addto.phtml">
                             <block class="Magento\Catalog\Block\Product\View\AddTo\Compare" name="view.addto.compare" after="view.addto.wishlist"
-                                   template="Magento_Catalog::product/view/addto/compare.phtml" >
+                                   template="Magento_Catalog::product/view/addto/compare.phtml">
                                 <arguments>
                                     <argument name="addToCompareViewModel" xsi:type="object">Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability</argument>
                                 </arguments>

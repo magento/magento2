@@ -13,8 +13,8 @@
             <argument name="productName" type="string"/>
         </arguments>
         <scrollTo selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="scroll"/>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProduct" />
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(productName)}}" stepKey="clickAddToCart" />
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(productName)}}" stepKey="clickAddToCart"/>
         <waitForAjaxLoad stepKey="waitForAjax"/>
     </actionGroup>
 </actionGroups>

@@ -11,11 +11,11 @@
              type="virtual"
              repository_class="Magento\Signifyd\Test\Repository\SignifydData"
              class="Magento\Signifyd\Test\Fixture\SignifydData">
-        <field name="team" />
-        <field name="caseFlag" />
-        <field name="guaranteeDisposition" />
-        <field name="cvvResponse" />
-        <field name="avsResponse" />
-        <field name="shippingPrice" />
+        <field name="team"/>
+        <field name="caseFlag"/>
+        <field name="guaranteeDisposition"/>
+        <field name="cvvResponse"/>
+        <field name="avsResponse"/>
+        <field name="shippingPrice"/>
     </fixture>
 </config>

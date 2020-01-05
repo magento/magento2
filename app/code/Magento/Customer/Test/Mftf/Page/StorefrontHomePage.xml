@@ -9,6 +9,6 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontHomePage" url="/" area="storefront" module="Magento_Customer">
-        <section name="StorefrontPanelHeader" />
+        <section name="StorefrontPanelHeader"/>
     </page>
 </pages>

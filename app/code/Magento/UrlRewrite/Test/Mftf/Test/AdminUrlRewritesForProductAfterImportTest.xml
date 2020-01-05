@@ -18,8 +18,8 @@
             <group value="urlRewrite"/>
         </annotations>
         <before>
-            <comment userInput="Set the configuration for Generate category/product URL Rewrites" stepKey="commentSetURLRewriteConfiguration" />
-            <comment userInput="Enable config to generate category/product URL Rewrites " stepKey="commentEnableConfig" />
+            <comment userInput="Set the configuration for Generate category/product URL Rewrites" stepKey="commentSetURLRewriteConfiguration"/>
+            <comment userInput="Enable config to generate category/product URL Rewrites " stepKey="commentEnableConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <createData entity="NewRootCategory" stepKey="simpleSubCategory1">
                 <field key="parent_id">2</field>
@@ -30,26 +30,26 @@
             <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory3">
                 <requiredEntity createDataKey="simpleSubCategory2"/>
             </createData>
-            <comment userInput="Create Simple product 1 and assign it to Category 3 " stepKey="commentCreateSimpleProduct" />
+            <comment userInput="Create Simple product 1 and assign it to Category 3 " stepKey="commentCreateSimpleProduct"/>
             <createData entity="SimpleProductAfterImport1" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="simpleSubCategory3"/>
             </createData>
         </before>
         <after>
-            <comment userInput="Delete all products that replaced products in the before block post import " stepKey="commentDeleteAllProducts" />
+            <comment userInput="Delete all products that replaced products in the before block post import " stepKey="commentDeleteAllProducts"/>
             <deleteData stepKey="deleteSimpleProduct1" url="/V1/products/SimpleProductForTest1"/>
             <deleteData createDataKey="simpleSubCategory3" stepKey="deleteSimpleSubCategory3"/>
             <deleteData createDataKey="simpleSubCategory2" stepKey="deleteSimpleSubCategory2"/>
             <deleteData createDataKey="simpleSubCategory1" stepKey="deleteSimpleSubCategory1"/>
-            <comment userInput="Disable config to generate category/product URL Rewrites " stepKey="commentDisableConfig" />
+            <comment userInput="Disable config to generate category/product URL Rewrites " stepKey="commentDisableConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
-        <comment userInput="1. Log in to Admin " stepKey="commentAdminLogin" />
+        <comment userInput="1. Log in to Admin " stepKey="commentAdminLogin"/>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
-        <comment userInput="2. Open Marketing - SEO and Search - URL Rewrites " stepKey="commentVerifyUrlRewrite" />
+        <comment userInput="2. Open Marketing - SEO and Search - URL Rewrites " stepKey="commentVerifyUrlRewrite"/>
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
@@ -58,19 +58,19 @@
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue3"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
 
-        <comment userInput="3. Import products with add/update behavior " stepKey="commentProductImport" />
+        <comment userInput="3. Import products with add/update behavior " stepKey="commentProductImport"/>
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProducts">
             <argument name="behavior" value="Add/Update"/>
             <argument name="importFile" value="catalog_import_products_url_rewrite.csv"/>
             <argument name="importNoticeMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
         </actionGroup>
 
-        <comment userInput="4. Assert Simple Product1 on grid " stepKey="commentVerifyProduct" />
+        <comment userInput="4. Assert Simple Product1 on grid " stepKey="commentVerifyProduct"/>
         <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertSimpleProduct1OnAdminGrid">
             <argument name="product" value="SimpleProductAfterImport1"/>
         </actionGroup>
 
-        <comment userInput="5. Open Marketing - SEO and Search - URL Rewrites" stepKey="commentVerifyURLAfterImport" />
+        <comment userInput="5. Open Marketing - SEO and Search - URL Rewrites" stepKey="commentVerifyURLAfterImport"/>
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$-new.html" stepKey="inputProductName2"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>

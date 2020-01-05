@@ -103,10 +103,10 @@
         </actionGroup>
 
         <!--Add to compare Simple Product and Simple Product 2-->
-        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addSimpleProductToCompare" >
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addSimpleProductToCompare">
             <argument name="productVar" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addSecondSimpleProductToCompare" >
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addSecondSimpleProductToCompare">
             <argument name="productVar" value="$$createSecondSimpleProduct$$"/>
         </actionGroup>
         <!--The Compare Products widget displays Simple Product 1 and Simple Product 2-->

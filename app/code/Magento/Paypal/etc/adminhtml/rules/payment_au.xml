@@ -15,7 +15,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
                     <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
                     <argument name="express_checkout_other">express_checkout_other</argument>
@@ -49,7 +49,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
@@ -78,7 +78,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
@@ -107,7 +107,7 @@
                 <predicate name="confirm"
                            message="There is already another PayPal solution enabled. Enable this solution instead?"
                            event="deactivate-rule"
-                        >
+                       >
                     <argument name="wps_other">wps_other</argument>
                 </predicate>
             </event>

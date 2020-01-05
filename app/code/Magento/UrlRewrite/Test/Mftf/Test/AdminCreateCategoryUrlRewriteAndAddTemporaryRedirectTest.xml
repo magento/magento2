@@ -38,8 +38,8 @@
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
-            <argument name="redirectPath" value="newrequestpath.html" />
-            <argument name="redirectType" value="Temporary (302)" />
+            <argument name="redirectPath" value="newrequestpath.html"/>
+            <argument name="redirectType" value="Temporary (302)"/>
             <argument name="targetPath" value="$$category.name_lwr$$.html"/>
         </actionGroup>
 

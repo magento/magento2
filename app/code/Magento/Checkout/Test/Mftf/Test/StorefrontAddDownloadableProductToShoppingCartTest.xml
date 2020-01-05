@@ -43,14 +43,14 @@
 
         <!-- Add Downloadable product to the cart -->
         <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToTheCart">
-            <argument name="productName" value="$$createDownloadableProduct.name$$" />
+            <argument name="productName" value="$$createDownloadableProduct.name$$"/>
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Shopping Cart Summary-->
-        <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="AssertCartSummary" >
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="AssertCartSummary">
             <argument name="subtotal" value="$123.00"/>
             <argument name="total" value="123.00"/>
         </actionGroup>
@@ -60,7 +60,7 @@
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
             <argument name="productSku" value="$$createDownloadableProduct.sku$$"/>
             <argument name="productPrice" value="$123.00"/>
-            <argument name="subtotal" value="$123.00" />
+            <argument name="subtotal" value="$123.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeLinksInCart">
@@ -82,7 +82,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertMiniCart">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
             <argument name="productPrice" value="$123.00"/>
-            <argument name="cartSubtotal" value="123.00" />
+            <argument name="cartSubtotal" value="123.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
     </test>

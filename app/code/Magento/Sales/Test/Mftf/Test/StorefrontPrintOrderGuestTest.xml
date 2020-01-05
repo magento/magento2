@@ -231,7 +231,7 @@
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" />
+        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
 
         <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
         <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>

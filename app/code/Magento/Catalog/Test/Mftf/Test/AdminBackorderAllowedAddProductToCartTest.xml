@@ -46,7 +46,7 @@
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>
             <argument name="productPrice" value="$$createProduct.price$$"/>
-            <argument name="subtotal" value="$$createProduct.price$$" />
+            <argument name="subtotal" value="$$createProduct.price$$"/>
             <argument name="qty" value="1"/>
         </actionGroup>
     </test>

@@ -82,7 +82,7 @@
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Shopping Cart Summary-->
-        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary">
             <argument name="subtotal" value="$60.00"/>
             <argument name="shipping" value="5.00"/>
             <argument name="total" value="65.00"/>
@@ -93,7 +93,7 @@
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="productSku" value="$$createBundleProduct.sku$$"/>
             <argument name="productPrice" value="$60.00"/>
-            <argument name="subtotal" value="$60.00" />
+            <argument name="subtotal" value="$60.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
 
@@ -117,7 +117,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="productPrice" value="$60.00"/>
-            <argument name="cartSubtotal" value="$60.00" />
+            <argument name="cartSubtotal" value="$60.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
     </test>

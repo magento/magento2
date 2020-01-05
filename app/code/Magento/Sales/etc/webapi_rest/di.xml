@@ -7,10 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Sales\Model\ResourceModel\Order">
-        <plugin name="authorization" type="Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization" />
+        <plugin name="authorization" type="Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization"/>
     </type>
     <type name="Magento\Sales\Api\ShipmentRepositoryInterface">
-        <plugin name="convert_blob_to_string" type="Magento\Sales\Plugin\ShippingLabelConverter" />
+        <plugin name="convert_blob_to_string" type="Magento\Sales\Plugin\ShippingLabelConverter"/>
     </type>
     <type name="Magento\Framework\Reflection\DataObjectProcessor">
         <arguments>

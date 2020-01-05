@@ -15,9 +15,9 @@
             <data name="customer/data/is_subscribed" xsi:type="string">No</data>
             <data name="customer/data/password" xsi:type="string">123123^q</data>
             <data name="customer/data/password_confirmation" xsi:type="string">123123^q</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogout" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogout"/>
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation2" summary="Register new customer with subscribing">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -27,10 +27,10 @@
             <data name="customer/data/is_subscribed" xsi:type="string">Yes</data>
             <data name="customer/data/password" xsi:type="string">123123^q</data>
             <data name="customer/data/password_confirmation" xsi:type="string">123123^q</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
-            <constraint name="Magento\Newsletter\Test\Constraint\AssertCustomerIsSubscribedToNewsletter" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+            <constraint name="Magento\Newsletter\Test\Constraint\AssertCustomerIsSubscribedToNewsletter"/>
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation3" summary="Register Customer" ticketId="MAGETWO-12394">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
@@ -40,8 +40,8 @@
             <data name="customer/data/is_subscribed" xsi:type="string">No</data>
             <data name="customer/data/password" xsi:type="string">123123^q</data>
             <data name="customer/data/password_confirmation" xsi:type="string">123123^q</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerRedirectToDashboard" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerRedirectToDashboard"/>
         </variation>
     </testCase>
 </config>

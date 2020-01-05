@@ -10,9 +10,9 @@
         <variation name="MassDeleteSearchTermEntityTestVariation1">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="searchTerms" xsi:type="string">catalogSearchQuery::default,catalogSearchQuery::default,catalogSearchQuery::default</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionsNotInGrid" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage"/>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionsNotInGrid"/>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend"/>
         </variation>
     </testCase>
 </config>

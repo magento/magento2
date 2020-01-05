@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_CatalogRule::promo">
-                        <resource id="Magento_SalesRule::quote" sortOrder="30" title="Cart Price Rules" translate="title" />
+                        <resource id="Magento_SalesRule::quote" sortOrder="30" title="Cart Price Rules" translate="title"/>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">

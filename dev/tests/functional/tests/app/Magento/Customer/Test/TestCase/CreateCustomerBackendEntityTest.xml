@@ -15,9 +15,9 @@
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation2" summary="Customer with prefix">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -31,9 +31,9 @@
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
             <data name="customer/data/dob" xsi:type="string">03/16/2004</data>
             <data name="customer/data/gender" xsi:type="string">Male</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation3" summary="General customer from USA">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, mftf_migrated:yes</data>
@@ -51,9 +51,9 @@
             <data name="address/data/region_id" xsi:type="string">California</data>
             <data name="address/data/postcode" xsi:type="string">90230</data>
             <data name="address/data/telephone" xsi:type="string">3109450345</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation4" summary="Retailer customer without address">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -63,7 +63,7 @@
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@-example.com</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation5" summary="General customer from Poland">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -81,9 +81,9 @@
             <data name="address/data/country_id" xsi:type="string">Poland</data>
             <data name="address/data/postcode" xsi:type="string">43-310</data>
             <data name="address/data/telephone" xsi:type="string">799885616</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation6" summary="Create New Customer on Backend" ticketId="MAGETWO-12516">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -93,8 +93,8 @@
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation7" summary="Create customer with custom customer group">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -104,9 +104,9 @@
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendBackButton" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendBackButton"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation8" summary="Verify required fields on Account Information tab.">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -118,7 +118,7 @@
                 <item name="1" xsi:type="string">Last Name</item>
                 <item name="2" xsi:type="string">Email</item>
             </data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation9" summary="Verify required fields on the Add address modal.">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -136,7 +136,7 @@
                 <item name="5" xsi:type="string">Zip/Postal Code</item>
                 <item name="6" xsi:type="string">Phone Number</item>
             </data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressBackendRequiredFields" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressBackendRequiredFields"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation10" summary="Create customer with 2 websites and with different allowed countries.">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
@@ -163,7 +163,7 @@
             <data name="beforeActionCallback" xsi:type="array">
                 <item name="assertAllowedCountries" xsi:type="string">assertAllowedCountries</item>
             </data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation11" summary="Create customer if admin interface locale is en_GB.">
             <data name="issue" xsi:type="string">DEVOPS-474</data>
@@ -184,9 +184,9 @@
                 </item>
             </data>
             <data name="locale" xsi:type="string">en_GB</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
         </variation>
     </testCase>
 </config>

@@ -17,8 +17,8 @@
         </arguments>
 
         <scrollTo stepKey="scrollToNavItem" selector="{{AdminConfigSection.navItemByTitle(navItem)}}" x="0" y="-80"/>
-        <click selector="{{AdminConfigSection.navItemByTitle(navItem)}}" stepKey="openNavItem" />
-        <waitForElement selector="{{AdminConfigSection.activeNavItemByTitle(navItem)}}" stepKey="waitActiveNavItem" />
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <click selector="{{AdminConfigSection.navItemByTitle(navItem)}}" stepKey="openNavItem"/>
+        <waitForElement selector="{{AdminConfigSection.activeNavItemByTitle(navItem)}}" stepKey="waitActiveNavItem"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

@@ -29,10 +29,10 @@
             </data>
             <data name="configData" xsi:type="string">payflowpro</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test_deprecated, severity:S0</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory"/>
         </variation>
     </testCase>
 </config>

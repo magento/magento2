@@ -12,7 +12,7 @@
             <join reference_table="eav_attribute"
                   reference_field="attribute_id"
                   join_on_field="product_super_attribute_id"
-                    >
+                   >
                 <field>attribute_code</field>
             </join>
         </attribute>

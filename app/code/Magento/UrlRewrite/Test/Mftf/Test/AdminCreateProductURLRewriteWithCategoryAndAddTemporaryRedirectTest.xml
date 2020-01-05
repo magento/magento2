@@ -45,8 +45,8 @@
 
         <!--Assert Product Redirect -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
-            <argument name="redirectPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html" />
-            <argument name="redirectType" value="Temporary (302)" />
+            <argument name="redirectPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html"/>
+            <argument name="redirectType" value="Temporary (302)"/>
             <argument name="targetPath" value="$$createSimpleProduct.name$$.html"/>
         </actionGroup>
 
@@ -58,8 +58,8 @@
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
-            <argument name="redirectPath" value="$$createSimpleProduct.name$$.html" />
-            <argument name="redirectType" value="No" />
+            <argument name="redirectPath" value="$$createSimpleProduct.name$$.html"/>
+            <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
 
@@ -71,8 +71,8 @@
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath2">
-            <argument name="redirectPath" value="$$createCategory.name$$.html" />
-            <argument name="redirectType" value="No" />
+            <argument name="redirectPath" value="$$createCategory.name$$.html"/>
+            <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
         </actionGroup>
     </test>

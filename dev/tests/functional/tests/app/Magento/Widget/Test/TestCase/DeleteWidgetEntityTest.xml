@@ -10,8 +10,8 @@
         <variation name="DeleteWidgetEntityTestVariation1">
             <data name="tag" xsi:type="string">severity:S1</data>
             <data name="widget/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessDeleteMessage" />
-            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetAbsentOnFrontendHome" />
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessDeleteMessage"/>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetAbsentOnFrontendHome"/>
         </variation>
     </testCase>
 </config>

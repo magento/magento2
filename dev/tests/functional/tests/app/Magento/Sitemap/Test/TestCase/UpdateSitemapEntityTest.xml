@@ -13,8 +13,8 @@
             <data name="product/dataset" xsi:type="string">default</data>
             <data name="cmsPage/dataset" xsi:type="string">default</data>
             <data name="sitemap/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessGenerateMessage" />
-            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapContent" />
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessGenerateMessage"/>
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapContent"/>
         </variation>
     </testCase>
 </config>

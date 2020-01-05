@@ -15,9 +15,9 @@
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">https://marketplace.magento.com/</data>
             <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
             <data name="urlRewrite/data/description" xsi:type="string">test_description_relative path</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSuccessOutsideRedirect" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSuccessOutsideRedirect"/>
         </variation>
         <variation name="UpdateCustomUrlRewriteEntityTestVariation2">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, mftf_migrated:yes</data>
@@ -27,9 +27,9 @@
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">catalogsearch/result/?q=$%catalogProductSimple::defaul%sku$</data>
             <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
             <data name="urlRewrite/data/description" xsi:type="string">test_description_relative path</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomSearchRedirect" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomSearchRedirect"/>
         </variation>
     </testCase>
 </config>

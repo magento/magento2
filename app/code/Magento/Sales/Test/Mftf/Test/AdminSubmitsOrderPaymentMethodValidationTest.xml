@@ -18,7 +18,7 @@
             <group value="sales"/>
         </annotations>
         <before>
-            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 1" />
+            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 1"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -26,7 +26,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 0" />
+            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 0"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>

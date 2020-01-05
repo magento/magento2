@@ -12,8 +12,8 @@
             <data name="childCategory/dataset" xsi:type="string">three_nested_categories</data>
             <data name="parentCategory/dataset" xsi:type="string">default</data>
             <data name="moveLevel" xsi:type="number">1</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryBreadcrumbs" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryBreadcrumbs"/>
         </variation>
     </testCase>
 </config>

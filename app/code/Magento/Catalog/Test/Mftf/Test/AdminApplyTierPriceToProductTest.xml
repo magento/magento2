@@ -53,7 +53,7 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin1">
-            <argument name="Customer" value="$$createSimpleUSCustomer$$" />
+            <argument name="Customer" value="$$createSimpleUSCustomer$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
@@ -85,7 +85,7 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_1"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_3"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin2">
-            <argument name="Customer" value="$$createSimpleUSCustomer$$" />
+            <argument name="Customer" value="$$createSimpleUSCustomer$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage4"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
@@ -235,7 +235,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton5"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="waitForcustomerGroupPriceDeleteButton"/>
-        <scrollTo selector="(//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//tr//button[@data-action='remove_row'])[1]" x="30" y="0" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice" />
+        <scrollTo selector="(//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//tr//button[@data-action='remove_row'])[1]" x="30" y="0" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice"/>
         <click selector="(//tr//button[@data-action='remove_row'])[1]" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
         <click selector="//tr//button[@data-action='remove_row']" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="clickDoneButton5"/>

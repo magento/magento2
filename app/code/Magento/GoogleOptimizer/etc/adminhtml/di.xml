@@ -25,12 +25,12 @@
         </arguments>
     </virtualType>
     <type name="Magento\Cms\Model\Page\DataProvider">
-        <plugin name="google_optimizer_cms_page_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Cms\Page\DataProvider" />
+        <plugin name="google_optimizer_cms_page_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Cms\Page\DataProvider"/>
     </type>
     <type name="Magento\Catalog\Model\Category\DataProvider">
-        <plugin name="google_optimizer_category_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Catalog\Category\DataProvider" />
+        <plugin name="google_optimizer_category_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Catalog\Category\DataProvider"/>
     </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider">
-        <plugin name="google_optimizer_product_new_category_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Catalog\Product\Category\DataProvider" />
+        <plugin name="google_optimizer_product_new_category_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Catalog\Product\Category\DataProvider"/>
     </type>
 </config>

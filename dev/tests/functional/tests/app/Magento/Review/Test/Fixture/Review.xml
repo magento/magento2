@@ -13,19 +13,19 @@
              repository_class="Magento\Review\Test\Repository\Review"
              handler_interface="Magento\Review\Test\Handler\Review\ReviewInterface"
              class="Magento\Review\Test\Fixture\Review">
-        <field name="review_id" is_required="" />
-        <field name="created_at" is_required="" />
-        <field name="entity_id" is_required="" source="Magento\Review\Test\Fixture\Review\EntityId" />
-        <field name="entity_pk_value" is_required="" />
-        <field name="status_id" is_required="" />
-        <field name="detail_id" is_required="1" />
-        <field name="store_id" is_required="" />
-        <field name="title" is_required="" />
-        <field name="detail" is_required="" />
-        <field name="nickname" is_required="" />
-        <field name="customer_id" is_required="" />
-        <field name="select_stores" is_required="1" />
-        <field name="ratings" source="Magento\Review\Test\Fixture\Review\Ratings" />
-        <field name="type" is_required="" />
+        <field name="review_id" is_required=""/>
+        <field name="created_at" is_required=""/>
+        <field name="entity_id" is_required="" source="Magento\Review\Test\Fixture\Review\EntityId"/>
+        <field name="entity_pk_value" is_required=""/>
+        <field name="status_id" is_required=""/>
+        <field name="detail_id" is_required="1"/>
+        <field name="store_id" is_required=""/>
+        <field name="title" is_required=""/>
+        <field name="detail" is_required=""/>
+        <field name="nickname" is_required=""/>
+        <field name="customer_id" is_required=""/>
+        <field name="select_stores" is_required="1"/>
+        <field name="ratings" source="Magento\Review\Test\Fixture\Review\Ratings"/>
+        <field name="type" is_required=""/>
     </fixture>
 </config>

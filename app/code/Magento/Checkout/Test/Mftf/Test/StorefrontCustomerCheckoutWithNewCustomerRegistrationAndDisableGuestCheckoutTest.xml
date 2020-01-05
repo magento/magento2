@@ -60,16 +60,16 @@
 
         <!--Fill the registration form -->
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="createNewCustomerAccount">
-            <argument name="customer" value="Simple_US_Customer" />
+            <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
         <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
         <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad"/>
 
         <!--Assert customer information-->
         <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
-        <see stepKey="seeFirstName" userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-        <see stepKey="seeLastName" userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-        <see stepKey="seeEmail" userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeFirstName" userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeLastName" userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeEmail" userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
 
         <!--Fill Address details -->
         <click selector="{{CheckoutPaymentSection.addressBook}}" stepKey="goToAddressBook"/>

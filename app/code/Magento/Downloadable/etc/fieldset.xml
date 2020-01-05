@@ -10,53 +10,53 @@
     <scope id="global">
         <fieldset id="downloadable_sales_copy_order">
             <field name="entity_id">
-                <aspect name="to_downloadable" targetField="order_id" />
+                <aspect name="to_downloadable" targetField="order_id"/>
             </field>
             <field name="increment_id">
-                <aspect name="to_downloadable" targetField="order_increment_id" />
+                <aspect name="to_downloadable" targetField="order_increment_id"/>
             </field>
             <field name="created_at">
-                <aspect name="to_downloadable" />
+                <aspect name="to_downloadable"/>
             </field>
             <field name="updated_at">
-                <aspect name="to_downloadable" />
+                <aspect name="to_downloadable"/>
             </field>
             <field name="customer_id">
-                <aspect name="to_downloadable" />
+                <aspect name="to_downloadable"/>
             </field>
         </fieldset>
         <fieldset id="downloadable_sales_copy_order_item">
             <field name="item_id">
-                <aspect name="to_downloadable" targetField="order_item_id" />
+                <aspect name="to_downloadable" targetField="order_item_id"/>
             </field>
             <field name="name">
-                <aspect name="to_downloadable" targetField="product_name" />
+                <aspect name="to_downloadable" targetField="product_name"/>
             </field>
             <field name="sku">
-                <aspect name="to_downloadable" targetField="product_sku" />
+                <aspect name="to_downloadable" targetField="product_sku"/>
             </field>
         </fieldset>
         <fieldset id="downloadable_sales_copy_link">
             <field name="product_id">
-                <aspect name="to_purchased" />
+                <aspect name="to_purchased"/>
             </field>
             <field name="link_id">
-                <aspect name="to_purchased" />
+                <aspect name="to_purchased"/>
             </field>
             <field name="title">
-                <aspect name="to_purchased" targetField="link_title" />
+                <aspect name="to_purchased" targetField="link_title"/>
             </field>
             <field name="is_shareable">
-                <aspect name="to_purchased" />
+                <aspect name="to_purchased"/>
             </field>
             <field name="link_url">
-                <aspect name="to_purchased" />
+                <aspect name="to_purchased"/>
             </field>
             <field name="link_file">
-                <aspect name="to_purchased" />
+                <aspect name="to_purchased"/>
             </field>
             <field name="link_type">
-                <aspect name="to_purchased" />
+                <aspect name="to_purchased"/>
             </field>
         </fieldset>
         <fieldset id="downloadable_data">

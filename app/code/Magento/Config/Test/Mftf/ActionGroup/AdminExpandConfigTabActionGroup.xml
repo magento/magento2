@@ -17,7 +17,7 @@
         </arguments>
 
         <scrollTo stepKey="scrollToTab" selector="{{AdminConfigSection.collapsibleTabByTitle(tabName)}}" x="0" y="-80"/>
-        <conditionalClick selector="{{AdminConfigSection.collapsibleTabByTitle(tabName)}}" dependentSelector="{{AdminConfigSection.expandedTabByTitle(tabName)}}" visible="false" stepKey="expandTab" />
-        <waitForElement selector="{{AdminConfigSection.expandedTabByTitle(tabName)}}" stepKey="waitOpenedTab" />
+        <conditionalClick selector="{{AdminConfigSection.collapsibleTabByTitle(tabName)}}" dependentSelector="{{AdminConfigSection.expandedTabByTitle(tabName)}}" visible="false" stepKey="expandTab"/>
+        <waitForElement selector="{{AdminConfigSection.expandedTabByTitle(tabName)}}" stepKey="waitOpenedTab"/>
     </actionGroup>
 </actionGroups>

@@ -98,7 +98,7 @@
             <url>
                 <use_custom>0</use_custom>
                 <use_custom_path>0</use_custom_path>
-                <custom />
+                <custom/>
             </url>
             <security>
                 <use_form_key>1</use_form_key>

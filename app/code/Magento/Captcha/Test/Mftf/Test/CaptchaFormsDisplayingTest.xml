@@ -91,7 +91,7 @@
         </after>
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart" />
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <waitForText userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="waitForText"/>

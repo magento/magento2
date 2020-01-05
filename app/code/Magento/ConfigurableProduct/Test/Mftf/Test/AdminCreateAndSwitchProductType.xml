@@ -158,7 +158,7 @@
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="downloadable"/>
         </actionGroup>
-        <scrollTo selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="scrollToDownloadableInfo" />
+        <scrollTo selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="scrollToDownloadableInfo"/>
         <uncheckOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable"/>
         <!-- Fill form for Downloadable Product Type -->
         <comment stepKey="beforeFillProductForm" userInput="Filling Product Form"/>

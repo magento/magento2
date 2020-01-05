@@ -132,8 +132,8 @@
 
         <!--View and edit cart-->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickViewAndEditCartFromMiniCart"/>
-        <click selector="{{DiscountSection.DiscountTab}}" stepKey="scrollToDiscountTab" />
-        <fillField selector="{{DiscountSection.CouponInput}}" userInput="ABCD" stepKey="fillCouponCode" />
+        <click selector="{{DiscountSection.DiscountTab}}" stepKey="scrollToDiscountTab"/>
+        <fillField selector="{{DiscountSection.CouponInput}}" userInput="ABCD" stepKey="fillCouponCode"/>
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <see userInput="You used coupon code" stepKey="assertText"/>

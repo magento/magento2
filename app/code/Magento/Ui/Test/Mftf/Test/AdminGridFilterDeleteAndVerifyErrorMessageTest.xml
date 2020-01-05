@@ -23,7 +23,7 @@
             <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createProduct">
-                <requiredEntity createDataKey="rootCategory" />
+                <requiredEntity createDataKey="rootCategory"/>
             </createData>
 
             <!--Create website-->

@@ -16,10 +16,10 @@
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
         </arguments>
         <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
-        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"  stepKey="fillName" />
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"  stepKey="fillName"/>
         <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
-        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription" />
-        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="{{catalogRule.website_ids}}" stepKey="selectSite" />
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="{{catalogRule.website_ids}}" stepKey="selectSite"/>
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>

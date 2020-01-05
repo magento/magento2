@@ -18,18 +18,18 @@
             <testCaseId value="MAGETWO-85825"/>
         </annotations>
         <before>
-            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage"/>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
         </before>
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
-        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
         <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
@@ -43,7 +43,7 @@
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
-        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup" />
+        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillFieldUrlKey"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
@@ -55,7 +55,7 @@
         <seeElement selector="{{StorefrontCMSPageSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontCMSPageSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
         <after>
-            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

@@ -7,6 +7,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <html>
-        <attribute name="html_attribute_name" value="html_attribute_value" />
+        <attribute name="html_attribute_name" value="html_attribute_value"/>
     </html>
 </page>

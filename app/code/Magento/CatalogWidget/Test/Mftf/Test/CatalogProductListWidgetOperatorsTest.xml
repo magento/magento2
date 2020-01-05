@@ -146,7 +146,7 @@
 
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>

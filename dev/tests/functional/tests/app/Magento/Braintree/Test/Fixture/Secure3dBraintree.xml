@@ -12,6 +12,6 @@
              entity_type="secure3d_braintree"
              repository_class="Magento\Braintree\Test\Repository\Secure3d"
              class="Magento\Braintree\Test\Fixture\Secure3dBraintree">
-        <field name="secure3d_password" />
+        <field name="secure3d_password"/>
     </fixture>
 </config>

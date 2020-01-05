@@ -10,7 +10,7 @@
     <test name="AdminScheduledImportSettingsHiddenTest">
         <annotations>
             <features value="Directory"/>
-            <title value="Scheduled import settings hidden" />
+            <title value="Scheduled import settings hidden"/>
             <description value="Scheduled Import Settings' should hide fields when 'Enabled' is 'No'"/>
             <severity value="MINOR"/>
         </annotations>
@@ -24,7 +24,7 @@
             <magentoCLI command="config:set currency/import/enabled 0" stepKey="disableCurrencyImport"/>
         </after>
 
-        <amOnPage url="{{AdminCurrencySetupPage.url}}" stepKey="openCurrencyOptionsPage" />
+        <amOnPage url="{{AdminCurrencySetupPage.url}}" stepKey="openCurrencyOptionsPage"/>
         <conditionalClick dependentSelector="{{AdminScheduledImportSettingsSection.enabled}}" visible="false" selector="{{AdminScheduledImportSettingsSection.head}}" stepKey="openCollapsibleBlock"/>
         <see selector="{{AdminScheduledImportSettingsSection.service}}" userInput="Fixer.io" stepKey="seeServiceFixerIo"/>
         <selectOption selector="{{AdminScheduledImportSettingsSection.enabled}}" userInput="0" stepKey="disableCurrencyImportOption"/>

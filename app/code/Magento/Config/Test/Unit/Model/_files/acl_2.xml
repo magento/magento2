@@ -11,8 +11,8 @@
             <resource id="Backend_Dummy1::parent">
                 <resource id="Backend_Dummy1::first">
                     <resource id="Backend_Dummy2::parent" title="Dummy 2 Resource Parent" sortOrder="0">
-                        <resource id="Backend_Dummy2::first" title="Dummy 2 Resource #1" sortOrder="10" />
-                        <resource id="Backend_Dummy2::second" title="Dummy 2 Resource #2" sortOrder="20" />
+                        <resource id="Backend_Dummy2::first" title="Dummy 2 Resource #1" sortOrder="10"/>
+                        <resource id="Backend_Dummy2::second" title="Dummy 2 Resource #2" sortOrder="20"/>
                     </resource>
                 </resource>
             </resource>

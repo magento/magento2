@@ -48,7 +48,7 @@
         </actionGroup>
         <!-- Create a new customer and sign up newsletter on the new Store View -->
         <actionGroup ref="StorefrontCreateCustomerSignedUpNewsletterActionGroup" stepKey="createCustomer">
-            <argument name="customer" value="CustomerEntityOne" />
+            <argument name="customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!-- Go to the customer edit page on admin area -->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerGrid">

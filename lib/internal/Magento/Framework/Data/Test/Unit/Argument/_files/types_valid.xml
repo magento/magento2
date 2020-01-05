@@ -17,7 +17,7 @@
     <argument name="boolean 1" xsi:type="boolean">1</argument>
     <argument name="number" xsi:type="number">100500</argument>
     <argument name="object" xsi:type="object">Object</argument>
-    <argument name="null Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="null" />
+    <argument name="null Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="null"/>
     <argument name="empty_array" xsi:type="array"/>
     <argument name="single_array" xsi:type="array">
         <item name="key1 unique for single array" xsi:type="string">value</item>

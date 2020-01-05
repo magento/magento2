@@ -11,7 +11,7 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
         </before>
         <annotations>
             <features value="Catalog"/>
@@ -24,13 +24,13 @@
         </annotations>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
         <waitForPageLoad stepKey="wait1"/>
-        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <waitForLoadingMaskToDisappear stepKey="wait2"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
-        <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
-        <click selector="{{CatalogWYSIWYGSection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <click selector="{{CatalogWYSIWYGSection.InsertImageIcon}}" stepKey="clickInsertImageIcon"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
         <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
@@ -44,7 +44,7 @@
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
-        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup" />
+        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCatalog"/>
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>

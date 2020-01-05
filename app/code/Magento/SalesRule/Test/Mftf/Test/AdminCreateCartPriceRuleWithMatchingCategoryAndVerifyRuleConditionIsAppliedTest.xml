@@ -105,7 +105,7 @@
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyCartSubtotalEqualsGrandTotal">
             <argument name="productName" value="{{_defaultProduct.name}}"/>
             <argument name="productPrice" value="$123.00"/>
-            <argument name="cartSubtotal" value="$123.00" />
+            <argument name="cartSubtotal" value="$123.00"/>
             <argument name="qty" value="1"/>
         </actionGroup>
 

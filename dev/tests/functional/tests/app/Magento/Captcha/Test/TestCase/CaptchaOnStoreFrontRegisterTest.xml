@@ -12,7 +12,7 @@
             <data name="customer/dataset" xsi:type="string">register_customer</data>
             <data name="customer/data/captcha" xsi:type="string">111</data>
             <data name="configData" xsi:type="string">captcha_storefront_register</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage"/>
         </variation>
     </testCase>
 </config>

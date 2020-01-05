@@ -11,7 +11,7 @@
         <queue consumer="deprecatedConfigAsyncMixedConsumer" name="deprecated.config.queue.3" handler="Magento\TestModuleMessageQueueConfiguration\AsyncHandler::methodWithMixedParam"/>
     </broker>
     <broker topic="deprecated.config.async.bool.topic" type="db" exchange="deprecatedExchange">
-        <queue consumer="deprecatedConfigAsyncBoolConsumer" name="deprecated.config.queue.2" />
+        <queue consumer="deprecatedConfigAsyncBoolConsumer" name="deprecated.config.queue.2"/>
     </broker>
     <broker topic="deprecated.config.sync.bool.topic" type="amqp" exchange="customExchange">
         <queue consumer="deprecatedConfigSyncBoolConsumer" name="deprecated.config.queue.4"/>

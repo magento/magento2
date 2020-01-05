@@ -11,12 +11,12 @@
     <actionGroup name="StorefrontAddSimpleProductToShoppingCartActionGroup">
         <arguments>
             <argument name="product"/>
-            <argument name="qty" type="string" defaultValue="1" />
+            <argument name="qty" type="string" defaultValue="1"/>
         </arguments>
-        <amOnPage url="{{StorefrontProductPage.url(product.custom_attributes[url_key])}}" stepKey="openProductPage" />
-        <waitForPageLoad stepKey="waitForProductPageOpen" />
-        <fillField userInput="{{qty}}" selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="fillQty" />
-        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
-        <waitForElementVisible selector="{{StorefrontMessagesSection.messageByType('success')}}" stepKey="waitForSuccessMessage" />
+        <amOnPage url="{{StorefrontProductPage.url(product.custom_attributes[url_key])}}" stepKey="openProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageOpen"/>
+        <fillField userInput="{{qty}}" selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="fillQty"/>
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.messageByType('success')}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
 </actionGroups>

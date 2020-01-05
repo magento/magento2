@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <createData entity="defaultUrlRewrite" stepKey="urlRewrite" />
+            <createData entity="defaultUrlRewrite" stepKey="urlRewrite"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         </before>
         <after>

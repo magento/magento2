@@ -14,7 +14,7 @@
             <stories value="Check necessary logic to action class for cookie messages"/>
             <title value="Storefront check necessary logic to action class for cookie messages test"/>
             <description value="Check necessary logic to action class for cookie messages"/>
-            <testCaseId value="MC-6141" />
+            <testCaseId value="MC-6141"/>
             <severity value="CRITICAL"/>
             <group value="security"/>
             <group value="customer"/>

@@ -27,6 +27,6 @@
         <checkOption selector="{{AdminProductDownloadableSection.addLinkIsUnlimitedDownloads(index)}}" stepKey="checkDownloadableLinkUnlimited"/>
         <fillField userInput="{{link.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUrlInput(index)}}" stepKey="fillDownloadableLinkFileUrl"/>
         <attachFile userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUploadFile(index)}}" stepKey="attachDownloadableLinkUploadSample"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterFillingOutForm" />
+        <waitForPageLoad stepKey="waitForPageLoadAfterFillingOutForm"/>
     </actionGroup>
 </actionGroups>

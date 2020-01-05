@@ -31,7 +31,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!--Categories-->

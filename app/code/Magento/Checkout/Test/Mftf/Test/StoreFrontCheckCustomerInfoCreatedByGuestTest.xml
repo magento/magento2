@@ -29,8 +29,8 @@
         </before>
 
         <after>
-            <deleteData createDataKey="product" stepKey="deleteProduct" />
-            <deleteData createDataKey="category" stepKey="deleteCategory" />
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
@@ -46,7 +46,7 @@
         </actionGroup>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
-            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessRegisterSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>

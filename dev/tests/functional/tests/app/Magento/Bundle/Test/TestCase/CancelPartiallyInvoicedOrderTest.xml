@@ -23,8 +23,8 @@
             </data>
             <data name="configData" xsi:type="string">cashondelivery</data>
             <data name="status" xsi:type="string">Processing</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
         </variation>
     </testCase>
 </config>

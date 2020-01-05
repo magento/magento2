@@ -6,7 +6,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
-    <any_node1 parent="any_handle_name" />
-    <any_node2 parent="singlechunk" />
-    <any_node3 parent="router_name_action" />
+    <any_node1 parent="any_handle_name"/>
+    <any_node2 parent="singlechunk"/>
+    <any_node3 parent="router_name_action"/>
 </layout>

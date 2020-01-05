@@ -12,11 +12,11 @@
             <data name="product" xsi:type="string">configurableProduct::two_options_by_one_dollar</data>
             <data name="productPrice/0/regular" xsi:type="string">1</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart"/>
         </variation>
     </testCase>
 </config>

@@ -22,7 +22,7 @@
             <parameter name="products_per_page" xsi:type="text" required="true" visible="true">
                 <label translate="true">Number of Products per Page</label>
                 <depends>
-                    <parameter name="show_pager" value="1" />
+                    <parameter name="show_pager" value="1"/>
                 </depends>
                 <value>5</value>
             </parameter>
@@ -53,13 +53,13 @@
         </parameters>
         <containers>
             <container name="content">
-                <template name="grid" value="default" />
+                <template name="grid" value="default"/>
             </container>
             <container name="content.top">
-                <template name="grid" value="default" />
+                <template name="grid" value="default"/>
             </container>
             <container name="content.bottom">
-                <template name="grid" value="default" />
+                <template name="grid" value="default"/>
             </container>
         </containers>
     </widget>

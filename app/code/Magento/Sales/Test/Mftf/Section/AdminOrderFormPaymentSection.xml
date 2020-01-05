@@ -22,7 +22,7 @@
         <element name="checkCashOnDelivery" type="radio" selector="#p_method_cashondelivery" timeout="30"/>
         <element name="checkPurchaseOrder" type="radio" selector="#p_method_purchaseorder" timeout="30"/>
         <element name="fieldPurchaseOrderNumber" type="input" selector="#po_number"/>
-        <element name="paymentBlock" type="text" selector="#order-billing_method" />
+        <element name="paymentBlock" type="text" selector="#order-billing_method"/>
         <element name="paymentError" type="text" selector="#payment[method]-error"/>
         <element name="bankTransferOption" type="radio" selector="#p_method_banktransfer" timeout="30"/>
         <element name="cashOnDeliveryOption" type="radio" selector="#p_method_cashondelivery" timeout="30"/>

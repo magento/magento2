@@ -57,10 +57,10 @@
         <waitForPageLoad stepKey="waitForCmsList2"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <!-- Verify CMS page on storefront -->
-        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="waitForCMSPageListItem" />
-        <click selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="clickSelect" />
-        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit(_newDefaultCmsPage.title)}}" stepKey="waitForEditLink" />
-        <click selector="{{CmsPagesPageActionsSection.preview(_newDefaultCmsPage.title)}}" stepKey="clickEdit" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="waitForCMSPageListItem"/>
+        <click selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="clickSelect"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit(_newDefaultCmsPage.title)}}" stepKey="waitForEditLink"/>
+        <click selector="{{CmsPagesPageActionsSection.preview(_newDefaultCmsPage.title)}}" stepKey="clickEdit"/>
         <waitForPageLoad stepKey="waitForCMSPage"/>
         <seeInTitle userInput="{{_newDefaultCmsPage.title}}" stepKey="seePageTitle"/>
         <see userInput="{{_newDefaultCmsPage.title}}" stepKey="seeProduct"/>

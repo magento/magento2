@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Sitemap\Model\SitemapItemInterface" type="Magento\Sitemap\Model\SitemapItem" />
-    <preference for="Magento\Sitemap\Model\ItemProvider\ItemProviderInterface" type="Magento\Sitemap\Model\ItemProvider\Composite" />
-    <preference for="Magento\Sitemap\Model\SitemapConfigReaderInterface" type="Magento\Sitemap\Model\SitemapConfigReader" />
+    <preference for="Magento\Sitemap\Model\SitemapItemInterface" type="Magento\Sitemap\Model\SitemapItem"/>
+    <preference for="Magento\Sitemap\Model\ItemProvider\ItemProviderInterface" type="Magento\Sitemap\Model\ItemProvider\Composite"/>
+    <preference for="Magento\Sitemap\Model\SitemapConfigReaderInterface" type="Magento\Sitemap\Model\SitemapConfigReader"/>
 
     <type name="Magento\Sitemap\Model\Sitemap">
         <arguments>

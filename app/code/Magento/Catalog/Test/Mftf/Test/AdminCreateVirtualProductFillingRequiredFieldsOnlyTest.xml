@@ -36,7 +36,7 @@
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductWithRequiredFields.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductWithRequiredFields.price}}" stepKey="fillProductPrice"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved" />
+        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>

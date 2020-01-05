@@ -14,8 +14,8 @@
             <data name="initialProducts/1" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
             <data name="productsCount" xsi:type="number">2</data>
             <data name="product/data/price/value" xsi:type="string">1.99</data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
         </variation>
     </testCase>
 </config>

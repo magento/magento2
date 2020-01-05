@@ -10,34 +10,34 @@
         <variation name="UpdateCustomerGroupEntityTestVariation1">
             <data name="customerGroup/data/tax_class_id/dataset" xsi:type="string">retail_customer</data>
             <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm"/>
         </variation>
         <variation name="UpdateCustomerGroupEntityTestVariation2">
             <data name="customerGroup/data/tax_class_id/dataset" xsi:type="string">-</data>
             <data name="customerGroup/data/customer_group_code" xsi:type="string">General</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupAlreadyExists" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupAlreadyExists"/>
         </variation>
         <variation name="UpdateCustomerGroupEntityTestVariation3">
             <data name="customerGroup/data/tax_class_id/dataset" xsi:type="string">customer_tax_class</data>
             <data name="customerGroup/data/customer_group_code" xsi:type="string">Group Name %isolation%</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm"/>
         </variation>
         <variation name="UpdateCustomerGroupEntityTestVariation4">
             <data name="customerGroup/data/tax_class_id/dataset" xsi:type="string">customer_tax_class</data>
             <data name="customerGroup/data/customer_group_code" xsi:type="string">Group#Name%isolation%</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCartPriceRuleForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCatalogPriceRuleForm" />
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnProductForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCartPriceRuleForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCatalogPriceRuleForm"/>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnProductForm"/>
         </variation>
     </testCase>
 </config>

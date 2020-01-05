@@ -7,12 +7,12 @@
 -->
 <engines xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_engine.xsd">
     <engine name="mysql">
-        <feature name="synonyms" support="1" />
-        <feature name="stopwords" support="0" />
+        <feature name="synonyms" support="1"/>
+        <feature name="stopwords" support="0"/>
     </engine>
     <engine name="other">
-        <feature name="synonyms" support="1" />
-        <feature name="stopwords" support="1" />
+        <feature name="synonyms" support="1"/>
+        <feature name="stopwords" support="1"/>
     </engine>
-    <engine name="none" />
+    <engine name="none"/>
 </engines>

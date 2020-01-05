@@ -10,7 +10,7 @@
         <variation name="LoginOnFrontendFailTestVariation1">
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLoginErrorMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLoginErrorMessage"/>
         </variation>
     </testCase>
 </config>

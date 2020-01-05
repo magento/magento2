@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Catalog\Api\Data\ProductRenderInterface">
-        <attribute code="review_html" type="string" />
+        <attribute code="review_html" type="string"/>
     </extension_attributes>
 </config>

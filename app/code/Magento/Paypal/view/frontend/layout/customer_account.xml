@@ -12,7 +12,7 @@
             <block class="Magento\Customer\Block\Account\SortLinkInterface"
                    name="customer-account-navigation-billing-agreements-link"
                    ifconfig="payment/paypal_express/active"
-            >
+           >
                 <arguments>
                     <argument name="path" xsi:type="string">paypal/billing_agreement</argument>
                     <argument name="label" xsi:type="string" translate="true">Billing Agreements</argument>

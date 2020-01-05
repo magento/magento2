@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Quote\Api\Data\CartItemInterface">
-        <attribute code="discounts" type="Magento\SalesRule\Api\Data\RuleDiscountInterface[]" />
+        <attribute code="discounts" type="Magento\SalesRule\Api\Data\RuleDiscountInterface[]"/>
     </extension_attributes>
     <extension_attributes for="Magento\Quote\Api\Data\AddressInterface">
-        <attribute code="discounts" type="Magento\SalesRule\Api\Data\RuleDiscountInterface[]" />
+        <attribute code="discounts" type="Magento\SalesRule\Api\Data\RuleDiscountInterface[]"/>
     </extension_attributes>
 </config>

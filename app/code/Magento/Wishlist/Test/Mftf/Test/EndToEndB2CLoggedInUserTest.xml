@@ -10,9 +10,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CLoggedInUserTest">
         <!-- Step 5: Add products to wishlist -->
-        <comment userInput="Start of adding products to wishlist" stepKey="startOfAddingProductsToWishlist" after="endOfComparingProducts" />
+        <comment userInput="Start of adding products to wishlist" stepKey="startOfAddingProductsToWishlist" after="endOfComparingProducts"/>
         <!-- Add Simple Product 1 to wishlist -->
-        <comment userInput="Add Simple Product 1 to wishlist" stepKey="commentAddSimpleProduct1ToWishlist" after="startOfAddingProductsToWishlist" />
+        <comment userInput="Add Simple Product 1 to wishlist" stepKey="commentAddSimpleProduct1ToWishlist" after="startOfAddingProductsToWishlist"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" after="commentAddSimpleProduct1ToWishlist" stepKey="wishlistGotoCategory1"/>
         <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup" after="wishlistGotoCategory1" stepKey="wishlistAddSimpleProduct1ToWishlist">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
@@ -25,7 +25,7 @@
         </actionGroup>
 
         <!-- Add Simple Product 2 to wishlist -->
-        <comment userInput="Add Simple Product 2 to wishlist" stepKey="commentAddSimpleProduct2ToWishlist" after="wishlistCheckSimpleProduct1InWishlistSidebar" />
+        <comment userInput="Add Simple Product 2 to wishlist" stepKey="commentAddSimpleProduct2ToWishlist" after="wishlistCheckSimpleProduct1InWishlistSidebar"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" after="commentAddSimpleProduct2ToWishlist" stepKey="wishlistGotoCategory2"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" after="wishlistGotoCategory2" stepKey="wishlistClickSimpleProduct2"/>
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" after="wishlistClickSimpleProduct2" stepKey="wishlistAddSimpleProduct2ToWishlist">
@@ -37,6 +37,6 @@
         <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" after="wishlistCheckSimpleProduct2InWishlist" stepKey="wishlistCheckSimpleProduct2InWishlistSidebar">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
-        <comment userInput="End of adding products to wishlist" after="wishlistCheckSimpleProduct2InWishlistSidebar" stepKey="endOfAddingProductsToWishlist" />
+        <comment userInput="End of adding products to wishlist" after="wishlistCheckSimpleProduct2InWishlistSidebar" stepKey="endOfAddingProductsToWishlist"/>
     </test>
 </tests>

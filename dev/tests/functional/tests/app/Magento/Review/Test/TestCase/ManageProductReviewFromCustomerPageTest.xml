@@ -12,18 +12,18 @@
             <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
             <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
             <data name="review/data/detail" xsi:type="string">review_upd_%isolation%</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertReviewSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGridOnCustomerPage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertReviewSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGridOnCustomerPage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage"/>
         </variation>
         <variation name="ManageProductReviewFromCustomerPageTestVariation2">
             <data name="review/data/status_id" xsi:type="string">Not Approved</data>
             <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
             <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
             <data name="review/data/detail" xsi:type="string">review_upd_%isolation%</data>
-            <constraint name="Magento\Review\Test\Constraint\AssertReviewSuccessSaveMessage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGridOnCustomerPage" />
-            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertReviewSuccessSaveMessage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGridOnCustomerPage"/>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage"/>
         </variation>
     </testCase>
 </config>

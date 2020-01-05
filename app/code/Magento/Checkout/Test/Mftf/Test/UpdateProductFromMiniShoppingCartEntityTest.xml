@@ -31,12 +31,12 @@
 
         <after>
             <!--Delete created data-->
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
         <actionGroup ref="StorefrontUpdateProductQtyMiniShoppingCartActionGroup" stepKey="updateProductQty">
-            <argument name="product" value="$$createProduct$$" />
-            <argument name="quote" value="simpleOrderQty2" />
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="quote" value="simpleOrderQty2"/>
         </actionGroup>
 
         <!-- Perform all assertions -->

@@ -10,8 +10,8 @@
         <status_id>
             <input>select</input>
         </status_id>
-        <title />
-        <nickname />
+        <title/>
+        <nickname/>
         <select_stores>
             <selector>[name="select_stores[]"]</selector>
             <input>multiselectgrouplist</input>

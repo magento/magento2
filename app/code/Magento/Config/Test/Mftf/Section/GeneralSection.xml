@@ -14,8 +14,8 @@
         <element name="EnableSystemValue" type="button" selector="#cms_wysiwyg_enabled_inherit"/>
         <element name="EnableWYSIWYG" type="button" selector="#cms_wysiwyg_enabled"/>
         <element name="SwitcherSystemValue" type="button" selector="#cms_wysiwyg_editor_inherit" timeout="60"/>
-        <element name="Switcher" type="button" selector="#cms_wysiwyg_editor" />
-        <element name="StaticURL" type="button" selector="#cms_wysiwyg_use_static_urls_in_catalog" />
+        <element name="Switcher" type="button" selector="#cms_wysiwyg_editor"/>
+        <element name="StaticURL" type="button" selector="#cms_wysiwyg_use_static_urls_in_catalog"/>
         <element name="Save" type="button" selector="#save" timeout="30"/>
         <element name="StoreConfigurationPageSuccessMessage" type="text" selector="#messages [data-ui-id='messages-message-success']"/>
     </section>

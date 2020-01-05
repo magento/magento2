@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite" />
+    <preference for="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite"/>
     <preference for="Magento\Catalog\Model\Locator\LocatorInterface" type="Magento\Catalog\Model\Locator\RegistryLocator"/>
     <!--<preference for="Magento\Catalog\Ui\DataProvider\Product\Form\Container\MetaInterface" type="Magento\Catalog\Ui\DataProvider\Product\Form\Container\Meta"/>-->
     <!--<preference for="Magento\Catalog\Ui\DataProvider\Product\Form\Container\DataInterface" type="Magento\Catalog\Ui\DataProvider\Product\Form\Container\Data"/>-->
@@ -73,10 +73,10 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Full">
-        <plugin name="invalidate_pagecache_after_full_reindex" type="Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute" />
+        <plugin name="invalidate_pagecache_after_full_reindex" type="Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute"/>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
-        <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save" />
+        <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save"/>
     </type>
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>

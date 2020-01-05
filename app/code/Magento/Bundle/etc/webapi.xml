@@ -32,39 +32,39 @@
         </resources>
     </route>
     <route url="/V1/bundle-products/:sku/options/all" method="GET">
-        <service class="Magento\Bundle\Api\ProductOptionRepositoryInterface" method="getList" />
+        <service class="Magento\Bundle\Api\ProductOptionRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/bundle-products/options/types" method="GET">
-        <service class="Magento\Bundle\Api\ProductOptionTypeListInterface" method="getItems" />
+        <service class="Magento\Bundle\Api\ProductOptionTypeListInterface" method="getItems"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/bundle-products/:sku/options/:optionId" method="GET">
-        <service class="Magento\Bundle\Api\ProductOptionRepositoryInterface" method="get" />
+        <service class="Magento\Bundle\Api\ProductOptionRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/bundle-products/options/add" method="POST">
-        <service class="Magento\Bundle\Api\ProductOptionManagementInterface" method="save" />
+        <service class="Magento\Bundle\Api\ProductOptionManagementInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/bundle-products/options/:optionId" method="PUT">
-        <service class="Magento\Bundle\Api\ProductOptionManagementInterface" method="save" />
+        <service class="Magento\Bundle\Api\ProductOptionManagementInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/bundle-products/:sku/options/:optionId" method="DELETE">
-        <service class="Magento\Bundle\Api\ProductOptionRepositoryInterface" method="deleteById" />
+        <service class="Magento\Bundle\Api\ProductOptionRepositoryInterface" method="deleteById"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
 </routes>

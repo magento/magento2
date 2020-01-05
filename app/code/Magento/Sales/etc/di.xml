@@ -65,7 +65,7 @@
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
     <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
     <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Model\Order\Status\HistoryRepository"/>
-    <preference for="Magento\Sales\Api\PaymentFailuresInterface" type="Magento\Sales\Model\Service\PaymentFailuresService" />
+    <preference for="Magento\Sales\Api\PaymentFailuresInterface" type="Magento\Sales\Model\Service\PaymentFailuresService"/>
     <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\CommentRepository"/>
     <preference for="Magento\Sales\Api\ShipmentItemRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\ItemRepository"/>
     <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Model\Order\ShipmentRepository"/>
@@ -115,8 +115,8 @@
     <preference for="Magento\Sales\Model\Order\Creditmemo\NotifierInterface" type="Magento\Sales\Model\Order\Creditmemo\Notifier"/>
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
-    <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
-    <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
+    <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider"/>
+    <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config"/>
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -1015,10 +1015,10 @@
     </type>
     <preference
             for="Magento\Sales\Api\OrderCustomerDelegateInterface"
-            type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
+            type="Magento\Sales\Model\Order\OrderCustomerDelegate"/>
     <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
         <arguments>
-            <argument name="productAvailabilityChecks" xsi:type="array" />
+            <argument name="productAvailabilityChecks" xsi:type="array"/>
         </arguments>
     </type>
 </config>

@@ -11,9 +11,9 @@
              type="virtual"
              repository_class="Magento\Braintree\Test\Repository\BraintreeSandboxCustomer"
              class="Magento\Braintree\Test\Fixture\BraintreeSandboxCustomer">
-        <field name="environment" />
-        <field name="merchantId" />
-        <field name="publicKey" />
-        <field name="privateKey" />
+        <field name="environment"/>
+        <field name="merchantId"/>
+        <field name="publicKey"/>
+        <field name="privateKey"/>
     </fixture>
 </config>

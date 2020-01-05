@@ -35,9 +35,9 @@
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageSaved"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle"/>
         <!--Verify Category is created/>-->
-        <seeElement selector="{{AdminCategoryContentSection.activeCategoryInTree(_defaultCategory.name)}}" stepKey="seeCategoryInTree"  />
+        <seeElement selector="{{AdminCategoryContentSection.activeCategoryInTree(_defaultCategory.name)}}" stepKey="seeCategoryInTree" />
         <!--Verify Category in store front page menu/>-->
         <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>

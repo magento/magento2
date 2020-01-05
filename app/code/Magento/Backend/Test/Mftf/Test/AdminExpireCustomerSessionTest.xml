@@ -37,7 +37,7 @@
 
         <!-- 4. Wait for session to expire. -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$createCustomer$$" />
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <wait time="60" stepKey="waitForCookieLifetime"/>
         <reloadPage stepKey="reloadPage"/>

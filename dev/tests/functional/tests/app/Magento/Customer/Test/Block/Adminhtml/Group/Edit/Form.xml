@@ -7,7 +7,7 @@
 -->
 <mapping strict="0">
     <fields>
-        <code />
+        <code/>
         <tax_class_id>
             <selector>#tax_class_id</selector>
             <input>select</input>

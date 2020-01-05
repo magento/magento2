@@ -132,7 +132,7 @@
             <argument name="price" value="34"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnFirst" />
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnFirst"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseFirst"/>
         <waitForPageLoad stepKey="waitForMessage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageFirst"/>
@@ -155,7 +155,7 @@
             <argument name="attributeOption" value="option5"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageLoadThird"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnSecond" />
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnSecond"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseSecond"/>
         <waitForPageLoad stepKey="waitForSuccessMessage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageSecond"/>
@@ -177,7 +177,7 @@
             <argument name="price" value="34"/>
             <argument name="attributeOption" value="option1"/>
         </actionGroup>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnThird" />
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnThird"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseThird"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveConfigurableProductMessage"/>

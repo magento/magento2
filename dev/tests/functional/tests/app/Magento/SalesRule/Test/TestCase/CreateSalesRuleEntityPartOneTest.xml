@@ -32,10 +32,10 @@
             <data name="cartPrice/sub_total" xsi:type="string">150.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">75.00</data>
             <data name="cartPrice/discount" xsi:type="string">75.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleFreeShippingIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleFreeShippingIsApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation8">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -63,9 +63,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">150.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">85.00</data>
             <data name="cartPrice/discount" xsi:type="string">75.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation9">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -83,9 +83,9 @@
             <data name="salesRule/data/store_labels/0" xsi:type="string">Total Items Quantity-Not Applied test</data>
             <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
             <data name="productQuantity/productForSalesRule1" xsi:type="string">2</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsNotApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsNotApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation10">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -109,9 +109,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">250.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">140.00</data>
             <data name="cartPrice/discount" xsi:type="string">125.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation11">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
@@ -134,9 +134,9 @@
             <data name="cartPrice/sub_total" xsi:type="string">200.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">115.00</data>
             <data name="cartPrice/discount" xsi:type="string">100.00</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm"/>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied"/>
         </variation>
     </testCase>
 </config>

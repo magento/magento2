@@ -15,7 +15,7 @@
             <join reference_table="cataloginventory_stock_item"
                   join_on_field="id"
                   reference_field="id"
-                    >
+                   >
                 <field>qty</field>
             </join>
         </attribute>
@@ -23,7 +23,7 @@
             <join reference_table="reviews"
                   reference_field="product_id"
                   join_on_field="id"
-                    >
+                   >
                 <field>comment</field>
                 <field>rating</field>
                 <field>date</field>

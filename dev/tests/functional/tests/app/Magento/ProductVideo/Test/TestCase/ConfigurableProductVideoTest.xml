@@ -14,7 +14,7 @@
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
             <data name="vimeoDataCode" xsi:type="string">16342611</data>
             <data name="youtubeDataCode" xsi:type="string">bpOSxM0rNPM</data>
-             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoConfigurableProductView" />
+             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoConfigurableProductView"/>
         </variation>
     </testCase>
 </config>

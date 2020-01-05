@@ -133,8 +133,8 @@
 
         <!--Create and apply catalog price rule-->
         <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsSKUActionGroup" stepKey="createCatalogPriceRule">
-            <argument name="catalogRule" value="CatalogRuleByPercentWith96Amount" />
-            <argument name="productSku" value="$$createConfigChildProduct3.sku$$" />
+            <argument name="catalogRule" value="CatalogRuleByPercentWith96Amount"/>
+            <argument name="productSku" value="$$createConfigChildProduct3.sku$$"/>
         </actionGroup>
         <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>

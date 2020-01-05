@@ -19,7 +19,7 @@
 
         <before>
             <!-- Set the configuration for Generate "category/product" URL Rewrites-->
-            <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
+            <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
@@ -35,7 +35,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
 
             <!-- Set the configuration for Generate "category/product" URL Rewrites-->
-            <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
+            <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
@@ -52,12 +52,12 @@
 
         <!-- 2. Set the configuration for Generate "category/product" URL Rewrites to No-->
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="amOnCatalogConfigPage"/>
-        <conditionalClick selector="{{CatalogSection.seo}}" dependentSelector="{{CatalogSection.CheckIfSeoTabExpand}}" visible="true" stepKey="expandSeoTab" />
+        <conditionalClick selector="{{CatalogSection.seo}}" dependentSelector="{{CatalogSection.CheckIfSeoTabExpand}}" visible="true" stepKey="expandSeoTab"/>
         <waitForElementVisible  selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="GenerateUrlRewritesSelect"/>
-        <selectOption userInput="0" selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="selectUrlGenerationNo" />
+        <selectOption userInput="0" selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="selectUrlGenerationNo"/>
         <waitForElementVisible selector="{{GenerateUrlRewritesConfirm.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{GenerateUrlRewritesConfirm.ok}}" stepKey="confirmSwitchingGenerationOff"/>
-        <click selector="{{CatalogSection.save}}" stepKey="saveConfig" />
+        <click selector="{{CatalogSection.save}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
 
         <!-- 3. Flush cache-->

@@ -14,7 +14,7 @@
         </before>
         <after></after>
         <include>
-            <group name="SearchEngineMysql" />
+            <group name="SearchEngineMysql"/>
         </include>
         <exclude>
             <group name="skip"/>

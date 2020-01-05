@@ -308,7 +308,7 @@
         <amOnPage url="{{CheckoutPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForShippingSection"/>
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{Simple_US_Customer_CA.email}}" stepKey="enterEmail"/>
-        <waitForLoadingMaskToDisappear stepKey="waitEmailLoad" />
+        <waitForLoadingMaskToDisappear stepKey="waitEmailLoad"/>
         <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
             <argument name="Address" value="US_Address_CA"/>
         </actionGroup>

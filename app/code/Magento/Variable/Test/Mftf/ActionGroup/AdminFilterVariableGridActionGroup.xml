@@ -12,11 +12,11 @@
         <arguments>
             <argument name="variable" type="entity"/>
         </arguments>
-        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
-        <waitForPageLoad stepKey="waitForFilterReset" />
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters"/>
+        <waitForPageLoad stepKey="waitForFilterReset"/>
         <fillField selector="{{AdminVariableGridFilterSection.codeField}}" userInput="{{variable.code}}" stepKey="fillCodeFieldInFilter"/>
         <fillField selector="{{AdminVariableGridFilterSection.nameField}}" userInput="{{variable.name}}" stepKey="fillNameFieldInFilter"/>
         <click selector="{{AdminLegacyDataGridFilterSection.apply}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForFiltersApply" />
+        <waitForPageLoad stepKey="waitForFiltersApply"/>
     </actionGroup>
 </actionGroups>

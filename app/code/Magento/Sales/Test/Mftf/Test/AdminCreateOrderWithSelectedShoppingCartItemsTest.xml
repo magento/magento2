@@ -42,7 +42,7 @@
 
         <!-- Step 1: Go to Storefront as Customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$simpleCustomer$$" />
+            <argument name="Customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
         <!-- Step 2: Add product to cart -->

@@ -16,7 +16,7 @@
             <argument name="sectionName" type="string"/>
         </arguments>
 
-        <conditionalClick selector="{{AdminConfigSection.collapsibleSectionByTitle(sectionName)}}" dependentSelector="{{AdminConfigSection.expandedSectionByTitle(sectionName)}}" visible="false" stepKey="expandSection" />
+        <conditionalClick selector="{{AdminConfigSection.collapsibleSectionByTitle(sectionName)}}" dependentSelector="{{AdminConfigSection.expandedSectionByTitle(sectionName)}}" visible="false" stepKey="expandSection"/>
         <waitForElement selector="{{AdminConfigSection.expandedSectionByTitle(sectionName)}}" stepKey="waitOpenedSection"/>
     </actionGroup>
 </actionGroups>

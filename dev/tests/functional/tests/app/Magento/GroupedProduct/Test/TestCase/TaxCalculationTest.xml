@@ -35,7 +35,7 @@
             <data name="prices/tax" xsi:type="string">2.70</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">57.00</data>
             <data name="prices/grand_total_incl_tax" xsi:type="string">59.70</data>
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesGroupedExcludingIncludingTax" />
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesGroupedExcludingIncludingTax"/>
         </variation>
     </testCase>
 </config>

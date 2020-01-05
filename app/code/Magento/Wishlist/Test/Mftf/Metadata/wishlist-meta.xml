@@ -9,7 +9,7 @@
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateWishlist" dataType="wishlist" type="create"
-               auth="customerFormKey" url="/wishlist/index/add/" method="POST" successRegex="" returnRegex="~\/wishlist_id\/(\d*?)\/~" >
+               auth="customerFormKey" url="/wishlist/index/add/" method="POST" successRegex="" returnRegex="~\/wishlist_id\/(\d*?)\/~">
         <contentType>application/x-www-form-urlencoded</contentType>
         <field key="product">integer</field>
         <field key="customer_email">string</field>

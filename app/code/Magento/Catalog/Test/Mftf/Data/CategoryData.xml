@@ -34,13 +34,13 @@
         <data key="name" unique="suffix">subCategory</data>
         <data key="name_lwr" unique="suffix">subCategory</data>
         <data key="is_active">true</data>
-        <var key="parent_id" entityType="category" entityKey="id" />
+        <var key="parent_id" entityType="category" entityKey="id"/>
     </entity>
     <entity name="NewSubCategoryWithParent" type="category">
         <data key="name" unique="suffix">subCategory</data>
         <data key="name_lwr" unique="suffix">subcategory</data>
         <data key="is_active">true</data>
-        <var key="parent_id" entityType="category" entityKey="id" />
+        <var key="parent_id" entityType="category" entityKey="id"/>
     </entity>
     <entity name="FirstLevelSubCat" type="category">
         <data key="name" unique="suffix">FirstLevelSubCategory</data>
@@ -68,7 +68,7 @@
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
         <data key="url_key" unique="suffix">simplerootsubcategory</data>
-        <var key="parent_id" entityType="category" entityKey="id" />
+        <var key="parent_id" entityType="category" entityKey="id"/>
     </entity>
     <entity name="SubCategory" type="category">
         <data key="name" unique="suffix">SubCategory</data>
@@ -82,7 +82,7 @@
         <data key="name_lwr" unique="suffix">secondlevel</data>
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
-        <var key="parent_id" entityType="category" entityKey="id" />
+        <var key="parent_id" entityType="category" entityKey="id"/>
     </entity>
     <entity name="Three_nested_categories" type="category">
         <data key="name" unique="suffix">ThirdLevel</data>
@@ -90,7 +90,7 @@
         <data key="name_lwr" unique="suffix">thirdlevel</data>
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
-        <var key="parent_id" entityType="category" entityKey="id" />
+        <var key="parent_id" entityType="category" entityKey="id"/>
     </entity>
     <entity name="CatNotIncludeInMenu" type="category">
         <data key="name" unique="suffix">NotInclMenu</data>

@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_QuoteAnalytics" >
+    <module name="Magento_QuoteAnalytics">
         <sequence>
             <module name="Magento_Quote"/>
             <module name="Magento_Analytics"/>

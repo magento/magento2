@@ -13,37 +13,37 @@
     <php-includepath>../../../../../../framework</php-includepath>
 
     <!-- Code Size Rules -->
-    <rule ref="rulesets/codesize.xml/CyclomaticComplexity" />
-    <rule ref="rulesets/codesize.xml/NPathComplexity" />
-    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength" />
-    <rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
-    <rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
-    <rule ref="rulesets/codesize.xml/TooManyFields" />
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity"/>
+    <rule ref="rulesets/codesize.xml/NPathComplexity"/>
+    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength"/>
+    <rule ref="rulesets/codesize.xml/ExcessiveParameterList"/>
+    <rule ref="rulesets/codesize.xml/ExcessivePublicCount"/>
+    <rule ref="rulesets/codesize.xml/TooManyFields"/>
     <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
         <properties>
-            <property name="maximum" value="100" />
+            <property name="maximum" value="100"/>
         </properties>
     </rule>
 
     <!-- Unused code rules -->
-    <rule ref="rulesets/unusedcode.xml" />
+    <rule ref="rulesets/unusedcode.xml"/>
 
     <!-- Code design rules -->
-    <rule ref="rulesets/design.xml/NumberOfChildren" />
+    <rule ref="rulesets/design.xml/NumberOfChildren"/>
     <rule ref="rulesets/design.xml/DepthOfInheritance">
         <properties>
-            <property name="minimum" value="8" />
+            <property name="minimum" value="8"/>
         </properties>
     </rule>
-    <rule ref="rulesets/design.xml/CouplingBetweenObjects" />
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects"/>
 
     <!-- Naming Rules -->
-    <rule ref="rulesets/naming.xml/ShortMethodName" />
-    <rule ref="rulesets/naming.xml/ConstantNamingConventions" />
-    <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
+    <rule ref="rulesets/naming.xml/ShortMethodName"/>
+    <rule ref="rulesets/naming.xml/ConstantNamingConventions"/>
+    <rule ref="rulesets/naming.xml/BooleanGetMethodName"/>
 
     <!-- Magento Specific Rules -->
-    <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/AllPurposeAction" />
-    <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/CookieAndSessionMisuse" />
+    <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/AllPurposeAction"/>
+    <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/CookieAndSessionMisuse"/>
 
 </ruleset>

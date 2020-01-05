@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="checkout_submit_all_after">
-        <observer name="directpost_save_order_after_submit" instance="Magento\Authorizenet\Observer\SaveOrderAfterSubmitObserver" />
+        <observer name="directpost_save_order_after_submit" instance="Magento\Authorizenet\Observer\SaveOrderAfterSubmitObserver"/>
     </event>
     <event name="checkout_directpost_placeOrder">
-        <observer name="directpost_save_order_onepage" instance="Magento\Authorizenet\Observer\AddFieldsToResponseObserver" />
+        <observer name="directpost_save_order_onepage" instance="Magento\Authorizenet\Observer\AddFieldsToResponseObserver"/>
     </event>
 </config>

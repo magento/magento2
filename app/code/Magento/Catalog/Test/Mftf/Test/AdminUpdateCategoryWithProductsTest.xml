@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
         </before>
         <after>
@@ -62,7 +62,7 @@
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
 
         <!--Verify Category Title-->
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle"/>
 
         <!-- Perform reindex and flush cache -->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>

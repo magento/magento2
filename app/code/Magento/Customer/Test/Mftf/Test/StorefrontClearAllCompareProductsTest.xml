@@ -18,7 +18,7 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-        
+
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create Simple Customer -->
@@ -127,7 +127,7 @@
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer1">
-            <argument name="Customer" value="$$createSimpleCustomer1$$" />
+            <argument name="Customer" value="$$createSimpleCustomer1$$"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage1">

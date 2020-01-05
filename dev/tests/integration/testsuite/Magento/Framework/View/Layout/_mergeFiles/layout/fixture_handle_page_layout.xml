@@ -6,5 +6,5 @@
  */
 -->
 <layout>
-    <container name="main.container" />
+    <container name="main.container"/>
 </layout>

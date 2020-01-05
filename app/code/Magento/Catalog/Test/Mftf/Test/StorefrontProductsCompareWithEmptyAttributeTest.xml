@@ -40,7 +40,7 @@
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
         <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('testattribute')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
         <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
         <seeElement selector=".message-success" stepKey="assertSuccess"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront1"/>

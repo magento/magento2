@@ -13,7 +13,7 @@
     </head>
     <update handle="editor"/>
     <body>
-        <referenceContainer name="left" htmlTag="div" />
+        <referenceContainer name="left" htmlTag="div"/>
         <referenceContainer name="page.main.actions">
             <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml"/>
         </referenceContainer>
@@ -22,7 +22,7 @@
         </referenceContainer>
         <referenceContainer name="content">
             <uiComponent name="category_form"/>
-            <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="Magento_Catalog::catalog/category/edit.phtml" />
+            <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="Magento_Catalog::catalog/category/edit.phtml"/>
         </referenceContainer>
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="catalog_category_page_head_components" template="Magento_Catalog::js/components.phtml"/>

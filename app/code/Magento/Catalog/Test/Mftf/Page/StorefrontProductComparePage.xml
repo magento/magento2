@@ -9,6 +9,6 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontProductComparePage" url="catalog/product_compare/index" module="Magento_Catalog" area="storefront">
-        <section name="StorefrontProductCompareMainSection" />
+        <section name="StorefrontProductCompareMainSection"/>
     </page>
 </pages>

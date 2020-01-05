@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="controller_action_predispatch">
-        <observer name="adminnotification" instance="Magento\AdminNotification\Observer\PredispatchAdminActionControllerObserver" />
+        <observer name="adminnotification" instance="Magento\AdminNotification\Observer\PredispatchAdminActionControllerObserver"/>
     </event>
 </config>

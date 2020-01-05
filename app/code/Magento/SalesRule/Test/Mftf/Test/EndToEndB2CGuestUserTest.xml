@@ -20,7 +20,7 @@
         </after>
 
         <!-- Step 5: User uses coupon codes -->
-        <comment userInput="Start of using coupon code" stepKey="startOfUsingCouponCode" after="endOfComparingProducts" />
+        <comment userInput="Start of using coupon code" stepKey="startOfUsingCouponCode" after="endOfComparingProducts"/>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="couponOpenCart" after="startOfUsingCouponCode"/>
 
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="couponApplyCoupon" after="couponOpenCart">
@@ -45,7 +45,7 @@
             <argument name="shippingMethod" value="Flat Rate - Fixed"/>
             <argument name="total" value="495.00"/>
         </actionGroup>
-        <comment userInput="End of using coupon code" stepKey="endOfUsingCouponCode" after="cartAssertCartAfterCancelCoupon" />
+        <comment userInput="End of using coupon code" stepKey="endOfUsingCouponCode" after="cartAssertCartAfterCancelCoupon"/>
     </test>
     <test name="EndToEndB2CGuestUserMysqlTest">
         <before>
@@ -59,7 +59,7 @@
         </after>
 
         <!-- Step 5: User uses coupon codes -->
-        <comment userInput="Start of using coupon code" stepKey="startOfUsingCouponCode" after="endOfComparingProducts" />
+        <comment userInput="Start of using coupon code" stepKey="startOfUsingCouponCode" after="endOfComparingProducts"/>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="couponOpenCart" after="startOfUsingCouponCode"/>
 
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="couponApplyCoupon" after="couponOpenCart">
@@ -84,6 +84,6 @@
             <argument name="shippingMethod" value="Flat Rate - Fixed"/>
             <argument name="total" value="495.00"/>
         </actionGroup>
-        <comment userInput="End of using coupon code" stepKey="endOfUsingCouponCode" after="cartAssertCartAfterCancelCoupon" />
+        <comment userInput="End of using coupon code" stepKey="endOfUsingCouponCode" after="cartAssertCartAfterCancelCoupon"/>
     </test>
 </tests>

@@ -36,7 +36,7 @@
         <!-- Search default virtual product in the grid page -->
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAllFilter" />
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAllFilter"/>
         <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="$$initialVirtualProduct.name$$" stepKey="fillVirtualProductNameInKeywordSearch"/>
         <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
         <waitForPageLoad stepKey="waitForProductSearch"/>
@@ -51,10 +51,10 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductRegularPriceInStock.quantity}}" stepKey="fillProductQuantity"/>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductRegularPriceInStock.status}}" stepKey="selectStockStatusInStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory"/>
         <waitForPageLoad stepKey="waitForCategory1"/>
         <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
         <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
@@ -144,7 +144,7 @@
         <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductRegularPriceInStock.quantity}}" stepKey="seeProductQuantity"/>
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{updateVirtualProductRegularPriceInStock.status}}" stepKey="seeProductStockStatus"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
-        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories" />
+        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories"/>
         <assertEquals stepKey="assertSelectedCategories">
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
@@ -231,18 +231,18 @@
             <actualResult type="variable">productPriceAmount</actualResult>
         </assertEquals>
         <!--Verify we customer see customizable options are Required -->
-        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption1.title)}}" stepKey="verifyFirstCustomOptionIsRequired" />
-        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption2.title)}}" stepKey="verifySecondCustomOptionIsRequired" />
-        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption3.title)}}" stepKey="verifyThirdCustomOptionIsRequired" />
-        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption4.title)}}" stepKey="verifyFourthCustomOptionIsRequired" />
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption1.title)}}" stepKey="verifyFirstCustomOptionIsRequired"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption2.title)}}" stepKey="verifySecondCustomOptionIsRequired"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption3.title)}}" stepKey="verifyThirdCustomOptionIsRequired"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption4.title)}}" stepKey="verifyFourthCustomOptionIsRequired"/>
         <!--Verify customer see customizable option titles and prices -->
-        <grabMultiple selector="{{StorefrontProductInfoMainSection.allCustomOptionLabels}}" stepKey="allCustomOptionLabels" />
+        <grabMultiple selector="{{StorefrontProductInfoMainSection.allCustomOptionLabels}}" stepKey="allCustomOptionLabels"/>
         <assertEquals stepKey="verifyLabels">
             <actualResult type="variable">allCustomOptionLabels</actualResult>
             <expectedResult type="array">[{{virtualProductCustomizableOption1.title}} + ${{virtualProductCustomizableOption1.option_0_price}}, {{virtualProductCustomizableOption2.title}} + ${{virtualProductCustomizableOption2.option_0_price}}, {{virtualProductCustomizableOption3.title}}, {{virtualProductCustomizableOption4.title}}]</expectedResult>
         </assertEquals>
-        <grabAttributeFrom userInput="for" selector="{{StorefrontProductInfoMainSection.customOptionLabel(virtualProductCustomizableOption4.title)}}" stepKey="fourthOptionId" />
-        <grabMultiple selector="{{StorefrontProductInfoMainSection.customSelectOptions({$fourthOptionId})}}" stepKey="grabFourthOptions" />
+        <grabAttributeFrom userInput="for" selector="{{StorefrontProductInfoMainSection.customOptionLabel(virtualProductCustomizableOption4.title)}}" stepKey="fourthOptionId"/>
+        <grabMultiple selector="{{StorefrontProductInfoMainSection.customSelectOptions({$fourthOptionId})}}" stepKey="grabFourthOptions"/>
         <assertEquals stepKey="assertFourthSelectOptions">
             <actualResult type="variable">grabFourthOptions</actualResult>
             <expectedResult type="array">['-- Please Select --', {{virtualProductCustomizableOption4.option_0_title}} +$12.01, {{virtualProductCustomizableOption4.option_1_title}} +$20.02]</expectedResult>

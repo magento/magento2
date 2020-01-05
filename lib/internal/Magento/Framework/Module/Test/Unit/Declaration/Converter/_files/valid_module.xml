@@ -13,7 +13,7 @@
     </module>
     <module name="Module_Two">
         <sequence>
-            <module name="Module_One" />
+            <module name="Module_One"/>
         </sequence>
     </module>
 </config>
