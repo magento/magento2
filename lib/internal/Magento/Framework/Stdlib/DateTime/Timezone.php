@@ -362,7 +362,7 @@ class Timezone implements TimezoneInterface
 
             $formatterWithoutHour = new \IntlDateFormatter(
                 $locale,
-                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::MEDIUM,
                 \IntlDateFormatter::NONE,
                 new \DateTimeZone($timezone)
             );
@@ -379,7 +379,7 @@ class Timezone implements TimezoneInterface
 
             $formatterWithHour = new \IntlDateFormatter(
                 $locale,
-                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::MEDIUM,
                 \IntlDateFormatter::SHORT,
                 new \DateTimeZone($timezone)
             );
