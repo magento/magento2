@@ -347,6 +347,8 @@ class Timezone implements TimezoneInterface
     }
 
     /**
+     * Append time to DateTime
+     *
      * @param string $date
      * @param boolean $includeTime
      * @param string $timezone
