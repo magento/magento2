@@ -17,10 +17,10 @@ use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
  */
 class DownloadTest extends \PHPUnit\Framework\TestCase
 {
-	/** @var array Result of get_headers() function */
-	public static $headers;
+    /** @var array Result of get_headers() function */
+    public static $headers;
 
-	/** @var DownloadHelper */
+    /** @var DownloadHelper */
     protected $_helper;
 
     /** @var Filesystem|\PHPUnit_Framework_MockObject_MockObject */
@@ -233,7 +233,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_handleMock)
         );
 
-		self::$headers = ['200 OK'];
+        self::$headers = ['200 OK'];
         $this->_helper->setResource($url, DownloadHelper::LINK_TYPE_URL);
     }
 

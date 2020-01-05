@@ -30,5 +30,5 @@ function mime_content_type()
  */
 function get_headers()
 {
-	return DownloadTest::$headers;
+    return DownloadTest::$headers;
 }
