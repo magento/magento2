@@ -177,7 +177,7 @@ class Timezone implements TimezoneInterface
                 $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
                 $formatter = new \IntlDateFormatter(
                     $locale,
-                    \IntlDateFormatter::SHORT,
+                    \IntlDateFormatter::MEDIUM,
                     $timeType,
                     new \DateTimeZone($timezone)
                 );
