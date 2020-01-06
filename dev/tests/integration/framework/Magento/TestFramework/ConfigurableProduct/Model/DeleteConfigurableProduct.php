@@ -50,17 +50,19 @@ class DeleteConfigurableProduct
     {
         $configurableProduct = $this->productRepository->get($sku, false, null, true);
         $childrenIds = $configurableProduct->getExtensionAttributes()->getConfigurableProductLinks();
-        $childrenSkus = $this->productResource->getProductsSku($childrenIds);
-        $childrenSkus[]['sku'] = $sku;
+        $childrenSkus = array_column($this->productResource->getProductsSku($childrenIds), 'sku');
+        $childrenSkus[] = $sku;
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
+
         foreach ($childrenSkus as $childSku) {
             try {
-                $this->productRepository->deleteById($childSku['sku']);
+                $this->productRepository->deleteById($childSku);
             } catch (NoSuchEntityException $e) {
                 //product already removed
             }
         }
+
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', false);
     }
