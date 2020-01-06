@@ -8,6 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--
+    NOTICE: navigateToCreatedCMSPage is deprecated.
+            Please use NavigateToCreatedCMSPageActionGroup instead.
+    -->
     <actionGroup name="navigateToCreatedCMSPage">
         <annotations>
             <description>Goes to the Admin CMS Pages page. </description>
@@ -33,6 +37,10 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOfStagingSection"/>
     </actionGroup>
 
+    <!--
+    NOTICE: navigateToCreatedCMSBlockPage is deprecated.
+            Please use NavigateToCreatedCMSBlockPageActionGroup instead.
+    -->
     <actionGroup name="navigateToCreatedCMSBlockPage">
         <annotations>
             <description>Goes to the Admin Blocks page. Clicks on 'Edit' for the provided Block.</description>
@@ -72,6 +80,10 @@
         <see userInput="You deleted the block." stepKey="VerifyBlockIsDeleted"/>
     </actionGroup>
 
+    <!--
+    NOTICE: AddStoreViewToCmsPage is deprecated.
+            Please use AddStoreViewToCmsPageActionGroup instead.
+    -->
     <actionGroup name="AddStoreViewToCmsPage" extends="navigateToCreatedCMSPage">
         <annotations>
             <description>EXTENDS: navigateToCreatedCMSPage. Adds the provided Store View to a Page.</description>
@@ -92,6 +104,10 @@
         <see userInput="You saved the page." stepKey="seeMessage"/>
     </actionGroup>
 
+    <!--
+    NOTICE: saveAndCloseCMSBlockWithSplitButton is deprecated.
+            Please use SaveAndCloseCMSBlockWithSplitButtonActionGroup instead.
+    -->
     <actionGroup name="saveAndCloseCMSBlockWithSplitButton">
         <annotations>
             <description>Clicks on the Save and Close button.</description>
@@ -104,6 +120,10 @@
         <see userInput="You saved the block." stepKey="assertSaveBlockSuccessMessage"/>
     </actionGroup>
 
+    <!--
+    NOTICE: navigateToStorefrontForCreatedPage is deprecated.
+            Please use NavigateToStorefrontForCreatedPageActionGroup instead.
+    -->
     <actionGroup name="navigateToStorefrontForCreatedPage">
         <annotations>
             <description>Goes to the provided Page on the Storefront.</description>
@@ -116,6 +136,10 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 
+    <!--
+    NOTICE: saveCMSBlock is deprecated.
+            Please use saveCMSBlockActionGroup instead.
+    -->
     <actionGroup name="saveCMSBlock">
         <annotations>
             <description>Clicks on the Save button. Validates that the Save message is present and correct. PLEASE NOTE: The message is Hardcoded.</description>
@@ -139,6 +163,10 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
     </actionGroup>
 
+    <!--
+    NOTICE: saveCmsPage is deprecated.
+            Please use SaveCmsPageActionGroup instead.
+    -->
     <actionGroup name="saveCmsPage">
         <annotations>
             <description>Clicks on the Save button. Validates that the Success Message is present.</description>
@@ -152,6 +180,10 @@
         <see userInput="You saved the page." selector="{{CmsPagesPageActionsSection.savePageSuccessMessage}}" stepKey="assertSavePageSuccessMessage"/>
     </actionGroup>
 
+    <!--
+    NOTICE: setLayout is deprecated.
+            Please use SetLayoutActionGroup instead.
+    -->
     <actionGroup name="setLayout">
         <annotations>
             <description>Sets the provided option for 'Layout', under 'Design' on the Page creation/edit page. </description>
