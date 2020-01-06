@@ -11,8 +11,6 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\Generic;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -25,7 +23,7 @@ use Magento\Store\Model\StoreSwitcher\HashGenerator;
 /**
  * Builds correct url to target store (group) and performs redirect.
  */
-class Redirect extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
+class Redirect extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var StoreRepositoryInterface
