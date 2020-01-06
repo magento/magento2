@@ -49,6 +49,9 @@ class ConfigurableViewOnProductPageTest extends TestCase
     /** @var ProductResource */
     private $productResource;
 
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
     /**
      * @inheritdoc
      */
@@ -63,6 +66,7 @@ class ConfigurableViewOnProductPageTest extends TestCase
         $this->block = $this->layout->createBlock(Configurable::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -76,7 +80,7 @@ class ConfigurableViewOnProductPageTest extends TestCase
      */
     public function testOneChildNotVisible(string $sku, array $data, array $expectedData): void
     {
-        $configurableProduct = $this->prepareProductToTest($sku, $data);
+        $configurableProduct = $this->prepareConfigurableProduct($sku, $data);
         $result = $this->renderStockBlock($configurableProduct);
         $this->performAsserts($result, $expectedData);
     }
@@ -142,7 +146,7 @@ class ConfigurableViewOnProductPageTest extends TestCase
         array $data,
         array $expectedData
     ): void {
-        $configurableProduct = $this->prepareProductToTest($sku, $data);
+        $configurableProduct = $this->prepareConfigurableProduct($sku, $data);
         $result = $this->renderStockBlock($configurableProduct);
         $this->performAsserts($result, $expectedData);
     }
@@ -206,34 +210,34 @@ class ConfigurableViewOnProductPageTest extends TestCase
      */
     private function updateProduct(string $sku, array $data): void
     {
-        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $currentStore = $storeManager->getStore();
+        $currentStore = $this->storeManager->getStore();
         try {
-            $storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
+            $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
             $product = $this->productRepository->get($sku);
             $product->addData($data);
             $this->productRepository->save($product);
         } finally {
-            $storeManager->setCurrentStore($currentStore);
+            $this->storeManager->setCurrentStore($currentStore);
         }
     }
 
     /**
      * Check attribute options
      *
-     * @param array $actualAttributeDataData
-     * @param array $actualOptionData
+     * @param array $actualData
      * @param array $expectedData
      * @return void
      */
-    private function assertConfig(array $actualAttributeDataData, array $actualOptionData, array $expectedData): void
+    private function assertConfig(array $actualData, array $expectedData): void
     {
-        $this->assertCount(count($expectedData), $actualOptionData, 'Redundant options were loaded');
+        $this->assertCount(count($expectedData), $actualData['options_data'], 'Redundant options were loaded');
+        $sku = array_column($expectedData, 'product');
+        $idBySkuMapping = $this->productResource->getProductsIdsBySkus($sku);
         foreach ($expectedData as $expectedOption) {
-            $expectedId = $this->productResource->getIdBySku($expectedOption['product']);
-            $itemToCheck = $actualOptionData[$expectedId] ?? null;
+            $expectedId = $idBySkuMapping[$expectedOption['product']];
+            $itemToCheck = $actualData['options_data'][$expectedId] ?? null;
             $this->assertNotNull($itemToCheck);
-            foreach ($actualAttributeDataData['options'] as $actualAttributeDataItem) {
+            foreach ($actualData['attributes']['options'] as $actualAttributeDataItem) {
                 if ($actualAttributeDataItem['id'] === reset($itemToCheck)) {
                     $this->assertEquals($expectedOption['label'], $actualAttributeDataItem['label']);
                 }
@@ -266,7 +270,8 @@ class ConfigurableViewOnProductPageTest extends TestCase
     {
         $this->assertEquals((string)__($expectedData['stock_status']), trim(strip_tags($result)));
         $config = $this->json->unserialize($this->block->getJsonConfig());
-        $this->assertConfig(reset($config['attributes']), $config['index'], $expectedData['options']);
+        $dataToCheck = ['attributes' => reset($config['attributes']), 'options_data' =>  $config['index']];
+        $this->assertConfig($dataToCheck, $expectedData['options']);
     }
 
     /**
@@ -276,11 +281,10 @@ class ConfigurableViewOnProductPageTest extends TestCase
      * @param array $data
      * @return ProductInterface
      */
-    private function prepareProductToTest(string $sku, array $data): ProductInterface
+    private function prepareConfigurableProduct(string $sku, array $data): ProductInterface
     {
         $this->updateProduct($sku, $data);
-        $configurableProduct = $this->productRepository->get('configurable', false, null, true);
 
-        return $configurableProduct;
+        return $this->productRepository->get('configurable', false, null, true);
     }
 }

@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Check is configurable product salable with different conditions
+ *
+ * @magentoAppArea frontend
  */
 class SalableTest extends TestCase
 {

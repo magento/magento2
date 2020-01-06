@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
+ * @magentoAppArea frontend
  * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_out_of_stock_children.php
  */
 class ConfigurableViewOnCategoryPageTest extends TestCase
