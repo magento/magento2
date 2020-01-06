@@ -34,6 +34,8 @@
                 type="Magento\SalesRule\Model\Data\RuleDiscount" />
     <preference for="Magento\SalesRule\Api\Data\DiscountDataInterface"
                 type="Magento\SalesRule\Model\Data\DiscountData" />
+    <preference for="Magento\SalesRule\Model\Spi\RuleQuoteRecollectTotalsInterface"
+                type="\Magento\SalesRule\Model\Rule\RuleQuoteRecollectTotalsOnDemand" />
     <type name="Magento\SalesRule\Helper\Coupon">
         <arguments>
             <argument name="couponParameters" xsi:type="array">
