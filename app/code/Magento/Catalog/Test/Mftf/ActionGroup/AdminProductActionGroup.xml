@@ -251,7 +251,10 @@
         <dontSeeElement selector="{{AdminProductImagesSection.imageFile(image.filename)}}" stepKey="seeImage"/>
     </actionGroup>
 
-    <!--Fill fields for simple product in a category in Admin-->
+    <!--
+    NOTICE: FillAdminSimpleProductForm is deprecated.
+            Please use FillAdminSimpleProductFormActionGroup instead.
+    -->
     <actionGroup name="FillAdminSimpleProductForm">
         <annotations>
             <description>Goes to the Admin Product grid page. Clicks on Add. Fills the provided Product details (Name, SKU, Price, Quantity, Category and URL). Clicks on Save. Validates that the Product details are present and correct.</description>
@@ -383,7 +386,10 @@
         <see selector="{{element}}" userInput="{{expectedText}}" stepKey="assertText"/>
     </actionGroup>
 
-    <!--Related products-->
+    <!--
+    NOTICE: addRelatedProductBySku is deprecated.
+            Please use AddRelatedProductBySkuActionGroup instead.
+    -->
     <actionGroup name="addRelatedProductBySku">
         <annotations>
             <description>Adds the provided Product SKU as a Related Product on the Admin Product creation/edit page.</description>
@@ -643,6 +649,10 @@
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategory"/>
     </actionGroup>
 
+    <!--
+    NOTICE: expandAdminProductSection is deprecated.
+            Please use ExpandAdminProductSectionActionGroup instead.
+    -->
     <actionGroup name="expandAdminProductSection">
         <annotations>
             <description>Expand the provided Section Selector based on the provided dependant Section Selector.</description>
@@ -658,6 +668,10 @@
         <waitForPageLoad time="30" stepKey="waitForSectionToExpand"/>
     </actionGroup>
 
+    <!--
+    NOTICE: navigateToCreatedProductEditPage is deprecated.
+            Please use NavigateToCreatedProductEditPageActionGroup instead.
+    -->
     <actionGroup name="navigateToCreatedProductEditPage">
         <annotations>
             <description>Goes to the Admin Product grid page. Filters the Product grid based on the provided Product details (SKU). Edits the provided Product. Validates that the Product SKU is present and correct.</description>
@@ -685,6 +699,10 @@
         <seeInField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{product.sku}}" stepKey="seeProductSKU"/>
     </actionGroup>
 
+    <!--
+    NOTICE: addUpSellProductBySku is deprecated.
+            Please use AddUpSellProductBySkuActionGroup instead.
+    -->
     <actionGroup name="addUpSellProductBySku" extends="addRelatedProductBySku">
         <annotations>
             <description>EXTENDS: addRelatedProductBySku. Add the provided Product as an Up Sell Product.</description>
