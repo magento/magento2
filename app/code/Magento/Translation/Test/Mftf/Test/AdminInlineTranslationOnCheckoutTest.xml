@@ -56,7 +56,7 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProduct">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -333,7 +333,7 @@
             <argument name="Customer" value="$$createCustomer2$$"/>
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="showCart"/>
@@ -427,7 +427,7 @@
             <argument name="Customer" value="$$createCustomer3$$"/>
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addOneProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addOneProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 

@@ -21,8 +21,6 @@
                 <issueId value="MQE-1576"/>
             </skip>
         </annotations>
-
-
         <before>
             <!--Login As Admin-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -39,17 +37,20 @@
 
 
         <!--Configure Braintree-->
-        <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
+        <actionGroup ref="ConfigureBraintreeActionGroup" stepKey="configureBraintree"/>
 
         <!--Create New Role-->
-        <actionGroup ref="GoToUserRoles" stepKey="GoToUserRoles"/>
+        <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoToUserRoles"/>
         <waitForPageLoad stepKey="waitForAllRoles" time="15"/>
-        <actionGroup ref="AdminCreateNewRole" stepKey="AdminCreateNewRole"/>
+        <actionGroup ref="AdminCreateNewRoleActionGroup" stepKey="AdminCreateNewRole"/>
 
         <!--Create new admin user-->
-        <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
+        <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoToAllUsers"/>
         <waitForPageLoad stepKey="waitForUsers" time="15"/>
-        <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="AdminCreateNewUser">
+            <argument name="role" value="role"/>
+            <argument name="User" value="NewAdmin"/>
+        </actionGroup>
 
         <!--SignOut-->
         <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
@@ -59,23 +60,23 @@
         <waitForPageLoad stepKey="waitForLogin" time="3"/>
 
         <!--Create New Order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrder">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
 
         <!--Add Product to Order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addProduct">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
 
         <!--Fill Order Customer Information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <!--Select Shipping-->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping"/>
         <waitForPageLoad stepKey="waitForShippingToFinish"/>
 
         <!--Pay with Braintree -->
@@ -88,7 +89,7 @@
 
         <after>
             <!-- Disable BrainTree -->
-            <actionGroup ref="DisableBrainTree" stepKey="disableBrainTree"/>
+            <actionGroup ref="DisableBraintreeActionGroup" stepKey="disableBrainTree"/>
 
             <!--SignOut-->
             <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
@@ -101,11 +102,11 @@
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete User -->
-            <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
+            <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoBackToAllUsers"/>
             <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
 
             <!--Delete Role-->
-            <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
+            <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoBackToUserRoles"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
         </after>
     </test>

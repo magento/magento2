@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FilterProductGridBySetNewFromDateActionGroup">
+        <annotations>
+            <description>Filters the Admin Products grid by the New From Data field. PLEASE NOTE: The Start Date is Hardcoded.</description>
+        </annotations>
+
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.newFromDateFilter}}" userInput="05/16/2018" stepKey="fillSetAsNewProductFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+    </actionGroup>
+</actionGroups>

@@ -102,10 +102,10 @@
         <!-- Go to the product page for the first product -->
         <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
         <waitForPageLoad stepKey="waitForProductGridLoad"/>
-        <actionGroup stepKey="searchForSimpleProduct" ref="filterProductGridBySku2">
+        <actionGroup stepKey="searchForSimpleProduct" ref="FilterProductGridBySku2ActionGroup">
             <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
         </actionGroup>
-        <actionGroup stepKey="openProductEditPage" ref="openProducForEditByClickingRowXColumnYInProductGrid"/>
+        <actionGroup stepKey="openProductEditPage" ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup"/>
         <!-- Edit the visibility the first simple product -->
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="Catalog, Search" stepKey="selectVisibilityCatalogSearch"/>
         <!--Add to category-->

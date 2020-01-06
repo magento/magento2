@@ -10,7 +10,7 @@
     <system>
         <section id="catalog">
             <group id="search">
-                <!-- Elasticsearch 6.0+ -->
+                <!-- Elasticsearch 6.x -->
                 <field id="elasticsearch6_server_hostname" translate="label" type="text" sortOrder="71"
                        showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Elasticsearch Server Hostname</label>
@@ -78,6 +78,15 @@
                     <depends>
                         <field id="engine">elasticsearch6</field>
                     </depends>
+                </field>
+                <field id="elasticsearch6_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Minimum Terms to Match</label>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                    </depends>
+                    <comment><![CDATA[<a href="https://docs.magento.com/m2/ce/user_guide/catalog/search-elasticsearch.html">Learn more</a> about valid syntax.]]></comment>
+                    <backend_model>Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch</backend_model>
                 </field>
             </group>
         </section>

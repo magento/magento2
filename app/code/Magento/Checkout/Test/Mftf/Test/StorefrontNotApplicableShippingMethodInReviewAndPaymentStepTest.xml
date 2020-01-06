@@ -17,6 +17,9 @@
             <testCaseId value="MC-22625"/>
             <useCaseId value="MC-21926"/>
             <group value="Checkout"/>
+            <skip>
+                <issueId value="MC-29597"/>
+            </skip>
         </annotations>
 
         <before>
@@ -112,7 +115,7 @@
         </actionGroup>
 
         <!-- Go to Order review -->
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToCheckoutReview"/>
 
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
@@ -142,7 +145,7 @@
         </actionGroup>
 
         <!-- Go to Order review -->
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview2"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToCheckoutReview2"/>
 
         <!-- Place order assert succeed -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
@@ -167,7 +170,7 @@
         </actionGroup>
 
         <!-- Go to Order review -->
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview3"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToCheckoutReview3"/>
 
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
@@ -198,7 +201,7 @@
         </actionGroup>
 
         <!-- Go to Order review -->
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview4"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToCheckoutReview4"/>
 
         <!-- Place order assert succeed -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder2"/>
