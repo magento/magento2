@@ -38,7 +38,7 @@
             <argument name="path" value="/"/>
         </actionGroup>
         <!-- Assert Success Message -->
-        <actionGroup ref="AssertAdminSitemapMessageActionGroup" stepKey="seeSuccessMessage">
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
             <argument name="message" value="You saved the sitemap."/>
             <argument name="messageType" value="success"/>
         </actionGroup>

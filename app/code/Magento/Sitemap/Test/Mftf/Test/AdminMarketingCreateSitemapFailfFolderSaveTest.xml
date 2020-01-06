@@ -38,7 +38,7 @@
             <argument name="path" value="%isolation%"/>
         </actionGroup>
         <!-- See Error Message-->
-        <actionGroup ref="AssertAdminSitemapMessageActionGroup" stepKey="seeErrorMessage">
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
             <argument name="message" value="Please create the specified folder &quot;%isolation%&quot; before saving the sitemap."/>
             <argument value="error" name="messageType"/>
         </actionGroup>

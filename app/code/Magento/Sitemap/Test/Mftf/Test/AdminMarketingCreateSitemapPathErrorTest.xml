@@ -39,7 +39,7 @@
             <argument name="path" value="/"/>
         </actionGroup>
         <!-- See Error Message-->
-        <actionGroup ref="AssertAdminSitemapMessageActionGroup" stepKey="seeErrorMessage">
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
             <argument name="message" value="Path &quot;/%isolation%&quot; is not available and cannot be used."/>
             <argument value="error" name="messageType"/>
         </actionGroup>
