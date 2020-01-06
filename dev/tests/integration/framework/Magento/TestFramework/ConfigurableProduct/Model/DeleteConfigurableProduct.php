@@ -29,6 +29,7 @@ class DeleteConfigurableProduct
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param ProductResource $productResource
+     * @param Registry $registry
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
