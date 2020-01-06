@@ -225,7 +225,7 @@ class Bootstrap
      *
      * @param string $type
      * @param array $arguments
-     * @return \Magento\Framework\AppInterface
+     * @return \Magento\Framework\AppInterface | void
      * @throws \InvalidArgumentException
      */
     public function createApplication($type, $arguments = [])
