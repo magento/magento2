@@ -115,7 +115,7 @@
         <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <selectOption selector="{{AdminProductGridFilterSection.productPerPage}}" userInput="30" stepKey="selectPagePerView"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1" time="30"/>
+        <waitForPageLoad stepKey="waitForPageToLoadProductPerPage" time="30"/>
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="pagi"  stepKey="selectProduct1"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitFroPageToLoad2"/>
