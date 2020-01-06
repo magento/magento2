@@ -129,7 +129,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'BHD', /*Bahraini Dinar*/
         'BDT', /*Bangladesh Taka*/
         'BBD', /*Barbados Dollar*/
-        'BYR', /*Belarussian Ruble*/
+        'BYN', /*Belarussian Ruble*/
         'BZD', /*Belize Dollar*/
         'BMD', /*Bermudan Dollar*/
         'BTN', /*Bhutan Ngultrum*/

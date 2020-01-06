@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Go to storefront category product page by given parameters -->
+    <actionGroup name="GoToStorefrontCategoryPageByParametersActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Category page using URI Search Parameters.</description>
+        </annotations>
+        <arguments>
+            <argument name="category" type="string"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+            <argument name="sort" type="string" defaultValue="asc"/>
+        </arguments>
+
+        <!-- Go to storefront category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_limit={{numOfProductsPerPage}}&amp;product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>
