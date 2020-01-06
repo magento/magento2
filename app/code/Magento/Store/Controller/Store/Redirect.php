@@ -64,8 +64,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     }
 
     /**
-     * Performs store redirect
-     *
      * @inheritDoc
      *
      * @throws NoSuchEntityException
