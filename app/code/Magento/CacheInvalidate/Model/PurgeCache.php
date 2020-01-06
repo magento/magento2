@@ -9,6 +9,7 @@ use Magento\Framework\Cache\InvalidateLogger;
 
 /**
  * Class PurgeCache
+ * @package Magento\CacheInvalidate\Model
  */
 class PurgeCache
 {

@@ -7,6 +7,10 @@ namespace Magento\CacheInvalidate\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class InvalidateVarnishObserver
+ * @package Magento\CacheInvalidate\Observer
+ */
 class InvalidateVarnishObserver implements ObserverInterface
 {
     /**
@@ -41,8 +45,7 @@ class InvalidateVarnishObserver implements ObserverInterface
     }
 
     /**
-     * If Varnish caching is enabled it collects array of tags
-     * of incoming object and asks to clean cache.
+     * If Varnish caching is enabled, it collects array of tags of incoming object and asks to clean cache.
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
@@ -68,6 +71,8 @@ class InvalidateVarnishObserver implements ObserverInterface
     }
 
     /**
+     * Resolve tags for the provided model instance being purged.
+     *
      * @deprecated 100.1.2
      * @return \Magento\Framework\App\Cache\Tag\Resolver
      */

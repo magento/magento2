@@ -7,6 +7,10 @@ namespace Magento\CacheInvalidate\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class FlushAllCacheObserver
+ * @package Magento\CacheInvalidate\Observer
+ */
 class FlushAllCacheObserver implements ObserverInterface
 {
     /**
