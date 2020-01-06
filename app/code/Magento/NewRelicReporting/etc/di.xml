@@ -41,6 +41,16 @@
         </arguments>
     </type>
     <type name="Symfony\Component\Console\Command\Command">
-        <plugin name="newrelic-describe-commands"  type="Magento\NewRelicReporting\Plugin\CommandPlugin"/>
+        <plugin name="newrelic-describe-commands" type="Magento\NewRelicReporting\Plugin\CommandPlugin"/>
+    </type>
+    <type name="Magento\Framework\Profiler\Driver\Standard\Stat">
+        <plugin name="newrelic-describe-cronjobs" type="Magento\NewRelicReporting\Plugin\StatPlugin"/>
+    </type>
+    <type name="Magento\NewRelicReporting\Plugin\CommandPlugin">
+        <arguments>
+            <argument name="skipCommands" xsi:type="array">
+                <item xsi:type="boolean" name="cron:run">true</item>
+            </argument>
+        </arguments>
     </type>
 </config>

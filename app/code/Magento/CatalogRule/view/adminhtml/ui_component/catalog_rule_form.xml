@@ -208,6 +208,9 @@
                 </item>
             </argument>
             <settings>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
                 <dataType>text</dataType>
                 <label translate="true">Priority</label>
                 <dataScope>sort_order</dataScope>

@@ -37,7 +37,7 @@
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
 
         <!--Add Product to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -54,7 +54,7 @@
         <openNewTab stepKey="openNewTab"/>
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
         <fillField userInput="120" selector="{{AdminProductFormSection.productPrice}}"  stepKey="setNewPrice"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <closeTab stepKey="closeTab"/>
 
         <!--Check price-->

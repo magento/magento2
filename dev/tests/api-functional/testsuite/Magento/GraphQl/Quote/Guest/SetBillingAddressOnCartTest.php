@@ -300,58 +300,6 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     *
-     * @dataProvider dataProviderSetWithoutRequiredParameters
-     * @param string $input
-     * @param string $message
-     * @throws \Exception
-     */
-    public function testSetBillingAddressWithoutRequiredParameters(string $input, string $message)
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
-
-        $query = <<<QUERY
-mutation {
-  setBillingAddressOnCart(
-    input: {
-      {$input}
-    }
-  ) {
-    cart {
-        billing_address {
-            city
-          }
-    }
-  }
-}
-QUERY;
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderSetWithoutRequiredParameters(): array
-    {
-        return [
-            'missed_billing_address' => [
-                'cart_id: "cart_id_value"',
-                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
-                . ' was not provided.',
-            ],
-            'missed_cart_id' => [
-                'billing_address: {}',
-                'Field SetBillingAddressOnCartInput.cart_id of required type String! was not provided.'
-            ]
-        ];
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testSetNewBillingAddressWithoutCustomerAddressIdAndAddress()
     {
