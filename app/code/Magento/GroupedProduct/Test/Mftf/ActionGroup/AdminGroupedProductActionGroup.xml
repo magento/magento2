@@ -22,7 +22,10 @@
         <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
     </actionGroup>
 
-    <!--Fill main fields in grouped product form-->
+    <!--
+    NOTICE: fillGroupedProductForm is deprecated.
+            Please use FillGroupedProductFormActionGroup instead.
+    -->
     <actionGroup name="fillGroupedProductForm">
         <annotations>
             <description>Fills in the provided Product Name and SKU on the Grouped Product creation/edit page.</description>
@@ -69,8 +72,10 @@
         <fillField selector="{{AdminAddedProductsToGroupGrid.inputByProductName(productName)}}" userInput="{{qty}}" stepKey="fillDefaultQtyForLinkedProduct"/>
     </actionGroup>
 
-    <!-- Assign Specified Product To Grouped Product -->
-    <!-- Assumes web client is on grouped product edit page -->
+    <!--
+    NOTICE: AdminAssignProductToGroup is deprecated.
+            Please use AdminAssignProductToGroupActionGroup instead.
+    -->
     <actionGroup name="AdminAssignProductToGroup">
         <annotations>
             <description>Adds the provided Product to a Grouped Product on an Admin Grouped Product creation/edit page.</description>

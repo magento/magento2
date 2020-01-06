@@ -169,27 +169,9 @@ QUERY;
     public function dataProviderSetShippingMethodWithWrongParameters(): array
     {
         return [
-            'missed_cart_id' => [
-                'shipping_methods: [{
-                    carrier_code: "flatrate"
-                    method_code: "flatrate"
-                }]',
-                'Field SetShippingMethodsOnCartInput.cart_id of required type String! was not provided.'
-            ],
-            'missed_shipping_methods' => [
-                'cart_id: "cart_id_value"',
-                'Field SetShippingMethodsOnCartInput.shipping_methods of required type [ShippingMethodInput]!'
-                . ' was not provided.'
-            ],
             'shipping_methods_are_empty' => [
                 'cart_id: "cart_id_value" shipping_methods: []',
                 'Required parameter "shipping_methods" is missing'
-            ],
-            'missed_carrier_code' => [
-                'cart_id: "cart_id_value", shipping_methods: [{
-                    method_code: "flatrate"
-                }]',
-                'Field ShippingMethodInput.carrier_code of required type String! was not provided.'
             ],
             'empty_carrier_code' => [
                 'cart_id: "cart_id_value", shipping_methods: [{
@@ -204,12 +186,6 @@ QUERY;
                     method_code: "flatrate"
                 }]',
                 'Carrier with such method not found: wrong-carrier-code, flatrate'
-            ],
-            'missed_method_code' => [
-                'cart_id: "cart_id_value", shipping_methods: [{
-                    carrier_code: "flatrate"
-                }]',
-                'Field ShippingMethodInput.method_code of required type String! was not provided.'
             ],
             'empty_method_code' => [
                 'cart_id: "cart_id_value", shipping_methods: [{
