@@ -14,6 +14,8 @@ use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
  * Remove SID, from_store, store from target url.
+ *
+ * Used in store-switching process in HTML frontend.
  */
 class CleanTargetUrl implements StoreSwitcherInterface
 {
@@ -23,19 +25,10 @@ class CleanTargetUrl implements StoreSwitcherInterface
     private $urlHelper;
 
     /**
-     * @var \Magento\Framework\Session\Generic
-     */
-    private $session;
-
-    /**
-     * @var \Magento\Framework\Session\SidResolverInterface
-     */
-    private $sidResolver;
-
-    /**
      * @param UrlHelper $urlHelper
      * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         UrlHelper $urlHelper,
@@ -43,8 +36,6 @@ class CleanTargetUrl implements StoreSwitcherInterface
         \Magento\Framework\Session\SidResolverInterface $sidResolver
     ) {
         $this->urlHelper = $urlHelper;
-        $this->session = $session;
-        $this->sidResolver = $sidResolver;
     }
 
     /**
@@ -54,6 +45,7 @@ class CleanTargetUrl implements StoreSwitcherInterface
      * @param StoreInterface $targetStore store where to go to
      * @param string $redirectUrl original url requested for redirect after switching
      * @return string redirect url
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
     {

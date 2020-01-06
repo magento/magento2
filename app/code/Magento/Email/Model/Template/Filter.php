@@ -264,6 +264,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param bool $flag
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated SID query parameter is not used in URLs anymore.
      */
     public function setUseSessionInUrl($flag)
