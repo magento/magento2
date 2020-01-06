@@ -69,7 +69,7 @@ class PurgeCache
      */
     public function sendPurgeRequest($tags)
     {
-        if (!is_string($tags)) {
+        if (is_string($tags)) {
             $tags = [$tags];
         }
 
