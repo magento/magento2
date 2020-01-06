@@ -178,7 +178,13 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testApplyCustomLayoutUpdate()
+    /**
+     * Apply custom layout update is correct
+     *
+     * @dataProvider getInvokationData
+     * @return void
+     */
+    public function testApplyCustomLayoutUpdate(array $expectedData): void
     {
         $categoryId = 123;
         $pageLayout = 'page_layout';
@@ -199,11 +205,45 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\DataObject::class,
             ['getPageLayout', 'getLayoutUpdates']
         );
+        $this->expectationForPageLayoutHandles($expectedData);
         $settings->expects($this->atLeastOnce())->method('getPageLayout')->will($this->returnValue($pageLayout));
         $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
-
         $this->catalogDesign->expects($this->any())->method('getDesignSettings')->will($this->returnValue($settings));
 
         $this->action->execute();
+    }
+
+    /**
+     * Expected invocation for Layout Handles
+     *
+     * @param array $data
+     * @return void
+     */
+    private function expectationForPageLayoutHandles($data): void
+    {
+        $index = 2;
+        foreach ($data as $expectedData) {
+            $this->page->expects($this->at($index))
+            ->method('addPageLayoutHandles')
+            ->with($expectedData[0], $expectedData[1], $expectedData[2]);
+            $index++;
+        }
+    }
+
+    /**
+     * Data provider for execute method.
+     *
+     * @return array
+     */
+    public function getInvokationData(): array
+    {
+        return [
+            [
+                'layoutHandles' => [
+                    [['type' => 'default_without_children'], null, false],
+                    [['displaymode' => ''], null, false]
+                ]
+            ]
+        ];
     }
 }
