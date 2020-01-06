@@ -14,18 +14,18 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Session\Generic as Session;
-use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\Session\Generic;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreResolver;
+use Magento\Framework\Session\SidResolverInterface;
 use Magento\Store\Model\StoreSwitcher\HashGenerator;
 
 /**
- * Builds correct url to target store and performs redirect.
+ * Builds correct url to target store (group) and performs redirect.
  */
-class Redirect extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class Redirect extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var StoreRepositoryInterface
@@ -38,16 +38,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     private $storeResolver;
 
     /**
-     * @var SidResolverInterface
-     */
-    private $sidResolver;
-
-    /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @var HashGenerator
      */
     private $hashGenerator;
@@ -56,30 +46,30 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
      * @param Context $context
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreResolverInterface $storeResolver
-     * @param Session $session
+     * @param Generic $session
      * @param SidResolverInterface $sidResolver
      * @param HashGenerator $hashGenerator
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
         StoreRepositoryInterface $storeRepository,
         StoreResolverInterface $storeResolver,
-        Session $session,
+        Generic $session,
         SidResolverInterface $sidResolver,
         HashGenerator $hashGenerator
     ) {
         parent::__construct($context);
         $this->storeRepository = $storeRepository;
         $this->storeResolver = $storeResolver;
-        $this->session = $session;
-        $this->sidResolver = $sidResolver;
         $this->hashGenerator = $hashGenerator;
     }
 
     /**
      * Performs store redirect
      *
-     * @return ResponseInterface|ResultInterface|void
+     * @inheritDoc
+     *
      * @throws NoSuchEntityException
      */
     public function execute()
@@ -113,12 +103,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
                 \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
             ];
 
-            if ($this->sidResolver->getUseSessionInUrl()) {
-                // allow customers to stay logged in during store switching
-                $sidName = $this->sidResolver->getSessionIdQueryParam($this->session);
-                $query[$sidName] = $this->session->getSessionId();
-            }
-
             $customerHash = $this->hashGenerator->generateHash($fromStore);
             $query = array_merge($query, $customerHash);
 
@@ -128,5 +112,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             ];
             $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
         }
+        // phpstan:ignore "Method Magento\Store\Controller\Store\Redirect::execute() should return *"
     }
 }
