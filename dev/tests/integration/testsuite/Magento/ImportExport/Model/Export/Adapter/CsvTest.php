@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace Magento\ImportExport\Model\Export\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -54,22 +55,12 @@ class CsvTest extends TestCase
         $this->csv->destruct();
 
         /** Assert that the destination file was removed after destruct */
-        $destinationPath = $this->getAbsoluteFilePath(DirectoryList::VAR_DIR, $this->destination);
-        $this->assertFileNotExists($destinationPath, 'The destination file was\'t removed after destruct');
-    }
-
-    /**
-     * Get absolute file path
-     *
-     * @param string $path
-     * @param string $fileName
-     * @return string
-     */
-    private function getAbsoluteFilePath(string $path, string $fileName): string
-    {
-        /** @var DirectoryList $directoryList */
-        $directoryList = $this->objectManager->get(DirectoryList::class);
-
-        return $directoryList->getPath($path) . '/' . $fileName;
+        /** @var Filesystem $fileSystem */
+        $fileSystem = $this->objectManager->get(Filesystem::class);
+        $directoryHandle = $fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $this->assertFileNotExists(
+            $directoryHandle->getAbsolutePath($this->destination),
+            'The destination file was\'t removed after destruct'
+        );
     }
 }
