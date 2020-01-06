@@ -6,6 +6,7 @@
 
 namespace Magento\Indexer\Setup;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Indexer\StateInterface;
@@ -13,6 +14,7 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Indexer\StateFactory;
@@ -52,6 +54,11 @@ class Recurring implements InstallSchemaInterface
     private $stateFactory;
 
     /**
+     * @var IndexerInterfaceFactory
+     */
+    private $indexerFactory;
+
+    /**
      * Init
      *
      * @param CollectionFactory $statesFactory
@@ -59,19 +66,22 @@ class Recurring implements InstallSchemaInterface
      * @param ConfigInterface $config
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
+     * @param IndexerInterfaceFactory|null $indexerFactory
      */
     public function __construct(
         CollectionFactory $statesFactory,
         StateFactory $stateFactory,
         ConfigInterface $config,
         EncryptorInterface $encryptor,
-        EncoderInterface $encoder
+        EncoderInterface $encoder,
+        IndexerInterfaceFactory $indexerFactory = null
     ) {
         $this->statesFactory = $statesFactory;
         $this->stateFactory = $stateFactory;
         $this->config = $config;
         $this->encryptor = $encryptor;
         $this->encoder = $encoder;
+        $this->indexerFactory = $indexerFactory ?: ObjectManager::getInstance()->get(IndexerInterfaceFactory::class);
     }
 
     /**
@@ -106,6 +116,11 @@ class Recurring implements InstallSchemaInterface
                 $state->setHashConfig($expectedHashConfig);
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
+            }
+
+            $indexer = $this->indexerFactory->create()->load($indexerId);
+            if ($indexer->isScheduled()) {
+                $indexer->getView()->unsubscribe()->subscribe();
             }
         }
     }
