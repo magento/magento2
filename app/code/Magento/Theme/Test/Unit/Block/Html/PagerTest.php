@@ -35,11 +35,6 @@ class PagerTest extends TestCase
     private $scopeConfig;
 
     /**
-     * @var ObjectManager $objectManager
-     */
-    private $objectManager;
-
-    /**
      * @var UrlInterface $urlBuilderMock
      */
     private $urlBuilderMock;
