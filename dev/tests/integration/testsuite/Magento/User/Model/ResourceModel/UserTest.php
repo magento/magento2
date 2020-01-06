@@ -5,9 +5,11 @@
  */
 namespace Magento\User\Model\ResourceModel;
 
+use Magento\Authorization\Model\ResourceModel\Role\Collection as UserRoleCollection;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\User\Model\User;
 use Magento\User\Model\ResourceModel\User as UserResourceModel;
+use Magento\User\Model\User;
 
 /**
  * @magentoAppArea adminhtml
@@ -44,6 +46,33 @@ class UserTest extends \PHPUnit\Framework\TestCase
             $latestPassword,
             'Latest password should be stored even if password lifetime config value is 0'
         );
+    }
+
+    /**
+     * Test that user role is not deleted after deleting empty user
+     */
+    public function testDelete()
+    {
+        $this->checkRoleCollectionSize();
+        /** @var User $user */
+        $user = Bootstrap::getObjectManager()->create(
+            User::class
+        );
+        $this->model->delete($user);
+        $this->checkRoleCollectionSize();
+    }
+
+    /**
+     * Ensure that role collection size is correct
+     */
+    private function checkRoleCollectionSize()
+    {
+        /** @var UserRoleCollection $roleCollection */
+        $roleCollection = Bootstrap::getObjectManager()->create(
+            UserRoleCollection::class
+        );
+        $roleCollection->setUserFilter(0, UserContextInterface::USER_TYPE_ADMIN);
+        $this->assertEquals(1, $roleCollection->getSize());
     }
 
     public function testCountAll()

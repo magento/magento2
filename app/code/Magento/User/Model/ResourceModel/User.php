@@ -258,15 +258,17 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $uid = $user->getId();
         $connection->beginTransaction();
-        try {
-            $connection->delete($this->getMainTable(), ['user_id = ?' => $uid]);
-            $connection->delete(
-                $this->getTable('authorization_role'),
-                ['user_id = ?' => $uid, 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN]
-            );
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $connection->rollBack();
-            return false;
+        if ($uid) {
+            try {
+                $connection->delete($this->getMainTable(), ['user_id = ?' => $uid]);
+                $connection->delete(
+                    $this->getTable('authorization_role'),
+                    ['user_id = ?' => $uid, 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN]
+                );
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $connection->rollBack();
+                return false;
+            }
         }
         $connection->commit();
         $this->_afterDelete($user);
