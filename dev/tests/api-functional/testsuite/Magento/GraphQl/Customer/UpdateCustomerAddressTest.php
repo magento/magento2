@@ -40,7 +40,7 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
      */
     private $lockCustomer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -174,6 +174,49 @@ mutation {
 }
 MUTATION;
         $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * Test custom attributes of the customer's address
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_address_custom_attribute.php
+     */
+    public function testUpdateCustomerAddressHasCustomAttributes()
+    {
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $addressId = 1;
+        $attributes = [
+            [
+                'attribute_code' => 'custom_attribute1',
+                'value'=> '[new-value1,new-value2]'
+            ],
+            [
+                'attribute_code' => 'custom_attribute2',
+                'value'=> '"new-value3"'
+            ]
+        ];
+        $attributesFragment = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($attributes));
+        $mutation
+            = <<<MUTATION
+mutation {
+  updateCustomerAddress(
+    id: {$addressId}
+    input: {
+      custom_attributes: {$attributesFragment}
+    }
+  ) {
+    custom_attributes {
+      attribute_code
+      value
+    }
+  }
+}
+MUTATION;
+
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->assertEquals($attributes, $response['updateCustomerAddress']['custom_attributes']);
     }
 
     /**

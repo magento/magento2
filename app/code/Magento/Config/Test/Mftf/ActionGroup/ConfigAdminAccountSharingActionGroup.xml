@@ -22,20 +22,4 @@
         <click selector="{{AdminSection.SecurityTab}}" stepKey="clollapseSecurityTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
     </actionGroup>
-
-    <actionGroup name="EnableAdminAccountSharingActionGroup">
-        <annotations>
-            <description>Enabled 'Admin Account Sharing' via the API.</description>
-        </annotations>
-
-        <createData stepKey="setConfig" entity="EnableAdminAccountSharing"/>
-    </actionGroup>
-
-    <actionGroup name="DisableAdminAccountSharingActionGroup">
-        <annotations>
-            <description>Disables 'Admin Account Sharing' via the API.</description>
-        </annotations>
-
-        <createData stepKey="setConfig" entity="DisableAdminAccountSharing"/>
-    </actionGroup>
 </actionGroups>
