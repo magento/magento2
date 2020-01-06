@@ -2838,6 +2838,113 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that configurable product images are imported correctly.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
+     */
+    public function testImportConfigurableProductImages()
+    {
+        $this->importDataForMediaTest('import_configurable_product_multistore.csv');
+        $expected = [
+            'import-configurable-option-1' => [
+                [
+                    'file' => '/m/a/magento_image.jpg',
+                    'label' => 'Base Image Label - Option 1',
+                ],
+                [
+                    'file' => '/m/a/magento_small_image.jpg',
+                    'label' => 'Small Image Label - Option 1',
+                ],
+                [
+                    'file' => '/m/a/magento_thumbnail.jpg',
+                    'label' => 'Thumbnail Image Label - Option 1',
+                ],
+                [
+                    'file' => '/m/a/magento_additional_image_one.jpg',
+                    'label' => '',
+                ],
+            ],
+            'import-configurable-option-2' => [
+                [
+                    'file' => '/m/a/magento_image.jpg',
+                    'label' => 'Base Image Label - Option 2',
+                ],
+                [
+                    'file' => '/m/a/magento_small_image.jpg',
+                    'label' => 'Small Image Label - Option 2',
+                ],
+                [
+                    'file' => '/m/a/magento_thumbnail.jpg',
+                    'label' => 'Thumbnail Image Label - Option 2',
+                ],
+                [
+                    'file' => '/m/a/magento_additional_image_two.jpg',
+                    'label' => '',
+                ],
+            ],
+            'import-configurable' => [
+                [
+                    'file' => '/m/a/magento_image.jpg',
+                    'label' => 'Base Image Label - Configurable',
+                ],
+                [
+                    'file' => '/m/a/magento_small_image.jpg',
+                    'label' => 'Small Image Label - Configurable',
+                ],
+                [
+                    'file' => '/m/a/magento_thumbnail.jpg',
+                    'label' => 'Thumbnail Image Label - Configurable',
+                ],
+                [
+                    'file' => '/m/a/magento_additional_image_three.jpg',
+                    'label' => '',
+                ],
+            ]
+        ];
+        $actual = [];
+        $products = ['import-configurable-option-1', 'import-configurable-option-2', 'import-configurable'];
+        foreach ($products as $sku) {
+            $product = $this->getProductBySku($sku);
+            $gallery = $product->getMediaGalleryImages();
+            foreach ($gallery->getItems() as $item) {
+                $actual[$sku][] = $item->toArray(['file', 'label']);
+            }
+        }
+        $this->assertEquals($expected, $actual);
+
+        $expected['import-configurable'] = [
+            [
+                'file' => '/m/a/magento_image.jpg',
+                'label' => 'Base Image Label - Configurable (fixturestore)',
+            ],
+            [
+                'file' => '/m/a/magento_small_image.jpg',
+                'label' => 'Small Image Label - Configurable (fixturestore)',
+            ],
+            [
+                'file' => '/m/a/magento_thumbnail.jpg',
+                'label' => 'Thumbnail Image Label - Configurable (fixturestore)',
+            ],
+            [
+                'file' => '/m/a/magento_additional_image_three.jpg',
+                'label' => '',
+            ],
+        ];
+
+        $actual = [];
+        foreach ($products as $sku) {
+            $product = $this->getProductBySku($sku, 'fixturestore');
+            $gallery = $product->getMediaGalleryImages();
+            foreach ($gallery->getItems() as $item) {
+                $actual[$sku][] = $item->toArray(['file', 'label']);
+            }
+        }
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
      * Test that product stock status is updated after import
      *
      * @magentoDataFixture mediaImportImageFixture
