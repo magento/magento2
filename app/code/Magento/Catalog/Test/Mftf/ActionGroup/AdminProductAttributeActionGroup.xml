@@ -8,6 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--
+    NOTICE: navigateToCreatedProductAttribute is deprecated.
+            Please use NavigateToCreatedProductAttributeActionGroup instead.
+    -->
     <actionGroup name="navigateToCreatedProductAttribute">
         <annotations>
             <description>Goes to the Product Attributes grid page. Filters the grid based on the provided Product Attribute. Clicks on the 1st row.</description>
@@ -184,6 +188,11 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
 
+    <!--
+    NOTICE: deleteProductAttributeByLabel is deprecated.
+            Please use deleteProductAttributeByLabelActionGroup instead.
+    -->
+
     <actionGroup name="deleteProductAttributeByLabel">
         <annotations>
             <description>Goes to the Admin Product Attributes grid page. Filters the grid for the provided Product Attribute (Label). Deletes the Product Attribute from the grid. Validates that the Success Message is present.</description>
@@ -254,6 +263,10 @@
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
     </actionGroup>
 
+    <!--
+    NOTICE: saveProductAttribute is deprecated.
+            Please use SaveProductAttributeActionGroup instead.
+    -->
     <actionGroup name="saveProductAttribute">
         <annotations>
             <description>Clicks on Save. Validates that the Success Message is present.</description>
@@ -265,6 +278,10 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
 
+    <!--
+    NOTICE: confirmChangeInputTypeModal is deprecated.
+            Please use ConfirmChangeInputTypeModalActionGroup instead.
+    -->
     <actionGroup name="confirmChangeInputTypeModal">
         <annotations>
             <description>Clicks on the Confirm button for the 'Product Data My Be Lost' modal.</description>
