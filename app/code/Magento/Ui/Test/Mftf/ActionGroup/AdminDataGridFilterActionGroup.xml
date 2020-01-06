@@ -36,7 +36,10 @@
         <see selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
     </actionGroup>
 
-    <!--Clear all filters in grid-->
+    <!--
+    NOTICE: clearFiltersAdminDataGrid is deprecated.
+            Please use ClearFiltersAdminDataGridActionGroup instead.
+    -->
     <actionGroup name="clearFiltersAdminDataGrid">
         <annotations>
             <description>Clicks on 'Clear Filters' on an Admin Grid page.</description>
