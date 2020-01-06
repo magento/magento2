@@ -181,7 +181,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     /**
      * Apply custom layout update is correct
      *
-     * @dataProvider getInvokationData
+     * @dataProvider getInvocationData
      * @return void
      */
     public function testApplyCustomLayoutUpdate(array $expectedData): void
@@ -235,7 +235,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getInvokationData(): array
+    public function getInvocationData(): array
     {
         return [
             [
