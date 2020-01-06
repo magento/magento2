@@ -15,7 +15,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Bundle product view test
+ * Test querying Bundle products
  */
 class BundleProductViewTest extends GraphQlAbstract
 {
