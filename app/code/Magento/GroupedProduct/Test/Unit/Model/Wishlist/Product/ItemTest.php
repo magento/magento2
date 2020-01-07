@@ -61,6 +61,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeRepresentProduct()
     {
+        $testSimpleProdId = 34;
+        $prodInitQty = 2;
+        $prodQtyInWishlist = 3;
+        $resWishlistQty = $prodInitQty + $prodQtyInWishlist;
         $superGroup = [
             'super_group' => [
                 33 => "0",
@@ -71,12 +75,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $superGroupObj = new \Magento\Framework\DataObject($superGroup);
 
-        $this->productMock->expects($this->once())->method('getId')->willReturn(34);
+        $this->productMock->expects($this->once())->method('getId')->willReturn($testSimpleProdId);
         $this->productMock->expects($this->once())->method('getTypeId')
             ->willReturn(TypeGrouped::TYPE_CODE);
         $this->productMock->expects($this->once())->method('getCustomOptions')
             ->willReturn(
-                $this->getProductAssocOption(2, 34)
+                $this->getProductAssocOption($prodInitQty, $testSimpleProdId)
             );
 
         $wishlistItemProductMock = $this->createPartialMock(
@@ -85,13 +89,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 'getId',
             ]
         );
-        $wishlistItemProductMock->expects($this->once())->method('getId')->willReturn(34);
+        $wishlistItemProductMock->expects($this->once())->method('getId')->willReturn($testSimpleProdId);
 
         $this->subjectMock->expects($this->once())->method('getProduct')
             ->willReturn($wishlistItemProductMock);
         $this->subjectMock->expects($this->once())->method('getOptionsByCode')
             ->willReturn(
-                $this->getWishlistAssocOption(3, 5, 34)
+                $this->getWishlistAssocOption($prodQtyInWishlist, $resWishlistQty, $testSimpleProdId)
             );
         $this->subjectMock->expects($this->once())->method('getBuyRequest')->willReturn($superGroupObj);
 

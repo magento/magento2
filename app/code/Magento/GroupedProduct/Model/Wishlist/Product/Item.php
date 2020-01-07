@@ -68,6 +68,7 @@ class Item
      * @param array $options1
      * @param array $options2
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeCompareOptions(
         WishlistItem $subject,
@@ -77,7 +78,7 @@ class Item
         $diff = array_diff_key($options1, $options2);
 
         if (!$diff) {
-            foreach ($options1 as $key => $val) {
+            foreach (array_keys($options1) as $key) {
                 if (preg_match('/associated_product_\d+/', $key)) {
                     unset($options1[$key]);
                     unset($options2[$key]);
