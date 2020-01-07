@@ -39,7 +39,7 @@
         <!-- Add downloadable product to the cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToDownloadableProductPage"/>
         <waitForPageLoad stepKey="waitForDownloadableProductPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartDownloadableProductFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartDownloadableProductFromStorefrontProductPage">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
         </actionGroup>
 
