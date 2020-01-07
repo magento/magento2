@@ -677,13 +677,11 @@ class Adapter implements MethodInterface, SaleOperationInterface
     /**
      * @inheritdoc
      */
-    public function sale(InfoInterface $payment, $amount)
+    public function sale(InfoInterface $payment, float $amount)
     {
         $this->executeCommand(
             'sale',
             ['payment' => $payment, 'amount' => $amount]
         );
-
-        return $this;
     }
 }

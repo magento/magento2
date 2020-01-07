@@ -61,8 +61,6 @@ class SaleOperationTest extends \PHPUnit\Framework\TestCase
 
         /** @var MethodInterface|\PHPUnit_Framework_MockObject_MockObject $paymentMethod */
         $paymentMethod = $this->getMockForAbstractClass(MethodInterface::class);
-        $paymentMethod->method('canCapture')
-            ->willReturn(true);
 
         /** @var Payment|\PHPUnit_Framework_MockObject_MockObject  $orderPayment| */
         $orderPayment = $this->getMockBuilder(Payment::class)

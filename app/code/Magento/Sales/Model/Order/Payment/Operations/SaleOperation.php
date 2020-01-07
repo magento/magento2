@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Payment\Operations;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -36,19 +38,15 @@ class SaleOperation
      * @return OrderPaymentInterface
      * @throws LocalizedException
      */
-    public function execute(OrderPaymentInterface $payment)
+    public function execute(OrderPaymentInterface $payment): OrderPaymentInterface
     {
         /** @var $payment Payment */
         $invoice = $payment->getOrder()->prepareInvoice();
         $invoice->register();
-
-        if ($payment->getMethodInstance()->canCapture()) {
-            $this->processInvoiceOperation->execute($payment, $invoice, 'sale');
-            if ($invoice->getIsPaid()) {
-                $invoice->pay();
-            }
+        $this->processInvoiceOperation->execute($payment, $invoice, 'sale');
+        if ($invoice->getIsPaid()) {
+            $invoice->pay();
         }
-
         $payment->getOrder()->addRelatedObject($invoice);
         $payment->setCreatedInvoice($invoice);
         if ($payment->getIsFraudDetected()) {

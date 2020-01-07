@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Payment\Operations;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
@@ -22,14 +25,17 @@ class ProcessInvoiceOperation extends AbstractOperation
      * @param InvoiceInterface $invoice
      * @param string $operationMethod
      * @return OrderPaymentInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function execute(OrderPaymentInterface $payment, InvoiceInterface $invoice, string $operationMethod)
-    {
+    public function execute(
+        OrderPaymentInterface $payment,
+        InvoiceInterface $invoice,
+        string $operationMethod
+    ): OrderPaymentInterface {
         /**
          * @var $payment Payment
          */
-        $amountToCapture = $payment->formatAmount($invoice->getBaseGrandTotal());
+        $amountToCapture = $payment->formatAmount($invoice->getBaseGrandTotal(), true);
         $order = $payment->getOrder();
 
         $payment->setTransactionId(
@@ -63,7 +69,7 @@ class ProcessInvoiceOperation extends AbstractOperation
         }
 
         if ($invoice->getIsPaid()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The transaction "%1" cannot be captured yet.', $invoice->getTransactionId())
             );
         }
