@@ -28,8 +28,8 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="SetTaxClassForShipping" stepKey="setTaxClass"/>
-            <actionGroup ref="SetTaxApplyOnSetting" stepKey="setApplyTaxOnSetting">
+            <actionGroup ref="SetTaxClassForShippingActionGroup" stepKey="setTaxClass"/>
+            <actionGroup ref="SetTaxApplyOnSettingActionGroup" stepKey="setApplyTaxOnSetting">
                 <argument name="userInput" value="Original price only"/>
             </actionGroup>
             <amOnPage url="{{AdminEditTaxRulePage.url($$createTaxRule.id$$)}}" stepKey="navigateToEditTaxRulePage"/>
@@ -45,19 +45,19 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
-            <actionGroup ref="DisableTaxApplyOnOriginalPrice" stepKey="setApplyTaxOffSetting">
+            <actionGroup ref="DisableTaxApplyOnOriginalPriceActionGroup" stepKey="setApplyTaxOffSetting">
                 <argument name="userInput" value="Custom price if available"/>
             </actionGroup>
-            <actionGroup ref="ResetTaxClassForShipping" stepKey="resetTaxClassForShipping"/>
+            <actionGroup ref="ResetTaxClassForShippingActionGroup" stepKey="resetTaxClassForShipping"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="gotoNewOrderCreationPage"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerSingleStoreActionGroup" stepKey="gotoNewOrderCreationPage"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$createProduct$$"></argument>
         </actionGroup>
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillEmailField"/>
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>

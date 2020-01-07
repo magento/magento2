@@ -16,38 +16,36 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class for testing fulltext index rebuild
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
-     */
-    protected $actionFull;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        $this->actionFull = Bootstrap::getObjectManager()->create(
-            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class
-        );
-    }
-
     /**
      * Testing fulltext index rebuild
      *
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_index.php
      * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_not_available.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testGetIndexData()
     {
+        $engineProvider = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\ResourceModel\EngineProvider::class
+        );
+        $dataProvider = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::class,
+            ['engineProvider' => $engineProvider]
+        );
+        $actionFull = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class,
+            ['dataProvider' => $dataProvider]
+        );
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $allowedStatuses = Bootstrap::getObjectManager()->get(Status::class)->getVisibleStatusIds();
         $allowedVisibility = Bootstrap::getObjectManager()->get(Engine::class)->getAllowedVisibility();
-        $result = iterator_to_array($this->actionFull->rebuildStoreIndex(Store::DISTRO_STORE_ID));
+        $result = iterator_to_array($actionFull->rebuildStoreIndex(Store::DISTRO_STORE_ID));
         $this->assertNotEmpty($result);
 
         $productsIds = array_keys($result);
@@ -132,6 +130,9 @@ class FullTest extends \PHPUnit\Framework\TestCase
      */
     public function testRebuildStoreIndexConfigurable()
     {
+        $actionFull = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class
+        );
         $storeId = 1;
 
         $simpleProductId = $this->getIdBySku('simple_10');
@@ -141,8 +142,8 @@ class FullTest extends \PHPUnit\Framework\TestCase
             $simpleProductId,
             $configProductId
         ];
-        $storeIndexDataSimple = $this->actionFull->rebuildStoreIndex($storeId, [$simpleProductId]);
-        $storeIndexDataExpected = $this->actionFull->rebuildStoreIndex($storeId, $expected);
+        $storeIndexDataSimple = $actionFull->rebuildStoreIndex($storeId, [$simpleProductId]);
+        $storeIndexDataExpected = $actionFull->rebuildStoreIndex($storeId, $expected);
 
         $this->assertEquals($storeIndexDataSimple, $storeIndexDataExpected);
     }

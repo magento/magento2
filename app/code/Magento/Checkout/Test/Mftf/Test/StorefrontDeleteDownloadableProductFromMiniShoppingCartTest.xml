@@ -19,6 +19,7 @@
         </annotations>
 
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
@@ -30,6 +31,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteProduct"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -44,7 +46,7 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert product details in Mini Cart -->
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
@@ -57,18 +59,18 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="seeProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeProductInMiniCart">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
         </actionGroup>
 
         <!--Remove an item from the cart using minicart-->
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromMiniCart">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
         <!--Check the minicart is empty and verify AssertProductAbsentInMiniShoppingCart-->
-        <actionGroup ref="assertMiniCartEmpty" stepKey="miniCartEnpty"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$createDownloadableProduct.name$$)}}" stepKey="verifyAssertProductAbsentInMiniShoppingCart"/>
     </test>
 </tests>

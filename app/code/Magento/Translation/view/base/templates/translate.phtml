@@ -6,6 +6,10 @@
 
 /** @var \Magento\Translation\Block\Js $block */
 ?>
+<!--
+    For frontend area dictionary file is inserted into html head in Magento/Translation/view/base/templates/dictionary.phtml
+    Same translation mechanism should be introduced for admin area in 2.4 version.
+-->
 <?php if ($block->dictionaryEnabled()) : ?>
     <script>
         require.config({

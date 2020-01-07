@@ -52,6 +52,8 @@ interface UiComponentInterface extends BlockInterface
     public function addComponent($name, UiComponentInterface $component);
 
     /**
+     * Get component
+     *
      * @param string $name
      * @return UiComponentInterface
      */

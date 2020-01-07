@@ -19,7 +19,6 @@
         "ext-intl": "*",
         "ext-openssl": "*",
         "ext-simplexml": "*",
-        "ext-spl": "*",
         "ext-xsl": "*",
         "ext-bcmath": "*",
         "lib-libxml": "*",

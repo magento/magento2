@@ -149,8 +149,8 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
             $paymentMethod,
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
-        $this->assertNotEmpty(isset($responseData['data']['placeOrder']['order']['order_id']));
-        $this->assertEquals('test_quote', $responseData['data']['placeOrder']['order']['order_id']);
+        $this->assertNotEmpty(isset($responseData['data']['placeOrder']['order']['order_number']));
+        $this->assertEquals('test_quote', $responseData['data']['placeOrder']['order']['order_number']);
     }
 
     /**
@@ -265,7 +265,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
   }
   placeOrder(input: {cart_id: "$cartId"}) {
     order {
-      order_id
+      order_number
     }
   }
 }

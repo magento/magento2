@@ -246,6 +246,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
+     * @magentoDbIsolation disabled
      */
     public function testFlatAfterDeleted()
     {
@@ -348,19 +349,21 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private function createSubCategoriesInDefaultCategory()
     {
-        $this->executeWithFlatEnabledInAdminArea(function () {
-            $category = $this->getLoadedDefaultCategory();
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $category = $this->getLoadedDefaultCategory();
 
-            $categoryOne = $this->instantiateCategoryModel();
-            $categoryOne->setName('Category One')->setPath($category->getPath())->setIsActive(true);
-            $category->getResource()->save($categoryOne);
-            self::$categoryOne = $categoryOne->getId();
+                $categoryOne = $this->instantiateCategoryModel();
+                $categoryOne->setName('Category One')->setPath($category->getPath())->setIsActive(true);
+                $category->getResource()->save($categoryOne);
+                self::$categoryOne = $categoryOne->getId();
 
-            $categoryTwo = $this->instantiateCategoryModel();
-            $categoryTwo->setName('Category Two')->setPath($categoryOne->getPath())->setIsActive(true);
-            $category->getResource()->save($categoryTwo);
-            self::$categoryTwo = $categoryTwo->getId();
-        });
+                $categoryTwo = $this->instantiateCategoryModel();
+                $categoryTwo->setName('Category Two')->setPath($categoryOne->getPath())->setIsActive(true);
+                $category->getResource()->save($categoryTwo);
+                self::$categoryTwo = $categoryTwo->getId();
+            }
+        );
     }
 
     /**
@@ -371,11 +374,13 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private function moveSubCategoriesInDefaultCategory()
     {
-        $this->executeWithFlatEnabledInAdminArea(function () {
-            $this->createSubCategoriesInDefaultCategory();
-            $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
-            $categoryTwo->move(self::$defaultCategoryId, self::$categoryOne);
-        });
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $this->createSubCategoriesInDefaultCategory();
+                $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
+                $categoryTwo->move(self::$defaultCategoryId, self::$categoryOne);
+            }
+        );
     }
 
     /**
@@ -386,10 +391,12 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private function deleteSubCategoriesInDefaultCategory()
     {
-        $this->executeWithFlatEnabledInAdminArea(function () {
-            $this->createSubCategoriesInDefaultCategory();
-            $this->removeSubCategoriesInDefaultCategory();
-        });
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $this->createSubCategoriesInDefaultCategory();
+                $this->removeSubCategoriesInDefaultCategory();
+            }
+        );
     }
 
     /**
@@ -398,13 +405,15 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private function removeSubCategoriesInDefaultCategory()
     {
-        $this->executeWithFlatEnabledInAdminArea(function () {
-            $category = $this->instantiateCategoryModel();
-            $category->load(self::$categoryTwo);
-            $category->delete();
-            $category->load(self::$categoryOne);
-            $category->delete();
-        });
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $category = $this->instantiateCategoryModel();
+                $category->load(self::$categoryTwo);
+                $category->delete();
+                $category->load(self::$categoryOne);
+                $category->delete();
+            }
+        );
     }
 
     /**
@@ -467,13 +476,5 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         );
-    }
-
-    /**
-     * teardown
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
     }
 }

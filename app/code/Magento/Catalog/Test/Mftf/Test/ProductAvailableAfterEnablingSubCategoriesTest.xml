@@ -49,6 +49,10 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see userInput="You saved the category." stepKey="seeSuccessMessage"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryStorefrontPage"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct.name$$)}}" stepKey="seeCreatedProduct"/>
