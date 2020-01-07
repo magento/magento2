@@ -33,7 +33,6 @@
         <fillField selector="{{AdminEditUserSection.roleNameFilterTextField}}" userInput="{{role.name}}" stepKey="filterRole"/>
         <click selector="{{AdminEditUserSection.searchButton}}" stepKey="clickSearch"/>
         <waitForPageLoad stepKey="waitForLoadingMaskToDisappear1"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
         <click selector="{{AdminEditUserSection.searchResultFirstRow}}" stepKey="selectRole"/>
         <click selector="{{AdminEditUserSection.saveButton}}" stepKey="clickSaveUser"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
