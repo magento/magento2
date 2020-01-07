@@ -625,6 +625,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $mappedSqlField = $this->getEavAttributeTableAlias() . '.value';
         } elseif ($this->getAttribute() == 'category_ids') {
             $mappedSqlField = 'e.entity_id';
+        } elseif ($this->getAttribute() == 'attribute_set_id') {
+            $mappedSqlField = $mappedSqlField = 'e.attribute_set_id';
         } else {
             $mappedSqlField = parent::getMappedSqlField();
         }
