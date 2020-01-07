@@ -6,7 +6,6 @@
 
 namespace Magento\Indexer\Setup;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Indexer\StateInterface;
@@ -66,7 +65,7 @@ class Recurring implements InstallSchemaInterface
      * @param ConfigInterface $config
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
-     * @param IndexerInterfaceFactory|null $indexerFactory
+     * @param IndexerInterfaceFactory $indexerFactory
      */
     public function __construct(
         CollectionFactory $statesFactory,
@@ -74,14 +73,14 @@ class Recurring implements InstallSchemaInterface
         ConfigInterface $config,
         EncryptorInterface $encryptor,
         EncoderInterface $encoder,
-        IndexerInterfaceFactory $indexerFactory = null
+        IndexerInterfaceFactory $indexerFactory
     ) {
         $this->statesFactory = $statesFactory;
         $this->stateFactory = $stateFactory;
         $this->config = $config;
         $this->encryptor = $encryptor;
         $this->encoder = $encoder;
-        $this->indexerFactory = $indexerFactory ?: ObjectManager::getInstance()->get(IndexerInterfaceFactory::class);
+        $this->indexerFactory = $indexerFactory;
     }
 
     /**
