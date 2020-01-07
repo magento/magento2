@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\ViewModel;
+namespace Magento\Catalog\ViewModel\Product\Compare;
 
 use Magento\Catalog\Helper\Product\Compare as CompareHelper;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
