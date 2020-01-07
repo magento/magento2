@@ -502,8 +502,8 @@ class StructureTest extends \PHPUnit\Framework\TestCase
                     ],
                     'field_5' => [
                         'field_5',
-                    ],
-                    'section_3' => ['section_3']
+                        'field_5'
+                    ]
                 ]
             ]
         ];

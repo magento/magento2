@@ -75,7 +75,8 @@ return [
                                                     'id' => 'field_3_1_1',
                                                     'translate' => 'label',
                                                     'showInWebsite' => '1',
-                                                    'backend_model' => \Magento\Config\Model\Config\Backend\Encrypted::class,
+                                                    'backend_model' =>
+                                                        \Magento\Config\Model\Config\Backend\Encrypted::class,
                                                     'type' => 'text',
                                                     'label' => 'Field 3.1.1',
                                                     '_elementType' => 'field',
@@ -192,9 +193,26 @@ return [
                 'section_3' => [
                     'id' => 'section_3',
                     'type' => 'text',
-                    'tab' => 'tab_1',
-                    '_elementType' => 'field'
-                ],
+                    '_elementType' => 'section',
+                    'children' => [
+                        'group_5' => [
+                            'id' => 'group_5',
+                            'type' => 'text',
+                            'showInDefault' => 1,
+                            'showInWebsite' => 1,
+                            'showInStore' => 1,
+                            '_elementType' => 'group',
+                            'children' => [
+                                'field_5' => [
+                                    'id' => 'field_5',
+                                    'showInWebsite' => '1',
+                                    'type' => 'text',
+                                    '_elementType' => 'field',
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ],
         ],
     ],
