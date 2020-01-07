@@ -22,15 +22,15 @@
         <input type="hidden" name="error_url" value="<?= $block->escapeUrl($block->getErrorUrl()) ?>">
         <?= $block->getNameBlockHtml() ?>
 
-        <?php if ($_company->isEnabled()) : ?>
+        <?php if ($_company->isEnabled()): ?>
             <?= $_company->setCompany($block->getAddress()->getCompany())->toHtml() ?>
         <?php endif ?>
 
-        <?php if ($_telephone->isEnabled()) : ?>
+        <?php if ($_telephone->isEnabled()): ?>
             <?= $_telephone->setTelephone($block->getAddress()->getTelephone())->toHtml() ?>
         <?php endif ?>
 
-        <?php if ($_fax->isEnabled()) : ?>
+        <?php if ($_fax->isEnabled()): ?>
             <?= $_fax->setFax($block->getAddress()->getFax())->toHtml() ?>
         <?php endif ?>
 
@@ -49,7 +49,7 @@
                        class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>"/>
                 <div class="nested">
                     <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
-                    <?php for ($_i = 1, $_n = $this->helper(\Magento\Customer\Helper\Address::class)->getStreetLines(); $_i < $_n; $_i++) : ?>
+                    <?php for ($_i = 1, $_n = $this->helper(\Magento\Customer\Helper\Address::class)->getStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
                                 <span><?= $block->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <?php if ($this->helper(\Magento\Customer\Helper\Address::class)->isVatAttributeVisible()) : ?>
+        <?php if ($this->helper(\Magento\Customer\Helper\Address::class)->isVatAttributeVisible()): ?>
             <div class="field taxvat">
                 <label class="label" for="vat_id">
                     <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
@@ -134,33 +134,33 @@
             </div>
         </div>
 
-        <?php if ($block->isDefaultBilling()) : ?>
+        <?php if ($block->isDefaultBilling()): ?>
             <div class="message info">
                 <span><?= $block->escapeHtml(__("It's a default billing address.")) ?></span>
             </div>
-        <?php elseif ($block->canSetAsDefaultBilling()) : ?>
+        <?php elseif ($block->canSetAsDefaultBilling()): ?>
             <div class="field choice set billing">
                 <input type="checkbox" id="primary_billing" name="default_billing" value="1" class="checkbox">
                 <label class="label" for="primary_billing">
                     <span><?= $block->escapeHtml(__('Use as my default billing address')) ?></span>
                 </label>
             </div>
-        <?php else : ?>
+        <?php else: ?>
             <input type="hidden" name="default_billing" value="1" />
         <?php endif; ?>
 
-        <?php if ($block->isDefaultShipping()) : ?>
+        <?php if ($block->isDefaultShipping()): ?>
             <div class="message info">
                 <span><?= $block->escapeHtml(__("It's a default shipping address.")) ?></span>
             </div>
-        <?php elseif ($block->canSetAsDefaultShipping()) : ?>
+        <?php elseif ($block->canSetAsDefaultShipping()): ?>
             <div class="field choice set shipping">
                 <input type="checkbox" id="primary_shipping" name="default_shipping" value="1" class="checkbox">
                 <label class="label" for="primary_shipping">
                     <span><?= $block->escapeHtml(__('Use as my default shipping address')) ?></span>
                 </label>
             </div>
-        <?php else : ?>
+        <?php else: ?>
             <input type="hidden" name="default_shipping" value="1">
         <?php endif; ?>
     </fieldset>
