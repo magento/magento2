@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Plugin\Wysiwyg\Images;
 
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
@@ -15,6 +16,7 @@ use Magento\Cms\Model\Wysiwyg\Images\Storage as StorageSubject;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Ensures that metadata is removed from the database when a file is deleted and it is an image
@@ -34,7 +36,7 @@ class Storage
     /**
      * @var DeleteByDirectoryPathInterface
      */
-    private $deleteMediAssetByDirectoryPath;
+    private $deleteMediaAssetByDirectoryPath;
 
     /**
      * @var Filesystem
@@ -64,7 +66,7 @@ class Storage
     ) {
         $this->getMediaAssetByPath = $getMediaAssetByPath;
         $this->deleteMediaAssetByPath = $deleteMediaAssetByPath;
-        $this->deleteMediAssetByDirectoryPath = $deleteByDirectoryPath;
+        $this->deleteMediaAssetByDirectoryPath = $deleteByDirectoryPath;
         $this->filesystem = $filesystem;
         $this->logger = $logger;
     }
@@ -109,6 +111,7 @@ class Storage
      *
      * @return null
      *
+     * @throws CouldNotDeleteException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDeleteDirectory(StorageSubject $subject, $result, $path)
@@ -117,8 +120,16 @@ class Storage
             return $result;
         }
 
-        $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
-        $this->deleteMediAssetByDirectoryPath->execute($relativePath);
+        try {
+            $mediaDirectoryRead = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $relativePath = $mediaDirectoryRead->getRelativePath($path);
+            if ($mediaDirectoryRead->isExist($relativePath) === false) {
+                throw new CouldNotDeleteException(__('Cannot remove assets, the provided path does not exist'));
+            }
+            $this->deleteMediaAssetByDirectoryPath->execute($relativePath);
+        } catch (ValidatorException $exception) {
+            $this->logger->critical($exception);
+        }
 
         return $result;
     }

@@ -10,7 +10,6 @@ namespace Magento\MediaGallery\Model\Asset\Command;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface;
 use Psr\Log\LoggerInterface;
 
@@ -55,13 +54,13 @@ class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface
      * @param string $directoryPath
      *
      * @return void
+     *
      * @throws CouldNotDeleteException
      */
     public function execute(string $directoryPath): void
     {
+        $this->validateDirectoryPath($directoryPath);
         try {
-            $this->validateDirectoryPath($directoryPath);
-
             // Make sure that the path has a trailing slash
             $directoryPath = rtrim($directoryPath, '/') . '/';
 
@@ -83,12 +82,13 @@ class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface
      * Validate the directory path
      *
      * @param string $directoryPath
-     * @throws LocalizedException
+     *
+     * @throws CouldNotDeleteException
      */
     private function validateDirectoryPath(string $directoryPath): void
     {
         if (!$directoryPath || trim($directoryPath) === '') {
-            throw new LocalizedException(__('Cannot remove assets, the directory path does not exist'));
+            throw new CouldNotDeleteException(__('Cannot remove assets, the directory path does not exist'));
         }
     }
 }
