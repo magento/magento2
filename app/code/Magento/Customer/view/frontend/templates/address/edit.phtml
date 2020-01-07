@@ -5,6 +5,8 @@
  */
 
 /** @var \Magento\Customer\Block\Address\Edit $block */
+/** @var \Magento\Customer\ViewModel\Address $viewModel */
+$viewModel = $block->getData('viewModel');
 ?>
 <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
 <?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
@@ -19,13 +21,13 @@
 <?php $_dataHelper = $this->helper(\Magento\Directory\Helper\Data::class); ?>
 <?php $_addressHelper = $this->helper(\Magento\Customer\Helper\Address::class); ?>
 
-<?php $_vatidValidationClass = $_addressHelper->getAttributeValidationClass('vat_id'); ?>
-<?php $_cityValidationClass = $_addressHelper->getAttributeValidationClass('city'); ?>
-<?php $_postcodeValidationClass_value = $_addressHelper->getAttributeValidationClass('postcode'); ?>
+<?php $_vatidValidationClass = $viewModel->addressGetAttributeValidationClass('vat_id'); ?>
+<?php $_cityValidationClass = $viewModel->addressGetAttributeValidationClass('city'); ?>
+<?php $_postcodeValidationClass_value = $viewModel->addressGetAttributeValidationClass('postcode'); ?>
 <?php $_postcodeValidationClass = $_postcodeValidationClass_value; ?>
-<?php $_streetValidationClass = $_addressHelper->getAttributeValidationClass('street'); ?>
+<?php $_streetValidationClass = $viewModel->addressGetAttributeValidationClass('street'); ?>
 <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
-<?php $_regionValidationClass = $_addressHelper->getAttributeValidationClass('region'); ?>
+<?php $_regionValidationClass = $viewModel->addressGetAttributeValidationClass('region'); ?>
 
 <form class="form-address-edit"
       action="<?= $block->escapeUrl($block->getSaveUrl()) ?>"
@@ -65,7 +67,7 @@
                        id="street_1"
                        class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>"/>
                 <div class="nested">
-                    <?php for ($_i = 1, $_n = $_addressHelper->getStreetLines(); $_i < $_n; $_i++): ?>
+                    <?php for ($_i = 1, $_n = $viewModel->addressGetStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
                                 <span><?= $block->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
@@ -83,7 +85,7 @@
             </div>
         </div>
 
-        <?php if ($_addressHelper->isVatAttributeVisible()): ?>
+        <?php if ($viewModel->addressGetisVatAttributeVisible()): ?>
             <div class="field taxvat">
                 <label class="label" for="vat_id">
                     <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
@@ -214,9 +216,9 @@
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?= /* @noEscape */ $_dataHelper->getRegionJson() ?>,
+                "regionJson": <?= /* @noEscape */ $viewModel->dataGetRegionJson() ?>,
                 "defaultRegion": "<?= (int) $block->getRegionId() ?>",
-                "countriesWithOptionalZip": <?= /* @noEscape */ $_dataHelper->getCountriesWithOptionalZip(true) ?>
+                "countriesWithOptionalZip": <?= /* @noEscape */ $viewModel->dataGetCountriesWithOptionalZip(true) ?>
             }
         }
     }

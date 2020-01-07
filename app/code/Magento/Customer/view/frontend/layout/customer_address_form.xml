@@ -21,6 +21,7 @@
                 <arguments>
                     <argument name="attribute_data" xsi:type="object">Magento\Customer\Block\DataProviders\AddressAttributeData</argument>
                     <argument name="post_code_config" xsi:type="object">Magento\Customer\Block\DataProviders\PostCodesPatternsAttributeData</argument>
+                    <argument name="view_model" xsi:type="object">Magento\Customer\ViewModel\Data</argument>
                 </arguments>
             </block>
         </referenceContainer>
