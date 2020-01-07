@@ -113,7 +113,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
-     * @inheritDoc
+     * @return void
      */
     protected function _construct()
     {
