@@ -79,24 +79,4 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
         }
         return $priceRender;
     }
-
-    /**
-     * Get Wishlist URL
-     *
-     * @return string
-     */
-    public function getWishlistUrl()
-    {
-        return $this->_getHelper()->getListUrl();
-    }
-
-    /**
-     * Check whether the Wishlist is allowed
-     *
-     * @return bool
-     */
-    public function isWishlistAllowed()
-    {
-        return $this->_getHelper()->isAllow();
-    }
 }
