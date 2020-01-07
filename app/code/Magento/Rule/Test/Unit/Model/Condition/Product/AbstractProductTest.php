@@ -282,6 +282,8 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->_condition->setAttribute('category_ids');
         $this->assertEquals('e.entity_id', $this->_condition->getMappedSqlField());
+        $this->_condition->setAttribute('attribute_set_id');
+        $this->assertEquals('e.attribute_set_id', $this->_condition->getMappedSqlField());
     }
 
     /**
