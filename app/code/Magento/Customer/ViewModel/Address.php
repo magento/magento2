@@ -15,8 +15,8 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  */
 
  /**
- * Address view model
- */
+  * Address view model
+  */
 class Address implements ArgumentInterface
 {
     /**
@@ -35,7 +35,7 @@ class Address implements ArgumentInterface
 
     /**
      * Constructor
-     * 
+     *
      * @param DataHelper $helperData
      * @param AddressHelper $helperAddress
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -50,7 +50,7 @@ class Address implements ArgumentInterface
 
     /**
      * Returns data validation class
-     * 
+     * @param mixed $param
      * @return mixed
      */
     public function dataGetAttributeValidationClass($param)
@@ -60,7 +60,7 @@ class Address implements ArgumentInterface
 
     /**
      * Returns address validation class
-     * 
+     * @param mixed $param
      * @return mixed
      */
     public function addressGetAttributeValidationClass($param)
@@ -70,7 +70,7 @@ class Address implements ArgumentInterface
 
     /**
      * Returns street lines
-     * 
+     *
      * @return mixed
      */
     public function addressGetStreetLines()
@@ -80,7 +80,7 @@ class Address implements ArgumentInterface
 
     /**
      * Returns if VAT attribute is visible
-     * 
+     *
      * @return boolean
      */
     public function addressIsVatAttributeVisible()
@@ -90,7 +90,7 @@ class Address implements ArgumentInterface
 
     /**
      * Returns region JSON
-     * 
+     *
      * @return mixed
      */
     public function dataGetRegionJson()
@@ -100,7 +100,7 @@ class Address implements ArgumentInterface
 
     /**
      * Returns rcountries with optional zip
-     * 
+     *
      * @return mixed
      */
     public function dataGetCountriesWithOptionalZip()
