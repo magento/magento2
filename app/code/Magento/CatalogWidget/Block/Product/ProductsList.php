@@ -373,8 +373,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
                 return $condition;
             }
 
-            if ($category->getIsAnchor() && $category->getChildren()) {
-                $children = explode(',', $category->getChildren());
+            if ($category->getIsAnchor() && $category->getChildren(true)) {
+                $children = explode(',', $category->getChildren(true));
 
                 $condition['operator'] = "()";
                 $condition['value'] = array_merge([$categoryId], $children);
