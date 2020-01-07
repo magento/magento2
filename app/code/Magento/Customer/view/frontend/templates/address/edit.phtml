@@ -39,9 +39,7 @@
         <legend class="legend"><span><?= $block->escapeHtml(__('Address')) ?></span></legend><br>
         <?php $_streetValidationClass = $this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('street'); ?>
         <div class="field street required">
-            <label for="street_1" class="label">
-                <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?></span>
-            </label>
+            <label for="street_1" class="label"><span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?></span></label>
             <div class="control">
                 <input type="text"
                        name="street[]"
