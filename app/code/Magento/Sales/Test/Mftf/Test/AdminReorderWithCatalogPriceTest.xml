@@ -53,8 +53,8 @@
         <!-- Login as admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!--Open order by Id-->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
-            <argument name="orderId" value="$createGuestCart.return$"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderById">
+            <argument name="entityId" value="$createGuestCart.return$"/>
         </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
