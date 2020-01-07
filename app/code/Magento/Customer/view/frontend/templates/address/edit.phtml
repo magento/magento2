@@ -13,8 +13,20 @@
 <?php $_street = $block->getAttributeData()->getFrontendLabel('street'); ?>
 <?php $_city = $block->getAttributeData()->getFrontendLabel('city'); ?>
 <?php $_region = $block->getAttributeData()->getFrontendLabel('region'); ?>
-<?php $_data_helper = $this->helper(\Magento\Directory\Helper\Data::class); ?>
-<?php $_address_helper = $this->helper(\Magento\Customer\Helper\Address::class); ?>
+<?php $_selectRegion = 'Please select a region, state or province.'; ?>
+<?php $_displayAll = $block->getConfig('general/region/display_all'); ?>
+
+<?php $_dataHelper = $this->helper(\Magento\Directory\Helper\Data::class); ?>
+<?php $_addressHelper = $this->helper(\Magento\Customer\Helper\Address::class); ?>
+
+<?php $_vatidValidationClass = $block->escapeHtmlAttr($_addressHelper->getAttributeValidationClass('vat_id')); ?>
+<?php $_cityValidationClass = $block->escapeHtmlAttr($_addressHelper->getAttributeValidationClass('city')); ?>
+<?php $_postcodeValidationClass_value = $_addressHelper->getAttributeValidationClass('postcode'); ?>
+<?php $_postcodeValidationClass = $block->escapeHtmlAttr($_postcodeValidationClass_value); ?>
+<?php $_streetValidationClass = $_addressHelper->getAttributeValidationClass('street'); ?>
+<?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+<?php $_regionValidationClass = $block->escapeHtmlAttr($_addressHelper->getAttributeValidationClass('region')); ?>
+
 <form class="form-address-edit"
       action="<?= $block->escapeUrl($block->getSaveUrl()) ?>"
       method="post"
@@ -43,7 +55,6 @@
     </fieldset>
     <fieldset class="fieldset">
         <legend class="legend"><span><?= $block->escapeHtml(__('Address')) ?></span></legend><br>
-        <?php $_streetValidationClass = $_address_helper->getAttributeValidationClass('street'); ?>
         <div class="field street required">
             <label for="street_1" class="label"><span><?= /* @noEscape */ $_street ?></span></label>
             <div class="control">
@@ -54,8 +65,7 @@
                        id="street_1"
                        class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>"/>
                 <div class="nested">
-                    <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
-                    <?php for ($_i = 1, $_n = $_address_helper->getStreetLines(); $_i < $_n; $_i++): ?>
+                    <?php for ($_i = 1, $_n = $_addressHelper->getStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
                                 <span><?= $block->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
@@ -73,7 +83,7 @@
             </div>
         </div>
 
-        <?php if ($_address_helper->isVatAttributeVisible()): ?>
+        <?php if ($_addressHelper->isVatAttributeVisible()): ?>
             <div class="field taxvat">
                 <label class="label" for="vat_id">
                     <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
@@ -83,7 +93,7 @@
                            name="vat_id"
                            value="<?= $block->escapeHtmlAttr($block->getAddress()->getVatId()) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
-                           class="input-text <?= $block->escapeHtmlAttr($_address_helper->getAttributeValidationClass('vat_id')) ?>"
+                           class="input-text <?= $_vatidValidationClass ?>"
                            id="vat_id">
                 </div>
             </div>
@@ -95,7 +105,7 @@
                        name="city"
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
                        title="<?= $block->escapeHtmlAttr(__('City')) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($_address_helper->getAttributeValidationClass('city')) ?>"
+                       class="input-text <?= $_cityValidationClass ?>"
                        id="city">
             </div>
         </div>
@@ -106,15 +116,17 @@
             <div class="control">
                 <select id="region_id" name="region_id"
                         title="<?= /* @noEscape */ $_region ?>"
-                        class="validate-select region_id" <?= /* @noEscape */ !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>>
-                    <option value=""><?= $block->escapeHtml(__('Please select a region, state or province.')) ?></option>
+                        class="validate-select region_id"
+                        <?= /* @noEscape */ !$_displayAll ? ' disabled="disabled"' : '' ?>>
+                    <option value=""><?= $block->escapeHtml(__($_selectRegion)) ?></option>
                 </select>
                 <input type="text"
                        id="region"
                        name="region"
                        value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>"
                        title="<?= /* @noEscape */ $_region ?>"
-                       class="input-text validate-not-number-first <?= $block->escapeHtmlAttr($_address_helper->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
+                       class="input-text validate-not-number-first<?= $_regionValidationClass ?>"
+                       <?= !$_displayAll ? ' disabled="disabled"' : '' ?>/>
             </div>
         </div>
         <div class="field zip required">
@@ -127,7 +139,7 @@
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getPostcode()) ?>"
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                        id="zip"
-                       class="input-text validate-zip-international <?= $block->escapeHtmlAttr($_address_helper->getAttributeValidationClass('postcode')) ?>">
+                       class="input-text validate-zip-international <?= $_postcodeValidationClass ?>">
                 <div role="alert" class="message warning" style="display:none">
                     <span></span>
                 </div>
@@ -196,14 +208,14 @@
         "#country": {
             "regionUpdater": {
                 "optionalRegionAllowed":
-                  <?= /* @noEscape */ $block->getConfig('general/region/display_all') ? 'true' : 'false' ?>,
+                    <?= /* @noEscape */ $_displayAll ? 'true' : 'false' ?>,
                 "regionListId": "#region_id",
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?= /* @noEscape */ $_helper->getRegionJson() ?>,
+                "regionJson": <?= /* @noEscape */ $_dataHelper->getRegionJson() ?>,
                 "defaultRegion": "<?= (int) $block->getRegionId() ?>",
-                "countriesWithOptionalZip": <?= /* @noEscape */ $_data_helper->getCountriesWithOptionalZip(true) ?>
+                "countriesWithOptionalZip": <?= /* @noEscape */ $_dataHelper->getCountriesWithOptionalZip(true) ?>
             }
         }
     }
