@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddStoreViewToCmsPageActionGroup" extends="NavigateToCreatedCMSPageActionGroup">
+        <annotations>
+            <description>EXTENDS: navigateToCreatedCMSPage. Adds the provided Store View to a Page.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+
+        <remove keyForRemoval="clickExpandContentTabForPage"/>
+        <remove keyForRemoval="waitForLoadingMaskOfStagingSection"/>
+        <click selector="{{CmsNewPagePiwSection.header}}" stepKey="clickPageInWebsites" after="waitForPageLoad3"/>
+        <waitForElementVisible selector="{{CmsNewPagePiwSection.selectStoreView(storeViewName)}}" stepKey="waitForStoreGridReload"/>
+        <clickWithLeftButton selector="{{CmsNewPagePiwSection.selectStoreView(storeViewName)}}" stepKey="clickStoreView"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="You saved the page." stepKey="seeMessage"/>
+    </actionGroup>
+</actionGroups>
