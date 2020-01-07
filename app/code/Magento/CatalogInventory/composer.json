@@ -14,7 +14,7 @@
         "magento/module-sales": "101.0.*"
     },
     "type": "magento2-module",
-    "version": "100.2.9",
+    "version": "100.2.10",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

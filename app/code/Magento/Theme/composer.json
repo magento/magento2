@@ -22,7 +22,7 @@
         "magento/module-directory": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.10",
+    "version": "100.2.11",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

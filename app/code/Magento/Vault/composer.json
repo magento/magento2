@@ -12,7 +12,7 @@
         "magento/module-quote": "101.0.*"
     },
     "type": "magento2-module",
-    "version": "101.0.7",
+    "version": "101.0.8",
     "license": [
         "proprietary"
     ],

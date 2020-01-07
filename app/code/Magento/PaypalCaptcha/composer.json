@@ -12,7 +12,7 @@
         "magento/module-paypal": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.1",
+    "version": "100.2.2",
     "license": [
         "proprietary"
     ],
