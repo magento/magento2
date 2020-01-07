@@ -36,5 +36,7 @@
         <element name="productCount" type="text" selector="#catalog_category_products-total-count"/>
         <element name="productPerPage" type="select" selector="#catalog_category_products_page-limit"/>
         <element name="storeViewDropdown" type="text" selector="//select[@name='store_id']/option[contains(.,'{{storeView}}')]" parameterized="true"/>
+        <element name="inputByCodeRangeFrom" type="input" selector="input.admin__control-text[name='{{code}}[from]']" parameterized="true"/>
+        <element name="inputByCodeRangeTo" type="input" selector="input.admin__control-text[name='{{code}}[to]']" parameterized="true"/>
     </section>
 </sections>
