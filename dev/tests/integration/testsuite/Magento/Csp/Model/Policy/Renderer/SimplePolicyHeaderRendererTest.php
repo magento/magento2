@@ -11,6 +11,7 @@ use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Zend\Http\Header\HeaderInterface;
 
 /**
  * Test that rendering policies via headers works.
@@ -53,7 +54,13 @@ class SimplePolicyHeaderRendererTest extends TestCase
 
         $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy'));
         $this->assertEmpty($this->response->getHeader('Content-Security-Policy-Report-Only'));
-        $this->assertEquals('default-src https://magento.com \'self\';', $header->getFieldValue());
+        $contentSecurityPolicyContent = [];
+        if ($header instanceof \ArrayIterator) {
+            foreach ($header as $item) {
+                $contentSecurityPolicyContent[] = $item->getFieldValue();
+            }
+        }
+        $this->assertEquals(['default-src https://magento.com \'self\';'], $contentSecurityPolicyContent);
     }
 
     /**
@@ -73,9 +80,15 @@ class SimplePolicyHeaderRendererTest extends TestCase
 
         $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy'));
         $this->assertEmpty($this->response->getHeader('Content-Security-Policy-Report-Only'));
+        $contentSecurityPolicyContent = [];
+        if ($header instanceof \ArrayIterator) {
+            foreach ($header as $item) {
+                $contentSecurityPolicyContent[] = $item->getFieldValue();
+            }
+        }
         $this->assertEquals(
-            'default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;',
-            $header->getFieldValue()
+            ['default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;'],
+            $contentSecurityPolicyContent
         );
         $this->assertNotEmpty($reportToHeader = $this->response->getHeader('Report-To'));
         $this->assertNotEmpty($reportData = json_decode("[{$reportToHeader->getFieldValue()}]", true));
