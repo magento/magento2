@@ -38,7 +38,8 @@ $products = [
 ];
 
 foreach ($categories as $category) {
-    $categoryModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+    $categoryModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->create(\Magento\Catalog\Model\Category::class);
     $categoryModel->isObjectNew(true);
     $categoryModel->setId($category['id'])
         ->setName('Category ' . $category['id'])
@@ -55,7 +56,8 @@ foreach ($categories as $category) {
 
 foreach ($products as $product) {
     /** @var $product \Magento\Catalog\Model\Product */
-    $productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+    $productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->create(\Magento\Catalog\Model\Product::class);
     $productModel->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
         ->setId($product['id'])
         ->setAttributeSetId(4)

@@ -6,7 +6,8 @@
 declare(strict_types=1);
 
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
@@ -15,7 +16,8 @@ $productIDs = [444, 445];
 
 foreach ($productIDs as $productID) {
     /** @var $product \Magento\Catalog\Model\Product */
-    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->create(\Magento\Catalog\Model\Product::class);
     $product->load($productID);
     if ($product->getId()) {
         $product->delete();
@@ -24,7 +26,8 @@ foreach ($productIDs as $productID) {
 
 foreach ($categoryIDs as $categoryID) {
     /** @var $category \Magento\Catalog\Model\Category */
-    $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+    $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->create(\Magento\Catalog\Model\Category::class);
     $category->load($categoryID);
     if ($category->getId()) {
         $category->delete();
