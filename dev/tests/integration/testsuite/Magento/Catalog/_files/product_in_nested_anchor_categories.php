@@ -16,13 +16,13 @@ $categories = [
         'id' => 445,
         'parentId' => 444,
         'level' => 3,
-        'path' => '1/2/4'
+        'path' => '1/2/3/4'
     ],
     [
         'id' => 446,
         'parentId' => 445,
         'level' => 4,
-        'path' => '1/2/5'
+        'path' => '1/2/3/4/5'
     ],
 ];
 
