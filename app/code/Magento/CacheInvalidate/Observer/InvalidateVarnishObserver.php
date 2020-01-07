@@ -8,8 +8,7 @@ namespace Magento\CacheInvalidate\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Class InvalidateVarnishObserver
- * @package Magento\CacheInvalidate\Observer
+ * Trigger invalidations on configured HTTP cache hosts upon cache_clean_by_tags
  */
 class InvalidateVarnishObserver implements ObserverInterface
 {

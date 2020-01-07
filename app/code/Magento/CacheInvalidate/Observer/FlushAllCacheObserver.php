@@ -8,8 +8,7 @@ namespace Magento\CacheInvalidate\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Class FlushAllCacheObserver
- * @package Magento\CacheInvalidate\Observer
+ * Clear configured Varnish hosts when triggering a full cache flush (e.g. from the Cache Management admin dashboard)
  */
 class FlushAllCacheObserver implements ObserverInterface
 {

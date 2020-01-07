@@ -8,7 +8,7 @@ namespace Magento\CacheInvalidate\Model;
 use Magento\Framework\Cache\InvalidateLogger;
 
 /**
- * Class PurgeCache
+ * Invalidate external HTTP cache(s) based on tag pattern
  */
 class PurgeCache
 {
