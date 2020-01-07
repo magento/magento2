@@ -19,13 +19,13 @@
 <?php $_dataHelper = $this->helper(\Magento\Directory\Helper\Data::class); ?>
 <?php $_addressHelper = $this->helper(\Magento\Customer\Helper\Address::class); ?>
 
-<?php $_vatidValidationClass = $block->escapeHtmlAttr($_addressHelper->getAttributeValidationClass('vat_id')); ?>
-<?php $_cityValidationClass = $block->escapeHtmlAttr($_addressHelper->getAttributeValidationClass('city')); ?>
+<?php $_vatidValidationClass = $_addressHelper->getAttributeValidationClass('vat_id'); ?>
+<?php $_cityValidationClass = $_addressHelper->getAttributeValidationClass('city'); ?>
 <?php $_postcodeValidationClass_value = $_addressHelper->getAttributeValidationClass('postcode'); ?>
-<?php $_postcodeValidationClass = $block->escapeHtmlAttr($_postcodeValidationClass_value); ?>
+<?php $_postcodeValidationClass = $_postcodeValidationClass_value; ?>
 <?php $_streetValidationClass = $_addressHelper->getAttributeValidationClass('street'); ?>
 <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
-<?php $_regionValidationClass = $block->escapeHtmlAttr($_addressHelper->getAttributeValidationClass('region')); ?>
+<?php $_regionValidationClass = $_addressHelper->getAttributeValidationClass('region'); ?>
 
 <form class="form-address-edit"
       action="<?= $block->escapeUrl($block->getSaveUrl()) ?>"
@@ -93,7 +93,7 @@
                            name="vat_id"
                            value="<?= $block->escapeHtmlAttr($block->getAddress()->getVatId()) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
-                           class="input-text <?= $_vatidValidationClass ?>"
+                           class="input-text <?= $block->escapeHtmlAttr($_vatidValidationClass) ?>"
                            id="vat_id">
                 </div>
             </div>
@@ -105,7 +105,7 @@
                        name="city"
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
                        title="<?= $block->escapeHtmlAttr(__('City')) ?>"
-                       class="input-text <?= $_cityValidationClass ?>"
+                       class="input-text <?= $block->escapeHtmlAttr($_cityValidationClass) ?>"
                        id="city">
             </div>
         </div>
@@ -125,7 +125,8 @@
                        name="region"
                        value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>"
                        title="<?= /* @noEscape */ $_region ?>"
-                       class="input-text validate-not-number-first<?= $_regionValidationClass ?>"
+                       class="input-text validate-not-number-first
+                        <?= $block->escapeHtmlAttr($_regionValidationClass) ?>"
                         <?= !$_displayAll ? ' disabled="disabled"' : '' ?>/>
             </div>
         </div>
@@ -139,7 +140,8 @@
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getPostcode()) ?>"
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                        id="zip"
-                       class="input-text validate-zip-international <?= $_postcodeValidationClass ?>">
+                       class="input-text validate-zip-international
+                        <?= $block->escapeHtmlAttr($_postcodeValidationClass) ?>">
                 <div role="alert" class="message warning" style="display:none">
                     <span></span>
                 </div>
