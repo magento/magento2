@@ -18,9 +18,6 @@ $viewModel = $block->getData('viewModel');
 <?php $_selectRegion = 'Please select a region, state or province.'; ?>
 <?php $_displayAll = $block->getConfig('general/region/display_all'); ?>
 
-<?php $_dataHelper = $this->helper(\Magento\Directory\Helper\Data::class); ?>
-<?php $_addressHelper = $this->helper(\Magento\Customer\Helper\Address::class); ?>
-
 <?php $_vatidValidationClass = $viewModel->addressGetAttributeValidationClass('vat_id'); ?>
 <?php $_cityValidationClass = $viewModel->addressGetAttributeValidationClass('city'); ?>
 <?php $_postcodeValidationClass_value = $viewModel->addressGetAttributeValidationClass('postcode'); ?>
