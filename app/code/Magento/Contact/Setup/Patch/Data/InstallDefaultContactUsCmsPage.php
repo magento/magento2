@@ -28,8 +28,15 @@ class InstallDefaultContactUsCmsPage implements DataPatchInterface
     private $pageInterfaceFactory;
 
     /** @var string */
-    private const CMS_PAGE_CONTENT = <<<EOD
- {{block class="Magento\Contact\Block\ContactForm" name="contactForm" template="Magento_Contact::form.phtml"}}
+    private const CMS_CONTACT_US_LAYOUT = <<<EOD
+<referenceContainer name="content">
+    <block class="Magento\Contact\Block\ContactForm" name="contactForm" template="Magento_Contact::form.phtml">
+        <container name="form.additional.info" label="Form Additional Info"/>
+        <arguments>
+            <argument name="view_model" xsi:type="object">Magento\Contact\ViewModel\UserDataProvider</argument>
+        </arguments>
+    </block>
+</referenceContainer>
 EOD;
 
     /** @var string index for stores scope config */
@@ -67,7 +74,7 @@ EOD;
             PageInterface::PAGE_LAYOUT => '1column',
             PageInterface::IDENTIFIER => 'contact',
             PageInterface::CONTENT_HEADING => 'Contact Us',
-            PageInterface::CONTENT => self::CMS_PAGE_CONTENT,
+            PageInterface::LAYOUT_UPDATE_XML => self::CMS_CONTACT_US_LAYOUT,
             PageInterface::IS_ACTIVE => true,
             PageInterface::SORT_ORDER => 0,
             self::CONTACT_US_STORES => [0]

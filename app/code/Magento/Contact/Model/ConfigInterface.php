@@ -39,6 +39,11 @@ interface ConfigInterface
     const XML_PATH_CMS_CONTACT_US_PAGE = 'web/default/cms_contact_page';
 
     /**
+     * Contact us index path
+     */
+    const CONTACT_US_ROUTE_INDEX_PATH = 'contact/index/index';
+
+    /**
      * Check if contacts module is enabled
      *
      * @return bool

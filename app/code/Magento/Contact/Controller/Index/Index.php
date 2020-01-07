@@ -70,7 +70,7 @@ class Index extends AbstractIndex implements HttpGetActionInterface
         if ($resultPage === false) {
             $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
 
-            return $resultForward->forward('noroute');
+            return $resultForward->forward('no-route');
         }
         return $resultPage;
     }
