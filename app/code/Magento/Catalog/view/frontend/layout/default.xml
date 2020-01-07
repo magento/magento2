@@ -56,6 +56,7 @@
                             </item>
                         </item>
                     </argument>
+                    <argument name="compare_view_model" xsi:type="object">Magento\Catalog\ViewModel\Product\Compare\Sidebar</argument>
                 </arguments>
             </block>
         </referenceContainer>

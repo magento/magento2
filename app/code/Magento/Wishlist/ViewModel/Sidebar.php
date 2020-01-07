@@ -7,11 +7,12 @@
 namespace Magento\Wishlist\ViewModel;
 
 use Magento\Wishlist\Helper\Data as WishlistHelper;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * ViewModel for Wishlist Url
  */
-class Sidebar implements \Magento\Framework\View\Element\Block\ArgumentInterface
+class Sidebar implements ArgumentInterface
 {
     /**
      * @var WishlistHelper

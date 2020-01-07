@@ -9,7 +9,7 @@
 /** @var \Magento\Wishlist\ViewModel\Sidebar $viewModel */
 $viewModel = $block->getData('sidebar_view_model');
 ?>
-<?php if ($viewModel->isWishlistAllowed()) : ?>
+<?php if ($viewModel->isWishlistAllowed()): ?>
     <div class="block block-wishlist" data-bind="scope: 'wishlist'">
         <div class="block-title">
             <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>
@@ -28,7 +28,9 @@ $viewModel = $block->getData('sidebar_view_model');
         <div class="block-content">
             <strong class="subtitle"><?= $block->escapeHtml(__('Last Added Items')) ?></strong>
             <!-- ko if: wishlist().counter -->
-                <ol class="product-items no-display" id="wishlist-sidebar" data-bind="foreach: wishlist().items, css: {'no-display': null}">
+                <ol class="product-items no-display"
+                    id="wishlist-sidebar"
+                    data-bind="foreach: wishlist().items, css: {'no-display': null}">
                     <li class="product-item">
                         <div class="product-item-info">
                             <a class="product-item-photo" data-bind="attr: { href: product_url, title: product_name }">
@@ -45,10 +47,18 @@ $viewModel = $block->getData('sidebar_view_model');
                                     <!-- ko if: product_is_saleable_and_visible -->
                                     <div class="actions-primary">
                                         <!-- ko if: product_has_required_options -->
-                                        <a href="#" data-bind="attr: {'data-post': add_to_cart_params}" class="action tocart primary"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span></a>
+                                        <a href="#"
+                                           data-bind="attr: {'data-post': add_to_cart_params}"
+                                           class="action tocart primary">
+                                            <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                        </a>
                                         <!-- /ko -->
                                         <!-- ko ifnot: product_has_required_options -->
-                                            <button type="button" class="action tocart primary" data-bind="attr: {'data-post': add_to_cart_params}"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span></button>
+                                            <button type="button"
+                                                    class="action tocart primary"
+                                                    data-bind="attr: {'data-post': add_to_cart_params}">
+                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                            </button>
                                         <!-- /ko -->
                                     </div>
                                     <!-- /ko -->
@@ -68,7 +78,9 @@ $viewModel = $block->getData('sidebar_view_model');
                     <div class="primary">
                         <a class="action details"
                            href="<?= $block->escapeUrl($viewModel->getWishlistUrl()) ?>"
-                           title="<?= $block->escapeHtmlAttr(__('Go to Wish List')) ?>"><span><?= $block->escapeHtml(__('Go to Wish List')) ?></span></a>
+                           title="<?= $block->escapeHtmlAttr(__('Go to Wish List')) ?>">
+                           <span><?= $block->escapeHtml(__('Go to Wish List')) ?></span>
+                        </a>
                     </div>
                 </div>
             <!-- /ko -->
