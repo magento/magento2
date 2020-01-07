@@ -187,7 +187,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             '_inherit" name="' .
             $this->_testData['name'] .
             '[inherit]" type="checkbox" value="1"' .
-            ' class="checkbox config-inherit" checked="checked"' . ' disabled="disabled"' .
+            ' class="checkbox config-inherit" checked="checked"' . ' disabled="disabled"' . ' readonly="1"' .
             ' onclick="toggleValueElements(this, Element.previous(this.parentNode))" /> ';
 
         $expected .= '<label for="' . $this->_testData['htmlId'] . '_inherit" class="inherit">Use Website</label>';
