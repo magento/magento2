@@ -113,6 +113,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Override parent _construct method
+     *
      * @return void
      */
     protected function _construct()
