@@ -167,7 +167,7 @@ class EmailNotification implements EmailNotificationInterface
     private function emailAndPasswordChanged(CustomerInterface $customer, $email)
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -193,7 +193,7 @@ class EmailNotification implements EmailNotificationInterface
     private function emailChanged(CustomerInterface $customer, $email)
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -218,7 +218,7 @@ class EmailNotification implements EmailNotificationInterface
     private function passwordReset(CustomerInterface $customer)
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -317,7 +317,7 @@ class EmailNotification implements EmailNotificationInterface
     public function passwordReminder(CustomerInterface $customer)
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -341,7 +341,7 @@ class EmailNotification implements EmailNotificationInterface
     public function passwordResetConfirmation(CustomerInterface $customer)
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -382,7 +382,7 @@ class EmailNotification implements EmailNotificationInterface
             );
         }
 
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer, $sendemailStoreId);
         }
 
