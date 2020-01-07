@@ -126,7 +126,7 @@
                 </checkbox>
             </formElements>
         </field>
-        <field name="prefix" sortOrder="10">
+        <field name="prefix" component="Magento_Customer/js/form/element/prefix-suffix" sortOrder="10">
             <settings>
                 <dataType>text</dataType>
                 <visible>true</visible>
@@ -153,7 +153,7 @@
                 </validation>
             </settings>
         </field>
-        <field name="suffix" sortOrder="40">
+        <field name="suffix" component="Magento_Customer/js/form/element/prefix-suffix" sortOrder="40">
             <settings>
                 <dataType>text</dataType>
                 <visible>true</visible>
