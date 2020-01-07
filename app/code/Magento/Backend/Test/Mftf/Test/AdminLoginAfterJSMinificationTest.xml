@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
             <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
         </before>
         <after>
