@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Contact\Setup\Patch\Data;
 
 use Magento\Cms\Api\Data\PageInterface;
@@ -99,7 +103,7 @@ EOD;
     /**
      * @inheritDoc
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [];
     }
@@ -107,7 +111,7 @@ EOD;
     /**
      * @inheritDoc
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }

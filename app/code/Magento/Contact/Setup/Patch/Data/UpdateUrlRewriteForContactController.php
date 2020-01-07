@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Contact\Setup\Patch\Data;
 
 use Magento\Contact\Model\ConfigInterface;
@@ -49,7 +53,7 @@ class UpdateUrlRewriteForContactController implements DataPatchInterface
     }
 
     /**
-     * Installs cms contact us page
+     * Update url rewrite request path for contact page
      *
      * @return DataPatchInterface|void
      * @throws CouldNotSaveException
@@ -73,6 +77,8 @@ class UpdateUrlRewriteForContactController implements DataPatchInterface
     }
 
     /**
+     * Get url rewrite abstract model with contact page redirect
+     *
      * @return bool|AbstractModel|UrlRewrite
      */
     private function getContactUsUrlRewriteModel()
@@ -86,6 +92,8 @@ class UpdateUrlRewriteForContactController implements DataPatchInterface
     }
 
     /**
+     * Persist url rewrite model
+     *
      * @param UrlRewrite $urlRewrite
      *
      * @throws AlreadyExistsException
