@@ -33,7 +33,6 @@ define([
             htmlContainer.priceBundle();
 
             expect($.mage.priceBundle.prototype._updatePriceBox).toEqual(jasmine.any(Function));
-            expect($.mage.priceBundle.prototype._updatePriceBox).toHaveBeenCalled();
             expect($.mage.priceBundle.prototype._updatePriceBox).toHaveBeenCalledTimes(1);
         });
 
@@ -43,6 +42,24 @@ define([
             $('.price-box', htmlContainer).priceBox();
             expect($.mage.priceBundle.prototype._updatePriceBox).toEqual(jasmine.any(Function));
             expect($.mage.priceBundle.prototype._updatePriceBox).toHaveBeenCalledTimes(2);
+        });
+
+        it('Check _applyOptionNodeFix method doesn\'t call after priceBox initialization.', function () {
+            var optionConfig = {
+                    optionConfig: {
+                        prices: {}
+                    }
+                },
+                priceConfig = {
+                    priceConfig: 10
+                };
+
+            spyOn($.mage.priceBundle.prototype, '_applyOptionNodeFix').and.callThrough();
+            htmlContainer.priceBundle(optionConfig);
+            $('.price-box', htmlContainer).priceBox(priceConfig);
+            $('.price-box', htmlContainer).trigger('price-box-initialized');
+            expect($.mage.priceBundle.prototype._applyOptionNodeFix).toEqual(jasmine.any(Function));
+            expect($.mage.priceBundle.prototype._applyOptionNodeFix).toHaveBeenCalledTimes(2);
         });
 
         it('Check _updatePriceBox method call before priceBox was initialized.', function () {
