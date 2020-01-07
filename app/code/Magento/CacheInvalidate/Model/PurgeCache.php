@@ -9,7 +9,6 @@ use Magento\Framework\Cache\InvalidateLogger;
 
 /**
  * Class PurgeCache
- * @package Magento\CacheInvalidate\Model
  */
 class PurgeCache
 {
@@ -54,7 +53,7 @@ class PurgeCache
         \Magento\PageCache\Model\Cache\Server $cacheServer,
         \Magento\CacheInvalidate\Model\SocketFactory $socketAdapterFactory,
         InvalidateLogger $logger,
-        $maxHeaderSize = 7680
+        int $maxHeaderSize = 7680
     ) {
         $this->cacheServer = $cacheServer;
         $this->socketAdapterFactory = $socketAdapterFactory;
