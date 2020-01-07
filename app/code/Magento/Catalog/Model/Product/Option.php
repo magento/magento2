@@ -205,7 +205,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get resource instance
+     *
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated 101.1.0 because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -570,7 +573,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Clearing object's data
+     *
+     * @return $this
      */
     protected function _clearData()
     {
@@ -580,7 +585,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Clearing cyclic references
+     *
+     * @return $this
      */
     protected function _clearReferences()
     {
@@ -601,7 +608,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get product SKU
+     *
+     * @return string
      */
     public function getProductSku()
     {
@@ -613,7 +622,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get option id
+     *
+     * @return int|null
      * @codeCoverageIgnoreStart
      */
     public function getOptionId()
@@ -622,7 +633,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get option title
+     *
+     * @return string
      */
     public function getTitle()
     {
@@ -630,7 +643,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get option type
+     *
+     * @return string
      */
     public function getType()
     {
@@ -638,7 +653,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get sort order
+     *
+     * @return int
      */
     public function getSortOrder()
     {
@@ -646,7 +663,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get is require
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsRequire()
     {
@@ -654,7 +674,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get price type
+     *
+     * @return string|null
      */
     public function getPriceType()
     {
@@ -662,7 +684,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Get Sku
+     *
+     * @return string|null
      */
     public function getSku()
     {
@@ -710,7 +734,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set product SKU
+     *
+     * @param string $productSku
+     * @return $this
      */
     public function setProductSku($productSku)
     {
@@ -718,7 +745,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set option id
+     *
+     * @param int $optionId
+     * @return $this
      */
     public function setOptionId($optionId)
     {
@@ -726,7 +756,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set option title
+     *
+     * @param string $title
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -734,7 +767,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set option type
+     *
+     * @param string $type
+     * @return $this
      */
     public function setType($type)
     {
@@ -742,7 +778,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return $this
      */
     public function setSortOrder($sortOrder)
     {
@@ -750,7 +789,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set is require
+     *
+     * @param bool $isRequired
+     * @return $this
      */
     public function setIsRequire($isRequired)
     {
@@ -758,7 +800,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set price
+     *
+     * @param float $price
+     * @return $this
      */
     public function setPrice($price)
     {
@@ -766,7 +811,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set price type
+     *
+     * @param string $priceType
+     * @return $this
      */
     public function setPriceType($priceType)
     {
@@ -774,7 +822,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @inheritdoc
+     * Set Sku
+     *
+     * @param string $sku
+     * @return $this
      */
     public function setSku($sku)
     {
