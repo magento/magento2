@@ -100,7 +100,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9/_]{3,}" />
+            <xs:pattern value="[a-zA-Z0-9/_\-]{3,}" />
         </xs:restriction>
     </xs:simpleType>
 

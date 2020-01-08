@@ -26,7 +26,7 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -34,19 +34,19 @@
         <!-- Create a configurable swatch product via the UI -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
         <!--Add swatch attribute to configurable product-->
         <actionGroup ref="AddVisualSwatchToProductActionGroup" stepKey="addSwatchToProduct"/>
         <!--Add custom option to configurable product-->
-        <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
+        <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addCustomOptionToProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        
+
         <!--Go to storefront-->
         <amOnPage url="" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
@@ -85,7 +85,7 @@
         <click selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="deleteCartItem"/>
 
         <!--Delete product-->
-        <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
             <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
         </actionGroup>
     </test>

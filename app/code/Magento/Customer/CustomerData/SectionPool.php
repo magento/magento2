@@ -63,6 +63,16 @@ class SectionPool implements SectionPoolInterface
     }
 
     /**
+     * Return array of section names.
+     *
+     * @return array
+     */
+    public function getSectionNames()
+    {
+        return array_keys($this->sectionSourceMap);
+    }
+
+    /**
      * Get section sources by section names
      *
      * @param array $sectionNames

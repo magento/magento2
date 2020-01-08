@@ -49,14 +49,14 @@
             <see userInput="You saved the store view." stepKey="seeSaveMessage" />
         </before>
         <after>
-            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+        <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
         <!--Create a Simple Product with Custom Options -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
         <waitForPageLoad stepKey="waitForCatalogProductGrid"/>

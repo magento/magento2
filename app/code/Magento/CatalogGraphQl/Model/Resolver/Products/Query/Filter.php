@@ -12,7 +12,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
-use Magento\Framework\GraphQl\Query\FieldTranslator;
 
 /**
  * Retrieve filtered product data based off given search criteria in a format that GraphQL can interpret.
@@ -30,31 +29,31 @@ class Filter
     private $productDataProvider;
 
     /**
-     * @var FieldTranslator
-     */
-    private $fieldTranslator;
-
-    /**
      * @var \Magento\Catalog\Model\Layer\Resolver
      */
     private $layerResolver;
 
     /**
+     * FieldSelection
+     */
+    private $fieldSelection;
+
+    /**
      * @param SearchResultFactory $searchResultFactory
      * @param Product $productDataProvider
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param FieldTranslator $fieldTranslator
+     * @param FieldSelection $fieldSelection
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
         Product $productDataProvider,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
-        FieldTranslator $fieldTranslator
+        FieldSelection $fieldSelection
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;
-        $this->fieldTranslator = $fieldTranslator;
         $this->layerResolver = $layerResolver;
+        $this->fieldSelection = $fieldSelection;
     }
 
     /**
@@ -70,7 +69,7 @@ class Filter
         ResolveInfo $info,
         bool $isSearch = false
     ): SearchResult {
-        $fields = $this->getProductFields($info);
+        $fields = $this->fieldSelection->getProductsFieldSelection($info);
         $products = $this->productDataProvider->getList($searchCriteria, $fields, $isSearch);
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
@@ -79,42 +78,11 @@ class Filter
             $productArray[$product->getId()]['model'] = $product;
         }
 
-        return $this->searchResultFactory->create($products->getTotalCount(), $productArray);
-    }
-
-    /**
-     * Return field names for all requested product fields.
-     *
-     * @param ResolveInfo $info
-     * @return string[]
-     */
-    private function getProductFields(ResolveInfo $info) : array
-    {
-        $fieldNames = [];
-        foreach ($info->fieldNodes as $node) {
-            if ($node->name->value !== 'products') {
-                continue;
-            }
-            foreach ($node->selectionSet->selections as $selection) {
-                if ($selection->name->value !== 'items') {
-                    continue;
-                }
-
-                foreach ($selection->selectionSet->selections as $itemSelection) {
-                    if ($itemSelection->kind === 'InlineFragment') {
-                        foreach ($itemSelection->selectionSet->selections as $inlineSelection) {
-                            if ($inlineSelection->kind === 'InlineFragment') {
-                                continue;
-                            }
-                            $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
-                        }
-                        continue;
-                    }
-                    $fieldNames[] = $this->fieldTranslator->translate($itemSelection->name->value);
-                }
-            }
-        }
-
-        return $fieldNames;
+        return $this->searchResultFactory->create(
+            [
+                'totalCount' => $products->getTotalCount(),
+                'productsSearchResult' => $productArray
+            ]
+        );
     }
 }

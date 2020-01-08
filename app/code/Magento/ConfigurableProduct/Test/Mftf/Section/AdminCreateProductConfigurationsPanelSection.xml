@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateProductConfigurationsPanel">
+        <element name="attributeOption" type="checkbox" selector="li[data-attribute-option-title='{{colorOption}}']" parameterized="true"/>
         <element name="next" type="button" selector=".steps-wizard-navigation .action-next-step" timeout="30"/>
         <element name="createNewAttribute" type="button" selector=".select-attributes-actions button[title='Create New Attribute']" timeout="30"/>
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
@@ -16,6 +17,8 @@
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
         <element name="id" type="text" selector="//tr[contains(@data-repeat-index, '0')]/td[2]/div"/>
+        <element name="variationsGrid" type="block" selector=".admin__field[data-index='configurable-matrix']"/>
+        <element name="variationQty" type="input" selector=".admin__field[data-index='configurable-matrix'] input[name='configurable-matrix[{{rowIndex}}][qty]']" parameterized="true"/>
         <element name="attributeCheckbox" type="checkbox" selector="//div[contains(text(), '{{arg}}')]/ancestor::tr//input[@data-action='select-row']" parameterized="true"/>
         <element name="defaultLabel" type="text" selector="//div[contains(text(), '{{arg}}')]/ancestor::tr//td[3]/div[@class='data-grid-cell-content']" parameterized="true"/>
 
