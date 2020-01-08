@@ -38,11 +38,11 @@
             </createData>
             <createData entity="_defaultCmsPage" stepKey="createPreReqPage"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
         <!--Open created cms page-->
         <comment userInput="Open created cms page" stepKey="commentOpenCreatedCmsPage"/>
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage1">
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage1">
             <argument name="CMSPage" value="$$createPreReqPage$$"/>
         </actionGroup>
         <!--Add widget to cms page-->
@@ -76,7 +76,7 @@
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$$createSecondProduct.name$$')}}" stepKey="seeElementByName2"/>
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$$createFirstProduct.name$$')}}" stepKey="seeElementByName3"/>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createPreReqPage" stepKey="deletePreReqPage" />
             <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>

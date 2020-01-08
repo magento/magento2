@@ -260,6 +260,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testMatchWithRedirect()
     {
+        $queryParams = [];
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
         $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
@@ -268,7 +269,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->urlFinder->expects($this->any())->method('findOneByData')->will($this->returnValue($urlRewrite));
         $this->response->expects($this->once())->method('setRedirect')
             ->with('new-target-path', 'redirect-code');
-        $this->url->expects($this->once())->method('getUrl')->with('', ['_direct' => 'target-path'])
+        $this->request->expects($this->once())->method('getParams')->willReturn($queryParams);
+        $this->url->expects($this->once())->method('getUrl')->with(
+            '',
+            ['_direct' => 'target-path', '_query' => $queryParams]
+        )
             ->will($this->returnValue('new-target-path'));
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
@@ -282,6 +287,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testMatchWithCustomInternalRedirect()
     {
+        $queryParams = [];
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
         $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
@@ -289,8 +295,12 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $urlRewrite->expects($this->any())->method('getRedirectType')->will($this->returnValue('redirect-code'));
         $urlRewrite->expects($this->any())->method('getTargetPath')->will($this->returnValue('target-path'));
         $this->urlFinder->expects($this->any())->method('findOneByData')->will($this->returnValue($urlRewrite));
+        $this->request->expects($this->any())->method('getParams')->willReturn($queryParams);
         $this->response->expects($this->once())->method('setRedirect')->with('a', 'redirect-code');
-        $this->url->expects($this->once())->method('getUrl')->with('', ['_direct' => 'target-path'])->willReturn('a');
+        $this->url->expects($this->once())->method('getUrl')->with(
+            '',
+            ['_direct' => 'target-path', '_query' => $queryParams]
+        )->willReturn('a');
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
             ->with(\Magento\Framework\App\Action\Redirect::class);
@@ -312,6 +322,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $urlRewrite->expects($this->any())->method('getTargetPath')->will($this->returnValue($targetPath));
         $this->urlFinder->expects($this->any())->method('findOneByData')->will($this->returnValue($urlRewrite));
         $this->response->expects($this->once())->method('setRedirect')->with($targetPath, 'redirect-code');
+        $this->request->expects($this->never())->method('getParams');
         $this->url->expects($this->never())->method('getUrl');
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
@@ -350,55 +361,5 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Framework\App\Action\Forward::class);
 
         $this->router->match($this->request);
-    }
-
-    /**
-     * Test to match corresponding URL Rewrite on request with query params
-     *
-     * @param string $originalRequestPath
-     * @param string $requestPath
-     * @param int $countOfQueryParams
-     * @dataProvider matchWithQueryParamsDataProvider
-     */
-    public function testMatchWithQueryParams(string $originalRequestPath, string $requestPath, int $countOfQueryParams)
-    {
-        $targetPath = 'target-path';
-
-        $this->storeManager->method('getStore')->willReturn($this->store);
-        $urlRewrite = $this->createMock(UrlRewrite::class);
-        $urlRewrite->method('getRedirectType')->willReturn(0);
-        $urlRewrite->method('getTargetPath')->willReturn($targetPath);
-        $urlRewrite->method('getRequestPath')->willReturn($requestPath);
-        $this->urlFinder->method('findOneByData')
-            ->with([UrlRewrite::REQUEST_PATH => $requestPath, UrlRewrite::STORE_ID => $this->store->getId()])
-            ->willReturn($urlRewrite);
-
-        $this->requestQuery->method('count')->willReturn($countOfQueryParams);
-        $this->request->method('getPathInfo')
-            ->willReturn($originalRequestPath);
-        $this->request->expects($this->once())
-            ->method('setPathInfo')
-            ->with('/' . $targetPath);
-        $this->request->expects($this->once())
-            ->method('setAlias')
-            ->with(UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $requestPath);
-        $this->actionFactory->expects($this->once())
-            ->method('create')
-            ->with(Forward::class);
-
-        $this->router->match($this->request);
-    }
-
-    /**
-     * Data provider for Test to match corresponding URL Rewrite on request with query params
-     *
-     * @return array
-     */
-    public function matchWithQueryParamsDataProvider(): array
-    {
-        return [
-            ['/category.html/', 'category.html/', 0],
-            ['/category.html/', 'category.html', 1],
-        ];
     }
 }

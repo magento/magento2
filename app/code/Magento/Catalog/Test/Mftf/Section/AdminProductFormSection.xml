@@ -8,6 +8,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
+        <element name="additionalOptions" type="select" selector=".admin__control-multiselect"/>
+        <element name="datepickerNewAttribute" type="input" selector="[data-index='{{attrName}}'] input" timeout="30" parameterized="true"/>
         <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
         <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
         <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
@@ -37,7 +39,7 @@
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']" timeout="30"/>
         <element name="unselectCategories" type="button" selector="//span[@class='admin__action-multiselect-crumb']/span[contains(.,'{{category}}')]/../button[@data-action='remove-selected-item']" parameterized="true" timeout="30"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
-        <element name="advancedInventoryLink" type="button" selector="//button[contains(@data-index, 'advanced_inventory_button')]" timeout="30"/>
+        <element name="advancedInventoryLink" type="button" selector="button[data-index='advanced_inventory_button'].action-additional" timeout="30"/>
         <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']" timeout="30"/>
         <element name="productStockStatusDisabled" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]'][disabled=true]"/>
         <element name="stockStatus" type="select" selector="[data-index='product-details'] select[name='product[quantity_and_stock_status][is_in_stock]']"/>
@@ -156,6 +158,7 @@
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" timeout="30"/>
         <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="FolderContainer" type="button" selector="div[data-role='tree']" />
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
         <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
         <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />

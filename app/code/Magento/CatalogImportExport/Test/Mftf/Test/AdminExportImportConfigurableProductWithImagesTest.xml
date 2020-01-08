@@ -19,6 +19,9 @@
             <group value="configurable_product"/>
         </annotations>
         <before>
+            <!-- Add downloadable domains -->
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+
             <!-- Create sample data:
                  1. Create simple products -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -125,9 +128,12 @@
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
+            <actionGroup ref="DeleteAllExportedFilesActionGroup" stepKey="clearExportedFilesList"/>
     </before>
         <after>
+            <!-- Remove downloadable domains -->
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+
             <!-- Delete created data -->
             <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFisrtSimpleProduct"/>
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
@@ -144,7 +150,7 @@
             <deleteData createDataKey="createExportImportCategory" stepKey="deleteExportImportCategory"/>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <!-- Admin logout-->
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
@@ -153,7 +159,7 @@
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
 
         <!-- Set Export Settings: Entity Type > Products, SKU > ConfProd's sku and press "Continue" -->
-        <actionGroup ref="exportProductsFilterByAttribute" stepKey="exportProductBySku">
+        <actionGroup ref="ExportProductsFilterByAttributeActionGroup" stepKey="exportProductBySku">
             <argument name="attribute" value="sku"/>
             <argument name="attributeData" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
@@ -163,12 +169,12 @@
         <magentoCLI command="cron:run" stepKey="runCronSecondTime"/>
 
         <!-- Save exported file: file successfully downloaded -->
-        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+        <actionGroup ref="DownloadFileByRowIndexActionGroup" stepKey="downloadCreatedProducts">
             <argument name="rowIndex" value="0"/>
         </actionGroup>
 
         <!-- Go to Catalog > Products. Find ConfProd and delete it -->
-        <actionGroup ref="deleteProductBySku" stepKey="deleteConfigurableProductBySku">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductBySku">
             <argument name="sku" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
 
@@ -181,7 +187,7 @@
         </actionGroup>
 
         <!-- Go to Catalog > Products: Configurable product exists -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openConfigurableProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigurableProduct">
             <argument name="productSku" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
 
@@ -198,7 +204,7 @@
 
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToProductGalleryTab"/>
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage">
+        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
 
@@ -208,7 +214,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToChildProductGalleryTab"/>
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertChildProductImageAdminProductPage">
+        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertChildProductImageAdminProductPage">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <closeTab stepKey="closeConfigChildProductPage"/>

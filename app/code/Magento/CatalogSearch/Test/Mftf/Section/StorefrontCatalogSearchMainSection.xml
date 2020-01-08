@@ -16,5 +16,7 @@
         <element name="productCount" type="text" selector="#toolbar-amount"/>
         <element name="message" type="text" selector="div.message div"/>
         <element name="searchResults" type="block" selector="#maincontent .column.main"/>
+        <element name="relatedSearchTermsTitle" type="text" selector="div.message dl.block dt.title"/>
+        <element name="relatedSearchTerm" type="text" selector="div.message dl.block dd.item a"/>
     </section>
 </sections>

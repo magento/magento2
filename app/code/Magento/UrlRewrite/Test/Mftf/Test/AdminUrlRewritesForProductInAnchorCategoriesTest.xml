@@ -54,7 +54,7 @@
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
 
         <!-- 3. Edit Category 1 for DEFAULT Store View: -->
-        <actionGroup ref="switchCategoryStoreView" stepKey="switchStoreView">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
             <argument name="Store" value="_defaultStore.name"/>
             <argument name="CatName" value="$$simpleSubCategory1.name$$"/>
         </actionGroup>
@@ -137,7 +137,7 @@
         <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
 
         <!-- 3. Edit Category 1 for DEFAULT Store View: -->
-        <actionGroup ref="switchCategoryStoreView" stepKey="switchStoreView">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
             <argument name="Store" value="_defaultStore.name"/>
             <argument name="CatName" value="$$simpleSubCategory1.name$$"/>
         </actionGroup>
@@ -200,7 +200,7 @@
         </before>
         <remove keyForRemoval="switchStoreView"/>
         <!-- 3. Edit Category 1 for All store view: -->
-        <actionGroup ref="navigateToCreatedCategory" stepKey="goToCategoryPage" after="seeValue4">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="goToCategoryPage" after="seeValue4">
             <argument name="Category" value="$$simpleSubCategory1$$"/>
         </actionGroup>
         <remove keyForRemoval="uncheckRedirect2"/>
@@ -227,7 +227,7 @@
         </before>
         <remove keyForRemoval="switchStoreView"/>
         <!-- 3. Edit Category 1 for All store view: -->
-        <actionGroup ref="navigateToCreatedCategory" stepKey="goToCategoryPage" after="seeValue4">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="goToCategoryPage" after="seeValue4">
             <argument name="Category" value="$$simpleSubCategory1$$"/>
         </actionGroup>
         <remove keyForRemoval="uncheckRedirect2"/>

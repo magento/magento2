@@ -12,7 +12,7 @@
                 <label>Cron (Scheduled Tasks)</label>
                 <comment>For correct URLs generated during cron runs please make sure that Web &gt; Secure and Unsecure Base URLs are explicitly set. All the times are in minutes.</comment>
                 <group id="template" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Cron configuration options for group: </label>
+                    <label>Cron configuration options for group:</label>
                     <field id="schedule_generate_every" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Generate Schedules Every</label>
                         <validate>validate-zero-or-greater validate-digits</validate>

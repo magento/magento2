@@ -49,6 +49,7 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture default/reports/options/enabled 1
      */
     public function testGetPreparedCollectionProductPrice()
     {
@@ -57,9 +58,11 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->getById(1);
         $this->eventManager->dispatch('catalog_controller_product_view', ['product' => $product]);
 
+        $collection = $viewedProductsTabBlock->getPreparedCollection();
+
         $this->assertEquals(
             10,
-            $viewedProductsTabBlock->getPreparedCollection()->getFirstItem()->getDataByKey('price')
+            $collection->getFirstItem()->getDataByKey('price')
         );
     }
 }

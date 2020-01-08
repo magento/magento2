@@ -39,7 +39,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
     protected $taxCalculationMock;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManagerMock;
 
@@ -93,7 +93,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 

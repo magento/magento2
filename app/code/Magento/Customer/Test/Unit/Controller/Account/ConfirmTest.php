@@ -282,7 +282,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->willReturnSelf();
 
@@ -402,7 +402,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->willReturnSelf();
 
