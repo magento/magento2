@@ -43,7 +43,6 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
      */
     protected function assertHeaderPresent($name, $value)
     {
-        $value = [$value];
         $this->interceptedResponse->sendResponse();
         $header = $this->interceptedResponse->getHeader($name);
 
@@ -57,7 +56,7 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
         }
 
         $this->assertSame(
-            $value,
+            [$value],
             $headerContent
         );
     }

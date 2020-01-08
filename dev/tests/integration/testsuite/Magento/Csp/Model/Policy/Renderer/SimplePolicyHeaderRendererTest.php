@@ -11,7 +11,6 @@ use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\Response\Http as HttpResponse;
-use Zend\Http\Header\HeaderInterface;
 
 /**
  * Test that rendering policies via headers works.
