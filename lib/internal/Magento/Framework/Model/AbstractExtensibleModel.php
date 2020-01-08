@@ -127,8 +127,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * Initialize customAttributes based on existing data
-     *
-     * @return $this
      */
     protected function initializeCustomAttributes()
     {
