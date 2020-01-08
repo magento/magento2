@@ -194,7 +194,7 @@ class AccountManagementTest extends WebapiAbstract
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
-                $expectedException->addError(__('"Email" is not a valid email address.'));
+                $expectedException->addError(__('Please enter a valid email address (Ex: johndoe@domain.com)'));
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
@@ -206,7 +206,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => '"Email" is not a valid email address.',
+                    'message' => 'Please enter a valid email address (Ex: johndoe@domain.com)',
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
             }

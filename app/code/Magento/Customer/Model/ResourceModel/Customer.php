@@ -129,18 +129,21 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
         if (!$customer->getEmail()) {
             throw new ValidatorException(__('The customer email is missing. Enter and try again.'));
-        } else {
-            if(!preg_match("/^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}"
-                . "-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.("
-                . "[a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}"
-                . "\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*@([a-z0-9-]|[\x{00A0}"
-                . "-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.([a-z0-9-]|"
-                . "[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*\."
-                . "(([a-z]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])"
-                . "{2,})$/u",$customer->getEmail())) {
-                throw new ValidatorException(__('Please enter a valid email address (Ex: johndoe@domain.com).'));
-            }
+        } 
+        
+        $pattern = "/^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}"
+            . "-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.("
+            . "[a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}"
+            . "\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*@([a-z0-9-]|[\x{00A0}"
+            . "-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.([a-z0-9-]|"
+            . "[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*\."
+            . "(([a-z]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])"
+            . "{2,})$/u";
+        
+        if (!preg_match($pattern,$customer->getEmail())) {
+            throw new ValidatorException(__('Please enter a valid email address (Ex: johndoe@domain.com)'));
         }
+        
 
         $connection = $this->getConnection();
         $bind = ['email' => $customer->getEmail()];
