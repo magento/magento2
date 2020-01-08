@@ -21,7 +21,10 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification"/>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}" stepKey="navigateToAdminPage"/>
+            <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" stepKey="fillUsernameOnLoginPage"/>
+            <fillField userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" selector="{{AdminLoginFormSection.password}}" stepKey="fillPasswordOnPage"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickAdminLogin"/>
             <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
         </before>
         <after>
