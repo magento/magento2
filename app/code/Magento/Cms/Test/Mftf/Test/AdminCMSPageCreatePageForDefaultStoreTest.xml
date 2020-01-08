@@ -12,8 +12,10 @@
             <features value="Cms"/>
             <title value="Create CMS Page via the Admin for default store"/>
             <description value="Admin should be able to create a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14676"/>
             <group value="backend"/>
-            <group value="cMSContent"/>
+            <group value="Cms"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -30,13 +32,13 @@
             <argument name="storeViewName" value="Default Store View"/>
         </actionGroup>
         <!--Verify successfully saved-->
-        <actionGroup ref="saveCmsPage" stepKey="savePageWithDefaultStore"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="savePageWithDefaultStore"/>
         <!--Navigate to page in Admin-->
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCMSPageWithDefaultStoreInAdmin">
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCMSPageWithDefaultStoreInAdmin">
             <argument name="CMSPage" value="_duplicatedCMSPage"/>
         </actionGroup>
         <!--Verify Page Data in Admin-->
-        <actionGroup ref="AssertCMSPageContent" stepKey="verifyPageWithDefaultStoreDataInAdmin"/>
+        <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="verifyPageWithDefaultStoreDataInAdmin"/>
         <!--Verify Store ID-->
         <actionGroup ref="AssertCMSPageStoreIdActionGroup" stepKey="verifyStoreId">
             <argument name="storeId" value="1"/>

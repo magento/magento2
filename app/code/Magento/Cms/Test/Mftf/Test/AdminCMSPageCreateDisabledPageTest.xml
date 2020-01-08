@@ -12,8 +12,10 @@
             <features value="Cms"/>
             <title value="Create disabled CMS Page via the Admin"/>
             <description value="Admin should be able to create a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14677"/>
             <group value="backend"/>
-            <group value="cMSContent"/>
+            <group value="Cms"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -29,7 +31,7 @@
         <!--Fill the CMS page form-->
         <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForDisabledPage"/>
         <!--Verify successfully saved-->
-        <actionGroup ref="saveCmsPage" stepKey="saveDisabledPage"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveDisabledPage"/>
         <!--Check that page is disabled on frontend-->
         <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="goToCMSPageOnStorefront">
             <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>

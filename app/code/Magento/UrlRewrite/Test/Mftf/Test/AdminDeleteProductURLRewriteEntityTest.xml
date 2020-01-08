@@ -12,6 +12,9 @@
             <stories value="Delete Product UrlRewrite"/>
             <title value="Delete created product URL rewrite"/>
             <description value="Login as admin, create product with category and UrlRewrite, delete created URL rewrite"/>
+            <testCaseId value="MC-5347"/>
+            <severity value="MAJOR"/>
+            <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
         </annotations>
 
