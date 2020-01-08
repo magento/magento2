@@ -445,7 +445,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/productReviews');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="reviwGrid"', $body);
+        $this->assertContains('<div id="reviewGrid"', $body);
     }
 
     /**
