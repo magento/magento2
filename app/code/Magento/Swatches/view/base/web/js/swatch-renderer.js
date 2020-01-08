@@ -723,7 +723,9 @@ define([
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
                 $input = $parent.find('.' + $widget.options.classes.attributeInput),
-                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']);
+                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']),
+                $priceBox = $widget.element.parents($widget.options.selectorProduct)
+                    .find(this.options.selectorProductPrice);
 
             if ($widget.inProductList) {
                 $input = $widget.productForm.find(
@@ -751,16 +753,15 @@ define([
 
             $widget._Rebuild();
 
-            if ($widget.element.parents($widget.options.selectorProduct)
-                    .find(this.options.selectorProductPrice).is(':data(mage-priceBox)')
-            ) {
+            if ($priceBox.is(':data(mage-priceBox)')) {
                 $widget._UpdatePrice();
             }
 
             $(document).trigger('updateMsrpPriceBlock',
                 [
                     _.findKey($widget.options.jsonConfig.index, $widget.options.jsonConfig.defaultValues),
-                    $widget.options.jsonConfig.optionPrices
+                    $widget.options.jsonConfig.optionPrices,
+                    $priceBox
                 ]);
 
             if (parseInt(checkAdditionalData['update_product_preview_image'], 10) === 1) {
