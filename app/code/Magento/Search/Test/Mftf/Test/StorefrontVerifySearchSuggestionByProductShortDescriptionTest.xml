@@ -24,6 +24,10 @@
 
             <!-- Create product with short description -->
             <createData entity="ApiProductWithDescription" stepKey="product"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
 
@@ -35,12 +39,12 @@
             <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
 
             <!--Filter the search term -->
-            <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByThirdSearchQuery">
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
                 <argument name="searchQuery" value="{{ApiProductShortDescription.value}}"/>
             </actionGroup>
 
             <!-- Delete created below search terms -->
-            <actionGroup ref="deleteSearchTerm" stepKey="deleteSearchTerms"/>
+            <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

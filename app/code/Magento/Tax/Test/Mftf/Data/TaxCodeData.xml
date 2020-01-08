@@ -26,6 +26,12 @@
         <data key="zip">*</data>
         <data key="rate">8.375</data>
     </entity>
+    <entity name="SimpleTaxNYRate" type="tax">
+        <data key="state">New York</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">20.00</data>
+    </entity>
     <entity name="SimpleTaxCA" type="tax">
         <data key="state">California</data>
         <data key="country">United States</data>
