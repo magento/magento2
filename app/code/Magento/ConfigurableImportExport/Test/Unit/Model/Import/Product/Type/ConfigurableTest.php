@@ -410,7 +410,6 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'attribute_code' => 'testattr2',
                 'is_global' => '1',
                 'is_visible' => '1',
-                'is_static' => '0',
                 'is_required' => '0',
                 'is_unique' => '0',
                 'frontend_label' => 'testattr2',
@@ -432,7 +431,6 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'attribute_code' => 'testattr3',
                 'is_global' => '1',
                 'is_visible' => '1',
-                'is_static' => '0',
                 'is_required' => '0',
                 'is_unique' => '0',
                 'frontend_label' => 'testattr3',
@@ -480,8 +478,8 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
         ]);
         $this->_entityModel->expects($this->any())
-                           ->method('getNewSku')
-                           ->will($this->returnValue($newSkus));
+            ->method('getNewSku')
+            ->will($this->returnValue($newSkus));
 
         // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
         $this->_connection->expects($this->at(1))->method('quoteIdentifier')->with('m.attribute_id')->willReturn('a');
@@ -574,7 +572,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $this->setPropertyValue($this->configurable, '_superAttributes', $productData['super_attributes']);
 
         foreach ($bunch as $rowData) {
-            $result = $this->configurable->isRowValid($rowData, 0, !isset($this->_oldSku[$rowData['sku']]));
+            $result = $this->configurable->isRowValid($rowData, 0, false);
             $this->assertNotNull($result);
             if ($rowData['sku'] === $caseInsensitiveSKU) {
                 $this->assertTrue($result);
