@@ -17,7 +17,7 @@ class Sidebar implements ArgumentInterface
     /**
      * @var CompareHelper
      */
-    protected $compareHelper;
+    private $compareHelper;
 
     /**
      * @param CompareHelper $compareHelper

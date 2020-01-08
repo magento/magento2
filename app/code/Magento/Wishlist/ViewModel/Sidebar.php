@@ -17,7 +17,7 @@ class Sidebar implements ArgumentInterface
     /**
      * @var WishlistHelper
      */
-    protected $wishlistHelper;
+    private $wishlistHelper;
 
     /**
      * @param WishlistHelper $wishlistHelper
