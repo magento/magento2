@@ -31,14 +31,9 @@
         <actionGroup ref="AdminToggleEnabledActionGroup" stepKey="enableGoogleAdwordsConfig">
             <argument name="element" value="{{AdminGoogleAdwordsConfigSection.active}}"/>
         </actionGroup>
-
-
-
         <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveCustomVariable">
             <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
         </actionGroup>
-
-
         <actionGroup ref="AssertAdminValidationErrorActionGroup" stepKey="seeRequiredValidationErrorForConversionId">
             <argument name="inputId" value="google_adwords_conversion_id"/>
         </actionGroup>
