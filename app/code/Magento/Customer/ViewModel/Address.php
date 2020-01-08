@@ -8,6 +8,7 @@ namespace Magento\Customer\ViewModel;
 
 use Magento\Directory\Helper\Data as DataHelper;
 use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
@@ -49,31 +50,41 @@ class Address implements ArgumentInterface
     }
 
     /**
-     * Returns data validation class
+     * Get string with frontend validation classes for attribute
      *
-     * @param mixed $param
-     * @return mixed
+     * @param string $attributeCode
+     *
+     * @return string
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function dataGetAttributeValidationClass($param)
+    public function dataGetAttributeValidationClass($attributeCode)
     {
-        return $this->helperData->getAttributeValidationClass($param);
+        return $this->helperData->getAttributeValidationClass($attributeCode);
     }
 
     /**
-     * Returns address validation class
+     * Get string with frontend validation classes for attribute
      *
-     * @param mixed $param
-     * @return mixed
+     * @param string $attributeCode
+     *
+     * @return string
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function addressGetAttributeValidationClass($param)
+    public function addressGetAttributeValidationClass($attributeCode)
     {
-        return $this->helperAddress->getAttributeValidationClass($param);
+        return $this->helperAddress->getAttributeValidationClass($attributeCode);
     }
 
     /**
-     * Returns street lines
+     * Return Number of Lines in a Street Address for store
      *
-     * @return mixed
+     * @param \Magento\Store\Model\Store|int|string $store
+     *
+     * @return int
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addressGetStreetLines()
     {
@@ -81,7 +92,7 @@ class Address implements ArgumentInterface
     }
 
     /**
-     * Returns if VAT attribute is visible
+     * Check if VAT ID address attribute has to be shown on frontend (on Customer Address management forms)
      *
      * @return boolean
      */
@@ -91,9 +102,10 @@ class Address implements ArgumentInterface
     }
 
     /**
-     * Returns region JSON
+     * Retrieve regions data json
      *
-     * @return mixed
+     * @return string
+     * @throws NoSuchEntityException
      */
     public function dataGetRegionJson()
     {
@@ -101,12 +113,13 @@ class Address implements ArgumentInterface
     }
 
     /**
-     * Returns rcountries with optional zip
+     * Return ISO2 country codes, which have optional Zip/Postal pre-configured
      *
-     * @return mixed
+     * @param bool $asJson
+     * @return array|string
      */
-    public function dataGetCountriesWithOptionalZip()
+    public function dataGetCountriesWithOptionalZip($asJson)
     {
-        return $this->helperData->getCountriesWithOptionalZip();
+        return $this->helperData->getCountriesWithOptionalZip($asJson);
     }
 }
