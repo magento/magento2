@@ -39,7 +39,8 @@
         "zendframework/zend-validator": "^2.6.0",
         "zendframework/zend-mail": "^2.9.0",
         "zendframework/zend-mime": "^2.5.0",
-        "guzzlehttp/guzzle": "^6.3.3"
+        "guzzlehttp/guzzle": "^6.3.3",
+        "ramsey/uuid": "~3.8.0"
     },
     "archive": {
         "exclude": [
