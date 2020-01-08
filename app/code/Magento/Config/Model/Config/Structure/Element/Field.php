@@ -56,7 +56,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Config\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Config\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Config\Model\Config\CommentFactory $commentFactory
@@ -65,7 +65,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Config\Model\Config\BackendFactory $backendFactory,
         \Magento\Config\Model\Config\SourceFactory $sourceFactory,
         \Magento\Config\Model\Config\CommentFactory $commentFactory,

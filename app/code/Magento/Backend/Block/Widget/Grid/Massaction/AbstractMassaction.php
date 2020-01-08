@@ -3,26 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\ColumnSet;
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Grid widget massaction block
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
- * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
+ * @method Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @deprecated 100.2.0 in favour of UI component implementation
  * @since 100.0.2
  */
-abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
+abstract class AbstractMassaction extends Widget
 {
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
 
@@ -39,13 +48,13 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Backend::widget/grid/massaction.phtml';
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param Context $context
+     * @param EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        Context $context,
+        EncoderInterface $jsonEncoder,
         array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
@@ -122,11 +131,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getItem($itemId)
     {
-        if (isset($this->_items[$itemId])) {
-            return $this->_items[$itemId];
-        }
-
-        return null;
+        return $this->_items[$itemId] ?? null;
     }
 
     /**
@@ -161,7 +166,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getCount()
     {
-        return sizeof($this->_items);
+        return count($this->_items);
     }
 
     /**
@@ -288,11 +293,11 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 
         if ($collection instanceof AbstractDb) {
             $idsSelect = clone $collection->getSelect();
-            $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
-            $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
-            $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
-            $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
-            $idsSelect->columns($this->getMassactionIdField(), 'main_table');
+            $idsSelect->reset(Select::ORDER);
+            $idsSelect->reset(Select::LIMIT_COUNT);
+            $idsSelect->reset(Select::LIMIT_OFFSET);
+            $idsSelect->reset(Select::COLUMNS);
+            $idsSelect->columns($this->getMassactionIdField());
             $idList = $collection->getConnection()->fetchCol($idsSelect);
         } else {
             $idList = $collection->setPageSize(0)->getColumnValues($this->getMassactionIdField());
@@ -358,7 +363,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         $columnId = 'massaction';
         $massactionColumn = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Grid\Column::class
+            Column::class
         )->setData(
             [
                 'index' => $this->getMassactionIdField(),
@@ -378,7 +383,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         $gridBlock = $this->getParentBlock();
         $massactionColumn->setSelected($this->getSelected())->setGrid($gridBlock)->setId($columnId);
 
-        /** @var $columnSetBlock \Magento\Backend\Block\Widget\Grid\ColumnSet */
+        /** @var $columnSetBlock ColumnSet */
         $columnSetBlock = $gridBlock->getColumnSet();
         $childNames = $columnSetBlock->getChildNames();
         $siblingElement = count($childNames) ? current($childNames) : 0;

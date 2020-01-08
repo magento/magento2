@@ -97,7 +97,7 @@
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
 
         <!--Select SimpleProduct -->
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
@@ -106,7 +106,7 @@
         <!--Add SimpleProduct1 and ConfigProduct as Up sell products-->
         <click stepKey="clickOnRelatedProducts" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
         <click stepKey="clickOnAddUpSellProducts" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProduct">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProduct">
             <argument name="sku" value="$$createSimpleProduct1.sku$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForTheProductToLoad"/>
@@ -114,7 +114,7 @@
         <click stepKey="addSelectedProduct" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
         <waitForPageLoad stepKey="waitForProductToBeAdded"/>
         <click stepKey="clickOnAddUpSellProductsButton" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterConfigurableProduct">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterConfigurableProduct">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForTheConfigProductToLoad"/>
@@ -131,7 +131,7 @@
         <waitForPageLoad stepKey="waitForProductsToBeLoaded"/>
 
         <!--Select Configurable Product-->
-        <actionGroup ref="filterProductGridBySku" stepKey="findConfigProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findConfigProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <click stepKey="openConfigProduct" selector="{{AdminProductGridSection.productRowBySku($$createConfigProduct.sku$$)}}"/>
@@ -140,7 +140,7 @@
         <!--Add  SimpleProduct1 as Up Sell Product-->
         <click stepKey="clickOnRelatedProductsHeader" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
         <click stepKey="clickOnAddUpSellProductsButton1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterSimpleProduct2">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterSimpleProduct2">
             <argument name="sku" value="$$createSimpleProduct1.sku$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForTheSimpleProduct2ToBeLoaded"/>

@@ -169,7 +169,7 @@
         <arguments>
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Elasticsearch</item>
-                <item name="elasticsearch5" xsi:type="string">Elasticsearch 5.0+</item>
+                <item name="elasticsearch5" xsi:type="string">Elasticsearch 5.x</item>
             </argument>
         </arguments>
     </type>
@@ -267,7 +267,7 @@
     </type>
     <virtualType name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\ConnectionManager" type="Magento\Elasticsearch\SearchAdapter\ConnectionManager">
         <arguments>
-            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory</argument>
+            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy</argument>
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </virtualType>

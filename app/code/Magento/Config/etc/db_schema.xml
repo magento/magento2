@@ -9,12 +9,14 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="core_config_data" resource="default" engine="innodb" comment="Config Data">
         <column xsi:type="int" name="config_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Config Id"/>
+                comment="Config ID"/>
         <column xsi:type="varchar" name="scope" nullable="false" length="8" default="default" comment="Config Scope"/>
         <column xsi:type="int" name="scope_id" padding="11" unsigned="false" nullable="false" identity="false"
-                default="0" comment="Config Scope Id"/>
+                default="0" comment="Config Scope ID"/>
         <column xsi:type="varchar" name="path" nullable="false" length="255" default="general" comment="Config Path"/>
         <column xsi:type="text" name="value" nullable="true" comment="Config Value"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="config_id"/>
         </constraint>

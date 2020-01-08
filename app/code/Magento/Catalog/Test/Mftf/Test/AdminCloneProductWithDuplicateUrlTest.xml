@@ -28,10 +28,10 @@
         <after>
             <!--Delete created data-->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
-            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllDuplicateProducts">
+            <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
@@ -47,16 +47,16 @@
         <comment userInput="Add duplicated product to the simple product" stepKey="commentAddProduct"/>
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad1"/>
-        <actionGroup ref="addCrossSellProductBySku" stepKey="addCrossSellProduct">
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addCrossSellProduct">
             <argument name="sku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct">
             <argument name="sku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addUpSellProductBySku" stepKey="addUpSellProduct">
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="addUpSellProduct">
             <argument name="sku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" visible="false" stepKey="openProductRUSSection"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('related')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeRelatedProduct"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('upsell')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeUpSellProduct"/>

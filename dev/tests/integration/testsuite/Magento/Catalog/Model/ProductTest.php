@@ -9,8 +9,13 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model;
 
 use Magento\Eav\Model\Config as EavConfig;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\ObjectManager;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests product model:
@@ -28,31 +33,32 @@ use Magento\TestFramework\ObjectManager;
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $_model;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->_model = $this->objectManager->create(Product::class);
     }
 
     /**
-     * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @inheritdoc
      */
     public static function tearDownAfterClass()
     {
@@ -76,6 +82,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test can affect options
+     *
      * @return void
      */
     public function testCanAffectOptions()
@@ -86,6 +94,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test CRUD
+     *
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
@@ -118,6 +128,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test clean cache
+     *
      * @return void
      */
     public function testCleanCache()
@@ -141,6 +153,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test add image to media gallery
+     *
      * @return void
      */
     public function testAddImageToMediaGallery()
@@ -185,6 +199,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test duplicate method
+     *
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      */
@@ -215,6 +231,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test duplicate sku generation
+     *
      * @magentoAppArea adminhtml
      */
     public function testDuplicateSkuGeneration()
@@ -246,6 +264,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test visibility api
+     *
      * @covers \Magento\Catalog\Model\Product::getVisibleInCatalogStatuses
      * @covers \Magento\Catalog\Model\Product::getVisibleStatuses
      * @covers \Magento\Catalog\Model\Product::isVisibleInCatalog
@@ -288,6 +308,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test isDuplicable and setIsDuplicable methods
+     *
      * @covers \Magento\Catalog\Model\Product::isDuplicable
      * @covers \Magento\Catalog\Model\Product::setIsDuplicable
      */
@@ -299,6 +321,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test isSalable, isSaleable, isAvailable and isInStock methods
+     *
      * @covers \Magento\Catalog\Model\Product::isSalable
      * @covers \Magento\Catalog\Model\Product::isSaleable
      * @covers \Magento\Catalog\Model\Product::isAvailable
@@ -316,6 +340,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test isSalable method when Status is disabled
+     *
      * @covers \Magento\Catalog\Model\Product::isSalable
      * @covers \Magento\Catalog\Model\Product::isSaleable
      * @covers \Magento\Catalog\Model\Product::isAvailable
@@ -333,6 +359,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test isVirtual and getIsVirtual methods
+     *
      * @covers \Magento\Catalog\Model\Product::isVirtual
      * @covers \Magento\Catalog\Model\Product::getIsVirtual
      */
@@ -351,6 +379,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test toArray method
+     *
      * @return void
      */
     public function testToArray()
@@ -361,6 +391,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test fromArray method
+     *
      * @return void
      */
     public function testFromArray()
@@ -370,6 +402,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test set original data backend
+     *
      * @magentoAppArea adminhtml
      */
     public function testSetOrigDataBackend()
@@ -380,6 +414,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test reset method
+     *
      * @magentoAppArea frontend
      */
     public function testReset()
@@ -420,6 +456,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test is products has sku
+     *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testIsProductsHasSku()
@@ -435,6 +473,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test process by request
+     *
      * @return void
      */
     public function testProcessBuyRequest()
@@ -446,6 +486,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test validate method
+     *
      * @return void
      */
     public function testValidate()
@@ -482,6 +524,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test validate unique input attribute value
+     *
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/products_with_unique_input_attribute.php
      */
@@ -525,6 +569,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test validate unique input attribute value on the same product
+     *
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/products_with_unique_input_attribute.php
      */
@@ -621,7 +667,52 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Checking enable/disable product when Catalog Flat Product is enabled
+     *
+     * @magentoAppArea frontend
+     * @magentoDbIsolation disabled
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testProductStatusWhenCatalogFlatProductIsEnabled()
+    {
+        // check if product flat table is enabled
+        $productFlatState = $this->objectManager->get(\Magento\Catalog\Model\Indexer\Product\Flat\State::class);
+        $this->assertTrue($productFlatState->isFlatEnabled());
+        // run reindex to create product flat table
+        $productFlatProcessor = $this->objectManager->get(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);
+        $productFlatProcessor->reindexAll();
+        // get created simple product
+        $product = $this->productRepository->get('simple');
+        // get db connection and the product flat table name
+        $resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = $resource->getConnection();
+        $productFlatTableName = $productFlatState->getFlatIndexerHelper()->getFlatTableName(1);
+        // generate sql query to find created simple product in the flat table
+        $sql = $connection->select()->from($productFlatTableName)->where('sku =?', $product->getSku());
+        // check if the product exists in the product flat table
+        $products = $connection->fetchAll($sql);
+        $this->assertEquals(Status::STATUS_ENABLED, $product->getStatus());
+        $this->assertNotEmpty($products);
+        // disable product
+        $product->setStatus(Status::STATUS_DISABLED);
+        $product = $this->productRepository->save($product);
+        // check if the product exists in the product flat table
+        $products = $connection->fetchAll($sql);
+        $this->assertEquals(Status::STATUS_DISABLED, $product->getStatus());
+        $this->assertEmpty($products);
+    }
+
+    /**
      * DataProvider for the testSaveWithBackordersEnabled()
+     *
      * @return array
      */
     public function productWithBackordersDataProvider(): array

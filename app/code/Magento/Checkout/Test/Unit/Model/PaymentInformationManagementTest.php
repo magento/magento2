@@ -157,7 +157,6 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $phrase = new \Magento\Framework\Phrase(__('DB exception'));
         $exception = new \Magento\Framework\Exception\LocalizedException($phrase);
-        $this->loggerMock->expects($this->never())->method('critical');
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);

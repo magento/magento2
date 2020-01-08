@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductSetMaxQtyAllowedInShoppingCartActionGroup">
+        <arguments>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductFormSection.advancedInventoryLink}}" dependentSelector="{{AdminProductFormAdvancedInventorySection.advancedInventoryModal}}" visible="false" stepKey="clickOnAdvancedInventoryLinkIfNeeded"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.maxiQtyConfigSetting}}" stepKey="waitForAdvancedInventoryModalWindowOpen"/>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.maxiQtyConfigSetting}}" stepKey="uncheckMaxQtyCheckBox"/>
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCart}}" userInput="{{qty}}" stepKey="fillMaxAllowedQty"/>
+        <click selector="{{AdminSlideOutDialogSection.doneButton}}" stepKey="clickDone"/>
+    </actionGroup>
+
+
+</actionGroups>

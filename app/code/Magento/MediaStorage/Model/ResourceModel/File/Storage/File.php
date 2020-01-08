@@ -6,12 +6,20 @@
 namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Io\File as FileIo;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class File
  */
 class File
 {
+    /**
+     * @var FileIo
+     */
+    private $fileIo;
+
     /**
      * @var \Magento\Framework\Filesystem
      */
@@ -25,11 +33,16 @@ class File
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Psr\Log\LoggerInterface $log
+     * @param FileIo $fileIo
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, \Psr\Log\LoggerInterface $log)
-    {
+    public function __construct(
+        \Magento\Framework\Filesystem $filesystem,
+        \Psr\Log\LoggerInterface $log,
+        FileIo $fileIo = null
+    ) {
         $this->_logger = $log;
         $this->_filesystem = $filesystem;
+        $this->fileIo = $fileIo ?? ObjectManager::getInstance()->get(FileIo::class);
     }
 
     /**
@@ -45,14 +58,15 @@ class File
         $directoryInstance = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
         if ($directoryInstance->isDirectory($dir)) {
             foreach ($directoryInstance->readRecursively($dir) as $path) {
-                $itemName = basename($path);
+                $pathInfo = $this->fileIo->getPathInfo($path);
+                $itemName = $pathInfo['basename'];
                 if ($itemName == '.svn' || $itemName == '.htaccess') {
                     continue;
                 }
                 if ($directoryInstance->isDirectory($path)) {
                     $directories[] = [
                         'name' => $itemName,
-                        'path' => dirname($path) == '.' ? '/' : dirname($path),
+                        'path' => $pathInfo['dirname'] === '.' ? '/' : $pathInfo['dirname'],
                     ];
                 } else {
                     $files[] = $path;
@@ -64,7 +78,7 @@ class File
     }
 
     /**
-     * Clear files and directories in storage
+     * Clear all files in storage $dir
      *
      * @param string $dir
      * @return $this
@@ -73,8 +87,17 @@ class File
     {
         $directoryInstance = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         if ($directoryInstance->isDirectory($dir)) {
-            foreach ($directoryInstance->read($dir) as $path) {
-                $directoryInstance->delete($path);
+            $paths = $directoryInstance->readRecursively($dir);
+            foreach ($paths as $path) {
+                if ($directoryInstance->isDirectory($path)) {
+                    continue;
+                }
+
+                $pathInfo = $this->fileIo->getPathInfo($path);
+
+                if ($pathInfo['basename'] !== '.htaccess') {
+                    $directoryInstance->delete($path);
+                }
             }
         }
 
@@ -127,7 +150,7 @@ class File
             }
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             $this->_logger->info($e->getMessage());
-            throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save file: %1', $filePath));
+            throw new LocalizedException(__('Unable to save file: %1', $filePath));
         }
 
         return false;

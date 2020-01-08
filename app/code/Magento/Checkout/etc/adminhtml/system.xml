@@ -57,9 +57,9 @@
                 </field>
             </group>
             <group id="sidebar" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Shopping Cart Sidebar</label>
+                <label>Mini Cart</label>
                 <field id="display" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Display Shopping Cart Sidebar</label>
+                    <label>Display Mini Cart</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="count" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

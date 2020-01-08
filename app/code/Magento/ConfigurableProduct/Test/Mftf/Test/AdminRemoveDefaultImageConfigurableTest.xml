@@ -93,33 +93,33 @@
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGrid">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGrid">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid1"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid1"/>
 
         <!-- Add image to product -->
-        <actionGroup ref="addProductImage" stepKey="addImageForProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
 
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Remove image from product -->
-        <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
+        <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
 
-        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormAfterRemove"/>
 
         <!-- Assert product image not in admin product form -->
-        <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>
+        <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="AssertProductInStorefrontProductPageAfterRemove">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
         <!-- Assert product image not in storefront product page -->
-        <actionGroup ref="assertProductImageNotInStorefrontProductPage2" stepKey="assertProductImageNotInStorefrontProductPage2">
+        <actionGroup ref="AssertProductImageNotInStorefrontProductPage2ActionGroup" stepKey="assertProductImageNotInStorefrontProductPage2">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
     </test>
