@@ -16,6 +16,7 @@
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_duplicatedCMSPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
         <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_duplicatedCMSPage.content}}" stepKey="fillFieldContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_duplicatedCMSPage.content_heading}}" stepKey="fillFieldContentHeading"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_duplicatedCMSPage.identifier}}" stepKey="fillFieldUrlKey"/>
     </actionGroup>
