@@ -14,7 +14,8 @@ use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Store\Model\Store;
 
 /**
- * Class Product
+ * Rule product condition data model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
