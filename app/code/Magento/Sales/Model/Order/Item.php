@@ -1319,7 +1319,13 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getPrice()
     {
-        return $this->getData(OrderItemInterface::PRICE);
+        $price = $this->getData(OrderItemInterface::PRICE);
+
+        if ($price === null) {
+            return $price;
+        }
+
+        return (float) $price;
     }
 
     /**

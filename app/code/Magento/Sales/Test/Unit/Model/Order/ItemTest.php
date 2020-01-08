@@ -348,4 +348,22 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
+
+    /**
+     * Test getPrice() method
+     */
+    public function testGetPrice()
+    {
+        $price = 9.99;
+        $this->model->setPrice($price);
+        $this->assertEquals($price, $this->model->getPrice());
+
+        $newPrice = 5.53;
+        $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::PRICE, $newPrice);
+        $this->assertEquals($newPrice, $this->model->getPrice());
+
+        $nullablePrice = null;
+        $this->model->setPrice($nullablePrice);
+        $this->assertEquals($nullablePrice, $this->model->getPrice());
+    }
 }
