@@ -6,7 +6,7 @@
 
 /** @var \Magento\Customer\Block\Address\Edit $block */
 /** @var \Magento\Customer\ViewModel\Address $viewModel */
-$viewModel = $block->getData('viewModel');
+$viewModel = $block->getViewModel();
 ?>
 <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
 <?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
