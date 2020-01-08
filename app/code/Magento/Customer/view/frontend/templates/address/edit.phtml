@@ -82,7 +82,7 @@ $viewModel = $block->getViewModel();
             </div>
         </div>
 
-        <?php if ($viewModel->addressGetisVatAttributeVisible()): ?>
+        <?php if ($viewModel->addressIsVatAttributeVisible()): ?>
             <div class="field taxvat">
                 <label class="label" for="vat_id">
                     <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
