@@ -18,9 +18,10 @@ define([
     'Magento_Checkout/js/action/get-payment-information',
     'Magento_Checkout/js/model/totals',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/action/recollect-shipping-rates'
+    'Magento_Checkout/js/action/recollect-shipping-rates',
+    'Magento_Checkout/js/action/set-payment-information'
 ], function (ko, $, quote, urlManager, errorProcessor, messageContainer, storage, $t, getPaymentInformationAction,
-    totals, fullScreenLoader, recollectShippingRates
+    totals, fullScreenLoader, recollectShippingRates, setPaymentInformationAction
 ) {
     'use strict';
 
@@ -48,6 +49,15 @@ define([
             modifier(headers, data);
         });
         fullScreenLoader.startLoader();
+
+        if (quote.paymentMethod()) {
+            setPaymentInformationAction(
+                messageContainer,
+                {
+                    method: quote.paymentMethod().method
+                }
+            );
+        }
 
         return storage.put(
             url,
