@@ -21,6 +21,9 @@
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="AdminMarketingSiteDeleteByNameActionGroup" stepKey="deleteCreatedSitemap">
+                <argument name="filename" value="sitemap.xml"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
