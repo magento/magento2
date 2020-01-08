@@ -458,20 +458,30 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     public function testSaveData()
     {
         $newSkus = array_change_key_case([
-            'configurableskuI22' => [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v1' => [$this->productEntityLinkField => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr30v1' => [$this->productEntityLinkField => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v2' => [$this->productEntityLinkField => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimple' => [$this->productEntityLinkField => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimpleToSkip' => [$this->productEntityLinkField => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutLabels' => [$this->productEntityLinkField => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutVariations' => [$this->productEntityLinkField => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22Duplicated' => [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22BadPrice' => [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22' =>
+                [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr3v1' =>
+                [$this->productEntityLinkField => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr30v1' =>
+                [$this->productEntityLinkField => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr3v2' =>
+                [$this->productEntityLinkField => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimple' =>
+                [$this->productEntityLinkField => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimpleToSkip' =>
+                [$this->productEntityLinkField => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'configurableskuI22withoutLabels' =>
+                [$this->productEntityLinkField => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22withoutVariations' =>
+                [$this->productEntityLinkField => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22Duplicated' =>
+                [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22BadPrice' =>
+                [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
         ]);
         $this->_entityModel->expects($this->any())
-            ->method('getNewSku')
-            ->will($this->returnValue($newSkus));
+                           ->method('getNewSku')
+                           ->will($this->returnValue($newSkus));
 
         // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
         $this->_connection->expects($this->at(1))->method('quoteIdentifier')->with('m.attribute_id')->willReturn('a');
@@ -561,7 +571,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             $productData['bad_product'][\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [],
         ]);
         // Avoiding errors about attributes not being super
-        $this->setPropertyValue($this->configurable,'_superAttributes', $productData['super_attributes']);
+        $this->setPropertyValue($this->configurable, '_superAttributes', $productData['super_attributes']);
 
         foreach ($bunch as $rowData) {
             $result = $this->configurable->isRowValid($rowData, 0, !isset($this->_oldSku[$rowData['sku']]));
@@ -573,6 +583,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     }
 
     /**
+     *
      * Data provider for isValidRows test.
      *
      * @return array
@@ -621,8 +632,8 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         '_attribute_set' => 'Default',
                         '_type' => 'configurable',
                         '_product_websites' => 'website_1',
-                    ], 
-                    'super_attributes' => 
+                    ],
+                    'super_attributes' =>
                     [
                         'testattr2' => ['options' => ['attr2val1' => 1]],
                         'testattr3' => [
