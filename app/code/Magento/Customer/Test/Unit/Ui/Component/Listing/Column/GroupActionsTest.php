@@ -23,6 +23,36 @@ use PHPUnit\Framework\TestCase;
 class GroupActionsTest extends TestCase
 {
     /**
+     * @var int
+     */
+    private const STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_ID = 0;
+
+    /**
+     * @var string
+     */
+    private const STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_NAME = 'Not Logged In';
+
+    /**
+     * @var int
+     */
+    private const STUB_GENERAL_CUSTOMER_GROUP_ID = 1;
+
+    /**
+     * @var string
+     */
+    private const STUB_GENERAL_CUSTOMER_GROUP_NAME = 'General';
+
+    /**
+     * @var string
+     */
+    private const STUB_GROUP_EDIT_URL = 'http://magento.com/customer/group/edit';
+
+    /**
+     * @var string
+     */
+    private const STUB_GROUP_DELETE_URL = 'http://magento.com/customer/group/delete';
+
+    /**
      * @var GroupActions
      */
     private $component;
@@ -97,7 +127,6 @@ class GroupActionsTest extends TestCase
      */
     public function testPrepareDataSourceWithNonDefaultGroup(array $items, bool $isDefaultGroup, array $expected)
     {
-        $customerGroup = 'General';
         $dataSource = [
             'data' => [
                 'items' => $items
@@ -111,18 +140,29 @@ class GroupActionsTest extends TestCase
 
         $this->groupManagementMock->expects($this->any())
             ->method('isReadonly')
-            ->with(1)
+            ->with(static::STUB_GENERAL_CUSTOMER_GROUP_ID)
             ->willReturn($isDefaultGroup);
         $this->escaperMock->expects($this->any())
             ->method('escapeHtml')
-            ->with($customerGroup)
-            ->willReturn($customerGroup);
+            ->with(static::STUB_GENERAL_CUSTOMER_GROUP_NAME)
+            ->willReturn(static::STUB_GENERAL_CUSTOMER_GROUP_NAME);
         $this->urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturnMap(
                 [
-                    ['customer/group/edit', ['id' => 1], 'http://magento.com/customer/group/edit'],
-                    ['customer/group/delete', ['id' => 1], 'http://magento.com/customer/group/delete']
+                    [
+                        'customer/group/edit',
+                        [
+                            'id' => static::STUB_GENERAL_CUSTOMER_GROUP_ID
+                        ],
+                        static::STUB_GROUP_EDIT_URL],
+                    [
+                        'customer/group/delete',
+                        [
+                            'id' => static::STUB_GENERAL_CUSTOMER_GROUP_ID
+                        ],
+                        static::STUB_GROUP_DELETE_URL
+                    ]
                 ]
             );
 
@@ -142,12 +182,12 @@ class GroupActionsTest extends TestCase
             'data' => [
                 'items' => [
                     [
-                        'customer_group_id' => 1,
-                        'customer_group_code' => 'General',
+                        'customer_group_id' => static::STUB_GENERAL_CUSTOMER_GROUP_ID,
+                        'customer_group_code' => static::STUB_GENERAL_CUSTOMER_GROUP_NAME,
                     ],
                     [
-                        'customer_group_id' => 0,
-                        'customer_group_code' => 'Not Logged In',
+                        'customer_group_id' => static::STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_ID,
+                        'customer_group_code' => static::STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_NAME,
                     ],
                 ]
             ]
@@ -156,22 +196,22 @@ class GroupActionsTest extends TestCase
             'data' => [
                 'items' => [
                     [
-                        'customer_group_id' => 1,
-                        'customer_group_code' => 'General',
+                        'customer_group_id' => static::STUB_GENERAL_CUSTOMER_GROUP_ID,
+                        'customer_group_code' => static::STUB_GENERAL_CUSTOMER_GROUP_NAME,
                         'name' => [
                             'edit' => [
-                                'href' => 'http://magento.com/customer/group/edit',
+                                'href' => static::STUB_GROUP_EDIT_URL,
                                 'label' => __('Edit'),
                                 '__disableTmpl' => true,
                             ]
                         ]
                     ],
                     [
-                        'customer_group_id' => 0,
-                        'customer_group_code' => 'Not Logged In',
+                        'customer_group_id' => static::STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_ID,
+                        'customer_group_code' => static::STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_NAME,
                         'name' => [
                             'edit' => [
-                                'href' => 'http://magento.com/customer/group/edit',
+                                'href' => static::STUB_GROUP_EDIT_URL,
                                 'label' => __('Edit'),
                                 '__disableTmpl' => true,
                             ]
@@ -188,16 +228,36 @@ class GroupActionsTest extends TestCase
             ->method('escapeHtml')
             ->willReturnMap(
                 [
-                    ['General', null, 'General'],
-                    ['Not Logged In', null, 'Not Logged In']
+                    [
+                        static::STUB_GENERAL_CUSTOMER_GROUP_NAME,
+                        null,
+                        static::STUB_GENERAL_CUSTOMER_GROUP_NAME
+                    ],
+                    [
+                        static::STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_NAME,
+                        null,
+                        static::STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_NAME
+                    ]
                 ]
             );
         $this->urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturnMap(
                 [
-                    ['customer/group/edit', ['id' => 1], 'http://magento.com/customer/group/edit'],
-                    ['customer/group/edit', ['id' => 0], 'http://magento.com/customer/group/edit']
+                    [
+                        'customer/group/edit',
+                        [
+                            'id' => static::STUB_GENERAL_CUSTOMER_GROUP_ID
+                        ],
+                        static::STUB_GROUP_EDIT_URL
+                    ],
+                    [
+                        'customer/group/edit',
+                        [
+                            'id' => static::STUB_NOT_LOGGED_IN_CUSTOMER_GROUP_ID
+                        ],
+                        static::STUB_GROUP_EDIT_URL
+                    ]
                 ]
             );
 
@@ -216,23 +276,23 @@ class GroupActionsTest extends TestCase
             [
                 [
                     [
-                        'customer_group_id' => 1,
-                        'customer_group_code' => 'General',
+                        'customer_group_id' => static::STUB_GENERAL_CUSTOMER_GROUP_ID,
+                        'customer_group_code' => static::STUB_GENERAL_CUSTOMER_GROUP_NAME,
                     ],
                 ],
                 false,
                 [
                     [
-                        'customer_group_id' => 1,
-                        'customer_group_code' => 'General',
+                        'customer_group_id' => static::STUB_GENERAL_CUSTOMER_GROUP_ID,
+                        'customer_group_code' => static::STUB_GENERAL_CUSTOMER_GROUP_NAME,
                         'name' => [
                             'edit' => [
-                                'href' => 'http://magento.com/customer/group/edit',
+                                'href' => static::STUB_GROUP_EDIT_URL,
                                 'label' => __('Edit'),
                                 '__disableTmpl' => true,
                             ],
                             'delete' => [
-                                'href' => 'http://magento.com/customer/group/delete',
+                                'href' => static::STUB_GROUP_DELETE_URL,
                                 'label' => __('Delete'),
                                 'post' => true,
                                 '__disableTmpl' => true,
