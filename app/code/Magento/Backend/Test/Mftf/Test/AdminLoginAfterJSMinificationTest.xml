@@ -22,13 +22,14 @@
         <before>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification"/>
             <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesDisableConfigData.path}} {{MinifyJavaScriptFilesDisableConfigData.value}}" stepKey="disableJsMinification"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
+        <waitForPageLoad stepKey="waitForPageLoadOnDashboard"/>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="loggedInSuccessfully"/>
         <actionGroup ref="AssertAdminPageIsNot404ActionGroup" stepKey="dontSee404Page"/>
     </test>
