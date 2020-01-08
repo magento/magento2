@@ -205,6 +205,15 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\DataObject::class,
             ['getPageLayout', 'getLayoutUpdates']
         );
+        $this->category->expects($this->at(1))
+            ->method('hasChildren')
+            ->willReturn(true);
+        $this->category->expects($this->at(2))
+            ->method('hasChildren')
+            ->willReturn($expectedData[1][0]['type'] === 'default' ? true : false);
+        $this->category->expects($this->once())
+            ->method('getDisplayMode')
+            ->willReturn($expectedData[2][0]['displaymode']);
         $this->expectationForPageLayoutHandles($expectedData);
         $settings->expects($this->atLeastOnce())->method('getPageLayout')->will($this->returnValue($pageLayout));
         $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
@@ -221,7 +230,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     private function expectationForPageLayoutHandles($data): void
     {
-        $index = 2;
+        $index = 1;
+
         foreach ($data as $expectedData) {
             $this->page->expects($this->at($index))
             ->method('addPageLayoutHandles')
@@ -240,8 +250,23 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'layoutHandles' => [
+                    [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
-                    [['displaymode' => ''], null, false]
+                    [['displaymode' => 'products'], null, false]
+                ]
+            ],
+            [
+                'layoutHandles' => [
+                    [['type' => 'default'], null, false],
+                    [['type' => 'default_without_children'], null, false],
+                    [['displaymode' => 'page'], null, false]
+                ]
+            ],
+            [
+                'layoutHandles' => [
+                    [['type' => 'default'], null, false],
+                    [['type' => 'default'], null, false],
+                    [['displaymode' => 'poducts_and_page'], null, false]
                 ]
             ]
         ];
