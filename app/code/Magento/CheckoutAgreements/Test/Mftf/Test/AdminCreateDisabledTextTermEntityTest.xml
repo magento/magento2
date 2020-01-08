@@ -15,7 +15,7 @@
             <title value="Create disabled text checkout agreement"/>
             <description value="Admin should be able to create disabled text checkout agreement"/>
             <severity value="CRITICAL"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-14669"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -39,7 +39,7 @@
         <actionGroup ref="AdminAssertTermInGridActionGroup" stepKey="assertTermInGrid">
             <argument name="termName" value="{{disabledTextTerm.name}}"/>
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToTheCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToTheCart">
             <argument name="product" value="$$createdProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>

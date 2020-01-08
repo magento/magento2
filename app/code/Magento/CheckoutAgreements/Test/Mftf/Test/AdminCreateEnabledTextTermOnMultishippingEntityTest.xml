@@ -15,7 +15,7 @@
             <title value="Create enabled text checkout multishipping agreement"/>
             <description value="Admin should be able to create enabled text checkout multishipping agreement"/>
             <severity value="CRITICAL"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-14670"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -43,10 +43,10 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
             <argument name="Customer" value="$$createdCustomer$$" />
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProduct1ToTheCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="product" value="$$createdProduct1$$"/>
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProduct2ToTheCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct2ToTheCart">
             <argument name="product" value="$$createdProduct2$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAssertTermRequireMessageInMultishippingCheckoutActionGroup" stepKey="assertTermInCheckout">
