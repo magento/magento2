@@ -64,6 +64,24 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
     }
 
     /**
+     * Check subtotal for allowed free shipping
+     *
+     * @param RateRequest $request
+     *
+     * @return bool
+     */
+    private function isFreeShippingRequired(RateRequest $request): bool
+    {
+        $minSubtotal = $request->getPackageValueWithDiscount();
+        if ($request->getBaseSubtotalWithDiscountInclTax()
+            && $this->getConfigFlag('tax_including')) {
+            $minSubtotal = $request->getBaseSubtotalWithDiscountInclTax();
+        }
+
+        return $minSubtotal >= $this->getConfigData('free_shipping_subtotal');
+    }
+
+    /**
      * FreeShipping Rates Collector
      *
      * @param RateRequest $request
@@ -80,10 +98,7 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
 
         $this->_updateFreeMethodQuote($request);
 
-        if ($request->getFreeShipping() || $request->getPackageValueWithDiscount() >= $this->getConfigData(
-            'free_shipping_subtotal'
-        )
-        ) {
+        if ($request->getFreeShipping() || $this->isFreeShippingRequired($request)) {
             /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
             $method = $this->_rateMethodFactory->create();
 

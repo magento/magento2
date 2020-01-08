@@ -57,17 +57,17 @@
         </actionGroup>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openVirtualProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openVirtualProductPageAndVerifyProduct">
             <argument name="product" value="$$virtualProduct$$"/>
         </actionGroup>
 
         <!-- Add Product to the cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
 
         <!-- Apply Coupon -->
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyDiscount">
@@ -116,7 +116,7 @@
         <waitForPageLoad stepKey="waitForPageLoad5"/>
 
         <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
         <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$$createCustomer.fullname$$" stepKey="seeCustomerNameInGrid"/>
