@@ -50,6 +50,7 @@ class Address implements ArgumentInterface
 
     /**
      * Returns data validation class
+     *
      * @param mixed $param
      * @return mixed
      */
@@ -60,6 +61,7 @@ class Address implements ArgumentInterface
 
     /**
      * Returns address validation class
+     *
      * @param mixed $param
      * @return mixed
      */
