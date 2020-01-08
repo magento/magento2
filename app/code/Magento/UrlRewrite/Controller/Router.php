@@ -118,7 +118,7 @@ class Router implements \Magento\Framework\App\RouterInterface
         if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
             || ($prefix = substr($target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
         ) {
-            $target = $this->url->getUrl('', ['_direct' => $target]);
+            $target = $this->url->getUrl('', ['_direct' => $target, '_query' => $request->getParams()]);
         }
         return $this->redirect($request, $target, $rewrite->getRedirectType());
     }

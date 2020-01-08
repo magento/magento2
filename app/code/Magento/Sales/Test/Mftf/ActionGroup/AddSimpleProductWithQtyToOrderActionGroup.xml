@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddSimpleProductWithQtyToOrderActionGroup" extends="AddSimpleProductToOrderActionGroup">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct" type="entity"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
+    </actionGroup>
+</actionGroups>
