@@ -20,14 +20,15 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification" timeout="30"/>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification"/>
+            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesDisableConfigData.path}} {{MinifyJavaScriptFilesDisableConfigData.value}}" stepKey="disableJsMinification"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="loggedInSuccessfully"/>
         <actionGroup ref="AssertAdminPageIsNot404ActionGroup" stepKey="dontSee404Page"/>
     </test>
