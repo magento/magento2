@@ -606,7 +606,7 @@
             <title value="Deprecated. User should be able to use Quick Search to a configurable product's child products"/>
             <description value="Use Quick Search to find a configurable product with enabled/disable children"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-14798"/>
+            <useCaseId value="MC-14798"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
             <skip>
