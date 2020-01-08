@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Checkout\Api;
+namespace Magento\Braintree;
 
 use Braintree\Result\Error;
 use Braintree\Result\Successful;
@@ -13,6 +13,7 @@ use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\Braintree\Gateway\Http\Client\TransactionSale;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Area;
