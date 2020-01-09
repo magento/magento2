@@ -57,7 +57,7 @@
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!--Sign Out-->
-        <amOnPage url="customer/account/logout/" stepKey="customerOnLogoutPage"/>
+        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="customerOnLogoutPage"/>
         <waitForPageLoad stepKey="waitLogoutCustomer"/>
         <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
         <actionGroup ref="StorefrontCreateNewAccountNewsletterUncheckedActionGroup" stepKey="createNewAccountNewsletterUnchecked">

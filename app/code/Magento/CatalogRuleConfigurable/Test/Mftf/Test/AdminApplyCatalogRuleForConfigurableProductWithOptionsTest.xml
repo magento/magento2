@@ -212,7 +212,7 @@
         </actionGroup>
 
         <!--Assert product price in the cart -->
-        <amOnPage url="/checkout/cart/" stepKey="amOnShoppingCartPage"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <see userInput="{{CatalogRuleToFixed.discount_amount}}" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForFirstProductOption"/>
         <see userInput="$110.70" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForSecondProductOption"/>
