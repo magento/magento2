@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Config\Reader\Xml;
 /**
  * Schema locator for Publishers
  *
- * @deprecated 102.0.3
+ * @deprecated 102.0.4
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {

@@ -53,7 +53,7 @@ class ExchangeRepository
      * Get exchange factory.
      *
      * @return ExchangeFactoryInterface
-     * @deprecated 102.0.3
+     * @deprecated 102.0.4
      */
     private function getExchangeFactory()
     {

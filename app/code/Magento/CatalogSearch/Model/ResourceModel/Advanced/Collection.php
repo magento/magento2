@@ -355,6 +355,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
+     * @since 101.0.4
      */
     public function clear()
     {
@@ -364,6 +365,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
+     * @since 101.0.4
      */
     protected function _reset()
     {
@@ -373,6 +375,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
+     * @since 101.0.4
      */
     public function _loadEntities($printQuery = false, $logQuery = false)
     {

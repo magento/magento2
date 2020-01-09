@@ -25,7 +25,7 @@ class Products implements ResolverInterface
 {
     /**
      * @var Builder
-     * @deprecated
+     * @deprecated 100.3.4
      */
     private $searchCriteriaBuilder;
 
@@ -36,13 +36,13 @@ class Products implements ResolverInterface
 
     /**
      * @var Filter
-     * @deprecated
+     * @deprecated 100.3.4
      */
     private $filterQuery;
 
     /**
      * @var SearchFilter
-     * @deprecated
+     * @deprecated 100.3.4
      */
     private $searchFilter;
 

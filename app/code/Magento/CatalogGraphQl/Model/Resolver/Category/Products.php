@@ -30,13 +30,13 @@ class Products implements ResolverInterface
 
     /**
      * @var Builder
-     * @deprecated
+     * @deprecated 100.3.4
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var Filter
-     * @deprecated
+     * @deprecated 100.3.4
      */
     private $filterQuery;
 
