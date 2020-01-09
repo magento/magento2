@@ -17,6 +17,7 @@
             <group value="backend"/>
             <group value="Cms"/>
             <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
