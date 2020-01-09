@@ -82,8 +82,8 @@ class GetByPath implements GetByPathInterface
 
             return $mediaAssets;
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('An error occurred during get media asset list: %1', $exception->getMessage());
-            $this->logger->critical($message);
             throw new IntegrationException($message, $exception);
         }
     }

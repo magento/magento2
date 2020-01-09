@@ -9,6 +9,7 @@ define([
 
     return Column.extend({
         defaults: {
+            bodyTmpl: 'ui/grid/columns/image',
             modules: {
                 previewComponent: '${ $.parentName }.preview'
             },
@@ -77,6 +78,17 @@ define([
          */
         getClasses: function (record) {
             return record.css || {};
+        },
+
+        /**
+         * Get is active record
+         *
+         * @param {Object} record - Data to be preprocessed.
+         *
+         * @returns {Boolean}
+         */
+        getIsActive: function (record) {
+            return this.previewComponent().visibleRecord() === record._rowIndex || false;
         },
 
         /**
