@@ -56,9 +56,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testGetLatestPasswordWhenZeroPasswordLifetime(): void
     {
         /** @var User $user */
-        $user = Bootstrap::getObjectManager()->create(
-            User::class
-        );
+        $user = $this->userFactory->create();
         $user->loadByUsername('dummy_username');
         $latestPassword = $this->model->getLatestPassword($user->getId());
 
