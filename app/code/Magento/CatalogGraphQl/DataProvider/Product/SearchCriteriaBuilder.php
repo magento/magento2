@@ -129,7 +129,7 @@ class SearchCriteriaBuilder
             ? $this->visibility->getVisibleInSearchIds()
             : $this->visibility->getVisibleInCatalogIds();
 
-        $this->addFilter($searchCriteria, 'visibility', $visibilityIds);
+        $this->addFilter($searchCriteria, 'visibility', $visibilityIds, 'in');
     }
 
     /**
@@ -155,13 +155,20 @@ class SearchCriteriaBuilder
      * @param SearchCriteriaInterface $searchCriteria
      * @param string $field
      * @param mixed $value
+     * @param string|null $condition
      */
-    private function addFilter(SearchCriteriaInterface $searchCriteria, string $field, $value): void
-    {
+    private function addFilter(
+        SearchCriteriaInterface $searchCriteria,
+        string $field,
+        $value,
+        ?string $condition = null
+    ): void {
         $filter = $this->filterBuilder
             ->setField($field)
             ->setValue($value)
+            ->setConditionType($condition)
             ->create();
+
         $this->filterGroupBuilder->addFilter($filter);
         $filterGroups = $searchCriteria->getFilterGroups();
         $filterGroups[] = $this->filterGroupBuilder->create();
