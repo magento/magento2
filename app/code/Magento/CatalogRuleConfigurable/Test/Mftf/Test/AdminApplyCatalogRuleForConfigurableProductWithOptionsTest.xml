@@ -126,10 +126,10 @@
         </after>
 
         <!-- Create price rule for first configurable product option -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createFirstPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createFirstPriceRule">
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForFirstPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForFirstPriceRule"/>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createFirstCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
@@ -140,10 +140,10 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessageForFirstPriceRule"/>
 
         <!-- Create price rule for second configurable product option -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createSecondPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createSecondPriceRule">
             <argument name="catalogRule" value="_defaultCatalogRule"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForSecondPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForSecondPriceRule"/>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createSecondCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
@@ -154,10 +154,10 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessageForSecondPriceRule"/>
 
         <!-- Create price rule for third configurable product option -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createThirdPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createThirdPriceRule">
             <argument name="catalogRule" value="CatalogRuleWithoutDiscount"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForThirdPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForThirdPriceRule"/>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createThirdCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$"/>
@@ -212,7 +212,7 @@
         </actionGroup>
 
         <!--Assert product price in the cart -->
-        <amOnPage url="/checkout/cart/" stepKey="amOnShoppingCartPage"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <see userInput="{{CatalogRuleToFixed.discount_amount}}" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForFirstProductOption"/>
         <see userInput="$110.70" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForSecondProductOption"/>

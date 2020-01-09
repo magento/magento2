@@ -51,7 +51,7 @@
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
 
         <!--Filter orders grid by ID on Admin page-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
 
@@ -73,7 +73,7 @@
         </actionGroup>
 
         <!--Filter orders grid by ID on Admin page after changing "Interface Locale"-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridByIdAfterSetFrenchLocale">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdAfterSetFrenchLocale">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
 

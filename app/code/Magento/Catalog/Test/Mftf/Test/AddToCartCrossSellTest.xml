@@ -45,10 +45,10 @@
         <amOnPage url="{{AdminProductEditPage.url($simpleProduct1.id$)}}" stepKey="goToProduct1"/>
         <click stepKey="openHeader1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}"/>
 
-        <actionGroup ref="addCrossSellProductBySku" stepKey="addProduct2ToSimp1">
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct2ToSimp1">
             <argument name="sku" value="$simpleProduct2.sku$"/>
         </actionGroup>
-        <actionGroup ref="addCrossSellProductBySku" stepKey="addProduct3ToSimp1">
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct3ToSimp1">
             <argument name="sku" value="$simpleProduct3.sku$"/>
         </actionGroup>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
@@ -58,17 +58,17 @@
         <amOnPage url="{{AdminProductEditPage.url($simpleProduct3.id$)}}" stepKey="goToProduct3"/>
         <click stepKey="openHeader2" selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}"/>
 
-        <actionGroup ref="addCrossSellProductBySku" stepKey="addProduct1ToSimp3">
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct1ToSimp3">
             <argument name="sku" value="$simpleProduct1.sku$"/>
         </actionGroup>
-        <actionGroup ref="addCrossSellProductBySku" stepKey="addProduct2ToSimp3">
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct2ToSimp3">
             <argument name="sku" value="$simpleProduct2.sku$"/>
         </actionGroup>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave2"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <!-- Go to frontend, add simpleProduct1 to cart-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimp1ToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimp1ToCart">
             <argument name="product" value="$simpleProduct1$"/>
         </actionGroup>
 
