@@ -39,25 +39,13 @@ class Csv extends AbstractAdapter
     protected $_fileHandler;
 
     /**
-     * @param Filesystem $filesystem
-     * @param string|null $destination
+     * Object destructor
      */
-    public function __construct(Filesystem $filesystem, $destination = null)
-    {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        register_shutdown_function([$this, 'destruct']);
-        parent::__construct($filesystem, $destination);
-    }
-
-    /**
-     * Object destructor.
-     *
-     * @return void
-     */
-    public function destruct()
+    public function __destruct()
     {
         if (is_object($this->_fileHandler)) {
             $this->_fileHandler->close();
+            $this->_fileHandler = null;
             $this->_directoryHandle->delete($this->_destination);
         }
     }

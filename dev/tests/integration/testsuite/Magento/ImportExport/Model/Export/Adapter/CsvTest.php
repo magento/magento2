@@ -52,12 +52,16 @@ class CsvTest extends TestCase
      */
     public function testDestruct(): void
     {
-        $this->csv->destruct();
-
-        /** Assert that the destination file was removed after destruct */
         /** @var Filesystem $fileSystem */
         $fileSystem = $this->objectManager->get(Filesystem::class);
         $directoryHandle = $fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        /** Assert that the destination file is present after construct */
+        $this->assertFileExists(
+            $directoryHandle->getAbsolutePath($this->destination),
+            'The destination file was\'t created after construct'
+        );
+        /** Assert that the destination file was removed after destruct */
+        $this->csv = null;
         $this->assertFileNotExists(
             $directoryHandle->getAbsolutePath($this->destination),
             'The destination file was\'t removed after destruct'
