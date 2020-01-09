@@ -23,9 +23,8 @@ $viewModel = $block->getViewModel();
 <?php $_postcodeValidationClass_value = $viewModel->addressGetAttributeValidationClass('postcode'); ?>
 <?php $_postcodeValidationClass = $_postcodeValidationClass_value; ?>
 <?php $_streetValidationClass = $viewModel->addressGetAttributeValidationClass('street'); ?>
-<?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+<?php $_streetValidationClassNotRequired = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
 <?php $_regionValidationClass = $viewModel->addressGetAttributeValidationClass('region'); ?>
-
 <form class="form-address-edit"
       action="<?= $block->escapeUrl($block->getSaveUrl()) ?>"
       method="post"
@@ -74,7 +73,8 @@ $viewModel = $block->getViewModel();
                                        value="<?= $block->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
                                        title="<?= $block->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
                                        id="street_<?= /* @noEscape */ $_i + 1 ?>"
-                                       class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>">
+                                       class="input-text
+                                        <?= $block->escapeHtmlAttr($_streetValidationClassNotRequired) ?>">
                             </div>
                         </div>
                     <?php endfor; ?>
