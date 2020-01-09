@@ -51,6 +51,8 @@ class CreateCustomOptionsTest extends AbstractBackendController
      * @dataProvider productWithNewOptionsDataProvider
      *
      * @param array $productPostData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testSaveCustomOptionWithTypeField(array $productPostData): void
     {

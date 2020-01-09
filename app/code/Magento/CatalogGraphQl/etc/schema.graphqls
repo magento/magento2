@@ -102,14 +102,14 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     country_of_manufacture: String @doc(description: "The product's country of origin.")
     type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable.")
     websites: [Website] @doc(description: "An array of websites in which the product is available.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
-    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductLinks")
+    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\BatchProductLinks")
     media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use product's `media_gallery` instead") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
     price: ProductPrices @deprecated(reason: "Use price_range for product price information.") @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     price_range: PriceRange! @doc(description: "A PriceRange object, indicating the range of prices for the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\PriceRange")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
-    canonical_url: String @doc(description: "Canonical URL.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
+    canonical_url: String @doc(description: "Relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Products' is enabled") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
     media_gallery: [MediaGalleryInterface] @doc(description: "An array of Media Gallery objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
 }
 
@@ -198,7 +198,7 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
 
 interface MediaGalleryInterface @doc(description: "Contains basic information about a product image or video.") @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\MediaGalleryTypeResolver") {
     url: String @doc(description: "The URL of the product image or video.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Url")
-    label: String @doc(description: "The label of the product image or video.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Label")
+    label: String @doc(description: "The label of the product image or video.")
 }
 
 type ProductImage implements MediaGalleryInterface @doc(description: "Product image information. Contains the image URL and label.") {
@@ -223,6 +223,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     path_in_store: String @doc(description: "Category path in store.")
     url_key: String @doc(description: "The url key assigned to the category.")
     url_path: String @doc(description: "The url path assigned to the category.")
+    canonical_url: String @doc(description: "Relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Categories' is enabled") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CanonicalUrl")
     position: Int @doc(description: "The position of the category relative to other categories at the same level in tree.")
     level: Int @doc(description: "Indicates the depth of the category within the tree.")
     created_at: String @doc(description: "Timestamp indicating when the category was created.")

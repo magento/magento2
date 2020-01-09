@@ -15,6 +15,7 @@ use Magento\Setup\Model\ConfigGenerator;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\CryptKeyGenerator;
 use PHPUnit\Framework\TestCase;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
 /**
  * Test for Magento\Setup\Model\ConfigGenerator class.
@@ -47,11 +48,17 @@ class ConfigGeneratorTest extends TestCase
         $configDataFactoryMock = (new ObjectManager($this))
             ->getObject(ConfigDataFactory::class, ['objectManager' => $objectManagerMock]);
 
+        $driverOptions = $this->getMockBuilder(DriverOptions::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDriverOptions'])
+            ->getMock();
+
         $this->configGeneratorObject = new ConfigGenerator(
             $randomMock,
             $deployConfig,
             $configDataFactoryMock,
-            $cryptKeyGenerator
+            $cryptKeyGenerator,
+            $driverOptions
         );
     }
 
