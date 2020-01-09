@@ -6,10 +6,10 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-catalog-inventory": "*",
-        "magento/module-grouped-product": "*"
+        "magento/framework": "102.0.*",
+        "magento/module-catalog": "103.0.*",
+        "magento/module-catalog-inventory": "100.3.*",
+        "magento/module-grouped-product": "100.3.*"
     },
     "type": "magento2-module",
     "license": [
@@ -23,5 +23,6 @@
         "psr-4": {
             "Magento\\GroupedCatalogInventory\\": ""
         }
-    }
+    },
+    "version": "100.3.3"
 }

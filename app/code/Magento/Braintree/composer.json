@@ -7,26 +7,26 @@
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "braintree/braintree_php": "3.35.0",
-        "magento/framework": "*",
+        "magento/framework": "102.0.*",
         "magento/magento-composer-installer": "*",
-        "magento/module-catalog": "*",
-        "magento/module-backend": "*",
-        "magento/module-checkout": "*",
-        "magento/module-config": "*",
-        "magento/module-customer": "*",
-        "magento/module-directory": "*",
-        "magento/module-instant-purchase": "*",
-        "magento/module-payment": "*",
-        "magento/module-paypal": "*",
-        "magento/module-quote": "*",
-        "magento/module-sales": "*",
-        "magento/module-ui": "*",
-        "magento/module-vault": "*",
-        "magento/module-multishipping": "*",
-        "magento/module-theme": "*"
+        "magento/module-catalog": "103.0.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-checkout": "100.3.*",
+        "magento/module-config": "101.1.*",
+        "magento/module-customer": "102.0.*",
+        "magento/module-directory": "100.3.*",
+        "magento/module-instant-purchase": "100.3.*",
+        "magento/module-payment": "100.3.*",
+        "magento/module-paypal": "100.3.*",
+        "magento/module-quote": "101.1.*",
+        "magento/module-sales": "102.0.*",
+        "magento/module-ui": "101.1.*",
+        "magento/module-vault": "101.1.*",
+        "magento/module-multishipping": "100.3.*",
+        "magento/module-theme": "101.0.*"
     },
     "suggest": {
-        "magento/module-checkout-agreements": "*"
+        "magento/module-checkout-agreements": "100.3.*"
     },
     "type": "magento2-module",
     "license": [
@@ -40,5 +40,6 @@
         "psr-4": {
             "Magento\\Braintree\\": ""
         }
-    }
+    },
+    "version": "100.3.4"
 }

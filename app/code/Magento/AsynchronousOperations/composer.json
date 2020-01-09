@@ -5,16 +5,16 @@
         "sort-packages": true
     },
     "require": {
-        "magento/framework": "*",
-        "magento/framework-bulk": "*",
-        "magento/module-authorization": "*",
-        "magento/module-backend": "*",
-        "magento/module-ui": "*",
+        "magento/framework": "102.0.*",
+        "magento/framework-bulk": "100.3.*",
+        "magento/module-authorization": "100.3.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-ui": "101.1.*",
         "php": "~7.1.3||~7.2.0||~7.3.0"
     },
     "suggest": {
-        "magento/module-admin-notification": "*",
-        "magento/module-logging": "*"
+        "magento/module-admin-notification": "100.3.*",
+        "magento/module-logging": "101.1.*"
     },
     "type": "magento2-module",
     "license": [
@@ -28,5 +28,6 @@
         "psr-4": {
             "Magento\\AsynchronousOperations\\": ""
         }
-    }
+    },
+    "version": "100.3.4"
 }
