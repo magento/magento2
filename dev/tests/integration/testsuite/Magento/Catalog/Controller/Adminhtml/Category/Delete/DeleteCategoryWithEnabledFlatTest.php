@@ -60,8 +60,7 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
         $this->dispatch('backend/catalog/category/delete');
         $this->assertSessionMessages($this->equalTo([(string)__('You deleted the category.')]));
         $this->assertNull($this->getCategoryByIdFromCategoryFlat(333));
-        $this->expectExceptionObject(new NoSuchEntityException(__('No such entity with id = 333')));
-        $this->categoryRepository->get(333);
+        $this->checkCategoryIsDeleted(333);
     }
 
     /**
@@ -76,5 +75,16 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
         $categoryFlatCollection->addIdFilter($categoryId);
 
         return $categoryFlatCollection->getItemByColumnValue('entity_id', $categoryId);
+    }
+
+    /**
+     * Assert that category is deleted.
+     *
+     * @param int $categoryId
+     */
+    private function checkCategoryIsDeleted(int $categoryId): void
+    {
+        $this->expectExceptionObject(new NoSuchEntityException(__("No such entity with id = {$categoryId}")));
+        $this->categoryRepository->get($categoryId);
     }
 }

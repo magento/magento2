@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Adminhtml\Category\Save;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -17,9 +17,9 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class AbstractSaveCategoryTest extends AbstractBackendController
 {
     /**
-     * @var Json
+     * @var SerializerInterface
      */
-    private $jsonSerializer;
+    private $serializer;
 
     /**
      * @inheritdoc
@@ -27,7 +27,7 @@ class AbstractSaveCategoryTest extends AbstractBackendController
     protected function setUp()
     {
         parent::setUp();
-        $this->jsonSerializer = $this->_objectManager->get(Json::class);
+        $this->serializer = $this->_objectManager->get(SerializerInterface::class);
     }
 
     /**
@@ -42,7 +42,7 @@ class AbstractSaveCategoryTest extends AbstractBackendController
         $this->getRequest()->setPostValue($data);
         $this->dispatch('backend/catalog/category/save');
 
-        return $this->jsonSerializer->unserialize($this->getResponse()->getBody());
+        return $this->serializer->unserialize($this->getResponse()->getBody());
     }
 
     /**
