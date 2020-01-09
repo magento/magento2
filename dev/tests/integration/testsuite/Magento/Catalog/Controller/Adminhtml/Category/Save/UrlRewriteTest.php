@@ -8,9 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Adminhtml\Category\Save;
 
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
@@ -20,23 +17,20 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  */
-class UrlRewriteTest extends AbstractBackendController
+class UrlRewriteTest extends AbstractSaveCategoryTest
 {
-    /** @var $urlRewriteCollectionFactory */
+    /**
+     * @var UrlRewriteCollectionFactory
+     */
     private $urlRewriteCollectionFactory;
 
-    /** @var Json */
-    private $jsonSerializer;
-
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
         parent::setUp();
-
         $this->urlRewriteCollectionFactory = $this->_objectManager->get(UrlRewriteCollectionFactory::class);
-        $this->jsonSerializer = $this->_objectManager->get(Json::class);
     }
 
     /**
@@ -47,10 +41,9 @@ class UrlRewriteTest extends AbstractBackendController
      */
     public function testUrlRewrite(array $data): void
     {
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setPostValue($data);
-        $this->dispatch('backend/catalog/category/save');
-        $categoryId = $this->jsonSerializer->unserialize($this->getResponse()->getBody())['category']['entity_id'];
+        $responseData = $this->performSaveCategoryRequest($data);
+        $this->assertRequestIsSuccessfullyPerformed($responseData);
+        $categoryId = $responseData['category']['entity_id'];
         $this->assertNotNull($categoryId, 'The category was not created');
         $urlRewriteCollection = $this->urlRewriteCollectionFactory->create();
         $urlRewriteCollection->addFieldToFilter(UrlRewrite::ENTITY_ID, ['eq' => $categoryId])
