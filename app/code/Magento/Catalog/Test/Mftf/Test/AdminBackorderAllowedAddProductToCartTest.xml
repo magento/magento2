@@ -35,7 +35,7 @@
         </after>
 
         <!-- Go to the storefront and add the product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="gotoAndAddProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="gotoAndAddProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 

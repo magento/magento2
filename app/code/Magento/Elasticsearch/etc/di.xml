@@ -169,7 +169,7 @@
         <arguments>
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Elasticsearch</item>
-                <item name="elasticsearch5" xsi:type="string">Elasticsearch 5.0+</item>
+                <item name="elasticsearch5" xsi:type="string">Elasticsearch 5.x</item>
             </argument>
         </arguments>
     </type>
