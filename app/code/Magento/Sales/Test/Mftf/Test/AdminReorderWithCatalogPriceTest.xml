@@ -36,6 +36,8 @@
             <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
                 <requiredEntity createDataKey="createGuestCart"/>
             </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <!--END Create order via API-->
         </before>
         <after>
