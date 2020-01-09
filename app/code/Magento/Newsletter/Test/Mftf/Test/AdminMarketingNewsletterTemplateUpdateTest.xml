@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingNewsletterTemplateUpdate">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Newsletter Updating"/>
+            <title value="Newsletter Updating Test"/>
+            <description value="Admin should be able update created Newsletter Template"/>
+            <group value="reports"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <!-- Navigate To MARKETING > Newsletter Template -->
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterTemplatePage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
+            </actionGroup>
+            <!-- Navigate To Create Newsletter Template Page -->
+            <actionGroup ref="AdminNavigateToCreateNewsletterTemplatePageActionGroup" stepKey="navigateTiCreateNewsletterTemplatePage"/>
+            <!-- Create Newsletter Template -->
+            <actionGroup ref="AdminMarketingCreateNewsletterTemplateActionGroup" stepKey="createNewsletterTemplate">
+                <argument name="name" value="{{_defaultNewsletter.name}}"/>
+                <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+                <argument name="senderName" value="{{_defaultNewsletter.senderName}}"/>
+                <argument name="senderEmail" value="{{_defaultNewsletter.senderEmail}}"/>
+                <argument name="templateContent" value="{{_defaultNewsletter.textAreaContent}}"/>
+            </actionGroup>
+            <!-- Search Created Newsletter Template on Grid -->
+            <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplate">
+                <argument name="name" value="{{_defaultNewsletter.name}}"/>
+                <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+            </actionGroup>
+            <!-- Open Created Newsletter Template -->
+            <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openCreatedNewsletterTemplate"/>
+        </before>
+
+        <after>
+            <!-- Delete Created Newsletter Template -->
+            <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplateInGrid">
+                <argument name="name" value="{{updatedNewsletter.name}}"/>
+                <argument name="subject" value="{{updatedNewsletter.subject}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openTemplate"/>
+            <actionGroup ref="AdminMarketingDeleteNewsletterTemplateActionGroup" stepKey="deleteTemplate"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- TEST BODY -->
+        <!-- Update Created Newsletter Template -->
+        <actionGroup ref="AdminMarketingCreateNewsletterTemplateActionGroup" stepKey="updateNewsletterTemplate">
+            <argument name="name" value="{{updatedNewsletter.name}}"/>
+            <argument name="subject" value="{{updatedNewsletter.subject}}"/>
+            <argument name="senderName" value="{{updatedNewsletter.senderName}}"/>
+            <argument name="senderEmail" value="{{updatedNewsletter.senderEmail}}"/>
+            <argument name="templateContent" value="{{updatedNewsletter.textAreaContent}}"/>
+        </actionGroup>
+        <!-- Assert Success Message -->
+        <actionGroup ref="AssertAdminCreatedNewsletterTemplateMessageActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="The newsletter template has been saved."/>
+        </actionGroup>
+        <!-- Find Created Newsletter on Grid -->
+        <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplate">
+            <argument name="name" value="Updated Newsletter Template"/>
+            <argument name="subject" value="Updated Newsletter Subject"/>
+        </actionGroup>
+        <!-- Assert Created Newsletter on Grid -->
+        <actionGroup ref="AssertAdminCreatedNewsletterTemplateInGridActionGroup" stepKey="assertNewsletterInGrid">
+            <argument name="name" value="{{updatedNewsletter.name}}"/>
+            <argument name="subject" value="{{updatedNewsletter.subject}}"/>
+        </actionGroup>
+        <!-- END TEST BODY -->
+    </test>
+</tests>
