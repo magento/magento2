@@ -273,7 +273,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options.php
+     * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_radio_select.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @expectedException \Exception
      * @expectedExceptionMessage Option type (select, radio) should have only one element.
