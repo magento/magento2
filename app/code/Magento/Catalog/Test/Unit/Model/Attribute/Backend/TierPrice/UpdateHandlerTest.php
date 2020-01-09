@@ -128,6 +128,12 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
                     ['entity_id', $originalProductId]
                 ]
             );
+        $this->assertEquals($this->assertNotNull($newTierPrices[0]['price']), 
+        $this->tierPriceResource->expects($this->atLeastOnce())
+        ->method('updateValues')->with($newTierPrices, $originalTierPrices)->willReturn(true));
+        $this->assertEquals($this->assertNull($newTierPrices[0]['price']), 
+        $this->tierPriceResource->expects($this->atLeastOnce())
+        ->method('updateValues')->with($newTierPrices, $originalTierPrices)->willReturn(false));
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn(0);
         $product->expects($this->atLeastOnce())->method('setData')->with('tier_price_changed', 1);
         $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
@@ -163,7 +169,6 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->tierPriceResource->expects($this->exactly(2))->method('savePriceData')->willReturnSelf();
         $this->tierPriceResource->expects($this->once())->method('deletePriceData')
             ->with($productId, null, $priceIdToDelete);
-
         $this->assertEquals($product, $this->updateHandler->execute($product));
     }
 
