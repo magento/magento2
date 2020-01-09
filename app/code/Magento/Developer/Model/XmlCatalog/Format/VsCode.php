@@ -20,8 +20,9 @@ use Magento\Framework\Filesystem\File\WriteFactory;
 class VsCode implements FormatInterface
 {
     private const PROJECT_PATH_IDENTIFIER = '..';
-    private const FILE_MODE_READ = 'r';
-    private const FILE_MODE_WRITE = 'w';
+    public const XMLNS = 'urn:oasis:names:tc:entity:xmlns:xml:catalog';
+    public const FILE_MODE_READ = 'r';
+    public const FILE_MODE_WRITE = 'w';
 
     /**
      * @var ReadInterface
@@ -46,7 +47,7 @@ class VsCode implements FormatInterface
     public function __construct(
         ReadFactory $readFactory,
         WriteFactory $fileWriteFactory,
-        DomDocumentFactory $domDocumentFactory = null
+        DomDocumentFactory $domDocumentFactory
     ) {
         $this->currentDirRead = $readFactory->create(getcwd());
         $this->fileWriteFactory = $fileWriteFactory;
@@ -73,9 +74,12 @@ class VsCode implements FormatInterface
             } else {
                 $this->initEmptyFile($dom);
             }
-            $xpath = new \DOMXPath($dom);
-            $nodeList = $xpath->query('/catalog');
-            $catalogNode = $nodeList->item(0);
+            $catalogNode = $dom->getElementsByTagName('catalog')->item(0);
+
+            if ($catalogNode == null) {
+                $dom = $this->domDocumentFactory->create();
+                $catalogNode = $this->initEmptyFile($dom);
+            }
             $file->close();
         } catch (FileSystemException $f) {
             //create file if does not exists
@@ -83,13 +87,23 @@ class VsCode implements FormatInterface
             $catalogNode = $this->initEmptyFile($dom);
         }
 
+        $xpath = new \DOMXPath($dom);
+        $xpath->registerNamespace('xmlns', self::XMLNS);
+
         foreach ($dictionary as $urn => $xsdPath) {
-            $node = $dom->createElement('system');
+            // Find an existing urn
+            $existingNode = $xpath->query("/xmlns:catalog/xmlns:system[@systemId='" . $urn . "']")->item(0);
+            $node = $existingNode ?? $dom->createElement('system');
             $node->setAttribute('systemId', $urn);
             $node->setAttribute('uri', $this->getFileLocationInProject($xsdPath));
             $catalogNode->appendChild($node);
         }
         $dom->formatOutput = true;
+        $dom->preserveWhiteSpace = false;
+
+        // Reload to keep pretty format
+        $dom->loadXML($dom->saveXML());
+
         $file = $this->fileWriteFactory->create($configFile, DriverPool::FILE, self::FILE_MODE_WRITE);
         $file->write($dom->saveXML());
         $file->close();
@@ -105,7 +119,7 @@ class VsCode implements FormatInterface
     {
         $catalogNode = $dom->createElement('catalog');
 
-        $catalogNode->setAttribute('xmlns', 'urn:oasis:names:tc:entity:xmlns:xml:catalog');
+        $catalogNode->setAttribute('xmlns', self::XMLNS);
         $dom->appendChild($catalogNode);
 
         return $catalogNode;
