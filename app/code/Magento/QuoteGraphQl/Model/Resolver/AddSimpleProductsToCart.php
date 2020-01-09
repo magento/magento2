@@ -13,7 +13,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\AddProductsToCart;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Add simple products to cart GraphQl resolver
@@ -32,25 +31,15 @@ class AddSimpleProductsToCart implements ResolverInterface
     private $addProductsToCart;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * AddSimpleProductsToCart constructor.
-     *
      * @param GetCartForUser $getCartForUser
      * @param AddProductsToCart $addProductsToCart
-     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        AddProductsToCart $addProductsToCart,
-        ProductRepositoryInterface $productRepository
+        AddProductsToCart $addProductsToCart
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->addProductsToCart = $addProductsToCart;
-        $this->productRepository = $productRepository;
     }
 
     /**
@@ -70,10 +59,6 @@ class AddSimpleProductsToCart implements ResolverInterface
         }
         $cartItems = $args['input']['cart_items'];
 
-        foreach ($cartItems as $cartItem) {
-            $this->validationItemTypes($cartItem);
-        }
-
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->addProductsToCart->execute($cart, $cartItems);
@@ -83,44 +68,5 @@ class AddSimpleProductsToCart implements ResolverInterface
                 'model' => $cart,
             ],
         ];
-    }
-
-    /**
-     * Validate Items Types
-     *
-     * @param array $cartItem
-     * @throws GraphQlInputException
-     */
-    protected function validationItemTypes(array $cartItem)
-    {
-        $values = $errorTypes = [];
-
-        foreach ($cartItem['bundle_options'] as $bundleOption) {
-            $values[$bundleOption['id']] = $bundleOption['value'];
-        }
-
-        $product = $this->productRepository->get($cartItem['data']['sku'], false, null, true);
-        $optionsCollection = $product->getTypeInstance()->getOptionsCollection($product);
-
-        foreach ($optionsCollection as $options) {
-            $type = $options->getType();
-            $optionId = $options->getOptionId();
-
-            if (($type == 'radio' || $type == 'select') &&
-                isset($values[$optionId]) &&
-                count($values[$optionId]) > 1
-            ) {
-                $errorTypes[] = $type;
-            }
-        }
-
-        if (!empty($errorTypes)) {
-            throw new GraphQlInputException(
-                __(
-                    'Option type (%types) should have only one element.',
-                    ['types' => implode(", ", $errorTypes)]
-                )
-            );
-        }
     }
 }
