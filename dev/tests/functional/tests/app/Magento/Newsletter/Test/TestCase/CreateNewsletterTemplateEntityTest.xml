@@ -15,6 +15,7 @@
             <data name="template/data/text" xsi:type="string">Some content %isolation%</data>
             <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterSuccessCreateMessage" />
             <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterInGrid" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>
 </config>
