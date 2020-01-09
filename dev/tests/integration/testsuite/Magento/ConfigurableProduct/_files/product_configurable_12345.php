@@ -121,7 +121,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setId(11)
+    ->setId(111)
     ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Configurable Product 12345')

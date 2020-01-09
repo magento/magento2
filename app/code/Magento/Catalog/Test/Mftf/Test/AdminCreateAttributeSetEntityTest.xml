@@ -30,7 +30,7 @@
 
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="goToAttributeSetByName" stepKey="filterProductAttributeSetGridByLabel">
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
 
@@ -38,17 +38,17 @@
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassignedAttr"/>
 
         <!-- Assign attribute in the group -->
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
         </actionGroup>
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
-        <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets2"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <!-- Assert an attribute in the group-->
-        <actionGroup ref="goToAttributeSetByName" stepKey="filterProductAttributeSetGridByLabel2">
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel2">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup2"/>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddBundleOptionWithThreeProductsActionGroup" extends="AddBundleOptionWithTwoProductsActionGroup">
+        <annotations>
+            <description>Requires Navigation to the Product Creation page. Adds Bundle Option with Three Products using the provided arguments. 'x' refers to Bundle option number. 'n' refers to the first number after x.</description>
+        </annotations>
+        <arguments>
+            <argument name="prodTreeSku" type="string"/>
+        </arguments>
+
+        <remove keyForRemoval="fillQuantity1"/>
+        <remove keyForRemoval="fillQuantity2"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters3" after="selectProduct2"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters3" after="clickClearFilters3"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{prodTreeSku}}" stepKey="fillProductSkuFilter3" after="openProductFilters3"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters3" after="fillProductSkuFilter3"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad3" time="30" after="clickApplyFilters3"/>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectProduct3" after="waitForFilteredGridLoad3"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity(x, '0')}}" userInput="1" stepKey="fillQuantity1" after="clickAddButton1"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity(x, '1')}}" userInput="1" stepKey="fillQuantity2" after="fillQuantity1"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity(x, '2')}}" userInput="1" stepKey="fillQuantity3" after="fillQuantity2"/>
+    </actionGroup>
+</actionGroups>
