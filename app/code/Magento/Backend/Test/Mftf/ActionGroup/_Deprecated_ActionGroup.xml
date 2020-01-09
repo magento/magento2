@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="LoginAsAnyUserActionGroup">
+        <arguments>
+            <argument name="uname" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
+            <argument name="passwd" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        </arguments>
+        <!-- This ActionGroup is deprecated. Use `LoginAdminWithCredentialsActionGroup` instead -->
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}" stepKey="navigateToAdmin"/>
+        <fillField userInput="{{uname}}" selector="{{LoginFormSection.username}}" stepKey="fillUsername"/>
+        <fillField userInput="{{passwd}}" selector="{{LoginFormSection.password}}" stepKey="fillPassword"/>
+        <click selector="{{LoginFormSection.signIn}}" stepKey="clickLogin"/>
+    </actionGroup>
+</actionGroups>
