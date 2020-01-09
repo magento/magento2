@@ -47,7 +47,7 @@
             <argument name="templateContent" value="{{_defaultNewsletter.textAreaContent}}"/>
         </actionGroup>
         <!-- Assert Success Message -->
-        <actionGroup ref="AssertAdminCreatedNewsletterTemplateMessageActionGroup" stepKey="seeSuccessMessage">
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
             <argument name="message" value="The newsletter template has been saved."/>
         </actionGroup>
         <!-- Find Created Newsletter On grid -->
