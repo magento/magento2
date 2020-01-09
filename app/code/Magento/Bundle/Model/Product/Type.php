@@ -681,6 +681,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $optionsCollection,
                     $options
                 );
+                $this->checkAreRadioAndSelectOptionsUnit(
+                    $optionsCollection,
+                    $options
+                );
 
                 $selectionIds = array_values($this->arrayUtility->flatten($options));
                 // If product has not been configured yet then $selections array should be empty
@@ -1269,6 +1273,40 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     );
                 }
             }
+        }
+    }
+
+    /**
+     * Validate Radio And Select Options should be Unit
+     *
+     * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
+     * @param int[] $options
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function checkAreRadioAndSelectOptionsUnit($optionsCollection, $options)
+    {
+        $errorTypes = [];
+
+        foreach ($optionsCollection->getItems() as $option) {
+            $type = $option->getType();
+            $optionId = $option->getOptionId();
+
+            if (($type == 'radio' || $type == 'select') &&
+                isset($options[$optionId]) &&
+                count($options[$optionId]) > 1
+            ) {
+                $errorTypes[] = $type;
+            }
+        }
+
+        if (!empty($errorTypes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'Option type (%types) should have only one element.',
+                    ['types' => implode(", ", $errorTypes)]
+                )
+            );
         }
     }
 
