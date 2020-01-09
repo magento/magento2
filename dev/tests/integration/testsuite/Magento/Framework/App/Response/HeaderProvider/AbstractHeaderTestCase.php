@@ -8,6 +8,9 @@ namespace Magento\Framework\App\Response\HeaderProvider;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Zend\Http\Header\HeaderInterface;
 
+/**
+ * Class AbstractHeaderTestCase
+ */
 abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\AbstractController
 {
     /** @var  HttpResponse */
@@ -23,6 +26,7 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
             [
                 'preferences' =>
                     [
+                        // phpcs:ignore Magento2.PHP.LiteralNamespaces.LiteralClassUsage
                         HttpResponse::class => 'Magento\Framework\App\Response\Http\Interceptor'
                     ]
             ]
