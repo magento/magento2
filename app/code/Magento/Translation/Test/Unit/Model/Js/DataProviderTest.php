@@ -52,7 +52,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $translateMock;
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function setUp()
     {
@@ -83,9 +83,15 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify data translate
+     *
+     * @param array $config
      * @return void
+     * @dataProvider configDataProvider
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testGetData()
+    public function testGetData(array $config)
     {
         $themePath = 'blank';
         $areaCode = 'adminhtml';
@@ -101,28 +107,10 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             [$areaCode, $themePath, '*', '*', [$filePaths[3]]]
         ];
 
-        $expectedResult = [
-            'hello1' => 'hello1translated',
-            'hello2' => 'hello2translated',
-            'hello3' => 'hello3translated',
-            'hello4' => 'hello4translated'
-        ];
-
-        $contentsMap = [
-            'content1$.mage.__("hello1")content1',
-            'content2$.mage.__("hello2")content2',
-            'content2$.mage.__("hello4")content4', // this value should be last after running data provider
-            'content2$.mage.__("hello3")content3',
-        ];
-
-        $translateMap = [
-            [['hello1'], [], 'hello1translated'],
-            [['hello2'], [], 'hello2translated'],
-            [['hello3'], [], 'hello3translated'],
-            [['hello4'], [], 'hello4translated']
-        ];
-
-        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
+        $patterns = $config['patterns'];
+        $expectedResult = $config['expectedResult'];
+        $contentsMap = $config['contentsMap'];
+        $translateMap = $config['translateMap'];
 
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
@@ -157,14 +145,18 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify Get Data Throwing Exception
+     *
+     * @param array $config
      * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
+     * @dataProvider configDataProvider
      */
-    public function testGetDataThrowingException()
+    public function testGetDataThrowingException(array $config)
     {
         $themePath = 'blank';
         $areaCode = 'adminhtml';
-
-        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
+        $patterns = $config['patterns'];
 
         $this->fileReadMock->expects($this->once())
             ->method('readAll')
@@ -189,5 +181,50 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception('Test exception'));
 
         $this->model->getData($themePath);
+    }
+
+    /**
+     * Config Data Provider
+     *
+     * @return array
+     */
+    public function configDataProvider(): array
+    {
+        return [
+                 [
+                    [
+                        'patterns' => [
+                            '~\$\.mage\.__\(([\'"])(.+?)\1\)~',
+                            '~i18n\:\s*(["\'])(.*?)(?<!\\\)\1~',
+                            '~translate\=("\')([^\'].*?)\'\"~',
+                            '~(?s)\$t\(\s*([\'"])(\?\<translate\>.+?)(?<!\\\)\1\s*(*SKIP)\)(?s)~',
+                            '~translate args\=("|\'|"\'|\\\"\')([^\'].*?)(\'\\\"|\'"|\'|")~',
+                        ],
+
+                        'expectedResult' => [
+                            'hello1' => 'hello1translated',
+                            'hello2' => 'hello2translated',
+                            'hello3' => 'hello3translated',
+                            'hello4' => 'hello4translated'
+                        ],
+
+                        'contentsMap' =>
+                        [
+                            'content1$.mage.__("hello1")content1',
+                            'content2$.mage.__("hello2")content2',
+                            'content2$.mage.__("hello4")content4',
+                            'content2$.mage.__("hello3")content3',
+                        ],
+
+                        'translateMap' => [
+                            [['hello1'], [], 'hello1translated'],
+                            [['hello2'], [], 'hello2translated'],
+                            [['hello3'], [], 'hello3translated'],
+                            [['hello4'], [], 'hello4translated']
+                        ]
+                    ],
+
+                 ]
+        ];
     }
 }
