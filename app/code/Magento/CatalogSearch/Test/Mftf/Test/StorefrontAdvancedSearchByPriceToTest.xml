@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdvancedSearchByPriceToTest" extends="StorefrontAdvancedSearchEntitySimpleProductTest">
+        <annotations>
+            <stories value="Use Advanced Search"/>
+            <title value="Search product in advanced search by price to"/>
+            <description value="Search product in advanced search by price to"/>
+            <testCaseId value="MAGETWO-24729"/>
+            <severity value="CRITICAL"/>
+            <group value="searchFrontend"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="ABC_123_SimpleProduct" stepKey="createProduct2" after="createProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2" after="deleteProduct"/>
+        </after>
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
+            <argument name="price_to" value="100"/>
+        </actionGroup>
+        <!-- See that some items were found, other products may exist besides our test products -->
+        <see userInput="items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$createProduct2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProduct2Name" after="seeProductName"/>
+    </test>
+</tests>

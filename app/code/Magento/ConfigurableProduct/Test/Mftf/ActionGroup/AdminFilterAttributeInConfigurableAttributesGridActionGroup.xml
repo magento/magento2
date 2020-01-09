@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFilterAttributeInConfigurableAttributesGrid">
+        <annotations>
+            <description>Filter attribute in configurable attributes grid by attribute code value</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeCode" type="string" defaultValue="{{newProductAttribute.attribute_code}}"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridFilterSection.clear}}" visible="true" dependentSelector="{{AdminDataGridFilterSection.clear}}" stepKey="clearFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersReset"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="waitForFiltersAppear"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="expandFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{attributeCode}}" stepKey="fillFilterValue"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+</actionGroups>
