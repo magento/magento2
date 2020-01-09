@@ -17,7 +17,7 @@ $customer->setWebsiteId(
 )->setAttributeSetId(
     0
 )->setEmail(
-    'customer@needAconfirmation.com'
+    'customer@needaconfirmation.com'
 )->setPassword(
     'password'
 )->setGroupId(

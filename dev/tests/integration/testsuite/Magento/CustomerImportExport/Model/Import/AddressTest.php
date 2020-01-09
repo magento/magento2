@@ -403,7 +403,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Customer::class
         );
         $customer->setWebsiteId(0);
-        $customer->loadByEmail('BetsyParker@example.com');
+        $customer->loadByEmail('betsyparker@example.com');
         $defaultsData = $this->_updateData['default'];
         $this->assertEquals(
             $defaultsData['billing'],

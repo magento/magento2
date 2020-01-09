@@ -360,7 +360,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue(
                 [
-                    'email' => 'customer@needAconfirmation.com',
+                    'email' => 'customer@needaconfirmation.com',
                 ]
             );
 

@@ -254,7 +254,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $nsee) {
             $this->assertEquals(
-                'No such entity with email = 1234customer@needAconfirmation.com, websiteId = 1',
+                'No such entity with email = 1234customer@needaconfirmation.com, websiteId = 1',
                 $nsee->getMessage()
             );
         }
@@ -574,7 +574,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testResendConfirmation()
     {
-        $this->accountManagement->resendConfirmation('customer@needAconfirmation.com', 1);
+        $this->accountManagement->resendConfirmation('customer@needaconfirmation.com', 1);
         //TODO assert
     }
 
@@ -586,10 +586,10 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     public function testResendConfirmationBadWebsiteId()
     {
         try {
-            $this->accountManagement->resendConfirmation('customer@needAconfirmation.com', 'notAWebsiteId');
+            $this->accountManagement->resendConfirmation('customer@needaconfirmation.com', 'notAWebsiteId');
         } catch (NoSuchEntityException $nsee) {
             $this->assertEquals(
-                'No such entity with email = customer@needAconfirmation.com, websiteId = notAWebsiteId',
+                'No such entity with email = customer@needaconfirmation.com, websiteId = notAWebsiteId',
                 $nsee->getMessage()
             );
         }
