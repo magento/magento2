@@ -16,7 +16,7 @@
             <data name="customer/data/middlename" xsi:type="string">Middle Name %isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/suffix" xsi:type="string">_Suffix%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="customer/data/dob" xsi:type="string">08/01/1986</data>
             <data name="customer/data/taxvat" xsi:type="string">123456789001</data>
             <data name="customer/data/gender" xsi:type="string">Male</data>

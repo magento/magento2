@@ -14,7 +14,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
@@ -28,7 +28,7 @@
             <data name="customer/data/middlename" xsi:type="string">Jack</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/suffix" xsi:type="string">S</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="customer/data/dob" xsi:type="string">03/16/2004</data>
             <data name="customer/data/gender" xsi:type="string">Male</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
@@ -42,7 +42,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="address/data/firstname" xsi:type="string">Joe</data>
             <data name="address/data/lastname" xsi:type="string">Doe</data>
             <data name="address/data/street" xsi:type="string">1 Main Street</data>
@@ -62,7 +62,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">Retailer</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@-example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@-example.com</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail" />
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation5" summary="General customer from Poland">
@@ -92,7 +92,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle" />
         </variation>
@@ -103,7 +103,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">customer_group_retail_customer</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendBackButton" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
@@ -126,7 +126,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="address/data/company" xsi:type="string">Magento</data>
             <data name="address/data/country_id" xsi:type="string"></data>
             <data name="expectedRequiredFields" xsi:type="array">
@@ -145,7 +145,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="address/data/company" xsi:type="string">Magento</data>
             <data name="address/data/country_id" xsi:type="string">Bangladesh</data>
             <data name="address/data/street" xsi:type="string">Chmielna 113</data>
@@ -172,7 +172,7 @@
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
-            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="customer/data/dob" xsi:type="string">03/29/2004</data>
             <data name="steps" xsi:type="array">
                 <item name="changeAdminLocale" xsi:type="array">

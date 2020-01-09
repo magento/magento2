@@ -46,7 +46,7 @@ class Address extends AbstractRepository
                         'value' => 'Doe',
                     ],
                     'email' => [
-                        'value' => 'John.Doe%isolation%@example.com',
+                        'value' => 'john.doe%isolation%@example.com',
                     ],
                     'company' => [
                         'value' => 'Magento %isolation%',

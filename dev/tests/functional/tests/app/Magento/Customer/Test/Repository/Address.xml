@@ -10,7 +10,7 @@
         <dataset name="default">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
             <field name="city" xsi:type="string">Culver City</field>
@@ -23,7 +23,7 @@
         <dataset name="US_address">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
             <field name="city" xsi:type="string">Culver City</field>
@@ -38,7 +38,7 @@
         <dataset name="US_address_default_billing">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
             <field name="city" xsi:type="string">Culver City</field>
@@ -53,7 +53,7 @@
         <dataset name="US_address_default_shipping">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
             <field name="city" xsi:type="string">Culver City</field>
@@ -66,7 +66,7 @@
         </dataset>
 
         <dataset name="US_address_1">
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -106,7 +106,7 @@
         <dataset name="US_address_TX">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="street" xsi:type="string">7700 W. Parmer Lane Bldg. D</field>
             <field name="city" xsi:type="string">Austin</field>
@@ -121,7 +121,7 @@
         <dataset name="US_address_NY">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="street" xsi:type="string">3222 Cliffside Drive</field>
             <field name="city" xsi:type="string">Binghamton</field>
@@ -136,7 +136,7 @@
         <dataset name="US_address_NY_default_no">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="street" xsi:type="string">6262 Fifth Avenue</field>
             <field name="city" xsi:type="string">New York</field>
@@ -151,7 +151,7 @@
         <dataset name="UK_address_default_billing">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
+            <field name="email" xsi:type="string">janedoe_%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="city" xsi:type="string">London</field>
             <field name="street" xsi:type="string">172, Westminster Bridge Rd</field>
@@ -166,7 +166,7 @@
         <dataset name="UK_address">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
-            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
+            <field name="email" xsi:type="string">janedoe_%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="city" xsi:type="string">London</field>
             <field name="street" xsi:type="string">172, Westminster Bridge Rd</field>
@@ -266,7 +266,7 @@
         <dataset name="DE_address_default">
             <field name="firstname" xsi:type="string">Jan</field>
             <field name="lastname" xsi:type="string">Jansen</field>
-            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
+            <field name="email" xsi:type="string">janedoe_%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="city" xsi:type="string">Berlin</field>
             <field name="street" xsi:type="string">Augsburger Strabe 41</field>
@@ -317,7 +317,7 @@
         <dataset name="customer_UK_US_addresses">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe%isolation%</field>
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="email" xsi:type="string">john.doe%isolation%@example.com</field>
             <field name="password" xsi:type="string">123123^q</field>
             <field name="password_confirmation" xsi:type="string">123123^q</field>
             <field name="address" xsi:type="array">

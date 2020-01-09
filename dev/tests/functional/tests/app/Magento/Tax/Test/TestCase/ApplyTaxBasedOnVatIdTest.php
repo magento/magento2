@@ -163,7 +163,7 @@ class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest
             $this->customer->getData(),
             ['group_id' => ['value' => $this->vatGroups[$customerGroup]->getCustomerGroupId()]],
             ['address' => ['addresses' => $this->customer->getDataFieldConfig('address')['source']->getAddresses()]],
-            ['email' => 'JohnDoe%isolation%@example.com']
+            ['email' => 'johndoe%isolation%@example.com']
         );
 
         unset($customerData['id']);

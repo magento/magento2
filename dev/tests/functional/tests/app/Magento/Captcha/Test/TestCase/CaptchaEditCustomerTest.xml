@@ -9,7 +9,7 @@
     <testCase name="Magento\Captcha\Test\TestCase\CaptchaEditCustomerTest" summary="Captcha and Lockout on account edit page" ticketId="MAGETWO-49049">
         <variation name="CaptchaEditCustomerTestVariation1">
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="initCustomer/data/email" xsi:type="string">JaneDoe_%isolation%@example.com</data>
+            <data name="initCustomer/data/email" xsi:type="string">janedoe_%isolation%@example.com</data>
             <data name="initCustomer/data/current_password" xsi:type="string">incorrect password</data>
             <data name="attempts" xsi:type="number">3</data>
             <data name="captcha" xsi:type="string">111</data>
