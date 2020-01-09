@@ -174,9 +174,9 @@
             width: 100%;
 
             .price-box {
-                display: table-cell;
+                display: inline-block;
                 vertical-align: top;
-                width: 1px;
+                width: auto;
 
                 .price-container {
                     > span {
@@ -228,7 +228,8 @@
         }
 
         .product-info-stock-sku {
-            display: table-cell;
+            display: inline-block;
+            float: right;
             padding-bottom: @indent__s;
             padding-left: 10%;
             text-align: right;
