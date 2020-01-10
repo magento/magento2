@@ -23,7 +23,7 @@
             <!-- Create productTaxClass -->
             <createData entity="productTaxClass" stepKey="createProductTaxClass"/>
             <!--Set configs-->
-            <magentoCLI command="config:set {{DisableGenerateCategoryProductUrlRewrites.path}} {{DisableGenerateCategoryProductUrlRewrites.value}}" stepKey="disableGenerateUrlRewrite"/>
+            <magentoCLI command="config:set {{DisableGenerateCategoryProductUrlRewritesConfigData.path}} {{DisableGenerateCategoryProductUrlRewritesConfigData.value}}" stepKey="disableGenerateUrlRewrite"/>
             <magentoCLI command="config:set {{DefaultProductTaxClass.path}} $createProductTaxClass.return$" stepKey="setDefaultProductTaxClass"/>
             <!--Create category and product-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -42,7 +42,7 @@
         </before>
         <after>
             <!--Set configs-->
-            <magentoCLI command="config:set {{EnableGenerateCategoryProductUrlRewrites.path}} {{EnableGenerateCategoryProductUrlRewrites.value}}" stepKey="enableGenerateUrlRewrite"/>
+            <magentoCLI command="config:set {{EnableGenerateCategoryProductUrlRewritesConfigData.path}} {{EnableGenerateCategoryProductUrlRewritesConfigData.value}}" stepKey="enableGenerateUrlRewrite"/>
             <magentoCLI command="config:set {{DefaultProductTaxClass.path}} {{DefaultProductTaxClass.value}}" stepKey="setDefaultProductTaxClass"/>
             <!--Delete category and product-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
