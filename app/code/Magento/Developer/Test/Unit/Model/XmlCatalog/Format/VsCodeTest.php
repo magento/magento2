@@ -8,72 +8,87 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Filesystem\File\WriteFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class VsCodeTest extends \PHPUnit\Framework\TestCase
+class VsCodeTest extends TestCase
 {
     /**
-     * @var Magento\Developer\Model\XmlCatalog\Format\VsCode
+     * @var VsCode
      */
-    protected $vscodeFormat;
+    private $vscodeFormat;
 
     /**
-     * @var Magento\Framework\Filesystem\Directory\ReadFactory
+     * @var MockObject|ReadFactory
      */
-    protected $readFactory;
+    private $readFactoryMock;
 
     /**
-     * @var Magento\Framework\Filesystem\File\WriteFactory
+     * @var MockObject|WriteFactory
      */
-    protected $fileWriteFactory;
+    private $fileWriteFactoryMock;
 
     /**
-     * @var Magento\Framework\DomDocument\DomDocumentFactory
+     * @var DomDocumentFactory
      */
-    protected $domFactory;
+    private $domFactory;
 
-    protected $dictionary = [
-        'urn:magento:framework:Acl/etc/acl.xsd' => 'vendor/magento/framework/Acl/etc/acl.xsd',
-        'urn:magento:module:Magento_Store:etc/config.xsd' => 'vendor/magento/module-store/etc/config.xsd',
-        'urn:magento:module:Magento_Cron:etc/crontab.xsd' => 'vendor/magento/module-cron/etc/crontab.xsd',
-        'urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd' => 'vendor/magento/framework/Setup/Declaration/Schema/etc/schema.xsd',
-    ];
+    /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
 
     public function setUp()
     {
+        $this->objectManagerHelper = new ObjectManager($this);
 
-        $currentDirRead = $this->createMock(ReadInterface::class);
-        $currentDirRead->expects($this->any())
+        $currentDirReadMock = $this->createMock(ReadInterface::class);
+        $currentDirReadMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnCallback(function ($xsdPath) {
                 return $xsdPath;
             });
 
-        $this->readFactory = $this->createMock(ReadFactory::class);
-        $this->readFactory->expects($this->once())
+        $this->readFactoryMock = $this->createMock(ReadFactory::class);
+        $this->readFactoryMock->expects($this->once())
             ->method('create')
             ->withAnyParameters()
-            ->willReturn($currentDirRead);
+            ->willReturn($currentDirReadMock);
 
-        $this->fileWriteFactory = $this->createMock(WriteFactory::class);
-        $this->domFactory = new DomDocumentFactory();
+        $this->fileWriteFactoryMock = $this->createMock(WriteFactory::class);
+        $this->domFactory = $this->objectManagerHelper->getObject(DomDocumentFactory::class);
 
-        $this->vscodeFormat = new VsCode(
-            $this->readFactory,
-            $this->fileWriteFactory,
-            $this->domFactory
+        $vscodeFormatArgs = $this->objectManagerHelper->getConstructArguments(
+            VsCode::class,
+            [
+                'readFactory' => $this->readFactoryMock,
+                'fileWriteFactory' => $this->fileWriteFactoryMock,
+                'domDocumentFactory' => $this->domFactory,
+            ]
         );
+
+        $this->vscodeFormat = $this->objectManagerHelper->getObject(VsCode::class, $vscodeFormatArgs);
     }
 
-    public function testGenerateNewValidCatalog()
+    /**
+     * Test generation of new valid catalog
+     *
+     * @param string $content
+     * @param array $dictionary
+     * @dataProvider dictionaryDataProvider
+     * @return void
+     */
+    public function testGenerateNewValidCatalog($content, $dictionary)
     {
         $configFile = 'test';
-        $fixtureXmlFile = __DIR__ . '/_files/valid_catalog.xml';
-        $content = file_get_contents($fixtureXmlFile);
 
         $message = __("The \"%1.xml\" file doesn't exist.", $configFile);
 
-        $this->fileWriteFactory->expects($this->at(0))
+        $this->fileWriteFactoryMock->expects($this->at(0))
             ->method('create')
             ->with(
                 $configFile,
@@ -82,136 +97,177 @@ class VsCodeTest extends \PHPUnit\Framework\TestCase
             )
             ->willThrowException(new FileSystemException($message));
 
-        $file = $this->createMock(\Magento\Framework\Filesystem\File\Write::class);
-        $file->expects($this->once())
+        $fileMock = $this->createMock(Write::class);
+        $fileMock->expects($this->once())
             ->method('write')
             ->with($content);
 
-        $this->fileWriteFactory->expects($this->at(1))
+        $this->fileWriteFactoryMock->expects($this->at(1))
             ->method('create')
             ->with(
                 $configFile,
                 DriverPool::FILE,
                 VsCode::FILE_MODE_WRITE
             )
-            ->willReturn($file);
+            ->willReturn($fileMock);
 
-        $this->vscodeFormat->generateCatalog($this->dictionary, $configFile);
+        $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
 
-    public function testGenerateExistingValidCatalog()
+    /**
+     * Test modify existing valid catalog
+     *
+     * @param string $content
+     * @param array $dictionary
+     * @dataProvider dictionaryDataProvider
+     * @return void
+     */
+    public function testGenerateExistingValidCatalog($content, $dictionary)
     {
         $configFile = 'test';
-        $fixtureXmlFile = __DIR__ . '/_files/valid_catalog.xml';
-        $content = file_get_contents($fixtureXmlFile);
 
-        $file = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
-        $file->expects($this->once())
+        $fileMock = $this->createMock(Read::class);
+        $fileMock->expects($this->once())
             ->method('readAll')
             ->withAnyParameters()
             ->willReturn($content);
 
-        $this->fileWriteFactory->expects($this->at(0))
+        $this->fileWriteFactoryMock->expects($this->at(0))
             ->method('create')
             ->with(
                 $configFile,
                 DriverPool::FILE,
                 VsCode::FILE_MODE_READ
             )
-            ->willReturn($file);
+            ->willReturn($fileMock);
 
-        $file = $this->createMock(\Magento\Framework\Filesystem\File\Write::class);
-        $file->expects($this->once())
+        $fileMock = $this->createMock(Write::class);
+        $fileMock->expects($this->once())
             ->method('write')
             ->with($content);
 
-        $this->fileWriteFactory->expects($this->at(1))
+        $this->fileWriteFactoryMock->expects($this->at(1))
             ->method('create')
             ->with(
                 $configFile,
                 DriverPool::FILE,
                 VsCode::FILE_MODE_WRITE
             )
-            ->willReturn($file);
+            ->willReturn($fileMock);
 
-        $this->vscodeFormat->generateCatalog($this->dictionary, $configFile);
+        $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
 
-    public function testGenerateExistingEmptyValidCatalog()
+    /**
+     * Test modify existing empty catalog
+     *
+     * @param string $content
+     * @param array $dictionary
+     * @dataProvider dictionaryDataProvider
+     * @return void
+     */
+    public function testGenerateExistingEmptyValidCatalog($content, $dictionary)
     {
         $configFile = 'test';
-        $fixtureXmlFile = __DIR__ . '/_files/valid_catalog.xml';
-        $content = file_get_contents($fixtureXmlFile);
 
-        $file = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
-        $file->expects($this->once())
+        $fileMock = $this->createMock(Read::class);
+        $fileMock->expects($this->once())
             ->method('readAll')
             ->withAnyParameters()
             ->willReturn('');
 
-        $this->fileWriteFactory->expects($this->at(0))
+        $this->fileWriteFactoryMock->expects($this->at(0))
             ->method('create')
             ->with(
                 $configFile,
                 DriverPool::FILE,
                 VsCode::FILE_MODE_READ
             )
-            ->willReturn($file);
+            ->willReturn($fileMock);
 
-        $file = $this->createMock(\Magento\Framework\Filesystem\File\Write::class);
-        $file->expects($this->once())
+        $fileMock = $this->createMock(Write::class);
+        $fileMock->expects($this->once())
             ->method('write')
             ->with($content);
 
-        $this->fileWriteFactory->expects($this->at(1))
+        $this->fileWriteFactoryMock->expects($this->at(1))
             ->method('create')
             ->with(
                 $configFile,
                 DriverPool::FILE,
                 VsCode::FILE_MODE_WRITE
             )
-            ->willReturn($file);
+            ->willReturn($fileMock);
 
-        $this->vscodeFormat->generateCatalog($this->dictionary, $configFile);
+        $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
 
-    public function testGenerateExistingInvalidValidCatalog()
+    /**
+     * Test modify existing invalid catalog
+     *
+     * @param string $content
+     * @param array $dictionary
+     * @dataProvider dictionaryDataProvider
+     * @return void
+     */
+    public function testGenerateExistingInvalidValidCatalog($content, $dictionary, $invalidContent)
     {
         $configFile = 'test';
-        $invalidXmlFile = __DIR__ . '/_files/invalid_catalog.xml';
-        $invalidContent = file_get_contents($invalidXmlFile);
-        $validXmlFile = __DIR__ . '/_files/valid_catalog.xml';
-        $validContent = file_get_contents($validXmlFile);
 
-        $file = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
-        $file->expects($this->once())
+        $fileMock = $this->createMock(Read::class);
+        $fileMock->expects($this->once())
             ->method('readAll')
             ->withAnyParameters()
             ->willReturn($invalidContent);
 
-        $this->fileWriteFactory->expects($this->at(0))
+        $this->fileWriteFactoryMock->expects($this->at(0))
             ->method('create')
             ->with(
                 $configFile,
                 DriverPool::FILE,
                 VsCode::FILE_MODE_READ
             )
-            ->willReturn($file);
+            ->willReturn($fileMock);
 
-        $file = $this->createMock(\Magento\Framework\Filesystem\File\Write::class);
-        $file->expects($this->once())
+        $fileMock = $this->createMock(Write::class);
+        $fileMock->expects($this->once())
             ->method('write')
-            ->with($validContent);
+            ->with($content);
 
-        $this->fileWriteFactory->expects($this->at(1))
+        $this->fileWriteFactoryMock->expects($this->at(1))
             ->method('create')
             ->with(
                 $configFile,
                 DriverPool::FILE,
                 VsCode::FILE_MODE_WRITE
             )
-            ->willReturn($file);
+            ->willReturn($fileMock);
 
-        $this->vscodeFormat->generateCatalog($this->dictionary, $configFile);
+        $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
+
+    /**
+     * Data provider for test
+     *
+     * @return array
+     */
+    public function dictionaryDataProvider()
+    {
+        $fixtureXmlFile = __DIR__ . '/_files/valid_catalog.xml';
+        $content = file_get_contents($fixtureXmlFile);
+        $invalidXmlFile = __DIR__ . '/_files/invalid_catalog.xml';
+        $invalidContent = file_get_contents($invalidXmlFile);
+
+        return [
+            [
+                $content,
+                ['urn:magento:framework:Acl/etc/acl.xsd' => 'vendor/magento/framework/Acl/etc/acl.xsd',
+                    'urn:magento:module:Magento_Store:etc/config.xsd' => 'vendor/magento/module-store/etc/config.xsd',
+                    'urn:magento:module:Magento_Cron:etc/crontab.xsd' => 'vendor/magento/module-cron/etc/crontab.xsd',
+                    'urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd' => 'vendor/magento/framework/Setup/Declaration/Schema/etc/schema.xsd'],
+                $invalidContent,
+            ],
+        ];
+    }
+
 }
