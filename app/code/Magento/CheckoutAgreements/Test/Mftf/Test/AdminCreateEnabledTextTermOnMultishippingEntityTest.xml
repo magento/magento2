@@ -25,6 +25,8 @@
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createdCustomer"/>
             <createData entity="SimpleTwo" stepKey="createdProduct1"/>
             <createData entity="SimpleTwo" stepKey="createdProduct2"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>

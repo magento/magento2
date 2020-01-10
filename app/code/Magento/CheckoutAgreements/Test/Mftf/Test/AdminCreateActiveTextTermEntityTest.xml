@@ -23,6 +23,8 @@
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
             <createData entity="SimpleTwo" stepKey="createdProduct"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
