@@ -91,7 +91,7 @@ class CategoryIndexTest extends TestCase
         $category = $this->getCategoryByName->execute($categoryName);
         $product->setCategoryIds(array_merge($product->getCategoryIds(), [$category->getId()]));
         $this->productResource->save($product);
-        $result = $this->fetchDataFromIndexTable((int)$product->getId());
+        $result = $this->fetchIndexTableRecordsCount((int)$product->getId());
         $this->assertEquals($expectedItemsCount, $result);
     }
 
@@ -129,7 +129,7 @@ class CategoryIndexTest extends TestCase
         $data = ['posted_products' => [$product->getId() => 0]];
         $category->addData($data);
         $this->categoryResource->save($category);
-        $result = $this->fetchDataFromIndexTable((int)$product->getId());
+        $result = $this->fetchIndexTableRecordsCount((int)$product->getId());
         $this->assertEquals($expectedCount, $result);
     }
 
@@ -163,7 +163,7 @@ class CategoryIndexTest extends TestCase
         $newParentCategory = $this->getCategoryByName->execute('Parent category');
         $afterCategory = $this->getCategoryByName->execute('Child category');
         $category->move($newParentCategory->getId(), $afterCategory->getId());
-        $result = $this->fetchDataFromIndexTable((int)$product->getId());
+        $result = $this->fetchIndexTableRecordsCount((int)$product->getId());
         $this->assertEquals(2, $result);
     }
 
@@ -176,7 +176,7 @@ class CategoryIndexTest extends TestCase
     {
         $product = $this->productRepository->get('product_with_category');
         $this->productRepository->delete($product);
-        $result = $this->fetchDataFromIndexTable((int)$product->getId());
+        $result = $this->fetchIndexTableRecordsCount((int)$product->getId());
         $this->assertEmpty($result);
     }
 
@@ -186,7 +186,7 @@ class CategoryIndexTest extends TestCase
      * @param int $productId
      * @return int
      */
-    private function fetchDataFromIndexTable(int $productId): int
+    private function fetchIndexTableRecordsCount(int $productId): int
     {
         $tableName = $this->tableMaintainer->getMainTable((int)$this->storeManager->getStore()->getId());
         $select = $this->connection->select();
