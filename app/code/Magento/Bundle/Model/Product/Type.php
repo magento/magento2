@@ -1289,14 +1289,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $errorTypes = [];
 
         foreach ($optionsCollection->getItems() as $option) {
-            $type = $option->getType();
-            $optionId = $option->getOptionId();
-
-            if (($type == 'radio' || $type == 'select') &&
-                isset($options[$optionId]) &&
-                count($options[$optionId]) > 1
+            if (($option->getType() == 'radio' || $option->getType() == 'select') &&
+                isset($options[$option->getOptionId()]) &&
+                count($options[$option->getOptionId()]) > 1
             ) {
-                $errorTypes[] = $type;
+                $errorTypes[] = $option->getType();
             }
         }
 
