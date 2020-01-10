@@ -19,8 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests class configurable options block on product page.
- * Test class to check configurable product view behaviour
+ * Test class to check configurable product view behaviour.
  *
  * @see \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
  *
@@ -206,7 +205,7 @@ class ConfigurableTest extends TestCase
      * @param array $expectedData
      * @return void
      */
-    private function assertConfig($data, $expectedData): void
+    private function assertConfig(array $data, array $expectedData): void
     {
         $this->assertEquals($expectedData['label'], $data['label']);
         $skus = array_column($expectedData['options'], 'sku');
