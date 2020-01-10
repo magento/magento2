@@ -116,8 +116,14 @@ class PriceTest extends TestCase
      */
     public function testCalculatePrice(): void
     {
-        $this->assertEquals(10, $this->productPrice->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01'));
-        $this->assertEquals(8, $this->productPrice->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01'));
+        $this->assertEquals(
+            10,
+            $this->productPrice->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01')
+        );
+        $this->assertEquals(
+            8,
+            $this->productPrice->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01')
+        );
     }
 
     /**
