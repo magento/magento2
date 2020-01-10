@@ -70,7 +70,6 @@ class UrlRewriteTest extends AbstractSaveCategoryTest
                     'include_in_menu' => '1',
                     'display_mode' => 'PRODUCTS',
                     'is_anchor' => true,
-                    'return_session_messages_only' => true,
                     'use_config' => [
                         'available_sort_by' => 1,
                         'default_sort_by' => 1,
