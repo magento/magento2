@@ -10,7 +10,7 @@
     define('analyticsPopupConfig', function () {
         return {
             analyticsVisible: <?= $block->getNotification()->isAnalyticsVisible() ? 1 : 0; ?>,
-            releaseVisible: <?= $block->getNotification()->isReleaseVisible() ? 1 : 0; ?>,
+            releaseVisible: <?= $block->getNotification()->isReleaseVisible() ? 1 : 0; ?>
         }
     });
 </script>
