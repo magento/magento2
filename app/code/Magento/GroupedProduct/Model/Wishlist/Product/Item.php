@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Model\Wishlist\Product;
 
 use Magento\Wishlist\Model\Item as WishlistItem;
@@ -25,7 +27,7 @@ class Item
     public function beforeRepresentProduct(
         WishlistItem $subject,
         Product $product
-    ) {
+    ): array {
         if ($product->getTypeId() === TypeGrouped::TYPE_CODE
             && $product->getId() === $subject->getProduct()->getId()
         ) {
@@ -72,9 +74,9 @@ class Item
      */
     public function beforeCompareOptions(
         WishlistItem $subject,
-        $options1,
-        $options2
-    ) {
+        array $options1,
+        array $options2
+    ): array {
         $diff = array_diff_key($options1, $options2);
 
         if (!$diff) {
