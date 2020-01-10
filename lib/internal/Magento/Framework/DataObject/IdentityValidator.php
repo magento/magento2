@@ -11,6 +11,8 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * Class IdentityValidator
+ *
+ * Class for validating Uuid's
  */
 class IdentityValidator implements IdentityValidatorInterface
 {
