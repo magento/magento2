@@ -29,19 +29,9 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class UpdateTest extends TestCase
 {
-    /**
-     * Wishlist item id
-     *
-     * @var int
-     */
-    private const ITEM_ID = 1;
+    private const STUB_ITEM_ID = 1;
 
-    /**
-     * Product qty for wishlist
-     *
-     * @var int
-     */
-    private const WISHLIST_PRODUCT_QTY = 21;
+    private const STUB_WISHLIST_PRODUCT_QTY = 21;
 
     /**
      * @var MockObject|Validator $formKeyValidatorMock
@@ -126,7 +116,9 @@ class UpdateTest extends TestCase
             ->method('getMessageManager')
            ->willReturn($this->messageManagerMock);
 
-        $this->updateController = (new ObjectManagerHelper($this))->getObject(
+        $objectManager = new ObjectManagerHelper($this);
+
+        $this->updateController = $objectManager->getObject(
             Update::class,
             [
                 'context' => $this->contextMock,
@@ -286,11 +278,11 @@ class UpdateTest extends TestCase
             [
                 [
                     [
-                        'id' => self::ITEM_ID
+                        'id' => self::STUB_ITEM_ID
                     ],
                     [
-                        'qty' => [self::ITEM_ID => self::WISHLIST_PRODUCT_QTY],
-                        'description' => [self::ITEM_ID => 'Description for item_id 1']
+                        'qty' => [self::STUB_ITEM_ID => self::STUB_WISHLIST_PRODUCT_QTY],
+                        'description' => [self::STUB_ITEM_ID => 'Description for item_id 1']
                     ]
                 ]
             ];
