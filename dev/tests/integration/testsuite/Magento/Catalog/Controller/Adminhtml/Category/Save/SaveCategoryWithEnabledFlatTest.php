@@ -113,7 +113,6 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
             'include_in_menu' => 1,
             'display_mode' => 'PRODUCTS',
             'is_anchor' => true,
-            'return_session_messages_only' => true,
             'use_config' => [
                 'available_sort_by' => 1,
                 'default_sort_by' => 1,
@@ -127,7 +126,7 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
         $this->assertTrue(
             $this->categoryFlatResource->getConnection()->isTableExists($this->categoryFlatResource->getMainTable())
         );
-        $this->assertCount(1, $parentCategory->getChildrenCategories()->getItems());
+        $this->assertEquals(1, $parentCategory->getChildrenCategories()->getSize());
         $categoryFlatCollection = $this->categoryFlatCollectionFactory->create();
         $categoryFlatCollection->addIdFilter([333, $this->createdCategoryId]);
         $this->assertCount(2, $categoryFlatCollection->getItems());
@@ -185,7 +184,6 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
                     'include_in_menu' => 1,
                     'display_mode' => 'PRODUCTS',
                     'is_anchor' => true,
-                    'return_session_messages_only' => true,
                     'use_config' => [
                         'available_sort_by' => 1,
                         'default_sort_by' => 1,
@@ -204,7 +202,6 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
                     'include_in_menu' => 1,
                     'display_mode' => 'PRODUCTS',
                     'is_anchor' => true,
-                    'return_session_messages_only' => true,
                     'use_config' => [
                         'available_sort_by' => 1,
                         'default_sort_by' => 1,
@@ -223,7 +220,6 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
                     'include_in_menu' => 1,
                     'display_mode' => 'PRODUCTS',
                     'is_anchor' => true,
-                    'return_session_messages_only' => true,
                     'use_config' => [
                         'available_sort_by' => 1,
                         'default_sort_by' => 1,
@@ -242,7 +238,6 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
                     'include_in_menu' => 0,
                     'display_mode' => 'PRODUCTS',
                     'is_anchor' => true,
-                    'return_session_messages_only' => true,
                     'use_config' => [
                         'available_sort_by' => 1,
                         'default_sort_by' => 1,

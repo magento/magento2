@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Adminhtml\Category\Delete;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Catalog\Model\ResourceModel\Category\Flat as CategoryFlatResource;
 use Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -23,9 +25,19 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
 {
     /**
+     * @var IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
      * @var CategoryRepositoryInterface
      */
     private $categoryRepository;
+
+    /**
+     * @var CategoryFlatResource
+     */
+    private $categoryFlatResource;
 
     /**
      * @var CollectionFactory
@@ -38,8 +50,21 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
     protected function setUp()
     {
         parent::setUp();
+        $this->indexerRegistry = $this->_objectManager->get(IndexerRegistry::class);
         $this->categoryRepository = $this->_objectManager->get(CategoryRepositoryInterface::class);
+        $this->categoryFlatResource = $this->_objectManager->get(CategoryFlatResource::class);
         $this->categoryFlatCollectionFactory = $this->_objectManager->get(CollectionFactory::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $categoryFlatIndexer = $this->indexerRegistry->get(State::INDEXER_ID);
+        $categoryFlatIndexer->invalidate();
+        $this->categoryFlatResource->getConnection()->dropTable($this->categoryFlatResource->getMainTable());
     }
 
     /**
@@ -54,27 +79,27 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
      */
     public function testDeleteCategory(): void
     {
-        $this->assertNotNull($this->getCategoryByIdFromCategoryFlat(333));
+        $this->assertEquals(1, $this->getFlatCategoryCollectionSizeByCategoryId(333));
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(['id' => 333]);
         $this->dispatch('backend/catalog/category/delete');
         $this->assertSessionMessages($this->equalTo([(string)__('You deleted the category.')]));
-        $this->assertNull($this->getCategoryByIdFromCategoryFlat(333));
+        $this->assertEquals(0, $this->getFlatCategoryCollectionSizeByCategoryId(333));
         $this->checkCategoryIsDeleted(333);
     }
 
     /**
-     * Return category from category flat collection by category ID.
+     * Return collection size from category flat collection by category ID.
      *
      * @param int $categoryId
-     * @return Category|null
+     * @return int
      */
-    private function getCategoryByIdFromCategoryFlat(int $categoryId): ?Category
+    private function getFlatCategoryCollectionSizeByCategoryId(int $categoryId): int
     {
         $categoryFlatCollection = $this->categoryFlatCollectionFactory->create();
         $categoryFlatCollection->addIdFilter($categoryId);
 
-        return $categoryFlatCollection->getItemByColumnValue('entity_id', $categoryId);
+        return $categoryFlatCollection->getSize();
     }
 
     /**
