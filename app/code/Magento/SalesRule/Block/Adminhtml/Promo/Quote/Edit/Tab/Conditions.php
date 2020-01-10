@@ -196,7 +196,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         )->setRenderer(
             $this->_conditions
         );
-        $this->addComment($model, $fieldset);
 
         $form->setValues($model->getData());
         $this->setConditionFormName($model->getConditions(), $formName);
@@ -216,24 +215,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
                 $this->setConditionFormName($condition, $formName);
-            }
-        }
-    }
-
-    /**
-     * Adding comment if using specific sales rule.
-     *
-     * @param Rule $rule
-     * @param Fieldset $fieldset
-     * @return void
-     */
-    private function addComment(Rule $rule, Fieldset $fieldset): void
-    {
-        foreach ($rule->getConditions()->getConditions() as $condition) {
-            if ($condition->getAttribute() === 'payment_method') {
-                $fieldset->setComment(
-                    __('Adding "Payment Method" condition to Checkout pages may increase load time on the storefront.')
-                );
             }
         }
     }
