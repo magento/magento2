@@ -48,11 +48,7 @@ class UrlRewriteTest extends AbstractSaveCategoryTest
         $urlRewriteCollection = $this->urlRewriteCollectionFactory->create();
         $urlRewriteCollection->addFieldToFilter(UrlRewrite::ENTITY_ID, ['eq' => $categoryId])
             ->addFieldToFilter(UrlRewrite::ENTITY_TYPE, ['eq' => DataCategoryUrlRewriteDatabaseMap::ENTITY_TYPE]);
-        $this->assertCount(
-            1,
-            $urlRewriteCollection->getItems(),
-            'Wrong count of url rewrites was created'
-        );
+        $this->assertEquals(1, $urlRewriteCollection->getSize(), 'Wrong count of url rewrites was created');
     }
 
     /**
