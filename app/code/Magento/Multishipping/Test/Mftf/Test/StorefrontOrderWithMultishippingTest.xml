@@ -8,29 +8,23 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontMyAccountWithMultishipmentTest">
+    <test name="StorefrontOrderWithMultishippingTest">
         <annotations>
             <features value="Multishipping"/>
             <stories value="Shipping price shows 0 on Order view page after multiple address checkout"/>
-            <title value="DEPRECATED. Verify Shipping price for Storefront after multiple address checkout"/>
+            <title value="Verify Shipping price for Storefront after multiple address checkout"/>
             <description value="Verify that shipping price on My account matches with shipping method prices after multiple addresses checkout (Order view page)"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-19303"/>
+            <testCaseId value="MC-28900"/>
+            <group value="catalog"/>
+            <group value="sales"/>
             <group value="multishipping"/>
-            <skip>
-                <issueId value="DEPRECATED">Please use StorefrontOrderWithMultishippingTest instead</issueId>
-            </skip>
         </annotations>
 
         <before>
-            <createData entity="SimpleSubCategory" stepKey="category"/>
-            <createData entity="SimpleProduct" stepKey="product1">
-                <requiredEntity createDataKey="category"/>
-            </createData>
-            <createData entity="SimpleProduct" stepKey="product2">
-                <requiredEntity createDataKey="category"/>
-            </createData>
-            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="customer"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct2"/>
+            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="createCustomer"/>
             <!-- Set configurations -->
             <magentoCLI command="config:set {{EnableMultiShippingCheckoutMultiple.path}} {{EnableMultiShippingCheckoutMultiple.value}}" stepKey="allowShippingToMultipleAddresses"/>
             <magentoCLI command="config:set {{EnableFreeShippingMethod.path}} {{EnableFreeShippingMethod.value}}" stepKey="enableFreeShipping"/>
@@ -38,26 +32,27 @@
             <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
-                <argument name="Customer" value="$$customer$$"/>
+                <argument name="Customer" value="$$createCustomer$$"/>
             </actionGroup>
         </before>
+
         <after>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <!-- Need logout before customer delete. Fatal error appears otherwise -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{DisableMultiShippingCheckoutMultiple.path}} {{DisableMultiShippingCheckoutMultiple.value}}" stepKey="withdrawShippingToMultipleAddresses"/>
-            <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
-            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
-            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{DisableFreeShippingMethod.path}} {{DisableFreeShippingMethod.value}}" stepKey="disableFreeShipping"/>
-            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllFilters"/>
-            <actionGroup ref="logout" stepKey="logoutAdmin"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
+
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct1ToCart">
-            <argument name="product" value="$$product1$$"/>
+            <argument name="product" value="$$createProduct1$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct2ToCart">
-            <argument name="product" value="$$product2$$"/>
+            <argument name="product" value="$$createProduct2$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
         <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
@@ -79,21 +74,18 @@
             <argument name="secondOrderPosition" value="2"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
-        <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="goToSalesOrder"/>
-        <actionGroup ref="AssertStorefrontSalesOrderMatchesGrandTotalActionGroup" stepKey="checkSalesOrderForFirstOrder">
-            <argument name="dataHref" value="$dataHrefForFirstOrderPlaceOrder"/>
+
+        <!-- Check first order-->
+        <actionGroup ref="StorefrontCustomerOrdersViewOrderActionGroup" stepKey="openFirstOrder">
+            <argument name="orderNumber" value="{$getFirstOrderIdPlaceOrder}"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="goToSalesOrder2"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad2"/>
-        <actionGroup ref="AssertStorefrontSalesOrderMatchesGrandTotalActionGroup" stepKey="checkSalesOrderForSecondOrder">
-            <argument name="dataHref" value="$dataHrefForSecondOrderPlaceOrder"/>
+        <actionGroup ref="AssertStorefrontCustomerOrderMatchesGrandTotalActionGroup" stepKey="checkFirstOrderTotals"/>
+        <!-- Check second order-->
+        <actionGroup ref="StorefrontCustomerOrdersViewOrderActionGroup" stepKey="openSecondOrder">
+            <argument name="orderNumber" value="{$getSecondOrderIdPlaceOrder}"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForAdminPageToLoad"/>
-        <!-- Go to Stores > Configuration > Sales > Orders -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad3"/>
-        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <actionGroup ref="AssertStorefrontCustomerOrderMatchesGrandTotalActionGroup" stepKey="checkSecondOrderTotals"/>
+
         <!--Assert order in orders grid -->
         <!-- Go to order page -->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
@@ -102,9 +94,6 @@
         <!-- Check status -->
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeFirstOrderPendingStatus"/>
         <actionGroup ref="AdminSalesOrderActionGroup" stepKey="validateOrderTotalsForFirstOrder"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage2"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad4"/>
-        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters2"/>
         <!-- Go to order page -->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openSecondOrderPage">
             <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
@@ -112,6 +101,5 @@
         <!-- Check status -->
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeSecondOrderPendingStatus"/>
         <actionGroup ref="AdminSalesOrderActionGroup" stepKey="validateOrderTotalsForSecondOrder"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="gotToHomePage"/>
     </test>
 </tests>
