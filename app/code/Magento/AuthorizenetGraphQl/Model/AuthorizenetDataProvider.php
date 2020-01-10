@@ -49,21 +49,6 @@ class AuthorizenetDataProvider implements AdditionalDataProviderInterface
                 __('Required parameter "authorizenet_acceptjs" for "payment_method" is missing.')
             );
         }
-        if (!isset($data[self::PATH_ADDITIONAL_DATA]['opaque_data_descriptor'])) {
-            throw new GraphQlInputException(
-                __('Required parameter "opaque_data_descriptor" for "authorizenet_acceptjs" is missing.')
-            );
-        }
-        if (!isset($data[self::PATH_ADDITIONAL_DATA]['opaque_data_value'])) {
-            throw new GraphQlInputException(
-                __('Required parameter "opaque_data_value" for "authorizenet_acceptjs" is missing.')
-            );
-        }
-        if (!isset($data[self::PATH_ADDITIONAL_DATA]['cc_last_4'])) {
-            throw new GraphQlInputException(
-                __('Required parameter "cc_last_4" for "authorizenet_acceptjs" is missing.')
-            );
-        }
 
         $additionalData = $this->arrayManager->get(static::PATH_ADDITIONAL_DATA, $data);
         foreach ($additionalData as $key => $value) {

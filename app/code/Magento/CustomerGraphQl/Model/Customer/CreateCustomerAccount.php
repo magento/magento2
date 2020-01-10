@@ -14,6 +14,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -37,11 +38,6 @@ class CreateCustomerAccount
     private $accountManagement;
 
     /**
-     * @var ChangeSubscriptionStatus
-     */
-    private $changeSubscriptionStatus;
-
-    /**
      * @var ValidateCustomerData
      */
     private $validateCustomerData;
@@ -52,29 +48,34 @@ class CreateCustomerAccount
     private $dataObjectProcessor;
 
     /**
+     * @var SubscriptionManagerInterface
+     */
+    private $subscriptionManager;
+
+    /**
      * CreateCustomerAccount constructor.
      *
      * @param DataObjectHelper $dataObjectHelper
      * @param CustomerInterfaceFactory $customerFactory
      * @param AccountManagementInterface $accountManagement
-     * @param ChangeSubscriptionStatus $changeSubscriptionStatus
      * @param DataObjectProcessor $dataObjectProcessor
      * @param ValidateCustomerData $validateCustomerData
+     * @param SubscriptionManagerInterface $subscriptionManager
      */
     public function __construct(
         DataObjectHelper $dataObjectHelper,
         CustomerInterfaceFactory $customerFactory,
         AccountManagementInterface $accountManagement,
-        ChangeSubscriptionStatus $changeSubscriptionStatus,
         DataObjectProcessor $dataObjectProcessor,
-        ValidateCustomerData $validateCustomerData
+        ValidateCustomerData $validateCustomerData,
+        SubscriptionManagerInterface $subscriptionManager
     ) {
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerFactory = $customerFactory;
         $this->accountManagement = $accountManagement;
-        $this->changeSubscriptionStatus = $changeSubscriptionStatus;
         $this->validateCustomerData = $validateCustomerData;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->subscriptionManager = $subscriptionManager;
     }
 
     /**
@@ -94,7 +95,11 @@ class CreateCustomerAccount
         }
 
         if (isset($data['is_subscribed'])) {
-            $this->changeSubscriptionStatus->execute((int)$customer->getId(), (bool)$data['is_subscribed']);
+            if ((bool)$data['is_subscribed']) {
+                $this->subscriptionManager->subscribeCustomer((int)$customer->getId(), (int)$store->getId());
+            } else {
+                $this->subscriptionManager->unsubscribeCustomer((int)$customer->getId(), (int)$store->getId());
+            }
         }
         return $customer;
     }
