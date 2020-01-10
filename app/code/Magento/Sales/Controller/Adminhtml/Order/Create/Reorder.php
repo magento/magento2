@@ -90,10 +90,18 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
             }
             $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } else {
-            $order->setReordered(true);
-            $this->_getSession()->setUseOldShippingMethod(true);
-            $this->_getOrderCreateModel()->initFromOrder($order);
-            $resultRedirect->setPath('sales/*');
+            try {                
+                $order->setReordered(true);
+                $this->_getSession()->setUseOldShippingMethod(true);
+                $this->_getOrderCreateModel()->initFromOrder($order);
+                $resultRedirect->setPath('sales/*');
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+                return $resultRedirect->setPath('sales/*');
+            } catch (\Exception $e) {
+                $this->messageManager->addException($e, __('Error while processing order.'));
+                return $resultRedirect->setPath('sales/*');
+            }
         }
 
         return $resultRedirect;
