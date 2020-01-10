@@ -2425,6 +2425,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoDbIsolation enabled
      */
     public function testImportDataChangeAttributeSet()
     {
