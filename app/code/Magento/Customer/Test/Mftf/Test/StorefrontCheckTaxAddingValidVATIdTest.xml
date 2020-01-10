@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95028"/>
             <group value="customer"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
         <before>
             <!--Log In-->
@@ -33,23 +30,23 @@
         </before>
 
         <!--Add new tax rates. Go to tax rule page -->
-        <actionGroup ref="addNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
+        <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
         <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRule.name}}"/>
 
         <!-- Add NY and CA tax rules -->
-        <actionGroup ref="addNewTaxRateNoZip" stepKey="addSimpleTaxUK">
+        <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addSimpleTaxUK">
             <argument name="taxCode" value="SimpleTaxUK"/>
         </actionGroup>
         <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
         <waitForPageLoad stepKey="waitForNewTaxRuleCreated"/>
 
         <!-- Go to tax rule page to create second Tax Rule-->
-        <actionGroup ref="addNewTaxRuleActionGroup" stepKey="addSecondTaxRuleActionGroup"/>
+        <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addSecondTaxRuleActionGroup"/>
         <fillField stepKey="fillSecondRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRuleZeroRate.name}}"/>
-        <actionGroup ref="addNewTaxRateNoZip" stepKey="addSimpleTaxUKZeroRate">
+        <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addSimpleTaxUKZeroRate">
             <argument name="taxCode" value="SimpleTaxUKZeroRate"/>
         </actionGroup>
-        <actionGroup ref="addCustomerTaxClass" stepKey="addCustomerTaxClass">
+        <actionGroup ref="AddCustomerTaxClassActionGroup" stepKey="addCustomerTaxClass">
             <argument name="customerTaxClassName" value="UK_zero"/>
         </actionGroup>
         <click stepKey="disableDefaultProdTaxClass" selector="{{AdminTaxRulesSection.defaultCustomerTaxClass}}"/>
@@ -141,7 +138,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategoryFirst"/>
 
-            <actionGroup ref="deleteProductTaxClass" stepKey="deleteFirstProductTaxClass">
+            <actionGroup ref="DeleteProductTaxClassActionGroup" stepKey="deleteFirstProductTaxClass">
                 <argument name="taxClassName" value="UK_zero"/>
             </actionGroup>
 

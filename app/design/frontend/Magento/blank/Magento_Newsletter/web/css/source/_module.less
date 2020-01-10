@@ -44,7 +44,8 @@
         }
 
         input {
-            padding-left: 35px;
+            margin-right: 35px;
+            padding: 0 0 0 35px; // Reset some default Safari padding values.
         }
 
         .title {
@@ -75,7 +76,8 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block.newsletter {
-        width: 32%;
+        max-width: 44%;
+        width: max-content;
 
         .field {
             margin-right: 5px;

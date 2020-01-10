@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontRegisterCustomerFromOrderSuccessPage">
+        <annotations>
+            <description>Clicks on 'Create Account' on the Storefront Checkout Success page. Fills in the provided Customer details. Clicks on 'Create Account'. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
-            <argument name="customer" />
+            <argument name="customer"/>
         </arguments>
+
         <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{customer.password}}" stepKey="typePassword"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{customer.password}}" stepKey="typeConfirmationPassword"/>

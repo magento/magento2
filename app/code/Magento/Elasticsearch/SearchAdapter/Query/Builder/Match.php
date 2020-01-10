@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
+use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Query\BoolExpression;
@@ -50,6 +51,10 @@ class Match implements QueryInterface
      * @var ValueTransformerPool
      */
     private $valueTransformerPool;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * @param FieldMapperInterface $fieldMapper
@@ -57,13 +62,15 @@ class Match implements QueryInterface
      * @param AttributeProvider|null $attributeProvider
      * @param TypeResolver|null $fieldTypeResolver
      * @param ValueTransformerPool|null $valueTransformerPool
+     * @param Config|null $config
      */
     public function __construct(
         FieldMapperInterface $fieldMapper,
         array $preprocessorContainer,
         AttributeProvider $attributeProvider = null,
         TypeResolver $fieldTypeResolver = null,
-        ValueTransformerPool $valueTransformerPool = null
+        ValueTransformerPool $valueTransformerPool = null,
+        Config $config = null
     ) {
         $this->fieldMapper = $fieldMapper;
         $this->preprocessorContainer = $preprocessorContainer;
@@ -73,6 +80,7 @@ class Match implements QueryInterface
             ->get(TypeResolver::class);
         $this->valueTransformerPool = $valueTransformerPool ?? ObjectManager::getInstance()
             ->get(ValueTransformerPool::class);
+        $this->config = $config ?? ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
@@ -83,11 +91,15 @@ class Match implements QueryInterface
         $queryValue = $this->prepareQuery($requestQuery->getValue(), $conditionType);
         $queries = $this->buildQueries($requestQuery->getMatches(), $queryValue);
         $requestQueryBoost = $requestQuery->getBoost() ?: 1;
+        $minimumShouldMatch = $this->config->getElasticsearchConfigData('minimum_should_match');
         foreach ($queries as $query) {
             $queryBody = $query['body'];
             $matchKey = isset($queryBody['match_phrase']) ? 'match_phrase' : 'match';
             foreach ($queryBody[$matchKey] as $field => $matchQuery) {
                 $matchQuery['boost'] = $requestQueryBoost + $matchQuery['boost'];
+                if ($minimumShouldMatch) {
+                    $matchQuery['minimum_should_match'] = $minimumShouldMatch;
+                }
                 $queryBody[$matchKey][$field] = $matchQuery;
             }
             $selectQuery['bool'][$query['condition']][] = $queryBody;
@@ -138,7 +150,12 @@ class Match implements QueryInterface
 
         $transformedTypes = [];
         foreach ($matches as $match) {
-            $attributeAdapter = $this->attributeProvider->getByAttributeCode($match['field']);
+            $resolvedField = $this->fieldMapper->getFieldName(
+                $match['field'],
+                ['type' => FieldMapperInterface::TYPE_QUERY]
+            );
+
+            $attributeAdapter = $this->attributeProvider->getByAttributeCode($resolvedField);
             $fieldType = $this->fieldTypeResolver->getFieldType($attributeAdapter);
             $valueTransformer = $this->valueTransformerPool->get($fieldType ?? 'text');
             $valueTransformerHash = \spl_object_hash($valueTransformer);
@@ -151,10 +168,6 @@ class Match implements QueryInterface
                 continue;
             }
 
-            $resolvedField = $this->fieldMapper->getFieldName(
-                $match['field'],
-                ['type' => FieldMapperInterface::TYPE_QUERY]
-            );
             $conditions[] = [
                 'condition' => $queryValue['condition'],
                 'body' => [

@@ -94,13 +94,13 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
             if ($model->getId()) {
                 $model->delete();
             }
-            $this->messageManager->addSuccess(__('You will no longer receive stock alerts for this product.'));
+            $this->messageManager->addSuccessMessage(__('You will no longer receive stock alerts for this product.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('The product was not found.'));
+            $this->messageManager->addErrorMessage(__('The product was not found.'));
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __("The alert subscription couldn't update at this time. Please try again later.")
             );

@@ -66,7 +66,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->urlFactoryMock = $this->createMock(\Magento\Framework\UrlFactory::class);
         $this->customerFactoryMock = $this->getMockBuilder(\Magento\Customer\Model\CustomerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['create', 'save'])
             ->getMock();
         $this->customerRepositoryMock = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -192,15 +192,12 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         $customerMock = $this->createPartialMock(
             \Magento\Customer\Model\Customer::class,
-            ['getId', 'isConfirmationRequired', 'getConfirmation', 'updateData', 'getGroupId']
+            ['getId', 'getConfirmation', 'updateData', 'getGroupId']
         );
-        $customerMock->expects($this->once())
+        $customerMock->expects($this->exactly(3))
             ->method('getId')
             ->will($this->returnValue($customerId));
         $customerMock->expects($this->once())
-            ->method('isConfirmationRequired')
-            ->will($this->returnValue(true));
-        $customerMock->expects($this->never())
             ->method('getConfirmation')
             ->will($this->returnValue($customerId));
 

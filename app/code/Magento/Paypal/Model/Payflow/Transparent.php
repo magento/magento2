@@ -195,7 +195,6 @@ class Transparent extends Payflowpro implements TransparentInterface
         } catch (LocalizedException $exception) {
             $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
             throw new LocalizedException(__("The payment couldn't be processed at this time. Please try again later."));
         }
 

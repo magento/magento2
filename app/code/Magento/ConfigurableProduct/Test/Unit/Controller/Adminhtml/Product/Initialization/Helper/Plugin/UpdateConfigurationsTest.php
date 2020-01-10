@@ -136,7 +136,9 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 'swatch_image' => 'simple2_swatch_image',
                 'small_image' => 'simple2_small_image',
                 'thumbnail' => 'simple2_thumbnail',
-                'image' => 'simple2_image'
+                'image' => 'simple2_image',
+                'product_has_weight' => 1,
+                'type_id' => 'simple'
             ],
             'product3' => [
                 'quantity_and_stock_status' => ['qty' => '3']
@@ -185,6 +187,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $expectedData
      * @param bool $hasDataChanges
+     * @param bool $wasChanged
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)

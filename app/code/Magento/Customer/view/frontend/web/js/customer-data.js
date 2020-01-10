@@ -198,34 +198,9 @@ define([
          * Customer data initialization
          */
         init: function () {
-            var countryData,
-                privateContentVersion = 'private_content_version',
-                privateContent = $.cookieStorage.get(privateContentVersion),
-                localPrivateContent = $.localStorage.get(privateContentVersion),
-                needVersion = 'need_version',
-                expiredSectionNames = this.getExpiredSectionNames(),
-                isLoading = false;
+            var expiredSectionNames = this.getExpiredSectionNames();
 
-            if (privateContent &&
-                !$.cookieStorage.isSet(privateContentVersion) &&
-                !$.localStorage.isSet(privateContentVersion)
-            ) {
-                $.cookieStorage.set(privateContentVersion, needVersion);
-                $.localStorage.set(privateContentVersion, needVersion);
-                this.reload([], false);
-                isLoading = true;
-            } else if (localPrivateContent !== privateContent) {
-                if (!$.cookieStorage.isSet(privateContentVersion)) {
-                    privateContent = needVersion;
-                    $.cookieStorage.set(privateContentVersion, privateContent);
-                }
-                $.localStorage.set(privateContentVersion, privateContent);
-                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
-                    buffer.notify(sectionName, sectionData);
-                });
-                this.reload([], false);
-                isLoading = true;
-            } else if (expiredSectionNames.length > 0) {
+            if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
@@ -240,12 +215,9 @@ define([
                 }
             }
 
-            if (!_.isEmpty(privateContent)) {
-                countryData = this.get('directory-data');
-
-                if (_.isEmpty(countryData()) && !isLoading) {
-                    customerData.reload(['directory-data'], false);
-                }
+            if (!_.isEmpty($.cookieStorage.get('section_data_clean'))) {
+                this.reload(sectionConfig.getSectionNames(), true);
+                $.cookieStorage.set('section_data_clean', '');
             }
         },
 
@@ -332,6 +304,9 @@ define([
         },
 
         /**
+         * Avoid using this function directly 'cause of possible performance drawbacks.
+         * Each customer section reload brings new non-cached ajax request.
+         *
          * @param {Array} sectionNames
          * @param {Boolean} forceNewSectionTimestamp
          * @return {*}
@@ -350,7 +325,9 @@ define([
             var sectionDataIds,
                 sectionsNamesForInvalidation;
 
-            sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
+            sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? sectionConfig.getSectionNames() :
+                sectionNames;
+
             $(document).trigger('customer-data-invalidate', [sectionsNamesForInvalidation]);
             buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};

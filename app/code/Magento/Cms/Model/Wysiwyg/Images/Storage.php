@@ -416,7 +416,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please rename the folder using only letters, numbers, underscores and dashes.')
+                __('Please rename the folder using only Latin letters, numbers, underscores and dashes.')
             );
         }
 
@@ -447,7 +447,6 @@ class Storage extends \Magento\Framework\DataObject
                 'id' => $this->_cmsWysiwygImages->convertPathToId($newPath),
             ];
             return $result;
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot create a new directory.'));
         }
@@ -474,7 +473,6 @@ class Storage extends \Magento\Framework\DataObject
             $this->_deleteByPath($path);
             $path = $this->getThumbnailRoot() . $this->_getRelativePathToRoot($path);
             $this->_deleteByPath($path);
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot delete directory %1.', $this->_getRelativePathToRoot($path))

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateProductAttributeActionGroup">
+        <annotations>
+            <description>Clicks on 'Add New Attribute'. Fills in the Attribute Details (Label, Input Type and Value Required). Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="attribute" type="entity" defaultValue="productAttributeWysiwyg"/>
+        </arguments>
+
+        <click stepKey="createNewAttribute" selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}"/>
+        <fillField stepKey="fillDefaultLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{attribute.attribute_code}}"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" stepKey="checkInputType" userInput="{{attribute.frontend_input}}"/>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" stepKey="checkRequired" userInput="{{attribute.is_required_admin}}"/>
+        <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
+    </actionGroup>
+</actionGroups>

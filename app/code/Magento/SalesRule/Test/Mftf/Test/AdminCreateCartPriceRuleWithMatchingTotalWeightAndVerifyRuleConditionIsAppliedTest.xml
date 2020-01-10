@@ -16,9 +16,6 @@
             <severity value="CRITICAL"/>
             <group value="SalesRule"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
 
         <before>
@@ -84,7 +81,7 @@
         <seeInField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{CartPriceRuleConditionAppliedForWeight.defaultStoreView}}" stepKey="seeDefaultStoreView"/>
 
         <!--Go to storefront page and verify created product-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
         <!--Click on Add To Cart button-->
@@ -101,7 +98,7 @@
         </actionGroup>
 
         <!--Click on view and edit cart link-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
         <!--Verify AssertCartPriceRuleConditionIsApplied if condition Total Weight equals 200 is true-->
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">
