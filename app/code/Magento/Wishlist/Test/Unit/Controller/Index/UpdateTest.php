@@ -13,12 +13,15 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Wishlist\Controller\Index\Update;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\LocaleQuantityProcessor;
+use Magento\Wishlist\Model\Wishlist;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for upate controller wishlist
@@ -27,19 +30,33 @@ use PHPUnit\Framework\TestCase;
 class UpdateTest extends TestCase
 {
     /**
-     * @var Validator $formKeyValidator
+     * Wishlist item id
+     *
+     * @var int
      */
-    private $formKeyValidator;
+    private const ITEM_ID = 1;
 
     /**
-     * @var WishlistProviderInterface $wishlistProvider
+     * Product qty for wishlist
+     *
+     * @var int
      */
-    private $wishlistProvider;
+    private const WISHLIST_PRODUCT_QTY = 21;
 
     /**
-     * @var LocaleQuantityProcessor $quantityProcessor
+     * @var MockObject|Validator $formKeyValidatorMock
      */
-    private $quantityProcessor;
+    private $formKeyValidatorMock;
+
+    /**
+     * @var MockObject|WishlistProviderInterface $wishlistProviderMock
+     */
+    private $wishlistProviderMock;
+
+    /**
+     * @var MockObject|LocaleQuantityProcessor $quantityProcessorMock
+     */
+    private $quantityProcessorMock;
 
     /**
      * @var Update $updateController
@@ -47,75 +64,76 @@ class UpdateTest extends TestCase
     private $updateController;
 
     /**
-     * @var $context
+     * @var MockObject|Context$contextMock
      */
-    private $context;
+    private $contextMock;
 
     /**
-     * @var Redirect $resultRedirect
+     * @var MockObject|Redirect $resultRedirectMock
      */
-    private $resultRedirect;
+    private $resultRedirectMock;
 
     /**
-     * @var ResultFactory $resultFatory
+     * @var MockObject|ResultFactory $resultFatoryMock
      */
-    private $resultFactory;
+    private $resultFactoryMock;
 
     /**
-     * @var RequestInterface $requestMock
+     * @var MockObject|RequestInterface $requestMock
      */
     private $requestMock;
 
     /**
-     * @var ObjectManagerInterface $objectManagerMock
+     * @var MockObject|ObjectManagerInterface $objectManagerMock
      */
     private $objectManagerMock;
 
     /**
-     * @var ManagerInterface $messageManager
+     * @var MockObject|ManagerInterface $messageManagerMock
      */
-    private $messageManager;
+    private $messageManagerMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->formKeyValidator = $this->createMock(Validator::class);
-        $this->wishlistProvider = $this->createMock(WishlistProviderInterface::class);
-        $this->quantityProcessor = $this->createMock(LocaleQuantityProcessor::class);
-        $this->context = $this->createMock(Context::class);
-        $this->resultRedirect = $this->createMock(Redirect::class);
-        $this->resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
+        $this->formKeyValidatorMock = $this->createMock(Validator::class);
+        $this->wishlistProviderMock = $this->createMock(WishlistProviderInterface::class);
+        $this->quantityProcessorMock = $this->createMock(LocaleQuantityProcessor::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $this->resultFactoryMock = $this->createPartialMock(ResultFactory::class, ['create']);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPostValue'])
             ->getMockForAbstractClass();
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $this->context->expects($this->once())
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+        $this->contextMock->expects($this->once())
             ->method('getResultFactory')
-            ->willReturn($this->resultFactory);
-        $this->context->expects($this->once())
+            ->willReturn($this->resultFactoryMock);
+        $this->contextMock->expects($this->once())
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
-
-        $this->resultFactory->expects($this->any())
-                              ->method('create')
-                              ->willReturn($this->resultRedirect);
-        $this->context->expects($this->any())
+        $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
-
-        $this->messageManager = $this->createMock(ManagerInterface::class);
-        $this->context->expects($this->any())
+        $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->willReturn($this->messageManager);
+           ->willReturn($this->messageManagerMock);
 
-        $this->updateController = new Update(
-            $this->context,
-            $this->formKeyValidator,
-            $this->wishlistProvider,
-            $this->quantityProcessor
+        $this->updateController = (new ObjectManagerHelper($this))->getObject(
+            Update::class,
+            [
+                'context' => $this->contextMock,
+                '_formKeyValidator' => $this->formKeyValidatorMock,
+                'wishlistProvider' => $this->wishlistProviderMock,
+                'quantityProcessor' => $this->quantityProcessorMock
+            ]
         );
     }
 
@@ -123,28 +141,13 @@ class UpdateTest extends TestCase
      * Test for update method Wishlist controller.
      *
      * @dataProvider getWishlistDataProvider
+     * @param array $wishlistDataProvider
+     * @param array $postData
      * @return void
      */
-    public function testUpdate(array $wishlistDataProvider): void
+    public function testUpdate(array $wishlistDataProvider, array $postData): void
     {
-        $this->formKeyValidator->expects($this->once())
-            ->method('validate')
-            ->willReturn(true);
-
-        $wishlist = $this->createMock(\Magento\Wishlist\Model\Wishlist::class);
-
-        $this->wishlistProvider->expects($this->once())
-            ->method('getWishlist')
-            ->willReturn($wishlist);
-        $wishlist->expects($this->exactly(2))
-            ->method('getId')
-            ->willReturn($wishlistDataProvider['wishlist_data']['id']);
-        $this->requestMock->expects($this->once())
-            ->method('getPostValue')
-            ->willReturn($wishlistDataProvider['post_data']);
-        $this->resultRedirect->expects($this->once())
-            ->method('setPath')
-            ->with('*', ['wishlist_id' => $wishlistDataProvider['wishlist_data']['id']]);
+        $wishlist = $this->createMock(Wishlist::class);
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -160,7 +163,27 @@ class UpdateTest extends TestCase
                     'getName'
                 ]
             )->getMock();
+        $dataMock = $this->createMock(Data::class);
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
+        $this->formKeyValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
+        $this->wishlistProviderMock->expects($this->once())
+            ->method('getWishlist')
+            ->willReturn($wishlist);
+        $wishlist->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn($wishlistDataProvider['id']);
+        $this->requestMock->expects($this->once())
+            ->method('getPostValue')
+            ->willReturn($postData);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*', ['wishlist_id' => $wishlistDataProvider['id']]);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(Item::class)
@@ -171,7 +194,7 @@ class UpdateTest extends TestCase
             ->willReturnSelf();
         $itemMock->expects($this->once())
             ->method('getWishLIstId')
-            ->willReturn($wishlistDataProvider['wishlist_data']['id']);
+            ->willReturn($wishlistDataProvider['id']);
         $itemMock->expects($this->once())
             ->method('getDescription')
             ->willReturn('');
@@ -181,8 +204,6 @@ class UpdateTest extends TestCase
         $itemMock->expects($this->once())
             ->method('setQty')
             ->willReturnSelf();
-        $dataMock = $this->createMock(Data::class);
-
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('get')
             ->with(Data::class)
@@ -192,33 +213,62 @@ class UpdateTest extends TestCase
             ->willReturn('');
         $dataMock->expects($this->once())
             ->method('calculate');
-        $this->quantityProcessor->expects($this->once())
+        $this->quantityProcessorMock->expects($this->once())
             ->method('process')
-            ->willReturn($wishlistDataProvider['post_data']['qty']);
-
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->willReturn($postData['qty']);
         $itemMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($productMock);
         $productMock->expects($this->once())
             ->method('getName')
             ->willReturn('product');
-        $this->messageManager->expects($this->once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage');
-        $this->assertEquals($this->resultRedirect, $this->updateController->execute());
+
+        $this->assertEquals($this->resultRedirectMock, $this->updateController->execute());
+    }
+
+    /**
+     * Verify update method if post data not available
+     *
+     * @dataProvider getWishlistDataProvider
+     * @param array $wishlistDataProvider
+     * @return void
+     */
+    public function testUpdateRedirectWhenNoPostData(array $wishlistDataProvider): void
+    {
+        $wishlist = $this->createMock(Wishlist::class);
+
+        $this->formKeyValidatorMock->expects($this->once())
+            ->method('validate')
+            ->willReturn(true);
+        $this->wishlistProviderMock->expects($this->once())
+            ->method('getWishlist')
+            ->willReturn($wishlist);
+        $wishlist->expects($this->exactly(1))
+            ->method('getId')
+            ->willReturn($wishlistDataProvider['id']);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*', ['wishlist_id' => $wishlistDataProvider['id']]);
+        $this->requestMock->expects($this->once())
+            ->method('getPostValue')
+            ->willReturn(null);
+
+        $this->assertEquals($this->resultRedirectMock, $this->updateController->execute());
     }
 
     /**
      * Check if wishlist not availbale, and exception is shown
+     *
+     * @return void
      */
-    public function testUpdateWithNotFoundException()
+    public function testUpdateThrowsNotFoundExceptionWhenWishlistDoNotExist(): void
     {
-        $this->formKeyValidator->expects($this->once())
+        $this->formKeyValidatorMock->expects($this->once())
             ->method('validate')
             ->willReturn(true);
-        $this->wishlistProvider->expects($this->once())
+        $this->wishlistProviderMock->expects($this->once())
             ->method('getWishlist')
             ->willReturn(null);
         $this->expectException(NotFoundException::class);
@@ -232,21 +282,17 @@ class UpdateTest extends TestCase
      */
     public function getWishlistDataProvider(): array
     {
-        return [
+        return
             [
                 [
-                    'wishlist_data' => [
-                        'id' => 1,
-
+                    [
+                        'id' => self::ITEM_ID
                     ],
-                    'post_data' => [
-                        'qty' => [1 => 12],
-                        'description' => [
-                            1 => 'Description for item_id 1'
-                        ]
+                    [
+                        'qty' => [self::ITEM_ID => self::WISHLIST_PRODUCT_QTY],
+                        'description' => [self::ITEM_ID => 'Description for item_id 1']
                     ]
                 ]
-            ]
-        ];
+            ];
     }
 }
