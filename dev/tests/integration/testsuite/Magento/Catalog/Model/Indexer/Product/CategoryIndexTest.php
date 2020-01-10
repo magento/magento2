@@ -66,7 +66,6 @@ class CategoryIndexTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $this->productRepository->cleanCache();
         $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->connection = $this->productResource->getConnection();
@@ -93,7 +92,7 @@ class CategoryIndexTest extends TestCase
         $product->setCategoryIds(array_merge($product->getCategoryIds(), [$category->getId()]));
         $this->productResource->save($product);
         $result = $this->fetchDataFromIndexTable((int)$product->getId());
-        $this->assertCount($expectedItemsCount, $result);
+        $this->assertEquals($expectedItemsCount, $result);
     }
 
     /**
@@ -131,7 +130,7 @@ class CategoryIndexTest extends TestCase
         $category->addData($data);
         $this->categoryResource->save($category);
         $result = $this->fetchDataFromIndexTable((int)$product->getId());
-        $this->assertCount($expectedCount, $result);
+        $this->assertEquals($expectedCount, $result);
     }
 
     /**
@@ -165,7 +164,7 @@ class CategoryIndexTest extends TestCase
         $afterCategory = $this->getCategoryByName->execute('Child category');
         $category->move($newParentCategory->getId(), $afterCategory->getId());
         $result = $this->fetchDataFromIndexTable((int)$product->getId());
-        $this->assertCount(2, $result);
+        $this->assertEquals(2, $result);
     }
 
     /**
@@ -185,18 +184,16 @@ class CategoryIndexTest extends TestCase
      * Fetch data from category product index table
      *
      * @param int $productId
-     * @return array
+     * @return int
      */
-    private function fetchDataFromIndexTable(int $productId)
+    private function fetchDataFromIndexTable(int $productId): int
     {
         $tableName = $this->tableMaintainer->getMainTable((int)$this->storeManager->getStore()->getId());
         $select = $this->connection->select();
-        $conditions = [
-            'index_table.product_id =' . $productId,
-            'index_table.category_id !=' . self::DEFAULT_CATEGORY_ID,
-        ];
-        $select->from(['index_table' => $tableName], 'index_table.category_id')->where(join(' AND ', $conditions));
+        $select->from(['index_table' => $tableName], new \Zend_Db_Expr('COUNT(*)'))
+            ->where('index_table.product_id = ?', $productId)
+            ->where('index_table.category_id != ?', self::DEFAULT_CATEGORY_ID);
 
-        return $this->connection->fetchAll($select);
+        return (int)$this->connection->fetchOne($select);
     }
 }

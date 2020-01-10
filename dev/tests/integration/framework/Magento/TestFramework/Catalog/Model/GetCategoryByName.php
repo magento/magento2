@@ -15,7 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
  */
 class GetCategoryByName
 {
-    /** @var CollectionFactory  */
+    /** @var CollectionFactory */
     private $categoryCollectionFactory;
 
     /**
@@ -35,12 +35,9 @@ class GetCategoryByName
     public function execute(string $categoryName): CategoryInterface
     {
         $categoryCollection = $this->categoryCollectionFactory->create();
-        /** @var CategoryInterface $category */
-        $category = $categoryCollection
-            ->addAttributeToFilter(CategoryInterface::KEY_NAME, $categoryName)
+
+        return $categoryCollection->addAttributeToFilter(CategoryInterface::KEY_NAME, $categoryName)
             ->setPageSize(1)
             ->getFirstItem();
-
-        return $category;
     }
 }

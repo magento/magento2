@@ -51,7 +51,6 @@ class CategoryIndexTest extends AbstractBackendController
         parent::setUp();
 
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
-        $this->productRepository->cleanCache();
         $this->product = $this->productRepository->get('product_with_category');
         $this->tableMaintainer = $this->_objectManager->create(TableMaintainer::class);
         $this->productResource = $this->_objectManager->get(ProductResource::class);
@@ -81,6 +80,7 @@ class CategoryIndexTest extends AbstractBackendController
         $this->dispatchRequestWithData($postData);
         $this->assertSessionMessages($this->equalTo(['You saved the product.']), MessageInterface::TYPE_SUCCESS);
         $result = $this->fetchDataFromIndexTable();
+        $this->assertEmpty($result);
         $this->assertEquals(333, reset($result)['category_id']);
     }
 
@@ -124,11 +124,9 @@ class CategoryIndexTest extends AbstractBackendController
     {
         $tableName = $this->tableMaintainer->getMainTable(Store::DISTRO_STORE_ID);
         $select = $this->connection->select();
-        $conditions = [
-            'index_table.product_id = ' . $this->product->getId(),
-            'index_table.category_id != ' . self::DEFAULT_CATEGORY_ID,
-        ];
-        $select->from(['index_table' => $tableName], 'index_table.category_id')->where(join(' AND ', $conditions));
+        $select->from(['index_table' => $tableName], 'index_table.category_id')
+            ->where('index_table.product_id = ?', $this->product->getId())
+            ->where('index_table.category_id != ?', self::DEFAULT_CATEGORY_ID);
 
         return $this->connection->fetchAll($select);
     }
