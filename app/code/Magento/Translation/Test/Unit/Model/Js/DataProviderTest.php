@@ -15,7 +15,7 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Framework\Phrase\Renderer\Translate;
 
 /**
- * Class DataProviderTest
+ * Verify data provider translation
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -107,11 +107,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             [$areaCode, $themePath, '*', '*', [$filePaths[3]]]
         ];
 
-        $patterns = $config['patterns'];
-        $expectedResult = $config['expectedResult'];
-        $contentsMap = $config['contentsMap'];
-        $translateMap = $config['translateMap'];
-
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
@@ -122,7 +117,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getStaticHtmlFiles')
             ->willReturnMap($staticFilesMap);
 
-        foreach ($contentsMap as $index => $content) {
+        foreach ($config['contentsMap'] as $index => $content) {
             $this->fileReadMock->expects($this->at($index))
                 ->method('readAll')
                 ->willReturn($content);
@@ -130,15 +125,15 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->configMock->expects($this->any())
             ->method('getPatterns')
-            ->willReturn($patterns);
+            ->willReturn($config['patterns']);
         $this->translateMock->expects($this->any())
             ->method('render')
-            ->willReturnMap($translateMap);
+            ->willReturnMap($config['translateMap']);
 
         $actualResult = $this->model->getData($themePath);
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals($config['expectedResult'], $actualResult);
         $this->assertEquals(
-            json_encode($expectedResult),
+            json_encode($config['expectedResult']),
             json_encode($actualResult),
             "Translations should be sorted by key"
         );
