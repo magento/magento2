@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Customer\Model\Session;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -41,67 +40,13 @@ class PriceTest extends TestCase
     private $productRepository;
 
     /**
-     * @var Session
-     */
-    private $customerSession;
-
-    /**
      * @inheritdoc
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productPrice = $this->objectManager->create(Price::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $this->customerSession = $this->objectManager->get(Session::class);
-    }
-
-    /**
-     * Assert that for logged user product price equal to price from catalog rule.
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDataFixture Magento/CatalogRule/_files/catalog_rule_6_off_logged_user.php
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @magentoDbIsolation disabled
-     * @magentoAppArea frontend
-     * @magentoAppIsolation enabled
-     *
-     * @return void
-     */
-    public function testPriceByRuleForLoggedUser(): void
-    {
-        $product = $this->productRepository->get('simple');
-        $this->assertEquals(10, $this->productPrice->getFinalPrice(1, $product));
-        $this->customerSession->setCustomerId(1);
-        try {
-            $this->assertEquals(4, $this->productPrice->getFinalPrice(1, $product));
-        } finally {
-            $this->customerSession->setCustomerId(null);
-        }
-    }
-
-    /**
-     * Assert price for different customer groups.
-     *
-     * @magentoDataFixture Magento/Catalog/_files/simple_product_with_tier_price_for_logged_user.php
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @magentoAppIsolation enabled
-     *
-     * @return void
-     */
-    public function testTierPriceWithDifferentCustomerGroups(): void
-    {
-        $product = $this->productRepository->get('simple');
-        $this->assertEquals(8, $this->productPrice->getFinalPrice(2, $product));
-        $this->assertEquals(5, $this->productPrice->getFinalPrice(3, $product));
-        $this->customerSession->setCustomerId(1);
-        try {
-            $this->assertEquals(1, $this->productPrice->getFinalPrice(3, $product));
-        } finally {
-            $this->customerSession->setCustomerId(null);
-        }
     }
 
     /**
@@ -134,6 +79,7 @@ class PriceTest extends TestCase
     public function testGetFinalPrice(): void
     {
         $product = $this->productRepository->get('simple');
+        // fixture
 
         // regular & tier prices
         $this->assertEquals(10.0, $this->productPrice->getFinalPrice(1, $product));
@@ -159,6 +105,7 @@ class PriceTest extends TestCase
     public function testGetFormatedPrice(): void
     {
         $product = $this->productRepository->get('simple');
+        // fixture
         $this->assertEquals('<span class="price">$10.00</span>', $this->productPrice->getFormatedPrice($product));
     }
 
@@ -169,14 +116,8 @@ class PriceTest extends TestCase
      */
     public function testCalculatePrice(): void
     {
-        $this->assertEquals(
-            10,
-            $this->productPrice->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01')
-        );
-        $this->assertEquals(
-            8,
-            $this->productPrice->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01')
-        );
+        $this->assertEquals(10, $this->productPrice->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01'));
+        $this->assertEquals(8, $this->productPrice->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01'));
     }
 
     /**
@@ -207,7 +148,7 @@ class PriceTest extends TestCase
     }
 
     /**
-     * Build buy request based on product custom options.
+     * Build buy request based on product custom options
      *
      * @param Product $product
      * @return DataObject
@@ -215,7 +156,7 @@ class PriceTest extends TestCase
     private function prepareBuyRequest(Product $product): DataObject
     {
         $options = [];
-        /** @var Option $option */
+        /** @var $option Option */
         foreach ($product->getOptions() as $option) {
             switch ($option->getGroupByType()) {
                 case ProductCustomOptionInterface::OPTION_GROUP_DATE:
@@ -231,6 +172,6 @@ class PriceTest extends TestCase
             $options[$option->getId()] = $value;
         }
 
-        return $this->objectManager->create(DataObject::class, ['data' => ['qty' => 1, 'options' => $options]]);
+        return new DataObject(['qty' => 1, 'options' => $options]);
     }
 }
