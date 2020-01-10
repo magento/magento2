@@ -271,12 +271,12 @@ define([
          */
         show: function () {
             this.visible = true;
-            //Check admin grid button has addedr not
+            //Check admin grid button has added or not
             if ($('.page-main-actions').length === 0) {
                 this.$sticky.style.top = 0;
             }
-            this.$sticky.style.display = '';
-            this.$toolbar.style.visibility = 'hidden';
+            this.$sticky.style.display = 'block';
+            this.$toolbar.style.display = 'none';
 
             return this;
         },
@@ -290,7 +290,7 @@ define([
             this.visible = false;
 
             this.$sticky.style.display = 'none';
-            this.$toolbar.style.visibility = '';
+            this.$toolbar.style.display = 'block';
 
             return this;
         },
