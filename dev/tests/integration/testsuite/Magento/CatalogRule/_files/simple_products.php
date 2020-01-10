@@ -26,12 +26,14 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setPrice(10)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData([
-        'use_config_manage_stock' => 1,
-        'qty' => 100,
-        'is_qty_decimal' => 0,
-        'is_in_stock' => 1,
-    ]);
+    ->setStockData(
+        [
+            'use_config_manage_stock' => 1,
+            'qty' => 100,
+            'is_qty_decimal' => 0,
+            'is_in_stock' => 1,
+        ]
+    );
 $productRepository->save($product);
 $productAction = $objectManager->get(\Magento\Catalog\Model\Product\Action::class);
 $productAction->updateAttributes([$product->getId()], ['test_attribute' => 'test_attribute_value'], $store->getId());
@@ -46,10 +48,52 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setPrice(9.9)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData([
-        'use_config_manage_stock' => 1,
-        'qty' => 100,
-        'is_qty_decimal' => 0,
-        'is_in_stock' => 1,
-    ]);
+    ->setStockData(
+        [
+            'use_config_manage_stock' => 1,
+            'qty' => 100,
+            'is_qty_decimal' => 0,
+            'is_in_stock' => 1,
+        ]
+    );
 $productRepository->save($product);
+$store = $objectManager->create(\Magento\Store\Model\Store::class);
+$store->load('second_store_view', 'code');
+/**
+ * @var Website $website
+ */
+$website2 = $objectManager->get(\Magento\Store\Model\Website::class);
+$website2->load('second_website', 'code');
+if (!$website2->getId()) {
+    /** @var \Magento\Store\Model\Website $website */
+    $website2->setData(
+        [
+            'code' => 'second_website',
+            'name' => 'Second Website',
+
+        ]
+    );
+
+    $website2->save();
+}
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class)
+    ->setTypeId('simple')
+    ->setId(3)
+    ->setAttributeSetId($attributeSetId)
+    ->setWebsiteIds([$website2->getId()])
+    ->setName('Simple Product 3')
+    ->setSku('simple3')
+    ->setPrice(50)
+    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setStockData(
+        [
+            'use_config_manage_stock' => 1,
+            'qty' => 100,
+            'is_qty_decimal' => 0,
+            'is_in_stock' => 1,
+        ]
+    );
+$productRepository->save($product);
+$productAction = $objectManager->get(\Magento\Catalog\Model\Product\Action::class);
+$productAction->updateAttributes([$product->getId()], ['test_attribute' => 'test_attribute_value'], $store->getId());
