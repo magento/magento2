@@ -222,7 +222,7 @@ class ProductListTest extends TestCase
      * 4. Load collection for product list widget and make sure that number of loaded products is correct
      *
      * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
+     * @magentoDataFixture Magento/Catalog/_files/product_in_nested_anchor_categories.php
      */
     public function testCreateAnchorCollection()
     {

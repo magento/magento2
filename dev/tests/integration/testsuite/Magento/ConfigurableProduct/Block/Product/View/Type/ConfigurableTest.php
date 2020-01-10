@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\ObjectManagerInterface;
@@ -19,6 +20,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests class configurable options block on product page.
+ * Test class to check configurable product view behaviour
+ *
+ * @see \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
  *
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
@@ -52,6 +56,11 @@ class ConfigurableTest extends TestCase
     private $productRepository;
 
     /**
+     * @var ProductResource
+     */
+    private $productResource;
+
+    /**
      * @var ProductInterface
      */
     private $product;
@@ -67,6 +76,7 @@ class ConfigurableTest extends TestCase
         $this->searchBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
+        $this->productResource = $this->objectManager->create(ProductResource::class);
         $this->product = $this->productRepository->get('configurable');
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Configurable::class);
         $this->block->setProduct($this->product);
@@ -143,6 +153,74 @@ class ConfigurableTest extends TestCase
             $this->assertEquals('image', $resultImage['type']);
             $this->assertEquals($i, $resultImage['position']);
             $this->assertNull($resultImage['videoUrl']);
+        }
+    }
+
+    /**
+     * @dataProvider expectedDataProvider
+     *
+     * @param string $label
+     * @param array $expectedConfig
+     * @return void
+     */
+    public function testConfigurableProductView(string $label, array $expectedConfig): void
+    {
+        $attributes = $this->block->decorateArray($this->block->getAllowAttributes());
+        $this->assertCount(1, $attributes);
+        $attribute = $attributes->getFirstItem();
+        $this->assertEquals($label, $attribute->getLabel());
+        $config = $this->serializer->unserialize($this->block->getJsonConfig())['attributes'] ?? null;
+        $this->assertNotNull($config);
+        $this->assertConfig(reset($config), $expectedConfig);
+    }
+
+    /**
+     * @return array
+     */
+    public function expectedDataProvider(): array
+    {
+        return [
+            [
+                'label' => 'Test Configurable',
+                'config_data' => [
+                    'label' => 'Test Configurable',
+                    'options' => [
+                        [
+                            'label' => 'Option 1',
+                            'sku' => 'simple_10',
+                        ],
+                        [
+                            'label' => 'Option 2',
+                            'sku' => 'simple_20',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Assert that data was generated
+     *
+     * @param array $data
+     * @param array $expectedData
+     * @return void
+     */
+    private function assertConfig($data, $expectedData): void
+    {
+        $this->assertEquals($expectedData['label'], $data['label']);
+        $skus = array_column($expectedData['options'], 'sku');
+        $idBySkuMap = $this->productResource->getProductsIdsBySkus($skus);
+        foreach ($expectedData['options'] as &$option) {
+            $sku = $option['sku'];
+            unset($option['sku']);
+            $option['products'] = [$idBySkuMap[$sku]];
+            foreach ($data['options'] as $actualOption) {
+                if ($option['label'] === $actualOption['label']) {
+                    unset($actualOption['id']);
+                    $this->assertEquals($option, $actualOption);
+                }
+            }
         }
     }
 
