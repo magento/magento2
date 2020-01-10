@@ -11,10 +11,12 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Setup\Patch\Data;
 use Magento\AuthorizenetAcceptjs\Setup\Patch\Data\CopyCurrentConfig;
 use Magento\Config\Model\ResourceModel\Config as ResourceConfig;
 use Magento\Framework\App\Config;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Setup\Module\DataSetup;
 use Magento\Setup\Model\ModuleContext;
+use Magento\Setup\Module\DataSetup;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\TestCase;
@@ -56,6 +58,16 @@ class CopyCurrentConfigTest extends TestCase
      */
     private $website;
 
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * @var \Magento\Framework\DB\Select
+     */
+    private $select;
+
     protected function setUp(): void
     {
         $this->scopeConfig = $this->createMock(Config::class);
@@ -74,6 +86,8 @@ class CopyCurrentConfigTest extends TestCase
         $this->context = $this->createMock(ModuleContext::class);
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->website = $this->createMock(Website::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->select = $this->createMock(Select::class);//@todo check if we really need it
     }
 
     public function testMigrateData(): void
@@ -97,6 +111,93 @@ class CopyCurrentConfigTest extends TestCase
         $this->storeManager->expects($this->once())
             ->method('getWebsites')
             ->willReturn([$this->website]);
+
+        $this->setup->expects($this->any())
+            ->method('getTable')
+            ->with('core_config_data')
+            ->willReturn('core_config_data');
+
+        $this->setup->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connection);
+
+        $this->connection->expects($this->exactly(26))
+            ->method('select')
+            ->willReturn($this->select);
+
+        $this->select->expects($this->exactly(26))
+            ->method('from')
+            ->with('core_config_data')
+            ->willReturnSelf();
+
+        $this->select->expects($this->any())
+            ->method('where')
+            ->willReturnSelf();
+
+        $this->connection->expects($this->exactly(26))
+            ->method('fetchRow')
+            ->willReturn(1);
+
+        $objectManager = new ObjectManager($this);
+
+        $installer = $objectManager->getObject(
+            CopyCurrentConfig::class,
+            [
+                'moduleDataSetup' => $this->setup,
+                'scopeConfig' => $this->scopeConfig,
+                'resourceConfig' => $this->resourceConfig,
+                'encryptor' => $this->encryptor,
+                'storeManager' => $this->storeManager
+            ]
+        );
+
+        $installer->apply($this->context);
+    }
+
+    public function testMigrateDataWhenValuesNotInDB(): void
+    {
+        $this->scopeConfig->expects($this->never())
+            ->method('getValue');
+
+        $this->resourceConfig->expects($this->never())
+            ->method('saveConfig');
+
+        $this->encryptor->expects($this->never())
+            ->method('encrypt');
+
+        $this->website->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->storeManager->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn([$this->website]);
+
+        $this->setup->expects($this->any())
+            ->method('getTable')
+            ->with('core_config_data')
+            ->willReturn('core_config_data');
+
+        $this->setup->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connection);
+
+        $this->connection->expects($this->exactly(26))
+            ->method('select')
+            ->willReturn($this->select);
+
+        $this->select->expects($this->exactly(26))
+            ->method('from')
+            ->with('core_config_data')
+            ->willReturnSelf();
+
+        $this->select->expects($this->any())
+            ->method('where')
+            ->willReturnSelf();
+
+        $this->connection->expects($this->exactly(26))
+            ->method('fetchRow')
+            ->willReturn(null);
 
         $objectManager = new ObjectManager($this);
 
@@ -130,6 +231,32 @@ class CopyCurrentConfigTest extends TestCase
         $this->storeManager->expects($this->once())
             ->method('getWebsites')
             ->willReturn([]);
+
+        $this->setup->expects($this->any())
+            ->method('getTable')
+            ->with('core_config_data')
+            ->willReturn('core_config_data');
+
+        $this->setup->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connection);
+
+        $this->connection->expects($this->exactly(13))
+            ->method('select')
+            ->willReturn($this->select);
+
+        $this->select->expects($this->exactly(13))
+            ->method('from')
+            ->with('core_config_data')
+            ->willReturnSelf();
+
+        $this->select->expects($this->any())
+            ->method('where')
+            ->willReturnSelf();
+
+        $this->connection->expects($this->exactly(13))
+            ->method('fetchRow')
+            ->willReturn(1);
 
         $objectManager = new ObjectManager($this);
 
