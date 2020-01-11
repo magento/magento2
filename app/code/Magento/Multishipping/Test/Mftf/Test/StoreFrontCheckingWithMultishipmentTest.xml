@@ -38,11 +38,11 @@
         </before>
 
         <amOnPage url="$$product1.name$$.html" stepKey="goToProduct1"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProduct1">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct1">
             <argument name="productName" value="$$product1.name$$"/>
         </actionGroup>
         <amOnPage url="$$product2.name$$.html" stepKey="goToProduct2"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProduct2">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct2">
             <argument name="productName" value="$$product2.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>

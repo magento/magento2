@@ -75,7 +75,7 @@
         <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct">
             <argument name="website" value="{{NewWebSiteData.name}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProductFirstTime"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFirstTime"/>
         <!-- Add Fixed Product Tax attribute -->
         <comment userInput="Add Fixed Product Tax attribute" stepKey="addFixedProdTaxAttr"/>
         <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFixedProductTaxAttr">
@@ -83,7 +83,7 @@
             <argument name="stateForFPT" value="California"/>
             <argument name="valueForFPT" value="10"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProductSecondTime"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductSecondTime"/>
         <!-- Check if created tax attribute is saved -->
         <comment userInput="Check if created tax attribute is saved" stepKey="checkThatTaxAttributeIsSaved"/>
         <seeElement selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" stepKey="checkIfTaxAttributeSaved"/>
@@ -104,10 +104,10 @@
         <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="checkAllWebsitesInDropDown"/>
         <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="checkMainWebsiteInDropDown"/>
         <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="checkSecondWebsitesInDropDown"/>
-        <actionGroup ref="unassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
+        <actionGroup ref="UnassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProductThirdTime"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductThirdTime"/>
         <waitForPageLoad stepKey="waitForSavedProductLoad"/>
         <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="checkAllWebsitesInDropDownSecondTime"/>
         <dontSeeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="checkNoMainWebsiteInDropDown"/>

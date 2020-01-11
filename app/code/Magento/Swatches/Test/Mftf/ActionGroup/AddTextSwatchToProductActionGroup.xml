@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddTextSwatchToProductActionGroup">
+        <annotations>
+            <description>Add text swatch property attribute.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeName" defaultValue="{{textSwatchAttribute.default_label}}" type="string"/>
+            <argument name="attributeCode" defaultValue="{{textSwatchAttribute.attribute_code}}" type="string"/>
+            <argument name="option1" defaultValue="textSwatchOption1" type="string"/>
+            <argument name="option2" defaultValue="textSwatchOption2" type="string"/>
+            <argument name="option3" defaultValue="textSwatchOption3" type="string"/>
+            <argument name="usedInProductListing" defaultValue="No" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{attributeName}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{textSwatchAttribute.input_type}}" stepKey="selectInputType"/>
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('0')}}" userInput="{{option1}}" stepKey="fillSwatch1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('0')}}" userInput="{{option1}}" stepKey="fillSwatch1Description"/>
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch2"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('1')}}" userInput="{{option2}}" stepKey="fillSwatch2"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('1')}}" userInput="{{option2}}" stepKey="fillSwatch2Description"/>
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch3"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('2')}}" userInput="{{option3}}" stepKey="fillSwatch3"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('2')}}" userInput="{{option3}}" stepKey="fillSwatch3Description"/>
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attributeCode}}" stepKey="fillAttributeCodeField"/>
+        <scrollToTopOfPage stepKey="scrollToTabs"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" stepKey="waitForTabSwitch"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" userInput="{{usedInProductListing}}" stepKey="useInProductListing"/>
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSave"/>
+    </actionGroup>
+</actionGroups>

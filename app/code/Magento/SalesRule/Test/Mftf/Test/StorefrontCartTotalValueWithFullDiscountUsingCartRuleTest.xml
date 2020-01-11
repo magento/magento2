@@ -39,7 +39,7 @@
             <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
             <!-- Add tax rule with 20% tax rate -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNYRate"/>
             </actionGroup>
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
