@@ -59,7 +59,8 @@ class CustomerRegistry
         CustomerFactory $customerFactory,
         CustomerSecureFactory $customerSecureFactory,
         StoreManagerInterface $storeManager
-    ) {
+    )
+    {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
         $this->storeManager = $storeManager;
@@ -103,6 +104,7 @@ class CustomerRegistry
         if ($websiteId === null) {
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
+
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);
         if (isset($this->customerRegistryByEmail[$emailKey])) {
             return $this->customerRegistryByEmail[$emailKey];
@@ -111,11 +113,22 @@ class CustomerRegistry
         /** @var Customer $customer */
         $customer = $this->customerFactory->create();
 
-        if (isset($websiteId)) {
-            $customer->setWebsiteId($websiteId);
+        if ($websiteId == 0) {
+            $websites = $this->storeManager->getWebsites();
+            foreach ($websites as $website) {
+                $customer->setWebsiteId($website->getId());
+                $customer->loadByEmail($customerEmail);
+                if ($customer->getEmail()) {
+                    break;
+                }
+            }
+        } else {
+            if (isset($websiteId)) {
+                $customer->setWebsiteId($websiteId);
+            }
+            $customer->loadByEmail($customerEmail);
         }
 
-        $customer->loadByEmail($customerEmail);
         if (!$customer->getEmail()) {
             // customer does not exist
             throw new NoSuchEntityException(
@@ -150,7 +163,7 @@ class CustomerRegistry
         }
         /** @var Customer $customer */
         $customer = $this->retrieve($customerId);
-        /** @var $customerSecure CustomerSecure*/
+        /** @var $customerSecure CustomerSecure */
         $customerSecure = $this->customerSecureFactory->create();
         $customerSecure->setPasswordHash($customer->getPasswordHash());
         $customerSecure->setRpToken($customer->getRpToken());
