@@ -6,15 +6,26 @@
 
 namespace Magento\CatalogWidget\Block\Product;
 
+use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Block\Product\Widget\Html\Pager as ProductBlockPager;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\CatalogWidget\Model\Rule;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Url\EncoderInterface as UrlEncoderInterface;
+use Magento\Framework\View\Element\RendererList;
 use Magento\Framework\View\LayoutFactory;
+use Magento\Rule\Model\Condition\Sql\Builder as SqlConditionBuilder;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Framework\Url\EncoderInterface;
+use Magento\Widget\Helper\Conditions as ConditionsHelper;
 
 /**
  * Catalog Products List widget block
@@ -22,7 +33,7 @@ use Magento\Framework\Url\EncoderInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
-class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
+class ProductsList extends AbstractProduct implements BlockInterface, IdentityInterface
 {
     /**
      * Default value for products count that will be shown
@@ -32,7 +43,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * Name of request parameter for page number value
      *
-     * @deprecated
+     * @deprecated No longer used for Magento Core
+     * @see self::getData('page_var_name')
      */
     const PAGE_VAR_NAME = 'np';
 
@@ -49,41 +61,41 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * Instance of pager block
      *
-     * @var \Magento\Catalog\Block\Product\Widget\Html\Pager
+     * @var ProductBlockPager
      */
     protected $pager;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var HttpContext
      */
     protected $httpContext;
 
     /**
      * Catalog product visibility
      *
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var ProductVisibility
      */
     protected $catalogProductVisibility;
 
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var ProductCollectionFactory
      */
     protected $productCollectionFactory;
 
     /**
-     * @var \Magento\Rule\Model\Condition\Sql\Builder
+     * @var SqlConditionBuilder
      */
     protected $sqlBuilder;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule
+     * @var Rule
      */
     protected $rule;
 
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var ConditionsHelper
      */
     protected $conditionsHelper;
 
@@ -105,38 +117,38 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     private $layoutFactory;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|null
+     * @var UrlEncoderInterface|null
      */
     private $urlEncoder;
 
     /**
-     * @var \Magento\Framework\View\Element\RendererList
+     * @var RendererList
      */
     private $rendererListBlock;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder
-     * @param \Magento\CatalogWidget\Model\Rule $rule
-     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
+     * @param Context $context
+     * @param ProductCollectionFactory $productCollectionFactory
+     * @param ProductVisibility $catalogProductVisibility
+     * @param HttpContext $httpContext
+     * @param SqlConditionBuilder $sqlBuilder
+     * @param Rule $rule
+     * @param ConditionsHelper $conditionsHelper
      * @param array $data
      * @param Json|null $json
      * @param LayoutFactory|null $layoutFactory
-     * @param \Magento\Framework\Url\EncoderInterface|null $urlEncoder
+     * @param UrlEncoderInterface|null $urlEncoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
-        \Magento\CatalogWidget\Model\Rule $rule,
-        \Magento\Widget\Helper\Conditions $conditionsHelper,
+        Context $context,
+        ProductCollectionFactory $productCollectionFactory,
+        ProductVisibility $catalogProductVisibility,
+        HttpContext $httpContext,
+        SqlConditionBuilder $sqlBuilder,
+        Rule $rule,
+        ConditionsHelper $conditionsHelper,
         array $data = [],
         Json $json = null,
         LayoutFactory $layoutFactory = null,
@@ -173,7 +185,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
         $this->addData([
             'cache_lifetime' => 86400,
-            'cache_tags' => [\Magento\Catalog\Model\Product::CACHE_TAG,
+            'cache_tags' => [
+                Product::CACHE_TAG,
             ], ]);
     }
 
@@ -210,7 +223,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getProductPriceHtml(
-        \Magento\Catalog\Model\Product $product,
+        Product $product,
         $priceType = null,
         $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
         array $arguments = []
@@ -418,7 +431,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         if ($this->showPager() && $this->getProductCollection()->getSize() > $this->getProductsPerPage()) {
             if (!$this->pager) {
                 $this->pager = $this->getLayout()->createBlock(
-                    \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
+                    ProductBlockPager::class,
                     $this->getWidgetPagerBlockName()
                 );
 
@@ -444,16 +457,17 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     public function getIdentities()
     {
-        $identities = [];
+        $identities = [[]];
         if ($this->getProductCollection()) {
             foreach ($this->getProductCollection() as $product) {
                 if ($product instanceof IdentityInterface) {
-                    $identities = array_merge($identities, $product->getIdentities());
+                    $identities[] = $product->getIdentities();
                 }
             }
         }
+        $identities = array_merge(...$identities);
 
-        return $identities ?: [\Magento\Catalog\Model\Product::CACHE_TAG];
+        return $identities ?: [Product::CACHE_TAG];
     }
 
     /**

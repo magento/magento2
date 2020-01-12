@@ -71,7 +71,7 @@ class LayoutPlugin
     public function afterGetOutput(\Magento\Framework\View\Layout $subject, $result)
     {
         if ($subject->isCacheable() && $this->config->isEnabled()) {
-            $tags = [];
+            $tags = [[]];
             foreach ($subject->getAllBlocks() as $block) {
                 if ($block instanceof \Magento\Framework\DataObject\IdentityInterface) {
                     $isEsiBlock = $block->getTtl() > 0;
@@ -80,10 +80,10 @@ class LayoutPlugin
                         continue;
                     }
                     // phpcs:ignore
-                    $tags = array_merge($tags, $block->getIdentities());
+                    $tags[] = $block->getIdentities();
                 }
             }
-            $tags = array_unique($tags);
+            $tags = array_unique(array_merge(...$tags));
             $this->response->setHeader('X-Magento-Tags', implode(',', $tags));
         }
         return $result;

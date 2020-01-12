@@ -32,10 +32,10 @@ class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite impleme
      */
     public function getIdentities()
     {
-        $identities = [];
+        $identities = [[]];
         foreach ($this->getChildProducts() as $item) {
-            $identities = array_merge($identities, $item->getIdentities());
+            $identities[] = $item->getIdentities();
         }
-        return $identities;
+        return array_merge(...$identities);
     }
 }

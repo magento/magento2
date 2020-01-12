@@ -10,12 +10,15 @@ use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Website as ProductWebsite;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\StockIndexInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResourceModel;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Class StockIndex
+ * Index responsible for Stock
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockIndex implements StockIndexInterface
@@ -31,7 +34,7 @@ class StockIndex implements StockIndexInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status
+     * @var StockStatusResourceModel
      */
     protected $stockStatusResource;
 
@@ -46,6 +49,11 @@ class StockIndex implements StockIndexInterface
      * @var array
      */
     protected $websites;
+
+    /**
+     * @var ProductWebsite
+     */
+    private $productWebsite;
 
     /**
      * Product Type Instances cache
@@ -88,7 +96,7 @@ class StockIndex implements StockIndexInterface
         } else {
             $lastProductId = 0;
             while (true) {
-                /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status $resource */
+                /** @var StockStatusResourceModel $resource */
                 $resource = $this->getStockStatusResource();
                 $productCollection = $resource->getProductCollection($lastProductId);
                 if (!$productCollection) {
@@ -132,7 +140,7 @@ class StockIndex implements StockIndexInterface
      * @param int $websiteId
      * @param int $qty
      * @param int $status
-     * @return $this
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processChildren(
@@ -160,10 +168,12 @@ class StockIndex implements StockIndexInterface
 
         $requiredChildrenIds = $typeInstance->getChildrenIds($productId, true);
         if ($requiredChildrenIds) {
-            $childrenIds = [];
+            $childrenIds = [[]];
             foreach ($requiredChildrenIds as $groupedChildrenIds) {
-                $childrenIds = array_merge($childrenIds, $groupedChildrenIds);
+                $childrenIds[] = $groupedChildrenIds;
             }
+            $childrenIds = array_merge(...$childrenIds);
+
             $childrenWebsites = $this->productWebsite->getWebsites($childrenIds);
             foreach ($websitesWithStores as $websiteId => $storeId) {
                 $childrenStatus = $this->getStockStatusResource()->getProductStatus($childrenIds, $storeId);
@@ -201,7 +211,7 @@ class StockIndex implements StockIndexInterface
     protected function getWebsitesWithDefaultStores($websiteId = null)
     {
         if ($this->websites === null) {
-            /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status $resource */
+            /** @var StockStatusResourceModel $resource */
             $resource = $this->getStockStatusResource();
             $this->websites = $resource->getWebsiteStores();
         }
@@ -217,17 +227,19 @@ class StockIndex implements StockIndexInterface
      *
      * @param int $productId
      * @param int $websiteId
-     * @return $this
+     * @return void
      */
     protected function processParents($productId, $websiteId)
     {
-        $parentIds = [];
+        $parentIds = [[]];
         foreach ($this->getProductTypeInstances() as $typeInstance) {
             /* @var $typeInstance AbstractType */
-            $parentIds = array_merge($parentIds, $typeInstance->getParentIdsByChild($productId));
+            $parentIds[] = $typeInstance->getParentIdsByChild($productId);
         }
 
-        if (!$parentIds) {
+        $parentIds = array_merge(...$parentIds);
+
+        if (empty($parentIds)) {
             return $this;
         }
 
@@ -244,8 +256,7 @@ class StockIndex implements StockIndexInterface
     }
 
     /**
-     * Retrieve Product Type Instances
-     * as key - type code, value - instance model
+     * Retrieve Product Type Instances as key - type code, value - instance model
      *
      * @return array
      */
@@ -262,14 +273,14 @@ class StockIndex implements StockIndexInterface
     }
 
     /**
-     * @return \Magento\CatalogInventory\Model\ResourceModel\Stock\Status
+     * Returns ResourceModel for Stock Status
+     *
+     * @return StockStatusResourceModel
      */
     protected function getStockStatusResource()
     {
         if (empty($this->stockStatusResource)) {
-            $this->stockStatusResource = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class
-            );
+            $this->stockStatusResource = ObjectManager::getInstance()->get(StockStatusResourceModel::class);
         }
         return $this->stockStatusResource;
     }
