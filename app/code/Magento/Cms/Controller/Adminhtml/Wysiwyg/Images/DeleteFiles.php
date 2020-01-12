@@ -79,7 +79,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
                 /** @var \Magento\Framework\Filesystem $filesystem */
                 $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
                 $dir = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
-                $filePath = $path . '/' . \Magento\Framework\File\Uploader::getCorrectFileName($file);
+                $filePath = $path . '/' . $file;
                 if ($dir->isFile($dir->getRelativePath($filePath)) && !preg_match('#.htaccess#', $file)) {
                     $this->getStorage()->deleteFile($filePath);
                 }
