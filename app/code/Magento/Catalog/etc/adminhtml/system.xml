@@ -173,6 +173,9 @@
                     <label>Use Static URLs for Media Content in WYSIWYG</label>
                     <comment>Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled" negative="1">disabled</field>
+                    </depends>
                 </field>
             </group>
         </section>
