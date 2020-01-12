@@ -27,8 +27,8 @@
                 default="0" comment="Product ID"/>
         <column xsi:type="smallint" name="stock_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Stock ID"/>
-        <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="true" comment="Qty"/>
-        <column xsi:type="decimal" name="min_qty" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="float" name="qty" unsigned="false" nullable="true" comment="Qty"/>
+        <column xsi:type="float" name="min_qty" unsigned="false" nullable="false"
                 default="0" comment="Min Qty"/>
         <column xsi:type="smallint" name="use_config_min_qty" padding="5" unsigned="true" nullable="false"
                 identity="false" default="1" comment="Use Config Min Qty"/>
