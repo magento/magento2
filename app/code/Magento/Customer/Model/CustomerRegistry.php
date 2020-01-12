@@ -10,6 +10,7 @@ use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Registry for \Magento\Customer\Model\Customer
@@ -17,6 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 class CustomerRegistry
 {
     const REGISTRY_SEPARATOR = ':';
+    const ADMIN_DEFAULT_WEBSITE = 0;
 
     /**
      * @var CustomerFactory
@@ -59,8 +61,7 @@ class CustomerRegistry
         CustomerFactory $customerFactory,
         CustomerSecureFactory $customerSecureFactory,
         StoreManagerInterface $storeManager
-    )
-    {
+    ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
         $this->storeManager = $storeManager;
@@ -94,10 +95,11 @@ class CustomerRegistry
     /**
      * Retrieve Customer Model from registry given an email
      *
-     * @param string $customerEmail Customers email address
-     * @param string|null $websiteId Optional website ID, if not set, will use the current websiteId
-     * @return Customer
+     * @param $customerEmail
+     * @param null $websiteId
+     * @return Customer|mixed
      * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function retrieveByEmail($customerEmail, $websiteId = null)
     {
@@ -113,7 +115,8 @@ class CustomerRegistry
         /** @var Customer $customer */
         $customer = $this->customerFactory->create();
 
-        if ($websiteId == 0) {
+        /** Verify if the websiteId is coming from Swagger UI */
+        if ($websiteId == self::ADMIN_DEFAULT_WEBSITE) {
             $websites = $this->storeManager->getWebsites();
             foreach ($websites as $website) {
                 $customer->setWebsiteId($website->getId());
