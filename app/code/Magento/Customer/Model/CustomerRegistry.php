@@ -95,9 +95,9 @@ class CustomerRegistry
     /**
      * Retrieve Customer Model from registry given an email
      *
-     * @param $customerEmail
-     * @param null $websiteId
-     * @return Customer|mixed
+     * @param string $customerEmail Customers email address
+     * @param string|null $websiteId Optional website ID, if not set, will use the current websiteId
+     * @return Customer
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
