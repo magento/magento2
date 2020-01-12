@@ -257,10 +257,10 @@ class Processor
         //The url needs to be updated base on Document root path.
         return $this->getBaseUrl() .
         str_replace(
-            str_replace('\\', '/', $this->_indexDir),
+            str_replace('\\', '/', realpath($this->_indexDir)),
             '',
-            str_replace('\\', '/', $this->_errorDir)
-        ) . $this->_config->skin . '/';
+            str_replace('\\', '/', realpath($this->_errorDir))
+        ) . '/' . $this->_config->skin . '/';
     }
 
     /**
