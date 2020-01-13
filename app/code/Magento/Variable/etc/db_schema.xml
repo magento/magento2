@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="variable" resource="default" engine="innodb" comment="Variables">
         <column xsi:type="int" name="variable_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Variable Id"/>
+                comment="Variable ID"/>
         <column xsi:type="varchar" name="code" nullable="true" length="255" comment="Variable Code"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Variable Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -21,11 +21,11 @@
     </table>
     <table name="variable_value" resource="default" engine="innodb" comment="Variable Value">
         <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Variable Value Id"/>
+                comment="Variable Value ID"/>
         <column xsi:type="int" name="variable_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Variable Id"/>
+                default="0" comment="Variable ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="text" name="plain_value" nullable="true" comment="Plain Text Value"/>
         <column xsi:type="text" name="html_value" nullable="true" comment="Html Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

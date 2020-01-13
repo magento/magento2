@@ -364,6 +364,10 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
+                '0',
+                '0',
+            ],
+            [
                 'javascript%3Aalert%28String.fromCharCode%280x78%29%2BString.'
                 . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29',
                 ':alert%28String.fromCharCode%280x78%29%2BString.'

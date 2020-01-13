@@ -75,10 +75,10 @@ class UiComponentFactory extends DataObject
      * @param ManagerInterface $componentManager
      * @param InterpreterInterface $argumentInterpreter
      * @param ContextFactory $contextFactory
-     * @param DataInterfaceFactory|null $configFactory
      * @param array $data
      * @param array $componentChildFactories
-     * @param DataInterface|null $definitionData
+     * @param DataInterface $definitionData
+     * @param DataInterfaceFactory $configFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -266,10 +266,12 @@ class UiComponentFactory extends DataObject
 
         foreach ($children as $identifier => $config) {
             if (!isset($config['componentType'])) {
-                throw new LocalizedException(new Phrase(
-                    'The "componentType" configuration parameter is required for the "%1" component.',
-                    $identifier
-                ));
+                throw new LocalizedException(
+                    new Phrase(
+                        'The "componentType" configuration parameter is required for the "%1" component.',
+                        $identifier
+                    )
+                );
             }
 
             if (!isset($componentArguments['context'])) {
@@ -387,10 +389,12 @@ class UiComponentFactory extends DataObject
 
             if (!$isMerged) {
                 if (!isset($data['arguments']['data']['config']['componentType'])) {
-                    throw new LocalizedException(new Phrase(
-                        'The "componentType" configuration parameter is required for the "%1" component.',
-                        [$name]
-                    ));
+                    throw new LocalizedException(
+                        new Phrase(
+                            'The "componentType" configuration parameter is required for the "%1" component.',
+                            [$name]
+                        )
+                    );
                 }
                 $rawComponentData = $this->definitionData->get(
                     $data['arguments']['data']['config']['componentType']

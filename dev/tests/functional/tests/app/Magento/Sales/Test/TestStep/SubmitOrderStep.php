@@ -114,7 +114,7 @@ class SubmitOrderStep implements TestStepInterface
         $orderData = $this->order !== null ? $this->order->getData() : [];
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
-            ['data' => array_merge($data, $orderData)]
+            ['data' => array_merge($orderData, $data)]
         );
 
         return ['orderId' => $orderId, 'order' => $order];

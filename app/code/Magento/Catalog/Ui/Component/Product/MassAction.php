@@ -52,6 +52,7 @@ class MassAction extends AbstractComponent
         foreach ($this->getChildComponents() as $actionComponent) {
             $actionType = $actionComponent->getConfiguration()['type'];
             if ($this->isActionAllowed($actionType)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $config['actions'][] = array_merge($actionComponent->getConfiguration(), ['__disableTmpl' => true]);
             }
         }

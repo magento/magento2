@@ -1,0 +1,25 @@
+{
+    "name": "magento/module-media-gallery",
+    "description": "Magento module responsible for media handling",
+    "require": {
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "magento/framework": "102.0.*",
+        "magento/module-media-gallery-api": "100.3.*",
+        "magento/module-cms": "103.0.*",
+        "magento/module-catalog": "103.0.*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\MediaGallery\\": ""
+        }
+    },
+    "version": "100.3.0"
+}

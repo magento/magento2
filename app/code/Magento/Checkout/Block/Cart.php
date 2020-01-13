@@ -6,6 +6,8 @@
 namespace Magento\Checkout\Block;
 
 use Magento\Customer\Model\Context;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Shopping cart block
@@ -69,7 +71,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
-     * prepare cart items URLs
+     * Prepare cart items URLs
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -111,6 +113,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Check quote for error
+     *
      * @codeCoverageIgnore
      * @return bool
      */
@@ -120,6 +124,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get Items Summary Qty
+     *
      * @codeCoverageIgnore
      * @return int
      */
@@ -129,6 +135,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Check if Wishlist Active
+     *
      * @codeCoverageIgnore
      * @return bool
      */
@@ -148,6 +156,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get Checkout Url
+     *
      * @codeCoverageIgnore
      * @return string
      */
@@ -157,6 +167,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get Continue Shopping Url
+     *
      * @return string
      */
     public function getContinueShoppingUrl()
@@ -173,6 +185,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Check if quote is virtual
+     *
      * @return bool
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
@@ -208,7 +222,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     {
         $block = $this->getLayout()->getBlock($name);
         if (!$block) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid method: %1', $name));
+            throw new LocalizedException(new Phrase($this->escapeHtml(__('Invalid method: %1', $name))));
         }
         return $block->toHtml();
     }
@@ -228,6 +242,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get Items Count
+     *
      * @codeCoverageIgnore
      * @return int
      */

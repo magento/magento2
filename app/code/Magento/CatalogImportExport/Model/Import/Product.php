@@ -141,7 +141,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_PRODUCT_WEBSITES = '_product_websites';
 
     /**
-     * Media gallery attribute code.
+     * Attribute code for media gallery.
      */
     const MEDIA_GALLERY_ATTRIBUTE_CODE = 'media_gallery';
 
@@ -151,12 +151,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_MEDIA_IMAGE = '_media_image';
 
     /**
-     * Inventory use config.
+     * Inventory use config label.
      */
     const INVENTORY_USE_CONFIG = 'Use Config';
 
     /**
-     * Inventory use config prefix.
+     * Prefix for inventory use config.
      */
     const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
 
@@ -1196,8 +1196,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
             }
+            // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
             $this->_fieldsMap = array_merge($this->_fieldsMap, $model->getCustomFieldsMapping());
             $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
+            // phpcs:enable 
         }
         $this->_initErrorTemplates();
         // remove doubles
@@ -1888,6 +1890,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         return $this;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Prepare array with image states (visible or hidden from product page)
@@ -2738,8 +2741,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             try {
                 $rowData = $source->current();
             } catch (\InvalidArgumentException $e) {
-                $this->addRowError($e->getMessage(), $this->_processedRowsCount);
-                $this->_processedRowsCount++;
                 $source->next();
                 continue;
             }
@@ -2975,6 +2976,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
+
+        if (isset($rowData['qty']) && $rowData['qty'] == 0 && !isset($rowData['is_in_stock'])) {
+            $rowData['is_in_stock'] = 0;
+        }
 
         $row = array_merge(
             $this->defaultStockData,

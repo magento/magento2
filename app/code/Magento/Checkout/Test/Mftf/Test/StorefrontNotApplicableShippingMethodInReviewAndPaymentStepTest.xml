@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontNotApplicableShippingMethodInReviewAndPaymentStepTest">
+        <annotations>
+            <title value="Not applicable Shipping Method In Review and Payment Step"/>
+            <stories value="Checkout Shipping Method Recalculation after Coupon Code Added"/>
+            <description value="User should not be able to place order when free shipping declined after applying coupon code"/>
+            <features value="Checkout"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-22625"/>
+            <useCaseId value="MC-21926"/>
+            <group value="Checkout"/>
+            <skip>
+                <issueId value="MC-29764"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!-- Enable Free Shipping Method and set Minimum Order Amount to 100-->
+            <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.enabled}}" stepKey="enableFreeShippingMethod" />
+            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.hundred}}" stepKey="setFreeShippingMethodMinimumOrderAmountToBe100" />
+
+            <!--Set Fedex configs data-->
+            <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} {{AdminFedexEnableForCheckoutConfigData.value}}" stepKey="enableCheckout"/>
+            <magentoCLI command="config:set {{AdminFedexEnableSandboxModeConfigData.path}} {{AdminFedexEnableSandboxModeConfigData.value}}" stepKey="enableSandbox"/>
+            <magentoCLI command="config:set {{AdminFedexEnableDebugConfigData.path}} {{AdminFedexEnableDebugConfigData.value}}" stepKey="enableDebug"/>
+            <magentoCLI command="config:set {{AdminFedexEnableShowMethodConfigData.path}} {{AdminFedexEnableShowMethodConfigData.value}}" stepKey="enableShowMethod"/>
+
+            <!--Set StoreInformation configs data-->
+            <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} '{{AdminGeneralSetStoreNameConfigData.value}}'" stepKey="setStoreInformationName"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.telephone}}" stepKey="setStoreInformationPhone"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCountryConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.country_id}}" stepKey="setStoreInformationCountry"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.city}}" stepKey="setStoreInformationCity"/>
+            <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.postcode}}" stepKey="setStoreInformationPostcode"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddressConfigData.path}} '{{DE_Address_Berlin_Not_Default_Address.street[0]}}'" stepKey="setStoreInformationStreetAddress"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setStoreInformationStreetAddress2"/>
+            <magentoCLI command="config:set {{AdminGeneralSetVatNumberConfigData.path}} {{AdminGeneralSetVatNumberConfigData.value}}" stepKey="setStoreInformationVatNumber"/>
+
+            <!--Set Shipping settings origin data-->
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCountryConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.country_id}}" stepKey="setOriginCountry"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.city}}" stepKey="setOriginCity"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.postcode}}" stepKey="setOriginZipCode"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} '{{DE_Address_Berlin_Not_Default_Address.street[0]}}'" stepKey="setOriginStreetAddress"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setOriginStreetAddress2"/>
+
+            <!-- Create Simple Product -->
+            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">100</field>
+            </createData>
+            <!-- Create Cart Price Rule with 10% discount -->
+            <createData entity="ApiSalesRule" stepKey="createCartPriceRule"/>
+            <!-- Create Coupon code for the Cart Price Rule -->
+            <createData entity="ApiSalesRuleCoupon" stepKey="createCartPriceRuleCoupon">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+            <!-- Create Customer with filled Shipping & Billing Address -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault" />
+            <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.disabled}}" stepKey="disableFreeShippingMethod" />
+            <!--Reset configs-->
+            <magentoCLI command="config:set {{AdminFedexDisableForCheckoutConfigData.path}} {{AdminFedexDisableForCheckoutConfigData.value}}" stepKey="disableCheckout"/>
+            <magentoCLI command="config:set {{AdminFedexDisableSandboxModeConfigData.path}} {{AdminFedexDisableSandboxModeConfigData.value}}" stepKey="disableSandbox"/>
+            <magentoCLI command="config:set {{AdminFedexDisableDebugConfigData.path}} {{AdminFedexDisableDebugConfigData.value}}" stepKey="disableDebug"/>
+            <magentoCLI command="config:set {{AdminFedexDisableShowMethodConfigData.path}} {{AdminFedexDisableShowMethodConfigData.value}}" stepKey="disableShowMethod"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} ''" stepKey="setStoreInformationName"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} ''" stepKey="setStoreInformationPhone"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} ''" stepKey="setStoreInformationCity"/>
+            <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} ''" stepKey="setStoreInformationPostcode"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddressConfigData.path}} ''" stepKey="setStoreInformationStreetAddress"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} ''" stepKey="setStoreInformationStreetAddress2"/>
+            <magentoCLI command="config:set {{AdminGeneralSetVatNumberConfigData.path}} ''" stepKey="setStoreInformationVatNumber"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} ''" stepKey="setOriginCity"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} ''" stepKey="setOriginZipCode"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} ''" stepKey="setOriginStreetAddress"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} ''" stepKey="setOriginStreetAddress2"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!-- Guest Customer Test Scenario -->
+        <!-- Add Simple Product to Cart -->
+        <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+
+        <!-- Fill all required fields -->
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillNewShippingAddress">
+            <argument name="customer" value="Simple_Customer_Without_Address" />
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!-- Select payment solution -->
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+
+        <!-- Apply Discount Coupon to the Order -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
+            <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+
+        <!-- Assert Shipping total is not yet calculated -->
+        <actionGroup ref="AssertStorefrontNotCalculatedValueInShippingTotalInOrderSummaryActionGroup" stepKey="assertNotYetCalculated"/>
+
+        <!--  Assert order cannot be placed and error message will shown. -->
+        <actionGroup ref="AssertStorefrontOrderCannotBePlacedActionGroup" stepKey="assertOrderCannotBePlaced">
+            <argument name="error" value="The shipping method is missing. Select the shipping method and try again."/>
+        </actionGroup>
+
+        <!-- Go to checkout page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="openCheckoutShippingPage"/>
+
+        <!-- Chose flat rate -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview2"/>
+
+        <!-- Place order assert succeed -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+
+        <!-- Loged in Customer Test Scenario -->
+        <!-- Login with created Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add Simple Product to Cart -->
+        <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" stepKey="addProductToCart2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout2"/>
+
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping2">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview3"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
+
+        <!-- Select payment solution -->
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution2" />
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
+
+        <!-- Apply Discount Coupon to the Order -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon2">
+            <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+
+        <!-- Assert Shipping total is not yet calculated -->
+        <actionGroup ref="AssertStorefrontNotCalculatedValueInShippingTotalInOrderSummaryActionGroup" stepKey="assertNotYetCalculated2"/>
+
+        <!--  Assert order cannot be placed and error message will shown. -->
+        <actionGroup ref="AssertStorefrontOrderCannotBePlacedActionGroup" stepKey="assertOrderCannotBePlaced2">
+            <argument name="error" value="The shipping method is missing. Select the shipping method and try again."/>
+        </actionGroup>
+
+        <!-- Go to checkout page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="openCheckoutShippingPage2"/>
+
+        <!-- Chose flat rate -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate2">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview4"/>
+
+        <!-- Place order assert succeed -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder2"/>
+    </test>
+</tests>

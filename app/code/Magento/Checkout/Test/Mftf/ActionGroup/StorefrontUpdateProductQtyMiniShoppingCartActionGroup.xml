@@ -5,24 +5,27 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontUpdateProductQtyMiniShoppingCartActionGroup">
+        <annotations>
+            <description>Clicks on the Storefront Mini Shopping Cart icon in the Header. Fills in the provided Quantity for the provided Product in the Mini Shopping Cart. Clicks on Update.</description>
+        </annotations>
         <arguments>
-            <argument name="product" type="entity" />
-            <argument name="quote" type="entity" />
+            <argument name="product" type="entity"/>
+            <argument name="quote" type="entity"/>
         </arguments>
 
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="goToMiniShoppingCart"/>
 
         <!-- Clearing QTY field -->
-        <doubleClick selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}" stepKey="doubleClickOnQtyInput" />
+        <doubleClick selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}" stepKey="doubleClickOnQtyInput"/>
         <pressKey selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}" parameterArray="[\WebDriverKeys::DELETE]" stepKey="clearQty"/>
         <!-- Clearing QTY field -->
 
         <fillField selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}"  userInput="{{quote.qty}}" stepKey="changeQty"/>
         <click selector="{{StorefrontMinicartSection.itemQuantityUpdateBySku(product.sku)}}" stepKey="clickUpdateButton"/>
-        <waitForPageLoad stepKey="waitForProductQtyUpdate" />
-
+        <waitForPageLoad stepKey="waitForProductQtyUpdate"/>
     </actionGroup>
 </actionGroups>

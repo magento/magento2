@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch6\Test\Unit\Model\Client;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Elasticsearch6\Model\Client\Elasticsearch;
 
 /**
  * Class ElasticsearchTest
@@ -83,7 +85,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager = new ObjectManagerHelper($this);
         $this->model = $this->objectManager->getObject(
-            \Magento\Elasticsearch6\Model\Client\Elasticsearch::class,
+            Elasticsearch::class,
             [
                 'options' => $this->getOptions(),
                 'elasticsearchClient' => $this->elasticsearchClientMock
@@ -97,7 +99,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testConstructorOptionsException()
     {
         $result = $this->objectManager->getObject(
-            \Magento\Elasticsearch6\Model\Client\Elasticsearch::class,
+            Elasticsearch::class,
             [
                 'options' => []
             ]
@@ -117,6 +119,69 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->assertNotNull($result);
+    }
+
+    /**
+     * Ensure that configuration returns correct url.
+     *
+     * @param array $options
+     * @param string $expectedResult
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \ReflectionException
+     * @dataProvider getOptionsDataProvider
+     */
+    public function testBuildConfig(array $options, $expectedResult): void
+    {
+        $buildConfig = new Elasticsearch($options);
+        $config = $this->getPrivateMethod(Elasticsearch::class, 'buildConfig');
+        $result = $config->invoke($buildConfig, $options);
+        $this->assertEquals($expectedResult, $result['hosts'][0]);
+    }
+
+    /**
+     * Return private method for elastic search class.
+     *
+     * @param $className
+     * @param $methodName
+     * @return \ReflectionMethod
+     * @throws \ReflectionException
+     */
+    private function getPrivateMethod($className, $methodName)
+    {
+        $reflector = new \ReflectionClass($className);
+        $method = $reflector->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method;
+    }
+
+    /**
+     * Get options data provider.
+     */
+    public function getOptionsDataProvider()
+    {
+        return [
+            [
+                'without_protocol' => [
+                    'hostname' => 'localhost',
+                    'port' => '9200',
+                    'timeout' => 15,
+                    'index' => 'magento2',
+                    'enableAuth' => 0,
+                ],
+                'expected_result' => 'http://localhost:9200'
+            ],
+            [
+                'with_protocol' => [
+                    'hostname' => 'https://localhost',
+                    'port' => '9200',
+                    'timeout' => 15,
+                    'index' => 'magento2',
+                    'enableAuth' => 0,
+                ],
+                'expected_result' => 'https://localhost:9200'
+            ]
+        ];
     }
 
     /**
@@ -376,7 +441,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => false
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -386,7 +451,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'text',
-                                            'index' => false,
+                                            'index' => true,
                                             'copy_to' => '_search'
                                         ],
                                     ],
@@ -446,7 +511,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => false
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -456,7 +521,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'text',
-                                            'index' => false,
+                                            'index' => true,
                                             'copy_to' => '_search'
                                         ],
                                     ],

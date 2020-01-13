@@ -65,13 +65,15 @@
                     </depends>
                     <attribute type="shared">1</attribute>
                 </field>
-                <field id="proxy_port" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1">
+                <field id="proxy_port" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1">
                     <label>Proxy Port</label>
+                    <comment>Please enter at least 0 and at most 65535</comment>
                     <config_path>payment/payflowpro/proxy_port</config_path>
                     <depends>
                         <field id="use_proxy">1</field>
                     </depends>
                     <attribute type="shared">1</attribute>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
                 </field>
             </group>
             <field id="enable_paypal_payflow" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">

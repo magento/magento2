@@ -18,6 +18,7 @@ use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
@@ -46,6 +47,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as Attrib
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @since 101.0.0
  */
 class Eav extends AbstractModifier
@@ -687,11 +689,17 @@ class Eav extends AbstractModifier
                 '__disableTmpl' => ['label' => true, 'code' => true]
             ]
         );
+        $product = $this->locator->getProduct();
 
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
-            $options = $attributeModel->getSource()->getAllOptions(true, true);
+            $source = $attributeModel->getSource();
+            if ($source instanceof SpecificSourceInterface) {
+                $options = $source->getOptionsFor($product);
+            } else {
+                $options = $source->getAllOptions(true, true);
+            }
             foreach ($options as &$option) {
                 $option['__disableTmpl'] = true;
             }
@@ -718,7 +726,6 @@ class Eav extends AbstractModifier
             $meta = $this->arrayManager->merge($configPath, $meta, ['componentType' => Field::NAME]);
         }
 
-        $product = $this->locator->getProduct();
         if (in_array($attributeCode, $this->attributesToDisable)
             || $product->isLockedAttribute($attributeCode)) {
             $meta = $this->arrayManager->merge($configPath, $meta, ['disabled' => true]);
@@ -726,7 +733,7 @@ class Eav extends AbstractModifier
 
         // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
         $childData = $this->arrayManager->get($configPath, $meta, []);
-        if (($rules = $this->catalogEavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
+        if ($rules = $this->catalogEavValidationRules->build($this->getAttributeModel($attribute), $childData)) {
             $meta = $this->arrayManager->merge($configPath, $meta, ['validation' => $rules]);
         }
 
@@ -860,7 +867,9 @@ class Eav extends AbstractModifier
                 'arguments/data/config',
                 $containerMeta,
                 [
-                    'component' => 'Magento_Ui/js/form/components/group'
+                    'component' => 'Magento_Ui/js/form/components/group',
+                    'label' => false,
+                    'required' => false,
                 ]
             );
         }
@@ -1050,6 +1059,10 @@ class Eav extends AbstractModifier
      */
     private function getAttributeModel($attribute)
     {
+        // The statement below solves performance issue related to loading same attribute options on different models
+        if ($attribute instanceof EavAttribute) {
+            return $attribute;
+        }
         $attributeId = $attribute->getAttributeId();
 
         if (!array_key_exists($attributeId, $this->attributesCache)) {

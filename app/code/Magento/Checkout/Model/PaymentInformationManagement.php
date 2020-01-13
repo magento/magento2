@@ -124,9 +124,9 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingAddress && $shippingAddress->getShippingMethod()) {
                 $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
-                $shippingAddress->setLimitCarrier(
-                    $shippingRate ? $shippingRate->getCarrier() : $shippingAddress->getShippingMethod()
-                );
+                if ($shippingRate) {
+                    $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
+                }
             }
         }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);

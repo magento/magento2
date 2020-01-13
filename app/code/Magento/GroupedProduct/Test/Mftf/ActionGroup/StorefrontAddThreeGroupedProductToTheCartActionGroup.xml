@@ -10,6 +10,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Check that required fields are actually required-->
     <actionGroup name="StorefrontAddThreeGroupedProductToTheCartActionGroup">
+        <annotations>
+            <description>Goes to the provided URL for a Grouped Product. Validates that the provided Products and Quantities are present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="urlKey" type="string"/>
             <argument name="product1" type="string"/>
@@ -19,6 +22,7 @@
             <argument name="qty2" type="string"/>
             <argument name="qty3" type="string"/>
         </arguments>
+
         <amOnPage url="{{StorefrontProductPage.url(urlKey)}}" stepKey="OpenStoreFrontProductPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <fillField stepKey="fillQuantityForProduct1" selector="{{StorefrontProductPageSection.qtyInputWithProduct(product1)}}" userInput="{{qty1}}"/>
@@ -27,4 +31,3 @@
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="clickOnAddToCartButton"/>
     </actionGroup>
 </actionGroups>
-

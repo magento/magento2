@@ -19,7 +19,7 @@ use Magento\Signifyd\Model\SignifydOrderSessionId;
  *
  * @api
  * @see https://www.signifyd.com/docs/api/#/reference/device-fingerprint/create-a-case
- * @since 100.2.1
+ * @since 100.2.0
  */
 class Fingerprint extends Template
 {
@@ -40,7 +40,7 @@ class Fingerprint extends Template
 
     /**
      * @var string
-     * @since 100.2.1
+     * @since 100.2.0
      */
     protected $_template = 'Magento_Signifyd::fingerprint.phtml';
 
@@ -68,7 +68,7 @@ class Fingerprint extends Template
      * Returns a unique Signifyd order session id.
      *
      * @return string
-     * @since 100.2.1
+     * @since 100.2.0
      */
     public function getSignifydOrderSessionId()
     {
@@ -81,7 +81,7 @@ class Fingerprint extends Template
      * Checks if module is enabled.
      *
      * @return boolean
-     * @since 100.2.1
+     * @since 100.2.0
      */
     public function isModuleActive()
     {

@@ -31,7 +31,8 @@
         <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active" timeout="30"/>
         <element name="checkMoneyOrderPayment" type="radio" selector="input#checkmo.radio" timeout="30"/>
         <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="30"/>
-        <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[text()='Payment Method']" />
+        <element name="placeOrderWithoutTimeout" type="button" selector=".payment-method._active button.action.primary.checkout"/>
+        <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[@data-role='title']" />
         <element name="orderSummarySubtotal" type="text" selector="//tr[@class='totals sub']//span[@class='price']" />
         <element name="orderSummaryShippingTotal" type="text" selector="//tr[@class='totals shipping excl']//span[@class='price']" />
         <element name="orderSummaryShippingMethod" type="text" selector="//tr[@class='totals shipping excl']//span[@class='value']" />
@@ -42,6 +43,7 @@
         <element name="ProductOptionLinkActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']//a[text() = '{{var2}}']" parameterized="true" />
         <element name="shipToInformation" type="text" selector="//div[@class='ship-to']//div[@class='shipping-information-content']" />
         <element name="shippingMethodInformation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']" />
+        <element name="shippingInformationSection" type="text" selector=".ship-to .shipping-information-content" />
         <element name="paymentMethodTitle" type="text" selector=".payment-method-title span" />
         <element name="productOptionsByProductItemPrice" type="text" selector="//div[@class='product-item-inner']//div[@class='subtotal']//span[@class='price'][contains(.,'{{price}}')]//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true"/>
         <element name="productOptionsActiveByProductItemPrice" type="text" selector="//div[@class='subtotal']//span[@class='price'][contains(.,'{{price}}')]//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true"/>
@@ -51,6 +53,7 @@
         <element name="orderSummaryTotalIncluding" type="text" selector="//tr[@class='grand totals incl']//span[@class='price']" />
         <element name="orderSummaryTotalExcluding" type="text" selector="//tr[@class='grand totals excl']//span[@class='price']" />
         <element name="shippingAndBillingAddressSame" type="input" selector="#billing-address-same-as-shipping-braintree_cc_vault"/>
+        <element name="myShippingAndBillingAddressSame" type="input" selector=".billing-address-same-as-shipping-block"/>
         <element name="addressAction" type="button" selector="//span[text()='{{action}}']" parameterized="true"/>
         <element name="addressBook" type="button" selector="//a[text()='Address Book']"/>
         <element name="noQuotes" type="text" selector=".no-quotes-block"/>

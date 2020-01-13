@@ -23,6 +23,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Model\VaultPaymentInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -42,10 +43,19 @@ class VaultTest extends \PHPUnit\Framework\TestCase
      */
     private $vaultProvider;
 
+    /**
+     * @var Json|MockObject
+     */
+    private $jsonSerializer;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->vaultProvider = $this->createMock(MethodInterface::class);
+        $this->jsonSerializer = $this->createMock(Json::class);
     }
 
     /**
@@ -152,6 +162,19 @@ class VaultTest extends \PHPUnit\Framework\TestCase
         $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
         $token = $this->createMock(PaymentTokenInterface::class);
 
+        $tokenDetails = [
+            'cc_last4' => '1111',
+            'cc_type' => 'VI',
+            'cc_exp_year' => '2020',
+            'cc_exp_month' => '01',
+        ];
+
+        $extensionAttributes->method('getVaultPaymentToken')
+            ->willReturn($token);
+
+        $this->jsonSerializer->method('unserialize')
+            ->willReturn($tokenDetails);
+
         $paymentModel->expects(static::once())
             ->method('getAdditionalInformation')
             ->willReturn(
@@ -164,8 +187,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             ->method('getByPublicHash')
             ->with($publicHash, $customerId)
             ->willReturn($token);
-        $paymentModel->expects(static::once())
-            ->method('getExtensionAttributes')
+        $paymentModel->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
         $extensionAttributes->expects(static::once())
             ->method('setVaultPaymentToken')
@@ -198,7 +220,8 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             [
                 'tokenManagement' => $tokenManagement,
                 'commandManagerPool' => $commandManagerPool,
-                'vaultProvider' => $this->vaultProvider
+                'vaultProvider' => $this->vaultProvider,
+                'jsonSerializer' => $this->jsonSerializer,
             ]
         );
         $model->authorize($paymentModel, $amount);

@@ -55,6 +55,7 @@
         <selectionsColumn name="ids" sortOrder="0">
             <settings>
                 <indexField>attribute_id</indexField>
+                <preserveSelectionsOnFilter>true</preserveSelectionsOnFilter>
             </settings>
         </selectionsColumn>
         <column name="attribute_code">

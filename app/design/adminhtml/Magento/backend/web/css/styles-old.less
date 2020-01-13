@@ -3958,11 +3958,28 @@
         .grid tr.headings th > span {
             white-space: normal;
         }
+        
+        .field {
+            &.field-subscription {
+               .admin__field-label {
+                    margin-left: 10px;
+                    float: none;
+                    cursor: pointer;
+               } 
+                
+               .admin__field-control {
+                    float: left;
+                    width: auto;
+                    margin: 6px 0px 0px 0px;
+                }
+            }
+        }
     }
 }
 
 //  Configuration -> Payment Methods
-.adminhtml-system-config-edit {
+.adminhtml-system-config-edit,
+.adminhtml-system_config-edit {
     .admin__scope-old {
         .payflow-settings-notice {
             margin-top: 2rem;
@@ -4055,6 +4072,31 @@
         .col-added,
         .col-updated {
             width: 140px;
+        }
+    }
+}
+
+.newsletter-template-preview {
+    height: 100%;
+    .cms-revision-preview {
+        height: 100%;
+        .preview_iframe {
+            height: calc(~'100% - 50px');
+        }
+    }
+}
+
+.adminhtml-email_template-preview {
+    .cms-revision-preview {
+        padding-top: 56.25%;
+        position: relative;
+
+        #preview_iframe {
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
         }
     }
 }

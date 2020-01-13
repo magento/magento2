@@ -40,6 +40,8 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <actionGroup ref="GoToProductCatalogPage" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
             <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>

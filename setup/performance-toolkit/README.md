@@ -29,7 +29,7 @@ Splitting generation and indexation processes doesn't reduce total processing ti
     php bin/magento setup:performance:generate-fixtures -s setup/performance-toolkit/profiles/ce/small.xml
     php bin/magento indexer:reindex
 
-For more information about the available profiles and generating fixtures generation, read [Generate data for performance testing](https://devdocs.magento.com/guides/v2.2/config-guide/cli/config-cli-subcommands-perf-data.html).
+For more information about the available profiles and generating fixtures generation, read [Generate data for performance testing](https://devdocs.magento.com/guides/v2.3/config-guide/cli/config-cli-subcommands-perf-data.html).
 
 For run Admin Pool in multithreading mode, please be sure, that:
   - "Admin Account Sharing" is enabled

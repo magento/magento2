@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Adminhtml sales order create sidebar cart block
@@ -146,5 +147,32 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
         }
 
         return null;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 102.0.4
+     */
+    public function getItemCount()
+    {
+        $count = $this->getData('item_count');
+        if ($count === null) {
+            $useQty = $this->_scopeConfig->getValue(
+                'checkout/cart_link/use_qty',
+                ScopeInterface::SCOPE_STORE
+            );
+            $allItems = $this->getItems();
+            if ($useQty) {
+                $count = 0;
+                foreach ($allItems as $item) {
+                    $count += $item->getQty();
+                }
+            } else {
+                $count = count($allItems);
+            }
+            $this->setData('item_count', $count);
+        }
+
+        return $count;
     }
 }

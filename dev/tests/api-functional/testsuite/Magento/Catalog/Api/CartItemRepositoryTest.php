@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * Class \Magento\Catalog\Api\CartItemRepositoryTest
+ */
 class CartItemRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'quoteCartItemRepositoryV1';
@@ -62,7 +67,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'sku' => $item->getSku(),
                 'qty' => $item->getQty(),
                 'name' => $item->getName(),
-                
+                'price' => $item->getPrice(),
                 'product_type' => $item->getProductType(),
                 'quote_id' => $item->getQuoteId(),
                 'product_option' => [

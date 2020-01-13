@@ -276,7 +276,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                     } else {
                         $setterValue = $this->convertValue($value, $returnType);
                     }
-                // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (SerializationException $e) {
                     throw new SerializationException(
                         new Phrase(
@@ -325,7 +324,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             ) {
                 try {
                     $attributeValue = $this->convertValue($customAttributeValue, $type);
-                // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (SerializationException $e) {
                     throw new SerializationException(
                         new Phrase(

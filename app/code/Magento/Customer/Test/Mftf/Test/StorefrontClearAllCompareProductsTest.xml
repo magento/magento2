@@ -118,6 +118,7 @@
             <deleteData createDataKey="createSimpleCategory1" stepKey="deleteSimpleCategory1"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
             <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
             <deleteData createDataKey="createVirtualProduct1" stepKey="deleteVirtualProduct1"/>
             <deleteData createDataKey="createBundleProduct1" stepKey="deleteBundleProduct1"/>

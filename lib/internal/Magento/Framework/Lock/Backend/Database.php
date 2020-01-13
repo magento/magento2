@@ -76,7 +76,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         if (!$this->deploymentConfig->isDbAvailable()) {
             return true;
-        };
+        }
         $name = $this->addPrefix($name);
 
         /**
@@ -117,7 +117,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         if (!$this->deploymentConfig->isDbAvailable()) {
             return true;
-        };
+        }
 
         $name = $this->addPrefix($name);
 
@@ -145,7 +145,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         if (!$this->deploymentConfig->isDbAvailable()) {
             return false;
-        };
+        }
 
         $name = $this->addPrefix($name);
 

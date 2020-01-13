@@ -445,8 +445,8 @@ define([
          */
         loadShippingRates: function () {
             var addressContainer = this.shippingAsBilling ?
-                    'billingAddressContainer' :
-                    'shippingAddressContainer',
+                'billingAddressContainer' :
+                'shippingAddressContainer',
                 data = this.serializeData(this[addressContainer]).toObject();
 
             data['collect_shipping_rates'] = 1;
@@ -793,6 +793,20 @@ define([
                 this.gridProducts.unset(element.value);
             }
             grid.reloadParams = {'products[]':this.gridProducts.keys()};
+        },
+
+        productGridFilterKeyPress: function (grid, event) {
+            var returnKey = parseInt(Event.KEY_RETURN || 13, 10);
+
+            if (event.keyCode === returnKey) {
+                if (typeof event.stopPropagation === 'function') {
+                    event.stopPropagation();
+                }
+
+                if (typeof event.preventDefault === 'function') {
+                    event.preventDefault();
+                }
+            }
         },
 
         /**

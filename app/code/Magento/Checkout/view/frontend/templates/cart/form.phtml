@@ -52,15 +52,15 @@
         <?php if ($block->getContinueShoppingUrl()) :?>
             <a class="action continue"
                href="<?= $block->escapeUrl($block->getContinueShoppingUrl()) ?>"
-               title="<?= $block->escapeHtml(__('Continue Shopping')) ?>">
+               title="<?= $block->escapeHtmlAttr(__('Continue Shopping')) ?>">
                 <span><?= $block->escapeHtml(__('Continue Shopping')) ?></span>
             </a>
         <?php endif; ?>
-        <button type="submit"
+        <button type="button"
                 name="update_cart_action"
                 data-cart-empty=""
                 value="empty_cart"
-                title="<?= $block->escapeHtml(__('Clear Shopping Cart')) ?>"
+                title="<?= $block->escapeHtmlAttr(__('Clear Shopping Cart')) ?>"
                 class="action clear" id="empty_cart_button">
             <span><?= $block->escapeHtml(__('Clear Shopping Cart')) ?></span>
         </button>
@@ -68,7 +68,7 @@
                 name="update_cart_action"
                 data-cart-item-update=""
                 value="update_qty"
-                title="<?= $block->escapeHtml(__('Update Shopping Cart')) ?>"
+                title="<?= $block->escapeHtmlAttr(__('Update Shopping Cart')) ?>"
                 class="action update">
             <span><?= $block->escapeHtml(__('Update Shopping Cart')) ?></span>
         </button>

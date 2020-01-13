@@ -24,5 +24,6 @@
         <element name="productSuccessShareMessage" type="text" selector="div.message-success"/>
         <element name="pager" type="block" selector=".toolbar .pager"/>
         <element name="wishlistEmpty" type="block" selector=".form-wishlist-items .message.info.empty"/>
+        <element name="removeProduct" type="button" selector=".products-grid a.btn-remove" timeout="30"/>
     </section>
 </sections>

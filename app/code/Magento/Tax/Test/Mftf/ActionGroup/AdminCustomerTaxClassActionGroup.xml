@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Add Customer Tax Class-->
     <actionGroup name="addCustomerTaxClass">
+        <annotations>
+            <description>Adds the provided Customer Tax Class on the Admin Tax Rule creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="customerTaxClassName" type="string"/>
         </arguments>
+        
         <!--Click Additional Settings-->
         <click stepKey="clickAdditionalSettings" selector="{{AdminTaxRulesSection.additionalSettings}}"/>
         <!--Click Product Add New Tax Class Button-->
@@ -25,9 +29,13 @@
 
     <!--Delete Product Tax Class-->
     <actionGroup name="deleteCustomerTaxClass">
+        <annotations>
+            <description>Goes to the Admin New Tax Rule page. Deletes the provided Tax Class Name.</description>
+        </annotations>
         <arguments>
             <argument name="taxClassName" type="string"/>
         </arguments>
+        
         <!-- Go to tax rule page -->
         <amOnPage url="{{AdminNewTaxRulePage.url}}" stepKey="goToNewTaxRulePage"/>
         <waitForPageLoad stepKey="waitForTaxRatePage"/>

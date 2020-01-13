@@ -9,7 +9,7 @@ namespace Magento\Framework\Controller\Test\Unit\Router\Route;
 use \Magento\Framework\Controller\Router\Route\Factory;
 
 use Magento\Framework\Controller\Router\Route\Factory as RouteFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {

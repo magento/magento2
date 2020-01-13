@@ -23,7 +23,6 @@ use Magento\Framework\AuthorizationInterface;
  * Data provider for categories field of product page
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 101.0.0
  */
@@ -120,7 +119,7 @@ class Categories extends AbstractModifier
      * @return CacheInterface
      * @deprecated 101.0.3
      */
-    private function getCacheManager()
+    private function getCacheManager(): CacheInterface
     {
         if (!$this->cacheManager) {
             $this->cacheManager = ObjectManager::getInstance()
@@ -148,9 +147,9 @@ class Categories extends AbstractModifier
      *
      * @return bool
      */
-    private function isAllowed()
+    private function isAllowed(): bool
     {
-        return $this->authorization->isAllowed('Magento_Catalog::categories');
+        return (bool) $this->authorization->isAllowed('Magento_Catalog::categories');
     }
 
     /**
@@ -234,6 +233,7 @@ class Categories extends AbstractModifier
         $fieldCode = 'category_ids';
         $elementPath = $this->arrayManager->findPath($fieldCode, $meta, null, 'children');
         $containerPath = $this->arrayManager->findPath(static::CONTAINER_PREFIX . $fieldCode, $meta, null, 'children');
+        $fieldIsDisabled = $this->locator->getProduct()->isLockedAttribute($fieldCode);
 
         if (!$elementPath) {
             return $meta;
@@ -243,13 +243,13 @@ class Categories extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'label' => __('Categories'),
+                        'label' => false,
+                        'required' => false,
                         'dataScope' => '',
                         'breakLine' => false,
                         'formElement' => 'container',
                         'componentType' => 'container',
                         'component' => 'Magento_Ui/js/form/components/group',
-                        'scopeLabel' => __('[GLOBAL]'),
                         'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
                     ],
                 ],
@@ -266,6 +266,7 @@ class Categories extends AbstractModifier
                                 'chipsEnabled' => true,
                                 'disableLabel' => true,
                                 'levelsVisibility' => '1',
+                                'disabled' => $fieldIsDisabled,
                                 'elementTmpl' => 'ui/grid/filters/elements/ui-select',
                                 'options' => $this->getCategoriesTree(),
                                 'listens' => [
@@ -291,6 +292,7 @@ class Categories extends AbstractModifier
                             'formElement' => 'container',
                             'additionalClasses' => 'admin__field-small',
                             'componentType' => 'container',
+                            'disabled' => $fieldIsDisabled,
                             'component' => 'Magento_Ui/js/form/components/button',
                             'template' => 'ui/form/components/button/container',
                             'actions' => [
@@ -320,11 +322,7 @@ class Categories extends AbstractModifier
                 ]
             ];
         }
-        $meta = $this->arrayManager->merge(
-            $containerPath,
-            $meta,
-            $value
-        );
+        $meta = $this->arrayManager->merge($containerPath, $meta, $value);
 
         return $meta;
     }

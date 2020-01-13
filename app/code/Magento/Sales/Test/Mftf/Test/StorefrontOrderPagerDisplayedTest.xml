@@ -17,6 +17,9 @@
             <testCaseId value="MC-16167"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-29942"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -129,7 +132,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="scrollToLimiter"/>
-        <selectOption userInput="30" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="selectLimitOnPage"/>
+        <selectOption userInput="36" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="selectLimitOnPage"/>
         <waitForPageLoad stepKey="waitForLoadProducts"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
 

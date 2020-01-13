@@ -11,7 +11,7 @@ use Magento\Framework\Api\SearchResultsInterface;
  * Retrieve and set list of case entities.
  *
  * @api
- * @since 100.2.1
+ * @since 100.2.0
  */
 interface CaseSearchResultsInterface extends SearchResultsInterface
 {
@@ -19,7 +19,7 @@ interface CaseSearchResultsInterface extends SearchResultsInterface
      * Gets collection of case entities.
      *
      * @return \Magento\Signifyd\Api\Data\CaseInterface[]
-     * @since 100.2.1
+     * @since 100.2.0
      */
     public function getItems();
 
@@ -28,7 +28,7 @@ interface CaseSearchResultsInterface extends SearchResultsInterface
      *
      * @param \Magento\Signifyd\Api\Data\CaseInterface[] $items
      * @return $this
-     * @since 100.2.1
+     * @since 100.2.0
      */
     public function setItems(array $items);
 }

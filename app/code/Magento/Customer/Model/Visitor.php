@@ -265,7 +265,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Create binding of checkout quote
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return  \Magento\Customer\Model\Visitor
+     * @return \Magento\Customer\Model\Visitor
      */
     public function bindQuoteCreate($observer)
     {
@@ -283,7 +283,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Destroy binding of checkout quote
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return  \Magento\Customer\Model\Visitor
+     * @return \Magento\Customer\Model\Visitor
      */
     public function bindQuoteDestroy($observer)
     {

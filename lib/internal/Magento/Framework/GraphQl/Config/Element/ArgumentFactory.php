@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQl\Config\Element;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ArgumentFactory
 {
@@ -51,7 +51,8 @@ class ArgumentFactory
                 'isList' => isset($argumentData['itemType']),
                 'itemType' => isset($argumentData['itemType']) ? $argumentData['itemType'] : '',
                 'itemsRequired' => isset($argumentData['itemsRequired']) ? $argumentData['itemsRequired'] : false,
-                'defaultValue' => isset($argumentData['defaultValue']) ? $argumentData['defaultValue'] : null
+                'defaultValue' => isset($argumentData['defaultValue']) ? $argumentData['defaultValue'] : null,
+                'deprecated' => isset($argumentData['deprecated']) ? $argumentData['deprecated'] : [],
             ]
         );
     }

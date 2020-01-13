@@ -41,9 +41,11 @@
                 <label>Recently Viewed/Compared Products</label>
                 <field id="recently_viewed_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lifetime of products in Recently Viewed Widget</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="recently_compared_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lifetime of products in Recently Compared Widget</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="synchronize_with_backend" translate="label" type="select" showInDefault="1" canRestore="1">
                     <label>Synchronize widget products with backend storage</label>
@@ -140,6 +142,7 @@
                 <label>Category Top Navigation</label>
                 <field id="max_depth" translate="label" type="text" sortOrder="1" showInDefault="1" canRestore="1">
                     <label>Maximal Depth</label>
+                    <validate>validate-digits validate-zero-or-greater</validate>
                 </field>
             </group>
             <group id="custom_options" translate="label" type="text" sortOrder="700" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -158,6 +161,7 @@
                 </field>
                 <field id="year_range" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Year Range</label>
+                    <validate>validate-digits validate-zero-or-greater validate-number-range number-range-1000-9999</validate>
                     <comment>Please use a four-digit year format.</comment>
                     <frontend_model>Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\YearRange</frontend_model>
                 </field>

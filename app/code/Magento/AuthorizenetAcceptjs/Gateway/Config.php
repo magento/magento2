@@ -13,6 +13,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Houses configuration for this gateway
+ *
+ * @deprecated 100.3.3 Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
@@ -32,19 +35,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
     private const SOLUTION_ID_SANDBOX = 'AAA102993';
     private const SOLUTION_ID_PRODUCTION = 'AAA175350';
-
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param null|string $methodCode
-     * @param string $pathPattern
-     */
-    public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        $methodCode = null,
-        $pathPattern = self::DEFAULT_PATH_PATTERN
-    ) {
-        parent::__construct($scopeConfig, $methodCode, $pathPattern);
-    }
 
     /**
      * Gets the login id

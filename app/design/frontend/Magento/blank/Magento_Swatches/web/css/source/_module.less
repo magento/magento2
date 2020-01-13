@@ -120,7 +120,7 @@
                     &.selected {
                         .lib-css(background, @attr-swatch-option__selected__background);
                         .lib-css(border, @attr-swatch-option__selected__border);
-                        .lib-css(color, @attr-swatch-option__selected__color);  
+                        .lib-css(color, @attr-swatch-option__selected__color);
                     }
                 }
             }
@@ -180,7 +180,9 @@
             }
 
             &.disabled {
+                box-shadow: unset;
                 cursor: default;
+                pointer-events: none;
 
                 &:after {
                     //  ToDo: improve .lib-background-gradient() to support diagonal gradient

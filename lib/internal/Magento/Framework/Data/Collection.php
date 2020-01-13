@@ -260,7 +260,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if (0 === $collectionSize) {
             return 1;
         } elseif ($this->_pageSize) {
-            return ceil($collectionSize / $this->_pageSize);
+            return (int)ceil($collectionSize / $this->_pageSize);
         } else {
             return 1;
         }
@@ -539,7 +539,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
             }
         }
     }
-    
+
     /**
      * Setting data for all collection items
      *

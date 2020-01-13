@@ -170,7 +170,7 @@ switch ($type = $block->getType()) {
                 <?php if ($type == 'related' && $canItemsAddToCart) :?>
                     <div class="block-actions">
                         <?= $block->escapeHtml(__('Check items to add to the cart or')) ?>
-                        <button type="button" class="action select" role="button"><span><?= $block->escapeHtml(__('select all')) ?></span></button>
+                        <button type="button" class="action select" data-role="select-all"><span><?= $block->escapeHtml(__('select all')) ?></span></button>
                     </div>
                 <?php endif; ?>
                 <div class="products wrapper grid products-grid products-<?= $block->escapeHtmlAttr($type) ?>">
@@ -193,7 +193,7 @@ switch ($type = $block->getType()) {
                                     <?= $block->getImage($_item, $image)->toHtml() ?>
                                 </a>
                                 <div class="product details product-item-details">
-                                    <strong class="product name product-item-name"><a class="product-item-link" title="<?= $block->escapeHtml($_item->getName()) ?>" href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
+                                    <strong class="product name product-item-name"><a class="product-item-link" title="<?= $block->escapeHtmlAttr($_item->getName()) ?>" href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
                                             <?= $block->escapeHtml($_item->getName()) ?></a>
                                     </strong>
 

@@ -21,7 +21,7 @@ if ($block->getIsInCatalogProduct()) {
     $isInCatalogProduct = $block->getIsInCatalogProduct();
 }
 ?>
-<div data-label="<?= $block->escapeHtml(__('or')) ?>"
+<div data-label="<?= $block->escapeHtmlAttr(__('or')) ?>"
      class="paypal checkout <?= /* @noEscape */ $labelPosition ?> paypal-logo
         <?= /* @noEscape */ $shortcutHtmlId ?>"
      data-mage-init='{
@@ -34,12 +34,12 @@ if ($block->getIsInCatalogProduct()) {
     <input type="image" data-action="checkout-form-submit"
            data-checkout-url="<?= $block->escapeUrl($block->getCheckoutUrl()) ?>"
            src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
-           alt="<?= $block->escapeHtml(__('Checkout with PayPal')) ?>"
-           title="<?= $block->escapeHtml(__('Checkout with PayPal')) ?>"/>
+           alt="<?= $block->escapeHtmlAttr(__('Checkout with PayPal')) ?>"
+           title="<?= $block->escapeHtmlAttr(__('Checkout with PayPal')) ?>"/>
     <?php if ($block->getAdditionalLinkImage()) : ?>
         <?php $linkImage = $block->getAdditionalLinkImage(); ?>
         <a href="<?= $block->escapeUrl($linkImage['href']) ?>">
-            <img src="<?= $block->escapeHtml($linkImage['src']) ?>" />
+            <img src="<?= $block->escapeUrl($linkImage['src']) ?>" />
         </a>
     <?php endif; ?>
 </div>

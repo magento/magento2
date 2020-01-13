@@ -197,7 +197,7 @@ class Attribute extends AbstractDb
      * @param AbstractModel $attribute
      * @return AbstractDb
      * @throws CouldNotDeleteException
-     * @since 102.0.3
+     * @since 102.0.2
      */
     protected function _beforeDelete(AbstractModel $attribute)
     {
@@ -477,6 +477,7 @@ class Attribute extends AbstractDb
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {
                 $connection->delete($table, ['option_id = ?' => $intOptionId]);
+                $this->clearSelectedOptionInEntities($object, $intOptionId);
             }
             return false;
         }
@@ -493,6 +494,41 @@ class Attribute extends AbstractDb
         }
 
         return $intOptionId;
+    }
+
+    /**
+     * Clear selected option in entities
+     *
+     * @param EntityAttribute|AbstractModel $object
+     * @param int $optionId
+     * @return void
+     */
+    private function clearSelectedOptionInEntities(AbstractModel $object, int $optionId)
+    {
+        $backendTable = $object->getBackendTable();
+        $attributeId = $object->getAttributeId();
+        if (!$backendTable || !$attributeId) {
+            return;
+        }
+
+        $connection = $this->getConnection();
+        $where = $connection->quoteInto('attribute_id = ?', $attributeId);
+        $update = [];
+
+        if ($object->getBackendType() === 'varchar') {
+            $where.= ' AND ' . $connection->prepareSqlCondition('value', ['finset' => $optionId]);
+            $concat = $connection->getConcatSql(["','", 'value', "','"]);
+            $expr = $connection->quoteInto(
+                "TRIM(BOTH ',' FROM REPLACE($concat,',?,',','))",
+                $optionId
+            );
+            $update['value'] = new \Zend_Db_Expr($expr);
+        } else {
+            $where.= $connection->quoteInto(' AND value = ?', $optionId);
+            $update['value'] = null;
+        }
+
+        $connection->update($backendTable, $update, $where);
     }
 
     /**

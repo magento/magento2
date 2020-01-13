@@ -15,7 +15,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
  * First, second and third level comments should have two spaces after "//".
  * Inline comments should have one space after "//".
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#comments
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#comments
  */
 class CommentLevelsSniff implements Sniff
 {

@@ -10,13 +10,16 @@ use Zend\Mime\Part;
 
 /**
  * Class Message for email transportation
+ *
+ * @deprecated 102.0.4
+ * @see \Magento\Framework\Mail\EmailMessage
  */
 class Message implements MailMessageInterface
 {
     /**
      * @var \Zend\Mail\Message
      */
-    private $zendMessage;
+    protected $zendMessage;
 
     /**
      * Message type

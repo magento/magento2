@@ -267,7 +267,7 @@
     </type>
     <virtualType name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\ConnectionManager" type="Magento\Elasticsearch\SearchAdapter\ConnectionManager">
         <arguments>
-            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory</argument>
+            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy</argument>
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </virtualType>
@@ -555,6 +555,13 @@
             <argument name="preprocessors" xsi:type="array">
                 <item name="stopwordsPreprocessor" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords</item>
                 <item name="synonymsPreprocessor" xsi:type="object">Magento\Search\Adapter\Query\Preprocessor\Synonyms</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField">
+        <arguments>
+            <argument name="excludedAttributes" xsi:type="array">
+                <item name="price" xsi:type="string">price</item>
             </argument>
         </arguments>
     </type>

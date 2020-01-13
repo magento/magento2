@@ -36,7 +36,7 @@ if (!$attribute->getId()) {
             'is_unique' => 0,
             'is_required' => 0,
             'is_searchable' => 1,
-            'is_visible_in_advanced_search' => 0,
+            'is_visible_in_advanced_search' => 1,
             'is_comparable' => 1,
             'is_filterable' => 1,
             'is_filterable_in_search' => 1,
