@@ -10,6 +10,7 @@ namespace Magento\Framework\Setup\Patch;
  * The interface should be used for migration from the legacy installation approach to the declarative installation
  * mechanism. The usage of this interface prohibited for the new data or schema patches.
  *
+ * @deprecated 102.0.0
  */
 interface PatchVersionInterface
 {
@@ -20,6 +21,7 @@ interface PatchVersionInterface
      * by old mechanism of UpgradeData.php script
      *
      * @return string
+     * @deprecated 102.0.0 since appearance, required for backward compatibility
      */
     public static function getVersion();
 }
