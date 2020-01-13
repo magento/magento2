@@ -20,6 +20,45 @@ define([
             selectElement = $(option);
 
     beforeEach(function () {
+        //remove this lines when jasmine version will be upgraded
+        if (!Array.prototype.find) {
+            Object.defineProperty(Array.prototype, 'find', {//eslint-disable-line
+                enumerable: false,
+                configurable: true,
+                writable: true,
+
+                /**
+                 * Find method
+                 */
+                value: function (predicate) {
+                    var list = Object(this),
+                        length = list.length >>> 0,
+                        thisArg = arguments[1],
+                        value,
+                        i;
+
+                    if (this == null) {
+                        throw new TypeError('Array.prototype.find called on null or undefined');
+                    }
+
+                    if (typeof predicate !== 'function') {
+                        throw new TypeError('predicate must be a function');
+                    }
+
+                    for (i = 0; i < length; i++) {
+                        if (i in list) {
+                            value = list[i];
+
+                            if (predicate.call(thisArg, value, i, list)) {//eslint-disable-line
+                                return value;
+                            }
+                        }
+                    }
+
+                    return undefined;
+                }
+            });
+        }
         widget = new Configurable();
         widget.options = {
             spConfig: {
@@ -27,7 +66,17 @@ define([
                 attributes:
                 {
                     'size': {
-                        options: $('<div><p class="2"></p></div>')
+                        options: [
+                            {
+                                id: '2',
+                                value: '2'
+                            },
+                            {
+                                id: 3,
+                                value: 'red'
+
+                            }
+                        ]
                     }
                 },
                 prices: {
@@ -45,16 +94,15 @@ define([
 
         it('check if attribute value is possible to be set as configurable option', function () {
             expect($.mage.configurable).toBeDefined();
-            widget._parseQueryParams('http://magento.com/product?color=red&size=2');
+            widget._parseQueryParams('size=2');
             expect(widget.options.values.size).toBe('2');
         });
 
-        it('check if attribute value is possible to be set as option with "please select option"', function () {
+        it('check that attribute value is not set id provided option does not exists', function () {
             expect($.mage.configurable).toBeDefined();
+            widget._parseQueryParams('size=10');
             widget._fillSelect(selectElement[0]);
-            expect(selectElement[0].options[0].innerHTML).toBe(widget.options.spConfig.chooseText);
-            widget._parseQueryParams('http://magento.com/product?color=red&size=2');
-            expect(widget.options.values.size).toBe('2');
+            expect(widget.options.values.size).toBe(undefined);
         });
     });
 });
