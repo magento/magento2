@@ -336,6 +336,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
                 'getSku',
                 'setStoreId',
                 'getStoreId',
+                'getVisibility'
             ]
         );
         $product
@@ -349,10 +350,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
                 $newSku[0]['entity_id'],
                 $newSku[0]['entity_id'],
                 $newSku[0]['entity_id'],
-                $newSku[0]['entity_id'],
-                $newSku[1]['entity_id'],
-                $newSku[1]['entity_id'],
-                $newSku[1]['entity_id']
+                $newSku[0]['entity_id']
             );
         $product
             ->expects($this->exactly($productsCount))
@@ -379,6 +377,9 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
                 [$this->products[0][ImportProduct::COL_STORE]],
                 [$this->products[1][ImportProduct::COL_STORE]]
             );
+        $product->expects($this->at(4))
+            ->method('getVisibility')
+            ->willReturn(1);
         $this->catalogProductFactory
             ->expects($this->exactly($productsCount))
             ->method('create')
@@ -407,7 +408,6 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
 
         $productUrls = [
             'requestPath_0' => $this->urlRewrite,
-            'requestPath_not global' => $this->urlRewrite
         ];
 
         $this->urlPersist
