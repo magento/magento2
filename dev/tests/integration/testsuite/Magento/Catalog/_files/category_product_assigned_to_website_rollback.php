@@ -33,10 +33,9 @@ try {
 }
 
 $category = $getCategoryByName->execute('Category with product');
-try {
-    $categoryRepository->deleteByIdentifier($category->getId());
-} catch (NoSuchEntityException $e) {
-    // category already deleted
+
+if ($category->getId()) {
+    $categoryRepository->delete($category);
 }
 
 $registry->unregister('isSecureArea');

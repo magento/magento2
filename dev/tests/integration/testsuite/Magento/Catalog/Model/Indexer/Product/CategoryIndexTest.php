@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
@@ -28,8 +29,6 @@ use Magento\TestFramework\Indexer\TestCase;
  */
 class CategoryIndexTest extends TestCase
 {
-    private const DEFAULT_CATEGORY_ID = 2;
-
     /** @var ObjectManagerInterface */
     private $objectManager;
 
@@ -91,7 +90,7 @@ class CategoryIndexTest extends TestCase
         $category = $this->getCategoryByName->execute($categoryName);
         $product->setCategoryIds(array_merge($product->getCategoryIds(), [$category->getId()]));
         $this->productResource->save($product);
-        $result = $this->fetchIndexTableRecordsCount((int)$product->getId());
+        $result = $this->getIndexRecordsByProductId((int)$product->getId());
         $this->assertEquals($expectedItemsCount, $result);
     }
 
@@ -129,7 +128,7 @@ class CategoryIndexTest extends TestCase
         $data = ['posted_products' => [$product->getId() => 0]];
         $category->addData($data);
         $this->categoryResource->save($category);
-        $result = $this->fetchIndexTableRecordsCount((int)$product->getId());
+        $result = $this->getIndexRecordsByProductId((int)$product->getId());
         $this->assertEquals($expectedCount, $result);
     }
 
@@ -163,7 +162,7 @@ class CategoryIndexTest extends TestCase
         $newParentCategory = $this->getCategoryByName->execute('Parent category');
         $afterCategory = $this->getCategoryByName->execute('Child category');
         $category->move($newParentCategory->getId(), $afterCategory->getId());
-        $result = $this->fetchIndexTableRecordsCount((int)$product->getId());
+        $result = $this->getIndexRecordsByProductId((int)$product->getId());
         $this->assertEquals(2, $result);
     }
 
@@ -176,7 +175,7 @@ class CategoryIndexTest extends TestCase
     {
         $product = $this->productRepository->get('product_with_category');
         $this->productRepository->delete($product);
-        $result = $this->fetchIndexTableRecordsCount((int)$product->getId());
+        $result = $this->getIndexRecordsByProductId((int)$product->getId());
         $this->assertEmpty($result);
     }
 
@@ -186,13 +185,13 @@ class CategoryIndexTest extends TestCase
      * @param int $productId
      * @return int
      */
-    private function fetchIndexTableRecordsCount(int $productId): int
+    private function getIndexRecordsByProductId(int $productId): int
     {
         $tableName = $this->tableMaintainer->getMainTable((int)$this->storeManager->getStore()->getId());
         $select = $this->connection->select();
         $select->from(['index_table' => $tableName], new \Zend_Db_Expr('COUNT(*)'))
             ->where('index_table.product_id = ?', $productId)
-            ->where('index_table.category_id != ?', self::DEFAULT_CATEGORY_ID);
+            ->where('index_table.category_id != ?', DefaultCategory::getId());
 
         return (int)$this->connection->fetchOne($select);
     }

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Save;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\App\Request\Http;
@@ -26,8 +27,6 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class CategoryIndexTest extends AbstractBackendController
 {
-    private const DEFAULT_CATEGORY_ID = 2;
-
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
@@ -63,9 +62,9 @@ class CategoryIndexTest extends AbstractBackendController
     public function testUnassignCategory(): void
     {
         $postData = $this->preparePostData();
-        $this->dispatchRequestWithData($postData);
+        $this->dispatchSaveProductRequest($postData);
         $this->assertSessionMessages($this->equalTo(['You saved the product.']), MessageInterface::TYPE_SUCCESS);
-        $this->assertEmpty($this->fetchDataFromIndexTable());
+        $this->assertEmpty($this->fetchIndexData());
     }
 
     /**
@@ -77,10 +76,9 @@ class CategoryIndexTest extends AbstractBackendController
     public function testReassignCategory(): void
     {
         $postData = $this->preparePostData(333);
-        $this->dispatchRequestWithData($postData);
-        $this->assertSessionMessages($this->equalTo(['You saved the product.']), MessageInterface::TYPE_SUCCESS);
-        $result = $this->fetchDataFromIndexTable();
-        $this->assertEmpty($result);
+        $this->dispatchSaveProductRequest($postData);
+        $result = $this->fetchIndexData();
+        $this->assertNotEmpty($result);
         $this->assertEquals(333, reset($result)['category_id']);
     }
 
@@ -90,11 +88,12 @@ class CategoryIndexTest extends AbstractBackendController
      * @param array $postData
      * @return void
      */
-    private function dispatchRequestWithData(array $postData): void
+    private function dispatchSaveProductRequest(array $postData): void
     {
         $this->getRequest()->setPostValue($postData);
         $this->getRequest()->setMethod(Http::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $this->product->getEntityId());
+        $this->assertSessionMessages($this->equalTo(['You saved the product.']), MessageInterface::TYPE_SUCCESS);
     }
 
     /**
@@ -120,13 +119,13 @@ class CategoryIndexTest extends AbstractBackendController
      *
      * @return array
      */
-    private function fetchDataFromIndexTable(): array
+    private function fetchIndexData(): array
     {
         $tableName = $this->tableMaintainer->getMainTable(Store::DISTRO_STORE_ID);
         $select = $this->connection->select();
         $select->from(['index_table' => $tableName], 'index_table.category_id')
             ->where('index_table.product_id = ?', $this->product->getId())
-            ->where('index_table.category_id != ?', self::DEFAULT_CATEGORY_ID);
+            ->where('index_table.category_id != ?', DefaultCategory::getId());
 
         return $this->connection->fetchAll($select);
     }

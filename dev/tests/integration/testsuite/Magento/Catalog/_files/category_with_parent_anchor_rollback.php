@@ -8,7 +8,6 @@ declare(strict_types=1);
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -31,12 +30,8 @@ $categoryCollection->addAttributeToFilter(
     ['in' => ['Parent category', 'Child category']]
 );
 
-try {
-    foreach ($categoryCollection as $category) {
-        $categoryRepository->deleteByIdentifier($category->getId());
-    }
-} catch (NoSuchEntityException $e) {
-    // category already deleted
+foreach ($categoryCollection as $category) {
+    $categoryRepository->delete($category);
 }
 
 $registry->unregister('isSecureArea');
