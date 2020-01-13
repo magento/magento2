@@ -117,8 +117,15 @@ class VsCode implements FormatInterface
      */
     private function initEmptyFile(\DOMDocument $dom): \DOMElement
     {
-        $catalogNode = $dom->createElement('catalog');
+        $copyrigthComment = $dom->createComment('
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+');
+        $dom->appendChild($copyrigthComment);
 
+        $catalogNode = $dom->createElement('catalog');
         $catalogNode->setAttribute('xmlns', self::XMLNS);
         $dom->appendChild($catalogNode);
 
