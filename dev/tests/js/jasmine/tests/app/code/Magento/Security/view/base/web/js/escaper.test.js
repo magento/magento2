@@ -97,6 +97,11 @@ define([
                 expected: 'Only <span><b>2</b></span> in stock ',
                 allowedTags: ['span', 'b']
             },
+            'text with multiple comments': {
+                data: 'Only <span><b>2</b></span> <!-- HTML COMMENT -->in stock <!-- HTML COMMENT -->',
+                expected: 'Only <span><b>2</b></span> in stock ',
+                allowedTags: ['span', 'b']
+            },
             'text with multi-line html comment': {
                 data: 'Only <span><b>2</b></span> in stock <!-- --!\n\n><img src=#>-->',
                 expected: 'Only <span><b>2</b></span> in stock ',

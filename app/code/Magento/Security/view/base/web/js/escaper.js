@@ -85,11 +85,16 @@ define([], function () {
                         return NodeFilter.FILTER_ACCEPT;
                     },
                     false
-                );
+                ),
+                nodesToRemove = [];
 
             while (treeWalker.nextNode()) {
-                treeWalker.currentNode.parentNode.removeChild(treeWalker.currentNode);
+                nodesToRemove.push(treeWalker.currentNode);
             }
+
+            nodesToRemove.forEach(function (nodeToRemove) {
+                nodeToRemove.parentNode.removeChild(nodeToRemove);
+            });
         },
 
         /**
