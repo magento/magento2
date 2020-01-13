@@ -140,7 +140,7 @@ define([
 
             $.each(queryParams, $.proxy(function (key, value) {
                 if (this.options.spConfig.attributes[key] !== undefined &&
-                    this.options.spConfig.attributes[key].options.find(function (element) {
+                    _.find(this.options.spConfig.attributes[key].options, function (element) {
                         return element.id === value;
                     })) {
                     this.options.values[key] = value;
@@ -162,7 +162,7 @@ define([
                     attributeId = element.id.replace(/[a-z]*/, '');
 
                     if (this.options.spConfig.attributes[attributeId] !== undefined &&
-                        this.options.spConfig.attributes[attributeId].options.find(function (optionElement) {
+                        _.find(this.options.spConfig.attributes[attributeId].options, function (optionElement) {
                             return optionElement.id === element.value;
                         })) {
                         this.options.values[attributeId] = element.value;
