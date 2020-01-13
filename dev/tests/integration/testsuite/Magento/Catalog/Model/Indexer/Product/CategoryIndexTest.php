@@ -26,6 +26,7 @@ use Magento\TestFramework\Indexer\TestCase;
  * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryIndexTest extends TestCase
 {
@@ -56,6 +57,9 @@ class CategoryIndexTest extends TestCase
     /** @var GetCategoryByName */
     private $getCategoryByName;
 
+    /** @var DefaultCategory */
+    private $defaultCategoryHelper;
+
     /**
      * @inheritdoc
      */
@@ -72,6 +76,7 @@ class CategoryIndexTest extends TestCase
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->categoryResource = $this->objectManager->get(CategoryResource::class);
         $this->getCategoryByName = $this->objectManager->create(GetCategoryByName::class);
+        $this->defaultCategoryHelper = $this->objectManager->get(DefaultCategory::class);
     }
 
     /**
@@ -191,7 +196,7 @@ class CategoryIndexTest extends TestCase
         $select = $this->connection->select();
         $select->from(['index_table' => $tableName], new \Zend_Db_Expr('COUNT(*)'))
             ->where('index_table.product_id = ?', $productId)
-            ->where('index_table.category_id != ?', DefaultCategory::getId());
+            ->where('index_table.category_id != ?', $this->defaultCategoryHelper->getId());
 
         return (int)$this->connection->fetchOne($select);
     }

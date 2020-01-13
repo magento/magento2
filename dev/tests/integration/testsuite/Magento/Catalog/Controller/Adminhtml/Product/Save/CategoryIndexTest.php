@@ -42,6 +42,8 @@ class CategoryIndexTest extends AbstractBackendController
     /** @var AdapterInterface */
     private $connection;
 
+    /** @var DefaultCategory */
+    private $defaultCategoryHelper;
     /**
      * @inheritdoc
      */
@@ -54,6 +56,7 @@ class CategoryIndexTest extends AbstractBackendController
         $this->tableMaintainer = $this->_objectManager->create(TableMaintainer::class);
         $this->productResource = $this->_objectManager->get(ProductResource::class);
         $this->connection = $this->productResource->getConnection();
+        $this->defaultCategoryHelper = $this->_objectManager->get(DefaultCategory::class);
     }
 
     /**
@@ -63,7 +66,6 @@ class CategoryIndexTest extends AbstractBackendController
     {
         $postData = $this->preparePostData();
         $this->dispatchSaveProductRequest($postData);
-        $this->assertSessionMessages($this->equalTo(['You saved the product.']), MessageInterface::TYPE_SUCCESS);
         $this->assertEmpty($this->fetchIndexData());
     }
 
@@ -125,7 +127,7 @@ class CategoryIndexTest extends AbstractBackendController
         $select = $this->connection->select();
         $select->from(['index_table' => $tableName], 'index_table.category_id')
             ->where('index_table.product_id = ?', $this->product->getId())
-            ->where('index_table.category_id != ?', DefaultCategory::getId());
+            ->where('index_table.category_id != ?', $this->defaultCategoryHelper->getId());
 
         return $this->connection->fetchAll($select);
     }
