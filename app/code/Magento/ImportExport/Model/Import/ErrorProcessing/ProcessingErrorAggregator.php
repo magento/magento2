@@ -237,7 +237,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function getAllErrors()
     {
-        if (empty($this->items)) {
+        if (empty($this->items) || empty($this->items['rows'])) {
             return [];
         }
 

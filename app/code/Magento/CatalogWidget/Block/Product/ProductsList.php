@@ -187,7 +187,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             'cache_lifetime' => 86400,
             'cache_tags' => [
                 Product::CACHE_TAG,
-            ], ]);
+            ],
+        ]);
     }
 
     /**
@@ -208,7 +209,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
-            (int) $this->getRequest()->getParam($this->getData('page_var_name'), 1),
+            (int)$this->getRequest()->getParam($this->getData('page_var_name'), 1),
             $this->getProductsPerPage(),
             $this->getProductsCount(),
             $conditions,
