@@ -58,7 +58,7 @@ class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
             [10, 20, 'once'],
             [null, 10, 'never'],
             [10, 10, 'never'],
-            [10, 10, 'once', true]
+            [10, 10, 'once', true],
         ];
     }
 }
