@@ -188,4 +188,14 @@ class History extends \Magento\Framework\View\Element\Template
     {
         return $this->getUrl('customer/account/');
     }
+
+    /**
+     * Get message for no orders.
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getEmptyOrdersMessage()
+    {
+        return __('You have placed no orders.');
+    }
 }

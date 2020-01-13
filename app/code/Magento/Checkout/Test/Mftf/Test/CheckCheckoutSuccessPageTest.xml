@@ -28,7 +28,7 @@
 
         <after>
             <!--Logout from customer account-->
-            <amOnPage url="customer/account/logout/" stepKey="logoutCustomerOne"/>
+            <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
             <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
