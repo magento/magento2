@@ -7,8 +7,7 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * @api
- * @since 102.0.3
- * @since 100.0.2
+ * @since 102.0.4
  */
 interface EnvelopeInterface
 {
@@ -16,7 +15,7 @@ interface EnvelopeInterface
      * Binary representation of message
      *
      * @return string
-     * @since 102.0.3
+     * @since 102.0.4
      */
     public function getBody();
 
@@ -24,7 +23,7 @@ interface EnvelopeInterface
      * Message metadata
      *
      * @return array
-     * @since 102.0.3
+     * @since 102.0.4
      */
     public function getProperties();
 }

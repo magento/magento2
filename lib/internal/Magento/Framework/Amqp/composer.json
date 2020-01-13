@@ -12,7 +12,7 @@
     "require": {
         "magento/framework": "102.0.*",
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "php-amqplib/php-amqplib": "~2.7.0"
+        "php-amqplib/php-amqplib": "~2.7.0|~2.10.0"
     },
     "autoload": {
         "psr-4": {
@@ -22,5 +22,5 @@
             "registration.php"
         ]
     },
-    "version": "100.3.3"
+    "version": "100.3.4"
 }

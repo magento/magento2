@@ -16,9 +16,9 @@
         "ext-gd": "*",
         "ext-hash": "*",
         "ext-iconv": "*",
+        "ext-intl": "*",
         "ext-openssl": "*",
         "ext-simplexml": "*",
-        "ext-spl": "*",
         "ext-xsl": "*",
         "ext-bcmath": "*",
         "lib-libxml": "*",
@@ -59,5 +59,5 @@
             "registration.php"
         ]
     },
-    "version": "102.0.3"
+    "version": "102.0.4"
 }

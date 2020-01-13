@@ -22,11 +22,11 @@
         "magento/module-sales": "102.0.*",
         "magento/module-ui": "101.1.*",
         "magento/module-vault": "101.1.*",
-        "magento/module-multishipping": "100.3.*"
+        "magento/module-multishipping": "100.3.*",
+        "magento/module-theme": "101.0.*"
     },
     "suggest": {
-        "magento/module-checkout-agreements": "100.3.*",
-        "magento/module-theme": "101.0.*"
+        "magento/module-checkout-agreements": "100.3.*"
     },
     "type": "magento2-module",
     "license": [
@@ -41,5 +41,5 @@
             "Magento\\Braintree\\": ""
         }
     },
-    "version": "100.3.3"
+    "version": "100.3.4"
 }

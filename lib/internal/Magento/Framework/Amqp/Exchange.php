@@ -18,7 +18,7 @@ use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
  * Class message exchange.
  *
  * @api
- * @since 102.0.3
+ * @since 102.0.4
  */
 class Exchange implements ExchangeInterface
 {
@@ -74,7 +74,7 @@ class Exchange implements ExchangeInterface
 
     /**
      * {@inheritdoc}
-     * @since 102.0.3
+     * @since 102.0.4
      */
     public function enqueue($topic, EnvelopeInterface $envelope)
     {

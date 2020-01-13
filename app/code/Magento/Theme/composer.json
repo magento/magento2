@@ -19,7 +19,6 @@
         "magento/module-widget": "101.1.*"
     },
     "suggest": {
-        "magento/module-translation": "100.3.*",
         "magento/module-theme-sample-data": "Sample Data version: 100.3.*",
         "magento/module-deploy": "100.3.*",
         "magento/module-directory": "100.3.*"
@@ -37,5 +36,5 @@
             "Magento\\Theme\\": ""
         }
     },
-    "version": "101.0.3"
+    "version": "101.0.4"
 }

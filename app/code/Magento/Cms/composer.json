@@ -15,8 +15,7 @@
         "magento/module-theme": "101.0.*",
         "magento/module-ui": "101.1.*",
         "magento/module-variable": "100.3.*",
-        "magento/module-widget": "101.1.*",
-        "magento/module-authorization": "100.3.*"
+        "magento/module-widget": "101.1.*"
     },
     "suggest": {
         "magento/module-cms-sample-data": "Sample Data version: 100.3.*"
@@ -34,5 +33,5 @@
             "Magento\\Cms\\": ""
         }
     },
-    "version": "103.0.3"
+    "version": "103.0.4"
 }

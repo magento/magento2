@@ -9,8 +9,7 @@ namespace Magento\Framework\MessageQueue;
  * Interface for interaction with message queue.
  *
  * @api
- * @since 102.0.3
- * @since 100.0.2
+ * @since 102.0.4
  */
 interface QueueInterface
 {
@@ -18,7 +17,7 @@ interface QueueInterface
      * Get message from queue
      *
      * @return EnvelopeInterface
-     * @since 102.0.3
+     * @since 102.0.4
      */
     public function dequeue();
 
@@ -27,7 +26,7 @@ interface QueueInterface
      *
      * @param EnvelopeInterface $envelope
      * @return void
-     * @since 102.0.3
+     * @since 102.0.4
      */
     public function acknowledge(EnvelopeInterface $envelope);
 
@@ -36,7 +35,7 @@ interface QueueInterface
      *
      * @param callable|array $callback
      * @return void
-     * @since 102.0.3
+     * @since 102.0.4
      */
     public function subscribe($callback);
 
@@ -47,7 +46,7 @@ interface QueueInterface
      * @param bool $requeue
      * @param string $rejectionMessage
      * @return void
-     * @since 102.0.3
+     * @since 102.0.4
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null);
 
@@ -56,7 +55,7 @@ interface QueueInterface
      *
      * @param EnvelopeInterface $envelope
      * @return void
-     * @since 102.0.3
+     * @since 102.0.4
      */
     public function push(EnvelopeInterface $envelope);
 }
