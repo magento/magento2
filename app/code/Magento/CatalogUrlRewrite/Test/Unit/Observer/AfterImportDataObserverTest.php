@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 
 /**
- * Class AfterImportDataObserverTest
+ * Verify after import data observer
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
