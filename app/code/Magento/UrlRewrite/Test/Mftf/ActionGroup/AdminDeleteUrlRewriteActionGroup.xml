@@ -18,18 +18,20 @@
 
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
         <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
-        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <click selector="{{AdminUrlRewriteIndexSection.editButton('1')}}" stepKey="clickOnEditButton"/>
+        <click selector="{{AdminUrlRewriteIndexSection.rowSelectAction('1')}}" stepKey="clickOnRowSelectButton"/>
+        <click selector="{{AdminUrlRewriteIndexSection.rowEditAction('1')}}" stepKey="clickOnEditButton"/>
         <waitForPageLoad stepKey="waitForEditPageToLoad"/>
         <click selector="{{AdminUrlRewriteEditSection.deleteButton}}" stepKey="clickOnDeleteButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
         <waitForElementVisible selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="waitForOkButtonToVisible"/>
         <click selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="clickOnOkButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
-        <see selector="{{AdminUrlRewriteIndexSection.successMessage}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

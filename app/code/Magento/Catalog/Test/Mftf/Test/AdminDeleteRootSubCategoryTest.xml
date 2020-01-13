@@ -83,8 +83,10 @@
         <!--Verify in Category is not in Url Rewrite grid-->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
         <waitForPageLoad stepKey="waitForUrlRewritePageTopLoad"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillRequestPath"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
-        <see selector="{{AdminUrlRewriteIndexSection.emptyRecordMessage}}" userInput="We couldn't find any records." stepKey="seeEmptyRow"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillRequestPath"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="seeEmptyRow"/>
     </test>
 </tests>

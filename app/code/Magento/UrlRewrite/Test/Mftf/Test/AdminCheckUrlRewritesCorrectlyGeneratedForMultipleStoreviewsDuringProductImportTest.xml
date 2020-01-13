@@ -91,35 +91,47 @@
         <grabFromCurrentUrl regex="~/id/(\d+)/~" stepKey="grabProductIdFromUrl"/>
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="goToUrlRewritesIndexPage"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-english.html" stepKey="inputCategoryUrlForENStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-english.html')}}" stepKey="seeUrlInRequestPathColumn"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-english.html" stepKey="inputCategoryUrlForENStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-english.html')}}" stepKey="seeUrlInRequestPathColumn"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-dutch.html" stepKey="inputCategoryUrlForNLStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-dutch.html')}}" stepKey="seeUrlInRequestPathColumn1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn1"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-dutch.html" stepKey="inputCategoryUrlForNLStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch.html')}}" stepKey="seeUrlInRequestPathColumn1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn1"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue('catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn2"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', 'catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn2"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView1"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton3"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn3"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue('catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn3"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters3"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView1"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters3"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', 'catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn3"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-english/productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView2"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton4"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-english/productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn4"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn4"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters4"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-english/productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView2"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters4"/>
+        <waitForPageLoad stepKey="waitForPageToLoad4"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-english/productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn4"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn4"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-dutch/productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView3"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton5"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters5"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-dutch/productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView3"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters5"/>
+        <waitForPageLoad stepKey="waitForPageToLoad5"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
     </test>
     <test name="AdminCheckUrlRewritesCorrectlyGeneratedForMultipleStoreviewsDuringProductImportTestWithConfigurationTurnedOff">
         <annotations>
@@ -218,29 +230,37 @@
         <grabFromCurrentUrl regex="~/id/(\d+)/~" stepKey="grabProductIdFromUrl"/>
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="goToUrlRewritesIndexPage"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-english.html" stepKey="inputCategoryUrlForENStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-english.html')}}" stepKey="seeUrlInRequestPathColumn"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-english.html" stepKey="inputCategoryUrlForENStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-english.html')}}" stepKey="seeUrlInRequestPathColumn"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-dutch.html" stepKey="inputCategoryUrlForNLStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-dutch.html')}}" stepKey="seeUrlInRequestPathColumn1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn1"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-dutch.html" stepKey="inputCategoryUrlForNLStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch.html')}}" stepKey="seeUrlInRequestPathColumn1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn1"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue('catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn2"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-english/productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn4"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn4"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', 'catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn2"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-english/productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn4"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn4"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView1"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton3"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn3"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue('catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn3"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters3"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView1"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters3"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', 'catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn3"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
 
         <!-- Switch StoreView -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>

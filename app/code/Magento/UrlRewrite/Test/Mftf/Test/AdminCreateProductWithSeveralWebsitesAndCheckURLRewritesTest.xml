@@ -95,8 +95,8 @@
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
         </actionGroup>
-        <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{customStoreGroup.name}}" stepKey="seeStoreValueForCategoryId"/>
-        <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{customStoreEN.name}}" stepKey="seeStoreViewValueForCategoryId"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}" userInput="{{customStoreGroup.name}}" stepKey="seeStoreValueForCategoryId"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}" userInput="{{customStoreEN.name}}" stepKey="seeStoreViewValueForCategoryId"/>
 
         <!-- Grab product Id -->
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="grabProductId">
@@ -109,7 +109,7 @@
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
-        <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{customStore.name}}" stepKey="seeStoreValueForProductId"/>
-        <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{storeViewData.name}}" stepKey="seeStoreViewValueForProductId"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}" userInput="{{customStore.name}}" stepKey="seeStoreValueForProductId"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}" userInput="{{storeViewData.name}}" stepKey="seeStoreViewValueForProductId"/>
     </test>
 </tests>
