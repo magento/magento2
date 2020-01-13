@@ -387,6 +387,10 @@
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
     </actionGroup>
 
+    <!--
+    NOTICE: NavigateToAndResetProductGridToDefaultView is deprecated.
+            Please use NavigateToAndResetProductGridToDefaultViewActionGroup instead.
+    -->
     <actionGroup name="NavigateToAndResetProductGridToDefaultView" extends="resetProductGridToDefaultView">
         <annotations>
             <description>EXTENDS: resetProductGridToDefaultView. Adds an action to go to the Admin Products grid page.</description>
@@ -396,6 +400,10 @@
         <waitForPageLoad after="goToAdminProductIndexPage" stepKey="waitForProductIndexPageToLoad"/>
     </actionGroup>
 
+    <!--
+    NOTICE: NavigateToAndResetProductAttributeGridToDefaultView is deprecated.
+            Please use NavigateToAndResetProductAttributeGridToDefaultViewActionGroup instead.
+    -->
     <actionGroup name="NavigateToAndResetProductAttributeGridToDefaultView">
         <annotations>
             <description>Goes to the Product Attributes grid. Clicks on 'Clear Filters'.</description>
