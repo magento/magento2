@@ -4,10 +4,9 @@
  */
 
 define([
-    'ko',
     'uiRegistry',
     'Magento_Ui/js/model/messages'
-], function (ko, registry, Constr) {
+], function (registry, Constr) {
     'use strict';
 
     describe('Magento_Ui/js/model/messages', function () {
@@ -44,6 +43,7 @@ define([
                     },
                     type = [],
                     returnedObj = ["Message test"];
+
                 expect(obj.add(messageObj, type)).toEqual(true);
                 expect(type).toEqual(returnedObj);
             });
@@ -60,28 +60,29 @@ define([
                     type = [],
                     returnedObj = ["Message test case " + messageObj.parameters[0] + ", case " +
                     messageObj.parameters[1] + " and case " + messageObj.parameters[2]];
+
                 expect(obj.add(messageObj, type)).toEqual(true);
                 expect(type).toEqual(returnedObj);
             });
         });
 
         describe('check methods: hasMessages, addErrorMessage, getErrorMessages', function () {
+            var errorMessageText = "Error message test";
+
             it('hasMessages method before adding messages', function () {
                 expect(obj.hasMessages()).toEqual(false);
             });
 
             it('check addErrorMessage method', function () {
                 var messageObj = {
-                    message: "Error message test"
+                    message: errorMessageText
                 };
 
                 expect(obj.addErrorMessage(messageObj)).toEqual(true);
             });
 
             it('check getErrorMessage method', function () {
-                var errorMessages = ko.observableArray(["Error message test"]);
-
-                expect(obj.getErrorMessages()()).toEqual(errorMessages());
+                expect(obj.getErrorMessages()()).toEqual([errorMessageText]);
             });
 
             it('hasMessages method after adding Error messages', function () {
@@ -98,17 +99,18 @@ define([
         });
 
         describe('check methods: hasMessages, addSuccessMessage, getSuccessMessages', function () {
+            var successMessageText = "Success message test";
+
             it('check addSuccessMessage and getSuccessMessage', function () {
                 var messageObj = {
-                    message: "Success message test"
+                    message: successMessageText
                 };
 
                 expect(obj.addSuccessMessage(messageObj)).toEqual(true);
             });
 
             it('check method getSuccessMessage', function () {
-                var successMessages = ko.observableArray(["Success message test"]);
-                expect(obj.getSuccessMessages()()).toEqual(successMessages());
+                expect(obj.getSuccessMessages()()).toEqual([successMessageText]);
             });
 
             it('hasMessages method after adding Success messages', function () {
