@@ -84,7 +84,6 @@ define([
                 expect(obj.getErrorMessages()()).toEqual(errorMessages());
             });
 
-
             it('hasMessages method after adding Error messages', function () {
                 expect(obj.hasMessages()).toEqual(true);
             });
