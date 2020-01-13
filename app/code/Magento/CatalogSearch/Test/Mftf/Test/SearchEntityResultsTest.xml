@@ -607,14 +607,14 @@
     <test name="QuickSearchConfigurableChildren">
         <annotations>
             <stories value="Search Product on Storefront"/>
-            <title value="User should be able to use Quick Search to a configurable product's child products"/>
+            <title value="Deprecated. User should be able to use Quick Search to a configurable product's child products"/>
             <description value="Use Quick Search to find a configurable product with enabled/disable children"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-14798"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-15101"/>
+                <issueId value="DEPRECATED">Use StorefrontQuickSearchConfigurableChildrenTest instead.</issueId>
             </skip>
         </annotations>
         <before>
