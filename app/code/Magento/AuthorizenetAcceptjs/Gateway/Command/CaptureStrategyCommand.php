@@ -21,7 +21,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 /**
  * Chooses the best method of capture based on the context of the payment
  *
- * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * @deprecated 100.3.3 Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
  * official payment integration available on the marketplace
  */
 class CaptureStrategyCommand implements CommandInterface

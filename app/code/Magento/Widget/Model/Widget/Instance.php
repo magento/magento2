@@ -99,11 +99,13 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
+     * @since 101.0.4
      */
     protected $_productType;
 
     /**
      * @var \Magento\Widget\Model\Config\Reader
+     * @since 101.0.4
      */
     protected $_reader;
 

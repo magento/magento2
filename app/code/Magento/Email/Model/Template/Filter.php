@@ -51,7 +51,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Modifier Callbacks
      *
      * @var array
-     * @deprecated Use the new Directive Processor interfaces
+     * @deprecated 101.0.4 Use the new Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -659,7 +659,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $default assumed modifier if none present
      * @return array
-     * @deprecated Use the new FilterApplier or Directive Processor interfaces
+     * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -678,7 +678,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $modifiers
      * @return string
-     * @deprecated Use the new FilterApplier or Directive Processor interfaces
+     * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -706,7 +706,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $type
      * @return string
-     * @deprecated Use the new FilterApplier or Directive Processor interfaces
+     * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
      */
     public function modifierEscape($value, $type = 'html')
     {

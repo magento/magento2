@@ -7,6 +7,7 @@ namespace Magento\Framework\Indexer;
 
 /**
  * @api Implement custom Fieldset
+ * @since 100.0.2
  */
 interface FieldsetInterface
 {

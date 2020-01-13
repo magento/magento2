@@ -120,6 +120,7 @@ class Db
      * @param string|null $tableName
      * @param bool $addDropIfExists
      * @return string
+     * @since 100.2.3
      */
     public function getTableTriggersSql($tableName = null, $addDropIfExists = true)
     {

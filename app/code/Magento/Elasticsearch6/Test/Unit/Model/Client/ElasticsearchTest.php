@@ -441,7 +441,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => false
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -451,7 +451,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'text',
-                                            'index' => false,
+                                            'index' => true,
                                             'copy_to' => '_search'
                                         ],
                                     ],
@@ -511,7 +511,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => false
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -521,7 +521,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'text',
-                                            'index' => false,
+                                            'index' => true,
                                             'copy_to' => '_search'
                                         ],
                                     ],

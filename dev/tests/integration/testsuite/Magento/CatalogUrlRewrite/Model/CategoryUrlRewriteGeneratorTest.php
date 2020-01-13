@@ -351,7 +351,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
         $model = $this->objectManager->get(Product::class);
         $connection = $model->getConnection();
         $select = $connection->select();
-        $select->from(Product::TABLE_NAME, 'COUNT(*)');
+        $select->from($model->getTable(Product::TABLE_NAME), 'COUNT(*)');
         $select->where('category_id = ?', $categoryId);
         $select->where('product_id = ?', $productId);
         return $connection->fetchOne($select);
