@@ -39,10 +39,10 @@ define([
         describe('add method', function () {
             it('simple message', function () {
                 var messageObj = {
-                        message: "Message test"
+                        message: 'Message test'
                     },
                     type = [],
-                    returnedObj = ["Message test"];
+                    returnedObj = ['Message test'];
 
                 expect(obj.add(messageObj, type)).toEqual(true);
                 expect(type).toEqual(returnedObj);
@@ -50,16 +50,16 @@ define([
 
             it('message with parameters', function () {
                 var messageObj = {
-                        message: "Message test case %1, case %2 and case %3",
+                        message: 'Message test case %1, case %2 and case %3',
                         parameters: [
-                            "one",
-                            "two",
+                            'one',
+                            'two',
                             'three'
                         ]
                     },
                     type = [],
-                    returnedObj = ["Message test case " + messageObj.parameters[0] + ", case " +
-                    messageObj.parameters[1] + " and case " + messageObj.parameters[2]];
+                    returnedObj = ['Message test case ' + messageObj.parameters[0] + ', case ' +
+                    messageObj.parameters[1] + ' and case ' + messageObj.parameters[2]];
 
                 expect(obj.add(messageObj, type)).toEqual(true);
                 expect(type).toEqual(returnedObj);
@@ -67,7 +67,7 @@ define([
         });
 
         describe('check methods: hasMessages, addErrorMessage, getErrorMessages', function () {
-            var errorMessageText = "Error message test";
+            var errorMessageText = 'Error message test';
 
             it('hasMessages method before adding messages', function () {
                 expect(obj.hasMessages()).toEqual(false);
@@ -99,7 +99,7 @@ define([
         });
 
         describe('check methods: hasMessages, addSuccessMessage, getSuccessMessages', function () {
-            var successMessageText = "Success message test";
+            var successMessageText = 'Success message test';
 
             it('check addSuccessMessage and getSuccessMessage', function () {
                 var messageObj = {
