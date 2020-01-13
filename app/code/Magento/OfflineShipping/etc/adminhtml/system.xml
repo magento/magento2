@@ -127,6 +127,10 @@
                     <label>Minimum Order Amount</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
+                <field id="tax_including" translate="label" sortOrder="5" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Include Tax to Amount</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Method Name</label>
                 </field>

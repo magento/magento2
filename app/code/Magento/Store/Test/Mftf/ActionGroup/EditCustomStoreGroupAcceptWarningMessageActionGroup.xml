@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="EditCustomStoreGroupAcceptWarningMessageActionGroup" extends="CreateCustomStore">
+    <actionGroup name="EditCustomStoreGroupAcceptWarningMessageActionGroup" extends="CreateCustomStoreActionGroup">
         <!-- Admin creates new Store group -->
         <annotations>
             <description>EXTENDS: CreateCustomStore. Removes 'selectCreateStore'. Clicks on the 1st row. Clicks on Ok.</description>

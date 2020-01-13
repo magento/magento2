@@ -95,10 +95,10 @@
         <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_value$$" stepKey="seeProductAttributeLabel"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeProductAttributeOptions"/>
         <!-- Delete Child products -->
-        <actionGroup ref="deleteProductBySku" stepKey="deleteFirstChildProduct">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
             <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
         </actionGroup>
-        <actionGroup ref="deleteProductBySku" stepKey="deleteSecondChildProduct">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
             <argument name="sku" value="$$createConfigChildProduct2.sku$$"/>
         </actionGroup>
         <!--Verify product is not visible in category store front page -->

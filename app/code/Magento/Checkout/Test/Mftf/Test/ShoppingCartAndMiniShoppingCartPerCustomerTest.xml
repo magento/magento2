@@ -66,7 +66,7 @@
         <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
 
         <!-- Add the product to the shopping cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addFirstProductToCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addFirstProductToCart">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -102,7 +102,7 @@
         <waitForPageLoad stepKey="waitForProductPage"/>
 
          <!-- Add the product to the shopping cart -->
-        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPage" stepKey="addProductToCart">
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
             <argument name="productQty" value="{{quoteQty2Price123.qty}}"/>
         </actionGroup>
@@ -137,10 +137,10 @@
         <!-- Assert products in mini cart for first customer -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStoreFrontHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertFirstProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertFirstProductInMiniCart">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertSecondProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertSecondProductInMiniCart">
             <argument name="productName" value="$$createSimpleProductWithCustomOptions.name$$"/>
         </actionGroup>
         <actionGroup ref="AssertMiniShoppingCartSubTotalActionGroup" stepKey="assertMiniCartSubTotal">
