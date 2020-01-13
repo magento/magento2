@@ -74,12 +74,15 @@ class DecimalFilterTest extends AbstractFiltersTest
     /**
      * @inheritdoc
      */
-    protected function updateProducts(array $products, string $attributeCode): void
-    {
+    protected function updateProducts(
+        array $products,
+        string $attributeCode,
+        int $storeId = Store::DEFAULT_STORE_ID
+    ): void {
         $attribute = $this->attributeRepository->get($attributeCode);
 
         foreach ($products as $productSku => $value) {
-            $product = $this->productRepository->get($productSku, false, Store::DEFAULT_STORE_ID, true);
+            $product = $this->productRepository->get($productSku, false, $storeId, true);
             $product->addData(
                 [$attribute->getAttributeCode() => $value]
             );
