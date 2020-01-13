@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="LoginAsAnyUserActionGroup">
+    <actionGroup name="LoginAsAnyUser">
         <arguments>
             <argument name="uname" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
             <argument name="passwd" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
