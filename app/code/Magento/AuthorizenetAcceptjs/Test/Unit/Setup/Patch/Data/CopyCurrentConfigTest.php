@@ -21,6 +21,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CopyCurrentConfigTest extends TestCase
 {
     /**
@@ -87,7 +90,7 @@ class CopyCurrentConfigTest extends TestCase
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->website = $this->createMock(Website::class);
         $this->connection = $this->createMock(AdapterInterface::class);
-        $this->select = $this->createMock(Select::class);//@todo check if we really need it
+        $this->select = $this->createMock(Select::class);
     }
 
     public function testMigrateData(): void
