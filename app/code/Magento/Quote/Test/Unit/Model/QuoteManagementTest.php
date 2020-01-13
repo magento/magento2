@@ -18,6 +18,8 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
+ * Verify management for quote
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -161,6 +163,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $quoteIdMaskFactoryMock;
 
     /**
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -272,6 +275,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->remoteAddressMock = $this->createMock(RemoteAddress::class);
     }
 
+    /**
+     * Verify create empty cart for anonymous.
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     public function testCreateEmptyCartAnonymous()
     {
         $storeId = 345;
@@ -302,6 +310,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($quoteId, $this->model->createEmptyCart());
     }
 
+    /**
+     * Verify create empty cart for customer.
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     public function testCreateEmptyCartForCustomer()
     {
         $storeId = 345;
@@ -339,6 +352,89 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
     }
 
+    /**
+     * Verify create empty cart with shipping address.
+     *
+     * @param int $storeId
+     * @param int $quoteId
+     * @param int $userId
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     *
+     * @dataProvider dataProviderConfig
+     */
+    public function testCreateEmptyCartForCustomerWithShippingAddress(int $storeId, int $quoteId, int $userId)
+    {
+        $quoteMock = $this->createMock(Quote::class);
+        $customer = $this->getMockBuilder(CustomerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDefaultBilling','getDefaultShipping'])
+            ->getMockForAbstractClass();
+        $billingAddress = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getCustomerId','getCustomerAddressId','setCustomerAddressId']
+        );
+        $shippingAddress = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getCustomerId','getSameAsBilling','getCustomerAddressId']
+        );
+
+        $this->storeManagerMock
+            ->expects($this->once())
+            ->method('getStore')
+            ->willReturnSelf();
+        $this->storeManagerMock
+            ->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->quoteRepositoryMock
+            ->expects($this->once())
+            ->method('getActiveForCustomer')
+            ->with($userId)
+            ->willReturn($quoteMock);
+        $this->customerRepositoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getById')
+            ->willReturn($customer);
+        $quoteMock->expects($this->atLeastOnce())
+            ->method('getBillingAddress')
+            ->willReturn($billingAddress);
+        $quoteMock->expects($this->once())
+            ->method('isVirtual')
+            ->willReturn(false);
+        $quoteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($quoteId);
+        $quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($shippingAddress);
+        $shippingAddress->expects($this->once())
+            ->method('getSameAsBilling')
+            ->willReturn(true);
+        $shippingAddress->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn($userId);
+        $billingAddress->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn($userId);
+        $billingAddress->expects($this->once())
+             ->method('getCustomerAddressId')
+             ->willReturn(null);
+        $shippingAddress->expects($this->once())
+            ->method('getCustomerAddressId')
+            ->willReturn('1');
+        $billingAddress->expects($this->once())
+            ->method('setCustomerAddressId')
+            ->with('1')
+            ->willReturnSelf();
+
+        $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
+    }
+
+    /**
+     * Verify return exists quote.
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     public function testCreateEmptyCartForCustomerReturnExistsQuote()
     {
         $storeId = 345;
@@ -372,6 +468,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify assigned customer from another store.
+     *
      * @expectedException \Magento\Framework\Exception\StateException
      * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
      */
@@ -416,6 +514,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify assign customer to non-anonymous cart.
+     *
      * @expectedException \Magento\Framework\Exception\StateException
      * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
@@ -465,6 +565,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     *  Verify assigned customer no such customer.
+     *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testAssignCustomerNoSuchCustomer()
@@ -497,6 +599,13 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->assignCustomer($cartId, $customerId, $storeId);
     }
 
+    /**
+     * Verify assigned customer with active cart.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     */
     public function testAssignCustomerWithActiveCart()
     {
         $cartId = 220;
@@ -571,6 +680,13 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->assignCustomer($cartId, $customerId, $storeId);
     }
 
+    /**
+     * Verify assigned customer.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     */
     public function testAssignCustomer()
     {
         $cartId = 220;
@@ -640,6 +756,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->assignCustomer($cartId, $customerId, $storeId);
     }
 
+    /**
+     * Verify submit quote.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testSubmit()
     {
         $orderData = [];
@@ -737,6 +858,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
 
+    /**
+     * Verify placed order to guest customer.
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     public function testPlaceOrderIfCustomerIsGuest()
     {
         $cartId = 100;
@@ -820,6 +946,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($orderId, $service->placeOrder($cartId));
     }
 
+    /**
+     * Verify placed order.
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     public function testPlaceOrder()
     {
         $cartId = 323;
@@ -918,6 +1049,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Gets and returns quote.
+     *
      * @param $isGuest
      * @param $isVirtual
      * @param \Magento\Quote\Model\Quote\Address $billingAddress
@@ -1010,6 +1143,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Prepared and returned order factory.
+     *
      * @param \Magento\Sales\Api\Data\OrderInterface $baseOrder
      * @param OrderAddressInterface $billingAddress
      * @param array $addresses
@@ -1074,6 +1209,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get cart for customer.
+     *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetCartForCustomer()
@@ -1245,5 +1382,17 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             true,
             $methods
         );
+    }
+
+    /**
+     * Config data provider
+     *
+     * @return array
+     */
+    public function dataProviderConfig():array
+    {
+        return [
+            [345,2311,567]
+        ];
     }
 }
