@@ -104,8 +104,8 @@ class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCa
             ->getMock();
 
         $this->observer = new CatalogProductListCollectionAppendSummaryFieldsObserver(
-                $this->sumResourceFactoryMock,
-                $this->storeManagerMock
+            $this->sumResourceFactoryMock,
+            $this->storeManagerMock
         );
     }
 
