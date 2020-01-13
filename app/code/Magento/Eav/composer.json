@@ -6,12 +6,12 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-backend": "101.0.*",
-        "magento/module-catalog": "103.0.*",
-        "magento/module-config": "101.1.*",
-        "magento/module-media-storage": "100.3.*",
-        "magento/module-store": "101.0.*"
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-config": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -25,6 +25,5 @@
         "psr-4": {
             "Magento\\Eav\\": ""
         }
-    },
-    "version": "102.0.4"
+    }
 }

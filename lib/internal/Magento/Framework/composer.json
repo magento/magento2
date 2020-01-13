@@ -58,6 +58,5 @@
         "files": [
             "registration.php"
         ]
-    },
-    "version": "102.0.4"
+    }
 }

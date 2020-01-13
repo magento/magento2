@@ -6,13 +6,13 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-captcha": "100.3.*",
-        "magento/module-checkout": "100.3.*",
-        "magento/module-store": "101.0.*"
+        "magento/framework": "*",
+        "magento/module-captcha": "*",
+        "magento/module-checkout": "*",
+        "magento/module-store": "*"
     },
     "suggest": {
-        "magento/module-paypal": "100.3.*"
+        "magento/module-paypal": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -26,6 +26,5 @@
         "psr-4": {
             "Magento\\PaypalCaptcha\\": ""
         }
-    },
-    "version": "100.3.2"
+    }
 }
