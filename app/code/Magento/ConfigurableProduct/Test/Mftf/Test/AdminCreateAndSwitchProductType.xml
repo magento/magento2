@@ -148,6 +148,7 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Create configurable product from downloadable product page-->

@@ -72,6 +72,8 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
