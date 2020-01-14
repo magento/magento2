@@ -15,6 +15,9 @@
             <title value="Customer Checkout via the Admin"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontCustomerCheckoutProcessTest instead</issueId>
+            </skip>
             <testCaseId value="MC-5922"/>
             <group value="checkout"/>
         </annotations>
