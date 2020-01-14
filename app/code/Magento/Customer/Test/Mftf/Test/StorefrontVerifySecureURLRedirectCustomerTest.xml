@@ -25,11 +25,11 @@
             <executeJS function="return window.location.host" stepKey="hostname"/>
             <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
             <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="cache:clean config" stepKey="cacheCleanConfig"/>
         </before>
         <after>
             <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="cache:clean config" stepKey="cacheCleanConfig"/>
         </after>
         <executeJS function="return window.location.host" stepKey="hostname"/>
         <amOnUrl url="http://{$hostname}/customer" stepKey="goToUnsecureCustomerURL"/>
