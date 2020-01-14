@@ -56,17 +56,11 @@ class ImageProvider
      */
     public function getImage(Product $product, $imageId, $attributes = [])
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        $this->appEmulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
-
         try {
             $image = $this->imageBuilder->create($product, $imageId, $attributes);
         } catch (\Exception $exception) {
-            $this->appEmulation->stopEnvironmentEmulation();
             throw $exception;
         }
-
-        $this->appEmulation->stopEnvironmentEmulation();
         return $image;
     }
 }
