@@ -243,7 +243,7 @@ QUERY;
                 'expected_value' => $product->getData(
                     $metadataPool->getMetadata(
                         ProductInterface::class
-                    )->getLinkField()
+                    )->getIdentifierField()
                 )
             ],
             ['response_field' => 'name', 'expected_value' => $product->getName()],

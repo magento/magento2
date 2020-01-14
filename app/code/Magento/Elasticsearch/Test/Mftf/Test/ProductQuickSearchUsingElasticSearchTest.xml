@@ -11,7 +11,7 @@
     <test name="ProductQuickSearchUsingElasticSearchTest">
         <annotations>
             <features value="Search"/>
-            <stories value="Quick Search of products on Storefront when ES 5.0+ is enabled"/>
+            <stories value="Quick Search of products on Storefront when ES 5.x is enabled"/>
             <title value="Product quick search doesn't throw exception after ES is chosen as search engine"/>
             <description value="Verify no elastic search exception is thrown when searching for product before catalogsearch reindexing"/>
             <severity value="CRITICAL"/>
@@ -36,7 +36,7 @@
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <comment userInput="Change Catalog search engine option to Elastic Search 5.0+" stepKey="chooseElasticSearch5"/>
+        <comment userInput="Change Catalog search engine option to Elastic Search 5.x" stepKey="chooseElasticSearch5"/>
         <actionGroup ref="ChooseElasticSearchAsSearchEngineActionGroup" stepKey="chooseES5"/>
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearing"/>
         <actionGroup ref="UpdateIndexerByScheduleActionGroup" stepKey="updateAnIndexerBySchedule">
