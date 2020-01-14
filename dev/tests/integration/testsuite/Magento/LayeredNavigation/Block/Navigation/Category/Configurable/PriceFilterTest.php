@@ -52,7 +52,7 @@ class PriceFilterTest extends AbstractFiltersTest
     {
         //This check is needed because LayeredNavigation independent of Magento_ConfigurableProduct
         if ($this->moduleManager->isEnabled('Magento_ConfigurableProduct')) {
-            $this->updateProductData($products, $this->getAttributeCode());
+            $this->updateProductData($products);
             $this->clearInstanceAndReindexSearch();
             $category = $this->loadCategory('Category 1', Store::DEFAULT_STORE_ID);
             $this->navigationBlock->getLayer()->setCurrentCategory($category);
@@ -145,11 +145,14 @@ class PriceFilterTest extends AbstractFiltersTest
     }
 
     /**
-     * @inheritdoc
+     * Updates products data.
+     *
+     * @param array $products
+     * @param int $storeId
+     * @return void
      */
     private function updateProductData(
         array $products,
-        string $attributeCode,
         int $storeId = Store::DEFAULT_STORE_ID
     ): void {
         foreach ($products as $productSku => $data) {
