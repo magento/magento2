@@ -6,7 +6,6 @@
 namespace Magento\ImportExport\Model\Export\Adapter;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\File\Write;
 
 /**
@@ -42,6 +41,16 @@ class Csv extends AbstractAdapter
      * Object destructor
      */
     public function __destruct()
+    {
+        $this->destruct();
+    }
+
+    /**
+     * Clean cached values
+     *
+     * @return void
+     */
+    public function destruct()
     {
         if (is_object($this->_fileHandler)) {
             $this->_fileHandler->close();
