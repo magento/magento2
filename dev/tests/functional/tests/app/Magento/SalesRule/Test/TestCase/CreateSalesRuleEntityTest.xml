@@ -17,6 +17,7 @@
             <data name="salesRule/data/simple_action" xsi:type="string">Percent of product price discount</data>
             <data name="salesRule/data/discount_amount" xsi:type="string">50</data>
             <data name="salesRule/data/apply_to_shipping" xsi:type="string">No</data>
+            <data name="salesRule/data/apply_to_shipping" xsi:type="string">No</data>
             <data name="salesRule/data/simple_free_shipping" xsi:type="string">No</data>
             <data name="salesRule/data/store_labels/0" xsi:type="string">Sales Cart Rule labels</data>
             <data name="cartPrice/sub_total" xsi:type="string">100.00</data>
