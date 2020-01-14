@@ -362,7 +362,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $type
      * @param string $backUrl
-     * @param int $storeId
+     * @param int|null $storeId
      * @param string $sendemailStoreId
      * @return void
      * @throws LocalizedException
@@ -371,7 +371,7 @@ class EmailNotification implements EmailNotificationInterface
         CustomerInterface $customer,
         $type = self::NEW_ACCOUNT_EMAIL_REGISTERED,
         $backUrl = '',
-        $storeId = 0,
+        $storeId = null,
         $sendemailStoreId = null
     ) {
         $types = self::TEMPLATE_TYPES;
