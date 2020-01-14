@@ -9,7 +9,7 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 
 ## Install Magento
 
-*    [Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
+* [Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
 
 ## Learn More About GraphQL in Magento 2
 
