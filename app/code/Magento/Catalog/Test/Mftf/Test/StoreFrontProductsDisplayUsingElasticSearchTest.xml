@@ -168,7 +168,7 @@
 
 
           <!--Revert ElasticSearch as search engine.-->
-           <actionGroup ref="ResetSearchEngineConfiguration" stepKey="resetCatalogSearchConfiguration"/>
+           <actionGroup ref="ResetSearchEngineConfigurationActionGroup" stepKey="resetCatalogSearchConfiguration"/>
            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchDisable"/>
            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchDisable"/>
            <actionGroup ref="logout" stepKey="logout"/>
