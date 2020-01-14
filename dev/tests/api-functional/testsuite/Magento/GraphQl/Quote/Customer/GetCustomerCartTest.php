@@ -35,33 +35,33 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
-    /**
-     * Query for an existing active customer cart
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     */
-    public function testGetActiveCustomerCart()
-    {
-        $quantity = 2;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $customerCartQuery = $this->getCustomerCartQuery();
-        $response = $this->graphQlQuery($customerCartQuery, [], '', $this->getHeaderMap());
-        $this->assertArrayHasKey('customerCart', $response);
-        $this->assertArrayHasKey('items', $response['customerCart']);
-        $this->assertNotEmpty($response['customerCart']['items']);
-        $this->assertEquals(2, $response['customerCart']['total_quantity']);
-        $this->assertArrayHasKey('id', $response['customerCart']);
-        $this->assertNotEmpty($response['customerCart']['id']);
-        $this->assertEquals($maskedQuoteId, $response['customerCart']['id']);
-        $this->assertEquals(
-            $quantity,
-            $response['customerCart']['items'][0]['quantity'],
-            'Incorrect quantity of products in cart'
-        );
-    }
+//    /**
+//     * Query for an existing active customer cart
+//     *
+//     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+//     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+//     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+//     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+//     */
+//    public function testGetActiveCustomerCart()
+//    {
+//        $quantity = 2;
+//        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+//        $customerCartQuery = $this->getCustomerCartQuery();
+//        $response = $this->graphQlQuery($customerCartQuery, [], '', $this->getHeaderMap());
+//        $this->assertArrayHasKey('customerCart', $response);
+//        $this->assertArrayHasKey('items', $response['customerCart']);
+//        $this->assertNotEmpty($response['customerCart']['items']);
+//        $this->assertEquals(2, $response['customerCart']['total_quantity']);
+//        $this->assertArrayHasKey('id', $response['customerCart']);
+//        $this->assertNotEmpty($response['customerCart']['id']);
+//        $this->assertEquals($maskedQuoteId, $response['customerCart']['id']);
+//        $this->assertEquals(
+//            $quantity,
+//            $response['customerCart']['items'][0]['quantity'],
+//            'Incorrect quantity of products in cart'
+//        );
+//    }
 
     /**
      * Query for an existing customer cart with no masked quote id
