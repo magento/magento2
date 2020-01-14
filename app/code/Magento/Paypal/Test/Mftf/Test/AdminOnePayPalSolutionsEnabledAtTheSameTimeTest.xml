@@ -39,13 +39,13 @@
         <!--Try to enable express checkout Solution-->
         <comment userInput="Try to enable express checkout Solution" stepKey="commentTryEnableExpressCheckout"/>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-        <actionGroup ref="EnablePayPalSolutionWithoutSave" stepKey="enableExpressCheckout">
+        <actionGroup ref="EnablePayPalSolutionWithoutSaveActionGroup" stepKey="enableExpressCheckout">
             <argument name="payPalConfigType" value="WPSExpressConfigSection"/>
             <argument name="countryCode" value="us"/>
         </actionGroup>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <actionGroup ref="EnablePayPalSolutionWithoutSave" stepKey="enableExpressCheckout2">
+        <actionGroup ref="EnablePayPalSolutionWithoutSaveActionGroup" stepKey="enableExpressCheckout2">
             <argument name="payPalConfigType" value="PayPalExpressCheckoutConfigSection"/>
             <argument name="countryCode" value="us"/>
         </actionGroup>

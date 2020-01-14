@@ -56,7 +56,7 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
 
         <!-- Go to Order review -->
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToCheckoutReview"/>
 
         <!-- Apply Discount Coupon to the Order -->
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
