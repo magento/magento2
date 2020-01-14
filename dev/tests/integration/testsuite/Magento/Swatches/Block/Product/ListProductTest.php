@@ -60,7 +60,7 @@ class ListProductTest extends TestCase
     private $layout;
 
     /**
-     * @var ListProduct $listingBlock
+     * @var ListProduct
      */
     private $listingBlock;
 
@@ -91,11 +91,8 @@ class ListProductTest extends TestCase
     public function testGetImageForTextSwatchConfigurable(array $images, string $area, array $expectation): void
     {
         $this->updateAttributePreviewImageFlag('text_swatch_attribute');
-        $this->updateProductImages($images);
         $this->addFilterToRequest('text_swatch_attribute', 'option 1');
-        $productImage = $this->listingBlock->getImage($this->productRepository->get('configurable'), $area);
-        $this->assertInstanceOf(Image::class, $productImage);
-        $this->assertProductImage($productImage, $expectation);
+        $this->assertProductImage($images, $area, $expectation);
     }
 
     /**
@@ -110,11 +107,8 @@ class ListProductTest extends TestCase
     public function testGetImageForVisualSwatchConfigurable(array $images, string $area, array $expectation): void
     {
         $this->updateAttributePreviewImageFlag('visual_swatch_attribute');
-        $this->updateProductImages($images);
         $this->addFilterToRequest('visual_swatch_attribute', 'option 1');
-        $productImage = $this->listingBlock->getImage($this->productRepository->get('configurable'), $area);
-        $this->assertInstanceOf(Image::class, $productImage);
-        $this->assertProductImage($productImage, $expectation);
+        $this->assertProductImage($images, $area, $expectation);
     }
 
     /**
@@ -151,7 +145,7 @@ class ListProductTest extends TestCase
             'with_image_on_simple_and_configurable' => [
                 'images' => [
                     'configurable' => '/m/a/magento_image.jpg',
-                    'simple_option_1' => '/m/a/magento_small_image.jpg'
+                    'simple_option_1' => '/m/a/magento_small_image.jpg',
                 ],
                 'display_area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
                 'expectation' => ['image_url' => '/m/a/magento_small_image.jpg', 'label' => 'Image Alt Text'],
@@ -162,12 +156,16 @@ class ListProductTest extends TestCase
     /**
      * Asserts image data.
      *
-     * @param Image $productImage
+     * @param array $images
+     * @param string $area
      * @param array $expectation
      * @return void
      */
-    private function assertProductImage(Image $productImage, array $expectation): void
+    private function assertProductImage(array $images, string $area, array $expectation): void
     {
+        $this->updateProductImages($images);
+        $productImage = $this->listingBlock->getImage($this->productRepository->get('configurable'), $area);
+        $this->assertInstanceOf(Image::class, $productImage);
         $this->assertEquals($productImage->getCustomAttributes(), '');
         $this->assertEquals($productImage->getClass(), 'product-image-photo');
         $this->assertEquals($productImage->getRatio(), 1.25);
@@ -202,7 +200,7 @@ class ListProductTest extends TestCase
                                 'disabled' => 0,
                                 'media_type' => 'image'
                             ],
-                        ]
+                        ],
                     ]
                 )
                 ->setCanSaveCustomOptions(true);

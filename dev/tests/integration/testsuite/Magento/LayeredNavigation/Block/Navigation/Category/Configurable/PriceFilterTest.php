@@ -36,6 +36,10 @@ class PriceFilterTest extends AbstractFiltersTest
     {
         parent::setUp();
         $this->moduleManager = $this->objectManager->get(Manager::class);
+        //This check is needed because LayeredNavigation independent of Magento_ConfigurableProduct
+        if (!$this->moduleManager->isEnabled('Magento_ConfigurableProduct')) {
+            $this->markTestSkipped('Magento_ConfigurableProduct module disabled.');
+        }
     }
 
     /**
@@ -50,19 +54,8 @@ class PriceFilterTest extends AbstractFiltersTest
      */
     public function testGetFilters(array $products, array $expectation): void
     {
-        //This check is needed because LayeredNavigation independent of Magento_ConfigurableProduct
-        if ($this->moduleManager->isEnabled('Magento_ConfigurableProduct')) {
-            $this->updateProductData($products);
-            $this->clearInstanceAndReindexSearch();
-            $category = $this->loadCategory('Category 1', Store::DEFAULT_STORE_ID);
-            $this->navigationBlock->getLayer()->setCurrentCategory($category);
-            $this->navigationBlock->setLayout($this->layout);
-            $filter = $this->getFilterByCode($this->navigationBlock->getFilters(), $this->getAttributeCode());
-            $this->assertNotNull($filter);
-            $this->assertEquals($expectation, $this->prepareFilterItems($filter));
-        } else {
-            $this->markTestSkipped('Magento_ConfigurableProduct module disabled.');
-        }
+        $this->updateProductData($products);
+        $this->getCategoryFiltersAndAssert([], ['is_filterable' => '1'], $expectation, 'Category 1');
     }
 
     /**
