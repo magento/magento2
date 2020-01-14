@@ -125,11 +125,14 @@
     }
 
     .page-layout-2columns-left {
+        .main {
+            padding-left: @layout-column__additional-sidebar-offset
+        }
+
         .sidebar-additional {
             clear: left;
             float: left;
             padding-left: 0;
-            padding-right: @layout-column__additional-sidebar-offset;
         }
     }
 

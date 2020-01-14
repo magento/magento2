@@ -11,6 +11,7 @@
     <test name="DisplayRefreshCacheAfterChangingCategoryPageLayoutTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Category Layout Change"/>
             <title value="'Refresh cache' admin notification is displayed when changing category page layout"/>
             <description value="'Refresh cache' message is not displayed when changing category page layout"/>
             <severity value="MAJOR"/>
@@ -34,7 +35,7 @@
         </after>
         <!-- Navigate to category details page -->
         <comment userInput="Navigate to category details page" stepKey="navigateToAdminCategoryPage"/>
-        <actionGroup ref="goToAdminCategoryPageById" stepKey="goToAdminCategoryPage">
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage">
             <argument name="id" value="$$simpleCategory.id$$"/>
         </actionGroup>
         <!-- Open design tab and set layout -->
@@ -45,7 +46,8 @@
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
         <waitForPageLoad stepKey="waitSaveToApply"/>
         <!-- See if warning message displays -->
-        <comment userInput="See if warning message displays" stepKey="checkWarningMessagePresence"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="Please go to Cache Management and refresh cache types" stepKey="seeWarningMessage"/>
+        <actionGroup ref="AdminSystemMessagesWarningActionGroup" stepKey="seeWarningMessage">
+            <argument name="message" value="Please go to Cache Management and refresh cache types"/>
+        </actionGroup>
     </test>
 </tests>

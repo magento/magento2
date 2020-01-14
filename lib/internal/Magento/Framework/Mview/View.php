@@ -240,7 +240,7 @@ class View extends DataObject implements ViewInterface
      */
     public function update()
     {
-        if ($this->getState()->getStatus() !== View\StateInterface::STATUS_IDLE) {
+        if (!$this->isIdle() || !$this->isEnabled()) {
             return;
         }
 
@@ -291,16 +291,13 @@ class View extends DataObject implements ViewInterface
      */
     private function executeAction(ActionInterface $action, int $lastVersionId, int $currentVersionId)
     {
-        $versionBatchSize = self::$maxVersionQueryBatch;
         $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
             ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
             : self::DEFAULT_BATCH_SIZE;
 
-        for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
-            // Don't go past the current version for atomicity.
-            $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
-            $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
-
+        $vsFrom = $lastVersionId;
+        while ($vsFrom < $currentVersionId) {
+            $ids = $this->getBatchOfIds($vsFrom, $currentVersionId);
             // We run the actual indexer in batches.
             // Chunked AFTER loading to avoid duplicates in separate chunks.
             $chunks = array_chunk($ids, $batchSize);
@@ -308,6 +305,32 @@ class View extends DataObject implements ViewInterface
                 $action->execute($ids);
             }
         }
+    }
+
+    /**
+     * Get batch of entity ids
+     *
+     * @param int $lastVersionId
+     * @param int $currentVersionId
+     * @return array
+     */
+    private function getBatchOfIds(int &$lastVersionId, int $currentVersionId): array
+    {
+        $ids = [];
+        $versionBatchSize = self::$maxVersionQueryBatch;
+        $idsBatchSize = self::$maxVersionQueryBatch;
+        for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
+            // Don't go past the current version for atomicity.
+            $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
+            /** To avoid duplicate ids need to flip and merge the array */
+            $ids += array_flip($this->getChangelog()->getList($vsFrom, $versionTo));
+            $lastVersionId = $versionTo;
+            if (count($ids) >= $idsBatchSize) {
+                break;
+            }
+        }
+
+        return array_keys($ids);
     }
 
     /**

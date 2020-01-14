@@ -27,10 +27,10 @@
         </after>
 
         <!-- Open Category Page and select Add category -->
-        <actionGroup ref="goToCreateCategoryPage" stepKey="goToCategoryPage"/>
+        <actionGroup ref="GoToCreateCategoryPageActionGroup" stepKey="goToCategoryPage"/>
 
         <!-- Fill the Category form with same name and urlKey as initially created category(SimpleSubCategory) -->
-        <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillCategoryForm">
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSaveActionGroup" stepKey="fillCategoryForm">
              <argument name="categoryName" value="$$category.name$$"/>
              <argument name="categoryUrlKey" value="$$category.custom_attributes[url_key]$$"/>
         </actionGroup>
