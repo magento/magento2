@@ -5,8 +5,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Delete image files.
@@ -62,6 +62,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
     {
         try {
             if (!$this->getRequest()->isPost()) {
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Wrong request.');
             }
             $files = $this->getRequest()->getParam('files');
@@ -84,8 +85,9 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
                     $this->getStorage()->deleteFile($filePath);
                 }
             }
-            
+
             return $this->resultRawFactory->create();
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
