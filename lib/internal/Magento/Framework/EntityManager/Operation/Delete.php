@@ -118,7 +118,7 @@ class Delete implements DeleteInterface
             $entity = $this->deleteMain->execute($entity, $arguments);
             $this->eventManager->dispatchEntityEvent($entityType, 'delete_after', ['entity' => $entity]);
             $this->eventManager->dispatch(
-                'entity_manager_delete_before',
+                'entity_manager_delete_after',
                 [
                     'entity_type' => $entityType,
                     'entity' => $entity

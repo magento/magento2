@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Exception\StateException;
@@ -114,7 +115,7 @@ class Mapper
             throw new \Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
             throw new StateException(
-                new Phrase('Cycle found. Query %1 already used in request hierarchy', [$queryName])
+                new Phrase('A cycle was found. The "%1" query is already used in the request hierarchy.', [$queryName])
             );
         }
         $this->mappedQueries[] = $queryName;
@@ -183,7 +184,10 @@ class Mapper
             throw new \Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
             throw new StateException(
-                new Phrase('Cycle found. Filter %1 already used in request hierarchy', [$filterName])
+                new Phrase(
+                    'A cycle was found. The "%1" filter is already used in the request hierarchy.',
+                    [$filterName]
+                )
             );
         }
         $this->mappedFilters[] = $filterName;
@@ -351,7 +355,7 @@ class Mapper
                     );
                     break;
                 default:
-                    throw new StateException(new Phrase('Invalid bucket type'));
+                    throw new StateException(new Phrase('The bucket type is invalid. Verify and try again.'));
                     break;
             }
             $buckets[] = $bucket;

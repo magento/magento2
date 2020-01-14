@@ -24,9 +24,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Framework\Registry */
-    protected $registry;
-
     /** @var \Magento\Email\Block\Adminhtml\Template\Edit\Form */
     protected $block;
 
@@ -51,11 +48,15 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->template = $this->objectManager->get(\Magento\Email\Model\Template::class)
             ->setId(1)
             ->setTemplateType(TemplateTypesInterface::TYPE_HTML);
-        $this->registry = $this->objectManager->get(\Magento\Framework\Registry::class);
-        if ($this->registry->registry('current_email_template') == null) {
-            $this->registry->register('current_email_template', $this->template);
-        }
-        $this->block = $this->objectManager->create(\Magento\Email\Block\Adminhtml\Template\Edit\Form::class);
+
+        $this->block = $this->objectManager->create(
+            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
+            [
+                'data' => [
+                    'email_template' => $this->template
+                ]
+            ]
+        );
         $this->prepareFormMethod = new \ReflectionMethod(
             \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
             '_prepareForm'

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="Qty_1000" type="stock_item">
+        <data key="qty">1000</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_100" type="stock_item">
+        <data key="qty">100</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_10" type="stock_item">
+        <data key="qty">10</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_99" type="stock_item">
+        <data key="qty">99</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_101" type="stock_item">
+        <data key="qty">101</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_1" type="stock_item">
+        <data key="qty">1</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_0" type="stock_item">
+        <data key="qty">0</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_777" type="stock_item">
+        <data key="qty">777</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+    <entity name="Qty_25" type="stock_item">
+        <data key="qty">25</data>
+        <data key="is_in_stock">true</data>
+    </entity>
+</entities>

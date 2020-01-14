@@ -59,10 +59,25 @@
         </arguments>
     </virtualType>
 
+    <type name="Magento\Customer\Model\Authorization\CustomerSessionUserContext">
+        <plugin name="webApiCustomerSessionUserContext" type="Magento\Webapi\Model\Plugin\Authorization\CustomerSessionUserContext" />
+    </type>
+
     <type name="Magento\Framework\Webapi\ServiceOutputProcessor">
         <arguments>
             <argument name="dataObjectProcessor" xsi:type="object">Magento\Framework\Reflection\DataObjectProcessorPermissionChecked</argument>
         </arguments>
     </type>
     <!-- End of configuration to check that permissions are checked on fields -->
+
+    <preference for="Magento\Webapi\Controller\Rest\RequestProcessorInterface" type="Magento\Webapi\Controller\Rest\RequestProcessorPool" />
+
+    <type name="Magento\Webapi\Controller\Rest\RequestProcessorPool">
+        <arguments>
+            <argument name="requestProcessors" xsi:type="array">
+                <item name="syncSchema" xsi:type="object" sortOrder="50">Magento\Webapi\Controller\Rest\SchemaRequestProcessor</item>
+                <item name="sync" xsi:type="object" sortOrder="100">Magento\Webapi\Controller\Rest\SynchronousRequestProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

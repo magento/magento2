@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
+/**
+ * Translit url test.
+ */
 class TranslitUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**

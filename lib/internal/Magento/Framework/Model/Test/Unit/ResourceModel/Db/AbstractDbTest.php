@@ -163,6 +163,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_model->getMainTable());
     }
 
+    /**
+     * @return array
+     */
     public function getTableDataProvider()
     {
         return [
@@ -217,6 +220,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->getChecksum($checksum));
     }
 
+    /**
+     * @return array
+     */
     public function getChecksumProvider()
     {
         return [
@@ -295,6 +301,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->will($this->returnValue($connectionInterfaceMock));
 
+        $abstractModelMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
         $abstractModelMock->expects($this->once())->method('getData')->willReturn(['data' => 'value']);
         $connectionMock = $this->createMock(AdapterInterface::class);
         $this->transactionManagerMock->expects($this->once())
@@ -399,6 +406,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->hasDataChanged($abstractModelMock));
     }
 
+    /**
+     * @return array
+     */
     public function hasDataChangedDataProvider()
     {
         return [
@@ -415,16 +425,15 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['save'])
             ->getMockForAbstractClass();
+
         $context = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             \Magento\Framework\Model\Context::class
         );
         $registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $resourceMock = $this->createPartialMock(AbstractDb::class, [
-                '_construct',
-                'getConnection',
-                '__wakeup',
-                'getIdFieldName'
-            ]);
+        $resourceMock = $this->createPartialMock(
+            AbstractDb::class,
+            ['_construct', 'getConnection', '__wakeup', 'getIdFieldName']
+        );
         $connectionInterfaceMock = $this->createMock(AdapterInterface::class);
         $resourceMock->expects($this->any())
             ->method('getConnection')
@@ -443,6 +452,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->_resourcesMock->expects($this->any())->method('getTableName')->with($data)->will(
             $this->returnValue('tableName')
         );
+
         $mainTableReflection = new \ReflectionProperty(
             AbstractDb::class,
             '_mainTable'
@@ -457,6 +467,13 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $idFieldNameReflection->setValue($this->_model, 'idFieldName');
         $connectionMock->expects($this->any())->method('save')->with('tableName', 'idFieldName');
         $connectionMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
+        $connectionMock->expects($this->any())
+            ->method('describeTable')
+            ->with('tableName')
+            ->willReturn(['idFieldName' => []]);
+        $connectionMock->expects($this->any())
+            ->method('prepareColumnValue')
+            ->willReturn(0);
         $abstractModelMock->setIdFieldName('id');
         $abstractModelMock->setData(
             [

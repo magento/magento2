@@ -5,14 +5,15 @@
  */
 namespace Magento\Payment\Gateway\Command;
 
-use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\CommandInterface;
+use Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapperInterface;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
+use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
-use Magento\Payment\Gateway\Request;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Payment\Gateway\Response;
 use Magento\Payment\Gateway\Response\HandlerInterface;
+use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Psr\Log\LoggerInterface;
 
@@ -55,12 +56,18 @@ class GatewayCommand implements CommandInterface
     private $logger;
 
     /**
+     * @var ErrorMessageMapperInterface
+     */
+    private $errorMessageMapper;
+
+    /**
      * @param BuilderInterface $requestBuilder
      * @param TransferFactoryInterface $transferFactory
      * @param ClientInterface $client
      * @param LoggerInterface $logger
      * @param HandlerInterface $handler
      * @param ValidatorInterface $validator
+     * @param ErrorMessageMapperInterface|null $errorMessageMapper
      */
     public function __construct(
         BuilderInterface $requestBuilder,
@@ -68,7 +75,8 @@ class GatewayCommand implements CommandInterface
         ClientInterface $client,
         LoggerInterface $logger,
         HandlerInterface $handler = null,
-        ValidatorInterface $validator = null
+        ValidatorInterface $validator = null,
+        ErrorMessageMapperInterface $errorMessageMapper = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->transferFactory = $transferFactory;
@@ -76,6 +84,7 @@ class GatewayCommand implements CommandInterface
         $this->handler = $handler;
         $this->validator = $validator;
         $this->logger = $logger;
+        $this->errorMessageMapper = $errorMessageMapper;
     }
 
     /**
@@ -84,6 +93,8 @@ class GatewayCommand implements CommandInterface
      * @param array $commandSubject
      * @return void
      * @throws CommandException
+     * @throws ClientException
+     * @throws ConverterException
      */
     public function execute(array $commandSubject)
     {
@@ -98,10 +109,7 @@ class GatewayCommand implements CommandInterface
                 array_merge($commandSubject, ['response' => $response])
             );
             if (!$result->isValid()) {
-                $this->logExceptions($result->getFailsDescription());
-                throw new CommandException(
-                    __('Transaction has been declined. Please try again later.')
-                );
+                $this->processErrors($result);
             }
         }
 
@@ -114,13 +122,34 @@ class GatewayCommand implements CommandInterface
     }
 
     /**
-     * @param Phrase[] $fails
-     * @return void
+     * Tries to map error messages from validation result and logs processed message.
+     * Throws an exception with mapped message or default error.
+     *
+     * @param ResultInterface $result
+     * @throws CommandException
      */
-    private function logExceptions(array $fails)
+    private function processErrors(ResultInterface $result)
     {
-        foreach ($fails as $failPhrase) {
-            $this->logger->critical((string) $failPhrase);
+        $messages = [];
+        $errorsSource = array_merge($result->getErrorCodes(), $result->getFailsDescription());
+        foreach ($errorsSource as $errorCodeOrMessage) {
+            $errorCodeOrMessage = (string) $errorCodeOrMessage;
+
+            // error messages mapper can be not configured if payment method doesn't have custom error messages.
+            if ($this->errorMessageMapper !== null) {
+                $mapped = (string) $this->errorMessageMapper->getMessage($errorCodeOrMessage);
+                if (!empty($mapped)) {
+                    $messages[] = $mapped;
+                    $errorCodeOrMessage = $mapped;
+                }
+            }
+            $this->logger->critical('Payment Error: ' . $errorCodeOrMessage);
         }
+
+        throw new CommandException(
+            !empty($messages)
+                ? __(implode(PHP_EOL, $messages))
+                : __('Transaction has been declined. Please try again later.')
+        );
     }
 }

@@ -202,7 +202,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param int $useAggregatedData
      * @param string $mainTable
      * @param int $isFilter
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getIfNullSqlResult
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getIfNullSqlResult
      * @dataProvider useAggregatedDataDataProvider
      * @return void
      */
@@ -309,7 +309,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param int $isFilter
      * @param int $useAggregatedData
      * @param string $mainTable
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getIfNullSqlResult
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getIfNullSqlResult
      * @dataProvider totalsDataProvider
      * @return void
      */

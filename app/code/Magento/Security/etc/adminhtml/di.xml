@@ -17,14 +17,14 @@
     </type>
     <type name="Magento\Security\Model\Plugin\AccountManagement">
         <arguments>
-            <argument name="passwordRequestEvent" xsi:type="const">Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST</argument>
+            <argument name="passwordRequestEvent" xsi:type="const">Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST</argument>
         </arguments>
     </type>
     <type name="Magento\Security\Model\SecurityManager">
         <arguments>
             <argument name="securityCheckers" xsi:type="array">
                 <item name="frequency" xsi:type="object">Magento\Security\Model\SecurityChecker\Frequency</item>
-                <item name="wuantity" xsi:type="object">Magento\Security\Model\SecurityChecker\Quantity</item>
+                <item name="quantity" xsi:type="object">Magento\Security\Model\SecurityChecker\Quantity</item>
             </argument>
         </arguments>
     </type>

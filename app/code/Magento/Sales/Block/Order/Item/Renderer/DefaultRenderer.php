@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
 use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
@@ -50,6 +48,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Set item.
+     *
      * @param \Magento\Framework\DataObject $item
      * @return $this
      */
@@ -60,6 +60,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get item.
+     *
      * @return array|null
      */
     public function getItem()
@@ -78,6 +80,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order item.
+     *
      * @return array|null
      */
     public function getOrderItem()
@@ -90,6 +94,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get item options.
+     *
      * @return array
      */
     public function getItemOptions()
@@ -175,7 +181,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
         $result = ['value' => $truncatedValue];
 
         if ($this->string->strlen($optionValue) > 55) {
-            $result['value'] = $result['value'] . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
+            $result['value'] = $result['value']
+                . ' ...';
             $optionValue = nl2br($optionValue);
             $result = array_merge($result, ['full_view' => $optionValue]);
         }

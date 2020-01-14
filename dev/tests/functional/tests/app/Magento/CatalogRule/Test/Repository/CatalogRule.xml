@@ -72,6 +72,21 @@
             <field name="discount_amount" xsi:type="string">10</field>
         </dataset>
 
+        <dataset name="active_catalog_price_rule_with_category_conditions">
+            <field name="name" xsi:type="string">rule_name%isolation%</field>
+            <field name="description" xsi:type="string">Rule Description</field>
+            <field name="is_active" xsi:type="string">Active</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="1" xsi:type="string">General</item>
+            </field>
+            <field name="rule" xsi:type="string">[Category|is|2]</field>
+            <field name="simple_action" xsi:type="string">Adjust final price to this percentage</field>
+            <field name="discount_amount" xsi:type="string">50</field>
+        </dataset>
+
         <dataset name="catalog_price_rule_priority_0">
             <field name="name" xsi:type="string">catalog_price_rule_priority_0</field>
             <field name="description" xsi:type="string">-50% of price, Priority = 0</field>
@@ -134,6 +149,20 @@
             <field name="sort_order" xsi:type="string">0</field>
             <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
             <field name="discount_amount" xsi:type="string">50</field>
+        </dataset>
+
+        <dataset name="apply_as_10_percentage">
+            <field name="name" xsi:type="string">CatalogPriceRule %isolation%</field>
+            <field name="description" xsi:type="string">Catalog Price Rule Description</field>
+            <field name="is_active" xsi:type="string">Active</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="0" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+            <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
+            <field name="discount_amount" xsi:type="string">10</field>
         </dataset>
     </repository>
 </config>

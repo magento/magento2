@@ -5,8 +5,9 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-// @codingStandardsIgnoreFile
-
+/**
+ * Class for Collection test.
+ */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -14,6 +15,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * Set up.
+     */
     protected function setUp()
     {
         $this->_model = new \Magento\Framework\Data\Collection(
@@ -21,6 +25,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test for method removeAllItems.
+     *
+     * @return void
+     */
     public function testRemoveAllItems()
     {
         $this->_model->addItem(new \Magento\Framework\DataObject());
@@ -32,6 +41,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test loadWithFilter()
+     *
      * @return void
      */
     public function testLoadWithFilter()
@@ -44,6 +54,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for method etItemObjectClass
+     *
      * @dataProvider setItemObjectClassDataProvider
      */
     public function testSetItemObjectClass($class)
@@ -53,6 +65,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider.
+     *
      * @return array
      */
     public function setItemObjectClassDataProvider()
@@ -61,6 +75,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for method setItemObjectClass with exception.
+     *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Incorrect_ClassName does not extend \Magento\Framework\DataObject
      */
@@ -69,12 +85,22 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_model->setItemObjectClass('Incorrect_ClassName');
     }
 
+    /**
+     * Test for method addFilter.
+     *
+     * @return void
+     */
     public function testAddFilter()
     {
         $this->_model->addFilter('field1', 'value');
         $this->assertEquals('field1', $this->_model->getFilter('field1')->getData('field'));
     }
 
+    /**
+     * Test for method getFilters.
+     *
+     * @return void
+     */
     public function testGetFilters()
     {
         $this->_model->addFilter('field1', 'value');
@@ -83,12 +109,22 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('field2', $this->_model->getFilter(['field1', 'field2'])[1]->getData('field'));
     }
 
+    /**
+     * Test for method get non existion filters.
+     *
+     * @return void
+     */
     public function testGetNonExistingFilters()
     {
         $this->assertEmpty($this->_model->getFilter([]));
         $this->assertEmpty($this->_model->getFilter('non_existing_filter'));
     }
 
+    /**
+     * Test for lag.
+     *
+     * @return void
+     */
     public function testFlag()
     {
         $this->_model->setFlag('flag_name', 'flag_value');
@@ -97,16 +133,32 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->_model->getFlag('non_existing_flag'));
     }
 
+    /**
+     * Test for method getCurPage.
+     *
+     * @return void
+     */
     public function testGetCurPage()
     {
-        $this->_model->setCurPage(10);
+        $this->_model->setCurPage(1);
         $this->assertEquals(1, $this->_model->getCurPage());
     }
 
+    /**
+     * Test for method possibleFlowWithItem.
+     *
+     * @return void
+     */
     public function testPossibleFlowWithItem()
     {
-        $firstItemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getData', 'toArray']);
-        $secondItemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getData', 'toArray']);
+        $firstItemMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['getId', 'getData', 'toArray']
+        );
+        $secondItemMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['getId', 'getData', 'toArray']
+        );
         $requiredFields = ['required_field_one', 'required_field_two'];
         $arrItems = [
             'totalRecords' => 1,
@@ -164,6 +216,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->_model->getItems());
     }
 
+    /**
+     * Test for method eachCallsMethodOnEachItemWithNoArgs.
+     *
+     * @return void
+     */
     public function testEachCallsMethodOnEachItemWithNoArgs()
     {
         for ($i = 0; $i < 3; $i++) {
@@ -173,7 +230,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         }
         $this->_model->each('testCallback');
     }
-    
+
+    /**
+     * Test for method eachCallsMethodOnEachItemWithArgs.
+     *
+     * @return void
+     */
     public function testEachCallsMethodOnEachItemWithArgs()
     {
         for ($i = 0; $i < 3; $i++) {
@@ -184,6 +246,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_model->each('testCallback', ['a', 'b', 'c']);
     }
 
+    /**
+     * Test for method callsClosureWithEachItemAndNoArgs.
+     *
+     * @return void
+     */
     public function testCallsClosureWithEachItemAndNoArgs()
     {
         for ($i = 0; $i < 3; $i++) {
@@ -196,6 +263,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         });
     }
 
+    /**
+     * Test for method callsClosureWithEachItemAndArgs.
+     *
+     * @return void
+     */
     public function testCallsClosureWithEachItemAndArgs()
     {
         for ($i = 0; $i < 3; $i++) {
@@ -208,6 +280,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         }, ['a', 'b', 'c']);
     }
 
+    /**
+     * Test for method callsCallableArrayWithEachItemNoArgs.
+     *
+     * @return void
+     */
     public function testCallsCallableArrayWithEachItemNoArgs()
     {
         $mockCallbackObject = $this->getMockBuilder('DummyEachCallbackInstance')
@@ -226,6 +303,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_model->each([$mockCallbackObject, 'testObjCallback']);
     }
 
+    /**
+     * Test for method callsCallableArrayWithEachItemAndArgs.
+     *
+     * @return void
+     */
     public function testCallsCallableArrayWithEachItemAndArgs()
     {
         $mockCallbackObject = $this->getMockBuilder('DummyEachCallbackInstance')

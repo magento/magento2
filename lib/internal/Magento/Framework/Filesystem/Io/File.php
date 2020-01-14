@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
-use Magento\Framework\Filesystem\DriverInterface;
-use Symfony\Component\Finder\Tests\Iterator\DateRangeFilterIteratorTest;
-
 /**
  * Filesystem client
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -78,6 +75,11 @@ class File extends AbstractIo
      * @var bool
      */
     protected $_streamLocked = false;
+
+    /**
+     * @var \Exception
+     */
+    private $_streamException;
 
     /**
      * Destruct
@@ -231,7 +233,7 @@ class File extends AbstractIo
         }
         $stat = @fstat($this->_streamHandler);
         if ($part !== null) {
-            return isset($stat[$part]) ? $stat[$part] : $default;
+            return $stat[$part] ?? $default;
         }
         return $stat;
     }
@@ -364,7 +366,7 @@ class File extends AbstractIo
             $dirCallback = $fileCallback;
         }
         if (is_dir($dir)) {
-            foreach (scandir($dir) as $item) {
+            foreach (scandir($dir, SCANDIR_SORT_NONE) as $item) {
                 if (!strcmp($item, '.') || !strcmp($item, '..')) {
                     continue;
                 }

@@ -1,15 +1,24 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page\Widget;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
-class Chooser extends \Magento\Backend\App\Action
+/**
+ * Chooser Source action.
+ */
+class Chooser extends Action implements HttpPostActionInterface, HttpGetActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */

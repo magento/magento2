@@ -25,7 +25,7 @@ class AssertFieldsArePresent extends AbstractConstraint
     public function processAssert(SystemConfigEditSectionPayment $configEditSectionPayment, array $fieldIds)
     {
         foreach ($fieldIds as $fieldId) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $configEditSectionPayment->getPaymentsConfigBlock()->isFieldPresent($fieldId),
                 'Field is active.'
             );

@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="newsletter_subscriber" resource="default" engine="innodb" comment="Newsletter Subscriber">
+        <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Subscriber ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Store ID"/>
+        <column xsi:type="timestamp" name="change_status_at" on_update="false" nullable="true"
+                comment="Change Status At"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Customer ID"/>
+        <column xsi:type="varchar" name="subscriber_email" nullable="true" length="150" comment="Subscriber Email"/>
+        <column xsi:type="int" name="subscriber_status" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Subscriber Status"/>
+        <column xsi:type="varchar" name="subscriber_confirm_code" nullable="true" length="32" default="NULL"
+                comment="Subscriber Confirm Code"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="subscriber_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_SUBSCRIBER_STORE_ID_STORE_STORE_ID"
+                    table="newsletter_subscriber" column="store_id" referenceTable="store" referenceColumn="store_id"
+                    onDelete="SET NULL"/>
+        <index referenceId="NEWSLETTER_SUBSCRIBER_CUSTOMER_ID" indexType="btree">
+            <column name="customer_id"/>
+        </index>
+        <index referenceId="NEWSLETTER_SUBSCRIBER_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <index referenceId="NEWSLETTER_SUBSCRIBER_SUBSCRIBER_EMAIL" indexType="btree">
+            <column name="subscriber_email"/>
+        </index>
+    </table>
+    <table name="newsletter_template" resource="default" engine="innodb" comment="Newsletter Template">
+        <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Template ID"/>
+        <column xsi:type="varchar" name="template_code" nullable="true" length="150" comment="Template Code"/>
+        <column xsi:type="text" name="template_text" nullable="true" comment="Template Text"/>
+        <column xsi:type="text" name="template_styles" nullable="true" comment="Template Styles"/>
+        <column xsi:type="int" name="template_type" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Template Type"/>
+        <column xsi:type="varchar" name="template_subject" nullable="true" length="200" comment="Template Subject"/>
+        <column xsi:type="varchar" name="template_sender_name" nullable="true" length="200"
+                comment="Template Sender Name"/>
+        <column xsi:type="varchar" name="template_sender_email" nullable="true" length="200"
+                comment="Template Sender Email"/>
+        <column xsi:type="smallint" name="template_actual" padding="5" unsigned="true" nullable="true" identity="false"
+                default="1" comment="Template Actual"/>
+        <column xsi:type="timestamp" name="added_at" on_update="false" nullable="true" comment="Added At"/>
+        <column xsi:type="timestamp" name="modified_at" on_update="false" nullable="true" comment="Modified At"/>
+        <column xsi:type="boolean" name="is_legacy" nullable="false"
+                default="false" comment="Should the template render in legacy mode"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="template_id"/>
+        </constraint>
+        <index referenceId="NEWSLETTER_TEMPLATE_TEMPLATE_ACTUAL" indexType="btree">
+            <column name="template_actual"/>
+        </index>
+        <index referenceId="NEWSLETTER_TEMPLATE_ADDED_AT" indexType="btree">
+            <column name="added_at"/>
+        </index>
+        <index referenceId="NEWSLETTER_TEMPLATE_MODIFIED_AT" indexType="btree">
+            <column name="modified_at"/>
+        </index>
+    </table>
+    <table name="newsletter_queue" resource="default" engine="innodb" comment="Newsletter Queue">
+        <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Queue ID"/>
+        <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Template ID"/>
+        <column xsi:type="int" name="newsletter_type" padding="11" unsigned="false" nullable="true" identity="false"
+                comment="Newsletter Type"/>
+        <column xsi:type="text" name="newsletter_text" nullable="true" comment="Newsletter Text"/>
+        <column xsi:type="text" name="newsletter_styles" nullable="true" comment="Newsletter Styles"/>
+        <column xsi:type="varchar" name="newsletter_subject" nullable="true" length="200" comment="Newsletter Subject"/>
+        <column xsi:type="varchar" name="newsletter_sender_name" nullable="true" length="200"
+                comment="Newsletter Sender Name"/>
+        <column xsi:type="varchar" name="newsletter_sender_email" nullable="true" length="200"
+                comment="Newsletter Sender Email"/>
+        <column xsi:type="int" name="queue_status" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Queue Status"/>
+        <column xsi:type="timestamp" name="queue_start_at" on_update="false" nullable="true" comment="Queue Start At"/>
+        <column xsi:type="timestamp" name="queue_finish_at" on_update="false" nullable="true"
+                comment="Queue Finish At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="queue_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_QUEUE_TEMPLATE_ID_NEWSLETTER_TEMPLATE_TEMPLATE_ID"
+                    table="newsletter_queue" column="template_id" referenceTable="newsletter_template"
+                    referenceColumn="template_id" onDelete="CASCADE"/>
+        <index referenceId="NEWSLETTER_QUEUE_TEMPLATE_ID" indexType="btree">
+            <column name="template_id"/>
+        </index>
+    </table>
+    <table name="newsletter_queue_link" resource="default" engine="innodb" comment="Newsletter Queue Link">
+        <column xsi:type="int" name="queue_link_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Queue Link ID"/>
+        <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Queue ID"/>
+        <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Subscriber ID"/>
+        <column xsi:type="timestamp" name="letter_sent_at" on_update="false" nullable="true" comment="Letter Sent At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="queue_link_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_QUEUE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
+                    table="newsletter_queue_link" column="queue_id" referenceTable="newsletter_queue"
+                    referenceColumn="queue_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="NLTTR_QUEUE_LNK_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID"
+                    table="newsletter_queue_link" column="subscriber_id" referenceTable="newsletter_subscriber"
+                    referenceColumn="subscriber_id" onDelete="CASCADE"/>
+        <index referenceId="NEWSLETTER_QUEUE_LINK_SUBSCRIBER_ID" indexType="btree">
+            <column name="subscriber_id"/>
+        </index>
+        <index referenceId="NEWSLETTER_QUEUE_LINK_QUEUE_ID_LETTER_SENT_AT" indexType="btree">
+            <column name="queue_id"/>
+            <column name="letter_sent_at"/>
+        </index>
+    </table>
+    <table name="newsletter_queue_store_link" resource="default" engine="innodb" comment="Newsletter Queue Store Link">
+        <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Queue ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="queue_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_QUEUE_STORE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
+                    table="newsletter_queue_store_link" column="queue_id" referenceTable="newsletter_queue"
+                    referenceColumn="queue_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_QUEUE_STORE_LINK_STORE_ID_STORE_STORE_ID"
+                    table="newsletter_queue_store_link" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="NEWSLETTER_QUEUE_STORE_LINK_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="newsletter_problem" resource="default" engine="innodb" comment="Newsletter Problems">
+        <column xsi:type="int" name="problem_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Problem ID"/>
+        <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Subscriber ID"/>
+        <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Queue ID"/>
+        <column xsi:type="int" name="problem_error_code" padding="10" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Problem Error Code"/>
+        <column xsi:type="varchar" name="problem_error_text" nullable="true" length="200" comment="Problem Error Text"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="problem_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_PROBLEM_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
+                    table="newsletter_problem" column="queue_id" referenceTable="newsletter_queue"
+                    referenceColumn="queue_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="NLTTR_PROBLEM_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID"
+                    table="newsletter_problem" column="subscriber_id" referenceTable="newsletter_subscriber"
+                    referenceColumn="subscriber_id" onDelete="CASCADE"/>
+        <index referenceId="NEWSLETTER_PROBLEM_SUBSCRIBER_ID" indexType="btree">
+            <column name="subscriber_id"/>
+        </index>
+        <index referenceId="NEWSLETTER_PROBLEM_QUEUE_ID" indexType="btree">
+            <column name="queue_id"/>
+        </index>
+    </table>
+</schema>

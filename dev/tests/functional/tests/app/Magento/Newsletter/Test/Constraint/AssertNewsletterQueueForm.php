@@ -33,7 +33,7 @@ class AssertNewsletterQueueForm extends AbstractAssertForm
         $indexQueue->getQueueTemplateGrid()->searchAndOpen(['newsletter_subject' => $queue->getNewsletterSubject()]);
 
         $dataDiff = $this->verifyData($queue->getData(), $templateQueue->getEditForm()->getData($queue));
-        \PHPUnit_Framework_Assert::assertEmpty($dataDiff, $dataDiff);
+        \PHPUnit\Framework\Assert::assertEmpty($dataDiff, $dataDiff);
     }
 
     /**

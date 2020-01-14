@@ -7,11 +7,15 @@
 namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Async\CallbackDeferred;
+use Magento\Framework\HTTP\AsyncClient\Request;
+use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Usps\Helper\Data as DataHelper;
 
 /**
@@ -118,6 +122,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @deprecated Use asynchronous client.
+     * @see $httpClient
      */
     protected $_httpClientFactory;
 
@@ -132,6 +138,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var DataHelper
      */
     private $dataHelper;
+
+    /**
+     * @var AsyncClientInterface
+     */
+    private $httpClient;
+
+    /**
+     * @var ProxyDeferredFactory
+     */
+    private $proxyDeferredFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -153,6 +169,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
+     * @param AsyncClientInterface|null $httpClient
+     * @param ProxyDeferredFactory|null $proxyDeferredFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -175,7 +193,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         CarrierHelper $carrierHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
-        array $data = []
+        array $data = [],
+        ?AsyncClientInterface $httpClient = null,
+        ?ProxyDeferredFactory $proxyDeferredFactory = null
     ) {
         $this->_carrierHelper = $carrierHelper;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -198,6 +218,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $stockRegistry,
             $data
         );
+        $this->httpClient = $httpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
+        $this->proxyDeferredFactory = $proxyDeferredFactory
+            ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
     }
 
     /**
@@ -213,10 +236,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $this->setRequest($request);
-        $this->_result = $this->_getQuotes();
-        $this->_updateFreeMethodQuote($request);
+        //Saving current result to use the right one in the callback.
+        $this->_result = $result = $this->_getQuotes();
 
-        return $this->getResult();
+        return $this->proxyDeferredFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($request, $result) {
+                        $this->_result = $result;
+                        $this->_updateFreeMethodQuote($request);
+
+                        return $this->getResult();
+                    }
+                )
+            ]
+        );
     }
 
     /**
@@ -365,6 +399,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * @inheritdoc
+     *
+     * Starting from 23.02.2018 USPS doesn't allow to create free shipping labels via their API.
+     */
+    public function isShippingLabelsAvailable()
+    {
+        return false;
+    }
+
+    /**
      * Get quotes
      *
      * @return Result
@@ -439,7 +483,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $package->addChild('FirstClassMailType', 'PARCEL');
             }
             $package->addChild('ZipOrigination', $r->getOrigPostal());
-            //only 5 chars avaialble
+            //only 5 chars available
             $package->addChild('ZipDestination', substr($r->getDestPostal(), 0, 5));
             $package->addChild('Pounds', $r->getWeightPounds());
             $package->addChild('Ounces', $r->getWeightOunces());
@@ -499,26 +543,33 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
             $debugData = ['request' => $this->filterDebugData($request)];
-            try {
-                $url = $this->getConfigData('gateway_url');
-                if (!$url) {
-                    $url = $this->_defaultGatewayUrl;
-                }
-                $client = $this->_httpClientFactory->create();
-                $client->setUri($url);
-                $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-                $client->setParameterGet('API', $api);
-                $client->setParameterGet('XML', $request);
-                $response = $client->request();
-                $responseBody = $response->getBody();
-
-                $debugData['result'] = $responseBody;
-                $this->_setCachedQuotes($request, $responseBody);
-            } catch (\Exception $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $responseBody = '';
+            $url = $this->getConfigData('gateway_url');
+            if (!$url) {
+                $url = $this->_defaultGatewayUrl;
             }
-            $this->_debug($debugData);
+            $deferredResponse = $this->httpClient->request(
+                new Request(
+                    $url . '?API=' . urlencode($api) . '&XML=' . urlencode($request),
+                    Request::METHOD_GET,
+                    [],
+                    null
+                )
+            );
+
+            return $this->proxyDeferredFactory->create(
+                [
+                    'deferred' => new CallbackDeferred(
+                        function () use ($deferredResponse, $request, $debugData) {
+                            $responseBody = $deferredResponse->get()->getBody();
+                            $debugData['result'] = $responseBody;
+                            $this->_setCachedQuotes($request, $responseBody);
+                            $this->_debug($debugData);
+
+                            return $this->_parseXmlResponse($responseBody);
+                        }
+                    )
+                ]
+            );
         }
 
         return $this->_parseXmlResponse($responseBody);
@@ -538,63 +589,59 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $r = $this->_rawRequest;
         $costArr = [];
         $priceArr = [];
-        if (strlen(trim($response)) > 0) {
-            if (strpos(trim($response), '<?xml') === 0) {
-                if (strpos($response, '<?xml version="1.0"?>') !== false) {
-                    $response = str_replace(
-                        '<?xml version="1.0"?>',
-                        '<?xml version="1.0" encoding="ISO-8859-1"?>',
-                        $response
-                    );
-                }
-                $xml = $this->parseXml($response);
+        if (strlen(trim($response)) > 0 && strpos(trim($response), '<?xml') === 0) {
+            if (strpos($response, '<?xml version="1.0"?>') !== false) {
+                $response = str_replace(
+                    '<?xml version="1.0"?>',
+                    '<?xml version="1.0" encoding="ISO-8859-1"?>',
+                    $response
+                );
+            }
+            $xml = $this->parseXml($response);
 
-                if (is_object($xml)) {
-                    $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
-                    $serviceCodeToActualNameMap = [];
+            if (is_object($xml) && is_object($xml->Package)) {
+                $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
+                $serviceCodeToActualNameMap = [];
+                $isUS = $this->_isUSCountry($r->getDestCountryId());
+
+                if ($isUS && is_object($xml->Package->Postage)) {
                     /**
                      * US Rates
                      */
-                    if ($this->_isUSCountry($r->getDestCountryId())) {
-                        if (is_object($xml->Package) && is_object($xml->Package->Postage)) {
-                            foreach ($xml->Package->Postage as $postage) {
-                                $serviceName = $this->_filterServiceName((string)$postage->MailService);
-                                $_serviceCode = $this->getCode('method_to_code', $serviceName);
-                                $serviceCode = $_serviceCode ? $_serviceCode : (string)$postage->attributes()->CLASSID;
-                                $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
-                                if (in_array($serviceCode, $allowedMethods)) {
-                                    $costArr[$serviceCode] = (string)$postage->Rate;
-                                    $priceArr[$serviceCode] = $this->getMethodPrice(
-                                        (string)$postage->Rate,
-                                        $serviceCode
-                                    );
-                                }
-                            }
-                            asort($priceArr);
-                        }
-                    } else {
-                        /*
-                         * International Rates
-                         */
-                        if (is_object($xml->Package) && is_object($xml->Package->Service)) {
-                            foreach ($xml->Package->Service as $service) {
-                                $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
-                                $serviceCode = 'INT_' . (string)$service->attributes()->ID;
-                                $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
-                                if (!$this->isServiceAvailable($service)) {
-                                    continue;
-                                }
-                                if (in_array($serviceCode, $allowedMethods)) {
-                                    $costArr[$serviceCode] = (string)$service->Postage;
-                                    $priceArr[$serviceCode] = $this->getMethodPrice(
-                                        (string)$service->Postage,
-                                        $serviceCode
-                                    );
-                                }
-                            }
-                            asort($priceArr);
+                    foreach ($xml->Package->Postage as $postage) {
+                        $serviceName = $this->_filterServiceName((string)$postage->MailService);
+                        $_serviceCode = $this->getCode('method_to_code', $serviceName);
+                        $serviceCode = $_serviceCode ? $_serviceCode : (string)$postage->attributes()->CLASSID;
+                        $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                        if (in_array($serviceCode, $allowedMethods)) {
+                            $costArr[$serviceCode] = (string)$postage->Rate;
+                            $priceArr[$serviceCode] = $this->getMethodPrice(
+                                (string)$postage->Rate,
+                                $serviceCode
+                            );
                         }
                     }
+                    asort($priceArr);
+                } elseif (!$isUS && is_object($xml->Package->Service)) {
+                    /*
+                     * International Rates
+                     */
+                    foreach ($xml->Package->Service as $service) {
+                        $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
+                        $serviceCode = 'INT_' . (string)$service->attributes()->ID;
+                        $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                        if (!$this->isServiceAvailable($service)) {
+                            continue;
+                        }
+                        if (in_array($serviceCode, $allowedMethods)) {
+                            $costArr[$serviceCode] = (string)$service->Postage;
+                            $priceArr[$serviceCode] = $this->getMethodPrice(
+                                (string)$service->Postage,
+                                $serviceCode
+                            );
+                        }
+                    }
+                    asort($priceArr);
                 }
             }
         }
@@ -1027,25 +1074,22 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
             $api = 'TrackV2';
             $request = $xml->asXML();
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
 
-            try {
-                $url = $this->getConfigData('gateway_url');
-                if (!$url) {
-                    $url = $this->_defaultGatewayUrl;
-                }
-                $client = $this->_httpClientFactory->create();
-                $client->setUri($url);
-                $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-                $client->setParameterGet('API', $api);
-                $client->setParameterGet('XML', $request);
-                $response = $client->request();
-                $responseBody = $response->getBody();
-                $debugData['result'] = $responseBody;
-            } catch (\Exception $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $responseBody = '';
+            $url = $this->getConfigData('gateway_url');
+            if (!$url) {
+                $url = $this->_defaultGatewayUrl;
             }
+            $responseDeferred = $this->httpClient->request(
+                new Request(
+                    $url . '?API=' . urlencode($api) . '&XML=' . urlencode($request),
+                    Request::METHOD_GET,
+                    [],
+                    null
+                )
+            );
+            $responseBody = $responseDeferred->get()->getBody();
+            $debugData['result'] = $responseBody;
 
             $this->_debug($debugData);
             $this->_parseXmlTrackingResponse($tracking, $responseBody);
@@ -1158,6 +1202,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * Return USPS county name by country ISO 3166-1-alpha-2 code
+     *
      * Return false for unknown countries
      *
      * @param string $countryId
@@ -1237,7 +1282,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'FO' => 'Faroe Islands',
             'FR' => 'France',
             'GA' => 'Gabon',
-            'GB' => 'Great Britain and Northern Ireland',
+            'GB' => 'United Kingdom of Great Britain and Northern Ireland',
             'GD' => 'Grenada',
             'GE' => 'Georgia, Republic of',
             'GF' => 'French Guiana',
@@ -1355,7 +1400,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'ST' => 'Sao Tome and Principe',
             'SV' => 'El Salvador',
             'SY' => 'Syrian Arab Republic',
-            'SZ' => 'Swaziland',
+            'SZ' => 'Eswatini',
             'TC' => 'Turks and Caicos Islands',
             'TD' => 'Chad',
             'TG' => 'Togo',
@@ -1406,11 +1451,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _filterServiceName($name)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $name = (string)preg_replace(
             ['~<[^/!][^>]+>.*</[^>]+>~sU', '~\<!--.*--\>~isU', '~<[^>]+>~is'],
             '',
             html_entity_decode($name)
         );
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         $name = str_replace('*', '', $name);
 
         return $name;
@@ -1423,6 +1470,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $request
      * @return string
+     * @deprecated This method should not be used anymore.
+     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest method doc block.
      */
     protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1519,7 +1568,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $serviceType = 'Library Mail';
                 break;
             default:
-                throw new \Exception(__('Service type does not match'));
+                throw new \InvalidArgumentException(__('Service type does not match'));
         }
         $packageParams = $request->getPackageParams();
         $packageWeight = $request->getPackageWeight();
@@ -1598,6 +1647,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @deprecated Should not be used anymore.
+     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest doc block.
      */
     protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1851,6 +1902,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * free shipping labels generating.
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1886,7 +1939,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
         }
 
-        $debugData = ['request' => $requestXml];
+        $debugData = ['request' => $this->filterDebugData($requestXml)];
         $url = $this->getConfigData('gateway_secure_url');
         if (!$url) {
             $url = $this->_defaultGatewayUrl;
@@ -1911,12 +1964,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $result->setErrors($debugData['result']['error']);
             } else {
                 if ($recipientUSCountry && $service == 'Priority Express') {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->EMLabel);
                     $trackingNumber = (string)$response->EMConfirmationNumber;
                 } elseif ($recipientUSCountry) {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
                     $trackingNumber = (string)$response->SignatureConfirmationNumber;
                 } else {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->LabelImage);
                     $trackingNumber = (string)$response->BarcodeNumber;
                 }
@@ -2039,7 +2095,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
             $zip = explode('-', $zipString);
         }
-        for ($i = 0; $i < count($zip); ++$i) {
+        $count = count($zip);
+        for ($i = 0; $i < $count; ++$i) {
             if (strlen($zip[$i]) == 5) {
                 $zip5 = $zip[$i];
             } elseif (strlen($zip[$i]) == 4) {
@@ -2103,6 +2160,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $data = $xml->asXML();
         } catch (\Exception $e) {
+            return '*Failed to read XML*';
         }
 
         return $data;

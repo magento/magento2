@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
+
+use Magento\Catalog\Model\Product;
 
 /**
  * Bundle option renderer
@@ -93,7 +93,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function showSingle()
     {
-        if (is_null($this->_showSingle)) {
+        if ($this->_showSingle === null) {
             $option = $this->getOption();
             $selections = $option->getSelections();
 
@@ -165,10 +165,13 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param \Magento\Bundle\Model\Option $option
      * @param mixed $selectionId
      * @return void
+     * @since 100.2.0
      */
     protected function assignSelection(\Magento\Bundle\Model\Option $option, $selectionId)
     {
-        if ($selectionId && $option->getSelectionById($selectionId)) {
+        if (is_array($selectionId)) {
+            $this->_selectedOptions = $selectionId;
+        } elseif ($selectionId && $option->getSelectionById($selectionId)) {
             $this->_selectedOptions = $selectionId;
         } elseif (!$option->getRequired()) {
             $this->_selectedOptions = 'None';
@@ -178,7 +181,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Define if selection is selected
      *
-     * @param  \Magento\Catalog\Model\Product $selection
+     * @param  Product $selection
      * @return bool
      */
     public function isSelected($selection)
@@ -190,9 +193,8 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
             return in_array($selection->getSelectionId(), $selectedOptions);
         } elseif ($selectedOptions == 'None') {
             return false;
-        } else {
-            return $selection->getIsDefault() && $selection->isSaleable();
         }
+        return $selection->getIsDefault() && $selection->isSaleable();
     }
 
     /**
@@ -219,7 +221,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Get product model
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     public function getProduct()
     {
@@ -230,14 +232,20 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $selection
+     * Get bundle option price title.
+     *
+     * @param Product $selection
      * @param bool $includeContainer
      * @return string
      */
     public function getSelectionQtyTitlePrice($selection, $includeContainer = true)
     {
         $this->setFormatProduct($selection);
-        $priceTitle = '<span class="product-name">' . $selection->getSelectionQty() * 1 . ' x ' . $this->escapeHtml($selection->getName()) . '</span>';
+        $priceTitle = '<span class="product-name">'
+            . $selection->getSelectionQty() * 1
+            . ' x '
+            . $this->escapeHtml($selection->getName())
+            . '</span>';
 
         $priceTitle .= ' &nbsp; ' . ($includeContainer ? '<span class="price-notice">' : '') . '+' .
             $this->renderPriceString($selection, $includeContainer) . ($includeContainer ? '</span>' : '');
@@ -248,7 +256,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Get price for selection product
      *
-     * @param \Magento\Catalog\Model\Product $selection
+     * @param Product $selection
      * @return int|float
      */
     public function getSelectionPrice($selection)
@@ -271,7 +279,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Get title price for selection product
      *
-     * @param \Magento\Catalog\Model\Product $selection
+     * @param Product $selection
      * @param bool $includeContainer
      * @return string
      */
@@ -293,7 +301,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return;
+        return '';
     }
 
     /**
@@ -312,7 +320,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Format price string
      *
-     * @param \Magento\Catalog\Model\Product $selection
+     * @param Product $selection
      * @param bool $includeContainer
      * @return string
      */

@@ -15,9 +15,6 @@ use Magento\Sales\Api\Data\InvoiceItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\InvoiceItemRepositoryInterface;
 use Magento\Sales\Model\Spi\InvoiceItemResourceInterface;
 
-/**
- * @since 2.2.0
- */
 class ItemRepository implements InvoiceItemRepositoryInterface
 {
     /**

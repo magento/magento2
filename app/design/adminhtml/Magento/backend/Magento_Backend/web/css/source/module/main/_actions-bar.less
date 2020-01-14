@@ -44,7 +44,10 @@
 
 .page-actions {
     @_page-action__indent: 1.3rem;
-    float: right;
+
+    &.floating-header {
+        &:extend(.page-actions-buttons all);
+    }
 
     .page-main-actions & {
         &._fixed {

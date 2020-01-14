@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Pdf\Items\Creditmemo;
 
 /**
@@ -66,11 +68,18 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
         $lines = [];
 
         // draw Product name
-        $lines[0] = [['text' => $this->string->split($item->getName(), 35, true, true), 'feed' => 35]];
+        $lines[0] = [
+            [
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                'text' => $this->string->split(html_entity_decode($item->getName()), 35, true, true),
+                'feed' => 35
+            ]
+        ];
 
         // draw SKU
         $lines[0][] = [
-            'text' => $this->string->split($this->getSku($item), 17),
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            'text' => $this->string->split(html_entity_decode($this->getSku($item)), 17),
             'feed' => 255,
             'align' => 'right',
         ];

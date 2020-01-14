@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -50,12 +51,17 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         if ($length > 0) {
             if ($length < self::MIN_PASSWORD_LENGTH) {
                 throw new LocalizedException(
-                    __('Please enter a password with at least %1 characters.', self::MIN_PASSWORD_LENGTH)
+                    __(
+                        'The password needs at least %1 characters. Create a new password and try again.',
+                        self::MIN_PASSWORD_LENGTH
+                    )
                 );
             }
 
             if (trim($password) !== $password) {
-                throw new LocalizedException(__('The password can not begin or end with a space.'));
+                throw new LocalizedException(
+                    __("The password can't begin or end with a space. Verify the password and try again.")
+                );
             }
 
             $object->setPasswordHash($object->hashPassword($password));

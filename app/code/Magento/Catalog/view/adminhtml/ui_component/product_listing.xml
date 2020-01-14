@@ -24,6 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Catalog::products</aclResource>
         <dataProvider class="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider" name="product_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -47,7 +48,9 @@
                 </settings>
             </filterSelect>
         </filters>
-        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+        <massaction name="listing_massaction"
+                    component="Magento_Ui/js/grid/tree-massactions"
+                    class="\Magento\Catalog\Ui\Component\Product\MassAction">
             <action name="delete">
                 <settings>
                     <confirm>
@@ -129,6 +132,7 @@
             <settings>
                 <addField>true</addField>
                 <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">Name</label>
             </settings>
         </column>
@@ -151,6 +155,7 @@
         <column name="sku" sortOrder="60">
             <settings>
                 <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">SKU</label>
             </settings>
         </column>

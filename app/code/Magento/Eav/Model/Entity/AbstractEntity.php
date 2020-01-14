@@ -4,28 +4,29 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 use Magento\Framework\App\Config\Element;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
-use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Entity/Attribute/Model - entity abstract
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -61,6 +62,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @var array
      */
     protected $_attributesByCode = [];
+
+    /**
+     * Attributes stored by scope (store id and attribute set id).
+     *
+     * @var array
+     */
+    private $attributesByScope = [];
 
     /**
      * Two-dimensional array by table name and attribute name
@@ -210,11 +218,20 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $objectRelationProcessor;
 
     /**
+     * @var UniqueValidationInterface
+     */
+    private $uniqueValidator;
+
+    /**
      * @param Context $context
      * @param array $data
+     * @param UniqueValidationInterface|null $uniqueValidator
      */
-    public function __construct(Context $context, $data = [])
-    {
+    public function __construct(
+        Context $context,
+        $data = [],
+        UniqueValidationInterface $uniqueValidator = null
+    ) {
         $this->_eavConfig = $context->getEavConfig();
         $this->_resource = $context->getResource();
         $this->_attrSetEntity = $context->getAttributeSetEntity();
@@ -223,6 +240,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $this->_universalFactory = $context->getUniversalFactory();
         $this->transactionManager = $context->getTransactionManager();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
+        $this->uniqueValidator = $uniqueValidator ?:
+            ObjectManager::getInstance()->get(UniqueValidationInterface::class);
         parent::__construct();
         $properties = get_object_vars($this);
         foreach ($data as $key => $value) {
@@ -247,6 +266,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 
     /**
      * Resource initialization
+     *
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      *
      * @return void
      */
@@ -359,7 +380,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         }
 
         if (!is_array($attributes)) {
-            throw new LocalizedException(__('Unknown parameter'));
+            throw new LocalizedException(__('This parameter is unknown. Verify and try again.'));
         }
 
         foreach ($attributes as $attrCode) {
@@ -394,75 +415,64 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param string|int|Element $attribute
      * @return AbstractAttribute|false
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAttribute($attribute)
     {
         /** @var $config \Magento\Eav\Model\Config */
         $config = $this->_getConfig();
-        if (is_numeric($attribute)) {
-            $attributeId = $attribute;
-            $attributeInstance = $config->getAttribute($this->getEntityType(), $attributeId);
-            if ($attributeInstance) {
-                $attributeCode = $attributeInstance->getAttributeCode();
-            }
-        } elseif (is_string($attribute)) {
-            $attributeCode = $attribute;
-            $attributeInstance = $config->getAttribute($this->getEntityType(), $attributeCode);
-            if (!$attributeInstance->getAttributeCode() && in_array($attribute, $this->getDefaultAttributes())) {
-                $attributeInstance->setAttributeCode(
-                    $attribute
-                )->setBackendType(
-                    AbstractAttribute::TYPE_STATIC
-                )->setIsGlobal(
-                    1
-                )->setEntity(
-                    $this
-                )->setEntityType(
-                    $this->getEntityType()
-                )->setEntityTypeId(
-                    $this->getEntityType()->getId()
-                );
-            }
-        } elseif ($attribute instanceof AbstractAttribute) {
-            $attributeInstance = $attribute;
-            $attributeCode = $attributeInstance->getAttributeCode();
+
+        $attributeInstance = $config->getAttribute($this->getEntityType(), $attribute);
+
+        if (!$attributeInstance->getAttributeCode() && in_array($attribute, $this->getDefaultAttributes(), true)) {
+            $attributeInstance = clone $attributeInstance;
+            $attributeInstance->setData([]);
+            $attributeInstance->setAttributeCode(
+                $attribute
+            )->setBackendType(
+                AbstractAttribute::TYPE_STATIC
+            )->setIsGlobal(
+                1
+            )->setEntity(
+                $this
+            )->setEntityType(
+                $this->getEntityType()
+            )->setEntityTypeId(
+                $this->getEntityType()->getId()
+            );
         }
 
-        if (empty($attributeInstance)
-            || !$attributeInstance instanceof AbstractAttribute
-            || !$attributeInstance->getId()
-            && !in_array($attributeInstance->getAttributeCode(), $this->getDefaultAttributes())
+        if (!$attributeInstance instanceof AbstractAttribute
+            || (!$attributeInstance->getId()
+                && !in_array($attributeInstance->getAttributeCode(), $this->getDefaultAttributes(), true))
         ) {
             return false;
         }
 
-        $attribute = $attributeInstance;
+        $this->addAttribute($attributeInstance);
 
-        if (!$attribute->getAttributeCode()) {
-            $attribute->setAttributeCode($attributeCode);
-        }
-        if (!$attribute->getAttributeModel()) {
-            $attribute->setAttributeModel($this->_getDefaultAttributeModel());
-        }
-
-        $this->addAttribute($attribute);
-
-        return $attribute;
+        return $attributeInstance;
     }
 
     /**
      * Adding attribute to entity
      *
      * @param AbstractAttribute $attribute
+     * @param DataObject|null $object
      * @return $this
      */
-    public function addAttribute(AbstractAttribute $attribute)
+    public function addAttribute(AbstractAttribute $attribute, $object = null)
     {
         $attribute->setEntity($this);
         $attributeCode = $attribute->getAttributeCode();
 
         $this->_attributesByCode[$attributeCode] = $attribute;
+
+        if ($object !== null) {
+            $suffix = $this->getAttributesCacheSuffix($object);
+            $this->attributesByScope[$suffix][$attributeCode] = $attribute;
+        }
 
         if ($attribute->isStatic()) {
             $this->_staticAttributes[$attributeCode] = $attribute;
@@ -471,6 +481,32 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         }
 
         return $this;
+    }
+
+    /**
+     * Get attributes by scope
+     *
+     * @param string $suffix
+     * @return array
+     */
+    private function getAttributesByScope($suffix)
+    {
+        return (isset($this->attributesByScope[$suffix]) && !empty($this->attributesByScope[$suffix]))
+            ? $this->attributesByScope[$suffix]
+            : $this->getAttributesByCode();
+    }
+
+    /**
+     * Get attributes cache suffix.
+     *
+     * @param DataObject $object
+     * @return string
+     */
+    private function getAttributesCacheSuffix(DataObject $object)
+    {
+        $attributeSetId = $object->getAttributeSetId() ?: 0;
+        $storeId = $object->getStoreId() ?: 0;
+        return $storeId . '-' . $attributeSetId;
     }
 
     /**
@@ -506,7 +542,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Retrieve configuration for all attributes
      *
-     * @param null|\Magento\Framework\DataObject $object
+     * @param null|DataObject $object
      * @return $this
      */
     public function loadAllAttributes($object = null)
@@ -554,19 +590,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $firstSort = $firstAttribute->getSortWeight((int) $this->_sortingSetId);
         $secondSort = $secondAttribute->getSortWeight((int) $this->_sortingSetId);
 
-        if ($firstSort > $secondSort) {
-            return 1;
-        } elseif ($firstSort < $secondSort) {
-            return -1;
-        }
-
-        return 0;
+        return $firstSort <=> $secondSort;
     }
 
     /**
      * Check whether the attribute is Applicable to the object
      *
-     * @param   \Magento\Framework\DataObject $object
+     * @param   DataObject $object
      * @param   AbstractAttribute $attribute
      * @return  bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -596,7 +626,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     public function walkAttributes($partMethod, array $args = [], $collectExceptionMessages = null)
     {
         $methodArr = explode('/', $partMethod);
-        switch (sizeof($methodArr)) {
+        switch (count($methodArr)) {
             case 1:
                 $part = 'attribute';
                 $method = $methodArr[0];
@@ -611,7 +641,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 break;
         }
         $results = [];
-        foreach ($this->getAttributesByCode() as $attrCode => $attribute) {
+        $suffix = $this->getAttributesCacheSuffix($args[0]);
+        foreach ($this->getAttributesByScope($suffix) as $attrCode => $attribute) {
             if (isset($args[0]) && is_object($args[0]) && !$this->_isApplicableAttribute($args[0], $attribute)) {
                 continue;
             }
@@ -642,6 +673,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
 
             try {
+                // phpcs:disable Magento2.Functions.DiscouragedFunction
                 $results[$attrCode] = call_user_func_array([$instance, $method], $args);
             } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
                 if ($collectExceptionMessages) {
@@ -781,9 +813,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $prefix = (string) $this->getEntityType()->getValueTablePrefix();
             if (!empty($prefix)) {
                 $this->_valueTablePrefix = $prefix;
-                /**
-                 * entity type prefix include DB table name prefix
-                 */
+            /**
+             * entity type prefix include DB table name prefix
+             */
                 //$this->_resource->getTableName($prefix);
             } else {
                 $this->_valueTablePrefix = $this->getEntityTable();
@@ -830,7 +862,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Validate all object's attributes against configuration
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
      * @return true|array
      */
@@ -856,10 +888,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Set new increment id to object
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    public function setNewIncrementId(\Magento\Framework\DataObject $object)
+    public function setNewIncrementId(DataObject $object)
     {
         if ($object->getIncrementId()) {
             return $this;
@@ -878,7 +910,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Check attribute unique value
      *
      * @param AbstractAttribute $attribute
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return bool
      */
     public function checkAttributeUniqueValue(AbstractAttribute $attribute, $object)
@@ -908,7 +940,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 'value' => trim($value),
             ];
 
-            $entityIdField = $attributeBackend->getEntityIdField();
+            $entityIdField = $object->getResource()->getLinkField();
             $select->from(
                 $attributeBackend->getTable(),
                 $entityIdField
@@ -926,12 +958,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 
         $data = $connection->fetchCol($select, $bind);
 
-        $objectId = $object->getData($entityIdField);
-        if ($objectId) {
-            if (isset($data[0])) {
-                return $data[0] == $objectId;
-            }
-            return true;
+        if ($object->getData($entityIdField)) {
+            return $this->uniqueValidator->validate($attribute, $object, $this, $entityIdField, $data);
         }
 
         return !count($data);
@@ -950,9 +978,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Load entity's attributes into the object
      *
-     * @param   AbstractModel $object
-     * @param   int $entityId
-     * @param   array|null $attributes
+     * @param AbstractModel $object
+     * @param int $entityId
+     * @param array|null $attributes
      * @return $this
      */
     public function load($object, $entityId, $attributes = [])
@@ -977,7 +1005,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         } else {
             $object->isObjectNew(true);
         }
-
 
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
@@ -1051,7 +1078,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Retrieve select object for loading base entity row
      *
-     * @param   \Magento\Framework\DataObject $object
+     * @param   DataObject $object
      * @param   string|int $rowId
      * @return  \Magento\Framework\DB\Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -1071,7 +1098,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Retrieve select object for loading entity attributes values
      *
-     * @param   \Magento\Framework\DataObject $object
+     * @param   DataObject $object
      * @param   string $table
      * @return  \Magento\Framework\DB\Select
      */
@@ -1091,8 +1118,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Initialize attribute value for object
      *
-     * @param   \Magento\Framework\DataObject $object
-     * @param   array $valueRow
+     * @param DataObject $object
+     * @param array $valueRow
      * @return $this
      */
     protected function _setAttributeValue($object, $valueRow)
@@ -1181,8 +1208,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Retrieve Object instance with original data
      *
-     * @param \Magento\Framework\DataObject $object
-     * @return \Magento\Framework\DataObject
+     * @param DataObject $object
+     * @return DataObject
      */
     protected function _getOrigObject($object)
     {
@@ -1197,7 +1224,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Aggregate Data for attributes that will be deleted
      *
-     * @param array &$delete
+     * @param &array $delete
      * @param AbstractAttribute $attribute
      * @param AbstractEntity $object
      * @return void
@@ -1208,6 +1235,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             if (!isset($delete[$tableName])) {
                 $delete[$tableName] = [];
             }
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $delete[$tableName] = array_merge((array)$delete[$tableName], $valuesData);
         }
     }
@@ -1245,7 +1273,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $origData = $this->_getOrigObject($newObject)->getOrigData();
             }
 
-            if (is_null($origData)) {
+            if ($origData === null) {
                 $origData = [];
             }
 
@@ -1382,7 +1410,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Save object collected data
      *
-     * @param   array $saveData array('newObject', 'entityRow', 'insert', 'update', 'delete')
+     * @param array $saveData array('newObject', 'entityRow', 'insert', 'update', 'delete')
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1422,7 +1450,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         /**
          * Process base row
          */
-        $entityObject = new \Magento\Framework\DataObject($entityRow);
+        $entityObject = new DataObject($entityRow);
         $entityRow = $this->_prepareDataForTable($entityObject, $entityTable);
         if ($insertEntity) {
             if (!empty($entityId)) {
@@ -1477,9 +1505,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Insert entity attribute value
      *
-     * @param   \Magento\Framework\DataObject $object
-     * @param   AbstractAttribute $attribute
-     * @param   mixed $value
+     * @param DataObject $object
+     * @param AbstractAttribute $attribute
+     * @param mixed $value
      * @return $this
      */
     protected function _insertAttribute($object, $attribute, $value)
@@ -1490,10 +1518,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Update entity attribute value
      *
-     * @param   \Magento\Framework\DataObject $object
-     * @param   AbstractAttribute $attribute
-     * @param   mixed $valueId
-     * @param   mixed $value
+     * @param DataObject $object
+     * @param AbstractAttribute $attribute
+     * @param mixed $valueId
+     * @param mixed $value
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1585,10 +1613,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Delete entity attribute values
      *
-     * @param   \Magento\Framework\DataObject $object
+     * @param   DataObject $object
      * @param   string $table
      * @param   array $info
-     * @return  \Magento\Framework\DataObject
+     * @return  DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _deleteAttributes($object, $table, $info)
@@ -1614,13 +1642,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Save attribute
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @param string $attributeCode
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function saveAttribute(\Magento\Framework\DataObject $object, $attributeCode)
+    public function saveAttribute(DataObject $object, $attributeCode)
     {
         $attribute = $this->getAttribute($attributeCode);
         $backend = $attribute->getBackend();
@@ -1643,20 +1671,22 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $connection->beginTransaction();
 
         try {
-            $select = $connection->select()->from($table, 'value_id')->where($where);
-            $origValueId = $connection->fetchOne($select);
+            $select = $connection->select()->from($table, ['value_id', 'value'])->where($where);
+            $origRow = $connection->fetchRow($select);
+            $origValueId = $origRow['value_id'] ?? false;
+            $origValue = $origRow['value'] ?? null;
 
             if ($origValueId === false && $newValue !== null) {
                 $this->_insertAttribute($object, $attribute, $newValue);
             } elseif ($origValueId !== false && $newValue !== null) {
                 $this->_updateAttribute($object, $attribute, $origValueId, $newValue);
-            } elseif ($origValueId !== false && $newValue === null) {
+            } elseif ($origValueId !== false && $newValue === null && $origValue !== null) {
                 $connection->delete($table, $where);
             }
             $this->_processAttributeValues();
             $connection->commit();
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw $e;
         }
 
@@ -1666,8 +1696,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Return attribute row to prepare where statement
      *
-     * @param \Magento\Framework\DataObject $entity
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $entity
+     * @param DataObject $object
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return array
      */
@@ -1688,7 +1718,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Delete entity using current object's data
      *
-     * @param \Magento\Framework\DataObject|int|string $object
+     * @param DataObject|int|string $object
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -1730,7 +1760,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Evaluate Delete operations
      *
-     * @param \Magento\Framework\DataObject|int|string $object
+     * @param DataObject|int|string $object
      * @param string|int $id
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return void
@@ -1764,10 +1794,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * After Load Entity process
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    protected function _afterLoad(\Magento\Framework\DataObject $object)
+    protected function _afterLoad(DataObject $object)
     {
         \Magento\Framework\Profiler::start('after_load');
         $this->walkAttributes('backend/afterLoad', [$object]);
@@ -1778,10 +1808,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Before delete Entity process
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    protected function _beforeSave(\Magento\Framework\DataObject $object)
+    protected function _beforeSave(DataObject $object)
     {
         $this->walkAttributes('backend/beforeSave', [$object]);
         return $this;
@@ -1790,10 +1820,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * After Save Entity process
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\DataObject $object)
+    protected function _afterSave(DataObject $object)
     {
         $this->walkAttributes('backend/afterSave', [$object]);
         return $this;
@@ -1802,10 +1832,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Before Delete Entity process
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    protected function _beforeDelete(\Magento\Framework\DataObject $object)
+    protected function _beforeDelete(DataObject $object)
     {
         $this->walkAttributes('backend/beforeDelete', [$object]);
         return $this;
@@ -1814,10 +1844,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * After delete entity process
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    protected function _afterDelete(\Magento\Framework\DataObject $object)
+    protected function _afterDelete(DataObject $object)
     {
         $this->walkAttributes('backend/afterDelete', [$object]);
         return $this;
@@ -1850,10 +1880,12 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function getDefaultAttributes()
     {
-        return array_unique(array_merge(
-            $this->_getDefaultAttributes(),
-            [$this->getEntityIdField(), $this->getLinkField()]
-        ));
+        return array_unique(
+            array_merge(
+                $this->_getDefaultAttributes(),
+                [$this->getEntityIdField(), $this->getLinkField()]
+            )
+        );
     }
 
     /**
@@ -1887,10 +1919,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Perform actions after entity load
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @since 100.1.0
      */
-    public function afterLoad(\Magento\Framework\DataObject $object)
+    public function afterLoad(DataObject $object)
     {
         $this->_afterLoad($object);
     }
@@ -1898,10 +1930,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Perform actions before entity save
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @since 100.1.0
      */
-    public function beforeSave(\Magento\Framework\DataObject $object)
+    public function beforeSave(DataObject $object)
     {
         $this->_beforeSave($object);
     }
@@ -1909,10 +1941,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Perform actions after entity save
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @since 100.1.0
      */
-    public function afterSave(\Magento\Framework\DataObject $object)
+    public function afterSave(DataObject $object)
     {
         $this->_afterSave($object);
     }
@@ -1920,10 +1952,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Perform actions before entity delete
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @since 100.1.0
      */
-    public function beforeDelete(\Magento\Framework\DataObject $object)
+    public function beforeDelete(DataObject $object)
     {
         $this->_beforeDelete($object);
     }
@@ -1931,17 +1963,18 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Perform actions after entity delete
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @since 100.1.0
      */
-    public function afterDelete(\Magento\Framework\DataObject $object)
+    public function afterDelete(DataObject $object)
     {
         $this->_afterDelete($object);
     }
 
     /**
      * Load attributes for object
-     *  if the object will not pass all attributes for this entity type will be loaded
+     *
+     * If the object will not pass all attributes for this entity type will be loaded
      *
      * @param array $attributes
      * @param AbstractEntity|null $object

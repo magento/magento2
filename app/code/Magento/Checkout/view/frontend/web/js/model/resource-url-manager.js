@@ -75,8 +75,8 @@ define([
                             quoteId: quoteId
                         } : {},
                     urls = {
-                        'guest': '/guest-carts/' + quoteId + '/coupons/' + couponCode,
-                        'customer': '/carts/mine/coupons/' + couponCode
+                        'guest': '/guest-carts/' + quoteId + '/coupons/' + encodeURIComponent(couponCode),
+                        'customer': '/carts/mine/coupons/' + encodeURIComponent(couponCode)
                     };
 
                 return this.getUrl(urls, params);

@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Reflection\DocBlock\Tag\ParamTag;
+use Zend\Code\Reflection\DocBlock\Tag\ReturnTag;
 use Zend\Code\Reflection\DocBlockReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
@@ -16,6 +19,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) this suppress MUST be removed after removing deprecated methods.
  */
 class TypeProcessor
 {
@@ -97,7 +101,9 @@ class TypeProcessor
     public function getTypeData($typeName)
     {
         if (!isset($this->_types[$typeName])) {
-            throw new \InvalidArgumentException(sprintf('Data type "%s" is not declared.', $typeName));
+            throw new \InvalidArgumentException(
+                sprintf('The "%s" data type isn\'t declared. Verify the type and try again.', $typeName)
+            );
         }
         return $this->_types[$typeName];
     }
@@ -135,7 +141,10 @@ class TypeProcessor
             $typeSimple = $this->getArrayItemType($type);
             if (!(class_exists($typeSimple) || interface_exists($typeSimple))) {
                 throw new \LogicException(
-                    sprintf('Class "%s" does not exist. Please note that namespace must be specified.', $type)
+                    sprintf(
+                        'The "%s" class doesn\'t exist and the namespace must be specified. Verify and try again.',
+                        $type
+                    )
                 );
             }
             $complexTypeName = $this->translateTypeName($type);
@@ -165,7 +174,7 @@ class TypeProcessor
         } else {
             if (!(class_exists($class) || interface_exists($class))) {
                 throw new \InvalidArgumentException(
-                    sprintf('Could not load the "%s" class as parameter type.', $class)
+                    sprintf('The "%s" class couldn\'t load as a parameter type.', $class)
                 );
             }
             $reflection = new ClassReflection($class);
@@ -275,22 +284,7 @@ class TypeProcessor
      */
     public function getGetterReturnType($methodReflection)
     {
-        $methodDocBlock = $methodReflection->getDocBlock();
-        if (!$methodDocBlock) {
-            throw new \InvalidArgumentException(
-                "Each getter must have description with @return annotation. "
-                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
-            );
-        }
-        $returnAnnotations = $methodDocBlock->getTags('return');
-        if (empty($returnAnnotations)) {
-            throw new \InvalidArgumentException(
-                "Getter return type must be specified using @return annotation. "
-                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
-            );
-        }
-        /** @var \Zend\Code\Reflection\DocBlock\Tag\ReturnTag $returnAnnotation */
-        $returnAnnotation = current($returnAnnotations);
+        $returnAnnotation = $this->getMethodReturnAnnotation($methodReflection);
         $types = $returnAnnotation->getTypes();
         $returnType = current($types);
         $nullable = in_array('null', $types);
@@ -362,7 +356,7 @@ class TypeProcessor
                 self::NORMALIZED_INT_TYPE,
                 self::NORMALIZED_FLOAT_TYPE,
                 self::NORMALIZED_DOUBLE_TYPE,
-                self::NORMALIZED_BOOLEAN_TYPE
+                self::NORMALIZED_BOOLEAN_TYPE,
             ]
         );
     }
@@ -438,7 +432,9 @@ class TypeProcessor
 
             return ucfirst($moduleNamespace . $moduleName . implode('', $typeNameParts));
         }
-        throw new \InvalidArgumentException(sprintf('Invalid parameter type "%s".', $class));
+        throw new \InvalidArgumentException(
+            sprintf('The "%s" parameter type is invalid. Verify the parameter and try again.', $class)
+        );
     }
 
     /**
@@ -477,7 +473,8 @@ class TypeProcessor
                 if ($value !== null && !settype($value[$key], $arrayItemType)) {
                     throw new SerializationException(
                         new Phrase(
-                            'Invalid type for value: "%value". Expected Type: "%type".',
+                            'The "%value" value\'s type is invalid. The "%type" type was expected. '
+                            . 'Verify and try again.',
                             ['value' => $value, 'type' => $type]
                         )
                     );
@@ -489,7 +486,7 @@ class TypeProcessor
             if ($value !== null && !$this->isTypeAny($type) && !$this->setType($value, $type)) {
                 throw new SerializationException(
                     new Phrase(
-                        'Invalid type for value: "%value". Expected Type: "%type".',
+                        'The "%value" value\'s type is invalid. The "%type" type was expected. Verify and try again.',
                         ['value' => (string)$value, 'type' => $type]
                     )
                 );
@@ -497,7 +494,7 @@ class TypeProcessor
         } elseif (!$this->isTypeAny($type)) {
             throw new SerializationException(
                 new Phrase(
-                    'Invalid type for value: "%value". Expected Type: "%type".',
+                    'The "%value" value\'s type is invalid. The "%type" type was expected. Verify and try again.',
                     ['value' => gettype($value), 'type' => $type]
                 )
             );
@@ -515,7 +512,7 @@ class TypeProcessor
     public function getParamType(ParameterReflection $param)
     {
         $type = $param->detectType();
-        if ($type == 'null') {
+        if ($type === 'null') {
             throw new \LogicException(sprintf(
                 '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
                 . ' First declared type should not be null. E.g. string|null',
@@ -524,37 +521,161 @@ class TypeProcessor
                 $param->getDeclaringFunction()->name
             ));
         }
-        if ($type == 'array') {
+        if ($type === 'array') {
             // try to determine class, if it's array of objects
-            $docBlock = $param->getDeclaringFunction()->getDocBlock();
-            $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
-            $matches = [];
-            if (preg_match($pattern, $docBlock->getContents(), $matches)) {
-                return $matches[1];
-            }
-            return "{$type}[]";
+            $paramDocBlock = $this->getParamDocBlockTag($param);
+            $paramTypes = $paramDocBlock->getTypes();
+            $paramType = array_shift($paramTypes);
+
+            $paramType = $this->resolveFullyQualifiedClassName($param->getDeclaringClass(), $paramType);
+
+            return strpos($paramType, '[]') !== false ? $paramType : "{$paramType}[]";
         }
-        return $type;
+
+        return $this->resolveFullyQualifiedClassName($param->getDeclaringClass(), $type);
     }
 
     /**
-     * Get parameter description
+     * Get alias mapping for source class
+     *
+     * @param ClassReflection $sourceClass
+     * @return array
+     */
+    public function getAliasMapping(ClassReflection $sourceClass): array
+    {
+        $sourceFileName = $sourceClass->getDeclaringFile();
+        $aliases = [];
+        foreach ($sourceFileName->getUses() as $use) {
+            if ($use['as'] !== null) {
+                $aliases[$use['as']] = $use['use'];
+            } else {
+                $pos = strrpos($use['use'], '\\');
+
+                $aliasName = substr($use['use'], $pos + 1);
+                $aliases[$aliasName] = $use['use'];
+            }
+        }
+
+        return $aliases;
+    }
+
+    /**
+     * Return true if the passed type is a simple type
+     *
+     * Eg.:
+     * Return true with; array, string, ...
+     * Return false with: SomeClassName
+     *
+     * @param string $typeName
+     * @return bool
+     */
+    public function isSimpleType(string $typeName): bool
+    {
+        return strtolower($typeName) === $typeName;
+    }
+
+    /**
+     * Get basic type for a class name
+     *
+     * Eg.:
+     * SomeClassName[] => SomeClassName
+     *
+     * @param string $className
+     * @return string
+     */
+    public function getBasicClassName(string $className): string
+    {
+        $pos = strpos($className, '[');
+        return ($pos === false) ? $className : substr($className, 0, $pos);
+    }
+
+    /**
+     * Return true if it is a FQ class name
+     *
+     * Eg.:
+     * SomeClassName => false
+     * \My\NameSpace\SomeClassName => true
+     *
+     * @param string $className
+     * @return bool
+     */
+    public function isFullyQualifiedClassName(string $className): bool
+    {
+        return strpos($className, '\\') === 0;
+    }
+
+    /**
+     * Get aliased class name
+     *
+     * @param string $className
+     * @param string $namespace
+     * @param array $aliases
+     * @return string
+     */
+    private function getAliasedClassName(string $className, string $namespace, array $aliases): string
+    {
+        $pos = strpos($className, '\\');
+        if ($pos === false) {
+            $namespacePrefix = $className;
+            $partialClassName = '';
+        } else {
+            $namespacePrefix = substr($className, 0, $pos);
+            $partialClassName = substr($className, $pos);
+        }
+
+        if (isset($aliases[$namespacePrefix])) {
+            return $aliases[$namespacePrefix] . $partialClassName;
+        }
+
+        return $namespace . '\\' . $className;
+    }
+
+    /**
+     * Resolve fully qualified type name in the class alias context
+     *
+     * @param ClassReflection $sourceClass
+     * @param string $typeName
+     * @return string
+     */
+    public function resolveFullyQualifiedClassName(ClassReflection $sourceClass, string $typeName): string
+    {
+        $typeName = trim($typeName);
+
+        // Simple way to understand it is a basic type or a class name
+        if ($this->isSimpleType($typeName)) {
+            return $typeName;
+        }
+
+        $basicTypeName = $this->getBasicClassName($typeName);
+
+        // Already a FQN class name
+        if ($this->isFullyQualifiedClassName($basicTypeName)) {
+            return '\\' . substr($typeName, 1);
+        }
+
+        $isArray = $this->isArrayType($typeName);
+        $aliases = $this->getAliasMapping($sourceClass);
+
+        $namespace = $sourceClass->getNamespaceName();
+        $fqClassName = '\\' . $this->getAliasedClassName($basicTypeName, $namespace, $aliases);
+
+        if (interface_exists($fqClassName) || class_exists($fqClassName)) {
+            return $fqClassName . ($isArray ? '[]' : '');
+        }
+
+        return $typeName;
+    }
+
+    /**
+     * Gets method parameter description.
      *
      * @param ParameterReflection $param
      * @return string|null
      */
     public function getParamDescription(ParameterReflection $param)
     {
-        $docBlock = $param->getDeclaringFunction()->getDocBlock();
-        $docBlockLines = explode("\n", $docBlock->getContents());
-        $pattern = "/\@param\s+([\w\\\_\[\]\|]+)\s+(\\\${$param->getName()})\s(.*)/";
-        $matches = [];
-
-        foreach ($docBlockLines as $line) {
-            if (preg_match($pattern, $line, $matches)) {
-                return $matches[3];
-            }
-        }
+        $paramDocBlock = $this->getParamDocBlockTag($param);
+        return $paramDocBlock->getDescription();
     }
 
     /**
@@ -707,5 +828,71 @@ class TypeProcessor
             $type = $this->getArrayItemType($type);
         }
         return $type;
+    }
+
+    /**
+     * Parses `return` annotation from reflection method.
+     *
+     * @param MethodReflection $methodReflection
+     * @return ReturnTag
+     * @throws \InvalidArgumentException if doc block is empty or `@return` annotation doesn't exist
+     */
+    private function getMethodReturnAnnotation(MethodReflection $methodReflection)
+    {
+        $methodName = $methodReflection->getName();
+        $returnAnnotations = $this->getReturnFromDocBlock($methodReflection);
+        if (empty($returnAnnotations)) {
+            // method can inherit doc block from implemented interface, like for interceptors
+            $implemented = $methodReflection->getDeclaringClass()->getInterfaces();
+            /** @var ClassReflection $parentClassReflection */
+            foreach ($implemented as $parentClassReflection) {
+                if ($parentClassReflection->hasMethod($methodName)) {
+                    $returnAnnotations = $this->getReturnFromDocBlock(
+                        $parentClassReflection->getMethod($methodName)
+                    );
+                    break;
+                }
+            }
+            // throw an exception if even implemented interface doesn't have return annotations
+            if (empty($returnAnnotations)) {
+                throw new \InvalidArgumentException(
+                    "Method's return type must be specified using @return annotation. "
+                    . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodName}()"
+                );
+            }
+        }
+        return $returnAnnotations;
+    }
+
+    /**
+     * Parses `return` annotation from doc block.
+     *
+     * @param MethodReflection $methodReflection
+     * @return ReturnTag
+     */
+    private function getReturnFromDocBlock(MethodReflection $methodReflection)
+    {
+        $methodDocBlock = $methodReflection->getDocBlock();
+        if (!$methodDocBlock) {
+            throw new \InvalidArgumentException(
+                "Each method must have a doc block. "
+                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
+            );
+        }
+        return current($methodDocBlock->getTags('return'));
+    }
+
+    /**
+     * Gets method's param doc block.
+     *
+     * @param ParameterReflection $param
+     * @return ParamTag
+     */
+    private function getParamDocBlockTag(ParameterReflection $param): ParamTag
+    {
+        $docBlock = $param->getDeclaringFunction()
+            ->getDocBlock();
+        $paramsTag = $docBlock->getTags('param');
+        return $paramsTag[$param->getPosition()];
     }
 }

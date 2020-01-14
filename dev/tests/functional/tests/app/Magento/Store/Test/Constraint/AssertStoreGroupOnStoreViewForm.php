@@ -29,7 +29,7 @@ class AssertStoreGroupOnStoreViewForm extends AbstractConstraint
     {
         $storeGroupName = $storeGroup->getName();
         $storeIndex->open()->getGridPageActions()->addStoreView();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $storeNew->getStoreForm()->isStoreVisible($storeGroupName),
             'Store Group \'' . $storeGroupName . '\' is not present on StoreView Form in Store dropdown.'
         );

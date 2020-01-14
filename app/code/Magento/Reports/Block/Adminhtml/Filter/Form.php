@@ -31,7 +31,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_fieldVisibility = [];
 
     /**
-     * Report field opions
+     * Report field options
      *
      * @var array
      */

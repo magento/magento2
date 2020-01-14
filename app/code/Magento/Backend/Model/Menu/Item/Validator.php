@@ -6,6 +6,9 @@
 namespace Magento\Backend\Model\Menu\Item;
 
 /**
+ * Class Validator
+ *
+ * @package Magento\Backend\Model\Menu\Item
  * @api
  * @since 100.0.2
  */
@@ -49,7 +52,7 @@ class Validator
 
         $attributeValidator = new \Zend_Validate();
         $attributeValidator->addValidator(new \Zend_Validate_StringLength(['min' => 3]));
-        $attributeValidator->addValidator(new \Zend_Validate_Regex('/^[A-Za-z0-9\/_]+$/'));
+        $attributeValidator->addValidator(new \Zend_Validate_Regex('/^[A-Za-z0-9\/_\-]+$/'));
 
         $textValidator = new \Zend_Validate_StringLength(['min' => 3, 'max' => 50]);
 
@@ -75,33 +78,86 @@ class Validator
      */
     public function validate($data)
     {
+        if ($this->checkMenuItemIsRemoved($data)) {
+            return;
+        }
+
+        $this->assertContainsRequiredParameters($data);
+        $this->assertIdentifierIsNotUsed($data['id']);
+
+        foreach ($data as $param => $value) {
+            $this->validateMenuItemParameter($param, $value);
+        }
+        $this->_ids[] = $data['id'];
+    }
+
+    /**
+     * Check that menu item is not deleted
+     *
+     * @param array $data
+     * @return bool
+     */
+    private function checkMenuItemIsRemoved($data)
+    {
+        return isset($data['id'], $data['removed']) && $data['removed'] === true;
+    }
+
+    /**
+     * Check that menu item contains all required data
+     *
+     * @param array $data
+     *
+     * @throws \BadMethodCallException
+     */
+    private function assertContainsRequiredParameters($data)
+    {
         foreach ($this->_required as $param) {
             if (!isset($data[$param])) {
                 throw new \BadMethodCallException('Missing required param ' . $param);
             }
         }
+    }
 
-        if (array_search($data['id'], $this->_ids) !== false) {
-            throw new \InvalidArgumentException('Item with id ' . $data['id'] . ' already exists');
+    /**
+     * Check that menu item id is not used
+     *
+     * @param string $id
+     * @throws \InvalidArgumentException
+     */
+    private function assertIdentifierIsNotUsed($id)
+    {
+        if (array_search($id, $this->_ids) !== false) {
+            throw new \InvalidArgumentException('Item with id ' . $id . ' already exists');
+        }
+    }
+
+    /**
+     * Validate menu item parameter value
+     *
+     * @param string $param
+     * @param mixed $value
+     * @throws \InvalidArgumentException
+     */
+    private function validateMenuItemParameter($param, $value)
+    {
+        if ($value === null) {
+            return;
+        }
+        if (!isset($this->_validators[$param])) {
+            return;
         }
 
-        foreach ($data as $param => $value) {
-            if ($data[$param] !== null
-            && isset(
-                $this->_validators[$param]
-            ) && !$this->_validators[$param]->isValid(
-                $value
+        $validator = $this->_validators[$param];
+        if ($validator->isValid($value)) {
+            return;
+        }
+
+        throw new \InvalidArgumentException(
+            "Param " . $param . " doesn't pass validation: " . implode(
+                '; ',
+                $validator->getMessages()
             )
-            ) {
-                throw new \InvalidArgumentException(
-                    "Param " . $param . " doesn't pass validation: " . implode(
-                        '; ',
-                        $this->_validators[$param]->getMessages()
-                    )
-                );
-            }
-        }
-        $this->_ids[] = $data['id'];
+        );
     }
 
     /**

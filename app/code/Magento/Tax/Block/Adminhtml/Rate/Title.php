@@ -23,7 +23,7 @@ class Title extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'rate/title.phtml';
+    protected $_template = 'Magento_Tax::rate/title.phtml';
 
     /**
      * @var \Magento\Store\Model\StoreFactory

@@ -11,6 +11,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Data object for sort order.
+ *
+ * @api
  */
 class SortOrder extends AbstractSimpleObject
 {
@@ -23,12 +25,16 @@ class SortOrder extends AbstractSimpleObject
      * Initialize object and validate sort direction
      *
      * @param array $data
+     * @throws InputException
      */
     public function __construct(array $data = [])
     {
         parent::__construct($data);
         if (null !== $this->getDirection()) {
             $this->validateDirection($this->getDirection());
+        }
+        if ($this->getField() !== null) {
+            $this->validateField($this->getField());
         }
     }
 
@@ -46,10 +52,14 @@ class SortOrder extends AbstractSimpleObject
      * Set sorting field.
      *
      * @param string $field
+     * @throws InputException
+     *
      * @return $this
      */
     public function setField($field)
     {
+        $this->validateField($field);
+
         return $this->setData(SortOrder::FIELD, $field);
     }
 
@@ -67,6 +77,8 @@ class SortOrder extends AbstractSimpleObject
      * Set sorting direction.
      *
      * @param string $direction
+     * @throws InputException
+     *
      * @return $this
      */
     public function setDirection($direction)
@@ -79,10 +91,10 @@ class SortOrder extends AbstractSimpleObject
      * Validate direction argument ASC or DESC
      *
      * @param mixed $direction
-     * @return null
+     * @return void
      * @throws InputException
      */
-    private function validateDirection($direction)
+    private function validateDirection($direction): void
     {
         $this->validateDirectionIsString($direction);
         $this->validateDirectionIsAscOrDesc($direction);
@@ -91,9 +103,9 @@ class SortOrder extends AbstractSimpleObject
     /**
      * @param string $direction
      * @throws InputException
-     * @return null
+     * @return void
      */
-    private function validateDirectionIsString($direction)
+    private function validateDirectionIsString($direction): void
     {
         if (!is_string($direction)) {
             throw new InputException(new Phrase(
@@ -106,9 +118,9 @@ class SortOrder extends AbstractSimpleObject
     /**
      * @param string $direction
      * @throws InputException
-     * @return null
+     * @return void
      */
-    private function validateDirectionIsAscOrDesc($direction)
+    private function validateDirectionIsAscOrDesc($direction): void
     {
         $normalizedDirection = $this->normalizeDirectionInput($direction);
         if (!in_array($normalizedDirection, [SortOrder::SORT_ASC, SortOrder::SORT_DESC], true)) {
@@ -126,5 +138,24 @@ class SortOrder extends AbstractSimpleObject
     private function normalizeDirectionInput($direction)
     {
         return strtoupper($direction);
+    }
+
+    /**
+     * Check if given value can be used as sorting field.
+     *
+     * @param string $field
+     * @return void
+     * @throws InputException
+     */
+    private function validateField(string $field): void
+    {
+        if (preg_match('/[^a-z0-9\_]/i', $field)) {
+            throw new InputException(
+                new Phrase(
+                    'Sort order field %1 contains restricted symbols',
+                    [$field]
+                )
+            );
+        }
     }
 }

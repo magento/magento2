@@ -19,4 +19,16 @@
     <type name="Magento\Framework\View\Asset\MergeService">
         <plugin name="cleanMergedJsCss" type="Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss"/>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="imagesResizeCommand" xsi:type="object">Magento\MediaStorage\Console\Command\ImagesResizeCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaStorage\Console\Command\ImagesResizeCommand">
+        <arguments>
+            <argument name="imageResizeScheduler" xsi:type="object">Magento\MediaStorage\Service\ImageResizeScheduler\Proxy</argument>
+        </arguments>
+    </type>
 </config>

@@ -23,7 +23,7 @@
         <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="0" showInWebsite="0" showInStore="0">
             <label>Advanced</label>
             <tab>advanced</tab>
-            <resource>Magento_Backend::advanced</resource>
+            <resource>Magento_Config::advanced</resource>
             <group id="modules_disable_output" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Disable Modules Output</label>
                 <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset\Modules\DisableOutput</frontend_model>
@@ -112,7 +112,7 @@
             <group id="debug" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Debug</label>
                 <field id="template_hints_storefront" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enabled Template Path Hints for Storefront</label>
+                    <label>Enable Template Path Hints for Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="template_hints_storefront_show_with_parameter" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -129,14 +129,14 @@
                         <field id="*/*/template_hints_storefront">1</field>
                         <field id="*/*/template_hints_storefront_show_with_parameter">1</field>
                     </depends>
-                    <comment>Add the following paramater to the URL to show template hints ?templatehints=[parameter_value]</comment>
+                    <comment>Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]</comment>
                 </field>
                 <field id="template_hints_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enabled Template Path Hints for Admin</label>
+                    <label>Enable Template Path Hints for Admin</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="template_hints_blocks" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Add Block Names to Hints</label>
+                    <label>Add Block Class Type to Hints</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -145,7 +145,9 @@
                 <field id="allow_symlink" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Symlinks</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk.</comment>
+                    <comment>
+                        <![CDATA[<strong style="color:red">Warning!</strong> Enabling this feature is not recommended on production environments because it represents a potential security risk.]]>
+                    </comment>
                 </field>
                 <field id="minify_html" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minify Html</label>
@@ -169,15 +171,15 @@
             </group>
             <group id="js" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>JavaScript Settings</label>
-                <field id="merge_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="merge_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Merge JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="enable_js_bundling" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_js_bundling" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable JavaScript Bundling</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minify JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
@@ -185,11 +187,11 @@
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>CSS Settings</label>
-                <field id="merge_css_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="merge_css_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Merge CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minify CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
@@ -197,7 +199,7 @@
             </group>
             <group id="image" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Image Processing Settings</label>
-                <field id="default_adapter" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="default_adapter" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Image Adapter</label>
                     <source_model>Magento\Config\Model\Config\Source\Image\Adapter</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Adapter</backend_model>
@@ -231,9 +233,10 @@
                     <label>European Union Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
-                <field id="destinations" translate="label" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="destinations" translate="label" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Top destinations</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
                 </field>
             </group>
             <group id="locale" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -314,24 +317,49 @@
                     <label>Disable Email Communications</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="host" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="host" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Host</label>
                     <comment>For Windows server only.</comment>
                 </field>
-                <field id="port" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="port" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Port (25)</label>
-                    <comment>For Windows server only.</comment>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
+                    <comment>Please enter at least 0 and at most 65535 (For Windows server only).</comment>
                 </field>
-                <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Set Return-Path</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesnocustom</source_model>
                 </field>
-                <field id="return_path_email" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="return_path_email" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Return-Path Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
                     <depends>
                         <field id="set_return_path">2</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Images Upload Configuration</label>
+                <field id="enable_resize" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Enable Frontend Resize</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Resize performed via javascript before file upload.</comment>
+                </field>
+                <field id="max_width" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Maximum Width</label>
+                    <validate>validate-greater-than-zero validate-number required-entry</validate>
+                    <comment>Maximum allowed width for uploaded image.</comment>
+                    <depends>
+                        <field id="enable_resize">1</field>
+                    </depends>
+                </field>
+                <field id="max_height" translate="label comment" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Maximum Height</label>
+                    <validate>validate-greater-than-zero validate-number required-entry</validate>
+                    <comment>Maximum allowed height for uploaded image.</comment>
+                    <depends>
+                        <field id="enable_resize">1</field>
                     </depends>
                 </field>
             </group>
@@ -410,7 +438,7 @@
                     <label>Admin Session Lifetime (seconds)</label>
                     <comment>Please enter at least 60 and at most 31536000 (one year).</comment>
                     <backend_model>Magento\Backend\Model\Config\SessionLifetime\BackendModel</backend_model>
-                    <validate>validate-digits</validate>
+                    <validate>validate-digits validate-digits-range digits-range-60-31536000</validate>
                 </field>
             </group>
             <group id="dashboard" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -425,17 +453,17 @@
             <label>Web</label>
             <tab>general</tab>
             <resource>Magento_Config::web</resource>
-            <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Url Options</label>
                 <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Add Store Code to Urls</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Store</backend_model>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).]]>
+                        <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).]]>
                     </comment>
                 </field>
-                <field id="redirect_to_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="redirect_to_base" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Auto-redirect to Base URL</label>
                     <source_model>Magento\Config\Model\Config\Source\Web\Redirect</source_model>
                     <comment>I.e. redirect from http://example.com/store/ to http://www.example.com/store/</comment>
@@ -448,76 +476,76 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-            <group id="unsecure" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="unsecure" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Base URLs</label>
                 <comment>Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/</comment>
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>Specify URL or {{base_url}} placeholder.</comment>
+                    <comment><![CDATA[Specify URL or {{base_url}} placeholder.]]></comment>
                 </field>
-                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="base_link_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Base Link URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May start with {{unsecure_base_url}} placeholder.</comment>
+                    <comment><![CDATA[May start with {{unsecure_base_url}} placeholder.]]></comment>
                 </field>
                 <field id="base_static_url" translate="label comment" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL for Static View Files</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
+                    <comment><![CDATA[May be empty or start with {{unsecure_base_url}} placeholder.]]></comment>
                 </field>
-                <field id="base_media_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="base_media_url" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL for User Media Files</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
+                    <comment><![CDATA[May be empty or start with {{unsecure_base_url}} placeholder.]]></comment>
                 </field>
             </group>
-            <group id="secure" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="secure" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Base URLs (Secure)</label>
                 <comment>Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. https://example.com/magento/</comment>
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.</comment>
+                    <comment><![CDATA[Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.]]></comment>
                 </field>
-                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="base_link_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Secure Base Link URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May start with {{secure_base_url}} or {{unsecure_base_url}} placeholder.</comment>
+                    <comment><![CDATA[May start with {{secure_base_url}} or {{unsecure_base_url}} placeholder.]]></comment>
                 </field>
                 <field id="base_static_url" translate="label comment" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL for Static View Files</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
+                    <comment><![CDATA[May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.]]></comment>
                 </field>
-                <field id="base_media_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="base_media_url" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL for User Media Files</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
+                    <comment><![CDATA[May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.]]></comment>
                 </field>
-                <field id="use_in_frontend" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="use_in_frontend" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Secure URLs on Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
                     <comment>Enter https protocol to use Secure URLs on Storefront.</comment>
                 </field>
-                <field id="use_in_adminhtml" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="use_in_adminhtml" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Use Secure URLs in Admin</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
                     <comment>Enter https protocol to use Secure URLs in Admin.</comment>
                 </field>
-                <field id="enable_hsts" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_hsts" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable HTTP Strict Transport Security (HSTS)</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
-                    <comment><![CDATA[See <a href="https://www.owasp.org/index.php/HTTP_Strict_Transport_Security" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
+                    <comment><![CDATA[See <a href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
                     <depends>
                         <field id="use_in_frontend">1</field>
                         <field id="use_in_adminhtml">1</field>
                     </depends>
                 </field>
-                <field id="enable_upgrade_insecure" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_upgrade_insecure" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Upgrade Insecure Requests</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
@@ -556,11 +584,6 @@
                 </field>
                 <field id="use_http_user_agent" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Validate HTTP_USER_AGENT</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="use_frontend_sid" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Use SID on Storefront</label>
-                    <comment>Allows customers to stay logged in when switching between different stores.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>

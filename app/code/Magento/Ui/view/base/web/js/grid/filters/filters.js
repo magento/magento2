@@ -10,8 +10,10 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiCollection'
-], function (_, utils, layout, Collection) {
+    'uiCollection',
+    'mage/translate',
+    'jquery'
+], function (_, utils, layout, Collection, $t, $) {
     'use strict';
 
     /**
@@ -48,6 +50,7 @@ define([
             stickyTmpl: 'ui/grid/sticky/filters',
             _processed: [],
             columnsProvider: 'ns = ${ $.ns }, componentType = columns',
+            bookmarksProvider: 'ns = ${ $.ns }, componentType = bookmark',
             applied: {
                 placeholder: true
             },
@@ -80,6 +83,10 @@ define([
                         component: 'Magento_Ui/js/grid/filters/range',
                         rangeType: 'date'
                     },
+                    datetimeRange: {
+                        component: 'Magento_Ui/js/grid/filters/range',
+                        rangeType: 'datetime'
+                    },
                     textRange: {
                         component: 'Magento_Ui/js/grid/filters/range',
                         rangeType: 'text'
@@ -102,7 +109,9 @@ define([
                 applied: '${ $.provider }:params.filters'
             },
             imports: {
-                'onColumnsUpdate': '${ $.columnsProvider }:elems'
+                onColumnsUpdate: '${ $.columnsProvider }:elems',
+                onBackendError: '${ $.provider }:lastError',
+                bookmarksActiveIndex: '${ $.bookmarksProvider }:activeIndex'
             },
             modules: {
                 columns: '${ $.columnsProvider }',
@@ -252,7 +261,7 @@ define([
         /**
          * Creates filter component configuration associated with the provided column.
          *
-         * @param {Column} column - Column component whith a basic filter declaration.
+         * @param {Column} column - Column component with a basic filter declaration.
          * @returns {Object} Filters' configuration.
          */
         buildFilter: function (column) {
@@ -267,11 +276,22 @@ define([
             }
 
             filter = utils.extend({}, filters.base, filter);
+            //Accepting labels as is.
+            filter.__disableTmpl = {
+                label: 1,
+                options: 1
+            };
 
-            return utils.template(filter, {
+            filter = utils.template(filter, {
                 filters: this,
                 column: column
             }, true, true);
+
+            filter.__disableTmpl = {
+                label: true
+            };
+
+            return filter;
         },
 
         /**
@@ -326,7 +346,7 @@ define([
         },
 
         /**
-         * Finds filters whith a not empty data
+         * Finds filters with a not empty data
          * and sets them to the 'active' filters array.
          *
          * @returns {Filters} Chainable.
@@ -371,6 +391,37 @@ define([
          */
         onColumnsUpdate: function (columns) {
             columns.forEach(this.addFilter, this);
+        },
+
+        /**
+         * Provider ajax error listener.
+         *
+         * @param {bool} isError - Selected index of the filter.
+         */
+        onBackendError: function (isError) {
+            var defaultMessage = 'Something went wrong with processing the default view and we have restored the ' +
+                    'filter to its original state.',
+                customMessage  = 'Something went wrong with processing current custom view and filters have been ' +
+                    'reset to its original state. Please edit filters then click apply.';
+
+            if (isError) {
+                this.clear();
+
+                $('body').notification('clear')
+                    .notification('add', {
+                        error: true,
+                        message: $.mage.__(this.bookmarksActiveIndex !== 'default' ? customMessage : defaultMessage),
+
+                        /**
+                         * @param {String} message
+                         */
+                        insertMethod: function (message) {
+                            var $wrapper = $('<div/>').html(message);
+
+                            $('.page-main-actions').after($wrapper);
+                        }
+                    });
+            }
         }
     });
 });

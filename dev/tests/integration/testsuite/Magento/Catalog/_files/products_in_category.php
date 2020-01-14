@@ -25,7 +25,7 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setStockData(
-    ['qty' => 100, 'is_in_stock' => 1]
+    ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]
 )->save();
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
@@ -48,7 +48,7 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setStockData(
-    ['qty' => 100, 'is_in_stock' => 1]
+    ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]
 )->save();
 
 /** @var \Magento\Catalog\Model\Category $category */

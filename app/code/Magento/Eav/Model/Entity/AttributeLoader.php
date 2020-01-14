@@ -67,10 +67,10 @@ class AttributeLoader implements AttributeLoaderInterface
         $resource->unsetAttributes();
 
         foreach ($defaultAttributesCodes as $attributeCode) {
-            $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
+            $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode), $object);
         }
         foreach ($attributes as $attributeCode => $attribute) {
-            $resource->addAttribute($attribute);
+            $resource->addAttribute($attribute, $object);
         }
         return $resource;
     }

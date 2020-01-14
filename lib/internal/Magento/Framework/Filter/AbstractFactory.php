@@ -68,7 +68,7 @@ abstract class AbstractFactory implements FactoryInterface
      */
     public function isShared($class)
     {
-        return isset($this->shared[$class]) ? $this->shared[$class] : $this->shareByDefault;
+        return $this->shared[$class] ?? $this->shareByDefault;
     }
 
     /**

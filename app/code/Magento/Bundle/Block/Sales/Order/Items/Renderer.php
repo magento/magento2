@@ -142,9 +142,8 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
         if ($attributes = $this->getSelectionAttributes($item)) {
             return sprintf('%d', $attributes['qty']) . ' x ' . $this->escapeHtml($item->getName()) . " "
                 . $this->getOrder()->formatPrice($attributes['price']);
-        } else {
-            return $this->escapeHtml($item->getName());
         }
+        return $this->escapeHtml($item->getName());
     }
 
     /**
@@ -179,9 +178,8 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 
         if (isset($itemsArray[$item->getOrderItem()->getId()])) {
             return $itemsArray[$item->getOrderItem()->getId()];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**

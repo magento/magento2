@@ -7,8 +7,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="root">
-            <block class="Magento\Wishlist\Block\Rss\EmailLink" name="wishlist.email.rss" cacheable="false"/>
-        </referenceContainer>
+        <block class="Magento\Wishlist\Block\Rss\EmailLink" name="wishlist.email.rss" cacheable="false"/>
     </body>
 </page>

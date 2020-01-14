@@ -14,7 +14,10 @@ define([
             clearing: false,
             parentContainer: '',
             parentSelections: '',
-            changer: ''
+            changer: '',
+            exports: {
+                value: '${$.parentName}:isDefaultValue'
+            }
         },
 
         /**
@@ -58,10 +61,6 @@ define([
 
             this.prefer = typeMap[type];
             this.elementTmpl(this.templates[typeMap[type]]);
-
-            if (this.prefer === 'radio' && this.checked()) {
-                this.clearValues();
-            }
         },
 
         /**

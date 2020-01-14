@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+require __DIR__ . '/products_upsell_rollback.php';
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
@@ -25,7 +27,7 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setStockData(
-    ['qty' => 100, 'is_in_stock' => 1]
+    ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]
 )->save();
 
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */

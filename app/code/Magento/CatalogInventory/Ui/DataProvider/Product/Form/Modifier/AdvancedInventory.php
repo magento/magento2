@@ -85,7 +85,7 @@ class AdvancedInventory extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -163,7 +163,7 @@ class AdvancedInventory extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -175,6 +175,8 @@ class AdvancedInventory extends AbstractModifier
     }
 
     /**
+     * Modify UI Quantity and Stock status attribute meta.
+     *
      * @return void
      */
     private function prepareMeta()
@@ -183,10 +185,6 @@ class AdvancedInventory extends AbstractModifier
         $pathField = $this->arrayManager->findPath($fieldCode, $this->meta, null, 'children');
 
         if ($pathField) {
-            $labelField = $this->arrayManager->get(
-                $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/label',
-                $this->meta
-            );
             $fieldsetPath = $this->arrayManager->slicePath($pathField, 0, -4);
 
             $this->meta = $this->arrayManager->merge(
@@ -210,23 +208,23 @@ class AdvancedInventory extends AbstractModifier
                     'scopeLabel' => '[GLOBAL]',
                 ]
             );
-
             $container['arguments']['data']['config'] = [
                 'formElement' => 'container',
                 'componentType' => 'container',
                 'component' => "Magento_Ui/js/form/components/group",
-                'label' => $labelField,
+                'label' => false,
                 'breakLine' => false,
                 'dataScope' => $fieldCode,
-                'scopeLabel' => '[GLOBAL]',
                 'source' => 'product_details',
                 'sortOrder' => (int) $this->arrayManager->get(
                     $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
                     $this->meta
                 ) - 1,
+                'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
             ];
             $qty['arguments']['data']['config'] = [
                 'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
+                'group' => 'quantity_and_stock_status_qty',
                 'dataType' => 'number',
                 'formElement' => 'input',
                 'componentType' => 'field',
@@ -256,6 +254,9 @@ class AdvancedInventory extends AbstractModifier
                         'targetName' => 'product_form.product_form.advanced_inventory_modal',
                         'actionName' => 'toggleModal',
                     ],
+                ],
+                'imports' => [
+                    'childError' => 'product_form.product_form.advanced_inventory_modal.stock_data:error',
                 ],
                 'title' => __('Advanced Inventory'),
                 'provider' => false,

@@ -36,7 +36,7 @@ class AssertIntegrationInGrid extends AbstractConstraint
         ];
 
         $integrationIndexPage->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $integrationIndexPage->getIntegrationGrid()->isRowVisible($filter),
             'Integration \'' . $filter['name'] . '\' is absent in Integration grid.'
         );

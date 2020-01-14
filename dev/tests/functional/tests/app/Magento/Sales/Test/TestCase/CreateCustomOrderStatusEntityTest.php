@@ -30,7 +30,7 @@ class CreateCustomOrderStatusEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Order staus page.
+     * Order status page.
      *
      * @var OrderStatusIndex
      */

@@ -10,10 +10,25 @@
     <preference for="Magento\ImportExport\Model\Export\ConfigInterface" type="Magento\ImportExport\Model\Export\Config" />
     <preference for="Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface" type="Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator" />
     <preference for="Magento\ImportExport\Model\Report\ReportProcessorInterface" type="Magento\ImportExport\Model\Report\Csv" />
+    <preference for="Magento\ImportExport\Api\Data\ExportInfoInterface" type="Magento\ImportExport\Model\Export\Entity\ExportInfo" />
+    <preference for="Magento\ImportExport\Api\Data\ExtendedExportInfoInterface" type="Magento\ImportExport\Model\Export\Entity\ExportInfo" />
+    <preference for="Magento\ImportExport\Api\ExportManagementInterface" type="Magento\ImportExport\Model\Export\ExportManagement" />
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">
                 <item name="importexport" xsi:type="string">Magento_ImportExport</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="advanced_pricing" xsi:type="string">Magento_ImportExport</item>
+                <item name="catalog_product" xsi:type="string">Magento_ImportExport</item>
+                <item name="customer" xsi:type="string">Magento_ImportExport</item>
+                <item name="customer_address" xsi:type="string">Magento_ImportExport</item>
+                <item name="customer_composite" xsi:type="string">Magento_ImportExport</item>
+                <item name="customer_finance" xsi:type="string">Magento_ImportExport</item>
             </argument>
         </arguments>
     </type>

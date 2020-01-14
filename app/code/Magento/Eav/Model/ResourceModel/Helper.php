@@ -47,6 +47,19 @@ class Helper extends \Magento\Framework\DB\Helper
     ];
 
     /**
+     * Attribute types that can be united via UNION into one query
+     * while selecting attribute`s data from tables like `catalog_product_entity_datatype`
+     *
+     * This helps to run one query with all data types instead of one per each data type
+     *
+     * This data types are determined as 'groupable' because their tables have the same structure
+     * which means that they can be used in one UNION query
+     *
+     * @var array
+     */
+    private $_groupableTypes = ['varchar', 'text', 'decimal', 'datetime', 'int'];
+
+    /**
      * Returns DDL type by column type in database
      *
      * @param string $columnType
@@ -72,15 +85,41 @@ class Helper extends \Magento\Framework\DB\Helper
     /**
      * Groups selects to separate unions depend on type
      *
+     * E.g. for input array:
+     *  [
+     *      varchar => [select1, select2],
+     *      text    => [select3],
+     *      int     => [select4],
+     *      bool    => [select5]
+     *  ]
+     *
+     * The result array will be:
+     *  [
+     *      0 => [select1, select2, select3, select4] // contains queries for varchar & text & int
+     *      1 => [select5]                            // contains queries for bool
+     *  ]
+     *
      * @param array $selects
      * @return array
      */
     public function getLoadAttributesSelectGroups($selects)
     {
         $mainGroup = [];
-        foreach ($selects as $selectGroup) {
-            $mainGroup = array_merge($mainGroup, $selectGroup);
+
+        foreach ($selects as $dataType => $selectGroup) {
+            if (in_array($dataType, $this->_groupableTypes)) {
+                $mainGroup['all'][] = $selectGroup;
+                continue;
+            }
+
+            $mainGroup[$dataType] = $selectGroup;
         }
-        return $mainGroup;
+
+        if (array_key_exists('all', $mainGroup)) {
+            // it is better to call array_merge once after loop instead of calling it on each loop
+            $mainGroup['all'] = array_merge(...$mainGroup['all']);
+        }
+
+        return array_values($mainGroup);
     }
 }

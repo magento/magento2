@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use \Magento\Framework\Filesystem\Driver\Http;
@@ -40,6 +41,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, (new Http())->isExists(''));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestIsExists()
     {
         return [['200 OK', true], ['404 Not Found', false]];
@@ -54,6 +58,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, (new Http())->stat(''));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestStat()
     {
         $headers1 = [
@@ -130,7 +137,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage Please correct the download URL.
+     * @expectedExceptionMessage The download URL is incorrect. Verify and try again.
      */
     public function testFileOpenInvalidUrl()
     {

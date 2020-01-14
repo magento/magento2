@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Design\Config;
 
 use \Magento\Framework\Exception\LocalizedException;
@@ -64,17 +65,8 @@ class Validator
         }
 
         foreach ($elements as $name => $data) {
-            // Load template object by configured template id
-            $template = $this->templateFactory->create();
-            $template->emulateDesign($designConfig->getScopeId());
             $templateId = $data['value'];
-            if (is_numeric($templateId)) {
-                $template->load($templateId);
-            } else {
-                $template->loadDefault($templateId);
-            }
-            $text = $template->getTemplateText();
-            $template->revertDesign();
+            $text = $this->getTemplateText($templateId, $designConfig);
             // Check if template body has a reference to the same config path
             if (preg_match_all(Template::CONSTRUCTION_TEMPLATE_PATTERN, $text, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
@@ -83,15 +75,51 @@ class Validator
                     if (isset($params['config_path']) && $params['config_path'] == $data['config_path']) {
                         throw new LocalizedException(
                             __(
-                                "The %templateName contains an incorrect configuration. The template has " .
-                                "a reference to itself. Either remove or change the reference.",
+                                'The "%templateName" template contains an incorrect configuration, with a reference '
+                                . 'to itself. Remove or change the reference, then try again.',
                                 ["templateName" => $name]
                             )
                         );
-                    };
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * Returns store identifier if is store scope
+     *
+     * @param DesignConfigInterface $designConfig
+     * @return string|bool
+     */
+    private function getScopeId(DesignConfigInterface $designConfig)
+    {
+        if ($designConfig->getScope() == 'stores') {
+            return $designConfig->getScopeId();
+        }
+        return false;
+    }
+    /**
+     * Load template text in configured scope
+     *
+     * @param integer|string $templateId
+     * @param DesignConfigInterface $designConfig
+     * @return string
+     */
+    private function getTemplateText($templateId, DesignConfigInterface $designConfig)
+    {
+        // Load template object by configured template id
+        $template = $this->templateFactory->create();
+        $template->emulateDesign($this->getScopeId($designConfig));
+        if (is_numeric($templateId)) {
+            $template->load($templateId);
+        } else {
+            $template->setForcedArea($templateId);
+            $template->loadDefault($templateId);
+        }
+        $text = $template->getTemplateText();
+        $template->revertDesign();
+        return $text;
     }
 
     /**

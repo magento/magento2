@@ -34,7 +34,7 @@ class AssertStoreForm extends AbstractAssertForm
         $formData = $storeNew->getStoreForm()->getData();
         $fixtureData = $store->getData();
         $errors = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 
     /**

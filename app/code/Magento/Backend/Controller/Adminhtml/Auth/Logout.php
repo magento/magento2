@@ -6,7 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
-class Logout extends \Magento\Backend\Controller\Adminhtml\Auth
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGet;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
+
+class Logout extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGet, HttpPost
 {
     /**
      * Administrator logout action
@@ -16,7 +19,7 @@ class Logout extends \Magento\Backend\Controller\Adminhtml\Auth
     public function execute()
     {
         $this->_auth->logout();
-        $this->messageManager->addSuccess(__('You have logged out.'));
+        $this->messageManager->addSuccessMessage(__('You have logged out.'));
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

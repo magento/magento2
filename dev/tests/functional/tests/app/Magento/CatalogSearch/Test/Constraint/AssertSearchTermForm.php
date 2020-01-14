@@ -44,7 +44,7 @@ class AssertSearchTermForm extends AbstractConstraint
         $formData = $editPage->getForm()->getData($searchTerm);
         $fixtureData = $searchTerm->getData();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $formData,
             $fixtureData,
             'This form "Search Term" does not match the fixture data.'

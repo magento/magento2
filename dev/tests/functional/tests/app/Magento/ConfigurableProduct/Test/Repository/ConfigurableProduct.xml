@@ -176,6 +176,37 @@
             </field>
         </dataset>
 
+        <dataset name="configurable_as_low_as">
+            <field name="name" xsi:type="string">Test configurable product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="dataset" xsi:type="string">price_as-40.00</item>
+            </field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">30</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">configurable_options_with_qty_1</item>
+            </field>
+        </dataset>
+
         <dataset name="product_with_special_price">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
@@ -1113,6 +1144,76 @@
                         <item name="video_title" xsi:type="string">Some title</item>
                     </item>
                 </item>
+            </field>
+        </dataset>
+
+        <dataset name="product_with_3_sizes">
+            <field name="name" xsi:type="string">Configurable product with sizes %isolation%</field>
+            <field name="sku" xsi:type="string">sku_configurable_product_with_sizes_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">2</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-with-size-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">size_3_items</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_anchor_subcategory</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">170</item>
+            </field>
+        </dataset>
+
+        <dataset name="with_only_two_options">
+            <field name="name" xsi:type="string">Configurable product with two options %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_with_two_options_%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">40</item>
+                <item name="dataset" xsi:type="string">price_40</item>
+            </field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">30</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-with-two-options-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_options</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">configurable_default_with_two_options</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
         </dataset>
     </repository>

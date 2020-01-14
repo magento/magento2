@@ -38,7 +38,7 @@ class AssertGetVideoInfoDataIsCorrect extends AbstractAssertForm
         $imagesTab = $editProductPage->getProductForm()->getSection('images-and-videos');
         $result = $imagesTab->clickFirstVideo()->getVideoDialog()->validate($video);
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $result,
             'Video data received from external service is not correct.'
         );

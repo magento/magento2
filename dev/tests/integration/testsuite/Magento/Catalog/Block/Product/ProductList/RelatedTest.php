@@ -3,83 +3,150 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Block\Product\ProductList;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as LinkProductCollection;
+
 /**
- * Test class for \Magento\Catalog\Block\Product\List\Related.
+ * Check the correct behavior of related products on the product view page
  *
- * @magentoDataFixture Magento/Catalog/_files/products_related.php
+ * @see \Magento\Catalog\Block\Product\ProductList\Related
+ * @magentoDbIsolation disabled
+ * @magentoAppArea frontend
  */
-class RelatedTest extends \PHPUnit\Framework\TestCase
+class RelatedTest extends AbstractLinksTest
 {
-    /**
-     * @var \Magento\Catalog\Block\Product\ProductList\Related
-     */
+    /** @var Related */
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductInterface
+     * @inheritdoc
      */
-    protected $product;
-
-    /**
-     * @var \Magento\Catalog\Api\Data\ProductInterface
-     */
-    protected $relatedProduct;
-
     protected function setUp()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+        parent::setUp();
 
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-
-        $this->relatedProduct = $productRepository->get('simple');
-        $this->product = $productRepository->get('simple_with_cross');
-        $objectManager->get(\Magento\Framework\Registry::class)->register('product', $this->product);
-
-        $this->block = $objectManager->get(\Magento\Framework\View\LayoutInterface::class)
-            ->createBlock(\Magento\Catalog\Block\Product\ProductList\Related::class);
-
-        $this->block->setLayout($objectManager->get(\Magento\Framework\View\LayoutInterface::class));
-        $this->block->setTemplate('Magento_Catalog::product/list/items.phtml');
-        $this->block->setType('related');
-        $this->block->addChild('addto', \Magento\Catalog\Block\Product\ProductList\Item\Container::class);
-        $this->block->getChildBlock(
-            'addto'
-        )->addChild(
-            'compare',
-            \Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare::class,
-            ['template' => 'Magento_Catalog::product/list/addto/compare.phtml']
-        );
+        $this->block = $this->layout->createBlock(Related::class);
+        $this->linkType = 'related';
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * Checks for a related product when block code is generated
+     *
+     * @magentoDataFixture Magento/Catalog/_files/products_related.php
+     * @return void
      */
-    public function testAll()
+    public function testAll(): void
     {
+        /** @var ProductInterface $relatedProduct */
+        $relatedProduct = $this->productRepository->get('simple');
+        $this->product = $this->productRepository->get('simple_with_cross');
+        $this->block->setProduct($this->product);
+        $this->prepareBlock();
         $html = $this->block->toHtml();
         $this->assertNotEmpty($html);
-        $this->assertContains('Simple Related Product', $html);
+        $this->assertContains($relatedProduct->getName(), $html);
         /* name */
-        $this->assertContains('"product":"' . $this->relatedProduct->getId() . '"', $html);
+        $this->assertContains('id="related-checkbox' . $relatedProduct->getId() . '"', $html);
         /* part of url */
         $this->assertInstanceOf(
-            \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
+            LinkProductCollection::class,
             $this->block->getItems()
         );
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/products_related.php
+     * @return void
      */
-    public function testGetIdentities()
+    public function testGetIdentities(): void
     {
-        $expectedTags = ['cat_p_' . $this->relatedProduct->getId(), 'cat_p'];
+        /** @var ProductInterface $relatedProduct */
+        $relatedProduct = $this->productRepository->get('simple');
+        $this->product = $this->productRepository->get('simple_with_cross');
+        $this->block->setProduct($this->product);
+        $this->prepareBlock();
+        $expectedTags = ['cat_p_' . $relatedProduct->getId(), 'cat_p'];
         $tags = $this->block->getIdentities();
         $this->assertEquals($expectedTags, $tags);
+    }
+
+    /**
+     * Test the display of related products in the block
+     *
+     * @dataProvider displayLinkedProductsProvider
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/products_list.php
+     * @param array $data
+     * @return void
+     */
+    public function testDisplayRelatedProducts(array $data): void
+    {
+        $this->updateProducts($data['updateProducts']);
+        $this->linkProducts('simple', $this->existingProducts);
+        $this->product = $this->productRepository->get('simple');
+        $this->block->setProduct($this->product);
+        $items = $this->block->getItems()->getItems();
+
+        $this->assertEquals(
+            $data['expectedProductLinks'],
+            $this->getActualLinks($items),
+            'Expected related products do not match actual related products!'
+        );
+    }
+
+    /**
+     * Test the position of related products in the block
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/products_list.php
+     * @return void
+     */
+    public function testPositionRelatedProducts(): void
+    {
+        $data = $this->getPositionData();
+        $this->linkProducts('simple', $data['productLinks']);
+        $this->product = $this->productRepository->get('simple');
+        $this->block->setProduct($this->product);
+        $items = $this->block->getItems()->getItems();
+
+        $this->assertEquals(
+            $data['expectedProductLinks'],
+            $this->getActualLinks($items),
+            'Expected related products do not match actual related products!'
+        );
+    }
+
+    /**
+     * Test the display of related products in the block on different websites
+     *
+     * @dataProvider multipleWebsitesLinkedProductsProvider
+     * @magentoDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
+     * @magentoDataFixture Magento/Catalog/_files/products_list.php
+     * @magentoAppIsolation enabled
+     * @param array $data
+     * @return void
+     */
+    public function testMultipleWebsitesRelatedProducts(array $data): void
+    {
+        $this->updateProducts($this->prepareWebsiteIdsProducts());
+        $productLinks = array_replace_recursive($this->existingProducts, $data['productLinks']);
+        $this->linkProducts('simple-1', $productLinks);
+        $this->product = $this->productRepository->get(
+            'simple-1',
+            false,
+            $this->storeManager->getStore($data['storeCode'])->getId()
+        );
+        $this->block->setProduct($this->product);
+        $items = $this->block->getItems()->getItems();
+
+        $this->assertEquals(
+            $data['expectedProductLinks'],
+            $this->getActualLinks($items),
+            'Expected related products do not match actual related products!'
+        );
     }
 }

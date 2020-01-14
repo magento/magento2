@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Check configurable product in checkout cart items -->
+    <actionGroup name="CheckConfigurableProductInCheckoutCartItemsActionGroup">
+        <annotations>
+            <description>Validates that the Configurable Product is present and correct in the Cart area on the Checkout page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar"/>
+            <argument name="optionLabel"/>
+            <argument name="optionValue"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
+        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="{{productVar.name}}" stepKey="seeProductInCart"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName(productVar.name)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" visible="false" stepKey="exposeProductOptions"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" userInput="{{optionLabel}}" stepKey="seeProductOptionLabel"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" userInput="{{optionValue}}" stepKey="seeProductOptionValue"/>
+    </actionGroup>
+</actionGroups>

@@ -59,7 +59,7 @@ class Curl extends AbstractCurl implements CmsBlockInterface
         $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("CMS Block entity creating by curl handler was not successful! Response: $response");
         }
 

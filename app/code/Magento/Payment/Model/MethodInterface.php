@@ -16,6 +16,32 @@ use Magento\Quote\Api\Data\CartInterface;
 interface MethodInterface
 {
     /**
+     * Different payment actions.
+     */
+    const ACTION_ORDER = 'order';
+
+    const ACTION_AUTHORIZE = 'authorize';
+
+    const ACTION_AUTHORIZE_CAPTURE = 'authorize_capture';
+
+    /**
+     * Different payment method checks.
+     */
+    const CHECK_USE_FOR_COUNTRY = 'country';
+
+    const CHECK_USE_FOR_CURRENCY = 'currency';
+
+    const CHECK_USE_CHECKOUT = 'checkout';
+
+    const CHECK_USE_INTERNAL = 'internal';
+
+    const CHECK_ORDER_TOTAL_MIN_MAX = 'total';
+
+    const CHECK_ZERO_TOTAL = 'zero_total';
+
+    const GROUP_OFFLINE = 'offline';
+
+    /**
      * Retrieve payment method code
      *
      * @return string

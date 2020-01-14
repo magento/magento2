@@ -37,7 +37,7 @@ class AssertUserPermissionsOnlyConfigurationIndexPage extends AbstractConstraint
         $adminAuth->getLoginBlock()->fill($customAdmin);
         $adminAuth->getLoginBlock()->submit();
         $configIndex->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $configIndex->getAdminForm()->isEmpty(),
             "Form isn't empty."
         );

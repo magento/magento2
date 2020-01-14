@@ -28,7 +28,7 @@ class ProductViewTest extends \PHPUnit\Framework\TestCase
 
         $this->stockItem = $this->getMockBuilder(\Magento\CatalogInventory\Model\Stock\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMinSaleQty', 'getQtyMaxAllowed', 'getQtyIncrements'])
+            ->setMethods(['getMinSaleQty', 'getMaxSaleQty', 'getQtyIncrements'])
             ->getMock();
 
         $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockRegistryInterface::class)
@@ -48,8 +48,8 @@ class ProductViewTest extends \PHPUnit\Framework\TestCase
             'validate-item-quantity' =>
                 [
                     'minAllowed' => 0.5,
-                    'maxAllowed' => 5,
-                    'qtyIncrements' => 3
+                    'maxAllowed' => 5.0,
+                    'qtyIncrements' => 3.0
                 ]
         ];
         $validators = [];
@@ -74,7 +74,7 @@ class ProductViewTest extends \PHPUnit\Framework\TestCase
             ->with('productId', 'websiteId')
             ->willReturn($this->stockItem);
         $this->stockItem->expects($this->once())->method('getMinSaleQty')->willReturn(0.5);
-        $this->stockItem->expects($this->any())->method('getQtyMaxAllowed')->willReturn(5);
+        $this->stockItem->expects($this->any())->method('getMaxSaleQty')->willReturn(5);
         $this->stockItem->expects($this->any())->method('getQtyIncrements')->willReturn(3);
 
         $this->assertEquals($result, $this->block->afterGetQuantityValidators($productViewBlock, $validators));

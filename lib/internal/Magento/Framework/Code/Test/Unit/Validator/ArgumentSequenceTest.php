@@ -51,7 +51,8 @@ class ArgumentSequenceTest extends \PHPUnit\Framework\TestCase
             'Actual  : %s' .
             PHP_EOL;
         $message = sprintf($message, '\ArgumentSequence\InvalidChildClass', $expectedSequence, $actualSequence);
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class, $message);
+        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectExceptionMessage($message);
         $this->_validator->validate('\ArgumentSequence\InvalidChildClass');
     }
 }

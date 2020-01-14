@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ProductLink;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -10,12 +13,16 @@ use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductLinkExtensionFactory;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks as LinksInitializer;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Model\ProductLink\Data\ListCriteria;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Product link entity repository.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
@@ -47,11 +54,14 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @var CollectionProvider
+     * @deprecated Not used anymore.
+     * @see query
      */
     protected $entityCollectionProvider;
 
     /**
      * @var LinksInitializer
+     * @deprecated Not used.
      */
     protected $linkInitializer;
 
@@ -67,13 +77,22 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
     /**
      * @var ProductLinkInterfaceFactory
+     * @deprecated Not used anymore, search delegated.
+     * @see getList()
      */
     protected $productLinkFactory;
 
     /**
      * @var ProductLinkExtensionFactory
+     * @deprecated Not used anymore, search delegated.
+     * @see getList()
      */
     protected $productLinkExtensionFactory;
+
+    /**
+     * @var ProductLinkQuery
+     */
+    private $query;
 
     /**
      * Constructor
@@ -85,6 +104,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory|null $productLinkExtensionFactory
+     * @param ProductLinkQuery|null $query
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -94,7 +114,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         \Magento\Catalog\Model\ProductLink\Management $linkManagement,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
-        \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory = null
+        \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory = null,
+        ?ProductLinkQuery $query = null
     ) {
         $this->productRepository = $productRepository;
         $this->entityCollectionProvider = $entityCollectionProvider;
@@ -105,10 +126,11 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
             ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
         $this->productLinkExtensionFactory = $productLinkExtensionFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Api\Data\ProductLinkExtensionFactory::class);
+        $this->query = $query ?? ObjectManager::getInstance()->get(ProductLinkQuery::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
@@ -137,7 +159,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 $linkTypesToId[$entity->getLinkType()]
             );
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
+            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
         return true;
     }
@@ -145,47 +167,25 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     /**
      * Get product links list
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param \Magento\Catalog\Api\Data\ProductInterface|\Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
      */
     public function getList(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
-        $output = [];
-        $linkTypes = $this->getLinkTypeProvider()->getLinkTypes();
-        foreach (array_keys($linkTypes) as $linkTypeName) {
-            $collection = $this->entityCollectionProvider->getCollection($product, $linkTypeName);
-            foreach ($collection as $item) {
-                /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
-                $productLink = $this->productLinkFactory->create();
-                $productLink->setSku($product->getSku())
-                    ->setLinkType($linkTypeName)
-                    ->setLinkedProductSku($item['sku'])
-                    ->setLinkedProductType($item['type'])
-                    ->setPosition($item['position']);
-                if (isset($item['custom_attributes'])) {
-                    $productLinkExtension = $productLink->getExtensionAttributes();
-                    if ($productLinkExtension === null) {
-                        $productLinkExtension = $this->productLinkExtensionFactory()->create();
-                    }
-                    foreach ($item['custom_attributes'] as $option) {
-                        $name = $option['attribute_code'];
-                        $value = $option['value'];
-                        $setterName = 'set'.ucfirst($name);
-                        // Check if setter exists
-                        if (method_exists($productLinkExtension, $setterName)) {
-                            call_user_func([$productLinkExtension, $setterName], $value);
-                        }
-                    }
-                    $productLink->setExtensionAttributes($productLinkExtension);
-                }
-                $output[] = $productLink;
-            }
+        if (!$product->getSku() || !$product->getId()) {
+            return $product->getProductLinks();
         }
-        return $output;
+        $criteria = new ListCriteria($product->getSku(), null, $product);
+        $result = $this->query->search([$criteria])[0];
+
+        if ($result->getError()) {
+            throw $result->getError();
+        }
+        return $result->getResult();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function delete(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
@@ -212,13 +212,13 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         try {
             $this->getLinkResource()->deleteProductLink($linkId);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
+            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
         return true;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function deleteById($sku, $type, $linkedProductSku)
     {
@@ -242,6 +242,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     }
 
     /**
+     * Get Link resource instance.
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link
      */
     private function getLinkResource()
@@ -254,6 +256,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     }
 
     /**
+     * Get LinkTypeProvider instance.
+     *
      * @return LinkTypeProvider
      */
     private function getLinkTypeProvider()
@@ -266,6 +270,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     }
 
     /**
+     * Get MetadataPool instance.
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

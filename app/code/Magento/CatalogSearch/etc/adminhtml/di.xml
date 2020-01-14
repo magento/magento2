@@ -26,4 +26,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ProductLink\Search">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\CatalogSearch\Ui\DataProvider\Product\AddFulltextFilterToCollection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
+        <plugin name="fulltext_search_indexer" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Model\Plugin\Category"/>
+    </type>
 </config>

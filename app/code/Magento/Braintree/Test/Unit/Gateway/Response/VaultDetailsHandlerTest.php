@@ -5,19 +5,23 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
+use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Braintree\Gateway\Response\VaultDetailsHandler;
-use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\CreditCardTokenFactory;
+use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
+use Magento\Vault\Model\PaymentToken;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -25,193 +29,143 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
+class VaultDetailsHandlerTest extends TestCase
 {
-    const TRANSACTION_ID = '432erwwe';
+    private static $transactionId = '432erwwe';
+
+    private static $token = 'rh3gd4';
 
     /**
-     * @var \Magento\Braintree\Gateway\Response\PaymentDetailsHandler
+     * @var PaymentDetailsHandler
      */
     private $paymentHandler;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|MockObject
+     * @var Payment|MockObject
      */
     private $payment;
 
     /**
-     * @var CreditCardTokenFactory|MockObject
+     * @var PaymentTokenFactoryInterface|MockObject
      */
     private $paymentTokenFactory;
 
     /**
-     * @var PaymentTokenInterface|MockObject
-     */
-    protected $paymentToken;
-
-    /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtension|MockObject
+     * @var OrderPaymentExtension|MockObject
      */
     private $paymentExtension;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory|MockObject
+     * @var OrderPaymentExtensionInterfaceFactory|MockObject
      */
     private $paymentExtensionFactory;
 
-    /**
-     * @var SubjectReader|MockObject
-     */
-    private $subjectReader;
-
-    /**
-     * @var Config|MockObject
-     */
-    private $config;
-
     protected function setUp()
     {
-        $this->paymentToken = $this->createMock(PaymentTokenInterface::class);
-        $this->paymentTokenFactory = $this->getMockBuilder(CreditCardTokenFactory::class)
+        $objectManager = new ObjectManager($this);
+        $paymentToken = $objectManager->getObject(PaymentToken::class);
+        $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentTokenFactory->expects(self::once())
-            ->method('create')
-            ->willReturn($this->paymentToken);
+        $this->paymentTokenFactory->method('create')
+            ->with(PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD)
+            ->willReturn($paymentToken);
 
-        $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->paymentExtensionFactory->expects(self::once())
-            ->method('create')
-            ->willReturn($this->paymentExtension);
+        $this->initPaymentExtensionAttributesMock();
+        $this->paymentExtension->method('setVaultPaymentToken')
+            ->with($paymentToken);
+        $this->paymentExtension->method('getVaultPaymentToken')
+            ->willReturn($paymentToken);
 
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->setMethods(['__wakeup', 'getExtensionAttributes'])
             ->getMock();
 
-        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->payment->expects(self::any())->method('getExtensionAttributes')->willReturn($this->paymentExtension);
 
-        $mapperArray = [
-            "american-express" => "AE",
-            "discover" => "DI",
-            "jcb" => "JCB",
-            "mastercard" => "MC",
-            "master-card" => "MC",
-            "visa" => "VI",
-            "maestro" => "MI",
-            "diners-club" => "DN",
-            "unionpay" => "CUP"
-        ];
-
-        $this->config = $this->getMockBuilder(Config::class)
-            ->setMethods(['getCctypesMapper'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->config->expects(self::once())
-            ->method('getCctypesMapper')
-            ->willReturn($mapperArray);
-
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $config = $this->getConfigMock();
 
         $this->paymentHandler = new VaultDetailsHandler(
             $this->paymentTokenFactory,
             $this->paymentExtensionFactory,
-            $this->config,
-            $this->subjectReader,
-            $this->serializer
+            $config,
+            new SubjectReader(),
+            new Json()
+        );
+    }
+
+    public function testHandle()
+    {
+        $paymentData = $this->getPaymentDataObjectMock();
+
+        $subject = ['payment' => $paymentData];
+        $response = ['object' => $this->getBraintreeTransaction()];
+
+        $this->paymentHandler->handle($subject, $response);
+        $paymentToken = $this->payment->getExtensionAttributes()
+            ->getVaultPaymentToken();
+
+        self::assertEquals(self::$token, $paymentToken->getGatewayToken());
+        self::assertEquals('2022-01-01 00:00:00', $paymentToken->getExpiresAt());
+
+        $details = json_decode($paymentToken->getTokenDetails(), true);
+        self::assertEquals(
+            [
+                'type' => 'AE',
+                'maskedCC' => 1231,
+                'expirationDate' => '12/2021'
+            ],
+            $details
         );
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Response\VaultDetailsHandler::handle
+     * Creates mock for payment data object and order payment.
+     *
+     * @return PaymentDataObject|MockObject
      */
-    public function testHandle()
-    {
-        $this->paymentExtension->expects(self::once())
-            ->method('setVaultPaymentToken')
-            ->with($this->paymentToken);
-        $this->paymentExtension->expects(self::once())
-            ->method('getVaultPaymentToken')
-            ->willReturn($this->paymentToken);
-
-        $paymentData = $this->getPaymentDataObjectMock();
-        $transaction = $this->getBraintreeTransaction();
-
-        $subject = ['payment' => $paymentData];
-        $response = ['object' => $transaction];
-
-        $this->subjectReader->expects(self::once())
-            ->method('readPayment')
-            ->with($subject)
-            ->willReturn($paymentData);
-        $this->subjectReader->expects(self::once())
-            ->method('readTransaction')
-            ->with($response)
-            ->willReturn($transaction);
-        $this->paymentToken->expects(static::once())
-            ->method('setGatewayToken')
-            ->with('rh3gd4');
-        $this->paymentToken->expects(static::once())
-            ->method('setExpiresAt')
-            ->with('2022-01-01 00:00:00');
-
-        $this->paymentHandler->handle($subject, $response);
-        $this->assertSame($this->paymentToken, $this->payment->getExtensionAttributes()->getVaultPaymentToken());
-    }
-
-    /**
-     * Create mock for payment data object and order payment
-     * @return MockObject
-     */
-    private function getPaymentDataObjectMock()
+    private function getPaymentDataObjectMock(): PaymentDataObject
     {
         $mock = $this->getMockBuilder(PaymentDataObject::class)
             ->setMethods(['getPayment'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects($this->once())
-            ->method('getPayment')
+        $mock->method('getPayment')
             ->willReturn($this->payment);
 
         return $mock;
     }
 
     /**
-     * Create Braintree transaction
-     * @return MockObject
+     * Creates Braintree transaction.
+     *
+     * @return Successful
      */
     private function getBraintreeTransaction()
     {
         $attributes = [
-            'id' => self::TRANSACTION_ID,
+            'id' => self::$transactionId,
             'creditCardDetails' => $this->getCreditCardDetails()
         ];
 
         $transaction = Transaction::factory($attributes);
+        $result = new Successful(['transaction' => $transaction]);
 
-        return $transaction;
+        return $result;
     }
 
     /**
-     * Create Braintree transaction
-     * @return \Braintree\Transaction\CreditCardDetails
+     * Creates Braintree transaction.
+     *
+     * @return CreditCardDetails
      */
-    private function getCreditCardDetails()
+    private function getCreditCardDetails(): CreditCardDetails
     {
         $attributes = [
-            'token' => 'rh3gd4',
+            'token' => self::$token,
             'bin' => '5421',
             'cardType' => 'American Express',
             'expirationMonth' => 12,
@@ -222,5 +176,55 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         $creditCardDetails = new CreditCardDetails($attributes);
 
         return $creditCardDetails;
+    }
+
+    /**
+     * Creates mock of config class.
+     *
+     * @return Config|MockObject
+     */
+    private function getConfigMock(): Config
+    {
+        $mapperArray = [
+            'american-express' => 'AE',
+            'discover' => 'DI',
+            'jcb' => 'JCB',
+            'mastercard' => 'MC',
+            'master-card' => 'MC',
+            'visa' => 'VI',
+            'maestro' => 'MI',
+            'diners-club' => 'DN',
+            'unionpay' => 'CUP'
+        ];
+
+        $config = $this->getMockBuilder(Config::class)
+            ->setMethods(['getCctypesMapper'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $config->method('getCctypesMapper')
+            ->willReturn($mapperArray);
+
+        return $config;
+    }
+
+    /**
+     * Initializes payment extension attributes mocks.
+     *
+     * @return void
+     */
+    private function initPaymentExtensionAttributesMock()
+    {
+        $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->paymentExtensionFactory->method('create')
+            ->willReturn($this->paymentExtension);
     }
 }

@@ -316,7 +316,7 @@ class File extends DataSource
                     $explodedArray = $compiledData['explodedArray'];
                 } else {
                     $explodedArray[$i] = str_replace('"', '', $explodedArray[$i]);
-                };
+                }
             }
             $data = array_diff($explodedArray, ['%to_delete%']);
             $this->csv[] = $data;

@@ -156,6 +156,9 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         $this->scopeMock->expects($this->at(2))
             ->method('setCurrentScope')
             ->with('oldScope');
+        $this->scopeMock->expects($this->at(3))
+            ->method('setCurrentScope')
+            ->with('oldScope');
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(Importer::FLAG_CODE, $data);

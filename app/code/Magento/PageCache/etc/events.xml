@@ -48,7 +48,13 @@
     <event name="model_save_commit_after">
         <observer name="flush_cache_after_model_save" instance="Magento\PageCache\Observer\FlushCacheByTags" />
     </event>
+    <event name="backend_auth_user_login_success">
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
+    </event>
+    <event name="customer_login">
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
+    </event>
     <event name="customer_logout">
-        <observer name="FlushFormKeyOnLogout" instance="Magento\PageCache\Observer\FlushFormKeyOnLogout"/>
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
     </event>
 </config>

@@ -105,7 +105,7 @@
                                                                     <item name="trigger" xsi:type="string">opc-new-shipping-address</item>
                                                                     <item name="buttons" xsi:type="array">
                                                                         <item name="save" xsi:type="array">
-                                                                            <item name="text" xsi:type="string" translate="true">Save Address</item>
+                                                                            <item name="text" xsi:type="string" translate="true">Ship here</item>
                                                                             <item name="class" xsi:type="string">action primary action-save-address</item>
                                                                         </item>
                                                                         <item name="cancel" xsi:type="array">
@@ -118,7 +118,7 @@
                                                         </item>
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping</item>
                                                         <item name="provider" xsi:type="string">checkoutProvider</item>
-                                                        <item name="sortOrder" xsi:type="string">1</item>
+                                                        <item name="sortOrder" xsi:type="string">10</item>
                                                         <item name="children" xsi:type="array">
                                                             <item name="customer-email" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/form/element/email</item>
@@ -246,6 +246,7 @@
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
                                                         <item name="config" xsi:type="array">
                                                             <item name="title" xsi:type="string" translate="true">Payment</item>
+                                                            <item name="sortOrder" xsi:type="string">20</item>
                                                         </item>
                                                         <item name="children" xsi:type="array">
                                                             <item name="renders" xsi:type="array">
@@ -364,20 +365,20 @@
                                                             <!-- sort order for this totals is configured on admin panel-->
                                                             <!-- Stores->Configuration->SALES->Sales->General->Checkout Totals Sort Order -->
                                                             <item name="subtotal" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/subtotal</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/subtotal</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="title" xsi:type="string" translate="true">Cart Subtotal</item>
                                                                 </item>
                                                             </item>
                                                             <item name="shipping" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="title" xsi:type="string" translate="true">Shipping</item>
                                                                     <item name="notCalculatedMessage" xsi:type="string" translate="true">Not yet calculated</item>
                                                                 </item>
                                                             </item>
                                                             <item name="grand-total" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/grand-total</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/grand-total</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="title" xsi:type="string" translate="true">Order Total</item>
                                                                 </item>
@@ -403,6 +404,10 @@
                                                                     <item name="subtotal" xsi:type="array">
                                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details/subtotal</item>
                                                                         <item name="displayArea" xsi:type="string">after_details</item>
+                                                                    </item>
+                                                                    <item name="message" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details/message</item>
+                                                                        <item name="displayArea" xsi:type="string">item_message</item>
                                                                     </item>
                                                                 </item>
                                                             </item>

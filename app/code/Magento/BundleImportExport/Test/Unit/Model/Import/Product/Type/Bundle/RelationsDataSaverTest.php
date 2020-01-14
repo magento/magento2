@@ -7,6 +7,7 @@
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type\Bundle;
 
 use Magento\BundleImportExport\Model\Import\Product\Type\Bundle\RelationsDataSaver;
+use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
@@ -30,6 +31,11 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
      */
     private $connectionMock;
 
+    /**
+     * @var Relation|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productRelationMock;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -39,12 +45,16 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
+
+        $this->productRelationMock = $this->getMockBuilder(Relation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->relationsDataSaver = $helper->getObject(
             RelationsDataSaver::class,
             [
-                'resource' => $this->resourceMock
+                'resource' => $this->resourceMock,
+                'productRelation' => $this->productRelationMock
             ]
         );
     }
@@ -53,7 +63,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
     {
         $options = [1, 2];
         $table_name= 'catalog_product_bundle_option';
-
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->with('catalog_product_bundle_option')
@@ -78,6 +88,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
         $optionsValues = [1, 2];
         $table_name= 'catalog_product_bundle_option_value';
 
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->with('catalog_product_bundle_option_value')
@@ -98,6 +109,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
         $selections = [1, 2];
         $table_name= 'catalog_product_bundle_selection';
 
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->with('catalog_product_bundle_selection')
@@ -120,5 +132,17 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->relationsDataSaver->saveSelections($selections);
+    }
+
+    public function testSaveProductRelations()
+    {
+        $parentId = 1;
+        $children = [2, 3];
+
+        $this->productRelationMock->expects($this->once())
+            ->method('processRelations')
+            ->with($parentId, $children);
+
+        $this->relationsDataSaver->saveProductRelations($parentId, $children);
     }
 }

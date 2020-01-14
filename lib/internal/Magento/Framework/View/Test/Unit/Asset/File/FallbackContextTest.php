@@ -53,6 +53,9 @@ class FallbackContextTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->fallbackContext->getConfigPath());
     }
 
+    /**
+     * @return array
+     */
     public function getConfigPathDataProvider()
     {
         return [

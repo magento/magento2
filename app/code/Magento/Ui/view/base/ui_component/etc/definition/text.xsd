@@ -15,6 +15,20 @@
             <xs:element name="settings" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="abstractSettings"/>
+                        <xs:group ref="dataTypeTextSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:complexType name="formElementText">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:group ref="dataTypeTextSettings"/>
                     </xs:choice>
                 </xs:complexType>
@@ -25,7 +39,6 @@
 
     <xs:group name="dataTypeTextSettings">
         <xs:choice>
-            <xs:group ref="abstractSettings"/>
         </xs:choice>
     </xs:group>
 </xs:schema>

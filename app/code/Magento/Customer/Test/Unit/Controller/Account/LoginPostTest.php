@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -92,13 +93,14 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
         $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'isLoggedIn',
-                'setCustomerDataAsLoggedIn',
-                'regenerateId',
-                'setUsername',
-            ])
-            ->getMock();
+            ->setMethods(
+                [
+                    'isLoggedIn',
+                    'setCustomerDataAsLoggedIn',
+                    'regenerateId',
+                    'setUsername',
+                ]
+            )->getMock();
 
         $this->accountManagement = $this->getMockBuilder(\Magento\Customer\Api\AccountManagementInterface::class)
             ->getMockForAbstractClass();
@@ -221,7 +223,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('A login and a password are required.'))
             ->willReturnSelf();
 
@@ -252,10 +254,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
@@ -291,9 +295,8 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerDataAsLoggedIn')
             ->with($customerMock)
             ->willReturnSelf();
-        $this->session->expects($this->once())
-            ->method('regenerateId')
-            ->willReturnSelf();
+        $this->session->expects($this->never())
+            ->method('regenerateId');
 
         $this->accountRedirect->expects($this->never())
             ->method('getRedirect')
@@ -334,10 +337,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
@@ -356,9 +361,8 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerDataAsLoggedIn')
             ->with($customerMock)
             ->willReturnSelf();
-        $this->session->expects($this->once())
-            ->method('regenerateId')
-            ->willReturnSelf();
+        $this->session->expects($this->never())
+            ->method('regenerateId');
 
         $this->accountRedirect->expects($this->once())
             ->method('getRedirect')
@@ -425,10 +429,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $exception = new $exceptionData['exception'](__($exceptionData['message']));
 
@@ -487,11 +493,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'isPost',
-                'getPost',
-            ])
-            ->getMock();
+            ->setMethods(
+                [
+                    'isPost',
+                    'getPost',
+                ]
+            )->getMock();
 
         $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
@@ -550,7 +557,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     $url
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($message)
                     ->willReturnSelf();
 
@@ -562,8 +569,13 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
             case \Magento\Framework\Exception\AuthenticationException::class:
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
-                    ->with(__('You did not sign in correctly or your account is temporarily disabled.'))
+                    ->method('addErrorMessage')
+                    ->with(
+                        __(
+                            'The account sign-in was incorrect or your account is disabled temporarily. '
+                            . 'Please wait and try again later.'
+                        )
+                    )
                     ->willReturnSelf();
 
                 $this->session->expects($this->once())
@@ -574,17 +586,18 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
             case '\Exception':
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with(__('An unspecified error occurred. Please contact us for assistance.'))
                     ->willReturnSelf();
                 break;
 
             case \Magento\Framework\Exception\State\UserLockedException::class:
                 $message = __(
-                    'You did not sign in correctly or your account is temporarily disabled.'
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($message)
                     ->willReturnSelf();
                 $this->session->expects($this->once())

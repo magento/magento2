@@ -27,7 +27,7 @@ class AssertUserInGrid extends AbstractConstraint
         $filter = ['username' => $user->getUsername()];
 
         $userIndex->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $userIndex->getUserGrid()->isRowVisible($filter),
             'User with name \'' . $user->getUsername() . '\' is absent in User grid.'
         );

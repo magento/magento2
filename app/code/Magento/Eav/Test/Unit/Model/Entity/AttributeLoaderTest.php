@@ -78,7 +78,6 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())->method('setIsGlobal')->with(1)->willReturnSelf();
         $attributeMock->expects($this->once())->method('setEntityType')->with($this->entityTypeMock)->willReturnSelf();
         $attributeMock->expects($this->once())->method('setEntityTypeId')->with($entityTypeId)->willReturnSelf();
-        $this->entityMock->expects($this->once())->method('addAttribute')->with($attributeMock)->willReturnSelf();
         $this->attributeLoader->loadAllAttributes($this->entityMock, $dataObject);
     }
 
@@ -102,8 +101,6 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityAttributes')->willReturn($attributeCodes);
         $this->entityMock->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
         $this->entityMock->expects($this->once())->method('unsetAttributes')->willReturnSelf();
-        $this->entityMock->expects($this->atLeastOnce())
-            ->method('addAttribute')->with($attributeMock)->willReturnSelf();
         $this->objectManagerMock->expects($this->never())->method('create');
         $this->attributeLoader->loadAllAttributes($this->entityMock, $dataObject);
     }

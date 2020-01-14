@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Model\Customer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
@@ -18,21 +19,21 @@ class NotificationStorage
     private $cache;
 
     /**
-     * @param FrontendInterface $cache
-     */
-
-    /**
-     * @param FrontendInterface $cache
+     * @var SerializerInterface
      */
     private $serializer;
 
     /**
      * NotificationStorage constructor.
      * @param FrontendInterface $cache
+     * @param SerializerInterface $serializer
      */
-    public function __construct(FrontendInterface $cache)
-    {
+    public function __construct(
+        FrontendInterface $cache,
+        SerializerInterface $serializer = null
+    ) {
         $this->cache = $cache;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -45,7 +46,7 @@ class NotificationStorage
     public function add($notificationType, $customerId)
     {
         $this->cache->save(
-            $this->getSerializer()->serialize([
+            $this->serializer->serialize([
                 'customer_id' => $customerId,
                 'notification_type' => $notificationType
             ]),
@@ -87,20 +88,5 @@ class NotificationStorage
     private function getCacheKey($notificationType, $customerId)
     {
         return 'notification_' . $notificationType . '_' . $customerId;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated 100.2.0
-     */
-    private function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }

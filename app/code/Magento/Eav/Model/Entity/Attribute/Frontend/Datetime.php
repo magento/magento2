@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
 /**
+ * Entity datetime frontend attribute
+ *
  * @api
  * @since 100.0.2
  */
@@ -44,10 +44,12 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
         $value = parent::getValue($object);
 
         if ($value) {
+            $showTime = $this->getAttribute()->getFrontendInput() === 'datetime'
+                ? \IntlDateFormatter::MEDIUM : \IntlDateFormatter::NONE;
             $data = $this->_localeDate->formatDateTime(
                 new \DateTime($value),
                 \IntlDateFormatter::MEDIUM,
-                \IntlDateFormatter::NONE
+                $showTime
             );
         }
 

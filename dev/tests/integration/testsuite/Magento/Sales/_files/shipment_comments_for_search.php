@@ -7,9 +7,8 @@
 use Magento\Payment\Helper\Data;
 use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Comment;
-use Magento\Sales\Model\Order\Shipment\Item;
+use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require 'default_rollback.php';
@@ -21,14 +20,12 @@ $paymentInfoBlock = Bootstrap::getObjectManager()->get(Data::class)
     ->getInfoBlock($payment);
 $payment->setBlockMock($paymentInfoBlock);
 
-/** @var Shipment $shipment */
-$shipment = Bootstrap::getObjectManager()->create(Shipment::class);
-$shipment->setOrder($order);
+$items = [];
+foreach ($order->getItems() as $orderItem) {
+    $items[$orderItem->getId()] = $orderItem->getQtyOrdered();
+}
+$shipment = Bootstrap::getObjectManager()->get(ShipmentFactory::class)->create($order, $items);
 
-/** @var Item $shipmentItem */
-$shipmentItem = Bootstrap::getObjectManager()->create(Item::class);
-$shipmentItem->setOrderItem($orderItem);
-$shipment->addItem($shipmentItem);
 $shipment->setPackages([['1'], ['2']]);
 $shipment->setShipmentStatus(\Magento\Sales\Model\Order\Shipment::STATUS_NEW);
 $shipment->save();

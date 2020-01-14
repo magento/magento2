@@ -1,13 +1,17 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Controller;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class PathProcessor
+ */
 class PathProcessor
 {
     /**  Store code alias to indicate that all stores should be affected by action */
@@ -19,11 +23,22 @@ class PathProcessor
     private $storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
-    {
+    private $localeResolver;
+
+    /**
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     */
+    public function __construct(
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
+    ) {
         $this->storeManager = $storeManager;
+        $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Locale\ResolverInterface::class
+        );
     }
 
     /**
@@ -50,13 +65,15 @@ class PathProcessor
     public function process($pathInfo)
     {
         $pathParts = $this->stripPathBeforeStorecode($pathInfo);
-        $storeCode = $pathParts[0];
+        $storeCode = current($pathParts);
         $stores = $this->storeManager->getStores(false, true);
         if (isset($stores[$storeCode])) {
             $this->storeManager->setCurrentStore($storeCode);
+            $this->localeResolver->emulate($this->storeManager->getStore()->getId());
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } elseif ($storeCode === self::ALL_STORE_CODE) {
             $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
+            $this->localeResolver->emulate($this->storeManager->getStore()->getId());
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } else {
             $path = '/' . implode('/', $pathParts);

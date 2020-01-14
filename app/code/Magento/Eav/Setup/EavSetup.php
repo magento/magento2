@@ -3,16 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
+ * Base eav setup class.
+ *
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -78,28 +83,49 @@ class EavSetup
     private $_defaultAttributeSetName = 'Default';
 
     /**
+     * @var AddOptionToAttribute
+     */
+    private $addAttributeOption;
+
+    /**
+     * @var Code
+     */
+    private $attributeCodeValidator;
+
+    /**
      * Init
      *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
+     * @param Code|null $attributeCodeValidator
+     * @param AddOptionToAttribute|null $addAttributeOption
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory
+        CollectionFactory $attrGroupCollectionFactory,
+        Code $attributeCodeValidator = null,
+        AddOptionToAttribute $addAttributeOption = null
     ) {
         $this->cache = $cache;
         $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
         $this->attributeMapper = $context->getAttributeMapper();
         $this->setup = $setup;
+        $this->addAttributeOption = $addAttributeOption
+            ?? ObjectManager::getInstance()->get(AddOptionToAttribute::class);
+        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
+            Code::class
+        );
     }
 
     /**
-     * Gets setup model
+     * Gets setup model.
      *
+     * @deprecated
      * @return ModuleDataSetupInterface
      */
     public function getSetup()
@@ -201,7 +227,10 @@ class EavSetup
         if ($this->getEntityType($code, 'entity_type_id')) {
             $this->updateEntityType($code, $data);
         } else {
-            $this->setup->getConnection()->insert($this->setup->getTable('eav_entity_type'), $data);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable('eav_entity_type'),
+                $data
+            );
         }
 
         if (isset($params['entity_type_id'])) {
@@ -264,7 +293,7 @@ class EavSetup
             $entityTypeId = $this->getEntityType($entityTypeId, 'entity_type_id');
         }
         if (!is_numeric($entityTypeId)) {
-            throw new LocalizedException(__('Wrong entity ID'));
+            throw new LocalizedException(__('The entity ID is incorrect. Verify the ID and try again.'));
         }
 
         return $entityTypeId;
@@ -338,7 +367,10 @@ class EavSetup
         if ($setId) {
             $this->updateAttributeSet($entityTypeId, $setId, $data);
         } else {
-            $this->setup->getConnection()->insert($this->setup->getTable('eav_attribute_set'), $data);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable('eav_attribute_set'),
+                $data
+            );
 
             $this->addAttributeGroup($entityTypeId, $name, $this->_generalGroupName);
         }
@@ -403,7 +435,7 @@ class EavSetup
             $setId = $this->getAttributeSet($entityTypeId, $setId, 'attribute_set_id');
         }
         if (!is_numeric($setId)) {
-            throw new LocalizedException(__('Wrong attribute set ID'));
+            throw new LocalizedException(__('The attribute set ID is incorrect. Verify the ID and try again.'));
         }
 
         return $setId;
@@ -545,17 +577,23 @@ class EavSetup
             if (empty($data['attribute_group_code'])) {
                 if (empty($attributeGroupCode)) {
                     // in the following code md5 is not used for security purposes
+                    // phpcs:disable Magento2.Security.InsecureFunction
                     $attributeGroupCode = md5($name);
                 }
                 $data['attribute_group_code'] = $attributeGroupCode;
             }
-            $this->setup->getConnection()->insert($this->setup->getTable('eav_attribute_group'), $data);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable('eav_attribute_group'),
+                $data
+            );
         }
 
         return $this;
     }
 
     /**
+     * Convert group name to attribute group code.
+     *
      * @param string $groupName
      * @return string
      * @since 100.1.0
@@ -665,7 +703,7 @@ class EavSetup
         }
 
         if (!is_numeric($groupId)) {
-            throw new LocalizedException(__('Wrong attribute group ID'));
+            throw new LocalizedException(__('The attribute group ID is incorrect. Verify the ID and try again.'));
         }
         return $groupId;
     }
@@ -763,38 +801,6 @@ class EavSetup
     }
 
     /**
-     * Validate attribute data before insert into table
-     *
-     * @param  array $data
-     * @return true
-     * @throws LocalizedException
-     */
-    private function _validateAttributeData($data)
-    {
-        $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
-        $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
-        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
-
-        $isAllowedLength = \Zend_Validate::is(
-            trim($attributeCode),
-            'StringLength',
-            ['min' => $minLength, 'max' => $maxLength]
-        );
-
-        if (!$isAllowedLength) {
-            $errorMessage = __(
-                'An attribute code must not be less than %1 and more than %2 characters.',
-                $minLength,
-                $maxLength
-            );
-
-            throw new LocalizedException($errorMessage);
-        }
-
-        return true;
-    }
-
-    /**
      * Add attribute to an entity type
      *
      * If attribute is system will add to all existing attribute sets
@@ -803,6 +809,8 @@ class EavSetup
      * @param string $code
      * @param array $attr
      * @return $this
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -813,7 +821,7 @@ class EavSetup
             $this->attributeMapper->map($attr, $entityTypeId)
         );
 
-        $this->_validateAttributeData($data);
+        $this->validateAttributeCode($data);
 
         $sortOrder = isset($attr['sort_order']) ? $attr['sort_order'] : null;
         $attributeId = $this->getAttribute($entityTypeId, $code, 'attribute_id');
@@ -871,58 +879,7 @@ class EavSetup
      */
     public function addAttributeOption($option)
     {
-        $optionTable = $this->setup->getTable('eav_attribute_option');
-        $optionValueTable = $this->setup->getTable('eav_attribute_option_value');
-
-        if (isset($option['value'])) {
-            foreach ($option['value'] as $optionId => $values) {
-                $intOptionId = (int)$optionId;
-                if (!empty($option['delete'][$optionId])) {
-                    if ($intOptionId) {
-                        $condition = ['option_id =?' => $intOptionId];
-                        $this->setup->getConnection()->delete($optionTable, $condition);
-                    }
-                    continue;
-                }
-
-                if (!$intOptionId) {
-                    $data = [
-                        'attribute_id' => $option['attribute_id'],
-                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
-                    ];
-                    $this->setup->getConnection()->insert($optionTable, $data);
-                    $intOptionId = $this->setup->getConnection()->lastInsertId($optionTable);
-                } else {
-                    $data = [
-                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
-                    ];
-                    $this->setup->getConnection()->update($optionTable, $data, ['option_id=?' => $intOptionId]);
-                }
-
-                // Default value
-                if (!isset($values[0])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Default option value is not defined')
-                    );
-                }
-                $condition = ['option_id =?' => $intOptionId];
-                $this->setup->getConnection()->delete($optionValueTable, $condition);
-                foreach ($values as $storeId => $value) {
-                    $data = ['option_id' => $intOptionId, 'store_id' => $storeId, 'value' => $value];
-                    $this->setup->getConnection()->insert($optionValueTable, $data);
-                }
-            }
-        } elseif (isset($option['values'])) {
-            foreach ($option['values'] as $sortOrder => $label) {
-                // add option
-                $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
-                $this->setup->getConnection()->insert($optionTable, $data);
-                $intOptionId = $this->setup->getConnection()->lastInsertId($optionTable);
-
-                $data = ['option_id' => $intOptionId, 'store_id' => 0, 'value' => $label];
-                $this->setup->getConnection()->insert($optionValueTable, $data);
-            }
-        }
+        $this->addAttributeOption->execute($option);
     }
 
     /**
@@ -970,7 +927,10 @@ class EavSetup
             $bind = [];
             foreach ($field as $k => $v) {
                 if (isset($attributeFields[$k])) {
-                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue($attributeFields[$k], $v);
+                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue(
+                        $attributeFields[$k],
+                        $v
+                    );
                 }
             }
             if (!$bind) {
@@ -1016,16 +976,23 @@ class EavSetup
         if (!$additionalTable) {
             return $this;
         }
-        $additionalTableExists = $this->setup->getConnection()->isTableExists($this->setup->getTable($additionalTable));
+        $additionalTableExists = $this->setup->getConnection()->isTableExists(
+            $this->setup->getTable($additionalTable)
+        );
         if (!$additionalTableExists) {
             return $this;
         }
-        $attributeFields = $this->setup->getConnection()->describeTable($this->setup->getTable($additionalTable));
+        $attributeFields = $this->setup->getConnection()->describeTable(
+            $this->setup->getTable($additionalTable)
+        );
         if (is_array($field)) {
             $bind = [];
             foreach ($field as $k => $v) {
                 if (isset($attributeFields[$k])) {
-                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue($attributeFields[$k], $v);
+                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue(
+                        $attributeFields[$k],
+                        $v
+                    );
                 }
             }
             if (!$bind) {
@@ -1037,7 +1004,7 @@ class EavSetup
                 return $this;
             }
         }
-      
+
         $attributeId = $this->getAttributeId($entityTypeId, $id);
         if (false === $attributeId) {
             throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
@@ -1358,7 +1325,10 @@ class EavSetup
             }
             $sortOrder = is_numeric($sortOrder) ? $sortOrder : 1;
             $data['sort_order'] = $sortOrder;
-            $this->setup->getConnection()->insert($this->setup->getTable('eav_entity_attribute'), $data);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable('eav_entity_attribute'),
+                $data
+            );
         }
 
         return $this;
@@ -1439,7 +1409,9 @@ class EavSetup
      */
     private function _getAttributeTableFields()
     {
-        return $this->setup->getConnection()->describeTable($this->setup->getTable('eav_attribute'));
+        return $this->setup->getConnection()->describeTable(
+            $this->setup->getTable('eav_attribute')
+        );
     }
 
     /**
@@ -1463,8 +1435,13 @@ class EavSetup
             return $this;
         }
 
-        $this->setup->getConnection()->insert($this->setup->getTable('eav_attribute'), $bind);
-        $attributeId = $this->setup->getConnection()->lastInsertId($this->setup->getTable('eav_attribute'));
+        $this->setup->getConnection()->insert(
+            $this->setup->getTable('eav_attribute'),
+            $bind
+        );
+        $attributeId = $this->setup->getConnection()->lastInsertId(
+            $this->setup->getTable('eav_attribute')
+        );
         $this->_insertAttributeAdditionalData(
             $data['entity_type_id'],
             array_merge(['attribute_id' => $attributeId], $data)
@@ -1486,10 +1463,14 @@ class EavSetup
         if (!$additionalTable) {
             return $this;
         }
-        $additionalTableExists = $this->setup->getConnection()->isTableExists($this->setup->getTable($additionalTable));
+        $additionalTableExists = $this->setup->getConnection()->isTableExists(
+            $this->setup->getTable($additionalTable)
+        );
         if ($additionalTable && $additionalTableExists) {
             $bind = [];
-            $fields = $this->setup->getConnection()->describeTable($this->setup->getTable($additionalTable));
+            $fields = $this->setup->getConnection()->describeTable(
+                $this->setup->getTable($additionalTable)
+            );
             foreach ($data as $k => $v) {
                 if (isset($fields[$k])) {
                     $bind[$k] = $this->setup->getConnection()->prepareColumnValue($fields[$k], $v);
@@ -1498,9 +1479,29 @@ class EavSetup
             if (!$bind) {
                 return $this;
             }
-            $this->setup->getConnection()->insert($this->setup->getTable($additionalTable), $bind);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable($additionalTable),
+                $bind
+            );
         }
 
         return $this;
+    }
+
+    /**
+     * Validate attribute code.
+     *
+     * @param array $data
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
+     */
+    private function validateAttributeCode(array $data): void
+    {
+        $attributeCode = $data['attribute_code'] ?? '';
+        if (!$this->attributeCodeValidator->isValid($attributeCode)) {
+            $errorMessage = implode('\n', $this->attributeCodeValidator->getMessages());
+
+            throw new LocalizedException(__($errorMessage));
+        }
     }
 }

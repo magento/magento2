@@ -20,7 +20,7 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * @var string
      */
-    protected $_template = 'email/items.phtml';
+    protected $_template = 'Magento_Wishlist::email/items.phtml';
 
     /**
      * Retrieve Product View URL

@@ -224,7 +224,7 @@ define([
          */
         build: function (parent, node, name) {
             var defaults    = parent && parent.childDefaults || {},
-                children    = node.children,
+                children    = this.filterDisabledChildren(node.children),
                 type        = getNodeType(parent, node),
                 dataScope   = getDataScope(parent, node),
                 component,
@@ -292,6 +292,35 @@ define([
             }
 
             return node;
+        },
+
+        /**
+         * Filter out all disabled components.
+         *
+         * @param {Object} children
+         * @returns {*}
+         */
+        filterDisabledChildren: function (children) {
+            var cIds;
+
+            //cleanup children config.componentDisabled = true
+            if (children && typeof children === 'object') {
+                cIds = Object.keys(children);
+
+                if (cIds) {
+                    _.each(cIds, function (cId) {
+                        if (typeof children[cId] === 'object' &&
+                            children[cId].hasOwnProperty('config') &&
+                            typeof children[cId].config === 'object' &&
+                            children[cId].config.hasOwnProperty('componentDisabled') &&
+                            children[cId].config.componentDisabled === true) {
+                            delete children[cId];
+                        }
+                    });
+                }
+            }
+
+            return children;
         },
 
         /**

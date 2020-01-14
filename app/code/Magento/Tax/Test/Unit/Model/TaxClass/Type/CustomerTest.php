@@ -26,9 +26,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $filterBuilder->expects($this->once())->method('setField')->with(
             \Magento\Customer\Api\Data\GroupInterface::TAX_CLASS_ID
-        )->willReturnself();
-        $filterBuilder->expects($this->once())->method('setValue')->willReturnself();
-        $filterBuilder->expects($this->once())->method('create')->willReturnself();
+        )->willReturnSelf();
+        $filterBuilder->expects($this->once())->method('setValue')->willReturnSelf();
+        $filterBuilder->expects($this->once())->method('create')->willReturnSelf();
 
         $filterGroupBuilder = $this->createMock(\Magento\Framework\Api\Search\FilterGroupBuilder::class);
         $searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)

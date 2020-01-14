@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Observer;
 
 use Magento\Framework\View\EntitySpecificHandlesList;
@@ -49,7 +47,10 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
             new \Magento\Framework\Serialize\Serializer\Base64Json()
         );
         $this->_observerMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
-        $this->_layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['isCacheable', 'getBlock', 'getUpdate', 'getHandles']);
+        $this->_layoutMock = $this->createPartialMock(
+            \Magento\Framework\View\Layout::class,
+            ['isCacheable', 'getBlock', 'getUpdate', 'getHandles']
+        );
         $this->_blockMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\AbstractBlock::class,
             [],
@@ -77,7 +78,10 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
         $blockTtl,
         $expectedOutput
     ) {
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getLayout', 'getElementName', 'getTransport']);
+        $eventMock = $this->createPartialMock(
+            \Magento\Framework\Event::class,
+            ['getLayout', 'getElementName', 'getTransport']
+        );
         $this->_observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
         $eventMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->_layoutMock));
         $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
@@ -118,8 +122,16 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
                     ->will($this->returnValue($blockTtl));
                 $this->_blockMock->expects($this->any())
                     ->method('getUrl')
-                    ->with('page_cache/block/esi', ['blocks' => '[null]', 'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='])
-                    ->will($this->returnValue('page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='));
+                    ->with(
+                        'page_cache/block/esi',
+                        ['blocks' => '[null]',
+                            'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==']
+                    )
+                    ->will(
+                        $this->returnValue(
+                            'page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='
+                        )
+                    );
             }
             if ($scopeIsPrivate) {
                 $this->_blockMock->expects($this->once())
@@ -139,7 +151,10 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithBase64Encode()
     {
         $expectedOutput = '<esi:include src="page_cache/block/wrapesi/with/handles/YW5kL290aGVyL3N0dWZm" />';
-        $eventMock = $this->createPartialMock('Magento\Framework\Event', ['getLayout', 'getElementName', 'getTransport']);
+        $eventMock = $this->createPartialMock(
+            \Magento\Framework\Event::class,
+            ['getLayout', 'getElementName', 'getTransport']
+        );
         $expectedUrl = 'page_cache/block/wrapesi/with/handles/' . base64_encode('and/other/stuff');
 
         $this->_observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
@@ -206,7 +221,8 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
                 true,
                 false,
                 360,
-                '<esi:include src="page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==" />',
+                '<esi:include src="page_cache/block/wrapesi/with/handles/'
+                . 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==" />',
             ],
             'full_page type and Varnish enabled, public scope, ttl is not set' => [
                 true,

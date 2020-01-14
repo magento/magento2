@@ -21,6 +21,7 @@
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Config::config_design</aclResource>
         <dataProvider class="Magento\Theme\Ui\Component\Design\Config\DataProvider" name="design_config_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -77,7 +78,7 @@
                 <label translate="true">Store View</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\EditAction">
+        <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\EditAction" sortOrder="50">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="editUrlPath" xsi:type="string">theme/design_config/edit</item>

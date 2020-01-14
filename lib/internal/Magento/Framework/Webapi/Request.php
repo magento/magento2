@@ -34,7 +34,7 @@ class Request extends HttpRequest implements RequestInterface
      * @param StringUtils $converter
      * @param AreaList $areaList
      * @param ScopeInterface $configScope
-     * @param null|string|\Zend_Uri $uri
+     * @param null|string $uri
      */
     public function __construct(
         CookieReaderInterface $cookieReader,

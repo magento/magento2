@@ -12,7 +12,7 @@
                 <arguments>
                     <argument name="path" xsi:type="string">downloadable/customer/products</argument>
                     <argument name="label" xsi:type="string" translate="true">My Downloadable Products</argument>
-                    <argument name="sortOrder" xsi:type="number">220</argument>
+                    <argument name="sortOrder" xsi:type="number">217</argument>
                 </arguments>
             </block>
         </referenceBlock>

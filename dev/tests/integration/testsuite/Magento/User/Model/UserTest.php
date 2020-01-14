@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\User\Model;
-use Magento\Framework\Serialize\Serializer\Json;
+
+use Magento\Framework\Encryption\Encryptor;
 
 /**
  * @magentoAppArea adminhtml
@@ -30,9 +29,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
     protected static $_newRole;
 
     /**
-     * @var Json
+     * @var Encryptor
      */
-    private $serializer;
+    private $encryptor;
 
     protected function setUp()
     {
@@ -42,8 +41,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->_dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Stdlib\DateTime::class
         );
-        $this->serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            Json::class
+        $this->encryptor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            Encryptor::class
         );
     }
 
@@ -105,6 +104,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('admin_role', $this->_model->getRole()->getRoleName());
     }
 
+    /**
+     * phpcs:disable Magento2.Functions.StaticFunction
+     */
     public static function roleDataFixture()
     {
         self::$_newRole = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -122,7 +124,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->_model->saveExtra(['test' => 'val']);
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $extra = $this->serializer->unserialize($this->_model->getExtra());
+        $extra = $this->_model->getExtra();
         $this->assertEquals($extra['test'], 'val');
     }
 
@@ -180,8 +182,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testGetCollection()
     {
         $this->assertInstanceOf(
-             \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
-            $this->_model->getCollection());
+            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
+            $this->_model->getCollection()
+        );
     }
 
     public function testGetName()
@@ -202,6 +205,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      * @magentoAdminConfigFixture admin/security/use_case_sensitive_login 1
      */
     public function testAuthenticate()
@@ -217,6 +221,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      * @magentoConfigFixture current_store admin/security/use_case_sensitive_login 0
      */
     public function testAuthenticateCaseInsensitive()
@@ -262,6 +267,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      */
     public function testLoginsAreLogged()
     {
@@ -313,11 +319,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage User Name is a required field.
-     * @expectedExceptionMessage First Name is a required field.
-     * @expectedExceptionMessage Last Name is a required field.
+     * @expectedExceptionMessage "User Name" is required. Enter and try again.
+     * @expectedExceptionMessage "First Name" is required. Enter and try again.
+     * @expectedExceptionMessage "Last Name" is required. Enter and try again.
      * @expectedExceptionMessage Please enter a valid email.
-     * @expectedExceptionMessage Password is required field.
+     * @expectedExceptionMessage "Password" is required. Enter and try again.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSaveRequiredFieldsValidation()
@@ -332,6 +338,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSavePasswordHash()
     {
+        $pattern = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
+            '/^[0-9a-f]+:[0-9a-zA-Z]{16}:[0-9]+$/' :
+            '/^[0-9a-f]+:[0-9a-zA-Z]{32}:[0-9]+$/';
         $this->_model->setUsername(
             'john.doe'
         )->setFirstname(
@@ -346,7 +355,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->_model->save();
         $this->assertNotContains('123123q', $this->_model->getPassword(), 'Password is expected to be hashed');
         $this->assertRegExp(
-            '/^[0-9a-f]+:[0-9a-zA-Z]{32}:[0-9]+$/',
+            $pattern,
             $this->_model->getPassword(),
             'Salt is expected to be saved along with the password'
         );
@@ -495,13 +504,16 @@ class UserTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/User/_files/user_with_role.php
      * @expectedException \Magento\Framework\Exception\AuthenticationException
-     * @expectedExceptionMessage You have entered an invalid password for current user.
      */
     public function testPerformIdentityCheckWrongPassword()
     {
         $this->_model->loadByUsername('adminUser');
         $passwordString = 'wrongPassword';
         $this->_model->performIdentityCheck($passwordString);
+
+        $this->expectExceptionMessage(
+            'The password entered for the current user is invalid. Verify the password and try again.'
+        );
     }
 
     /**
@@ -509,11 +521,15 @@ class UserTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/User/_files/locked_users.php
      * @expectedException \Magento\Framework\Exception\State\UserLockedException
-     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testPerformIdentityCheckLockExpires()
     {
         $this->_model->loadByUsername('adminUser2');
         $this->_model->performIdentityCheck(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.'
+        );
     }
 }

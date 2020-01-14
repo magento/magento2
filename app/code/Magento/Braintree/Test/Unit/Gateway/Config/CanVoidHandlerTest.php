@@ -6,7 +6,7 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Config;
 
 use Magento\Braintree\Gateway\Config\CanVoidHandler;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment;
@@ -39,7 +39,7 @@ class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($voidHandler->handle($subject));
     }
 
-    public function testHandleSomeAmoutWasPaid()
+    public function testHandleSomeAmountWasPaid()
     {
         $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $subject = [

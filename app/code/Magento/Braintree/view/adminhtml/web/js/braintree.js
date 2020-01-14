@@ -22,8 +22,16 @@ define([
             container: 'payment_form_braintree',
             active: false,
             scriptLoaded: false,
-            braintree: null,
+            braintreeClient: null,
+            braintreeHostedFields: null,
+            hostedFieldsInstance: null,
             selectedCardType: null,
+            selectorsMapper: {
+                'expirationMonth': 'expirationMonth',
+                'expirationYear': 'expirationYear',
+                'number': 'cc_number',
+                'cvv': 'cc_cid'
+            },
             imports: {
                 onActiveChange: 'active'
             }
@@ -107,16 +115,17 @@ define([
                 state = self.scriptLoaded;
 
             $('body').trigger('processStart');
-            require([this.sdkUrl], function (braintree) {
+            require([this.sdkUrl, this.hostedFieldsSdkUrl], function (client, hostedFields) {
                 state(true);
-                self.braintree = braintree;
+                self.braintreeClient = client;
+                self.braintreeHostedFields = hostedFields;
                 self.initBraintree();
                 $('body').trigger('processStop');
             });
         },
 
         /**
-         * Setup Braintree SDK
+         * Retrieves client token and setup Braintree SDK
          */
         initBraintree: function () {
             var self = this;
@@ -124,40 +133,47 @@ define([
             try {
                 $('body').trigger('processStart');
 
-                self.braintree.setup(self.clientToken, 'custom', {
-                    id: self.selector,
-                    hostedFields: self.getHostedFields(),
+                $.getJSON(self.clientTokenUrl).done(function (response) {
+                    self.clientToken = response.clientToken;
+                    self._initBraintree();
+                }).fail(function (response) {
+                    var failed = JSON.parse(response.responseText);
 
-                    /**
-                     * Triggered when sdk was loaded
-                     */
-                    onReady: function () {
-                        $('body').trigger('processStop');
-                    },
-
-                    /**
-                     * Callback for success response
-                     * @param {Object} response
-                     */
-                    onPaymentMethodReceived: function (response) {
-                        if (self.validateCardType()) {
-                            self.setPaymentDetails(response.nonce);
-                            self.placeOrder();
-                        }
-                    },
-
-                    /**
-                     * Error callback
-                     * @param {Object} response
-                     */
-                    onError: function (response) {
-                        self.error(response.message);
-                    }
+                    $('body').trigger('processStop');
+                    self.error(failed.message);
                 });
             } catch (e) {
                 $('body').trigger('processStop');
                 self.error(e.message);
             }
+        },
+
+        /**
+         * Setup Braintree SDK
+         */
+        _initBraintree: function () {
+            var self = this;
+
+            self.disableEventListeners();
+
+            self.braintreeClient.create({
+                authorization: self.clientToken
+            })
+                .then(function (clientInstance) {
+                    return self.braintreeHostedFields.create({
+                        client: clientInstance,
+                        fields: self.getHostedFields()
+                    });
+                })
+                .then(function (hostedFieldsInstance) {
+                    self.hostedFieldsInstance = hostedFieldsInstance;
+                    self.enableEventListeners();
+                    self.fieldEventHandler(hostedFieldsInstance);
+                    $('body').trigger('processStop');
+                })
+                .catch(function () {
+                    self.error($t('Braintree can\'t be initialized.'));
+                });
         },
 
         /**
@@ -177,14 +193,6 @@ define([
                     expirationYear: {
                         selector: self.getSelector('cc_exp_year'),
                         placeholder: $t('YY')
-                    },
-
-                    /**
-                     * Triggered when hosted field is changed
-                     * @param {Object} event
-                     */
-                    onFieldEvent: function (event) {
-                        return self.fieldEventHandler(event);
                     }
                 };
 
@@ -199,36 +207,49 @@ define([
 
         /**
          * Function to handle hosted fields events
-         * @param {Object} event
-         * @returns {Boolean}
+         * @param {Object} hostedFieldsInstance
          */
-        fieldEventHandler: function (event) {
+        fieldEventHandler: function (hostedFieldsInstance) {
             var self = this,
                 $cardType = $('#' + self.container).find('.icon-type');
 
-            if (event.isEmpty === false) {
-                self.validateCardType();
-            }
+            hostedFieldsInstance.on('empty', function (event) {
+                if (event.emittedBy === 'number') {
+                    $cardType.attr('class', 'icon-type');
+                    self.selectedCardType(null);
+                }
 
-            if (event.type !== 'fieldStateChange') {
+            });
 
-                return false;
-            }
+            hostedFieldsInstance.on('validityChange', function (event) {
+                var field = event.fields[event.emittedBy],
+                    fieldKey = event.emittedBy;
 
-            // Handle a change in validation or card type
-            if (event.target.fieldKey === 'number') {
-                self.selectedCardType(null);
-            }
+                if (fieldKey === 'number') {
+                    $cardType.addClass('icon-type-' + event.cards[0].type);
+                }
 
-            // remove previously set classes
-            $cardType.attr('class', 'icon-type');
+                if (fieldKey in self.selectorsMapper && field.isValid === false) {
+                    self.addInvalidClass(self.selectorsMapper[fieldKey]);
+                }
+            });
 
-            if (event.card) {
-                $cardType.addClass('icon-type-' + event.card.type);
+            hostedFieldsInstance.on('blur', function (event) {
+                if (event.emittedBy === 'number') {
+                    self.validateCardType();
+                }
+            });
+
+            hostedFieldsInstance.on('cardTypeChange', function (event) {
+                if (event.cards.length !== 1) {
+                    return;
+                }
+
+                $cardType.addClass('icon-type-' + event.cards[0].type);
                 self.selectedCardType(
-                    validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
+                    validator.getMageCardType(event.cards[0].type, self.getCcAvailableTypes())
                 );
-            }
+            });
         },
 
         /**
@@ -270,16 +291,32 @@ define([
          * Trigger order submit
          */
         submitOrder: function () {
-            this.$selector.validate().form();
-            this.$selector.trigger('afterValidate.beforeSubmit');
-            $('body').trigger('processStop');
+            var self = this;
+
+            self.$selector.validate().form();
+            self.$selector.trigger('afterValidate.beforeSubmit');
 
             // validate parent form
-            if (this.$selector.validate().errorList.length) {
+            if (self.$selector.validate().errorList.length) {
+                $('body').trigger('processStop');
+
                 return false;
             }
 
-            $('#' + this.container).find('[type="submit"]').trigger('click');
+            if (!self.validateCardType()) {
+                return false;
+            }
+
+            self.hostedFieldsInstance.tokenize(function (err, payload) {
+                if (err) {
+                    self.error($t('Some payment input fields are invalid.'));
+
+                    return false;
+                }
+
+                self.setPaymentDetails(payload.nonce);
+                $('#' + self.container).find('[type="submit"]').trigger('click');
+            });
         },
 
         /**
@@ -309,12 +346,10 @@ define([
          * @returns {Boolean}
          */
         validateCardType: function () {
-            var $input = $(this.getSelector('cc_number'));
-
-            $input.removeClass('braintree-hosted-fields-invalid');
+            this.removeInvalidClass('cc_number');
 
             if (!this.selectedCardType()) {
-                $input.addClass('braintree-hosted-fields-invalid');
+                this.addInvalidClass('cc_number');
 
                 return false;
             }
@@ -330,6 +365,28 @@ define([
          */
         getSelector: function (field) {
             return '#' + this.code + '_' + field;
+        },
+
+        /**
+         * Add invalid class to field.
+         *
+         * @param {String} field
+         * @returns void
+         * @private
+         */
+        addInvalidClass: function (field) {
+            $(this.getSelector(field)).addClass('braintree-hosted-fields-invalid');
+        },
+
+        /**
+         * Remove invalid class from field.
+         *
+         * @param {String} field
+         * @returns void
+         * @private
+         */
+        removeInvalidClass: function (field) {
+            $(this.getSelector(field)).removeClass('braintree-hosted-fields-invalid');
         }
     });
 });

@@ -1,0 +1,34 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type Query {
+    storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "The store config query") @cache(cacheable: false)
+}
+
+type Website @doc(description: "Website is deprecated because it is should not be used on storefront. The type contains information about a website") {
+    id : Int @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The ID number assigned to the website")
+    name : String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The website name. Websites use this name to identify it easier.")
+    code : String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "A code assigned to the website to identify it")
+    sort_order : Int @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The attribute to use for sorting websites")
+    default_group_id : String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The default group ID that the website has")
+    is_default : Boolean @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "Specifies if this is the default website")
+}
+
+type StoreConfig @doc(description: "The type contains information about a store config") {
+    id : Int @doc(description: "The ID number assigned to the store")
+    code : String @doc(description: "A code assigned to the store to identify it")
+    website_id : Int @doc(description: "The ID number assigned to the website store belongs")
+    locale : String @doc(description: "Store locale")
+    base_currency_code : String @doc(description: "Base currency code")
+    default_display_currency_code : String @doc(description: "Default display currency code")
+    timezone : String @doc(description: "Timezone of the store")
+    weight_unit : String @doc(description: "The unit of weight")
+    base_url : String @doc(description: "Base URL for the store")
+    base_link_url : String @doc(description: "Base link URL for the store")
+    base_static_url : String @doc(description: "Base static URL for the store")
+    base_media_url : String @doc(description: "Base media URL for the store")
+    secure_base_url : String @doc(description: "Secure base URL for the store")
+    secure_base_link_url : String @doc(description: "Secure base link URL for the store")
+    secure_base_static_url : String @doc(description: "Secure base static URL for the store")
+    secure_base_media_url : String @doc(description: "Secure base media URL for the store")
+    store_name : String @doc(description: "Name of the store")
+}

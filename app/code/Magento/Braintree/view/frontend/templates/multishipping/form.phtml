@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+    require([
+        'uiLayout',
+        'jquery'
+    ], function (layout, $) {
+        $(function () {
+            var paymentMethodData = {
+                method: 'braintree'
+            };
+            layout([
+                {
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/multishipping/cc-form',
+                    name: 'payment_method_braintree',
+                    method: paymentMethodData.method,
+                    item: paymentMethodData
+                }
+            ]);
+
+            $('body').trigger('contentUpdated');
+        })
+    })
+</script>
+<!-- ko template: getTemplate() --><!-- /ko -->

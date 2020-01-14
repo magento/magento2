@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Convert\Test\Unit;
 
 use \Magento\Framework\Convert\ConvertArray;
@@ -34,7 +35,7 @@ XML;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Associative and numeric keys must not be mixed at one level.
+     * @expectedExceptionMessage Associative and numeric keys can't be mixed at one level. Verify and try again.
      */
     public function testAssocToXmlExceptionByKey()
     {

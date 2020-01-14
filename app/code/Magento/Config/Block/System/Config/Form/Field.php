@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Block\System\Config\Form;
 
 /**
@@ -16,7 +14,8 @@ namespace Magento\Config\Block\System\Config\Form;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
-class Field extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Field extends \Magento\Backend\Block\Template implements
+    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Retrieve element HTML markup
@@ -42,6 +41,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
         // Disable element if value is inherited from other scope. Flag has to be set before the value is rendered.
         if ($element->getInherit() == 1 && $isCheckboxRequired) {
             $element->setDisabled(true);
+        }
+
+        if ($element->getIsDisableInheritance()) {
+            $element->setReadonly(true);
         }
 
         $html = '<td class="label"><label for="' .
@@ -95,7 +98,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
         $htmlId = $element->getHtmlId();
         $namePrefix = preg_replace('#\[value\](\[\])?$#', '', $element->getName());
         $checkedHtml = $element->getInherit() == 1 ? 'checked="checked"' : '';
-        $disabled = $element->getIsDisableInheritance() == true ? ' disabled="disabled"' : '';
+        $disabled = $element->getIsDisableInheritance() == true ? ' disabled="disabled" readonly="1"' : '';
 
         $html = '<td class="use-default">';
         $html .= '<input id="' .

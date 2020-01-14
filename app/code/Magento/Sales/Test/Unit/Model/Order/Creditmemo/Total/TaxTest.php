@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
 use Magento\Framework\DataObject as MagentoObject;
@@ -43,21 +41,30 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Sales\Model\Order\Creditmemo\Total\Tax $model */
         $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Creditmemo\Total\Tax::class);
 
-        $this->order = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
+        $this->order = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            [
                 '__wakeup'
-            ]);
+            ]
+        );
 
-        $this->invoice = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice::class, [
+        $this->invoice = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Invoice::class,
+            [
                 '__wakeup',
-            ]);
+            ]
+        );
 
-        $this->creditmemo = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
+        $this->creditmemo = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Creditmemo::class,
+            [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
                 'isLast',
                 '__wakeup',
-            ]);
+            ]
+        );
         $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
     }
 
@@ -93,16 +100,18 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->will($this->returnCallback(
-                function ($price, $type) use (&$roundingDelta) {
-                    if (!isset($roundingDelta[$type])) {
-                        $roundingDelta[$type] = 0;
+            ->will(
+                $this->returnCallback(
+                    function ($price, $type) use (&$roundingDelta) {
+                        if (!isset($roundingDelta[$type])) {
+                            $roundingDelta[$type] = 0;
+                        }
+                        $roundedPrice = round($price + $roundingDelta[$type], 2);
+                        $roundingDelta[$type] = $price - $roundedPrice;
+                        return $roundedPrice;
                     }
-                    $roundedPrice = round($price + $roundingDelta[$type], 2);
-                    $roundingDelta[$type] = $price - $roundedPrice;
-                    return $roundedPrice;
-                }
-            ));
+                )
+            );
 
         $this->model->collect($this->creditmemo);
 
@@ -183,13 +192,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
                     'invoice' => new MagentoObject(
-                            [
-                                'shipping_tax_amount' => 2.45,
-                                'base_shipping_tax_amount' => 2.45,
-                                'shipping_discount_tax_compensation_amount' => 0,
-                                'base_shipping_discount_tax_compensation_amount' => 0,
-                            ]
-                        ),
+                        [
+                            'shipping_tax_amount' => 2.45,
+                            'base_shipping_tax_amount' => 2.45,
+                            'shipping_discount_tax_compensation_amount' => 0,
+                            'base_shipping_discount_tax_compensation_amount' => 0,
+                        ]
+                    ),
                 ],
             ],
             'expected_results' => [
@@ -347,13 +356,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'tax_amount' => 1.65,
                     'base_tax_amount' => 1.65,
                     'invoice' => new MagentoObject(
-                            [
-                                'shipping_tax_amount' => 1.24,
-                                'base_shipping_tax_amount' => 1.24,
-                                'shipping_discount_tax_compensation_amount' => 0,
-                                'base_shipping_discount_tax_compensation_amount' => 0,
-                            ]
-                        ),
+                        [
+                            'shipping_tax_amount' => 1.24,
+                            'base_shipping_tax_amount' => 1.24,
+                            'shipping_discount_tax_compensation_amount' => 0,
+                            'base_shipping_discount_tax_compensation_amount' => 0,
+                        ]
+                    ),
                 ],
             ],
             'expected_results' => [
@@ -423,13 +432,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
                     'invoice' => new MagentoObject(
-                            [
-                                'shipping_tax_amount' => 1.24,
-                                'base_shipping_tax_amount' => 1.24,
-                                'shipping_discount_tax_compensation_amount' => 0,
-                                'base_shipping_discount_tax_compensation_amount' => 0,
-                            ]
-                        ),
+                        [
+                            'shipping_tax_amount' => 1.24,
+                            'base_shipping_tax_amount' => 1.24,
+                            'shipping_discount_tax_compensation_amount' => 0,
+                            'base_shipping_discount_tax_compensation_amount' => 0,
+                        ]
+                    ),
                 ],
             ],
             'expected_results' => [
@@ -440,10 +449,10 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'creditmemo_data' => [
-                    'grand_total' => 64.95,
-                    'base_grand_total' => 64.95,
-                    'tax_amount' => 4.95,
-                    'base_tax_amount' => 4.95,
+                    'grand_total' => 64.94,
+                    'base_grand_total' => 64.94,
+                    'tax_amount' => 4.94,
+                    'base_tax_amount' => 4.94,
                 ],
             ],
         ];
@@ -504,13 +513,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'tax_amount' => 0.76,
                     'base_tax_amount' => 0.76,
                     'invoice' => new MagentoObject(
-                            [
-                                'shipping_tax_amount' => 0,
-                                'base_shipping_tax_amount' => 0,
-                                'shipping_discount_tax_compensation_amount' => 0,
-                                'base_shipping_discount_tax_compensation_amount' => 0,
-                            ]
-                        ),
+                        [
+                            'shipping_tax_amount' => 0,
+                            'base_shipping_tax_amount' => 0,
+                            'shipping_discount_tax_compensation_amount' => 0,
+                            'base_shipping_discount_tax_compensation_amount' => 0,
+                        ]
+                    ),
                 ],
             ],
             'expected_results' => [
@@ -603,6 +612,143 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
+        // scenario 6: 2 items, 2 invoiced, price includes tax, full discount, free shipping
+        // partial credit memo, make sure that discount tax compensation (with 100 % discount) is calculated correctly
+        $result['collect_with_full_discount_product_price'] = [
+            'order_data' => [
+                'data_fields' => [
+                    'discount_amount' => -200.00,
+                    'discount_invoiced' => -200.00,
+                    'subtotal' => 181.82,
+                    'subtotal_incl_tax' => 200,
+                    'base_subtotal' => 181.82,
+                    'base_subtotal_incl_tax' => 200,
+                    'subtotal_invoiced' => 181.82,
+                    'discount_tax_compensation_amount' => 18.18,
+                    'discount_tax_compensation_invoiced' => 18.18,
+                    'base_discount_tax_compensation_amount' => 18.18,
+                    'base_discount_tax_compensation_invoiced' => 18.18,
+                    'grand_total' => 0,
+                    'base_grand_total' => 0,
+                    'shipping_tax_amount' => 0,
+                    'base_shipping_tax_amount' => 0,
+                    'shipping_discount_tax_compensation_amount' => 0,
+                    'base_shipping_discount_tax_compensation_amount' => 0,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                    'tax_invoiced' => 0,
+                    'base_tax_invoiced' => 0,
+                    'tax_refunded' => 0,
+                    'base_tax_refunded' => 0,
+                    'base_shipping_amount' => 0,
+                ],
+            ],
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_amount' => 0,
+                            'tax_invoiced' => 0,
+                            'tax_refunded' => null,
+                            'base_tax_amount' => 0,
+                            'base_tax_invoiced' => 0,
+                            'base_tax_refunded' => 0,
+                            'tax_percent' => 10,
+                            'qty_refunded' => 0,
+                            'discount_percent' => 100,
+                            'discount_amount' => 100,
+                            'base_discount_amount' => 100,
+                            'discount_invoiced' => 100,
+                            'base_discount_invoiced' => 100,
+                            'row_total' => 90.91,
+                            'base_row_total' => 90.91,
+                            'row_invoiced' => 90.91,
+                            'base_row_invoiced' => 90.91,
+                            'price_incl_tax' => 100,
+                            'base_price_incl_tax' => 100,
+                            'row_total_incl_tax' => 100,
+                            'base_row_total_incl_tax' => 100,
+                            'discount_tax_compensation_amount' => 9.09,
+                            'base_discount_tax_compensation_amount' => 9.09,
+                            'discount_tax_compensation_invoiced' => 9.09,
+                            'base_discount_tax_compensation_invoiced' => 9.09,
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                    'item_2' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_amount' => 0,
+                            'tax_invoiced' => 0,
+                            'tax_refunded' => null,
+                            'base_tax_amount' => 0,
+                            'base_tax_invoiced' => 0,
+                            'base_tax_refunded' => null,
+                            'tax_percent' => 10,
+                            'qty_refunded' => 0,
+                            'discount_percent' => 100,
+                            'discount_amount' => 100,
+                            'base_discount_amount' => 100,
+                            'discount_invoiced' => 100,
+                            'base_discount_invoiced' => 100,
+                            'row_total' => 90.91,
+                            'base_row_total' => 90.91,
+                            'row_invoiced' => 90.91,
+                            'base_row_invoiced' => 90.91,
+                            'price_incl_tax' => 100,
+                            'base_price_incl_tax' => 100,
+                            'row_total_incl_tax' => 100,
+                            'base_row_total_incl_tax' => 100,
+                            'discount_tax_compensation_amount' => 9.09,
+                            'base_discount_tax_compensation_amount' => 9.09,
+                            'discount_tax_compensation_invoiced' => 9.09,
+                            'base_discount_tax_compensation_invoiced' => 9.09,
+                        ],
+                        'is_last' => false,
+                        'qty' => 0,
+                    ],
+                ],
+                'is_last' => false,
+                'data_fields' => [
+                    'grand_total' => -9.09,
+                    'base_grand_total' => -9.09,
+                    'base_shipping_amount' => 0,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                    'invoice' => new MagentoObject(
+                        [
+                            'shipping_tax_amount' => 0,
+                            'base_shipping_tax_amount' => 0,
+                            'shipping_discount_tax_compensation_amount' => 0,
+                            'base_shipping_discount_tax_compensation_amount' => 0,
+                        ]
+                    ),
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'tax_amount' => 0,
+                        'base_tax_amount' => 0,
+                    ],
+                    'item_2' => [
+                        'tax_amount' => 0,
+                        'base_tax_amount' => 0,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 0,
+                    'base_grand_total' => 0,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                    'shipping_tax_amount' => 0,
+                    'base_shipping_tax_amount' => 0,
+                ],
+            ],
+        ];
+
         return $result;
     }
 
@@ -613,20 +759,26 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected function getCreditmemoItem($creditmemoItemData)
     {
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
-        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
+        $orderItem = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Item::class,
+            [
                 'isDummy',
                 '__wakeup'
-            ]);
+            ]
+        );
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
 
         /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject $creditmemoItem */
-        $creditmemoItem = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo\Item::class, [
+        $creditmemoItem = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Creditmemo\Item::class,
+            [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'
-            ]);
+            ]
+        );
         $creditmemoItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
         $creditmemoItem->expects($this->any())
             ->method('isLast')

@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Locale\Test\Unit\Deployed;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ConfigOptionsListConstants as Constants;
 use Magento\Framework\Locale\AvailableLocalesInterface;
 use Magento\Framework\Locale\Deployed\Options;
 use Magento\Framework\Locale\ListsInterface;
@@ -41,6 +45,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     private $localeListsMock;
 
     /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
      * @var Options
      */
     private $model;
@@ -59,63 +68,123 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->localeListsMock = $this->getMockBuilder(ListsInterface::class)
             ->getMockForAbstractClass();
+        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
 
         $this->model = new Options(
             $this->localeListsMock,
             $this->stateMock,
             $this->availableLocalesMock,
-            $this->designMock
+            $this->designMock,
+            $this->deploymentConfigMock
         );
     }
 
     /**
      * @param string $mode
+     * @param int $scdOnDemand
      * @param array $locales
-     * @param array $expectedLocales
-     * @param array $deployedCodes
-     * @dataProvider getLocaleDataProvider
+     * @return void
+     *
+     * @dataProvider getFullLocalesDataProvider
      */
-    public function testGetOptionLocales($mode, $locales, $expectedLocales, $deployedCodes)
+    public function testGetOptionLocalesFull(string $mode, int $scdOnDemand, array $locales): void
     {
         $this->localeListsMock->expects($this->once())
             ->method('getOptionLocales')
             ->willReturn($locales);
 
-        $this->prepareGetLocales($mode, $deployedCodes);
+        $this->prepareGetLocalesFull($mode, $scdOnDemand);
+
+        $this->assertEquals($locales, array_values($this->model->getOptionLocales()));
+    }
+
+    /**
+     * @param string $mode
+     * @param int $scdOnDemand
+     * @param array $locales
+     * @return void
+     *
+     * @dataProvider getFullLocalesDataProvider
+     */
+    public function testGetTranslatedOptionLocalesFull(string $mode, int $scdOnDemand, array $locales): void
+    {
+        $this->localeListsMock->expects($this->once())
+            ->method('getTranslatedOptionLocales')
+            ->willReturn($locales);
+
+        $this->prepareGetLocalesFull($mode, $scdOnDemand);
+
+        $this->assertEquals($locales, array_values($this->model->getTranslatedOptionLocales()));
+    }
+
+    /**
+     * @param string $mode
+     * @param int $scdOnDemand
+     * @param array $locales
+     * @param array $expectedLocales
+     * @param array $deployedCodes
+     * @return void
+     *
+     * @dataProvider getLimitedLocalesDataProvider
+     */
+    public function testGetOptionLocalesLimited(
+        string $mode,
+        int $scdOnDemand,
+        array $locales,
+        array $expectedLocales,
+        array $deployedCodes
+    ): void {
+        $this->localeListsMock->expects($this->once())
+            ->method('getOptionLocales')
+            ->willReturn($locales);
+
+        $this->prepareGetLocalesLimited($mode, $scdOnDemand, $deployedCodes);
 
         $this->assertEquals($expectedLocales, array_values($this->model->getOptionLocales()));
     }
 
     /**
      * @param string $mode
+     * @param int $scdOnDemand
      * @param array $locales
      * @param array $expectedLocales
      * @param array $deployedCodes
-     * @dataProvider getLocaleDataProvider
+     * @return void
+     *
+     * @dataProvider getLimitedLocalesDataProvider
      */
-    public function testGetTranslatedOptionLocales($mode, $locales, $expectedLocales, $deployedCodes)
-    {
+    public function testGetTranslatedOptionLocalesLimited(
+        string $mode,
+        int $scdOnDemand,
+        array $locales,
+        array $expectedLocales,
+        array $deployedCodes
+    ): void {
         $this->localeListsMock->expects($this->once())
             ->method('getTranslatedOptionLocales')
             ->willReturn($locales);
 
-        $this->prepareGetLocales($mode, $deployedCodes);
+        $this->prepareGetLocalesLimited($mode, $scdOnDemand, $deployedCodes);
 
         $this->assertEquals($expectedLocales, array_values($this->model->getTranslatedOptionLocales()));
     }
 
     /**
-     * @param $mode
-     * @param $deployedCodes
+     * @param string $mode
+     * @param int $scdOnDemand
+     * @param array $deployedCodes
      * @return void
      */
-    private function prepareGetLocales($mode, $deployedCodes)
+    private function prepareGetLocalesLimited(string $mode, int $scdOnDemand, $deployedCodes): void
     {
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn($mode);
+        $this->deploymentConfigMock->expects($this->any())
+            ->method('getConfigData')
+            ->with(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
+            ->willReturn($scdOnDemand);
 
-        if ($mode == State::MODE_PRODUCTION) {
             $area = 'area';
             $code = 'code';
             $themeMock = $this->getMockBuilder(ThemeInterface::class)
@@ -133,32 +202,94 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
                 ->method('getList')
                 ->with($code, $area)
                 ->willReturn($deployedCodes);
-        }
+    }
+
+    /**
+     * @param string $mode
+     * @param int $scdOnDemand
+     * @return void
+     */
+    private function prepareGetLocalesFull(string $mode, int $scdOnDemand): void
+    {
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn($mode);
+        $this->deploymentConfigMock->expects($this->any())
+            ->method('getConfigData')
+            ->with(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
+            ->willReturn($scdOnDemand);
+
+        $this->designMock->expects($this->never())
+            ->method('getDesignTheme');
     }
 
     /**
      * @return array
      */
-    public function getLocaleDataProvider()
+    public function getFullLocalesDataProvider(): array
     {
+        $deLocale = [
+            'value' => 'de_DE',
+            'label' => 'German (German)'
+        ];
+        $daLocale = [
+            'value' => 'da_DK',
+            'label' => 'Danish (Denmark)'
+        ];
+
         return [
             [
                 State::MODE_PRODUCTION,
+                1,
+                [$daLocale, $deLocale],
+            ],
+            [
+                State::MODE_DEVELOPER,
+                0,
+                [$daLocale, $deLocale],
+            ],
+            [
+                State::MODE_DEVELOPER,
+                1,
+                [$deLocale],
+            ],
+            [
+                State::MODE_DEFAULT,
+                0,
+                [$daLocale],
+            ],
+            [
+                State::MODE_DEFAULT,
+                1,
+                [$daLocale, $deLocale],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getLimitedLocalesDataProvider(): array
+    {
+        $deLocale = [
+            'value' => 'de_DE',
+            'label' => 'German (German)'
+        ];
+        $daLocale = [
+            'value' => 'da_DK',
+            'label' => 'Danish (Denmark)'
+        ];
+
+        return [
+            [
+                State::MODE_PRODUCTION,
+                0,
                 [
-                    [
-                        'value' => 'da_DK',
-                        'label' => 'Danish (Denmark)'
-                    ],
-                    [
-                        'value' => 'de_DE',
-                        'label' => 'German (German)'
-                    ]
+                    $daLocale,
+                    $deLocale
                 ],
                 [
-                    [
-                        'value' => 'de_DE',
-                        'label' => 'German (German)'
-                    ]
+                    $deLocale
                 ],
                 [
                     'de_DE'
@@ -166,38 +297,17 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 State::MODE_PRODUCTION,
+                0,
                 [
-                    [
-                        'value' => 'de_DE',
-                        'label' => 'German (German)'
-                    ]
-                ],
-                [],
-                []
-            ],
-            [
-                State::MODE_DEVELOPER,
-                [
-                    [
-                        'value' => 'da_DK',
-                        'label' => 'Danish (Denmark)'
-                    ],
-                    [
-                        'value' => 'de_DE',
-                        'label' => 'German (German)'
-                    ]
+                    $daLocale,
+                    $deLocale
                 ],
                 [
-                    [
-                        'value' => 'da_DK',
-                        'label' => 'Danish (Denmark)'
-                    ],
-                    [
-                        'value' => 'de_DE',
-                        'label' => 'German (German)'
-                    ]
+                    $daLocale,
+                    $deLocale
                 ],
                 [
+                    'da_DK',
                     'de_DE'
                 ]
             ],

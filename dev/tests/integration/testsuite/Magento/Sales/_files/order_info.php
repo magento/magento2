@@ -85,6 +85,9 @@ $invoiceFactory = $objectManager->get(\Magento\Sales\Api\InvoiceManagementInterf
 $invoice = $invoiceFactory->prepareInvoice($order, [$item->getId() => 10]);
 $invoice->register();
 $invoice->save();
+$order->save();
+
+$invoice = $objectManager->get(\Magento\Sales\Api\InvoiceRepositoryInterface::class)->get($invoice->getId());
 
 /** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory */
 $creditmemoFactory = $objectManager->get(\Magento\Sales\Model\Order\CreditmemoFactory::class);

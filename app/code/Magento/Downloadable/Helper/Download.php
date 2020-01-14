@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * Downloadable Products Download Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Download extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -146,7 +145,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
             throw new CoreException(__('Please set resource file and link type.'));
         }
 
-        if (is_null($this->_handle)) {
+        if ($this->_handle === null) {
             if ($this->_linkType == self::LINK_TYPE_URL) {
                 $path = $this->_resourceFile;
                 $protocol = strtolower(parse_url($path, PHP_URL_SCHEME));
@@ -188,19 +187,20 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     public function getContentType()
     {
         $this->_getHandle();
-        if ($this->_linkType == self::LINK_TYPE_FILE) {
-            if (function_exists(
-                'mime_content_type'
-            ) && ($contentType = mime_content_type(
-                $this->_workingDirectory->getAbsolutePath($this->_resourceFile)
-            ))
+        if ($this->_linkType === self::LINK_TYPE_FILE) {
+            if (function_exists('mime_content_type')
+                && ($contentType = mime_content_type(
+                    $this->_workingDirectory->getAbsolutePath($this->_resourceFile)
+                ))
             ) {
                 return $contentType;
-            } else {
-                return $this->_downloadableFile->getFileType($this->_resourceFile);
             }
-        } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            return $this->_handle->stat($this->_resourceFile)['type'];
+            return $this->_downloadableFile->getFileType($this->_resourceFile);
+        }
+        if ($this->_linkType === self::LINK_TYPE_URL) {
+            return (is_array($this->_handle->stat($this->_resourceFile)['type'])
+                ? end($this->_handle->stat($this->_resourceFile)['type'])
+                : $this->_handle->stat($this->_resourceFile)['type']);
         }
         return $this->_contentType;
     }
@@ -254,10 +254,21 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
                 );
             }
         }
-
+        
         $this->_resourceFile = $resourceFile;
+        
+        /**
+        * check header for urls
+        */
+        if ($linkType === self::LINK_TYPE_URL) {
+            $headers = array_change_key_case(get_headers($this->_resourceFile, 1), CASE_LOWER);
+            if (isset($headers['location'])) {
+                $this->_resourceFile  = is_array($headers['location']) ? current($headers['location'])
+                    : $headers['location'];
+            }
+        }
+        
         $this->_linkType = $linkType;
-
         return $this;
     }
 
@@ -271,7 +282,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         $handle = $this->_getHandle();
         $this->_session->writeClose();
         while (true == ($buffer = $handle->read(1024))) {
-            echo $buffer;
+            echo $buffer; //@codingStandardsIgnoreLine
         }
     }
 
@@ -284,6 +295,10 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getContentDisposition($store = null)
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_CONTENT_DISPOSITION, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_CONTENT_DISPOSITION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }

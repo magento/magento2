@@ -3,18 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Element\BlockFactory;
-use Magento\Framework\View\Layout\Data\Structure as DataStructure;
-use Magento\Framework\View\Layout\Element;
-use Magento\Framework\View\Layout\GeneratorInterface;
+use Magento\Framework\View\Element\UiComponent\ContainerInterface;
+use Magento\Framework\View\Element\UiComponent\ContextFactory as UiComponentContextFactory;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ContainerInterface;
-use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
+use Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\Generator\Context as GeneratorContext;
-use Magento\Framework\View\Element\UiComponent\ContextFactory as UiComponentContextFactory;
+use Magento\Framework\View\Layout\GeneratorInterface;
+use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 use Magento\Framework\View\LayoutInterface;
 
 /**
@@ -43,6 +44,11 @@ class UiComponent implements GeneratorInterface
     protected $contextFactory;
 
     /**
+     * @var BlockFactory
+     */
+    private $blockFactory;
+
+    /**
      * Constructor
      *
      * @param UiComponentFactory $uiComponentFactory
@@ -60,7 +66,7 @@ class UiComponent implements GeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getType()
     {
@@ -85,8 +91,6 @@ class UiComponent implements GeneratorInterface
         $layout = $generatorContext->getLayout();
 
         // Instantiate blocks and collect all actions data
-        /** @var $blocks \Magento\Framework\View\Element\AbstractBlock[] */
-        $blocks = [];
         foreach ($scheduledElements as $elementName => $element) {
             list($elementType, $data) = $element;
 
@@ -94,9 +98,10 @@ class UiComponent implements GeneratorInterface
                 continue;
             }
 
-            $block = $this->generateComponent($structure, $elementName, $data, $layout);
-            $blocks[$elementName] = $block;
-            $layout->setBlock($elementName, $block);
+            $layout->setBlock(
+                $elementName,
+                $this->generateComponent($structure, $elementName, $data, $layout)
+            );
             $scheduledStructure->unsetElement($elementName);
         }
 

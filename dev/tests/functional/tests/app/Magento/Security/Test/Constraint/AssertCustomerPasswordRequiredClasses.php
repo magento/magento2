@@ -31,7 +31,7 @@ class AssertCustomerPasswordRequiredClasses extends AbstractConstraint
         $characterClassesNumber = $config
             ->getData('section')['customer/password/required_character_classes_number']['value'];
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::EXPECTED_MAX_CHARACTERS, $characterClassesNumber) . self::EXPECTED_MESSAGE,
             $errorMessage,
             'Wrong expected message is displayed.'

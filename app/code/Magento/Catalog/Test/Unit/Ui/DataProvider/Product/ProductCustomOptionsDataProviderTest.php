@@ -11,6 +11,9 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DB\Select as DbSelect;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -44,6 +47,21 @@ class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $dbSelectMock;
 
+    /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataPool;
+
+    /**
+     * @var EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entityMetadata;
+
+    /**
+     * @var PoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $modifiersPool;
+
     protected function setUp()
     {
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
@@ -54,7 +72,16 @@ class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(AbstractCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getSelect', 'getTable', 'getIterator', 'isLoaded', 'toArray', 'getSize'])
+            ->setMethods([
+                'load',
+                'getSelect',
+                'getTable',
+                'getIterator',
+                'isLoaded',
+                'toArray',
+                'getSize',
+                'setStoreId'
+            ])
             ->getMockForAbstractClass();
         $this->dbSelectMock = $this->getMockBuilder(DbSelect::class)
             ->disableOriginalConstructor()
@@ -64,12 +91,29 @@ class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->collectionMock);
 
+        $this->modifiersPool = $this->getMockBuilder(PoolInterface::class)
+            ->getMockForAbstractClass();
+        $this->entityMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->getMockForAbstractClass();
+        $this->entityMetadata->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getMetadata'])
+            ->getMock();
+        $this->metadataPool->expects($this->any())
+            ->method('getMetadata')
+            ->willReturn($this->entityMetadata);
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->dataProvider = $this->objectManagerHelper->getObject(
             ProductCustomOptionsDataProvider::class,
             [
                 'collectionFactory' => $this->collectionFactoryMock,
-                'request' => $this->requestMock
+                'request' => $this->requestMock,
+                'modifiersPool' => $this->modifiersPool,
+                'metadataPool' => $this->metadataPool
             ]
         );
     }

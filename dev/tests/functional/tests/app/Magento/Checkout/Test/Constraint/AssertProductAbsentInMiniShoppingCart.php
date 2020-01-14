@@ -27,7 +27,7 @@ class AssertProductAbsentInMiniShoppingCart extends AbstractConstraint
     {
         $cmsIndex->open();
         $cmsIndex->getCartSidebarBlock()->openMiniCart();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $cmsIndex->getCartSidebarBlock()->getCartItem($deletedProduct)->isVisible(),
             'Product ' . $deletedProduct->getName() . ' is presents in Mini Shopping Cart.'
         );

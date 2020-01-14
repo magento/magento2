@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurationTimeToSendDataTest">
+        <annotations>
+            <features value="Analytics"/>
+            <stories value="Time of the day to collect data"/>
+            <title value="Time of the day to collect data"/>
+            <description value="An admin user can change the time of the day to collect data setting on the Advanced Reporting configuration page."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-66464"/>
+            <group value="analytics"/>
+        </annotations>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingHour}}" userInput="23" stepKey="selectAdvancedReportingHour"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingMinute}}" userInput="59" stepKey="selectAdvancedReportingMinute"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingSeconds}}" userInput="59" stepKey="selectAdvancedReportingSeconds"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+    </test>
+</tests>

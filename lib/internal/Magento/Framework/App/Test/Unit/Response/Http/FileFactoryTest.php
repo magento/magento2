@@ -67,7 +67,7 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @exceptedExceptionMessage File not found
+     * @expectedExceptionMessage File not found
      */
     public function testCreateIfFileNotExist()
     {
@@ -230,12 +230,12 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Get model mock
      *
-     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit\Framework_MockObject_MockBuilder
+     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     private function getModelMock()
     {
         $modelMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
-            ->setMethods(['callExit'])
+            ->setMethods(null)
             ->setConstructorArgs(
                 [
                     'response' => $this->responseMock,

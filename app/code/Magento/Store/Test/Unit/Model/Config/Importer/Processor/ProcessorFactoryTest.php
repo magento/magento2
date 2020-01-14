@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -62,7 +63,7 @@ class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     * @expectedExceptionMessage Class for type "dummyType" was not declared
+     * @expectedExceptionMessage The class for "dummyType" type wasn't declared. Enter the class and try again.
      */
     public function testCreateNonExisted()
     {

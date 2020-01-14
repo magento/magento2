@@ -6,9 +6,10 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
+class Delete extends \Magento\Tax\Controller\Adminhtml\Rule implements HttpPostActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="deprecated.config.async.string.topic">
+        <queue consumer="deprecatedConfigAsyncStringConsumer" name="deprecated.config.queue.1" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" maxMessages="200"/>
+        <queue consumer="deprecatedConfigAsyncMixedConsumer" name="deprecated.config.queue.3" handler="Magento\TestModuleMessageQueueConfiguration\AsyncHandler::methodWithMixedParam"/>
+    </broker>
+    <broker topic="deprecated.config.async.bool.topic" type="db" exchange="deprecatedExchange">
+        <queue consumer="deprecatedConfigAsyncBoolConsumer" name="deprecated.config.queue.2" />
+    </broker>
+    <broker topic="deprecated.config.sync.bool.topic" type="amqp" exchange="customExchange">
+        <queue consumer="deprecatedConfigSyncBoolConsumer" name="deprecated.config.queue.4"/>
+    </broker>
+    <broker topic="overlapping.topic.declaration" type="amqp" exchange="overlappingDeprecatedExchange">
+        <queue consumer="overlappingConsumerDeclaration" name="consumer.config.queue" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" maxMessages="222" handler="Magento\TestModuleMessageQueueConfiguration\AsyncHandler::methodWithMixedParam"/>
+    </broker>
+</config>

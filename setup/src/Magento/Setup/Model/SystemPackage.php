@@ -53,8 +53,8 @@ class SystemPackage
     /**
      * Returns system package and available versions
      *
-     * @throws \RuntimeException
      * @return array
+     * @throws \RuntimeException
      */
     public function getPackageVersions()
     {
@@ -150,10 +150,12 @@ class SystemPackage
                 'current' => true,
             ];
         }
-        return  $versions;
+        return $versions;
     }
 
     /**
+     * Get installed system packages.
+     *
      * @return array
      * @throws \Exception
      * @throws \RuntimeException
@@ -179,7 +181,7 @@ class SystemPackage
             throw new \RuntimeException(
                 'We\'re sorry, no components are available because you cloned the Magento 2 GitHub repository. ' .
                 'You must manually update components as discussed in the ' .
-                '<a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/dev_options.html">' .
+                '<a href="https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/dev_options.html">' .
                 'Installation Guide</a>.'
             );
         }
@@ -187,17 +189,22 @@ class SystemPackage
     }
 
     /**
+     * Sort versions.
+     *
      * @param array $enterpriseVersions
      * @return array
      */
     public function sortVersions($enterpriseVersions)
     {
-        usort($enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS], function ($versionOne, $versionTwo) {
-            if (version_compare($versionOne, $versionTwo, '==')) {
-                return 0;
+        usort(
+            $enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS],
+            function ($versionOne, $versionTwo) {
+                if (version_compare($versionOne, $versionTwo, '==')) {
+                    return 0;
+                }
+                return (version_compare($versionOne, $versionTwo, '<')) ? 1 : -1;
             }
-            return (version_compare($versionOne, $versionTwo, '<')) ? 1 : -1;
-        });
+        );
 
         return $enterpriseVersions;
     }
@@ -227,20 +234,25 @@ class SystemPackage
             }
         }
 
-        usort($versions, function ($versionOne, $versionTwo) {
-            if (version_compare($versionOne['id'], $versionTwo['id'], '==')) {
-                if ($versionOne['package'] === static::EDITION_COMMUNITY) {
-                    return 1;
+        usort(
+            $versions,
+            function ($versionOne, $versionTwo) {
+                if (version_compare($versionOne['id'], $versionTwo['id'], '==')) {
+                    if ($versionOne['package'] === static::EDITION_COMMUNITY) {
+                        return 1;
+                    }
+                    return 0;
                 }
-                return 0;
+                return (version_compare($versionOne['id'], $versionTwo['id'], '<')) ? 1 : -1;
             }
-            return (version_compare($versionOne['id'], $versionTwo['id'], '<')) ? 1 : -1;
-        });
+        );
 
         return $versions;
     }
 
     /**
+     * Filter enterprise versions.
+     *
      * @param string $currentCE
      * @param array $enterpriseVersions
      * @param string $maxVersion

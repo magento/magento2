@@ -1,0 +1,273 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+directive @doc(description: String="") on QUERY
+    | MUTATION
+    | FIELD
+    | FRAGMENT_DEFINITION
+    | FRAGMENT_SPREAD
+    | INLINE_FRAGMENT
+    | SCHEMA
+    | SCALAR
+    | OBJECT
+    | FIELD_DEFINITION
+    | ARGUMENT_DEFINITION
+    | INTERFACE
+    | UNION
+    | ENUM
+    | ENUM_VALUE
+    | INPUT_OBJECT
+    | INPUT_FIELD_DEFINITION
+
+directive @resolver(class: String="") on QUERY
+    | MUTATION
+    | FIELD
+    | FRAGMENT_DEFINITION
+    | FRAGMENT_SPREAD
+    | INLINE_FRAGMENT
+    | SCHEMA
+    | SCALAR
+    | OBJECT
+    | FIELD_DEFINITION
+    | ARGUMENT_DEFINITION
+    | INTERFACE
+    | UNION
+    | ENUM
+    | ENUM_VALUE
+    | INPUT_OBJECT
+    | INPUT_FIELD_DEFINITION
+
+directive @typeResolver(class: String="") on INTERFACE | OBJECT
+
+directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
+
+type Query {
+}
+
+type Mutation {
+}
+
+input FilterTypeInput @doc(description: "FilterTypeInput specifies which action will be performed in a query ") {
+    eq: String @doc(description: "Equals")
+    finset: [String] @deprecated (reason: "The finset filter is deprecated. Magento doesn't recomend to store comma separated values, therefore finset filter is redundant.")
+    from: String @doc(description: "From. Must be used with 'to'")
+    gt: String @doc(description: "Greater than")
+    gteq: String @doc(description: "Greater than or equal to")
+    in: [String] @doc(description: "In. The value can contain a set of comma-separated values")
+    like: String @doc(description: "Like. The specified value can contain % (percent signs) to allow matching of 0 or more characters")
+    lt: String @doc(description: "Less than")
+    lteq: String @doc(description: "Less than or equal to")
+    moreq: String @doc(description: "More than or equal to")
+    neq: String @doc(description: "Not equal to")
+    notnull: String @doc(description: "Not null")
+    null: String @doc(description: "Is null")
+    to: String@doc(description: "To. Must be used with 'from'")
+    nin: [String] @doc(description: "Not in. The value can contain a set of comma-separated values")
+}
+
+input FilterEqualTypeInput @doc(description: "Defines a filter that matches the input exactly.") {
+    in: [String] @doc(description: "An array of values to filter on")
+    eq: String @doc(description: "A string to filter on")
+}
+
+input FilterRangeTypeInput @doc(description: "Defines a filter that matches a range of values, such as prices or dates.") {
+    from: String @doc(description: "The beginning of the range")
+    to: String @doc(description: "The end of the range")
+}
+
+input FilterMatchTypeInput @doc(description: "Defines a filter that performs a fuzzy search.") {
+    match: String @doc(description: "One or more words to filter on")
+}
+
+type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {
+    page_size: Int @doc(description: "Specifies the maximum number of items to return")
+    current_page: Int @doc(description: "Specifies which page of results to return")
+    total_pages: Int @doc(description: "Total pages")
+}
+
+enum SortEnum @doc(description: "This enumeration indicates whether to return results in ascending or descending order") {
+    ASC
+    DESC
+}
+
+type ComplexTextValue {
+    html: String! @doc(description: "HTML format")
+}
+
+type Money @doc(description: "A Money object defines a monetary value, including a numeric value and a currency code.") {
+    value: Float @doc(description: "A number expressing a monetary value")
+    currency: CurrencyEnum @doc(description: "A three-letter currency code, such as USD or EUR")
+}
+
+enum CurrencyEnum @doc(description: "The list of available currency codes") {
+    AFN
+    ALL
+    AZN
+    DZD
+    AOA
+    ARS
+    AMD
+    AWG
+    AUD
+    BSD
+    BHD
+    BDT
+    BBD
+    BYN
+    BZD
+    BMD
+    BTN
+    BOB
+    BAM
+    BWP
+    BRL
+    GBP
+    BND
+    BGN
+    BUK
+    BIF
+    KHR
+    CAD
+    CVE
+    CZK
+    KYD
+    GQE
+    CLP
+    CNY
+    COP
+    KMF
+    CDF
+    CRC
+    HRK
+    CUP
+    DKK
+    DJF
+    DOP
+    XCD
+    EGP
+    SVC
+    ERN
+    EEK
+    ETB
+    EUR
+    FKP
+    FJD
+    GMD
+    GEK
+    GEL
+    GHS
+    GIP
+    GTQ
+    GNF
+    GYD
+    HTG
+    HNL
+    HKD
+    HUF
+    ISK
+    INR
+    IDR
+    IRR
+    IQD
+    ILS
+    JMD
+    JPY
+    JOD
+    KZT
+    KES
+    KWD
+    KGS
+    LAK
+    LVL
+    LBP
+    LSL
+    LRD
+    LYD
+    LTL
+    MOP
+    MKD
+    MGA
+    MWK
+    MYR
+    MVR
+    LSM
+    MRO
+    MUR
+    MXN
+    MDL
+    MNT
+    MAD
+    MZN
+    MMK
+    NAD
+    NPR
+    ANG
+    YTL
+    NZD
+    NIC
+    NGN
+    KPW
+    NOK
+    OMR
+    PKR
+    PAB
+    PGK
+    PYG
+    PEN
+    PHP
+    PLN
+    QAR
+    RHD
+    RON
+    RUB
+    RWF
+    SHP
+    STD
+    SAR
+    RSD
+    SCR
+    SLL
+    SGD
+    SKK
+    SBD
+    SOS
+    ZAR
+    KRW
+    LKR
+    SDG
+    SRD
+    SZL
+    SEK
+    CHF
+    SYP
+    TWD
+    TJS
+    TZS
+    THB
+    TOP
+    TTD
+    TND
+    TMM
+    USD
+    UGX
+    UAH
+    AED
+    UYU
+    UZS
+    VUV
+    VEB
+    VEF
+    VND
+    CHE
+    CHW
+    XOF
+    WST
+    YER
+    ZMK
+    ZWD
+    TRY
+    AZM
+    ROL
+    TRL
+    XPF
+}

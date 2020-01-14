@@ -48,7 +48,7 @@ class BundleProductsAssert
     /**
      * Asserts that generated bundled products are valid
      *
-     * @return void
+     * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \AssertionError
      */
@@ -74,5 +74,7 @@ class BundleProductsAssert
                 throw new \AssertionError('Bundle option product links amount is wrong');
             }
         }
+
+        return true;
     }
 }

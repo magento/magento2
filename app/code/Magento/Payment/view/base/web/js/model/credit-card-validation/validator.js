@@ -4,24 +4,22 @@
  */
 
 /* @api */
-(function (factory) {
+define([
+    'jquery',
+    'Magento_Payment/js/model/credit-card-validation/cvv-validator',
+    'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator',
+    'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-year-validator',
+    'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-month-validator',
+    'Magento_Payment/js/model/credit-card-validation/credit-card-data',
+    'mage/translate'
+], function ($, cvvValidator, creditCardNumberValidator, yearValidator, monthValidator, creditCardData) {
     'use strict';
 
-    if (typeof define === 'function' && define.amd) {
-        define([
-            'jquery',
-            'Magento_Payment/js/model/credit-card-validation/cvv-validator',
-            'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator',
-            'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-year-validator',
-            'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-month-validator',
-            'Magento_Payment/js/model/credit-card-validation/credit-card-data',
-            'mage/translate'
-        ], factory);
-    } else {
-        factory(jQuery);
-    }
-}(function ($, cvvValidator, creditCardNumberValidator, yearValidator, monthValidator, creditCardData) {
-    'use strict';
+    $('.payment-method-content input[type="number"]').on('keyup', function () {
+        if ($(this).val() < 0) {
+            $(this).val($(this).val().replace(/^-/, ''));
+        }
+    });
 
     $.each({
         'validate-card-type': [
@@ -105,4 +103,4 @@
         rule.unshift(i);
         $.validator.addMethod.apply($.validator, rule);
     });
-}));
+});

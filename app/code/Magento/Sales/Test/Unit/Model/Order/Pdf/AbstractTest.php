@@ -19,7 +19,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         // Setup parameters, that will be passed to the tested model method
         $page = $this->createMock(\Zend_Pdf_Page::class);
 
-        $order = new \StdClass();
+        $order = new \stdClass();
         $source = $this->createMock(\Magento\Sales\Model\Order\Invoice::class);
         $source->expects($this->any())->method('getOrder')->will($this->returnValue($order));
 

@@ -7,6 +7,12 @@
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\App\State;
+
+/**
+ * Class SidResolver
+ * @deprecated 2.3.3 SIDs in URLs are no longer used
+ */
 class SidResolver implements SidResolverInterface
 {
     /**
@@ -44,10 +50,10 @@ class SidResolver implements SidResolverInterface
     /**
      * Use session in URL flag
      *
-     * @var bool
+     * @var bool|null
      * @see \Magento\Framework\UrlInterface
      */
-    protected $_useSessionInUrl = true;
+    protected $_useSessionInUrl;
 
     /**
      * @var string
@@ -55,37 +61,51 @@ class SidResolver implements SidResolverInterface
     protected $_scopeType;
 
     /**
+     * @var State
+     */
+    private $appState;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $scopeType
      * @param array $sidNameMap
+     * @param State|null $appState
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\RequestInterface $request,
         $scopeType,
-        array $sidNameMap = []
+        array $sidNameMap = [],
+        State $appState = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->urlBuilder = $urlBuilder;
         $this->request = $request;
         $this->sidNameMap = $sidNameMap;
         $this->_scopeType = $scopeType;
+        $this->appState = $appState ?: \Magento\Framework\App\ObjectManager::getInstance()->get(State::class);
     }
 
     /**
+     * Get Sid
+     *
      * @param SessionManagerInterface $session
-     * @return string
+     *
+     * @return string|null
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSid(SessionManagerInterface $session)
     {
+        if ($this->appState->getAreaCode() !== \Magento\Framework\App\Area::AREA_FRONTEND) {
+            return null;
+        }
+
         $sidKey = null;
-        $useSidOnFrontend = $this->scopeConfig->getValue(
-            self::XML_PATH_USE_FRONTEND_SID,
-            $this->_scopeType
-        );
+
+        $useSidOnFrontend = $this->getUseSessionInUrl();
         if ($useSidOnFrontend && $this->request->getQuery(
             $this->getSessionIdQueryParam($session),
             false
@@ -147,13 +167,22 @@ class SidResolver implements SidResolverInterface
     }
 
     /**
-     * Retrieve use session in URL flag
+     * Retrieve use session in URL flag.
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSessionInUrl()
     {
+        if ($this->_useSessionInUrl === null) {
+            //Using config value by default, can be overridden by using the
+            //setter.
+            $this->_useSessionInUrl = $this->scopeConfig->isSetFlag(
+                self::XML_PATH_USE_FRONTEND_SID,
+                $this->_scopeType
+            );
+        }
+
         return $this->_useSessionInUrl;
     }
 }

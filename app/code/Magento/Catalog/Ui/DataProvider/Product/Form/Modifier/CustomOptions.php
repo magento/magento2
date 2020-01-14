@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price as ProductOptionsPrice;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Ui\Component\Form\Element\Hidden;
 use Magento\Ui\Component\Modal;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\DynamicRows;
@@ -166,7 +167,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -226,7 +227,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -348,7 +349,8 @@ class CustomOptions extends AbstractModifier
                                 'sortOrder' => 20,
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns = ${ $.ns }, index = ' . static::GRID_OPTIONS_NAME,
+                                        'targetName' => '${ $.ns }.${ $.ns }.' . static::GROUP_CUSTOM_OPTIONS_NAME
+                                            . '.' . static::GRID_OPTIONS_NAME,
                                         'actionName' => 'processingAddChild',
                                     ]
                                 ]
@@ -866,7 +868,7 @@ class CustomOptions extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => Field::NAME,
-                        'formElement' => Input::NAME,
+                        'formElement' => Hidden::NAME,
                         'dataScope' => static::FIELD_SORT_ORDER_NAME,
                         'dataType' => Number::NAME,
                         'visible' => false,
@@ -922,7 +924,7 @@ class CustomOptions extends AbstractModifier
                         'addbeforePool' => $this->productOptionsPrice->prefixesToOptionArray(),
                         'sortOrder' => $sortOrder,
                         'validation' => [
-                            'validate-zero-or-greater' => true
+                            'validate-number' => true
                         ],
                     ],
                 ],
@@ -1045,11 +1047,15 @@ class CustomOptions extends AbstractModifier
                 'data' => [
                     'config' => [
                         'label' => __('Compatible File Extensions'),
+                        'notice' => __('Enter separated extensions, like: png, jpg, gif.'),
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_FILE_EXTENSION_NAME,
                         'dataType' => Text::NAME,
                         'sortOrder' => $sortOrder,
+                        'validation' => [
+                            'required-entry' => true,
+                        ],
                     ],
                 ],
             ],
@@ -1147,7 +1153,7 @@ class CustomOptions extends AbstractModifier
 
             if (count($group['optgroup'])) {
                 $options[] = $group;
-                $groupIndex += 1;
+                $groupIndex++;
             }
         }
 

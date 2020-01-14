@@ -10,6 +10,10 @@ use Magento\Framework\App\State;
 use Magento\Framework\View\Design\Fallback\RulePool;
 use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
+use Magento\Framework\View\Template\Html\MinifierInterface;
+use Magento\Framework\View\Asset\ConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class TemplateFileTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,12 +23,12 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
     protected $resolver;
 
     /**
-     * @var \Magento\Framework\View\Template\Html\MinifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MinifierInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $minifier;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $state;
 
@@ -34,26 +38,29 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $assetConfig;
 
     protected function setUp()
     {
-        $this->resolver = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface::class
+        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->minifier = $this->getMockForAbstractClass(MinifierInterface::class);
+        $this->state = $this->createMock(State::class);
+        $this->assetConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->object = new TemplateFile(
+            $this->resolver,
+            $this->minifier,
+            $this->state,
+            $this->assetConfig,
+            $this->deploymentConfigMock
         );
-        $this->minifier = $this->createMock(\Magento\Framework\View\Template\Html\MinifierInterface::class);
-        $this->state = $this->getMockBuilder(
-            \Magento\Framework\App\State::class
-        )->disableOriginalConstructor()->getMock();
-        $this->assetConfig = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Asset\ConfigInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->object = new TemplateFile($this->resolver, $this->minifier, $this->state, $this->assetConfig);
     }
 
     /**
@@ -75,7 +82,7 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
         $this->resolver->expects($this->once())
             ->method('resolve')
             ->with(RulePool::TYPE_TEMPLATE_FILE, 'file.ext', 'frontend', $theme, null, 'Magento_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->object->getFile('frontend', $theme, 'file.ext', 'Magento_Module');
         $this->assertSame($expected, $actual);
@@ -84,10 +91,12 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
     /**
      * Cover getFile when mode is default
      * @param string $mode
+     * @param integer $onDemandInProduction
+     * @param integer $forceMinification
      * @param string $method
      * @dataProvider getMinifiedDataProvider
      */
-    public function testGetFileWhenModifiedNeeded($mode, $method)
+    public function testGetFileWhenModifiedNeeded($mode, $onDemandInProduction, $forceMinification, $method)
     {
         $this->assetConfig
             ->expects($this->once())
@@ -98,13 +107,19 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
         $expected = 'some/file.ext';
         $expectedMinified = '/path/to/minified/some/file.ext';
 
+        $this->deploymentConfigMock->expects($this->any())
+            ->method('getConfigData')
+            ->willReturnMap([
+                [ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION, $onDemandInProduction],
+                [ConfigOptionsListConstants::CONFIG_PATH_FORCE_HTML_MINIFICATION, $forceMinification],
+            ]);
         $this->state->expects($this->once())
             ->method('getMode')
             ->willReturn($mode);
         $this->resolver->expects($this->once())
             ->method('resolve')
             ->with(RulePool::TYPE_TEMPLATE_FILE, 'file.ext', 'frontend', $theme, null, 'Magento_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $this->minifier->expects($this->once())
             ->method($method)
             ->with($expected)
@@ -127,9 +142,10 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
         $this->resolver->expects($this->once())
             ->method('resolve')
             ->with(RulePool::TYPE_TEMPLATE_FILE, 'file.ext', 'frontend', $theme, null, 'Magento_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
-        $this->state->expects($this->never())->method('getMode');
+        $this->state->expects($this->never())
+            ->method('getMode');
 
         $actual = $this->object->getFile('frontend', $theme, 'file.ext', 'Magento_Module');
         $this->assertSame($expected, $actual);
@@ -143,8 +159,11 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
     public function getMinifiedDataProvider()
     {
         return [
-            'default' => [State::MODE_DEFAULT, 'getMinified'],
-            'production' => [State::MODE_PRODUCTION, 'getPathToMinified'],
+            'default with on demand' => [State::MODE_DEFAULT, 1, 1, 'getMinified'],
+            'default without on demand' => [State::MODE_DEFAULT, 0, 0, 'getMinified'],
+            'production with on demand' => [State::MODE_PRODUCTION, 1, 0, 'getMinified'],
+            'production without on demand' => [State::MODE_PRODUCTION, 0, 0, 'getPathToMinified'],
+            'production without on demand with minified' => [State::MODE_PRODUCTION, 0, 1, 'getMinified'],
         ];
     }
 }

@@ -131,6 +131,7 @@ define([
     return Abstract.extend({
         defaults: {
             options: [],
+            total: 0,
             listVisible: false,
             value: [],
             filterOptions: false,
@@ -153,6 +154,7 @@ define([
             labelsDecoration: false,
             disableLabel: false,
             filterRateLimit: 500,
+            filterRateLimitMethod: 'notifyAtFixedRate',
             closeBtnLabel: $t('Done'),
             optgroupTmpl: 'ui/grid/filters/elements/ui-select-optgroup',
             quantityPlaceholder: $t('options'),
@@ -165,6 +167,22 @@ define([
                 lotPlaceholders: $t('Selected')
             },
             separator: 'optgroup',
+            searchOptions: false,
+            loading: false,
+            searchUrl: false,
+            lastSearchKey: '',
+            lastSearchPage: 1,
+            filterPlaceholder: '',
+            emptyOptionsHtml: '',
+            cachedSearchResults: {},
+            pageLimit: 50,
+            deviation: 30,
+            validationLoading: false,
+            isRemoveSelectedIcon: false,
+            debounce: 300,
+            missingValuePlaceholder: $t('Entity with ID: %s doesn\'t exist'),
+            isDisplayMissingValuePlaceholder: false,
+            currentSearchKey: '',
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList',
@@ -308,11 +326,17 @@ define([
                 'options',
                 'itemsQuantity',
                 'filterInputValue',
-                'filterOptionsFocus'
+                'filterOptionsFocus',
+                'loading',
+                'validationLoading',
+                'isDisplayMissingValuePlaceholder'
             ]);
 
             this.filterInputValue.extend({
-                rateLimit: this.filterRateLimit
+                rateLimit: {
+                    timeout: this.filterRateLimit,
+                    method: this.filterRateLimitMethod
+                }
             });
 
             return this;
@@ -437,8 +461,8 @@ define([
             var value = this.filterInputValue().trim().toLowerCase(),
                 array = [];
 
-            if (value && value.length < 2) {
-                return false;
+            if (this.searchOptions) {
+                return this.loadOptions(value);
             }
 
             this.cleanHoveredElement();
@@ -525,9 +549,19 @@ define([
         _setItemsQuantity: function (data) {
             if (this.showFilteredQuantity) {
                 data || parseInt(data, 10) === 0 ?
-                    this.itemsQuantity(data + ' ' + this.quantityPlaceholder) :
+                    this.itemsQuantity(this.getItemsPlaceholder(data)) :
                     this.itemsQuantity('');
             }
+        },
+
+        /**
+         * Return formatted items placeholder.
+         *
+         * @param {Object} data - option data
+         * @returns {String}
+         */
+        getItemsPlaceholder: function (data) {
+            return data + ' ' + this.quantityPlaceholder;
         },
 
         /**
@@ -575,6 +609,20 @@ define([
         },
 
         /**
+         * Check selected option
+         *
+         * @param {Object} option - option value
+         * @return {Boolean}
+         */
+        isSelectedValue: function (option) {
+            if (_.isUndefined(option)) {
+                return false;
+            }
+
+            return this.isSelected(option.value);
+        },
+
+        /**
          * Check optgroup label
          *
          * @param {Object} data - element data
@@ -599,6 +647,10 @@ define([
             }
 
             elementData = ko.dataFor(this.hoveredElement);
+
+            if (_.isUndefined(elementData)) {
+                return false;
+            }
 
             return data.value === elementData.value;
         },
@@ -921,7 +973,7 @@ define([
          * Set caption
          */
         setCaption: function () {
-            var length;
+            var length, caption = '';
 
             if (!_.isArray(this.value()) && this.value()) {
                 length = 1;
@@ -930,6 +982,16 @@ define([
             } else {
                 this.value([]);
                 length = 0;
+            }
+            this.warn(caption);
+
+            //check if option was removed
+            if (this.isDisplayMissingValuePlaceholder && length && !this.getSelected().length) {
+                caption = this.missingValuePlaceholder.replace('%s', this.value());
+                this.placeholder(caption);
+                this.warn(caption);
+
+                return this.placeholder();
             }
 
             if (length > 1) {
@@ -1083,6 +1145,166 @@ define([
                 targetSelector,
                 this.onDelegatedMouseMouve.bind(this)
             );
+        },
+
+        /**
+         * Returns options from cache or send request
+         *
+         * @param {String} searchKey
+         */
+        loadOptions: function (searchKey) {
+            var currentPage = searchKey === this.lastSearchKey ? this.lastSearchPage + 1 : 1,
+                cachedSearchResult;
+
+            this.renderPath = !!this.showPath;
+
+            if (this.isSearchKeyCached(searchKey)) {
+                cachedSearchResult = this.getCachedSearchResults(searchKey);
+                this.options(cachedSearchResult.options);
+                this.afterLoadOptions(searchKey, cachedSearchResult.lastPage, cachedSearchResult.total);
+
+                return;
+            }
+
+            if (searchKey !== this.lastSearchKey) {
+                this.options([]);
+            }
+            this.processRequest(searchKey, currentPage);
+        },
+
+        /**
+         * Load more options on scroll down
+         * @param {Object} data
+         * @param {Event} event
+         */
+        onScrollDown: function (data, event) {
+            var clientHight = event.target.scrollTop + event.target.clientHeight,
+                scrollHeight = event.target.scrollHeight;
+
+            if (!this.searchOptions) {
+                return;
+            }
+
+            if (clientHight > scrollHeight - this.deviation && !this.isSearchKeyCached(data.filterInputValue())) {
+                this.loadOptions(data.filterInputValue());
+            }
+        },
+
+        /**
+         * Returns cached search result by search key
+         *
+         * @param {String} searchKey
+         * @return {Object}
+         */
+        getCachedSearchResults: function (searchKey) {
+            if (this.cachedSearchResults.hasOwnProperty(searchKey)) {
+                return this.cachedSearchResults[searchKey];
+            }
+
+            return {
+                options: [],
+                lastPage: 1,
+                total: 0
+            };
+        },
+
+        /**
+         * Cache loaded data
+         *
+         * @param {String} searchKey
+         * @param {Array} optionsArray
+         * @param {Number} page
+         * @param {Number} total
+         */
+        setCachedSearchResults: function (searchKey, optionsArray, page, total) {
+            var cachedData = {};
+
+            cachedData.options = optionsArray;
+            cachedData.lastPage = page;
+            cachedData.total = total;
+            this.cachedSearchResults[searchKey] = cachedData;
+        },
+
+        /**
+         * Check if search key cached
+         *
+         * @param {String} searchKey
+         * @return {Boolean}
+         */
+        isSearchKeyCached: function (searchKey) {
+            var totalCached = this.cachedSearchResults.hasOwnProperty(searchKey) ?
+                this.deviation * this.cachedSearchResults[searchKey].lastPage :
+                0;
+
+            return totalCached > 0 && totalCached >= this.cachedSearchResults[searchKey].total;
+        },
+
+        /**
+         * Submit request to load data
+         *
+         * @param {String} searchKey
+         * @param {Number} page
+         */
+        processRequest: function (searchKey, page) {
+            this.loading(true);
+            this.currentSearchKey = searchKey;
+            $.ajax({
+                url: this.searchUrl,
+                type: 'get',
+                dataType: 'json',
+                context: this,
+                data: {
+                    searchKey: searchKey,
+                    page: page,
+                    limit: this.pageLimit
+                },
+                success: $.proxy(this.success, this),
+                error: $.proxy(this.error, this),
+                beforeSend: $.proxy(this.beforeSend, this),
+                complete: $.proxy(this.complete, this, searchKey, page)
+            });
+        },
+
+        /** @param {Object} response */
+        success: function (response) {
+            var existingOptions = this.options();
+
+            _.each(response.options, function (opt) {
+                existingOptions.push(opt);
+            });
+
+            this.total = response.total;
+            this.options(existingOptions);
+        },
+
+        /** add actions before ajax request */
+        beforeSend: function () {
+
+        },
+
+        /** set empty array if error occurs */
+        error: function () {
+            this.options([]);
+        },
+
+        /** cache options and stop loading*/
+        complete: function (searchKey, page) {
+            this.setCachedSearchResults(searchKey, this.options(), page, this.total);
+            this.afterLoadOptions(searchKey, page, this.total);
+        },
+
+        /**
+         * Stop loading and update data after options were updated
+         *
+         * @param {String} searchKey
+         * @param {Number} page
+         * @param {Number} total
+         */
+        afterLoadOptions: function (searchKey, page, total) {
+            this.lastSearchKey = searchKey;
+            this.lastSearchPage = page;
+            this._setItemsQuantity(total);
+            this.loading(false);
         }
     });
 });

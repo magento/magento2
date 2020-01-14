@@ -17,11 +17,12 @@ define([
             imageSource: ko.observable(captchaData.imageSrc),
             visibility: ko.observable(false),
             captchaValue: ko.observable(null),
-            isRequired: captchaData.isRequired,
+            isRequired: ko.observable(captchaData.isRequired),
             isCaseSensitive: captchaData.isCaseSensitive,
             imageHeight: captchaData.imageHeight,
             refreshUrl: captchaData.refreshUrl,
             isLoading: ko.observable(false),
+            timestamp: null,
 
             /**
              * @return {String}
@@ -41,7 +42,7 @@ define([
              * @return {Boolean}
              */
             getIsVisible: function () {
-                return this.visibility;
+                return this.visibility();
             },
 
             /**
@@ -55,14 +56,14 @@ define([
              * @return {Boolean}
              */
             getIsRequired: function () {
-                return this.isRequired;
+                return this.isRequired();
             },
 
             /**
              * @param {Boolean} flag
              */
             setIsRequired: function (flag) {
-                this.isRequired = flag;
+                this.isRequired(flag);
             },
 
             /**

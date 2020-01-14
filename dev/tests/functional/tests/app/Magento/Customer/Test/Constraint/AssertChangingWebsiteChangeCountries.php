@@ -37,7 +37,7 @@ class AssertChangingWebsiteChangeCountries extends AbstractConstraint
         $countriesList = $tab->getCountriesList(1);
         sort($countriesList);
         sort($expectedList);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $countriesList,
             $expectedList,
             'Wrong country list is displayed.'

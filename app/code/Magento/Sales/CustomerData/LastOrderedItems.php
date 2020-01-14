@@ -6,6 +6,9 @@
 namespace Magento\Sales\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Returns information for "Recently Ordered" widget.
@@ -55,24 +58,40 @@ class LastOrderedItems implements SectionSourceInterface
     private $_storeManager;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param ProductRepositoryInterface $productRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        ProductRepositoryInterface $productRepository,
+        LoggerInterface $logger
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
         $this->_customerSession = $customerSession;
         $this->stockRegistry = $stockRegistry;
         $this->_storeManager = $storeManager;
+        $this->productRepository = $productRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -108,11 +127,23 @@ class LastOrderedItems implements SectionSourceInterface
             $website = $this->_storeManager->getStore()->getWebsiteId();
             /** @var \Magento\Sales\Model\Order\Item $item */
             foreach ($order->getParentItemsRandomCollection($limit) as $item) {
-                if ($item->hasData('product') && in_array($website, $item->getProduct()->getWebsiteIds())) {
+                /** @var \Magento\Catalog\Model\Product $product */
+                try {
+                    $product = $this->productRepository->getById(
+                        $item->getProductId(),
+                        false,
+                        $this->_storeManager->getStore()->getId()
+                    );
+                } catch (NoSuchEntityException $noEntityException) {
+                    $this->logger->critical($noEntityException);
+                    continue;
+                }
+                if (isset($product) && in_array($website, $product->getWebsiteIds())) {
+                    $url = $product->isVisibleInSiteVisibility() ? $product->getProductUrl() : null;
                     $items[] = [
                         'id' => $item->getId(),
                         'name' => $item->getName(),
-                        'url' => $item->getProduct()->getProductUrl(),
+                        'url' => $url,
                         'is_saleable' => $this->isItemAvailableForReorder($item),
                     ];
                 }
@@ -136,7 +167,7 @@ class LastOrderedItems implements SectionSourceInterface
                 $orderItem->getStore()->getWebsiteId()
             );
             return $stockItem->getIsInStock();
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $noEntityException) {
+        } catch (NoSuchEntityException $noEntityException) {
             return false;
         }
     }

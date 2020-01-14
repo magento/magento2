@@ -164,7 +164,7 @@ define([
         },
 
         /**
-         * Adds listeners on a new recrod.
+         * Adds listeners on a new record.
          *
          * @param {Record} record
          * @returns {Editor} Chainable.
@@ -208,7 +208,7 @@ define([
         },
 
         /**
-         * Starts editing of a specfied record. If records'
+         * Starts editing of a specified record. If records'
          * instance doesn't exist, than it will be created.
          *
          * @param {(Number|String)} id - See 'getId' method.
@@ -337,7 +337,18 @@ define([
          * @returns {Object} Collection of records data.
          */
         getData: function () {
-            var data = this.activeRecords.map('getData');
+            var data = this.activeRecords.map(function (record) {
+                var elemKey,
+                    recordData = record.getData();
+
+                for (elemKey in recordData) {
+                    if (_.isUndefined(recordData[elemKey])) {
+                        recordData[elemKey] = null;
+                    }
+                }
+
+                return recordData;
+            });
 
             return _.indexBy(data, this.indexField);
         },
@@ -357,7 +368,7 @@ define([
 
         /**
          * Resets specific records' data
-         * to the data present in asscotiated row.
+         * to the data present in associated row.
          *
          * @param {(Number|String)} id - See 'getId' method.
          * @param {Boolean} [isIndex=false] - See 'getId' method.
@@ -401,9 +412,9 @@ define([
         },
 
         /**
-         * Disables editing of specfied fields.
+         * Disables editing of specified fields.
          *
-         * @param {Array} fields - An array of fields indeces to be disabled.
+         * @param {Array} fields - An array of fields indexes to be disabled.
          * @returns {Editor} Chainable.
          */
         disableFields: function (fields) {

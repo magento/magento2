@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddNewUserRoleActionGroup">
+        <arguments>
+            <argument name="role" type="entity"/>
+        </arguments>
+
+        <!-- Navigate to Roles Page -->
+        <amOnPage url="{{AdminRolesPage.url}}" stepKey="amOnRolesPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Click Button "Add New Role" -->
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="addNewUseRole"/>
+        <waitForPageLoad stepKey="waitForCreateNewUserRolePageLoad"/>
+
+        <!-- Fill forms "Role info" -->
+        <fillField userInput="{{role.name}}" selector="{{AdminCreateRoleSection.name}}" stepKey="fillNameUserRole"/>
+        <fillField userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" selector="{{AdminCreateRoleSection.password}}" stepKey="fillPass"/>
+
+        <!-- Open tab "Role Resources" -->
+        <click selector="{{AdminCreateRoleSection.roleResources}}" stepKey="clickOnTab"/>
+        <waitForPageLoad stepKey="waitForTabLoaded"/>
+
+        <!-- Select Role Scopes -->
+        <selectOption userInput="{{role.roleScopes}}" selector="{{AdminCreateRoleSection.roleScopeNew}}" stepKey="selectRoleResources"/>
+
+        <!-- Select Resource Access -->
+        <selectOption userInput="{{role.resourceAccess}}" selector="{{AdminCreateRoleSection.roleResourceNew}}" stepKey="selectResourceAccess"/>
+        <click selector="{{AdminCreateRoleSection.save}}" stepKey="saveUserRole"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
+        <see userInput="You saved the role." selector="{{AdminMessagesSection.success}}" stepKey="seeMessage"/>
+    </actionGroup>
+</actionGroups>

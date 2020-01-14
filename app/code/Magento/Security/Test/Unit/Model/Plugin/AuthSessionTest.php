@@ -112,7 +112,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             ->willReturn($errorMessage);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errorMessage);
 
         $this->model->aroundProlong($this->authSessionMock, $proceed);

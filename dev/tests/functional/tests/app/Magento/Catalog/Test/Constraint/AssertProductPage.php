@@ -62,7 +62,7 @@ class AssertProductPage extends AbstractAssertForm
         $this->productView = $catalogProductView->getViewBlock();
 
         $errors = $this->verify();
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $errors,
             "\nFound the following errors:\n" . implode(" \n", $errors)
         );
@@ -145,7 +145,7 @@ class AssertProductPage extends AbstractAssertForm
         }
         $expectedSpecialPrice = $this->product->getSpecialPrice();
         $expectedSpecialPrice = number_format($expectedSpecialPrice, 2);
-        $priceBlock = $this->productView->getPriceBlock();
+        $priceBlock = $this->productView->getPriceBlock($this->product);
         if (!$priceBlock->isVisible()) {
             return "Price block for '{$this->product->getName()}' product' is not visible.";
         }

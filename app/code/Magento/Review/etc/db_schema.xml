@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="review_entity" resource="default" engine="innodb" comment="Review entities">
+        <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="true"
+                comment="Review entity ID"/>
+        <column xsi:type="varchar" name="entity_code" nullable="false" length="32" comment="Review entity code"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+    <table name="review_status" resource="default" engine="innodb" comment="Review statuses">
+        <column xsi:type="smallint" name="status_id" padding="5" unsigned="true" nullable="false" identity="true"
+                comment="Status ID"/>
+        <column xsi:type="varchar" name="status_code" nullable="false" length="32" comment="Status code"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="status_id"/>
+        </constraint>
+    </table>
+    <table name="review" resource="default" engine="innodb" comment="Review base information">
+        <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="true"
+                comment="Review ID"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Review create date"/>
+        <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Entity ID"/>
+        <column xsi:type="int" name="entity_pk_value" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Product ID"/>
+        <column xsi:type="smallint" name="status_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Status code"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="review_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="REVIEW_ENTITY_ID_REVIEW_ENTITY_ENTITY_ID" table="review" column="entity_id"
+                    referenceTable="review_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="REVIEW_STATUS_ID_REVIEW_STATUS_STATUS_ID" table="review" column="status_id"
+                    referenceTable="review_status" referenceColumn="status_id" onDelete="NO ACTION"/>
+        <index referenceId="REVIEW_ENTITY_ID" indexType="btree">
+            <column name="entity_id"/>
+        </index>
+        <index referenceId="REVIEW_STATUS_ID" indexType="btree">
+            <column name="status_id"/>
+        </index>
+        <index referenceId="REVIEW_ENTITY_PK_VALUE" indexType="btree">
+            <column name="entity_pk_value"/>
+        </index>
+    </table>
+    <table name="review_detail" resource="default" engine="innodb" comment="Review detail information">
+        <column xsi:type="bigint" name="detail_id" padding="20" unsigned="true" nullable="false" identity="true"
+                comment="Review detail ID"/>
+        <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Review ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Store ID"/>
+        <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Title"/>
+        <column xsi:type="text" name="detail" nullable="false" comment="Detail description"/>
+        <column xsi:type="varchar" name="nickname" nullable="false" length="128" comment="User nickname"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Customer ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="detail_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="REVIEW_DETAIL_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="review_detail"
+                    column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
+                    onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="REVIEW_DETAIL_REVIEW_ID_REVIEW_REVIEW_ID" table="review_detail"
+                    column="review_id" referenceTable="review" referenceColumn="review_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="REVIEW_DETAIL_STORE_ID_STORE_STORE_ID" table="review_detail"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
+        <index referenceId="REVIEW_DETAIL_REVIEW_ID" indexType="btree">
+            <column name="review_id"/>
+        </index>
+        <index referenceId="REVIEW_DETAIL_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <index referenceId="REVIEW_DETAIL_CUSTOMER_ID" indexType="btree">
+            <column name="customer_id"/>
+        </index>
+    </table>
+    <table name="review_entity_summary" resource="default" engine="innodb" comment="Review aggregates">
+        <column xsi:type="bigint" name="primary_id" padding="20" unsigned="false" nullable="false" identity="true"
+                comment="Summary review entity ID"/>
+        <column xsi:type="bigint" name="entity_pk_value" padding="20" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Product ID"/>
+        <column xsi:type="smallint" name="entity_type" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Entity type ID"/>
+        <column xsi:type="smallint" name="reviews_count" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Qty of reviews"/>
+        <column xsi:type="smallint" name="rating_summary" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Summarized rating"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="primary_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="REVIEW_ENTITY_SUMMARY_STORE_ID_STORE_STORE_ID"
+                    table="review_entity_summary" column="store_id" referenceTable="store" referenceColumn="store_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="REVIEW_ENTITY_SUMMARY_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="review_store" resource="default" engine="innodb" comment="Review Store">
+        <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="false"
+                comment="Review ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="review_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="REVIEW_STORE_REVIEW_ID_REVIEW_REVIEW_ID" table="review_store"
+                    column="review_id" referenceTable="review" referenceColumn="review_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="REVIEW_STORE_STORE_ID_STORE_STORE_ID" table="review_store"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="REVIEW_STORE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="rating_entity" resource="default" engine="innodb" comment="Rating entities">
+        <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="entity_code" nullable="false" length="64" comment="Entity Code"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="RATING_ENTITY_ENTITY_CODE">
+            <column name="entity_code"/>
+        </constraint>
+    </table>
+    <table name="rating" resource="default" engine="innodb" comment="Ratings">
+        <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="true"
+                comment="Rating ID"/>
+        <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Entity ID"/>
+        <column xsi:type="varchar" name="rating_code" nullable="false" length="64" comment="Rating Code"/>
+        <column xsi:type="smallint" name="position" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Rating Position On Storefront"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+                default="1" comment="Rating is active."/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rating_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="RATING_ENTITY_ID_RATING_ENTITY_ENTITY_ID" table="rating" column="entity_id"
+                    referenceTable="rating_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="RATING_RATING_CODE">
+            <column name="rating_code"/>
+        </constraint>
+        <index referenceId="RATING_ENTITY_ID" indexType="btree">
+            <column name="entity_id"/>
+        </index>
+    </table>
+    <table name="rating_option" resource="default" engine="innodb" comment="Rating options">
+        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Rating Option ID"/>
+        <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Rating ID"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="32" comment="Rating Option Code"/>
+        <column xsi:type="smallint" name="value" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Rating Option Value"/>
+        <column xsi:type="smallint" name="position" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Ration option position on Storefront"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="option_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="RATING_OPTION_RATING_ID_RATING_RATING_ID" table="rating_option"
+                    column="rating_id" referenceTable="rating" referenceColumn="rating_id" onDelete="CASCADE"/>
+        <index referenceId="RATING_OPTION_RATING_ID" indexType="btree">
+            <column name="rating_id"/>
+        </index>
+    </table>
+    <table name="rating_option_vote" resource="default" engine="innodb" comment="Rating option values">
+        <column xsi:type="bigint" name="vote_id" padding="20" unsigned="true" nullable="false" identity="true"
+                comment="Vote ID"/>
+        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Vote option ID"/>
+        <column xsi:type="varchar" name="remote_ip" nullable="false" length="16" comment="Customer IP"/>
+        <column xsi:type="bigint" name="remote_ip_long" padding="20" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Customer IP converted to long integer format"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Customer ID"/>
+        <column xsi:type="bigint" name="entity_pk_value" padding="20" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Product ID"/>
+        <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Rating ID"/>
+        <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="true" identity="false"
+                comment="Review ID"/>
+        <column xsi:type="smallint" name="percent" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Percent amount"/>
+        <column xsi:type="smallint" name="value" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Vote option value"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="vote_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="RATING_OPTION_VOTE_OPTION_ID_RATING_OPTION_OPTION_ID"
+                    table="rating_option_vote" column="option_id" referenceTable="rating_option"
+                    referenceColumn="option_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="RATING_OPTION_VOTE_REVIEW_ID_REVIEW_REVIEW_ID" table="rating_option_vote"
+                    column="review_id" referenceTable="review" referenceColumn="review_id" onDelete="CASCADE"/>
+        <index referenceId="RATING_OPTION_VOTE_OPTION_ID" indexType="btree">
+            <column name="option_id"/>
+        </index>
+    </table>
+    <table name="rating_option_vote_aggregated" resource="default" engine="innodb" comment="Rating vote aggregated">
+        <column xsi:type="int" name="primary_id" padding="11" unsigned="false" nullable="false" identity="true"
+                comment="Vote aggregation ID"/>
+        <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Rating ID"/>
+        <column xsi:type="bigint" name="entity_pk_value" padding="20" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Product ID"/>
+        <column xsi:type="int" name="vote_count" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Vote dty"/>
+        <column xsi:type="int" name="vote_value_sum" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="General vote sum"/>
+        <column xsi:type="smallint" name="percent" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Vote percent"/>
+        <column xsi:type="smallint" name="percent_approved" padding="6" unsigned="false" nullable="true"
+                identity="false" default="0" comment="Vote percent approved by admin"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="primary_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="RATING_OPTION_VOTE_AGGREGATED_RATING_ID_RATING_RATING_ID"
+                    table="rating_option_vote_aggregated" column="rating_id" referenceTable="rating"
+                    referenceColumn="rating_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="RATING_OPTION_VOTE_AGGREGATED_STORE_ID_STORE_STORE_ID"
+                    table="rating_option_vote_aggregated" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="RATING_OPTION_VOTE_AGGREGATED_RATING_ID" indexType="btree">
+            <column name="rating_id"/>
+        </index>
+        <index referenceId="RATING_OPTION_VOTE_AGGREGATED_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="rating_store" resource="default" engine="innodb" comment="Rating Store">
+        <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Rating ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rating_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="RATING_STORE_STORE_ID_STORE_STORE_ID" table="rating_store"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="RATING_STORE_RATING_ID_RATING_RATING_ID" table="rating_store"
+                    column="rating_id" referenceTable="rating" referenceColumn="rating_id" onDelete="CASCADE"/>
+        <index referenceId="RATING_STORE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="rating_title" resource="default" engine="innodb" comment="Rating Title">
+        <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Rating ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <column xsi:type="varchar" name="value" nullable="false" length="255" comment="Rating Label"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rating_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="RATING_TITLE_RATING_ID_RATING_RATING_ID" table="rating_title"
+                    column="rating_id" referenceTable="rating" referenceColumn="rating_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="RATING_TITLE_STORE_ID_STORE_STORE_ID" table="rating_title"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="RATING_TITLE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+</schema>

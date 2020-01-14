@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Helper\Catalog\Product;
 
 /**
@@ -69,7 +67,10 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
         if (strlen($title)) {
             return $title;
         }
-        return $this->scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

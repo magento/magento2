@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <test_section>
+            <test_group>
+                 <test_field_encrypted backend_model="Magento\Config\Model\Config\Backend\Encrypted">{ENCRYPTED_VALUE}</test_field_encrypted>
+                 <test_field_serialized>["value1","value2"]</test_field_serialized>
+                 <test_field>test config value</test_field>
+            </test_group>
+        </test_section>
+    </default>
+</config>

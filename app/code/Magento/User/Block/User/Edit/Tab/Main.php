@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
@@ -186,7 +184,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Your Password'),
                 'id' => self::CURRENT_USER_PASSWORD_FIELD,
                 'title' => __('Your Password'),
-                'class' => 'input-text validate-current-password required-entry',
+                'class' => 'validate-current-password required-entry',
                 'required' => true
             ]
         );

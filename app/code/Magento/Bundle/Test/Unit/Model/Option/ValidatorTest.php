@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Test\Unit\Model\Option;
 
 use Magento\Framework\Validator\NotEmpty;
@@ -71,9 +72,17 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['title', 'select', true, []],
-            ['title', null, false, ['type' => 'type is a required field.']],
-            [null, 'select', false, ['title' => 'title is a required field.']],
-            [null, null, false, ['type' => 'type is a required field.', 'title' => 'title is a required field.']]
+            ['title', null, false, ['type' => '"type" is required. Enter and try again.']],
+            [null, 'select', false, ['title' => '"title" is required. Enter and try again.']],
+            [
+                null,
+                null,
+                false,
+                [
+                    'type' => '"type" is required. Enter and try again.',
+                    'title' => '"title" is required. Enter and try again.'
+                ]
+            ]
         ];
     }
 }

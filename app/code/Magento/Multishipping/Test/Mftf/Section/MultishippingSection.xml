@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <section name="SingleShippingSection">
+        <element name="checkoutWithMultipleAddresses" type="button" selector="//span[text()='Check Out with Multiple Addresses']"/>
+        <element name="updateAddress" type="button" selector="//button[@class='action update']"/>
+        <element name="goToShippingInfo" type="button" selector="//span[text()='Go to Shipping Information']"/>
+        <element name="placeOrder" type="button" selector="#review-button"/>
+    </section>
+    <section name="MultishippingSection">
+        <element name="checkoutWithMultipleAddresses" type="button" selector="//span[text()='Check Out with Multiple Addresses']"/>
+        <element name="shippingMultipleCheckout" type="button" selector=".action.multicheckout"/>
+        <element name="shippingAddressSelector" type="select" selector="//tr[position()={{addressPosition}}]//td[@data-th='Send To']//select" parameterized="true"/>
+        <element name="shippingAddressOptions" type="select" selector="#multiship-addresses-table tbody tr:nth-of-type({{addressPosition}}) .col.address select option:nth-of-type({{optionIndex}})" parameterized="true"/>
+        <element name="selectShippingAddress" type="select" selector="(//table[@id='multiship-addresses-table'] //div[@class='field address'] //select)[{{sequenceNumber}}]" parameterized="true"/>
+    </section>
+    <section name="StorefrontMultipleShippingMethodSection">
+        <element name="orderId" type="text" selector=".shipping-list:nth-child({{rowNum}}) .order-id" parameterized="true"/>
+        <element name="goToReviewYourOrderButton" type="button" selector="#payment-continue"/>
+        <element name="continueToBillingInformationButton" type="button" selector=".action.primary.continue"/>
+        <element name="successMessage" type="text" selector=".multicheckout.success"/>
+    </section>
+</sections>

@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Store\Model\System;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -50,6 +53,11 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     protected $_storeManager;
 
     /**
+     * @var string
+     */
+    private $nonEscapableNbspChar;
+
+    /**
      * Init model
      * Load Website, Group and Store collections
      *
@@ -58,6 +66,9 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $this->nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
+
         return $this->reload();
     }
 
@@ -118,15 +129,13 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
             $options[] = ['label' => __('All Store Views'), 'value' => 0];
         }
 
-        $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
-
         foreach ($this->_websiteCollection as $website) {
             $websiteShow = false;
             foreach ($this->_groupCollection as $group) {
                 if ($website->getId() != $group->getWebsiteId()) {
                     continue;
                 }
-                $groupShow = false;
+                $values = [];
                 foreach ($this->_storeCollection as $store) {
                     if ($group->getId() != $store->getGroupId()) {
                         continue;
@@ -135,23 +144,25 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                         $options[] = ['label' => $website->getName(), 'value' => []];
                         $websiteShow = true;
                     }
-                    if (!$groupShow) {
-                        $groupShow = true;
-                        $values = [];
-                    }
                     $values[] = [
-                        'label' => str_repeat($nonEscapableNbspChar, 4) . $store->getName(),
+                        'label' => str_repeat($this->nonEscapableNbspChar, 4) . $store->getName(),
                         'value' => $store->getId(),
                     ];
                 }
-                if ($groupShow) {
+                if (!empty($values)) {
                     $options[] = [
-                        'label' => str_repeat($nonEscapableNbspChar, 4) . $group->getName(),
+                        'label' => str_repeat($this->nonEscapableNbspChar, 4) . $group->getName(),
                         'value' => $values,
                     ];
                 }
             }
         }
+        array_walk(
+            $options,
+            function (&$item) {
+                $item['__disableTmpl'] = true;
+            }
+        );
         return $options;
     }
 
@@ -208,6 +219,22 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
             }
         }
         return $out;
+    }
+
+    /**
+     * Get store options in tree view
+     *
+     * @param bool $isAll
+     * @param array $storeIds
+     * @param array $groupIds
+     * @param array $websiteIds
+     * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
+     */
+    public function getStoreOptionsTree($isAll = false, $storeIds = [], $groupIds = [], $websiteIds = []): array
+    {
+        $storeStructure = $this->getStoresStructure($isAll, $storeIds, $groupIds, $websiteIds);
+
+        return $this->retrieveOptionValues($storeStructure);
     }
 
     /**
@@ -398,6 +425,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
 
     /**
      * Load/Reload collection(s) by type
+     *
      * Allowed types: website, group, store or null for all
      *
      * @param string $type
@@ -472,5 +500,36 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     public function toOptionArray()
     {
         return $this->getStoreValuesForForm();
+    }
+
+    /**
+     * Retrieve option values
+     *
+     * Return array of options as value-label pairs in tree view
+     *
+     * @param array $structure
+     * @param bool $needSpacePrefix
+     * @return array
+     */
+    private function retrieveOptionValues(array $structure, bool $needSpacePrefix = false): array
+    {
+        $prefix = '';
+        if ($needSpacePrefix) {
+            $prefix = str_repeat($this->nonEscapableNbspChar, 4);
+        }
+
+        $values = [];
+        foreach ($structure as $item) {
+            $value = !empty($item['children'])
+                ? $this->retrieveOptionValues($item['children'], true)
+                : $item['value'];
+
+            $values[] = [
+                'label' => $prefix . $item['label'],
+                'value' => $value,
+            ];
+        }
+
+        return $values;
     }
 }

@@ -40,7 +40,13 @@ class Application
         }
 
         $listeners = $this->getListeners($serviceManager, $configuration);
-        $application = new ZendApplication($configuration, $serviceManager);
+        $application = new ZendApplication(
+            $configuration,
+            $serviceManager,
+            $serviceManager->get('EventManager'),
+            $serviceManager->get('Request'),
+            $serviceManager->get('Response')
+        );
         $application->bootstrap($listeners);
         return $application;
     }

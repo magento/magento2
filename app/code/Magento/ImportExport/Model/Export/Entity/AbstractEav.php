@@ -32,6 +32,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Attribute code to its types. Only attributes with options
      *
      * @var array
+     * @since 100.2.0
      */
     protected $attributeTypes = [];
 
@@ -100,6 +101,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * Initializes attribute types
      *
      * @return $this
+     * @since 100.2.0
      */
     protected function _initAttributeTypes()
     {
@@ -150,13 +152,24 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
             // filter applying
             if (isset($exportFilter[$attributeCode])) {
                 $attributeFilterType = Export::getAttributeFilterType($attribute);
-
                 if (Export::FILTER_TYPE_SELECT == $attributeFilterType) {
                     if (is_scalar($exportFilter[$attributeCode]) && trim($exportFilter[$attributeCode])) {
                         $collection->addAttributeToFilter(
                             $attributeCode,
                             ['eq' => $exportFilter[$attributeCode]]
                         );
+                    }
+                } elseif (Export::FILTER_TYPE_MULTISELECT == $attributeFilterType) {
+                    if (is_array($exportFilter[$attributeCode])) {
+                        array_filter($exportFilter[$attributeCode]);
+                        if (!empty($exportFilter[$attributeCode])) {
+                            foreach ($exportFilter[$attributeCode] as $val) {
+                                $collection->addAttributeToFilter(
+                                    $attributeCode,
+                                    ['finset' => $val]
+                                );
+                            }
+                        }
                     }
                 } elseif (Export::FILTER_TYPE_INPUT == $attributeFilterType) {
                     if (is_scalar($exportFilter[$attributeCode]) && trim($exportFilter[$attributeCode])) {

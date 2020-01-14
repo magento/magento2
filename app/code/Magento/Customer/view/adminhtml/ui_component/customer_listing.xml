@@ -28,6 +28,7 @@
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Customer::manage</aclResource>
         <dataProvider class="Magento\Customer\Ui\Component\DataProvider" name="customer_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -48,7 +49,7 @@
             <action name="delete">
                 <settings>
                     <confirm>
-                        <message translate="true">Are you sure to delete selected customers?</message>
+                        <message translate="true">Are you sure you want to delete the selected customers?</message>
                         <title translate="true">Delete items</title>
                     </confirm>
                     <url path="customer/index/massDelete"/>
@@ -66,7 +67,7 @@
             <action name="unsubscribe">
                 <settings>
                     <confirm>
-                        <message translate="true">Are you sure to unsubscribe selected customers from newsletter?</message>
+                        <message translate="true">Are you sure you want to unsubscribe the selected customers from the newsletter?</message>
                         <title translate="true">Unsubscribe from Newsletter</title>
                     </confirm>
                     <url path="customer/index/massUnsubscribe"/>
@@ -156,23 +157,18 @@
         <column name="billing_telephone" sortOrder="60">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Phone</label>
             </settings>
         </column>
         <column name="billing_postcode" sortOrder="70">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">ZIP</label>
             </settings>
         </column>
         <column name="billing_country_id" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
             <settings>
+                <options class="Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites"/>
                 <filter>select</filter>
                 <dataType>select</dataType>
                 <label translate="true">Country</label>
@@ -267,9 +263,6 @@
         <column name="billing_city" sortOrder="210">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">City</label>
                 <visible>false</visible>
             </settings>
@@ -277,9 +270,6 @@
         <column name="billing_fax" sortOrder="220">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Fax</label>
                 <visible>false</visible>
             </settings>
@@ -287,9 +277,6 @@
         <column name="billing_vat_id" sortOrder="230">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">VAT Number</label>
                 <visible>false</visible>
             </settings>
@@ -297,9 +284,6 @@
         <column name="billing_company" sortOrder="240">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Company</label>
                 <visible>false</visible>
             </settings>
@@ -307,9 +291,6 @@
         <column name="billing_firstname" sortOrder="250">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Billing Firstname</label>
                 <visible>false</visible>
             </settings>
@@ -317,9 +298,6 @@
         <column name="billing_lastname" sortOrder="260">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Billing Lastname</label>
                 <visible>false</visible>
             </settings>

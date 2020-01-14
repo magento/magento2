@@ -65,7 +65,7 @@ class Xml extends AbstractAdapter
     {
         $nodesDelimiter = strpos($attributes['translate'], ' ') === false ? ',' : ' ';
         foreach (explode($nodesDelimiter, $attributes['translate']) as $value) {
-            $phrase = (string)$element->{$value};
+            $phrase = trim((string)$element->{$value});
             if ($phrase) {
                 $this->_addPhrase($phrase);
             }

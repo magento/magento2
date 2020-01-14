@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">bulk_listing.bulk_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>bulk_columns</spinner>
+        <deps>
+            <dep>bulk_listing.bulk_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="bulk_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Logging::system_magento_logging_bulk_operations</aclResource>
+        <dataProvider class="Magento\AsynchronousOperations\Ui\Component\DataProvider" name="bulk_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="params" xsi:type="array">
+                        <item name="filters_modifier" xsi:type="array"/>
+                    </item>
+                    <item name="observers" xsi:type="array"/>
+                </item>
+            </argument>
+            <settings>
+                <statefull>
+                    <property name="applied" xsi:type="boolean">false</property>
+                </statefull>
+            </settings>
+        </filters>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="bulk_columns">
+        <selectionsColumn name="ids" sortOrder="10">
+            <settings>
+                <indexField>uuid</indexField>
+                <visible>false</visible>
+            </settings>
+        </selectionsColumn>
+        <column name="uuid" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="start_time" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="40">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Start Time</label>
+            </settings>
+        </column>
+        <column name="description" sortOrder="50">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\AsynchronousOperations\Model\BulkDescription\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">Description of Operation</label>
+            </settings>
+        </column>
+        <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="60">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\AsynchronousOperations\Model\BulkStatus\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="\Magento\AsynchronousOperations\Ui\Component\Listing\Column\Actions">
+            <settings>
+                <indexField>id</indexField>
+                <label translate="true">Action</label>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

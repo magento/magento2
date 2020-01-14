@@ -192,7 +192,7 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->toolbarMock));
 
         $this->assertEquals(
-            [$productTag, $categoryTag],
+            [$categoryTag, $productTag],
             $this->block->getIdentities()
         );
         $this->assertEquals(

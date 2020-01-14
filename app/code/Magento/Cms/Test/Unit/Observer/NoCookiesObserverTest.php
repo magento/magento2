@@ -139,6 +139,9 @@ class NoCookiesObserverTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->noCookiesObserver, $this->noCookiesObserver->execute($this->observerMock));
     }
 
+    /**
+     * @return array
+     */
     public function noCookiesDataProvider()
     {
         return [

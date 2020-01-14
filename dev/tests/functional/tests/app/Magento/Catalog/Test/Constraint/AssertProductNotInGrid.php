@@ -29,7 +29,7 @@ class AssertProductNotInGrid extends AbstractConstraint
         foreach ($products as $product) {
             $filter = ['sku' => $product->getSku(), 'name' => $product->getName()];
             $productGrid->open();
-            \PHPUnit_Framework_Assert::assertFalse(
+            \PHPUnit\Framework\Assert::assertFalse(
                 $productGrid->getProductGrid()->isRowVisible($filter),
                 "Product with sku \"{$filter['sku']}\" and name \"{$filter['name']}\" is attend in Products grid."
             );

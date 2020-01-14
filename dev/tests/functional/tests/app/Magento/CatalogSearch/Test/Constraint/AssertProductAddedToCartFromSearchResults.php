@@ -42,7 +42,7 @@ class AssertProductAddedToCartFromSearchResults extends AbstractConstraint
 
         $productName = $product->getName();
 
-        \PHPUnit_Framework_Assert::assertTrue($isProductVisible, "A product with name $productName was not found.");
+        \PHPUnit\Framework\Assert::assertTrue($isProductVisible, "A product with name $productName was not found.");
         $resultPage->getListProductBlock()->getProductItem($product)->clickAddToCart();
         $catalogProductView->getViewBlock()->waitLoader();
         if (isset($product->getCheckoutData()['options'])) {
@@ -52,7 +52,7 @@ class AssertProductAddedToCartFromSearchResults extends AbstractConstraint
             $message = $resultPage->getMessagesBlock()->getSuccessMessage();
         }
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::SUCCESS_MESSAGE, $productName),
             $message
         );

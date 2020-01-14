@@ -38,6 +38,9 @@ class SequenceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function createSequenceDdlDataProvider()
     {
         return [

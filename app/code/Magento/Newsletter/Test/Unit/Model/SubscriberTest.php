@@ -5,98 +5,152 @@
  */
 namespace Magento\Newsletter\Test\Unit\Model;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\TransportInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Newsletter\Helper\Data;
+use Magento\Newsletter\Model\Queue;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
+ * Test Subscriber model functionality
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SubscriberTest extends \PHPUnit\Framework\TestCase
+class SubscriberTest extends TestCase
 {
     /**
-     * @var \Magento\Newsletter\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
-    protected $newsletterData;
+    private $newsletterData;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransportBuilder|MockObject
      */
-    protected $transportBuilder;
+    private $transportBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|MockObject
      */
-    protected $customerRepository;
+    private $customerRepository;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountManagementInterface|MockObject
      */
-    protected $customerAccountManagement;
+    private $customerAccountManagement;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|MockObject
      */
-    protected $inlineTranslation;
+    private $inlineTranslation;
 
     /**
-     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber|MockObject
      */
-    protected $resource;
+    private $resource;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * @var \Magento\Newsletter\Model\Subscriber
+     * @var DataObjectHelper|MockObject
      */
-    protected $subscriber;
+    private $dataObjectHelper;
 
+    /**
+     * @var CustomerInterfaceFactory|MockObject
+     */
+    private $customerFactory;
+
+    /**
+     * @var Subscriber
+     */
+    private $subscriber;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->newsletterData = $this->createMock(\Magento\Newsletter\Helper\Data::class);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->transportBuilder = $this->createPartialMock(\Magento\Framework\Mail\Template\TransportBuilder::class, [
+        $this->newsletterData = $this->createMock(Data::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->transportBuilder = $this->createPartialMock(
+            TransportBuilder::class,
+            [
                 'setTemplateIdentifier',
                 'setTemplateOptions',
                 'setTemplateVars',
                 'setFrom',
                 'addTo',
                 'getTransport'
-            ]);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, [
+            ]
+        );
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->customerSession = $this->createPartialMock(
+            Session::class,
+            [
                 'isLoggedIn',
                 'getCustomerDataObject',
                 'getCustomerId'
-            ]);
-        $this->customerRepository = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        $this->customerAccountManagement = $this->createMock(\Magento\Customer\Api\AccountManagementInterface::class);
-        $this->inlineTranslation = $this->createMock(\Magento\Framework\Translate\Inline\StateInterface::class);
-        $this->resource = $this->createPartialMock(\Magento\Newsletter\Model\ResourceModel\Subscriber::class, [
+            ]
+        );
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerAccountManagement = $this->createMock(AccountManagementInterface::class);
+        $this->inlineTranslation = $this->createMock(StateInterface::class);
+        $this->resource = $this->createPartialMock(
+            \Magento\Newsletter\Model\ResourceModel\Subscriber::class,
+            [
                 'loadByEmail',
                 'getIdFieldName',
                 'save',
-                'loadByCustomerData',
-                'received'
-            ]);
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+                'loadByCustomer',
+                'received',
+                'loadBySubscriberEmail',
+                'loadByCustomerId',
+            ]
+        );
+        $this->objectManager = new ObjectManager($this);
+
+        $this->customerFactory = $this->getMockBuilder(CustomerInterfaceFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->subscriber = $this->objectManager->getObject(
-            \Magento\Newsletter\Model\Subscriber::class,
+            Subscriber::class,
             [
                 'newsletterData' => $this->newsletterData,
                 'scopeConfig' => $this->scopeConfig,
@@ -106,211 +160,80 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
                 'customerRepository' => $this->customerRepository,
                 'customerAccountManagement' => $this->customerAccountManagement,
                 'inlineTranslation' => $this->inlineTranslation,
-                'resource' => $this->resource
+                'resource' => $this->resource,
+                'customerFactory' => $this->customerFactory,
+                'dataObjectHelper' => $this->dataObjectHelper,
             ]
         );
     }
 
-    public function testSubscribe()
+    /**
+     * Test to Load by subscriber email
+     *
+     * @return void
+     */
+    public function testLoadBySubscriberEmail(): void
     {
-        $email = 'subscriber_email@magento.com';
-        $this->resource->expects($this->any())->method('loadByEmail')->willReturn(
-            [
-                'subscriber_status' => 3,
-                'subscriber_email' => $email,
-                'name' => 'subscriber_name'
-            ]
+        $email = 'subscriber_email@example.com';
+        $websiteId = 1;
+        $subscriberData = ['some_filed' => 'value'];
+
+        $this->resource->expects($this->once())
+            ->method('loadBySubscriberEmail')
+            ->with($email, $websiteId)
+            ->willReturn($subscriberData);
+
+        $this->assertEquals(
+            $subscriberData,
+            $this->subscriber->loadBySubscriberEmail($email, $websiteId)->getData()
         );
-        $this->scopeConfig->expects($this->any())->method('getValue')->willReturn(true);
-        $this->customerSession->expects($this->any())->method('isLoggedIn')->willReturn(true);
-        $customerDataModel = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $this->customerSession->expects($this->any())->method('getCustomerDataObject')->willReturn($customerDataModel);
-        $this->customerSession->expects($this->any())->method('getCustomerId')->willReturn(1);
-        $customerDataModel->expects($this->any())->method('getEmail')->willReturn($email);
-        $this->customerRepository->expects($this->any())->method('getById')->willReturn($customerDataModel);
-        $customerDataModel->expects($this->any())->method('getStoreId')->willReturn(1);
-        $customerDataModel->expects($this->any())->method('getId')->willReturn(1);
-        $this->sendEmailCheck();
-        $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-
-        $this->assertEquals(1, $this->subscriber->subscribe($email));
     }
 
-    public function testSubscribeNotLoggedIn()
+    /**
+     * Test to Load by customer
+     *
+     * @return void
+     */
+    public function testLoadByCustomer(): void
     {
-        $email = 'subscriber_email@magento.com';
-        $this->resource->expects($this->any())->method('loadByEmail')->willReturn(
-            [
-                'subscriber_status' => 3,
-                'subscriber_email' => $email,
-                'name' => 'subscriber_name'
-            ]
+        $customerId = 1;
+        $websiteId = 1;
+        $subscriberData = ['some_filed' => 'value'];
+
+        $this->resource->expects($this->once())
+            ->method('loadByCustomerId')
+            ->with($customerId, $websiteId)
+            ->willReturn($subscriberData);
+
+        $this->assertEquals(
+            $subscriberData,
+            $this->subscriber->loadByCustomer($customerId, $websiteId)->getData()
         );
-        $this->scopeConfig->expects($this->any())->method('getValue')->willReturn(true);
-        $this->customerSession->expects($this->any())->method('isLoggedIn')->willReturn(false);
-        $customerDataModel = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $this->customerSession->expects($this->any())->method('getCustomerDataObject')->willReturn($customerDataModel);
-        $this->customerSession->expects($this->any())->method('getCustomerId')->willReturn(1);
-        $customerDataModel->expects($this->any())->method('getEmail')->willReturn($email);
-        $this->customerRepository->expects($this->any())->method('getById')->willReturn($customerDataModel);
-        $customerDataModel->expects($this->any())->method('getStoreId')->willReturn(1);
-        $customerDataModel->expects($this->any())->method('getId')->willReturn(1);
-        $this->sendEmailCheck();
-        $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-
-        $this->assertEquals(2, $this->subscriber->subscribe($email));
     }
 
-    public function testUpdateSubscription()
-    {
-        $customerId = 1;
-        $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
-            ->getMock();
-        $this->customerRepository->expects($this->atLeastOnce())
-            ->method('getById')
-            ->with($customerId)->willReturn($customerDataMock);
-        $this->resource->expects($this->atLeastOnce())
-            ->method('loadByCustomerData')
-            ->with($customerDataMock)
-            ->willReturn(
-                [
-                    'subscriber_id' => 1,
-                    'subscriber_status' => 1
-                ]
-            );
-        $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
-        $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $this->customerAccountManagement->expects($this->once())
-            ->method('getConfirmationStatus')
-            ->with($customerId)
-            ->willReturn('account_confirmation_required');
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
-
-        $this->assertEquals($this->subscriber, $this->subscriber->updateSubscription($customerId));
-    }
-
-    public function testUnsubscribeCustomerById()
-    {
-        $customerId = 1;
-        $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
-            ->getMock();
-        $this->customerRepository->expects($this->atLeastOnce())
-            ->method('getById')
-            ->with($customerId)->willReturn($customerDataMock);
-        $this->resource->expects($this->atLeastOnce())
-            ->method('loadByCustomerData')
-            ->with($customerDataMock)
-            ->willReturn(
-                [
-                    'subscriber_id' => 1,
-                    'subscriber_status' => 1
-                ]
-            );
-        $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
-        $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
-        $this->sendEmailCheck();
-
-        $this->subscriber->unsubscribeCustomerById($customerId);
-    }
-
-    public function testSubscribeCustomerById()
-    {
-        $customerId = 1;
-        $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
-            ->getMock();
-        $this->customerRepository->expects($this->atLeastOnce())
-            ->method('getById')
-            ->with($customerId)->willReturn($customerDataMock);
-        $this->resource->expects($this->atLeastOnce())
-            ->method('loadByCustomerData')
-            ->with($customerDataMock)
-            ->willReturn(
-                [
-                    'subscriber_id' => 1,
-                    'subscriber_status' => 3
-                ]
-            );
-        $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
-        $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
-        $this->sendEmailCheck();
-
-        $this->subscriber->subscribeCustomerById($customerId);
-    }
-
-    public function testSubscribeCustomerById1()
-    {
-        $customerId = 1;
-        $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
-            ->getMock();
-        $this->customerRepository->expects($this->atLeastOnce())
-            ->method('getById')
-            ->with($customerId)->willReturn($customerDataMock);
-        $this->resource->expects($this->atLeastOnce())
-            ->method('loadByCustomerData')
-            ->with($customerDataMock)
-            ->willReturn(
-                [
-                    'subscriber_id' => 1,
-                    'subscriber_status' => 3
-                ]
-            );
-        $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
-        $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
-        $this->sendEmailCheck();
-        $this->customerAccountManagement->expects($this->once())
-            ->method('getConfirmationStatus')
-            ->willReturn(\Magento\Customer\Api\AccountManagementInterface::ACCOUNT_CONFIRMATION_NOT_REQUIRED);
-        $this->scopeConfig->expects($this->atLeastOnce())->method('getValue')->with()->willReturn(true);
-
-        $this->subscriber->subscribeCustomerById($customerId);
-        $this->assertEquals(\Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->getStatus());
-    }
-
-    public function testSubscribeCustomerByIdAfterConfirmation()
-    {
-        $customerId = 1;
-        $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
-            ->getMock();
-        $this->customerRepository->expects($this->atLeastOnce())
-            ->method('getById')
-            ->with($customerId)->willReturn($customerDataMock);
-        $this->resource->expects($this->atLeastOnce())
-            ->method('loadByCustomerData')
-            ->with($customerDataMock)
-            ->willReturn(
-                [
-                    'subscriber_id' => 1,
-                    'subscriber_status' => 4
-                ]
-            );
-        $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
-        $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
-        $this->sendEmailCheck();
-        $this->customerAccountManagement->expects($this->never())->method('getConfirmationStatus');
-        $this->scopeConfig->expects($this->atLeastOnce())->method('getValue')->with()->willReturn(true);
-
-        $this->subscriber->updateSubscription($customerId);
-        $this->assertEquals(\Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED, $this->subscriber->getStatus());
-    }
-
+    /**
+     * Test to unsubscribe customer from newsletters
+     */
     public function testUnsubscribe()
     {
         $this->resource->expects($this->once())->method('save')->willReturnSelf();
-        $this->sendEmailCheck();
+        $subscriberData = [
+            'store_id' => 2,
+            'email' => 'subscriber_email@example.com',
+            'name' => 'Subscriber Name',
+        ];
+        $this->subscriber->setData($subscriberData);
+        $this->sendEmailCheck(
+            Subscriber::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE,
+            Subscriber::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY
+        );
 
         $this->assertEquals($this->subscriber, $this->subscriber->unsubscribe());
     }
 
     /**
+     * Test to try unsubscribe customer from newsletters with wrong confirmation code
+     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage This is an invalid subscription confirmation code.
      */
@@ -322,6 +245,9 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->subscriber->unsubscribe();
     }
 
+    /**
+     * Test to get subscriber full name
+     */
     public function testGetSubscriberFullName()
     {
         $this->subscriber->setFirstname('John');
@@ -330,6 +256,9 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('John Doe', $this->subscriber->getSubscriberFullName());
     }
 
+    /**
+     * Test to confirm customer subscription
+     */
     public function testConfirm()
     {
         $code = 111;
@@ -339,6 +268,9 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->subscriber->confirm($code));
     }
 
+    /**
+     * Test to doesn't confirm customer subscription
+     */
     public function testConfirmWrongCode()
     {
         $code = 111;
@@ -347,9 +279,12 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->subscriber->confirm($code));
     }
 
+    /**
+     * Test to mark receiving subscriber of queue newsletter
+     */
     public function testReceived()
     {
-        $queue = $this->getMockBuilder(\Magento\Newsletter\Model\Queue::class)
+        $queue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->once())->method('received')->with($this->subscriber, $queue)->willReturnSelf();
@@ -357,26 +292,104 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->subscriber, $this->subscriber->received($queue));
     }
 
-    protected function sendEmailCheck()
+    /**
+     * Test to Sends out confirmation email
+     *
+     * @return void
+     */
+    public function testSendConfirmationRequestEmail(): void
     {
-        $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMock();
-        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
-        $this->scopeConfig->expects($this->any())->method('getValue')->willReturn(true);
-        $this->transportBuilder->expects($this->once())->method('setTemplateIdentifier')->willReturnSelf();
-        $this->transportBuilder->expects($this->once())->method('setTemplateOptions')->willReturnSelf();
-        $this->transportBuilder->expects($this->once())->method('setTemplateVars')->willReturnSelf();
-        $this->transportBuilder->expects($this->once())->method('setFrom')->willReturnSelf();
-        $this->transportBuilder->expects($this->once())->method('addTo')->willReturnSelf();
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeModel);
-        $storeModel->expects($this->any())->method('getId')->willReturn(1);
-        $this->transportBuilder->expects($this->once())->method('getTransport')->willReturn($transport);
+        $confirmLink = 'confirm link';
+        $storeId = 2;
+        $subscriberData = [
+            'store_id' => $storeId,
+            'email' => 'subscriber_email@example.com',
+            'name' => 'Subscriber Name',
+        ];
+        $store = $this->createMock(StoreInterface::class);
+        $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
+        $this->newsletterData->expects($this->once())
+            ->method('getConfirmationUrl')
+            ->with($this->subscriber)
+            ->willReturn($confirmLink);
+        $this->subscriber->setData($subscriberData);
+        $this->sendEmailCheck(
+            Subscriber::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+            Subscriber::XML_PATH_CONFIRM_EMAIL_IDENTITY,
+            [
+                'store' => $store,
+                'subscriber_data' => [
+                    'confirmation_link' => $confirmLink,
+                ],
+            ]
+        );
+        $this->assertEquals($this->subscriber, $this->subscriber->sendConfirmationRequestEmail());
+    }
+
+    /**
+     * Test to Sends out success email
+     *
+     * @return void
+     */
+    public function testSendConfirmationSuccessEmail(): void
+    {
+        $subscriberData = [
+            'store_id' => 2,
+            'email' => 'subscriber_email@example.com',
+            'name' => 'Subscriber Name',
+        ];
+        $this->subscriber->setData($subscriberData);
+        $this->sendEmailCheck(
+            Subscriber::XML_PATH_SUCCESS_EMAIL_TEMPLATE,
+            Subscriber::XML_PATH_SUCCESS_EMAIL_IDENTITY
+        );
+        $this->assertEquals($this->subscriber, $this->subscriber->sendConfirmationSuccessEmail());
+    }
+
+    /**
+     * Check to send email
+     *
+     * @param string $templateConfigPath
+     * @param string $identityTemplatePath
+     * @return void
+     */
+    private function sendEmailCheck(string $templateConfigPath, string $identityTemplatePath, array $vars = []): void
+    {
+        $template = 'email_template';
+        $identity = 'email_identity';
+        $vars += ['subscriber' => $this->subscriber];
+
+        $this->scopeConfig->method('getValue')
+            ->willReturnMap(
+                [
+                    [$templateConfigPath, ScopeInterface::SCOPE_STORE, $this->subscriber->getStoreId(), $template],
+                    [$identityTemplatePath, ScopeInterface::SCOPE_STORE, $this->subscriber->getStoreId(), $identity],
+                ]
+            );
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateIdentifier')
+            ->with($template)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateOptions')
+            ->with(['area' => Area::AREA_FRONTEND, 'store' => $this->subscriber->getStoreId()])
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateVars')
+            ->with($vars)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setFrom')
+            ->with($identity)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('addTo')
+            ->with($this->subscriber->getEmail(), $this->subscriber->getName())
+            ->willReturnSelf();
+        $transport = $this->createMock(TransportInterface::class);
         $transport->expects($this->once())->method('sendMessage')->willReturnSelf();
+        $this->transportBuilder->expects($this->once())->method('getTransport')->willReturn($transport);
         $this->inlineTranslation->expects($this->once())->method('suspend')->willReturnSelf();
         $this->inlineTranslation->expects($this->once())->method('resume')->willReturnSelf();
-
-        return $this;
     }
 }

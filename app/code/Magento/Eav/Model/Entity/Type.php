@@ -167,12 +167,8 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getAttributeCollection()
     {
-        $collection = $this->_attributeFactory->create()->getCollection();
-        $objectsModel = $this->getAttributeModel();
-        if ($objectsModel) {
-            $collection->setModel($objectsModel);
-        }
-
+        $collection = $this->_universalFactory->create($this->getEntityAttributeCollection());
+        $collection->setItemObjectClass($this->getAttributeModel());
         return $collection;
     }
 
@@ -317,7 +313,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get default attribute set identifier for etity type
+     * Get default attribute set identifier for entity type
      *
      * @return string|null
      */

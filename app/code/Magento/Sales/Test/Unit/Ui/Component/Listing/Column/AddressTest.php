@@ -47,7 +47,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     {
         $itemName = 'itemName';
         $oldItemValue = "itemValue\n";
-        $newItemValue = 'itemValue<br/>';
+        $newItemValue = "itemValue<br />\n";
         $dataSource = [
             'data' => [
                 'items' => [
@@ -57,7 +57,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->model->setData('name', $itemName);
-        $this->escaper->expects($this->once())->method('escapeHtml')->with($newItemValue)->willReturnArgument(0);
+        $this->escaper->expects($this->any())->method('escapeHtml')->with($oldItemValue)->willReturnArgument(0);
         $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }

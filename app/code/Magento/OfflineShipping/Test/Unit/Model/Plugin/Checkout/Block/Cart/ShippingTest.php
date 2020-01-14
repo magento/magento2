@@ -52,6 +52,9 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($assertResult, $this->model->afterIsStateActive($subjectMock, $result));
     }
 
+    /**
+     * @return array
+     */
     public function afterGetStateActiveDataProvider()
     {
         return [

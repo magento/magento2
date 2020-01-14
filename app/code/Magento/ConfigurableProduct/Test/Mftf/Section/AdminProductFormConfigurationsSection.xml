@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormConfigurationsSection">
+        <element name="sectionHeader" type="text" selector=".admin__collapsible-block-wrapper[data-index='configurable']"/>
+        <element name="createdConfigurationsBlock" type="text" selector="div.admin__field.admin__field-wide"/>
+        <element name="createConfigurations" type="button" selector="button[data-index='create_configurable_products_button']" timeout="30"/>
+        <element name="currentVariationsRows" type="button" selector=".data-row"/>
+        <element name="currentVariationsNameCells" type="textarea" selector=".admin__control-fields[data-index='name_container']"/>
+        <element name="currentVariationsSkuCells" type="textarea" selector=".admin__control-fields[data-index='sku_container']"/>
+        <element name="currentVariationsPriceCells" type="textarea" selector=".admin__control-fields[data-index='price_container']"/>
+        <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
+        <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
+        <element name="currentVariationsStatusCells" type="textarea" selector="._no-header[data-index='status']"/>
+        <element name="firstSKUInConfigurableProductsGrid" type="input" selector="//input[@name='configurable-matrix[0][sku]']"/>
+        <element name="actionsBtn" type="button" selector="(//button[@class='action-select']/span[contains(text(), 'Select')])[{{var1}}]" parameterized="true"/>
+        <element name="actionsBtnByProductName" type="textarea" selector="//*[.='Attributes']/ancestor::tr/td[@data-index='attributes']//span[contains(text(), '{{var}}')]/ancestor::tr//button[@class='action-select']" parameterized="true"/>
+        <element name="addProduct" type="button" selector="//*[.='Attributes']/ancestor::tr/td[@data-index='attributes']//span[contains(text(), '{{var}}')]/ancestor::tr//a[text()='Choose a different Product']" parameterized="true"/>
+        <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
+        <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
+        <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
+        <element name="confProductSku" type="input" selector="//*[@name='configurable-matrix[{{arg}}][sku]']" parameterized="true"/>
+        <element name="confProductNameCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='name_container']//input" parameterized="true"/>
+        <element name="confProductSkuCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='sku_container']//input" parameterized="true"/>
+        <element name="confProductPriceCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='price_container']//input" parameterized="true"/>
+        <element name="confProductQuantityCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='quantity_container']//input" parameterized="true"/>
+        <element name="confProductWeightCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='price_weight']//input" parameterized="true"/>
+        <element name="confProductOptionStatusCell" type="text" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{productName}}')]/ancestor::tr/td[@data-index='status']" parameterized="true"/>
+        <element name="confProductSkuMessage" type="text" selector="//*[@name='configurable-matrix[{{arg}}][sku]']/following-sibling::label" parameterized="true"/>
+        <element name="variationsSkuInputByRow" selector="[data-index='configurable-matrix'] table > tbody > tr:nth-of-type({{row}}) input[name*='sku']" type="input" parameterized="true"/>
+        <element name="variationsSkuInputErrorByRow" selector="[data-index='configurable-matrix'] table > tbody > tr:nth-of-type({{row}}) .admin__field-error" type="text" parameterized="true"/>
+        <element name="variationLabel" type="text" selector="//div[@data-index='configurable-matrix']/label"/>
+        <element name="stepsWizardTitle" type="text" selector="div.content:not([style='display: none;']) .steps-wizard-title"/>
+        <element name="attributeEntityByName" type="text" selector="//div[@class='attribute-entity']//div[normalize-space(.)='{{attributeLabel}}']" parameterized="true"/>
+        <element name="fileUploaderInput" type="file" selector="//input[@type='file' and @class='file-uploader-input']" />
+        <element name="variationImageSource" type="text" selector="[data-index='configurable-matrix'] [data-index='thumbnail_image_container'] img[src*='{{imageName}}']" parameterized="true"/>
+        <element name="variationProductLinkByName" type="text" selector="//div[@data-index='configurable-matrix']//*[@data-index='name_container']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
+    </section>
+    <section name="AdminConfigurableProductFormSection">
+        <element name="productWeight" type="input" selector=".admin__control-text[name='product[weight]']"/>
+        <element name="productQuantity" type="input" selector=".admin__control-text[name='product[quantity_and_stock_status][qty]']"/>
+        <element name="currentVariationsQuantityCells" type="button" selector="td[data-index='quantity_container']"/>
+        <element name="rowByCode" type="textarea" selector="//span[contains(text(), '{{var1}}-{{var2}}')]//ancestor-or-self::tr" parameterized="true"/>
+        <element name="currentAttribute" type="text" selector="//fieldset[@class='admin__fieldset']/div[contains(@class, 'admin__field _disabled')]//span"/>
+    </section>
+    <section name="AdminConfigurableProductSelectAttributesSlideOut">
+        <element name="grid" type="button" selector=".admin__data-grid-wrap tbody"/>
+    </section>
+    <section name="StorefrontConfigurableProductPage">
+        <element name="productAttributeDropDown" type="select" selector="select[id*='attribute']"/>
+    </section>
+</sections>

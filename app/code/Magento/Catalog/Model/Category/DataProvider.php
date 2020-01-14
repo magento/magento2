@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -10,30 +12,38 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\Attribute\Backend\Image as ImageBackendModel;
+use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Ui\DataProvider\ModifierPoolDataProvider;
 
 /**
- * Class DataProvider
+ * Category form data provider.
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 101.0.0
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends ModifierPoolDataProvider
 {
     /**
      * @var string
@@ -49,6 +59,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * EAV attribute properties to fetch from meta storage
+     *
      * @var array
      * @since 101.0.0
      */
@@ -62,6 +73,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         'default' => 'default_value',
         'size' => 'multiline_count',
     ];
+
+    private $boolMetaProperties = ['visible', 'required'];
 
     /**
      * Form element mapping
@@ -98,19 +111,28 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * Elements with currency symbol
+     *
+     * @var array
+     */
+    private $elementsWithCurrencySymbol = [
+        'filter_price_range',
+    ];
+
+    /**
      * @var EavValidationRules
      * @since 101.0.0
      */
     protected $eavValidationRules;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      * @since 101.0.0
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      * @since 101.0.0
      */
     protected $request;
@@ -141,25 +163,39 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $arrayManager;
 
     /**
-     * @var Filesystem
+     * @var ArrayUtils
+     */
+    private $arrayUtils;
+
+    /**
+     * @var FileInfo
      */
     private $fileInfo;
 
     /**
-     * DataProvider constructor
-     *
+     * @var AuthorizationInterface
+     */
+    private $auth;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      * @param Config $eavConfig
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param CategoryFactory $categoryFactory
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $pool
+     * @param AuthorizationInterface|null $auth
+     * @param ArrayUtils|null $arrayUtils
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
+     * @param ArrayManager|null $arrayManager
+     * @param FileInfo|null $fileInfo
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -169,12 +205,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         EavValidationRules $eavValidationRules,
         CategoryCollectionFactory $categoryCollectionFactory,
         StoreManagerInterface $storeManager,
-        \Magento\Framework\Registry $registry,
+        Registry $registry,
         Config $eavConfig,
-        \Magento\Framework\App\RequestInterface $request,
+        RequestInterface $request,
         CategoryFactory $categoryFactory,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        PoolInterface $pool = null,
+        ?AuthorizationInterface $auth = null,
+        ?ArrayUtils $arrayUtils = null,
+        ScopeOverriddenValue $scopeOverriddenValue = null,
+        ArrayManager $arrayManager = null,
+        FileInfo $fileInfo = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -184,8 +226,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
+        $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->arrayUtils = $arrayUtils ?? ObjectManager::getInstance()->get(ArrayUtils::class);
+        $this->scopeOverriddenValue = $scopeOverriddenValue ?:
+            ObjectManager::getInstance()->get(ScopeOverriddenValue::class);
+        $this->arrayManager = $arrayManager ?: ObjectManager::getInstance()->get(ArrayManager::class);
+        $this->fileInfo = $fileInfo ?: ObjectManager::getInstance()->get(FileInfo::class);
 
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
 
     /**
@@ -202,16 +250,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if ($category) {
             $meta = $this->addUseDefaultValueCheckbox($category, $meta);
         }
-
+        // Default and custom settings
         return $meta;
     }
 
     /**
+     * Disable fields if they are using default values.
+     *
      * @param Category $category
      * @param array $meta
      * @return array
      */
-    private function addUseDefaultValueCheckbox(Category $category, array $meta)
+    private function addUseDefaultValueCheckbox(Category $category, array $meta): array
     {
         /** @var EavAttributeInterface $attribute */
         foreach ($category->getAttributes() as $attribute) {
@@ -219,7 +269,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $canDisplayUseDefault = $attribute->getScope() != EavAttributeInterface::SCOPE_GLOBAL_TEXT
                 && $category->getId()
                 && $category->getStoreId();
-            $attributePath = $this->getArrayManager()->findPath($attributeCode, $meta);
+            $attributePath = $this->arrayManager->findPath($attributeCode, $meta);
 
             if (!$attributePath
                 || !$canDisplayUseDefault
@@ -228,14 +278,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 continue;
             }
 
-            $meta = $this->getArrayManager()->merge(
+            $meta = $this->arrayManager->merge(
                 [$attributePath, 'arguments/data/config'],
                 $meta,
                 [
                     'service' => [
                         'template' => 'ui/form/element/helper/service',
                     ],
-                    'disabled' => !$this->getScopeOverriddenValue()->containsValue(
+                    'disabled' => !$this->scopeOverriddenValue->containsValue(
                         CategoryInterface::class,
                         $category,
                         $attributeCode,
@@ -257,10 +307,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function prepareMeta($meta)
     {
-        $meta = array_replace_recursive($meta, $this->prepareFieldsMeta(
-            $this->getFieldsMap(),
-            $this->getAttributesMeta($this->eavConfig->getEntityType('catalog_category'))
-        ));
+        $meta = array_replace_recursive(
+            $meta,
+            $this->prepareFieldsMeta(
+                $this->getFieldsMap(),
+                $this->getAttributesMeta($this->eavConfig->getEntityType('catalog_category'))
+            )
+        );
 
         return $meta;
     }
@@ -272,13 +325,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $fieldsMeta
      * @return array
      */
-    private function prepareFieldsMeta($fieldsMap, $fieldsMeta)
+    private function prepareFieldsMeta(array $fieldsMap, array $fieldsMeta): array
     {
+        $canEditDesign = $this->auth->isAllowed('Magento_Catalog::edit_category_design');
+
         $result = [];
         foreach ($fieldsMap as $fieldSet => $fields) {
             foreach ($fields as $field) {
                 if (isset($fieldsMeta[$field])) {
-                    $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $fieldsMeta[$field];
+                    $config = $fieldsMeta[$field];
+                    if (($fieldSet === 'design' || $fieldSet === 'schedule_design_update') && !$canEditDesign) {
+                        $config['required'] = 1;
+                        $config['disabled'] = 1;
+                        $config['serviceDisabled'] = true;
+                    }
+
+                    $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $config;
                 }
             }
         }
@@ -305,6 +367,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $this->loadedData[$category->getId()] = $categoryData;
         }
+
         return $this->loadedData;
     }
 
@@ -313,7 +376,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param Type $entityType
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 101.0.0
@@ -322,6 +385,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
+        $fields = $this->getFields();
+        $category = $this->getCurrentCategory();
         /* @var EavAttribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
@@ -329,13 +394,26 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
                 $meta[$code][$metaName] = $value;
+                if (in_array($metaName, $this->boolMetaProperties, true)) {
+                    $meta[$code][$metaName] = (bool)$meta[$code][$metaName];
+                }
                 if ('frontend_input' === $origName) {
                     $meta[$code]['formElement'] = isset($this->formElement[$value])
                         ? $this->formElement[$value]
                         : $value;
                 }
                 if ($attribute->usesSource()) {
-                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                    $source = $attribute->getSource();
+                    $currentCategory = $this->getCurrentCategory();
+                    if ($source instanceof SpecificSourceInterface && $currentCategory) {
+                        $options = $source->getOptionsFor($currentCategory);
+                    } else {
+                        $options = $source->getAllOptions();
+                    }
+                    foreach ($options as &$option) {
+                        $option['__disableTmpl'] = true;
+                    }
+                    $meta[$code]['options'] = $options;
                 }
             }
 
@@ -346,6 +424,27 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $meta[$code]['scopeLabel'] = $this->getScopeLabel($attribute);
             $meta[$code]['componentType'] = Field::NAME;
+
+            // disable fields
+            if ($category) {
+                $attributeIsLocked = $category->isLockedAttribute($code);
+                $meta[$code]['disabled'] = $attributeIsLocked;
+                $hasUseConfigField = (bool)array_search('use_config.' . $code, $fields, true);
+                if ($hasUseConfigField && $meta[$code]['disabled']) {
+                    $meta['use_config.' . $code]['disabled'] = true;
+                }
+            }
+
+            if (in_array($code, $this->elementsWithCurrencySymbol, false)) {
+                $requestScope = $this->request->getParam(
+                    $this->requestScopeFieldName,
+                    Store::DEFAULT_STORE_ID
+                );
+
+                $meta[$code]['addbefore'] = $this->storeManager->getStore($requestScope)
+                    ->getBaseCurrency()
+                    ->getCurrencySymbol();
+            }
         }
 
         $result = [];
@@ -385,7 +484,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Add use default settings
      *
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Category $category
      * @param array $categoryData
      * @return array
      * @deprecated 101.1.0
@@ -473,13 +572,19 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Converts category image data to acceptable for rendering format
      *
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Category $category
      * @param array $categoryData
      * @return array
      */
-    private function convertValues($category, $categoryData)
+    private function convertValues($category, $categoryData): array
     {
         foreach ($category->getAttributes() as $attributeCode => $attribute) {
+            if ($attributeCode === 'custom_layout_update_file') {
+                if (!empty($categoryData['custom_layout_update'])) {
+                    $categoryData['custom_layout_update_file']
+                        = LayoutUpdate::VALUE_USE_UPDATE_XML;
+                }
+            }
             if (!isset($categoryData[$attributeCode])) {
                 continue;
             }
@@ -488,14 +593,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 unset($categoryData[$attributeCode]);
 
                 $fileName = $category->getData($attributeCode);
-                if ($this->getFileInfo()->isExist($fileName)) {
-                    $stat = $this->getFileInfo()->getStat($fileName);
-                    $mime = $this->getFileInfo()->getMimeType($fileName);
 
-                    $categoryData[$attributeCode][0]['name'] = $fileName;
-                    $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
-                    $categoryData['image'][0]['size'] = isset($stat) ? $stat['size'] : 0;
-                    $categoryData['image'][0]['type'] = $mime;
+                if ($this->fileInfo->isExist($fileName)) {
+                    $stat = $this->fileInfo->getStat($fileName);
+                    $mime = $this->fileInfo->getMimeType($fileName);
+
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $categoryData[$attributeCode][0]['name'] = basename($fileName);
+
+                    if ($this->fileInfo->isBeginsWithMediaDirectoryPath($fileName)) {
+                        $categoryData[$attributeCode][0]['url'] = $fileName;
+                    } else {
+                        $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+                    }
+
+                    $categoryData[$attributeCode][0]['size'] = isset($stat) ? $stat['size'] : 0;
+                    $categoryData[$attributeCode][0]['type'] = $mime;
                 }
             }
         }
@@ -521,6 +634,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * List of fields groups and fields.
+     *
      * @return array
      * @since 101.0.0
      */
@@ -528,101 +643,64 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         return [
             'general' => [
-                    'parent',
-                    'path',
-                    'is_active',
-                    'include_in_menu',
-                    'name',
-                ],
+                'parent',
+                'path',
+                'is_active',
+                'include_in_menu',
+                'name',
+            ],
             'content' => [
-                    'image',
-                    'description',
-                    'landing_page',
-                ],
+                'image',
+                'description',
+                'landing_page',
+            ],
             'display_settings' => [
-                    'display_mode',
-                    'is_anchor',
-                    'available_sort_by',
-                    'use_config.available_sort_by',
-                    'default_sort_by',
-                    'use_config.default_sort_by',
-                    'filter_price_range',
-                    'use_config.filter_price_range',
-                ],
+                'display_mode',
+                'is_anchor',
+                'available_sort_by',
+                'use_config.available_sort_by',
+                'default_sort_by',
+                'use_config.default_sort_by',
+                'filter_price_range',
+                'use_config.filter_price_range',
+            ],
             'search_engine_optimization' => [
-                    'url_key',
-                    'url_key_create_redirect',
-                    'url_key_group',
-                    'meta_title',
-                    'meta_keywords',
-                    'meta_description',
-                ],
+                'url_key',
+                'url_key_create_redirect',
+                'url_key_group',
+                'meta_title',
+                'meta_keywords',
+                'meta_description',
+            ],
             'assign_products' => [
-                ],
+            ],
             'design' => [
-                    'custom_use_parent_settings',
-                    'custom_apply_to_products',
-                    'custom_design',
-                    'page_layout',
-                    'custom_layout_update',
-                ],
+                'custom_use_parent_settings',
+                'custom_apply_to_products',
+                'custom_design',
+                'page_layout',
+                'custom_layout_update',
+                'custom_layout_update_file'
+            ],
             'schedule_design_update' => [
-                    'custom_design_from',
-                    'custom_design_to',
-                ],
+                'custom_design_from',
+                'custom_design_to',
+            ],
             'category_view_optimization' => [
-                ],
+            ],
             'category_permissions' => [
-                ],
+            ],
         ];
     }
 
     /**
-     * Retrieve scope overridden value
+     * Return list of fields names.
      *
-     * @return ScopeOverriddenValue
-     * @deprecated 101.1.0
+     * @return array
      */
-    private function getScopeOverriddenValue()
+    private function getFields(): array
     {
-        if (null === $this->scopeOverriddenValue) {
-            $this->scopeOverriddenValue = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                ScopeOverriddenValue::class
-            );
-        }
-
-        return $this->scopeOverriddenValue;
-    }
-
-    /**
-     * Retrieve array manager
-     *
-     * @return ArrayManager
-     * @deprecated 101.1.0
-     */
-    private function getArrayManager()
-    {
-        if (null === $this->arrayManager) {
-            $this->arrayManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                ArrayManager::class
-            );
-        }
-
-        return $this->arrayManager;
-    }
-
-    /**
-     * Get FileInfo instance
-     *
-     * @return FileInfo
-     *
-     * @deprecated 101.1.0
-     */
-    private function getFileInfo()
-    {
-        if ($this->fileInfo === null) {
-            $this->fileInfo = ObjectManager::getInstance()->get(FileInfo::class);
-        }
-        return $this->fileInfo;
+        $fieldsMap = $this->getFieldsMap();
+        return $this->arrayUtils->flatten($fieldsMap);
     }
 }

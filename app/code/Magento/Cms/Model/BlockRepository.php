@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
@@ -134,7 +135,7 @@ class BlockRepository implements BlockRepositoryInterface
         $block = $this->blockFactory->create();
         $this->resource->load($block, $blockId);
         if (!$block->getId()) {
-            throw new NoSuchEntityException(__('CMS Block with id "%1" does not exist.', $blockId));
+            throw new NoSuchEntityException(__('The CMS block with the "%1" ID doesn\'t exist.', $blockId));
         }
         return $block;
     }

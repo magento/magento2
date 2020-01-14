@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\App\Request;
 
+use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\RequestContentInterface;
 use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Http request
  */
-class Http extends Request implements RequestContentInterface, RequestSafetyInterface
+class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
 {
     /**#@+
      * HTTP Ports
@@ -95,13 +96,19 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     private $distroBaseUrl;
 
     /**
+     * @var PathInfo
+     */
+    private $pathInfoService;
+
+    /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
-     * @param ObjectManagerInterface  $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param \Zend\Uri\UriInterface|string|null $uri
      * @param array $directFrontNames
+     * @param PathInfo|null $pathInfoService
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
@@ -110,69 +117,71 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
         PathInfoProcessorInterface $pathInfoProcessor,
         ObjectManagerInterface $objectManager,
         $uri = null,
-        $directFrontNames = []
+        $directFrontNames = [],
+        PathInfo $pathInfoService = null
     ) {
         parent::__construct($cookieReader, $converter, $uri);
         $this->routeConfig = $routeConfig;
         $this->pathInfoProcessor = $pathInfoProcessor;
         $this->objectManager = $objectManager;
         $this->directFrontNames = $directFrontNames;
+        $this->pathInfoService = $pathInfoService ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            PathInfo::class
+        );
     }
 
     /**
-     * Returns ORIGINAL_PATH_INFO.
-     * This value is calculated instead of reading PATH_INFO
-     * directly from $_SERVER due to cross-platform differences.
+     * Return the ORIGINAL_PATH_INFO.
+     * This value is calculated and processed from $_SERVER due to cross-platform differences.
+     * instead of reading PATH_INFO
      *
      * @return string
      */
     public function getOriginalPathInfo()
     {
         if (empty($this->originalPathInfo)) {
-            $this->setPathInfo();
+            $originalPathInfoFromRequest = $this->pathInfoService->getPathInfo(
+                $this->getRequestUri(),
+                $this->getBaseUrl()
+            );
+            $this->originalPathInfo = (string)$this->pathInfoProcessor->process($this, $originalPathInfoFromRequest);
+            $this->requestString = $this->originalPathInfo
+                . $this->pathInfoService->getQueryString($this->getRequestUri());
         }
         return $this->originalPathInfo;
     }
 
     /**
-     * Set the PATH_INFO string
-     * Set the ORIGINAL_PATH_INFO string
+     * Return the path info
+     *
+     * @return string
+     */
+    public function getPathInfo()
+    {
+        if (empty($this->pathInfo)) {
+            $this->pathInfo = $this->getOriginalPathInfo();
+        }
+        return $this->pathInfo;
+    }
+
+    /**
+     * Set the PATH_INFO string.
+     *
+     * Set the ORIGINAL_PATH_INFO string.
      *
      * @param string|null $pathInfo
      * @return $this
      */
     public function setPathInfo($pathInfo = null)
     {
-        if ($pathInfo === null) {
-            $requestUri = $this->getRequestUri();
-            if ('/' === $requestUri) {
-                return $this;
-            }
-
-            // Remove the query string from REQUEST_URI
-            $pos = strpos($requestUri, '?');
-            if ($pos) {
-                $requestUri = substr($requestUri, 0, $pos);
-            }
-
-            $baseUrl = $this->getBaseUrl();
-            $pathInfo = substr($requestUri, strlen($baseUrl));
-            if (!empty($baseUrl) && false === $pathInfo) {
-                $pathInfo = '';
-            } elseif (null === $baseUrl) {
-                $pathInfo = $requestUri;
-            }
-            $pathInfo = $this->pathInfoProcessor->process($this, $pathInfo);
-            $this->originalPathInfo = (string)$pathInfo;
-            $this->requestString = $pathInfo . ($pos !== false ? substr($requestUri, $pos) : '');
-        }
         $this->pathInfo = (string)$pathInfo;
         return $this;
     }
 
     /**
-     * Check if code declared as direct access frontend name
-     * this mean what this url can be used without store code
+     * Check if code declared as direct access frontend name.
+     *
+     * This means what this url can be used without store code.
      *
      * @param   string $code
      * @return  bool
@@ -258,8 +267,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
-     * Collect properties changed by _forward in protected storage
-     * before _forward was called first time.
+     * Collect properties changed by _forward in protected storage before _forward was called first time.
      *
      * @return $this
      */
@@ -401,6 +409,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
+     * Sleep
+     *
      * @return array
      */
     public function __sleep()
@@ -409,7 +419,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isSafeMethod()
     {

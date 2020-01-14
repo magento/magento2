@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Phrase;
 
+/**
+ * Class Changelog for manipulations with the mview_state table.
+ */
 class Changelog implements ChangelogInterface
 {
     /**
@@ -41,6 +46,7 @@ class Changelog implements ChangelogInterface
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @throws ConnectionException
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
@@ -53,12 +59,14 @@ class Changelog implements ChangelogInterface
      * Check DB connection
      *
      * @return void
-     * @throws \Exception
+     * @throws ConnectionException
      */
     protected function checkConnection()
     {
         if (!$this->connection) {
-            throw new \Exception('Write DB connection is not available');
+            throw new ConnectionException(
+                new Phrase("The write connection to the database isn't available. Please try again later.")
+            );
         }
     }
 
@@ -121,7 +129,7 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
+        $this->connection->delete($changelogTableName, ['version_id < ?' => (int)$versionId]);
 
         return true;
     }
@@ -154,14 +162,15 @@ class Changelog implements ChangelogInterface
             (int)$toVersionId
         );
 
-        return $this->connection->fetchCol($select);
+        return array_map('intval', $this->connection->fetchCol($select));
     }
 
     /**
      * Get maximum version_id from changelog
+     *
      * @return int
      * @throws ChangelogTableNotExistsException
-     * @throws \Exception
+     * @throws RuntimeException
      */
     public function getVersion()
     {
@@ -169,11 +178,18 @@ class Changelog implements ChangelogInterface
         if (!$this->connection->isTableExists($changelogTableName)) {
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
-        $row = $this->connection->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
-        if (isset($row['Auto_increment'])) {
-            return (int)$row['Auto_increment'] - 1;
+        $select = $this->connection->select()->from($changelogTableName)->order('version_id DESC')->limit(1);
+        $row = $this->connection->fetchRow($select);
+        if ($row === false) {
+            return 0;
         } else {
-            throw new \Exception("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.");
+            if (is_array($row) && array_key_exists('version_id', $row)) {
+                return (int)$row['version_id'];
+            } else {
+                throw new RuntimeException(
+                    new Phrase("Table status for %1 is incorrect. Can`t fetch version id.", [$changelogTableName])
+                );
+            }
         }
     }
 
@@ -182,13 +198,15 @@ class Changelog implements ChangelogInterface
      *
      * Build a changelog name by concatenating view identifier and changelog name suffix.
      *
-     * @throws \Exception
+     * @throws \DomainException
      * @return string
      */
     public function getName()
     {
         if (strlen($this->viewId) == 0) {
-            throw new \Exception("View's identifier is not set");
+            throw new \DomainException(
+                new Phrase("View's identifier is not set")
+            );
         }
         return $this->viewId . '_' . self::NAME_SUFFIX;
     }
@@ -216,6 +234,8 @@ class Changelog implements ChangelogInterface
     }
 
     /**
+     * Get view's identifier
+     *
      * @return string
      */
     public function getViewId()

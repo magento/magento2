@@ -489,4 +489,23 @@ class CustomerSetup extends EavSetup
     {
         return $this->eavConfig;
     }
+
+    /**
+     * Update attributes for customer.
+     *
+     * @param array $entityAttributes
+     * @return void
+     */
+    public function upgradeAttributes(array $entityAttributes)
+    {
+        foreach ($entityAttributes as $entityType => $attributes) {
+            foreach ($attributes as $attributeCode => $attributeData) {
+                $attribute = $this->getEavConfig()->getAttribute($entityType, $attributeCode);
+                foreach ($attributeData as $key => $value) {
+                    $attribute->setData($key, $value);
+                }
+                $attribute->save();
+            }
+        }
+    }
 }

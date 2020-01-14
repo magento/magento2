@@ -7,7 +7,6 @@ namespace Magento\Widget\Model\Widget;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Widget Instance Model
@@ -16,13 +15,14 @@ use Magento\Framework\App\ObjectManager;
  * @method string getTitle()
  * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
  * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string $value)
+ * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string|array $value)
  * @method int getSortOrder()
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
@@ -35,7 +35,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
 
-    const SINGLE_PRODUCT_LAYOUT_HANLDE = 'catalog_product_view_id_{{ID}}';
+    /**
+     * @deprecated see self::SINGLE_PRODUCT_LAYOUT_HANDLE
+     */
+    const SINGLE_PRODUCT_LAYOUT_HANLDE = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
+    
+    const SINGLE_PRODUCT_LAYOUT_HANDLE = 'catalog_product_view_id_{{ID}}';
 
     const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
 
@@ -93,6 +98,16 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_relatedCacheTypes;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Type
+     */
+    protected $_productType;
+
+    /**
+     * @var \Magento\Widget\Model\Config\Reader
+     */
+    protected $_reader;
+
+    /**
      * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
@@ -113,8 +128,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $conditionsHelper;
 
     /**
-     * Instance of serializer interface.
-     *
      * @var Json
      */
     private $serializer;
@@ -136,7 +149,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
-     * @param Json $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -169,7 +182,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->conditionsHelper = $conditionsHelper;
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_namespaceResolver = $namespaceResolver;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -191,12 +204,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->_specificEntitiesLayoutHandles = [
             'anchor_categories' => self::SINGLE_CATEGORY_LAYOUT_HANDLE,
             'notanchor_categories' => self::SINGLE_CATEGORY_LAYOUT_HANDLE,
-            'all_products' => self::SINGLE_PRODUCT_LAYOUT_HANLDE,
+            'all_products' => self::SINGLE_PRODUCT_LAYOUT_HANDLE,
         ];
         foreach (array_keys($this->_productType->getTypes()) as $typeId) {
             $layoutHandle = str_replace('{{TYPE}}', $typeId, self::PRODUCT_TYPE_LAYOUT_HANDLE);
             $this->_layoutHandles[$typeId . '_products'] = $layoutHandle;
-            $this->_specificEntitiesLayoutHandles[$typeId . '_products'] = self::SINGLE_PRODUCT_LAYOUT_HANLDE;
+            $this->_specificEntitiesLayoutHandles[$typeId . '_products'] = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
         }
     }
 
@@ -256,7 +269,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         if (is_array($this->getData('store_ids'))) {
             $this->setData('store_ids', implode(',', $this->getData('store_ids')));
         }
-
         $parameters = $this->getData('widget_parameters');
         if (is_array($parameters)) {
             if (array_key_exists('show_pager', $parameters) && !array_key_exists('page_var_name', $parameters)) {
@@ -265,6 +277,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     \Magento\Framework\Math\Random::CHARS_LOWERS
                 );
             }
+
             $this->setData('widget_parameters', $this->serializer->serialize($parameters));
         }
         $this->setData('page_groups', $tmpPageGroups);
@@ -327,6 +340,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Setter
+     *
      * Prepare widget type
      *
      * @param string $type
@@ -340,6 +354,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Prepare widget type
      *
      * @return string
@@ -351,6 +366,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter.
+     *
      * If not set return default
      *
      * @return string
@@ -366,6 +382,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Explode to array if string setted
      *
      * @return array
@@ -380,6 +397,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Unserialize if serialized string setted
      *
      * @return array

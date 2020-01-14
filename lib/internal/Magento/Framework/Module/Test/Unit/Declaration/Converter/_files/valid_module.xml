@@ -7,9 +7,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <!-- commented text -->
-    <module name="Module_One" setup_version="1.0.0.0">
+    <module name="Module_One">
     </module>
-    <module name="Module_Two" setup_version="2.0.0.0">
+    <module name="Module_OneAndHalf" setup_version="2.0">
+    </module>
+    <module name="Module_Two">
         <sequence>
             <module name="Module_One" />
         </sequence>

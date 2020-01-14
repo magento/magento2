@@ -9,6 +9,7 @@
     <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/elements.xsd"/>
     <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/head.xsd"/>
     <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/body.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/html.xsd"/>
 
     <xs:element name="layout">
         <xs:annotation>
@@ -45,6 +46,7 @@
             <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="body" type="bodyType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="head" type="headType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="html" type="htmlType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:choice>
     </xs:complexType>
 
@@ -58,6 +60,12 @@
             <xs:extension base="layoutType">
                 <xs:attribute type="elementNameType" name="id" use="required"/>
             </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="const">
+        <xs:complexContent>
+            <xs:extension base="argumentType" />
         </xs:complexContent>
     </xs:complexType>
 </xs:schema>

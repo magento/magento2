@@ -338,6 +338,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param QuoteAbstractItem|OrderItem $item
      * @return float
+     * @since 100.2.0
      */
     public function getBaseWeeeTaxAppliedRowAmount($item)
     {

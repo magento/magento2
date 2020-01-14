@@ -108,6 +108,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
      */
     private $orderId;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->orderId = 111;
@@ -118,7 +121,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)->getMockForAbstractClass();
-        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)->getMock();
+        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -159,6 +164,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteForward()
     {
         $this->clearStorage();
@@ -169,6 +177,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Forward::class, $this->reorder->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteRedirectOrderGrid()
     {
         $this->clearStorage();
@@ -181,6 +192,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteRedirectBack()
     {
         $this->clearStorage();
@@ -195,6 +209,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteRedirectNewOrder()
     {
         $this->clearStorage();
@@ -209,6 +226,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
     }
 
+    /**
+     * @return void
+     */
     private function clearStorage()
     {
         $this->objectManagerMock->expects($this->at(0))
@@ -218,6 +238,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->quoteSessionMock->expects($this->once())->method('clearStorage')->will($this->returnSelf());
     }
 
+    /**
+     * @return void
+     */
     private function getOrder()
     {
         $this->requestMock->expects($this->once())
@@ -235,20 +258,26 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
      */
     private function canReorder($result)
     {
-        $entity_id = 1;
-        $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($entity_id);
+        $entityId = 1;
+        $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($entityId);
         $this->reorderHelperMock->expects($this->once())
             ->method('canReorder')
-            ->with($entity_id)
+            ->with($entityId)
             ->willReturn($result);
     }
 
+    /**
+     * @return void
+     */
     private function prepareForward()
     {
         $this->resultForwardFactoryMock->expects($this->once())->method('create')->willReturn($this->resultForwardMock);
         $this->resultForwardMock->expects($this->once())->method('forward')->with('noroute')->willReturnSelf();
     }
 
+    /**
+     * @return void
+     */
     private function createRedirect()
     {
         $this->resultRedirectFactoryMock->expects($this->once())
@@ -284,6 +313,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($unavailableProducts);
     }
 
+    /**
+     * @return void
+     */
     private function initFromOrder()
     {
         $this->orderMock->expects($this->once())->method('setReordered')->with(true)->willReturnSelf();

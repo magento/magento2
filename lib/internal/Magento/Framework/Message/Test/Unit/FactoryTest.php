@@ -38,8 +38,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateWithWrongInterfaceImplementation()
     {
-        $this->expectException(
-            '\InvalidArgumentException',
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Magento\Framework\Message\Error doesn\'t implement \Magento\Framework\Message\MessageInterface'
         );
         $messageMock = new \stdClass();

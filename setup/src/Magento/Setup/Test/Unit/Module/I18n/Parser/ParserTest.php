@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser;
 
 use Magento\Setup\Module\I18n\Parser as Parser;
@@ -41,7 +39,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
      * @param array $jsFiles
      * @param array $phpMap
      * @param array $jsMap
-     * @paran array $phraseFactoryMap
+     * @param array $phraseFactoryMap
      * @param array $expectedResult
      * @dataProvider addPhraseDataProvider
      */
@@ -174,6 +172,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
     }
 }
 
+// @codingStandardsIgnoreStart
 class AdapterStub implements Parser\AdapterInterface
 {
     /**

@@ -104,7 +104,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             throw new LocalizedException(
-                __('Sorry, something went wrong granting permissions. You can find out more in the exceptions log.')
+                __('An error occurred during the attempt to grant permissions. For details, see the exceptions log.')
             );
         }
     }

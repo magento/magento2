@@ -4,8 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/**
+ * @codingStandardsIgnoreStart
+ */
 class ConfigDomMock extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -32,6 +33,9 @@ class ConfigDomMock extends \PHPUnit\Framework\TestCase
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getDom()
     {
         return 'reader dom result';

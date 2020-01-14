@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateNewPageWithAllValuesActionGroup">
+        <annotations>
+            <description>Goes to the Admin CMS creation page. Fills in the provided Page details (Title, Heading, URL, Store View and Hierarchy).</description>
+        </annotations>
+        <arguments>
+            <argument name="PageTitle" type="string"/>
+            <argument name="ContentHeading" type="string"/>
+            <argument name="URLKey" type="string"/>
+            <argument name="selectStoreViewOpt" type="string"/>
+            <argument name="selectHierarchyOpt" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{PageTitle}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{ContentHeading}}" stepKey="fillFieldContentHeading"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimization"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{URLKey}}" stepKey="fillFieldURLKey"/>
+        <click selector="{{CmsNewPagePiwSection.header}}" stepKey="clickPageInWebsites"/>
+        <waitForElementVisible selector="{{CmsNewPagePiwSection.selectStoreView(selectStoreViewOpt)}}" stepKey="waitForStoreGridReload"/>
+        <clickWithLeftButton selector="{{CmsNewPagePiwSection.selectStoreView(selectStoreViewOpt)}}" stepKey="clickStoreView2"/>
+        <click selector="{{CmsNewPageHierarchySection.header}}" stepKey="clickHierarchy"/>
+        <click selector="{{CmsNewPageHierarchySection.selectHierarchy(selectHierarchyOpt)}}" stepKey="clickPageCheckBoxes"/>
+    </actionGroup>
+</actionGroups>

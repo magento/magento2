@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Cms\Model\Page\IdentityMap;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -69,6 +72,11 @@ class PageRepository implements PageRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var IdentityMap
+     */
+    private $identityMap;
+
+    /**
      * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
@@ -78,6 +86,8 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param IdentityMap|null $identityMap
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourcePage $resource,
@@ -88,7 +98,8 @@ class PageRepository implements PageRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        ?IdentityMap $identityMap = null
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -99,23 +110,50 @@ class PageRepository implements PageRepositoryInterface
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->identityMap = $identityMap ?? ObjectManager::getInstance()->get(IdentityMap::class);
+    }
+
+    /**
+     * Validate new layout update values.
+     *
+     * @param Data\PageInterface $page
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function validateLayoutUpdate(Data\PageInterface $page): void
+    {
+        //Persisted data
+        $savedPage = $page->getId() ? $this->getById($page->getId()) : null;
+        //Custom layout update can be removed or kept as is.
+        if ($page->getCustomLayoutUpdateXml()
+            && (!$savedPage || $page->getCustomLayoutUpdateXml() !== $savedPage->getCustomLayoutUpdateXml())
+        ) {
+            throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
+        }
+        if ($page->getLayoutUpdateXml()
+            && (!$savedPage || $page->getLayoutUpdateXml() !== $savedPage->getLayoutUpdateXml())
+        ) {
+            throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
+        }
     }
 
     /**
      * Save Page data
      *
-     * @param \Magento\Cms\Api\Data\PageInterface $page
+     * @param \Magento\Cms\Api\Data\PageInterface|Page $page
      * @return Page
      * @throws CouldNotSaveException
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
-        if (empty($page->getStoreId())) {
+        if ($page->getStoreId() === null) {
             $storeId = $this->storeManager->getStore()->getId();
             $page->setStoreId($storeId);
         }
         try {
+            $this->validateLayoutUpdate($page);
             $this->resource->save($page);
+            $this->identityMap->add($page);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the page: %1', $exception->getMessage()),
@@ -137,8 +175,10 @@ class PageRepository implements PageRepositoryInterface
         $page = $this->pageFactory->create();
         $page->load($pageId);
         if (!$page->getId()) {
-            throw new NoSuchEntityException(__('CMS Page with id "%1" does not exist.', $pageId));
+            throw new NoSuchEntityException(__('The CMS page with the "%1" ID doesn\'t exist.', $pageId));
         }
+        $this->identityMap->add($page);
+
         return $page;
     }
 
@@ -176,11 +216,11 @@ class PageRepository implements PageRepositoryInterface
     {
         try {
             $this->resource->delete($page);
+            $this->identityMap->remove($page->getId());
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__(
-                'Could not delete the page: %1',
-                $exception->getMessage()
-            ));
+            throw new CouldNotDeleteException(
+                __('Could not delete the page: %1', $exception->getMessage())
+            );
         }
         return true;
     }
@@ -208,7 +248,7 @@ class PageRepository implements PageRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor'
+                \Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor::class
             );
         }
         return $this->collectionProcessor;

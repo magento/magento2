@@ -12,6 +12,13 @@ use Magento\Framework\Controller\ResultFactory;
 class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::refresh_cache_type';
+
+    /**
      * Mass action for cache refresh
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -30,12 +37,12 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
                 $updatedTypes++;
             }
             if ($updatedTypes > 0) {
-                $this->messageManager->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
+                $this->messageManager->addSuccessMessage(__("%1 cache type(s) refreshed.", $updatedTypes));
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('An error occurred while refreshing cache.'));
+            $this->messageManager->addExceptionMessage($e, __('An error occurred while refreshing cache.'));
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

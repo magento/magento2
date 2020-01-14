@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFilterCustomerByEmail">
+        <annotations>
+            <description>Goes to the Customer grid page. Filter results based on provided Customer Email Address.</description>
+        </annotations>
+        <arguments>
+            <argument name="email" type="string"/>
+        </arguments>
+        
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerIndexPage"/>
+        <waitForPageLoad stepKey="waitToCustomerIndexPageToLoad"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerIndexPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+        <fillField userInput="{{email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+    </actionGroup>
+</actionGroups>

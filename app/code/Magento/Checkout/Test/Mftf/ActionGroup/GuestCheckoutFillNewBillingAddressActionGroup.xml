@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Guest checkout filling billing section -->
+    <actionGroup name="GuestCheckoutFillNewBillingAddressActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer and Address details on the Storefront Checkout page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading3"/>
+        <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestStreet}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutPaymentSection.guestCity}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutPaymentSection.guestRegion}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutPaymentSection.guestPostcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutPaymentSection.guestTelephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+    </actionGroup>
+</actionGroups>

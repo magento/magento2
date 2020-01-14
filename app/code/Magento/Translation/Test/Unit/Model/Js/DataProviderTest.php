@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Framework\App\State;
@@ -89,7 +90,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $themePath = 'blank';
         $areaCode = 'adminhtml';
 
-        $filePaths = [['path1'], ['path2'], ['path3'], ['path4']];
+        $filePaths = [['path1'], ['path2'], ['path4'], ['path3']];
 
         $jsFilesMap = [
             ['base', $themePath, '*', '*', [$filePaths[0]]],
@@ -110,8 +111,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $contentsMap = [
             'content1$.mage.__("hello1")content1',
             'content2$.mage.__("hello2")content2',
+            'content2$.mage.__("hello4")content4', // this value should be last after running data provider
             'content2$.mage.__("hello3")content3',
-            'content2$.mage.__("hello4")content4'
         ];
 
         $translateMap = [
@@ -146,6 +147,47 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('render')
             ->willReturnMap($translateMap);
 
-        $this->assertEquals($expectedResult, $this->model->getData($themePath));
+        $actualResult = $this->model->getData($themePath);
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals(
+            json_encode($expectedResult),
+            json_encode($actualResult),
+            "Translations should be sorted by key"
+        );
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testGetDataThrowingException()
+    {
+        $themePath = 'blank';
+        $areaCode = 'adminhtml';
+
+        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
+
+        $this->fileReadMock->expects($this->once())
+            ->method('readAll')
+            ->willReturn('content1$.mage.__("hello1")content1');
+
+        $this->appStateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn($areaCode);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getJsFiles')
+            ->willReturn(['test']);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getStaticHtmlFiles')
+            ->willReturn(['test']);
+
+        $this->configMock->expects($this->any())
+            ->method('getPatterns')
+            ->willReturn($patterns);
+
+        $this->translateMock->expects($this->once())
+            ->method('render')
+            ->willThrowException(new \Exception('Test exception'));
+
+        $this->model->getData($themePath);
     }
 }

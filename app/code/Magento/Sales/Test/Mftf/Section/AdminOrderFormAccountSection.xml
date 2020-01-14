@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormAccountSection">
+        <element name="group" type="select" selector="#group_id"/>
+        <element name="email" type="input" selector="#email"/>
+        <element name="requiredGroup" type="text" selector=".admin__field.required[data-ui-id='billing-address-fieldset-element-form-field-group-id']"/>
+        <element name="requiredEmail" type="text" selector=".admin__field.required[data-ui-id='billing-address-fieldset-element-form-field-email']"/>
+        <element name="defaultGeneral" type="text" selector="//*[contains(text(),'General')]" timeout="15"/>
+        <element name="emailErrorMessage" type="text" selector="#email-error"/>
+    </section>
+</sections>

@@ -86,7 +86,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->customAttributeTypeLocator = $objectManager
-            ->getObject(\Magento\Eav\Model\EavCustomAttributeTypeLocator::class);
+            ->getObject(\Magento\Eav\Model\TypeLocator::class);
 
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()

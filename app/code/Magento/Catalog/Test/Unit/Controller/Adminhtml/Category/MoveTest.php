@@ -115,7 +115,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
             ->willReturn($messageBlock);
-        $wysiwigConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
+        $wysiwygConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registry = $this->getMockBuilder(Registry::class)
@@ -134,13 +134,10 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
-            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwigConfig]]);
+            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
         $categoryMock->expects($this->once())
             ->method('move')
-            ->willThrowException(new \Exception(
-                __('Some exception')
-            ));
+            ->willThrowException(new \Exception(__('Some exception')));
         $this->messageManager->expects($this->once())
             ->method('addErrorMessage')
             ->with(__('There was a category move error.'));
@@ -173,7 +170,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->moveController->execute());
     }
 
-    public function testExecuteWithLocaliedException()
+    public function testExecuteWithLocalizedException()
     {
         $exceptionMessage = 'Sorry, but we can\'t find the new category you selected.';
         $messagesCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
@@ -189,7 +186,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
             ->willReturn($messageBlock);
-        $wysiwigConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
+        $wysiwygConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registry = $this->getMockBuilder(Registry::class)
@@ -208,8 +205,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
-            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwigConfig]]);
+            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
         $this->messageManager->expects($this->once())
             ->method('addExceptionMessage');
         $this->messageManager->expects($this->once())
@@ -236,9 +232,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $categoryMock->expects($this->once())
             ->method('move')
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(
-                __($exceptionMessage)
-            ));
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)));
         $this->resultJsonFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -246,7 +240,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->moveController->execute());
     }
 
-    public function testSuccessfullCategorySave()
+    public function testSuccessfulCategorySave()
     {
         $messagesCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
             ->disableOriginalConstructor()
@@ -261,7 +255,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
             ->willReturn($messageBlock);
-        $wysiwigConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
+        $wysiwygConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registry = $this->getMockBuilder(Registry::class)
@@ -280,8 +274,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
-            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwigConfig]]);
+            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->with(true)

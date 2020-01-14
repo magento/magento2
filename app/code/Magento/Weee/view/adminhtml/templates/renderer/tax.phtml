@@ -4,32 +4,31 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <?php
 /** @var $block \Magento\Weee\Block\Renderer\Weee\Tax */
 $data = ['fptAttribute' => [
-    'region' => $this->helper('Magento\Framework\Json\Helper\Data')->jsonDecode(
-        $this->helper('Magento\Directory\Helper\Data')->getRegionJson()
+    'region' => $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode(
+        $this->helper(\Magento\Directory\Helper\Data::class)->getRegionJson()
     ),
     'itemsData' => $block->getValues(),
     'bundlePriceType' => '#price_type',
 ]];
 ?>
-<div id="attribute-<?= $block->getElement()->getHtmlId() ?>-container" class="field"
-     data-attribute-code="<?= $block->getElement()->getHtmlId() ?>"
-     data-mage-init="<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)) ?>">
-    <label class="label"><span><?= /* @escapeNotVerified */ $block->getElement()->getLabel() ?></span></label>
+<div id="attribute-<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>-container" class="field"
+     data-attribute-code="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>"
+     data-mage-init="<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($data) ?>">
+    <label class="label"><span><?= $block->escapeHtml($block->getElement()->getLabel()) ?></span></label>
 
     <div class="control">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none;"<?php endif; ?>><?= /* @escapeNotVerified */ __('Website') ?></th>
-                    <th class="col-country required"><?= /* @escapeNotVerified */ __('Country/State') ?></th>
-                    <th class="col-tax required"><?= /* @escapeNotVerified */ __('Tax') ?></th>
-                    <th class="col-action"><?= /* @escapeNotVerified */ __('Action') ?></th>
+                    <th class="col-website" <?php if (!$block->isMultiWebsites()) : ?>style="display: none;"<?php endif; ?>><?= $block->escapeHtml(__('Website')) ?></th>
+                    <th class="col-country required"><?= $block->escapeHtml(__('Country/State')) ?></th>
+                    <th class="col-tax required"><?= $block->escapeHtml(__('Tax')) ?></th>
+                    <th class="col-action"><?= $block->escapeHtml(__('Action')) ?></th>
                 </tr>
             </thead>
             <tfoot>
@@ -44,41 +43,45 @@ $data = ['fptAttribute' => [
             Hidden field below with attribute code id is necessary for jQuery validation plugin.
             Validation message will be displayed after this field.
         -->
-        <input type="hidden" name="<?= $block->getElement()->getHtmlId() ?>" id="<?= $block->getElement()->getHtmlId() ?>" disabled="disabled">
+        <input type="hidden" name="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>" id="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>" disabled="disabled">
     </div>
 
     <script data-role="row-template" type="text/x-magento-template">
-        <tr id="<?= $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
-            <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
-                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_website"
-                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][website_id]"
-                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> website required-entry" data-role="select-website">
-                    <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
-                    <option value="<?= /* @escapeNotVerified */ $_websiteId ?>"><?= /* @escapeNotVerified */ $_info['name'] ?><?php if (!empty($_info['currency'])): ?>[<?= /* @escapeNotVerified */ $_info['currency'] ?>]<?php endif; ?></option>
+        <?php
+            $elementName = $block->escapeHtmlAttr($block->getElement()->getName());
+            $elementClass = $block->escapeHtmlAttr($block->getElement()->getClass());
+        ?>
+        <tr id="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
+            <td class="col-website" <?php if (!$block->isMultiWebsites()) : ?>style="display: none"<?php endif; ?>>
+                <select id="<?= /* @noEscape */ $elementName ?>_weee_tax_row_<%- data.index %>_website"
+                        name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][website_id]"
+                        class="<?= /* @noEscape */ $elementClass ?> website required-entry" data-role="select-website">
+                    <?php foreach ($block->getWebsites() as $_websiteId => $_info) : ?>
+                    <option value="<?= /* @noEscape */ $_websiteId ?>"><?= $block->escapeHtml($_info['name']) ?><?php if (!empty($_info['currency'])) : ?>[<?= /* @noEscape */ $_info['currency'] ?>]<?php endif; ?></option>
                     <?php endforeach ?>
                 </select>
             </td>
             <td class="col-country">
-                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_country"
-                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][country]"
-                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> country required-entry" data-role="select-country">
-                    <?php foreach ($block->getCountries() as $_country): ?>
-                    <option value="<?= /* @escapeNotVerified */ $_country['value'] ?>"><?= /* @escapeNotVerified */ htmlspecialchars($_country['label']) ?></option>
+                <select id="<?= /* @noEscape */ $elementName ?>_weee_tax_row_<%- data.index %>_country"
+                        name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][country]"
+                        class="<?= /* @noEscape */ $elementClass ?> country required-entry" data-role="select-country">
+                    <?php foreach ($block->getCountries() as $_country) : ?>
+                    <option value="<?= $block->escapeHtmlAttr($_country['value']) ?>"><?= $block->escapeHtml($_country['label']) ?></option>
                     <?php endforeach ?>
                 </select>
-                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_state"
-                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][state]"
-                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> state" disabled="" data-role="select-state">
+                <select id="<?= /* @noEscape */ $elementName ?>_weee_tax_row_<%- data.index %>_state"
+                        name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][state]"
+                        class="<?= /* @noEscape */ $elementClass ?> state" disabled="" data-role="select-state">
                     <option value="0">*</option>
                 </select>
             </td>
             <td class="col-tax">
-                <input name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][price]"
-                       class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> required-entry validate-greater-than-zero"
+                <input name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][price]"
+                       class="<?= /* @noEscape */ $elementClass ?> required-entry validate-greater-than-zero"
                        type="text" value="<%- data.value %>"/>
             </td>
             <td class="col-action">
-                <input name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
+                <input name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
                 <?= $block->getChildHtml('delete_button') ?>
             </td>
         </tr>

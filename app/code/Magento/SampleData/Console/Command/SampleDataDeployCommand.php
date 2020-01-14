@@ -12,6 +12,7 @@ use Magento\Setup\Model\PackagesAuth;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -19,6 +20,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SampleDataDeployCommand extends Command
 {
+    const OPTION_NO_UPDATE = 'no-update';
+
     /**
      * @var \Magento\Framework\Filesystem
      */
@@ -65,7 +68,13 @@ class SampleDataDeployCommand extends Command
     protected function configure()
     {
         $this->setName('sampledata:deploy')
-            ->setDescription('Deploy sample data modules');
+            ->setDescription('Deploy sample data modules for composer-based Magento installations');
+        $this->addOption(
+            self::OPTION_NO_UPDATE,
+            null,
+            InputOption::VALUE_NONE,
+            'Update composer.json without executing composer update'
+        );
         parent::configure();
     }
 
@@ -74,12 +83,21 @@ class SampleDataDeployCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $rootJson = json_decode($this->filesystem->getDirectoryRead(DirectoryList::ROOT)->readFile("composer.json"));
+        if (!isset($rootJson->version)) {
+            // @codingStandardsIgnoreLine
+            $output->writeln('<info>' . 'Git installations must deploy sample data from GitHub; see https://devdocs.magento.com/guides/v2.3/install-gde/install/sample-data-after-clone.html for more information.' . '</info>');
+            return;
+        }
         $this->updateMemoryLimit();
         $this->createAuthFile();
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();
         if (!empty($sampleDataPackages)) {
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
             $commonArgs = ['--working-dir' => $baseDir, '--no-progress' => 1];
+            if ($input->getOption(self::OPTION_NO_UPDATE)) {
+                $commonArgs['--no-update'] = 1;
+            }
             $packages = [];
             foreach ($sampleDataPackages as $name => $version) {
                 $packages[] = "$name:$version";
@@ -136,8 +154,8 @@ class SampleDataDeployCommand extends Command
         if (function_exists('ini_set')) {
             @ini_set('display_errors', 1);
             $memoryLimit = trim(ini_get('memory_limit'));
-            if ($memoryLimit != -1 && $this->getMemoryInBytes($memoryLimit) < 768 * 1024 * 1024) {
-                @ini_set('memory_limit', '768M');
+            if ($memoryLimit != -1 && $this->getMemoryInBytes($memoryLimit) < 756 * 1024 * 1024) {
+                @ini_set('memory_limit', '756M');
             }
         }
     }

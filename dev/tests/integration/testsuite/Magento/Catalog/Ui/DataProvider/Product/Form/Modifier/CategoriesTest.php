@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
@@ -29,6 +30,8 @@ class CategoriesTest extends \PHPUnit\Framework\TestCase
         $store = $objectManager->create(\Magento\Store\Model\Store::class);
         $store->load('admin');
         $registry->register('current_store', $store);
+        $product = $objectManager->create(Product::class);
+        $registry->register('current_product', $product);
         $this->object = $objectManager->create(Categories::class);
     }
 

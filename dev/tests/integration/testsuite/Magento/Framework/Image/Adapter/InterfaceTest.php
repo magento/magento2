@@ -338,6 +338,97 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test if alpha transparency is correctly handled
+     *
+     * @param string $image
+     * @param string $watermark
+     * @param int $alphaPercentage
+     * @param array $comparePoint1
+     * @param array $comparePoint2
+     * @param string $adapterType
+     *
+     * @dataProvider imageWatermarkWithAlphaTransparencyDataProvider
+     * @depends testOpen
+     * @depends testImageSize
+     */
+    public function testWatermarkWithAlphaTransparency(
+        $image,
+        $watermark,
+        $alphaPercentage,
+        $comparePoint1,
+        $comparePoint2,
+        $adapterType
+    ) {
+        $imageAdapter = $this->_getAdapter($adapterType);
+        $imageAdapter->open($image);
+
+        $watermarkAdapter = $this->_getAdapter($adapterType);
+        $watermarkAdapter->open($watermark);
+
+        list($comparePoint1X, $comparePoint1Y) = $comparePoint1;
+        list($comparePoint2X, $comparePoint2Y) = $comparePoint2;
+
+        $imageAdapter
+            ->setWatermarkImageOpacity($alphaPercentage)
+            ->setWatermarkPosition(\Magento\Framework\Image\Adapter\AbstractAdapter::POSITION_TOP_LEFT)
+            ->watermark($watermark);
+
+        $comparePoint1Color = $imageAdapter->getColorAt($comparePoint1X, $comparePoint1Y);
+        unset($comparePoint1Color['alpha']);
+
+        $comparePoint2Color = $imageAdapter->getColorAt($comparePoint2X, $comparePoint2Y);
+        unset($comparePoint2Color['alpha']);
+
+        $result = $this->_compareColors($comparePoint1Color, $comparePoint2Color);
+        $message = sprintf(
+            '%s should be different to %s due to alpha transparency',
+            join(',', $comparePoint1Color),
+            join(',', $comparePoint2Color)
+        );
+        $this->assertFalse($result, $message);
+    }
+
+    public function imageWatermarkWithAlphaTransparencyDataProvider()
+    {
+        return $this->_prepareData(
+            [
+                // Watermark with alpha channel, 25%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark_alpha.png'),
+                    25,
+                    [ 23, 3 ],
+                    [ 23, 30 ]
+                ],
+                // Watermark with alpha channel, 50%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark_alpha.png'),
+                    50,
+                    [ 23, 3 ],
+                    [ 23, 30 ]
+                ],
+                // Watermark with no alpha channel, 50%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark.png'),
+                    50,
+                    [ 3, 3 ],
+                    [ 23,3 ]
+                ],
+                // Watermark with no alpha channel, 100%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark.png'),
+                    100,
+                    [ 3, 3 ],
+                    [ 3, 60 ]
+                ],
+            ]
+        );
+    }
+
+    /**
      * Checks if watermark exists on the right position
      *
      * @param string $image
@@ -350,10 +441,10 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param int $colorY
      * @param string $adapterType
      *
-     * @dataProvider imageWatermarkDataProvider
+     * @dataProvider imageWatermarkPositionDataProvider
      * @depends testOpen
      */
-    public function testWatermark(
+    public function testWatermarkPosition(
         $image,
         $watermark,
         $width,
@@ -387,7 +478,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result, $message);
     }
 
-    public function imageWatermarkDataProvider()
+    public function imageWatermarkPositionDataProvider()
     {
         return $this->_prepareData(
             [
@@ -612,12 +703,47 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider testValidateUploadFileExceptionDataProvider
      * @expectedException \InvalidArgumentException
+     * @param string $fileName
+     * @param string $expectedErrorMsg
+     * @param bool $useFixture
      */
-    public function testValidateUploadFileException()
+    public function testValidateUploadFileException($fileName, $expectedErrorMsg, $useFixture)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
-        $imageAdapter->validateUploadFile(__FILE__);
+        $filePath = $useFixture ? $this->_getFixture($fileName) : $fileName;
+
+        try {
+            $imageAdapter->validateUploadFile($filePath);
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals($expectedErrorMsg, $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function testValidateUploadFileExceptionDataProvider()
+    {
+        return [
+            'image_notfound' => [
+                'fileName' => 'notfound.png',
+                'expectedErrorMsg' => 'Upload file does not exist.',
+                'useFixture' => false
+            ],
+            'image_empty' => [
+                'fileName' => 'empty.png',
+                'expectedErrorMsg' => 'Wrong file size.',
+                'useFixture' => true
+            ],
+            'notanimage' => [
+                'fileName' => 'notanimage.txt',
+                'expectedErrorMsg' => 'Disallowed file type.',
+                'useFixture' => true
+            ]
+        ];
     }
 }

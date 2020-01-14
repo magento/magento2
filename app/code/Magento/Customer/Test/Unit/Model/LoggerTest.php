@@ -71,7 +71,8 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         $data = array_filter($data);
 
         if (!$data) {
-            $this->expectException('\InvalidArgumentException', 'Log data is empty');
+            $this->expectException('\InvalidArgumentException');
+            $this->expectExceptionMessage('Log data is empty');
             $this->logger->log($customerId, $data);
             return;
         }

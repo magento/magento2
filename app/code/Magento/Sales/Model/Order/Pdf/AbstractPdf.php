@@ -4,18 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Model\Order\Pdf;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Sales Order PDF abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 abstract class AbstractPdf extends \Magento\Framework\DataObject
@@ -119,6 +120,16 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected $addressRenderer;
 
     /**
+     * @var array $pageSettings
+     */
+    private $pageSettings;
+
+    /**
+     * @var Database
+     */
+    private $fileStorageDatabase;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -130,6 +141,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
+     * @param Database $fileStorageDatabase
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -143,7 +155,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
-        array $data = []
+        array $data = [],
+        Database $fileStorageDatabase = null
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -156,12 +169,13 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
+        $this->fileStorageDatabase = $fileStorageDatabase ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
         parent::__construct($data);
     }
 
     /**
-     * Returns the total width in points of the string using the specified font and
-     * size.
+     * Returns the total width in points of the string using the specified font and size.
      *
      * This is not the most efficient way to perform this calculation. I'm
      * concentrating optimization efforts on the upcoming layout manager class.
@@ -175,10 +189,12 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      */
     public function widthForStringUsingFontSize($string, $font, $fontSize)
     {
+        // phpcs:ignore Generic.PHP.NoSilencedErrors
         $drawingString = '"libiconv"' == ICONV_IMPL ? iconv(
             'UTF-8',
             'UTF-16BE//IGNORE',
             $string
+        // phpcs:ignore Generic.PHP.NoSilencedErrors
         ) : @iconv(
             'UTF-8',
             'UTF-16BE',
@@ -186,7 +202,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         );
 
         $characters = [];
-        for ($i = 0; $i < strlen($drawingString); $i++) {
+
+        $drawingStringLength = strlen($drawingString);
+
+        for ($i = 0; $i < $drawingStringLength; $i++) {
             $characters[] = ord($drawingString[$i++]) << 8 | ord($drawingString[$i]);
         }
         $glyphs = $font->glyphNumbersForCharacters($characters);
@@ -227,14 +246,14 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $width = $this->widthForStringUsingFontSize($string, $font, $fontSize);
         return $x + round(($columnWidth - $width) / 2);
     }
-
     /**
      * Insert logo to pdf page
      *
-     * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param \Zend_Pdf_Page $page
+     * @param string|null $store
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Zend_Pdf_Exception
      */
     protected function insertLogo(&$page, $store = null)
     {
@@ -246,6 +265,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         );
         if ($image) {
             $imagePath = '/sales/store/logo/' . $image;
+            if ($this->fileStorageDatabase->checkDbUsage() &&
+                !$this->_mediaDirectory->isFile($imagePath)
+            ) {
+                $this->fileStorageDatabase->saveFileToFilesystem($imagePath);
+            }
             if ($this->_mediaDirectory->isFile($imagePath)) {
                 $image = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
                 $top = 830;
@@ -286,8 +310,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     /**
      * Insert address to pdf page
      *
-     * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param \Zend_Pdf_Page $page
+     * @param string|null $store
      * @return void
      */
     protected function insertAddress(&$page, $store = null)
@@ -297,14 +321,15 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $page->setLineWidth(0);
         $this->y = $this->y ? $this->y : 815;
         $top = 815;
-        foreach (explode(
-                     "\n",
-                     $this->_scopeConfig->getValue(
-                         'sales/identity/address',
-                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                         $store
-                     )
-                 ) as $value) {
+        $values = explode(
+            "\n",
+            $this->_scopeConfig->getValue(
+                'sales/identity/address',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            )
+        );
+        foreach ($values as $value) {
             if ($value !== '') {
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
@@ -366,9 +391,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     }
 
     /**
-     * Insert order to pdf page
+     * Insert order to pdf page.
      *
-     * @param \Zend_Pdf_Page &$page
+     * @param \Zend_Pdf_Page $page
      * @param \Magento\Sales\Model\Order $obj
      * @param bool $putOrderId
      * @return void
@@ -444,7 +469,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         /* Shipping Address and Method */
         if (!$order->getIsVirtual()) {
             /* Shipping Address */
-            $shippingAddress = $this->_formatAddress($this->addressRenderer->format($order->getShippingAddress(), 'pdf'));
+            $shippingAddress = $this->_formatAddress(
+                $this->addressRenderer->format($order->getShippingAddress(), 'pdf')
+            );
             $shippingMethod = $order->getShippingDescription();
         }
 
@@ -511,7 +538,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $this->y -= 15;
             $this->_setFontBold($page, 12);
             $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
-            $page->drawText(__('Payment Method'), 35, $this->y, 'UTF-8');
+            $page->drawText(__('Payment Method:'), 35, $this->y, 'UTF-8');
             $page->drawText(__('Shipping Method:'), 285, $this->y, 'UTF-8');
 
             $this->y -= 10;
@@ -557,11 +584,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             }
 
             $yShipments = $this->y;
-            $totalShippingChargesText = "(" . __(
-                    'Total Shipping Charges'
-                ) . " " . $order->formatPriceTxt(
-                    $order->getShippingAmount()
-                ) . ")";
+            $totalShippingChargesText = "("
+                . __('Total Shipping Charges')
+                . " "
+                . $order->formatPriceTxt($order->getShippingAmount())
+                . ")";
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;
@@ -640,11 +667,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             return 0;
         }
 
-        if ($a['sort_order'] == $b['sort_order']) {
-            return 0;
-        }
-
-        return $a['sort_order'] > $b['sort_order'] ? 1 : -1;
+        return $a['sort_order'] <=> $b['sort_order'];
     }
 
     /**
@@ -804,7 +827,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid renderer model.'));
         }
 
-        if (is_null($this->_renderers[$type]['renderer'])) {
+        if ($this->_renderers[$type]['renderer'] === null) {
             $this->_renderers[$type]['renderer'] = $this->_pdfItemsFactory->get($this->_renderers[$type]['model']);
         }
 
@@ -832,8 +855,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param  \Magento\Sales\Model\Order $order
      * @return \Zend_Pdf_Page
      */
-    protected function _drawItem(\Magento\Framework\DataObject $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
-    {
+    protected function _drawItem(
+        \Magento\Framework\DataObject $item,
+        \Zend_Pdf_Page $page,
+        \Magento\Sales\Model\Order $order
+    ) {
         $type = $item->getOrderItem()->getProductType();
         $renderer = $this->_getRenderer($type);
         $renderer->setOrder($order);
@@ -857,7 +883,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontRegular($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerif.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -873,7 +899,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontBold($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifBold.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -889,7 +915,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontItalic($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_It-2.8.2.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifItalic.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -954,7 +980,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * font         string; font style, optional: bold, italic, regular
      * font_file    string; path to font file (optional for use your custom font)
      * font_size    int; font size (default 7)
-     * align        string; text align (also see feed parametr), optional left, right
+     * align        string; text align (also see feed parameter), optional left, right
      * height       int;line spacing (default 10)
      *
      * @param  \Zend_Pdf_Page $page
@@ -965,9 +991,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function drawLineBlocks(\Zend_Pdf_Page $page, array $draw, array $pageSettings = [])
     {
+        $this->pageSettings = $pageSettings;
         foreach ($draw as $itemsProp) {
             if (!isset($itemsProp['lines']) || !is_array($itemsProp['lines'])) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -976,7 +1004,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             }
             $lines = $itemsProp['lines'];
             $height = isset($itemsProp['height']) ? $itemsProp['height'] : 10;
-
             if (empty($itemsProp['shift'])) {
                 $shift = 0;
                 foreach ($lines as $line) {
@@ -987,6 +1014,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                             $column['text'] = [$column['text']];
                         }
                         $top = 0;
+                        //
                         foreach ($column['text'] as $part) {
                             $top += $lineSpacing;
                         }
@@ -1001,69 +1029,99 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             if ($this->y - $itemsProp['shift'] < 15) {
                 $page = $this->newPage($pageSettings);
             }
-
-            foreach ($lines as $line) {
-                $maxHeight = 0;
-                foreach ($line as $column) {
-                    $fontSize = empty($column['font_size']) ? 10 : $column['font_size'];
-                    if (!empty($column['font_file'])) {
-                        $font = \Zend_Pdf_Font::fontWithPath($column['font_file']);
-                        $page->setFont($font, $fontSize);
-                    } else {
-                        $fontStyle = empty($column['font']) ? 'regular' : $column['font'];
-                        switch ($fontStyle) {
-                            case 'bold':
-                                $font = $this->_setFontBold($page, $fontSize);
-                                break;
-                            case 'italic':
-                                $font = $this->_setFontItalic($page, $fontSize);
-                                break;
-                            default:
-                                $font = $this->_setFontRegular($page, $fontSize);
-                                break;
-                        }
-                    }
-
-                    if (!is_array($column['text'])) {
-                        $column['text'] = [$column['text']];
-                    }
-
-                    $lineSpacing = !empty($column['height']) ? $column['height'] : $height;
-                    $top = 0;
-                    foreach ($column['text'] as $part) {
-                        if ($this->y - $lineSpacing < 15) {
-                            $page = $this->newPage($pageSettings);
-                        }
-
-                        $feed = $column['feed'];
-                        $textAlign = empty($column['align']) ? 'left' : $column['align'];
-                        $width = empty($column['width']) ? 0 : $column['width'];
-                        switch ($textAlign) {
-                            case 'right':
-                                if ($width) {
-                                    $feed = $this->getAlignRight($part, $feed, $width, $font, $fontSize);
-                                } else {
-                                    $feed = $feed - $this->widthForStringUsingFontSize($part, $font, $fontSize);
-                                }
-                                break;
-                            case 'center':
-                                if ($width) {
-                                    $feed = $this->getAlignCenter($part, $feed, $width, $font, $fontSize);
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        $page->drawText($part, $feed, $this->y - $top, 'UTF-8');
-                        $top += $lineSpacing;
-                    }
-
-                    $maxHeight = $top > $maxHeight ? $top : $maxHeight;
-                }
-                $this->y -= $maxHeight;
-            }
+            $this->correctLines($lines, $page, $height);
         }
 
         return $page;
+    }
+
+    /**
+     * Correct lines.
+     *
+     * @param array $lines
+     * @param \Zend_Pdf_Page $page
+     * @param int $height
+     * @throws \Zend_Pdf_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function correctLines($lines, $page, $height) :void
+    {
+        foreach ($lines as $line) {
+            $maxHeight = 0;
+            foreach ($line as $column) {
+                $fontSize = empty($column['font_size']) ? 10 : $column['font_size'];
+                if (!empty($column['font_file'])) {
+                    $font = \Zend_Pdf_Font::fontWithPath($column['font_file']);
+                    $page->setFont($font, $fontSize);
+                } else {
+                    $fontStyle = empty($column['font']) ? 'regular' : $column['font'];
+                    switch ($fontStyle) {
+                        case 'bold':
+                            $font = $this->_setFontBold($page, $fontSize);
+                            break;
+                        case 'italic':
+                            $font = $this->_setFontItalic($page, $fontSize);
+                            break;
+                        default:
+                            $font = $this->_setFontRegular($page, $fontSize);
+                            break;
+                    }
+                }
+
+                if (!is_array($column['text'])) {
+                    $column['text'] = [$column['text']];
+                }
+                $top = $this->correctText($column, $height, $font, $page);
+
+                $maxHeight = $top > $maxHeight ? $top : $maxHeight;
+            }
+            $this->y -= $maxHeight;
+        }
+    }
+
+    /**
+     * Correct text.
+     *
+     * @param array $column
+     * @param int $height
+     * @param \Zend_Pdf_Resource_Font $font
+     * @param \Zend_Pdf_Page $page
+     * @throws \Zend_Pdf_Exception
+     * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function correctText($column, $height, $font, $page) :int
+    {
+        $top = 0;
+        $lineSpacing = !empty($column['height']) ? $column['height'] : $height;
+        $fontSize = empty($column['font_size']) ? 10 : $column['font_size'];
+        foreach ($column['text'] as $part) {
+            if ($this->y - $lineSpacing < 15) {
+                $page = $this->newPage($this->pageSettings);
+            }
+
+            $feed = $column['feed'];
+            $textAlign = empty($column['align']) ? 'left' : $column['align'];
+            $width = empty($column['width']) ? 0 : $column['width'];
+            switch ($textAlign) {
+                case 'right':
+                    if ($width) {
+                        $feed = $this->getAlignRight($part, $feed, $width, $font, $fontSize);
+                    } else {
+                        $feed = $feed - $this->widthForStringUsingFontSize($part, $font, $fontSize);
+                    }
+                    break;
+                case 'center':
+                    if ($width) {
+                        $feed = $this->getAlignCenter($part, $feed, $width, $font, $fontSize);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            $page->drawText($part, $feed, $this->y - $top, 'UTF-8');
+            $top += $lineSpacing;
+        }
+        return $top;
     }
 }

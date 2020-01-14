@@ -99,7 +99,8 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
                 'setIsOtherSessionsTerminated',
                 'save',
                 'getUserId',
-                'getSessionId'
+                'getSessionId',
+                'getUpdatedAt'
             ]);
 
         $this->securityConfigMock = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
@@ -216,7 +217,8 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
     public function testProcessProlong()
     {
         $sessionId = 50;
-        $updatedAt = '2015-12-31 23:59:59';
+        $lastUpdatedAt = '2015-12-31 23:59:59';
+        $newUpdatedAt = '2016-01-01 00:00:30';
 
         $this->adminSessionInfoFactoryMock->expects($this->any())
             ->method('create')
@@ -230,13 +232,21 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->willReturnSelf();
 
-        $this->authSessionMock->expects($this->once())
+        $this->currentSessionMock->expects($this->once())
             ->method('getUpdatedAt')
-            ->willReturn($updatedAt);
+            ->willReturn($lastUpdatedAt);
+
+        $this->authSessionMock->expects($this->exactly(2))
+            ->method('getUpdatedAt')
+            ->willReturn(strtotime($newUpdatedAt));
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getAdminSessionLifetime')
+            ->willReturn(100);
 
         $this->currentSessionMock->expects($this->once())
             ->method('setData')
-            ->with('updated_at', $updatedAt)
+            ->with('updated_at', $newUpdatedAt)
             ->willReturnSelf();
 
         $this->currentSessionMock->expects($this->once())
@@ -360,7 +370,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT
             ],
             [
-                'expectedResult' => __('Your account is temporarily disabled.'),
+                'expectedResult' => __('Your account is temporarily disabled. Please try again later.'),
                 'sessionStatus' => \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             ],
             [

@@ -130,6 +130,9 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
         $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
+    /**
+     * @return array
+     */
     public function getScriptOptionsDataProvider()
     {
         return [
@@ -193,6 +196,9 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
         $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
+    /**
+     * @return array
+     */
     public function getScriptOptionsPrivateContentDataProvider()
     {
         // @codingStandardsIgnoreStart

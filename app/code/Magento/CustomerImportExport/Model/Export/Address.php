@@ -69,6 +69,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Attributes with index (not label) value
      *
      * @var string[]
+     * @since 100.2.0
      */
     protected $_indexValueAttributes = [self::COLUMN_COUNTRY_ID];
 

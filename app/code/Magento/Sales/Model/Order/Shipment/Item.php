@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\AttributeValueFactory;
@@ -146,7 +144,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Declare qty
      *
      * @param float $qty
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return \Magento\Sales\Model\Order\Shipment\Item
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)

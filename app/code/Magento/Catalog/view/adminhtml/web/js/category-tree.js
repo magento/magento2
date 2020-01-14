@@ -5,9 +5,10 @@
 
 define([
     'jquery',
+    'mageUtils',
     'jquery/ui',
     'jquery/jstree/jquery.jstree'
-], function ($) {
+], function ($, utils) {
     'use strict';
 
     $.widget('mage.categoryTree', {
@@ -36,8 +37,8 @@ define([
                             ajax: {
                                 url: options.url,
                                 type: 'POST',
-                                success: $.proxy(function (node) {
-                                    return this._convertData(node[0]);
+                                success: $.proxy(function (nodes) {
+                                    return this._convertDataNodes(nodes);
                                 }, this),
 
                                 /**
@@ -77,6 +78,21 @@ define([
         },
 
         /**
+         * @param {Array} nodes
+         * @returns {Array}
+         * @private
+         */
+        _convertDataNodes: function (nodes) {
+            var nodesData = [];
+
+            nodes.forEach(function (node) {
+                nodesData.push(this._convertData(node));
+            }, this);
+
+            return nodesData;
+        },
+
+        /**
          * @param {Object} node
          * @return {*}
          * @private
@@ -90,7 +106,7 @@ define([
             }
             result = {
                 data: {
-                    title: node.name + ' (' + node['product_count'] + ')'
+                    title: utils.unescape(node.name) + ' (' + node['product_count'] + ')'
                 },
                 attr: {
                     'class': node.cls + (!!node.disabled ? ' disabled' : '') //eslint-disable-line no-extra-boolean-cast

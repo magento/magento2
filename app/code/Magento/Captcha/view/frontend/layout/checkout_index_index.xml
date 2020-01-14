@@ -36,29 +36,7 @@
                                                                         <item name="captcha" xsi:type="array">
                                                                             <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
                                                                             <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
-                                                                            <item name="formId" xsi:type="string">guest_checkout</item>
-                                                                            <item name="configSource" xsi:type="string">checkoutConfig</item>
-                                                                        </item>
-                                                                    </item>
-                                                                </item>
-                                                            </item>
-                                                        </item>
-                                                    </item>
-                                                </item>
-                                            </item>
-                                        </item>
-                                        <item name="billing-step" xsi:type="array">
-                                            <item name="children" xsi:type="array">
-                                                <item name="payment" xsi:type="array">
-                                                    <item name="children" xsi:type="array">
-                                                        <item name="customer-email" xsi:type="array">
-                                                            <item name="children" xsi:type="array">
-                                                                <item name="additional-login-form-fields" xsi:type="array">
-                                                                    <item name="children" xsi:type="array">
-                                                                        <item name="captcha" xsi:type="array">
-                                                                            <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
-                                                                            <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
-                                                                            <item name="formId" xsi:type="string">guest_checkout</item>
+                                                                            <item name="formId" xsi:type="string">user_login</item>
                                                                             <item name="configSource" xsi:type="string">checkoutConfig</item>
                                                                         </item>
                                                                     </item>

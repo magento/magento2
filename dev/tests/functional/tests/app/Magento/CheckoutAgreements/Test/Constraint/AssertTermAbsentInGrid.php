@@ -26,7 +26,7 @@ class AssertTermAbsentInGrid extends AbstractConstraint
     public function processAssert(CheckoutAgreementIndex $agreementIndex, CheckoutAgreement $agreement)
     {
         $agreementIndex->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $agreementIndex->getAgreementGridBlock()->isRowVisible(['name' => $agreement->getName()]),
             'Checkout Agreement \'' . $agreement->getName() . '\' is present in agreement grid.'
         );

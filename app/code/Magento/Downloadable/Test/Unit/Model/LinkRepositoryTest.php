@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Test\Unit\Model;
 
 use Magento\Downloadable\Model\LinkRepository;
@@ -97,7 +98,9 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Json\EncoderInterface::class
         );
         $this->linkFactoryMock = $this->createPartialMock(\Magento\Downloadable\Model\LinkFactory::class, ['create']);
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            [
                 '__wakeup',
                 'getTypeId',
                 'setDownloadableData',
@@ -106,8 +109,9 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getStoreId',
                 'getStore',
                 'getWebsiteIds',
-                'getData'
-            ]);
+                'getData',
+            ]
+        );
         $this->service = new \Magento\Downloadable\Model\LinkRepository(
             $this->repositoryMock,
             $this->productTypeMock,
@@ -161,7 +165,8 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
                     'getNumberOfDownloads',
                     'getIsShareable',
                     'getLinkUrl',
-                    'getLinkFile'
+                    'getLinkFile',
+                    'hasSampleType',
                 ]
             )
             ->getMockForAbstractClass();
@@ -259,7 +264,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Link title cannot be empty.
+     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
      */
     public function testCreateThrowsExceptionIfTitleIsEmpty()
     {
@@ -308,12 +313,15 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->any())->method('getWebsiteId')->will($this->returnValue($websiteId));
         $this->productMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
-        $existingLinkMock = $this->createPartialMock(\Magento\Downloadable\Model\Link::class, [
+        $existingLinkMock = $this->createPartialMock(
+            \Magento\Downloadable\Model\Link::class,
+            [
                 '__wakeup',
                 'getId',
                 'load',
-                'getProductId'
-            ]);
+                'getProductId',
+            ]
+        );
         $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($existingLinkMock));
         $linkMock = $this->getLinkMock($linkData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkMock)
@@ -370,12 +378,15 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->any())->method('getWebsiteId')->will($this->returnValue($websiteId));
         $this->productMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
-        $existingLinkMock = $this->createPartialMock(\Magento\Downloadable\Model\Link::class, [
+        $existingLinkMock = $this->createPartialMock(
+            \Magento\Downloadable\Model\Link::class,
+            [
                 '__wakeup',
                 'getId',
                 'load',
-                'getProductId'
-            ]);
+                'getProductId',
+            ]
+        );
         $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($existingLinkMock));
         $linkMock = $this->getLinkMock($linkData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkMock)
@@ -421,7 +432,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Link title cannot be empty.
+     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
      */
     public function testUpdateThrowsExceptionIfTitleIsEmptyAndScopeIsGlobal()
     {
@@ -435,6 +446,8 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             'price' => 10.1,
             'number_of_downloads' => 100,
             'is_shareable' => true,
+            'link_type' => 'url',
+            'link_url' => 'https://google.com',
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
             ->will($this->returnValue($this->productMock));
@@ -469,7 +482,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no downloadable link with provided ID.
+     * @expectedExceptionMessage No downloadable link with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfLinkIdIsNotValid()
     {
@@ -500,10 +513,12 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             'sample_file' => '/r/o/rock.melody.ogg',
             'link_type' => 'url',
             'link_url' => 'http://link.url',
-            'link_file' => null
+            'link_file' => null,
         ];
 
-        $linkMock = $this->createPartialMock(\Magento\Downloadable\Model\Link::class, [
+        $linkMock = $this->createPartialMock(
+            \Magento\Downloadable\Model\Link::class,
+            [
                 'getId',
                 'getStoreTitle',
                 'getTitle',
@@ -518,8 +533,9 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getSampleUrl',
                 'getLinkType',
                 'getLinkFile',
-                'getLinkUrl'
-            ]);
+                'getLinkUrl',
+            ]
+        );
 
         $linkInterfaceMock = $this->createMock(\Magento\Downloadable\Api\Data\LinkInterface::class);
 
@@ -539,6 +555,10 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$linkInterfaceMock], $this->service->getList($productSku));
     }
 
+    /**
+     * @param $resource
+     * @param $inputData
+     */
     protected function setLinkAssertions($resource, $inputData)
     {
         $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));

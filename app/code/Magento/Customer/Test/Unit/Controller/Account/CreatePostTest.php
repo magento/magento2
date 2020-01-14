@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -154,7 +152,9 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
 
         $this->customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerDetailsMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $this->customerDetailsFactoryMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
+        $this->customerDetailsFactoryMock = $this->createMock(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+        );
 
         $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -168,7 +168,10 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
         $formFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
 
         $this->subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
-        $subscriberFactoryMock = $this->createPartialMock(\Magento\Newsletter\Model\SubscriberFactory::class, ['create']);
+        $subscriberFactoryMock = $this->createPartialMock(
+            \Magento\Newsletter\Model\SubscriberFactory::class,
+            ['create']
+        );
         $subscriberFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->subscriberMock));
@@ -184,7 +187,8 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
         $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Framework\Controller\Result\RedirectFactory::class)
+            \Magento\Framework\Controller\Result\RedirectFactory::class
+        )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -342,11 +346,13 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
-                ['password', null, $password],
-                ['password_confirmation', null, $password],
-                ['is_subscribed', false, true],
-            ]);
+            ->willReturnMap(
+                [
+                    ['password', null, $password],
+                    ['password_confirmation', null, $password],
+                    ['is_subscribed', false, true],
+                ]
+            );
 
         $this->customerMock->expects($this->once())
             ->method('setAddresses')
@@ -367,7 +373,7 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($customerId));
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->will($this->returnSelf());
 
@@ -473,11 +479,13 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
-                ['password', null, $password],
-                ['password_confirmation', null, $password],
-                ['is_subscribed', false, true],
-            ]);
+            ->willReturnMap(
+                [
+                    ['password', null, $password],
+                    ['password_confirmation', null, $password],
+                    ['is_subscribed', false, true],
+                ]
+            );
 
         $this->customerMock->expects($this->once())
             ->method('setAddresses')
@@ -498,16 +506,18 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($customerId));
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->will($this->returnSelf());
 
         $this->urlMock->expects($this->any())
             ->method('getUrl')
-            ->willReturnMap([
-                ['*/*/index', ['_secure' => true], $successUrl],
-                ['*/*/create', ['_secure' => true], $successUrl],
-            ]);
+            ->willReturnMap(
+                [
+                    ['*/*/index', ['_secure' => true], $successUrl],
+                    ['*/*/create', ['_secure' => true], $successUrl],
+                ]
+            );
         $this->redirectMock->expects($this->once())
             ->method('success')
             ->with($this->equalTo($successUrl))
@@ -529,6 +539,9 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
         $this->model->execute();
     }
 
+    /**
+     * @return array
+     */
     public function getSuccessRedirectDataProvider()
     {
         return [

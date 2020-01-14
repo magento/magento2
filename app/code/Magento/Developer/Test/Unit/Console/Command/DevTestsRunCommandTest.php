@@ -4,34 +4,101 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Developer\Test\Unit\Console\Command;
+// @codingStandardsIgnoreStart
 
-use Magento\Developer\Console\Command\DevTestsRunCommand;
-use Symfony\Component\Console\Tester\CommandTester;
+namespace Magento\Developer\Console\Command {
+    use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * Class DevTestsRunCommandTest
- *
- * Tests dev:tests:run command.  Only tests error case because DevTestsRunCommand calls phpunit with
- * passthru, so there is no good way to mock out running the tests.
- */
-class DevTestsRunCommandTest extends \PHPUnit\Framework\TestCase
-{
+    $devTestsRunCommandTestPassthruReturnVar = null;
 
     /**
-     * @var DevTestsRunCommand
+     * Mock for PHP builtin passthtru function
+     *
+     * @param string $command
+     * @param int|null $return_var
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private $command;
-
-    protected function setUp()
+    function passthru($command, &$return_var = null)
     {
-        $this->command = new DevTestsRunCommand();
+        global $devTestsRunCommandTestPassthruReturnVar;
+        $return_var = $devTestsRunCommandTestPassthruReturnVar;
     }
 
-    public function testExecuteBadType()
+    /**
+     * Class DevTestsRunCommandTest
+     *
+     * Tests dev:tests:run command.  Only tests error case because DevTestsRunCommand calls phpunit with
+     * passthru, so there is no good way to mock out running the tests.
+     */
+    class DevTestsRunCommandTest extends \PHPUnit\Framework\TestCase
     {
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute([DevTestsRunCommand::INPUT_ARG_TYPE => 'bad']);
-        $this->assertContains('Invalid type: "bad"', $commandTester->getDisplay());
+
+        /**
+         * @var DevTestsRunCommand
+         */
+        private $command;
+
+        protected function setUp()
+        {
+            $this->command = new DevTestsRunCommand();
+        }
+
+        public function testExecuteBadType()
+        {
+            $commandTester = new CommandTester($this->command);
+            $commandTester->execute([DevTestsRunCommand::INPUT_ARG_TYPE => 'bad']);
+            $this->assertContains('Invalid type: "bad"', $commandTester->getDisplay());
+        }
+
+        public function testPassArgumentsToPHPUnit()
+        {
+            global $devTestsRunCommandTestPassthruReturnVar;
+
+            $devTestsRunCommandTestPassthruReturnVar = 0;
+
+            $commandTester = new CommandTester($this->command);
+            $commandTester->execute(
+                [
+                    DevTestsRunCommand::INPUT_ARG_TYPE => 'unit',
+                    '-' . DevTestsRunCommand::INPUT_OPT_COMMAND_ARGUMENTS_SHORT => '--list-suites',
+                ]
+            );
+            $this->assertContains(
+                'phpunit  --list-suites',
+                $commandTester->getDisplay(),
+                'Parameters should be passed to PHPUnit'
+            );
+            $this->assertContains(
+                'PASSED (',
+                $commandTester->getDisplay(),
+                'PHPUnit runs should have passed'
+            );
+        }
+
+        public function testPassArgumentsToPHPUnitNegative()
+        {
+            global $devTestsRunCommandTestPassthruReturnVar;
+
+            $devTestsRunCommandTestPassthruReturnVar = 255;
+
+            $commandTester = new CommandTester($this->command);
+            $commandTester->execute(
+                [
+                    DevTestsRunCommand::INPUT_ARG_TYPE => 'unit',
+                    '-' . DevTestsRunCommand::INPUT_OPT_COMMAND_ARGUMENTS_SHORT => '--list-suites',
+                ]
+            );
+            $this->assertContains(
+                'phpunit  --list-suites',
+                $commandTester->getDisplay(),
+                'Parameters should be passed to PHPUnit'
+            );
+            $this->assertContains(
+                'FAILED - ',
+                $commandTester->getDisplay(),
+                'PHPUnit runs should have passed'
+            );
+        }
     }
 }

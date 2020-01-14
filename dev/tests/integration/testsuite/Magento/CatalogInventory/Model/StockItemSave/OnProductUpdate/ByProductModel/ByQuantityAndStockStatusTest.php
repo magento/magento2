@@ -44,6 +44,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
      * model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveBySetQuantityAndStockStatus()
     {
@@ -60,6 +61,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
      * via product model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveBySetData()
     {

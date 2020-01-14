@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CustomVariableSection">
+        <element name="GridCustomVariableCode" type="text" selector=".//*[@id='customVariablesGrid_table']/tbody//tr//td[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="variableCode" type="input" selector="#code"/>
+        <element name="variableName" type="input" selector="#name"/>
+        <element name="variableHTML" type="input" selector="#html_value"/>
+        <element name="variablePlain" type="input" selector="#plain_value"/>
+        <element name="saveCustomVariable" type="button" selector="#save"/>
+        <element name="delete" type="button" selector="#delete"/>
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept"/>
+    </section>
+</sections>

@@ -36,7 +36,7 @@ class AssertProductAttributeIsUsedPromoRules extends AbstractConstraint
 
         /** @var Conditions $conditionsSection */
         $conditionsSection = $catalogRuleNew->getEditForm()->getSection('conditions');
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $conditionsSection->isAttributeInConditions($attribute),
             'Product attribute can\'t be used on promo rules conditions.'
         );

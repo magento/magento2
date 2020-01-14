@@ -96,6 +96,7 @@ Phrase,Phrase
 testMessage,testMessage
 Edit,Edit
 "We found no files.","We found no files."
+"thumbnail","thumbnail"
 "Browse Files","Browse Files"
 Scope:,Scope:
 Remove,Remove
@@ -107,7 +108,7 @@ Remove,Remove
 "For the best experience on our site, be sure to turn on Javascript in your browser.","For the best experience on our site, be sure to turn on Javascript in your browser."
 "Local Storage seems to be disabled in your browser.","Local Storage seems to be disabled in your browser."
 "For the best experience on our site, be sure to turn on Local Storage in your browser.","For the best experience on our site, be sure to turn on Local Storage in your browser."
-"This is demo store. No orders will be fulfilled.","This is demo store. No orders will be fulfilled."
+"This is a demo store. No orders will be fulfilled.","This is a demo store. No orders will be fulfilled."
 "Items %1 to %2 of %3 total","Items %1 to %2 of %3 total"
 "%1 Item","%1 Item"
 "%1 Item(s)","%1 Item(s)"
@@ -142,11 +143,12 @@ Empty,Empty
 "1 column","1 column"
 Configuration,Configuration
 "Default welcome msg!","Default welcome msg!"
-"Copyright © 2013-2017 Magento, Inc. All rights reserved.","Copyright © 2013-2017 Magento, Inc. All rights reserved."
+"Copyright © 2013-present Magento, Inc. All rights reserved.","Copyright © 2013-present Magento, Inc. All rights reserved."
 "Design Config Grid","Design Config Grid"
 "Rebuild design config grid index","Rebuild design config grid index"
 "Admin empty","Admin empty"
 "Admin 1column","Admin 1column"
+"Admin 2 columns with left bar","Admin 2 columns with left bar"
 "Theme Information","Theme Information"
 "Other Settings","Other Settings"
 "HTML Head","HTML Head"
@@ -185,3 +187,7 @@ Settings,Settings
 "2 columns with left bar","2 columns with left bar"
 "2 columns with right bar","2 columns with right bar"
 "3 columns","3 columns"
+ID,ID
+View,View
+Action,Action
+"Display Report Bugs Link","Display Report Bugs Link"

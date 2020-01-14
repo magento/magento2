@@ -118,7 +118,7 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
     protected function assertAbsentCrossSellSection()
     {
         $this->checkoutCart->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $this->checkoutCart->getCrosssellBlock()->isVisible(),
             "Cross-sell block is present."
         );
@@ -145,7 +145,7 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
 
         sort($productNames);
         sort($pageProductNames);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $productNames,
             $pageProductNames,
             'Wrong products are displayed in cross-sell section.'

@@ -26,12 +26,8 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
                 throw new \Exception('Attribute "name" is required for module node.');
             }
             $moduleData['name'] = $nameNode->nodeValue;
-            $name = $moduleData['name'];
             $versionNode = $moduleAttributes->getNamedItem('setup_version');
-            if ($versionNode === null) {
-                throw new \Exception("Attribute 'setup_version' is missing for module '{$name}'.");
-            }
-            $moduleData['setup_version'] = $versionNode->nodeValue;
+            $moduleData['setup_version'] = $versionNode ? $versionNode->nodeValue : null;
             $moduleData['sequence'] = [];
             /** @var $childNode \DOMNode */
             foreach ($moduleNode->childNodes as $childNode) {

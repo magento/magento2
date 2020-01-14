@@ -20,7 +20,10 @@ define([
             loading:        false,
             visible:        true,
             template:       'ui/content/content',
-            additionalClasses: {}
+            additionalClasses: {},
+            ignoreTmpls: {
+                content: true
+            }
         },
 
         /**

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteImageFromStorageActionGroup">
+        <annotations>
+            <description>Deletes the provided Image from Storage.</description>
+        </annotations>
+        <arguments>
+            <argument name="Image"/>
+        </arguments>
+        
+        <waitForElementVisible selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForInitialImages"/>
+        <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="initialImages"/>
+        <waitForElementVisible selector="{{MediaGallerySection.lastImageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForLastImage"/>
+        <click selector="{{MediaGallerySection.lastImageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="selectImage"/>
+        <waitForElementVisible selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="waitForDeleteBtn"/>
+        <click selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{MediaGallerySection.confirmDelete}}" stepKey="waitForConfirmBtn"/>
+        <click selector="{{MediaGallerySection.confirmDelete}}" stepKey="clickConfirmBtn"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="newImages"/>
+        
+        <assertLessThan stepKey="assertLessImages">
+            <expectedResult type="variable">initialImages</expectedResult>
+            <actualResult type="variable">newImages</actualResult>
+        </assertLessThan>
+    </actionGroup>
+</actionGroups>

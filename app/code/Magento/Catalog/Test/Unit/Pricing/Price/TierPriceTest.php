@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\TierPrice;
@@ -81,7 +79,10 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     {
         $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
 
-        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup']);
+        $this->product = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup']
+        );
         $this->product->expects($this->any())->method('getPriceInfo')->will($this->returnValue($this->priceInfo));
         $this->customerGroupRetriever = $this->getMockBuilder(\Magento\Customer\Model\Group\RetrieverInterface::class)
             ->disableOriginalConstructor()->getMock();
@@ -119,11 +120,12 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $convertedExpectedValue = $expectedValue - 1;
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
-                function ($arg) {
-                    return $arg -1;
-                }
-            )
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        return $arg -1;
+                    }
+                )
             );
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
         $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
@@ -264,11 +266,12 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($price);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
-                function ($arg) {
-                    return round(0.5 * $arg, 2);
-                }
-            )
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        return round(0.5 * $arg, 2);
+                    }
+                )
             );
 
         $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
@@ -388,6 +391,42 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ['basePrice' => '70', 'tierPrice' => '35', 'savedPercent' => '50'],
             ['basePrice' => '50', 'tierPrice' => '35', 'savedPercent' => '30'],
             ['basePrice' => '20.80', 'tierPrice' => '18.72', 'savedPercent' => '10']
+        ];
+    }
+
+    /**
+     * @param null|string|float $quantity
+     * @param float $expectedValue
+     * @dataProvider getQuantityDataProvider
+     */
+    public function testGetQuantity($quantity, $expectedValue)
+    {
+        $tierPrice = new TierPrice(
+            $this->product,
+            $quantity,
+            $this->calculator,
+            $this->priceCurrencyMock,
+            $this->session,
+            $this->groupManagement,
+            $this->customerGroupRetriever
+        );
+
+        $this->assertEquals($expectedValue, $tierPrice->getQuantity());
+    }
+
+    /**
+     * @return array
+     */
+    public function getQuantityDataProvider()
+    {
+        return [
+            [null, 1],
+            ['one', 1],
+            ['', 1],
+            [4, 4],
+            [4.5, 4.5],
+            ['0.7', 0.7],
+            ['0.0000000', 1]
         ];
     }
 }

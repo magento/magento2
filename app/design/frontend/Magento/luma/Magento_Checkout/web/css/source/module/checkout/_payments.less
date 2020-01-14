@@ -46,6 +46,11 @@
                     .lib-css(border-top, @checkout-payment-method-title__border);
                 }
             }
+            form {
+                &.form-purchase-order {
+                    margin-bottom: 15px;
+                }
+            }
         }
 
         .payment-method-content {
@@ -58,6 +63,13 @@
                     }
                 }
             }
+            /**
+             * @codingStandardsIgnoreStart
+             */
+            #po_number {
+                margin-bottom: 20px;
+            }
+            //  @codingStandardsIgnoreEnd
         }
 
         .payment-method-title {
@@ -107,7 +119,8 @@
             margin: 0 0 @indent__base;
 
             .primary {
-                .action-update {
+                .action-update {                    
+                    margin-bottom: 20px;
                     margin-right: 0;
                 }
             }
@@ -119,6 +132,10 @@
             .billing-address-details {
                 .lib-css(line-height, @checkout-billing-address-details__line-height);
                 .lib-css(padding, @checkout-billing-address-details__padding);
+            }
+            
+            input[type="checkbox"] {
+                vertical-align: top;
             }
         }
 
@@ -160,6 +177,11 @@
     .checkout-payment-method {
         .payment-methods {
             .lib-css(margin, 0 -(@checkout-payment-method-title-mobile__padding));
+        }
+
+        .step-title {
+            .lib-css(padding-left, @checkout-payment-method-title-mobile__padding);
+            .lib-css(padding-right, @checkout-payment-method-title-mobile__padding)
         }
 
         .payment-method-title {

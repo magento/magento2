@@ -67,7 +67,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Only implemented for bundle product
+     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testSaveWithException()
     {

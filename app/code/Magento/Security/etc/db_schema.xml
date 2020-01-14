@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="admin_user_session" resource="default" engine="innodb" comment="Admin User sessions table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="session_id" nullable="false" length="128" comment="Session ID value"/>
+        <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Admin User ID"/>
+        <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false"
+                default="1" comment="Current Session status"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Update Time"/>
+        <column xsi:type="varchar" name="ip" nullable="false" length="15" onCreate="migrateDataFrom(ip)"
+                comment="Remote user IP"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADMIN_USER_SESSION_USER_ID_ADMIN_USER_USER_ID" table="admin_user_session"
+                    column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+        <index referenceId="ADMIN_USER_SESSION_SESSION_ID" indexType="btree">
+            <column name="session_id"/>
+        </index>
+        <index referenceId="ADMIN_USER_SESSION_USER_ID" indexType="btree">
+            <column name="user_id"/>
+        </index>
+    </table>
+    <table name="password_reset_request_event" resource="default" engine="innodb"
+           comment="Password Reset Request Event under a security control">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="smallint" name="request_type" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Type of the event under a security control"/>
+        <column xsi:type="varchar" name="account_reference" nullable="true" length="255"
+                comment="An identifier for existing account or another target"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Timestamp when the event occurs"/>
+        <column xsi:type="varchar" name="ip" nullable="false" length="15" onCreate="migrateDataFrom(ip)"
+                comment="Remote user IP"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="PASSWORD_RESET_REQUEST_EVENT_ACCOUNT_REFERENCE" indexType="btree">
+            <column name="account_reference"/>
+        </index>
+        <index referenceId="PASSWORD_RESET_REQUEST_EVENT_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+    </table>
+</schema>

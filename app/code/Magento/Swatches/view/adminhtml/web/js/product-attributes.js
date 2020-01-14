@@ -16,7 +16,8 @@ define([
     'use strict';
 
     return function (optionConfig) {
-        var swatchProductAttributes = {
+        var activePanelClass = 'selected-type-options',
+            swatchProductAttributes = {
                 frontendInput: $('#frontend_input'),
                 isFilterable: $('#is_filterable'),
                 isFilterableInSearch: $('#is_filterable_in_search'),
@@ -30,6 +31,7 @@ define([
                 defaultValueText: $('#default_value_text'),
                 defaultValueTextarea: $('#default_value_textarea'),
                 defaultValueDate: $('#default_value_date'),
+                defaultValueDatetime: $('#default_value_datetime'),
                 defaultValueYesno: $('#default_value_yesno'),
                 isGlobal: $('#is_global'),
                 useProductImageForSwatch: $('#use_product_image_for_swatch'),
@@ -45,7 +47,7 @@ define([
                 get tabsFront() {
                     return this.attrTabsFront.length ? this.attrTabsFront.closest('li') : $('#front_fieldset-wrapper');
                 },
-                selectFields: ['select', 'multiselect', 'price', 'swatch_text', 'swatch_visual'],
+                selectFields: ['boolean', 'select', 'multiselect', 'price', 'swatch_text', 'swatch_visual'],
 
                 /**
                  * @this {swatchProductAttributes}
@@ -177,11 +179,13 @@ define([
                         defaultValueTextVisibility = false,
                         defaultValueTextareaVisibility = false,
                         defaultValueDateVisibility = false,
+                        defaultValueDatetimeVisibility = false,
                         defaultValueYesnoVisibility = false,
                         scopeVisibility = true,
                         useProductImageForSwatch = false,
                         defaultValueUpdateImage = false,
                         optionDefaultInputType = '',
+                        isFrontTabHidden = false,
                         thing = this;
 
                     if (!this.frontendInput.length) {
@@ -201,11 +205,16 @@ define([
                             defaultValueDateVisibility = true;
                             break;
 
+                        case 'datetime':
+                            defaultValueDatetimeVisibility = true;
+                            break;
+
                         case 'boolean':
                             defaultValueYesnoVisibility = true;
                             break;
 
                         case 'textarea':
+                        case 'texteditor':
                             defaultValueTextareaVisibility = true;
                             break;
 
@@ -246,12 +255,14 @@ define([
                             switch (option) {
                                 case '_front_fieldset':
                                     thing.tabsFront.hide();
+                                    isFrontTabHidden = true;
                                     break;
 
                                 case '_default_value':
                                     defaultValueTextVisibility = false;
                                     defaultValueTextareaVisibility = false;
                                     defaultValueDateVisibility = false;
+                                    defaultValueDatetimeVisibility = false;
                                     defaultValueYesnoVisibility = false;
                                     break;
 
@@ -262,6 +273,11 @@ define([
                                     thing.setRowVisibility($('#' + option), false);
                             }
                         });
+
+                        if (!isFrontTabHidden) {
+                            thing.tabsFront.show();
+                        }
+
                     } else {
                         this.tabsFront.show();
                         this.showDefaultRows();
@@ -270,6 +286,7 @@ define([
                     this.setRowVisibility(this.defaultValueText, defaultValueTextVisibility);
                     this.setRowVisibility(this.defaultValueTextarea, defaultValueTextareaVisibility);
                     this.setRowVisibility(this.defaultValueDate, defaultValueDateVisibility);
+                    this.setRowVisibility(this.defaultValueDatetime, defaultValueDatetimeVisibility);
                     this.setRowVisibility(this.defaultValueYesno, defaultValueYesnoVisibility);
                     this.setRowVisibility(this.isGlobal, scopeVisibility);
 
@@ -330,6 +347,7 @@ define([
                  */
                 _showPanel: function (el) {
                     el.closest('.fieldset').show();
+                    el.addClass(activePanelClass);
                     this._render(el.attr('id'));
                 },
 
@@ -339,6 +357,7 @@ define([
                  */
                 _hidePanel: function (el) {
                     el.closest('.fieldset').hide();
+                    el.removeClass(activePanelClass);
                 },
 
                 /**
@@ -406,6 +425,12 @@ define([
             };
 
         $(function () {
+            var editForm = $('#edit_form'),
+                swatchVisualPanel = $('#swatch-visual-options-panel'),
+                swatchTextPanel = $('#swatch-text-options-panel'),
+                tableBody = $(),
+                activePanel = $();
+
             $('#frontend_input').bind('change', function () {
                 swatchProductAttributes.bindAttributeInputType();
             });
@@ -415,10 +440,42 @@ define([
 
             swatchProductAttributes.bindAttributeInputType();
 
-            // @todo: refactor collapsable component
+            // @todo: refactor collapsible component
             $('.attribute-popup .collapse, [data-role="advanced_fieldset-content"]')
                 .collapsable()
                 .collapse('hide');
+
+            editForm.on('beforeSubmit', function () {
+                var optionContainer, optionsValues;
+
+                activePanel = swatchTextPanel.hasClass(activePanelClass) ? swatchTextPanel : swatchVisualPanel;
+                optionContainer = activePanel.find('table tbody');
+
+                if (activePanel.hasClass(activePanelClass)) {
+                    optionsValues = $.map(
+                        optionContainer.find('tr'),
+                        function (row) {
+                            return $(row).find('input, select, textarea').serialize();
+                        }
+                    );
+                    $('<input>')
+                        .attr({
+                            type: 'hidden',
+                            name: 'serialized_options'
+                        })
+                        .val(JSON.stringify(optionsValues))
+                        .prependTo(editForm);
+                }
+
+                tableBody = optionContainer.detach();
+            });
+
+            editForm.on('afterValidate.error highlight.validate', function () {
+                if (activePanel.hasClass(activePanelClass)) {
+                    activePanel.find('table').append(tableBody);
+                    $('input[name="serialized_options"]').remove();
+                }
+            });
         });
 
         window.saveAttributeInNewSet = swatchProductAttributes.saveAttributeInNewSet;

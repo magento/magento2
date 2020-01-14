@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
@@ -84,7 +85,33 @@ class AttributeSetTest extends AbstractModifierTest
 
     public function testModifyMeta()
     {
-        $this->assertNotEmpty($this->getModel()->modifyMeta(['test_group' => []]));
+        $modifyMeta = $this->getModel()->modifyMeta(['test_group' => []]);
+        $this->assertNotEmpty($modifyMeta);
+    }
+
+    /**
+     * @param bool $locked
+     * @dataProvider modifyMetaLockedDataProvider
+     */
+    public function testModifyMetaLocked($locked)
+    {
+        $this->productMock->expects($this->any())
+            ->method('isLockedAttribute')
+            ->willReturn($locked);
+        $modifyMeta = $this->getModel()->modifyMeta([AbstractModifier::DEFAULT_GENERAL_PANEL => []]);
+        $children = $modifyMeta[AbstractModifier::DEFAULT_GENERAL_PANEL]['children'];
+        $this->assertEquals(
+            $locked,
+            $children['attribute_set_id']['arguments']['data']['config']['disabled']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function modifyMetaLockedDataProvider()
+    {
+        return [[true], [false]];
     }
 
     public function testModifyMetaToBeEmpty()

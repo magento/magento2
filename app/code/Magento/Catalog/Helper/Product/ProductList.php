@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Helper\Product;
 
 /**
@@ -31,6 +29,11 @@ class ProductList
     protected $scopeConfig;
 
     /**
+     * @var \Magento\Framework\Registry
+     */
+    private $coreRegistry;
+
+    /**
      * Default limits per page
      *
      * @var array
@@ -39,11 +42,16 @@ class ProductList
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Registry $coreRegistry = null
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->coreRegistry = $coreRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Registry::class
+        );
     }
 
     /**
@@ -53,7 +61,11 @@ class ProductList
      */
     public function getAvailableViewMode()
     {
-        switch ($this->scopeConfig->getValue(self::XML_PATH_LIST_MODE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+        $value = $this->scopeConfig->getValue(
+            self::XML_PATH_LIST_MODE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        switch ($value) {
             case 'grid':
                 $availableMode = ['grid' => __('Grid')];
                 break;
@@ -97,6 +109,11 @@ class ProductList
      */
     public function getDefaultSortField()
     {
+        $currentCategory = $this->coreRegistry->registry('current_category');
+        if ($currentCategory) {
+            return $currentCategory->getDefaultSortBy();
+        }
+
         return $this->scopeConfig->getValue(
             \Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

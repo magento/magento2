@@ -5,9 +5,14 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -16,10 +21,14 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testWrongFrontendInput()
     {
-        $postData = $this->_getAttributeData() + [
+        $postData = array_merge(
+            $this->_getAttributeData(),
+            [
                 'attribute_id' => 100500,
                 'frontend_input' => 'some_input',
-            ];
+            ]
+        );
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -45,6 +54,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             'popup' => 'true',
             'new_attribute_set_name' => 'new_attribute_set',
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -66,6 +76,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $postData = $this->_getAttributeData() + ['attribute_id' => 0, 'frontend_input' => 'boolean'];
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
@@ -84,6 +95,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $postData = $this->_getAttributeData() + ['attribute_id' => 100500];
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
@@ -108,6 +120,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
                 'set' => 4,
                 'frontend_input' => 'boolean',
             ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -126,34 +139,10 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     /**
      * @return void
      */
-    public function testWrongAttributeCode()
-    {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'attribute_code' => '_()&&&?'];
-        $this->getRequest()->setPostValue($postData);
-        $this->dispatch('backend/catalog/product_attribute/save');
-        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
-            'catalog/product_attribute/edit/attribute_id/2',
-            $this->getResponse()->getHeader('Location')->getFieldValue()
-        );
-        /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
-        $this->assertEquals(1, $messages->getCountByType('error'));
-        /** @var \Magento\Framework\Message\Error $message */
-        $message = $messages->getItemsByType('error')[0];
-        $this->assertEquals(
-            'Attribute code "_()&&&?" is invalid. Please use only letters (a-z),'
-            . ' numbers (0-9) or underscore(_) in this field, first character should be a letter.',
-            $message->getText()
-        );
-    }
-
-    /**
-     * @return void
-     */
     public function testAttributeWithoutEntityTypeId()
     {
         $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'new_attribute_set_name' => ' '];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -169,6 +158,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     public function testSaveActionApplyToDataSystemAttribute()
     {
         $postData = $this->_getAttributeData() + ['attribute_id' => '2'];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $model = $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
@@ -182,6 +172,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     public function testSaveActionApplyToDataUserDefinedAttribute()
     {
         $postData = $this->_getAttributeData() + ['attribute_id' => '1'];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
@@ -197,6 +188,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $postData = $this->_getAttributeData() + ['attribute_id' => '3'];
         unset($postData['apply_to']);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $model = $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
@@ -216,9 +208,116 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->assertEquals('predefined string translation', $this->_translate('string to translate'));
         $string->saveTranslate('string to translate', 'new string translation');
         $postData = $this->_getAttributeData() + ['attribute_id' => 1];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals('new string translation', $this->_translate('string to translate'));
+    }
+
+    /**
+     * Get attribute data preset.
+     *
+     * @return array
+     */
+    private function getLargeOptionsSetAttributeData()
+    {
+        return [
+            'frontend_label' => [
+                0 => 'testdrop1',
+                1 => '',
+                2 => '',
+            ],
+            'frontend_input' => 'select',
+            'is_required' => '0',
+            'update_product_preview_image' => '0',
+            'use_product_image_for_swatch' => '0',
+            'visual_swatch_validation' => '',
+            'visual_swatch_validation_unique' => '',
+            'text_swatch_validation' => '',
+            'text_swatch_validation_unique' => '',
+            'attribute_code' => 'test_many_options',
+            'is_global' => '0',
+            'default_value_text' => '',
+            'default_value_yesno' => '0',
+            'default_value_date' => '',
+            'default_value_textarea' => '',
+            'is_unique' => '0',
+            'is_used_in_grid' => '1',
+            'is_visible_in_grid' => '1',
+            'is_filterable_in_grid' => '1',
+            'is_searchable' => '0',
+            'is_comparable' => '0',
+            'is_filterable' => '0',
+            'is_filterable_in_search' => '0',
+            'is_used_for_promo_rules' => '0',
+            'is_html_allowed_on_front' => '1',
+            'is_visible_on_front' => '0',
+            'used_in_product_listing' => '0',
+            'used_for_sort_by' => '0',
+            'swatch_input_type' => 'dropdown',
+        ];
+    }
+
+    /**
+     * Test attribute saving with large amount of options exceeding maximum allowed by max_input_vars limit.
+     * @return void
+     */
+    public function testLargeOptionsDataSet()
+    {
+        $maxInputVars = ini_get('max_input_vars');
+        // Each option is at least 4 variables array (order, admin value, first store view value, delete flag).
+        // Set options count to exceed max_input_vars by 100 options (400 variables).
+        $optionsCount = floor($maxInputVars / 4) + 100;
+        $attributeData = $this->getLargeOptionsSetAttributeData();
+        $optionsData = [];
+        $expectedOptionsLabels = [];
+        for ($i = 0; $i < $optionsCount; $i++) {
+            $expectedOptionLabelOnStoreView = 'value_' . $i . '_store_1';
+            $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
+            $optionId = 'option_' . $i;
+            $optionRowData = [];
+            $optionRowData['option']['order'][$optionId] = $i + 1;
+            $optionRowData['option']['value'][$optionId][0] = 'value_' . $i . '_admin';
+            $optionRowData['option']['value'][$optionId][1] = $expectedOptionLabelOnStoreView;
+            $optionRowData['option']['delete'][$optionId] = '';
+            $optionsData[] = http_build_query($optionRowData);
+        }
+        $attributeData['serialized_options'] = json_encode($optionsData);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($attributeData);
+        $this->dispatch('backend/catalog/product_attribute/save');
+        $entityTypeId = $this->_objectManager->create(
+            \Magento\Eav\Model\Entity::class
+        )->setType(
+            \Magento\Catalog\Model\Product::ENTITY
+        )->getTypeId();
+
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = $this->_objectManager->create(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+        )->setEntityTypeId(
+            $entityTypeId
+        );
+        try {
+            $attribute->loadByCode($entityTypeId, 'test_many_options');
+            $options = $attribute->getOptions();
+            // assert that all options are saved without truncation
+            $this->assertEquals(
+                $optionsCount + 1,
+                count($options),
+                'Expected options count does not match (regarding first empty option for non-required attribute)'
+            );
+
+            foreach ($expectedOptionsLabels as $optionOrderNum => $label) {
+                $this->assertEquals(
+                    $label,
+                    $options[$optionOrderNum]->getLabel(),
+                    "Label for option #{$optionOrderNum} does not match expected."
+                );
+            }
+        } catch (LocalizedException $e) {
+            $this->fail('Test failed with exception on attribute model load: ' . $e);
+        }
     }
 
     /**
@@ -256,6 +355,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             'default_value_textarea' => '0',
             'is_required' => '1',
             'frontend_class' => '',
+            'frontend_input' => 'select',
             'is_searchable' => '0',
             'is_visible_in_advanced_search' => '0',
             'is_comparable' => '0',
@@ -267,7 +367,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             'used_in_product_listing' => '1',
             'used_for_sort_by' => '0',
             'apply_to' => ['simple'],
-            'frontend_label' => [\Magento\Store\Model\Store::DEFAULT_STORE_ID => 'string to translate']
+            'frontend_label' => [\Magento\Store\Model\Store::DEFAULT_STORE_ID => 'string to translate'],
         ];
     }
 }

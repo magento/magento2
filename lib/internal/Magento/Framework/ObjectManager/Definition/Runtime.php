@@ -7,12 +7,22 @@
  */
 namespace Magento\Framework\ObjectManager\Definition;
 
+/**
+ * Class Runtime
+ *
+ * @package Magento\Framework\ObjectManager\Definition
+ */
 class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
 {
     /**
      * @var array
      */
     protected $_definitions = [];
+
+    /**
+     * @var \Magento\Framework\Code\Reader\ClassReaderInterface
+     */
+    private $_reader;
 
     /**
      * @param \Magento\Framework\Code\Reader\ClassReaderInterface $reader
@@ -40,7 +50,7 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
      */
     public function getParameters($className)
     {
-        if (!array_key_exists($className, $this->_definitions)) {
+        if (!isset($this->_definitions[$className])) {
             $this->_definitions[$className] = $this->_reader->getConstructor($className);
         }
         return $this->_definitions[$className];

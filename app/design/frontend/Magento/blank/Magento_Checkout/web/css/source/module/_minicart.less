@@ -106,6 +106,11 @@
         .lib-dropdown(
         @_toggle-selector: ~'.action.showcart',
         @_options-selector: ~'.block-minicart',
+        @_dropdown-list-width: 320px,
+        @_dropdown-list-position-right: 0,
+        @_dropdown-list-pointer-position: right,
+        @_dropdown-list-pointer-position-left-right: 26px,
+        @_dropdown-list-z-index: 101,
         @_dropdown-toggle-icon-content: @icon-cart,
         @_dropdown-toggle-active-icon-content: @icon-cart,
         @_dropdown-list-item-padding: false,
@@ -121,22 +126,9 @@
 
         .block-minicart {
             .lib-css(padding, 25px @minicart__padding-horizontal);
-            right: 0;
-            width: 320px;
-            z-index: 101;
 
             .block-title {
                 display: none;
-            }
-
-            &:after {
-                left: auto;
-                right: 25px;
-            }
-
-            &:before {
-                left: auto;
-                right: 26px;
             }
         }
 
@@ -156,10 +148,10 @@
         .action {
             &.close {
                 .lib-button-icon(
-                @icon-remove,
-                @_icon-font-size: 32px,
-                @_icon-font-line-height: 32px,
-                @_icon-font-text-hide: true
+                    @icon-remove,
+                    @_icon-font-size: 32px,
+                    @_icon-font-line-height: 32px,
+                    @_icon-font-text-hide: true
                 );
                 .lib-button-reset();
                 height: 40px;
@@ -247,7 +239,6 @@
         .product-item-pricing {
             .label {
                 display: inline-block;
-                width: 4.5rem;
             }
         }
 
@@ -263,15 +254,16 @@
 
             .toggle {
                 .lib-icon-font(
-                @_icon-font-content: @icon-down,
-                @_icon-font-size: 28px,
-                @_icon-font-line-height: 16px,
-                @_icon-font-text-hide: false,
-                @_icon-font-position: after,
-                @_icon-font-display: block
+                    @_icon-font-content: @icon-down,
+                    @_icon-font-size: 28px,
+                    @_icon-font-line-height: 16px,
+                    @_icon-font-text-hide: false,
+                    @_icon-font-position: after,
+                    @_icon-font-display: block
                 );
                 cursor: pointer;
                 position: relative;
+                white-space: nowrap;
 
                 &:after {
                     position: static;
@@ -283,8 +275,8 @@
             &.active {
                 > .toggle {
                     .lib-icon-font-symbol(
-                    @_icon-font-content: @icon-up,
-                    @_icon-font-position: after
+                        @_icon-font-content: @icon-up,
+                        @_icon-font-position: after
                     );
                 }
             }
@@ -313,6 +305,7 @@
 
             .weee[data-label] {
                 .lib-font-size(11);
+
                 .label {
                     &:extend(.abs-no-display all);
                 }
@@ -326,12 +319,12 @@
         .product.options {
             .tooltip.toggle {
                 .lib-icon-font(
-                @icon-down,
-                @_icon-font-size: 28px,
-                @_icon-font-line-height: 28px,
-                @_icon-font-text-hide: true,
-                @_icon-font-margin: -3px 0 0 7px,
-                @_icon-font-position: after
+                    @icon-down,
+                    @_icon-font-size: 28px,
+                    @_icon-font-line-height: 28px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-margin: -3px 0 0 7px,
+                    @_icon-font-position: after
                 );
 
                 .details {
@@ -348,13 +341,13 @@
         }
 
         .item-qty {
-            margin-right: @indent__s;
             text-align: center;
-            width: 40px;
+            width: 45px;
         }
 
         .update-cart-item {
             .lib-font-size(11);
+            margin-left: 5px;
             vertical-align: top;
         }
 
@@ -366,19 +359,19 @@
             &.edit,
             &.delete {
                 .lib-icon-font(
-                @icon-settings,
-                @_icon-font-size: 28px,
-                @_icon-font-line-height: 28px,
-                @_icon-font-text-hide: true,
-                @_icon-font-color: @color-gray19,
-                @_icon-font-color-hover: @color-gray19,
-                @_icon-font-color-active: @color-gray19
+                    @icon-settings,
+                    @_icon-font-size: 28px,
+                    @_icon-font-line-height: 28px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-color: @color-gray19,
+                    @_icon-font-color-hover: @color-gray19,
+                    @_icon-font-color-active: @color-gray19
                 );
             }
 
             &.delete {
                 .lib-icon-font-symbol(
-                @_icon-font-content: @icon-trash
+                    @_icon-font-content: @icon-trash
                 );
             }
         }
@@ -398,6 +391,17 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .minicart-wrapper {
         margin-top: @indent__s;
+        .lib-clearfix();
+        .product {
+            .actions {
+                float: left;
+                margin: 10px 0 0 0;
+            }
+        }
+        .update-cart-item {
+            float: right;
+            margin-left: 0;
+        }
     }
 }
 
@@ -408,6 +412,7 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .minicart-wrapper {
         margin-left: 13px;
+
         .block-minicart {
             right: -15px;
             width: 390px;

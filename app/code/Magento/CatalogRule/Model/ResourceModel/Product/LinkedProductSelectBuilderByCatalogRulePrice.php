@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -11,6 +13,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
+/**
+ * Provide Select object for retrieve product id with minimal price
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelectBuilderInterface
 {
     /**
@@ -77,7 +84,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build($productId)
     {
@@ -105,6 +112,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->where('t.rule_date = ?', $currentDate)
             ->order('t.rule_price ' . Select::SQL_ASC)
+            ->order(BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . '.' . $linkField . ' ' . Select::SQL_ASC)
             ->limit(1);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 

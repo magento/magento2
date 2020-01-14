@@ -37,7 +37,7 @@ class PasswordResetRequestEvent extends \Magento\Framework\Model\ResourceModel\D
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Security\Setup\InstallSchema::PASSWORD_RESET_REQUEST_EVENT_DB_TABLE_NAME, 'id');
+        $this->_init('password_reset_request_event', 'id');
     }
 
     /**

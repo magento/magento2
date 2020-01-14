@@ -23,7 +23,11 @@
                     <block class="Magento\Wishlist\Block\Item\Configure" name="view.addto.wishlist.bundle"
                            template="Magento_Wishlist::item/configure/addto/wishlist.phtml" />
                     <block class="Magento\Catalog\Block\Product\View\AddTo\Compare" name="view.addto.compare.bundle" after="view.addto.wishlist"
-                           template="Magento_Catalog::product/view/addto/compare.phtml" />
+                           template="Magento_Catalog::product/view/addto/compare.phtml">
+                        <arguments>
+                            <argument name="addToCompareViewModel" xsi:type="object">Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability</argument>
+                        </arguments>
+                    </block>
                 </block>
             </block>
         </referenceBlock>
@@ -33,10 +37,22 @@
                 <container name="product.info.bundle.options.top" as="product_info_bundle_options_top">
                     <block class="Magento\Catalog\Block\Product\View" name="bundle.back.button" as="backButton" before="-" template="Magento_Bundle::catalog/product/view/backbutton.phtml"/>
                 </container>
-                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select"/>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                    </arguments>
+                </block>
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi" name="product.info.bundle.options.multi" as="multi"/>
-                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio"/>
-                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox"/>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                    </arguments>
+                </block>
             </block>
         </referenceBlock>
         <move element="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />

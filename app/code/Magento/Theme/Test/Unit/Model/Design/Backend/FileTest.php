@@ -28,6 +28,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     private $mime;
 
+    /**
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $databaseHelper;
+
     public function setUp()
     {
         $context = $this->getMockObject(\Magento\Framework\Model\Context::class);
@@ -55,6 +60,17 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->databaseHelper = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $abstractResource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
+            ->getMockForAbstractClass();
+
+        $abstractDb = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->fileBackend = new File(
             $context,
             $registry,
@@ -63,7 +79,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $uploaderFactory,
             $requestData,
             $filesystem,
-            $this->urlBuilder
+            $this->urlBuilder,
+            $abstractResource,
+            $abstractDb,
+            [],
+            $this->databaseHelper
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -168,17 +188,21 @@ class FileTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testBeforeSave()
+    /**
+     * @dataProvider beforeSaveDataProvider
+     * @param string $fileName
+     */
+    public function testBeforeSave($fileName)
     {
-        $value = 'filename.jpg';
-        $tmpMediaPath = 'tmp/design/file/' . $value;
+        $expectedFileName = basename($fileName);
+        $expectedTmpMediaPath = 'tmp/design/file/' . $expectedFileName;
         $this->fileBackend->setScope('store');
         $this->fileBackend->setScopeId(1);
         $this->fileBackend->setValue(
             [
                 [
-                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $value,
-                    'file' => $value,
+                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $fileName,
+                    'file' => $fileName,
                     'size' => 234234,
                 ]
             ]
@@ -192,16 +216,32 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
+        $this->databaseHelper->expects($this->once())
+            ->method('renameFile')
+            ->with($expectedTmpMediaPath, '/' . $expectedFileName)
+            ->willReturn(true);
+
         $this->mediaDirectory->expects($this->once())
             ->method('copyFile')
-            ->with($tmpMediaPath, '/' . $value)
+            ->with($expectedTmpMediaPath, '/' . $expectedFileName)
             ->willReturn(true);
         $this->mediaDirectory->expects($this->once())
             ->method('delete')
-            ->with($tmpMediaPath);
+            ->with($expectedTmpMediaPath);
 
         $this->fileBackend->beforeSave();
-        $this->assertEquals('filename.jpg', $this->fileBackend->getValue());
+        $this->assertEquals($expectedFileName, $this->fileBackend->getValue());
+    }
+
+    /**
+     * @return array
+     */
+    public function beforeSaveDataProvider()
+    {
+        return [
+            'Normal file name' => ['filename.jpg'],
+            'Vulnerable file name' => ['../../../../../../../../etc/passwd'],
+        ];
     }
 
     /**
@@ -241,5 +281,36 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $value,
             $this->fileBackend->getValue()
         );
+    }
+
+    /**
+     * Test for getRelativeMediaPath method.
+     *
+     * @param string $path
+     * @param string $filename
+     * @dataProvider getRelativeMediaPathDataProvider
+     */
+    public function testGetRelativeMediaPath(string $path, string $filename)
+    {
+        $reflection = new \ReflectionClass($this->fileBackend);
+        $method = $reflection->getMethod('getRelativeMediaPath');
+        $method->setAccessible(true);
+        $this->assertEquals(
+            $filename,
+            $method->invoke($this->fileBackend, $path . $filename)
+        );
+    }
+
+    /**
+     * Data provider for testGetRelativeMediaPath.
+     *
+     * @return array
+     */
+    public function getRelativeMediaPathDataProvider(): array
+    {
+        return [
+            'Normal path' => ['pub/media/', 'filename.jpg'],
+            'Complex path' => ['somepath/pub/media/', 'filename.jpg'],
+        ];
     }
 }

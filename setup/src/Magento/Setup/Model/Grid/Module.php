@@ -178,7 +178,7 @@ class Module
     private function addGeneralInfo(array $items)
     {
         foreach ($items as &$item) {
-            $item['moduleName'] = $item['moduleName'] ?: $this->packageInfo->getModuleName($item['name']);
+            $item['moduleName'] = $item['moduleName'] ?? $this->packageInfo->getModuleName($item['name']);
             $item['enable'] = $this->moduleList->has($item['moduleName']);
             $vendorSource = $item['name'] == self::UNKNOWN_PACKAGE_NAME ? $item['moduleName'] : $item['name'];
             $item['vendor'] = ucfirst(current(preg_split('%[/_]%', $vendorSource)));

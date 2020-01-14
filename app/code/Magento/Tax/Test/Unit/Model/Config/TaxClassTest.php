@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Tax\Model\Config\TaxClass
  */
 namespace Magento\Tax\Test\Unit\Model\Config;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class TaxClassTest extends \PHPUnit\Framework\TestCase
 {
     /**

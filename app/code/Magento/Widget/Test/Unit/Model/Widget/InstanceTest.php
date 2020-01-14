@@ -7,6 +7,8 @@
  */
 namespace Magento\Widget\Test\Unit\Model\Widget;
 
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -43,6 +45,9 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_directoryMock;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit_Framework_MockObject_MockObject */
+    private $serializer;
+
     protected function setUp()
     {
         $this->_widgetModelMock = $this->getMockBuilder(
@@ -71,6 +76,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->_directoryMock->expects($this->any())->method('isReadable')->will($this->returnArgument(0));
         $this->_directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->serializer = $this->createMock(Json::class);
         $args = $objectManagerHelper->getConstructArguments(
             \Magento\Widget\Model\Widget\Instance::class,
             [
@@ -79,9 +85,11 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
                 'cacheTypeList' => $this->_cacheTypesListMock,
                 'reader' => $this->_readerMock,
                 'widgetModel' => $this->_widgetModelMock,
-                'namespaceResolver' => $this->_namespaceResolver
+                'namespaceResolver' => $this->_namespaceResolver,
+                'serializer' => $this->serializer,
             ]
         );
+
         /** @var \Magento\Widget\Model\Widget\Instance _model */
         $this->_model = $this->getMockBuilder(\Magento\Widget\Model\Widget\Instance::class)
             ->setMethods(['_construct'])
@@ -343,5 +351,34 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [];
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('unknown'));
+    }
+
+    public function testGetWidgetParameters()
+    {
+        $serializedArray = '{"anchor_text":"232323232323232323","title":"232323232323232","page_id":"2"}';
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->willReturn(json_decode($serializedArray, true));
+
+        $this->_model->setData('widget_parameters', $serializedArray);
+        $this->assertEquals(
+            json_decode($serializedArray, true),
+            $this->_model->getWidgetParameters()
+        );
+    }
+
+    public function testBeforeSave()
+    {
+        $widgetParameters = [
+            'anchor_text' => 'Test',
+            'title' => 'Test',
+            'page_id' => '2'
+        ];
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->willReturn(json_encode($widgetParameters));
+
+        $this->_model->setData('widget_parameters', $widgetParameters);
+        $this->_model->beforeSave();
     }
 }

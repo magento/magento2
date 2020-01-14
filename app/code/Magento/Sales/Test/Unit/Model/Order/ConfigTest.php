@@ -23,23 +23,53 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderStatusCollectionFactoryMock;
 
+    /**
+     * @var \Magento\Sales\Model\Order\StatusFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $statusFactoryMock;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Status
+     */
+    protected $orderStatusModel;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManagerMock;
+
+    /**
+     * @return void
+     */
     protected function setUp()
     {
-        $orderStatusFactory = $this->createMock(\Magento\Sales\Model\Order\StatusFactory::class);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->orderStatusModel = $objectManager->getObject(\Magento\Sales\Model\Order\Status::class, [
+            'storeManager' => $this->storeManagerMock,
+        ]);
+        $this->statusFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\StatusFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'create'])
+            ->getMock();
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
             ['create']
         );
-        $this->salesConfig = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+        $this->salesConfig = $objectManager
             ->getObject(
                 \Magento\Sales\Model\Order\Config::class,
                 [
-                    'orderStatusFactory' => $orderStatusFactory,
+                    'orderStatusFactory' => $this->statusFactoryMock,
                     'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock
                 ]
             );
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvisibleOnFrontStatuses()
     {
         $statuses = [
@@ -86,6 +116,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    /**
+     * @return void
+     */
     public function testGetStateLabelByStateAndStatus()
     {
         $statuses = [
@@ -146,6 +179,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $collectionMock->expects($this->once())
             ->method('joinStates')
             ->will($this->returnValue($collectionData));
+
+        $this->statusFactoryMock->method('create')
+            ->willReturnSelf();
+
+        $this->statusFactoryMock->method('load')
+            ->willReturn($this->orderStatusModel);
+
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock->method('getId')
+            ->willReturn(1);
+
+        $this->storeManagerMock->method('getStore')
+            ->with($this->anything())
+            ->willReturn($storeMock);
+
+        $this->orderStatusModel->setData('store_labels', [1 => 'Pending label']);
 
         $result = $this->salesConfig->getStateStatuses($state, $joinLabels);
         $this->assertSame($expectedResult, $result);

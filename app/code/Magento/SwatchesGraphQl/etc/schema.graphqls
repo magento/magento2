@@ -1,0 +1,49 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface ProductInterface {
+    swatch_image: String @doc(description: "The file name of a swatch image")
+}
+
+input ProductFilterInput {
+    swatch_image: FilterTypeInput @doc(description: "The file name of a swatch image")
+}
+
+input ProductSortInput {
+    swatch_image: SortEnum @doc(description: "The file name of a swatch image")
+}
+
+interface SwatchLayerFilterItemInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\SwatchLayerFilterItemResolver")
+{
+    swatch_data: SwatchData @doc(description: "Data required to render swatch filter item")
+}
+
+type SwatchLayerFilterItem implements LayerFilterItemInterface, SwatchLayerFilterItemInterface
+{
+
+}
+
+type SwatchData {
+    type: String @doc(description: "Type of swatch filter item: 1 - text, 2 - image")
+    value: String @doc(description: "Value for swatch item (text or image link)")
+}
+
+type ConfigurableProductOptionsValues {
+    swatch_data: SwatchDataInterface @doc(description: "Swatch data for configurable product option") @resolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData")
+}
+
+interface SwatchDataInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchDataTypeResolver") {
+    value: String @doc(description: "Value of swatch item (HEX color code, image link or textual value)")
+}
+
+type ImageSwatchData implements SwatchDataInterface {
+    thumbnail: String @doc(description: "Thumbnail swatch image URL")
+}
+
+type TextSwatchData implements SwatchDataInterface {
+
+}
+
+type ColorSwatchData implements SwatchDataInterface {
+
+}

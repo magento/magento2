@@ -6,13 +6,13 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 
 /**
- * Adminhtml Catalog Attribute Set Main Block
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 
 /**
+ * Adminhtml Catalog Attribute Set Main Block.
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -22,7 +22,7 @@ class Main extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/set/main.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/set/main.phtml';
 
     /**
      * Core registry
@@ -140,7 +140,7 @@ class Main extends \Magento\Backend\Block\Template
                     ) . '\', \'' . $this->getUrl(
                         'catalog/*/delete',
                         ['id' => $setId]
-                    ) . '\')',
+                    ) . '\',{data: {}})',
                     'class' => 'delete'
                 ]
             );
@@ -233,7 +233,7 @@ class Main extends \Magento\Backend\Block\Template
         /* @var $node \Magento\Eav\Model\Entity\Attribute\Group */
         foreach ($groups as $node) {
             $item = [];
-            $item['text'] = $node->getAttributeGroupName();
+            $item['text'] = $this->escapeHtml($node->getAttributeGroupName());
             $item['id'] = $node->getAttributeGroupId();
             $item['cls'] = 'folder';
             $item['allowDrop'] = true;
@@ -280,7 +280,7 @@ class Main extends \Magento\Backend\Block\Template
 
         foreach ($attributes as $child) {
             $attr = [
-                'text' => $child->getAttributeCode(),
+                'text' => $this->escapeHtml($child->getAttributeCode()),
                 'id' => $child->getAttributeId(),
                 'cls' => 'leaf',
                 'allowDrop' => false,

@@ -726,5 +726,38 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="file_option_type">
+            <field name="0" xsi:type="array">
+                <item name="title" xsi:type="string">custom option file %isolation%</item>
+                <item name="is_require" xsi:type="string">Yes</item>
+                <item name="type" xsi:type="string">File/File</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="price" xsi:type="string">40</item>
+                        <item name="price_type" xsi:type="string">Percent</item>
+                        <item name="sku" xsi:type="string">file_option</item>
+                        <item name="file_extension" xsi:type="string">jpg, jpg gif .png</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="checkbox_with_one_100_percent_price">
+            <field name="0" xsi:type="array">
+                <item name="title" xsi:type="string">custom option checkbox %isolation%</item>
+                <item name="is_require" xsi:type="string">No</item>
+                <item name="type" xsi:type="string">Select/Checkbox</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">100 Percent</item>
+                        <item name="price" xsi:type="string">100</item>
+                        <item name="price_type" xsi:type="string">Percent</item>
+                        <item name="sku" xsi:type="string">sku_checkbox_row_1</item>
+                        <item name="sort_order" xsi:type="string">0</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>

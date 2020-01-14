@@ -61,8 +61,8 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
 
             if (!$useRegularPrice) {
                 $selectionsCollection->addAttributeToSelect('special_price');
-                $selectionsCollection->addAttributeToSelect('special_price_from');
-                $selectionsCollection->addAttributeToSelect('special_price_to');
+                $selectionsCollection->addAttributeToSelect('special_from_date');
+                $selectionsCollection->addAttributeToSelect('special_to_date');
                 $selectionsCollection->addAttributeToSelect('tax_class_id');
             }
 

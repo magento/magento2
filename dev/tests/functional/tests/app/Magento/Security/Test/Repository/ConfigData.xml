@@ -47,5 +47,20 @@
                 <item name="value" xsi:type="number">6</item>
             </field>
         </dataset>
+        <dataset name="captcha_storefront_disable">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="captcha_user_disable">
+            <field name="admin/captcha/enable" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
     </repository>
 </config>

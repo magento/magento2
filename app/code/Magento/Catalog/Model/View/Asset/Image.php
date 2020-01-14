@@ -20,6 +20,13 @@ use Magento\Framework\View\Asset\LocalInterface;
 class Image implements LocalInterface
 {
     /**
+     * Image type of image (thumbnail,small_image,image,swatch_image,swatch_thumb)
+     *
+     * @var string
+     */
+    private $sourceContentType;
+
+    /**
      * @var string
      */
     private $filePath;
@@ -65,8 +72,14 @@ class Image implements LocalInterface
         ContextInterface $context,
         EncryptorInterface $encryptor,
         $filePath,
-        array $miscParams = []
+        array $miscParams
     ) {
+        if (isset($miscParams['image_type'])) {
+            $this->sourceContentType = $miscParams['image_type'];
+            unset($miscParams['image_type']);
+        } else {
+            $this->sourceContentType = $this->contentType;
+        }
         $this->mediaConfig = $mediaConfig;
         $this->context = $context;
         $this->filePath = $filePath;
@@ -75,15 +88,15 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl()
     {
-        return $this->context->getBaseUrl() . $this->getRelativePath(DIRECTORY_SEPARATOR);
+        return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getImageInfo();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContentType()
     {
@@ -91,35 +104,20 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
-        return $this->getAbsolutePath($this->context->getPath());
+        return $this->context->getPath() . DIRECTORY_SEPARATOR . $this->getImageInfo();
     }
 
     /**
-     * Subroutine for building path
-     *
-     * @param string $path
-     * @param string $item
-     * @return string
-     */
-    private function join($path, $item)
-    {
-        return trim(
-            $path . ($item ? DIRECTORY_SEPARATOR . ltrim($item, DIRECTORY_SEPARATOR) : ''),
-            DIRECTORY_SEPARATOR
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSourceFile()
     {
         return $this->mediaConfig->getBaseMediaPath()
-            . DIRECTORY_SEPARATOR . ltrim($this->filePath, DIRECTORY_SEPARATOR);
+            . DIRECTORY_SEPARATOR . ltrim($this->getFilePath(), DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -129,11 +127,11 @@ class Image implements LocalInterface
      */
     public function getSourceContentType()
     {
-        return $this->contentType;
+        return $this->sourceContentType;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
@@ -141,7 +139,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilePath()
     {
@@ -149,7 +147,8 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return ContextInterface
      */
     public function getContext()
@@ -158,7 +157,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getModule()
     {
@@ -172,35 +171,44 @@ class Image implements LocalInterface
      */
     private function getMiscPath()
     {
-        return $this->encryptor->hash(implode('_', $this->miscParams), Encryptor::HASH_VERSION_MD5);
+        return $this->encryptor->hash(
+            implode('_', $this->convertToReadableFormat($this->miscParams)),
+            Encryptor::HASH_VERSION_MD5
+        );
     }
 
     /**
-     * Generate absolute path
+     * Generate path from image info
      *
-     * @param string $result
      * @return string
      */
-    private function getAbsolutePath($result)
+    private function getImageInfo()
     {
-        $prefix = (substr($result, 0, 1) == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
-        $result = $this->join($result, $this->getModule());
-        $result = $this->join($result, $this->getMiscPath());
-        $result = $this->join($result, $this->getFilePath());
-        return $prefix . $result;
+        $path = $this->getModule()
+            . DIRECTORY_SEPARATOR . $this->getMiscPath()
+            . DIRECTORY_SEPARATOR . $this->getFilePath();
+        return preg_replace('|\Q'. DIRECTORY_SEPARATOR . '\E+|', DIRECTORY_SEPARATOR, $path);
     }
 
     /**
-     * Generate relative path
+     * Converting bool into a string representation
      *
-     * @param string $result
-     * @return string
+     * @param array $miscParams
+     * @return array
      */
-    private function getRelativePath($result)
+    private function convertToReadableFormat(array $miscParams)
     {
-        $result = $this->join($result, $this->getModule());
-        $result = $this->join($result, $this->getMiscPath());
-        $result = $this->join($result, $this->getFilePath());
-        return DIRECTORY_SEPARATOR . $result;
+        $miscParams['image_height'] = 'h:' . ($miscParams['image_height'] ?? 'empty');
+        $miscParams['image_width'] = 'w:' . ($miscParams['image_width'] ?? 'empty');
+        $miscParams['quality'] = 'q:' . ($miscParams['quality'] ?? 'empty');
+        $miscParams['angle'] = 'r:' . ($miscParams['angle'] ?? 'empty');
+        $miscParams['keep_aspect_ratio'] = (!empty($miscParams['keep_aspect_ratio']) ? '' : 'non') . 'proportional';
+        $miscParams['keep_frame'] = (!empty($miscParams['keep_frame']) ? '' : 'no') . 'frame';
+        $miscParams['keep_transparency'] = (!empty($miscParams['keep_transparency']) ? '' : 'no') . 'transparency';
+        $miscParams['constrain_only'] = (!empty($miscParams['constrain_only']) ? 'do' : 'not') . 'constrainonly';
+        $miscParams['background'] = !empty($miscParams['background'])
+            ? 'rgb' . implode(',', $miscParams['background'])
+            : 'nobackground';
+        return $miscParams;
     }
 }

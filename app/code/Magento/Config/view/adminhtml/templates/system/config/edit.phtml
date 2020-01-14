@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -14,9 +11,16 @@
  *  getSaveUrl() - string
  *  getSections() - array
  *  getForm() - html
+ *  getConfigSearchParamsJson() - string
  */
 ?>
-<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+<style>
+    .highlighted {
+        background-color: #DFF7FF!important;
+    }
+</style>
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form"
+      enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="accordion">
         <?= $block->getChildHtml('form') ?>
@@ -26,14 +30,48 @@
 require([
     "jquery",
     "uiRegistry",
-    "jquery/jquery.hashchange",
+    "Magento_Ui/js/modal/confirm",
+    "mage/translate",
     "mage/mage",
     "prototype",
     "mage/adminhtml/form",
-    "domReady!"
+    "domReady!",
+    "jquery/ui"
 ], function(jQuery, registry){
 
     var adminSystemConfig = {
+        navigateToElement: function (searchRequest) {
+            if ('section' in searchRequest) {
+                var section = searchRequest.section;
+            }
+            if ('group' in searchRequest) {
+                var group = searchRequest.group;
+            }
+            if ('field' in searchRequest) {
+                var field = searchRequest.field;
+            }
+            if (typeof section === 'undefined') {
+                return;
+            }
+            if (typeof group !== 'undefined') {
+                var groupElement = jQuery('#' + section + '_' + group);
+
+                var parentSection = groupElement.parents('.section-config');
+                parentSection.addClass('highlighted');
+                parentSection.addClass('active');
+                setTimeout(function() {
+                    parentSection.removeClass('highlighted', 2000, "easeInBack");
+                }, 3000);
+                if (!parentSection.hasClass('active')) {
+                    if(section == 'payment') {
+                        var openSection = jQuery('.open').first().attr('id');
+                        var splitIdArray = openSection.split('_');
+                        section = section + '_' + splitIdArray[1];
+                    }
+                    Fieldset.toggleCollapse(section + '_' + group);
+                }
+            }
+        },
         getUp: function (element, tag) {
             var $element = Element.extend(element);
             if (typeof $element.upTag == 'undefined') {
@@ -127,7 +165,9 @@ require([
                         var elId = $el.id;
                         $el.replace($el.outerHTML);
                         events.each(function(event) {
-                            Event.observe(Element.extend(document.getElementById(elId)), event.eventName, event.handler);
+                            Event.observe(
+                                Element.extend(document.getElementById(elId)), event.eventName, event.handler
+                            );
                         });
                     } else {
                         el.stopObserving('change', adminSystemConfig.onchangeSharedElement);
@@ -264,7 +304,9 @@ require([
                 if (!scopeElement || !scopeElement.checked) {
                     eventObj.element.enable();
                     eventObj.requires.each(function(required) {
-                        adminSystemConfig.checkRequired.call(Element.extend(required), eventObj.element, eventObj.callback);
+                        adminSystemConfig.checkRequired.call(
+                            Element.extend(required), eventObj.element, eventObj.callback
+                        );
                     }.bind(this));
                 }
             },
@@ -346,9 +388,11 @@ require([
         return false;
     };
 
-    jQuery(window).hashchange(handleHash);
+    window.addEventListener('hashchange', handleHash);
     handleHash();
 
     registry.set('adminSystemConfig', adminSystemConfig);
+
+    adminSystemConfig.navigateToElement(<?= /* @noEscape */ $block->getConfigSearchParamsJson(); ?>);
 });
 </script>

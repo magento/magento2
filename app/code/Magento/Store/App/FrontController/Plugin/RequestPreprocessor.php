@@ -5,6 +5,9 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
+/**
+ * Class RequestPreprocessor
+ */
 class RequestPreprocessor
 {
     /**
@@ -52,6 +55,7 @@ class RequestPreprocessor
 
     /**
      * Auto-redirect to base url (without SID) if the requested url doesn't match it.
+     *
      * By default this feature is enabled in configuration.
      *
      * @param \Magento\Framework\App\FrontController $subject
@@ -66,16 +70,17 @@ class RequestPreprocessor
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled()) {
+        if ($this->isHttpsRedirect($request) || (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled())) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()
             );
             if ($baseUrl) {
+                // phpcs:disable Magento2.Functions.DiscouragedFunction
                 $uri = parse_url($baseUrl);
                 if (!$this->getBaseUrlChecker()->execute($uri, $request)) {
                     $redirectUrl = $this->_url->getRedirectUrl(
-                        $this->_url->getUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
+                        $this->_url->getDirectUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
                     );
                     $redirectCode = (int)$this->_scopeConfig->getValue(
                         'web/url/redirect_to_base',
@@ -109,5 +114,21 @@ class RequestPreprocessor
         }
 
         return $this->baseUrlChecker;
+    }
+
+    /**
+     * Check is request should be redirected, if https enabled.
+     *
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return bool
+     */
+    private function isHttpsRedirect(\Magento\Framework\App\RequestInterface $request)
+    {
+        $result = false;
+        if ($this->getBaseUrlChecker()->isFrontendSecure() && $request->isPost() && !$request->isSecure()) {
+            $result = true;
+        }
+
+        return $result;
     }
 }

@@ -4,12 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Indexer;
-use Magento\Catalog\Model\Category;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -128,22 +125,38 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->categoryTreeResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Tree::class);
-        $this->categoryTreeFactory = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Category\TreeFactory::class, ['create']);
+        $this->categoryTreeFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Category\TreeFactory::class,
+            ['create']
+        );
         $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
-        $this->storeCollectionFactory = $this->createPartialMock(\Magento\Store\Model\ResourceModel\Store\CollectionFactory::class, ['create']);
+        $this->storeCollectionFactory = $this->createPartialMock(
+            \Magento\Store\Model\ResourceModel\Store\CollectionFactory::class,
+            ['create']
+        );
         $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->productCollectionFactory = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class, ['create']);
+        $this->productCollectionFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+            ['create']
+        );
         $this->catalogConfig = $this->createMock(\Magento\Catalog\Model\Config::class);
-        $this->filterManager = $this->createPartialMock(\Magento\Framework\Filter\FilterManager::class, ['translitUrl']);
+        $this->filterManager = $this->createPartialMock(
+            \Magento\Framework\Filter\FilterManager::class,
+            ['translitUrl']
+        );
         $this->flatState = $this->createMock(\Magento\Catalog\Model\Indexer\Category\Flat\State::class);
         $this->flatIndexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $this->productIndexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
-        $this->categoryUrlPathGenerator = $this->createMock(\Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::class);
+        $this->categoryUrlPathGenerator = $this->createMock(
+            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::class
+        );
         $this->urlFinder = $this->createMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
         $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category::class);
         $this->indexerRegistry = $this->createPartialMock(\Magento\Framework\Indexer\IndexerRegistry::class, ['get']);
 
-        $this->metadataServiceMock = $this->createMock(\Magento\Catalog\Api\CategoryAttributeRepositoryInterface::class);
+        $this->metadataServiceMock = $this->createMock(
+            \Magento\Catalog\Api\CategoryAttributeRepositoryInterface::class
+        );
         $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -170,7 +183,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testMoveWhenCannotFindParentCategory()
     {
         $this->markTestIncomplete('MAGETWO-31165');
-        $parentCategory = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getId', 'setStoreId', 'load']);
+        $parentCategory = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getId', 'setStoreId', 'load']
+        );
         $parentCategory->expects($this->any())->method('setStoreId')->will($this->returnSelf());
         $parentCategory->expects($this->any())->method('load')->will($this->returnSelf());
         $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($parentCategory));
@@ -189,7 +205,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveWhenCannotFindNewCategory()
     {
-        $parentCategory = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getId', 'setStoreId', 'load']);
+        $parentCategory = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getId', 'setStoreId', 'load']
+        );
         $parentCategory->expects($this->any())->method('getId')->will($this->returnValue(5));
         $parentCategory->expects($this->any())->method('setStoreId')->will($this->returnSelf());
         $parentCategory->expects($this->any())->method('load')->will($this->returnSelf());
@@ -210,7 +229,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testMoveWhenParentCategoryIsSameAsChildCategory()
     {
         $this->markTestIncomplete('MAGETWO-31165');
-        $parentCategory = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getId', 'setStoreId', 'load']);
+        $parentCategory = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getId', 'setStoreId', 'load']
+        );
         $parentCategory->expects($this->any())->method('getId')->will($this->returnValue(5));
         $parentCategory->expects($this->any())->method('setStoreId')->will($this->returnSelf());
         $parentCategory->expects($this->any())->method('load')->will($this->returnSelf());
@@ -231,7 +253,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('catalog_category_product')
             ->will($this->returnValue($indexer));
-        $parentCategory = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getId', 'setStoreId', 'load']);
+        $parentCategory = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getId', 'setStoreId', 'load']
+        );
         $parentCategory->expects($this->any())->method('getId')->will($this->returnValue(5));
         $parentCategory->expects($this->any())->method('setStoreId')->will($this->returnSelf());
         $parentCategory->expects($this->any())->method('load')->will($this->returnSelf());
@@ -259,6 +284,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $category->getUseFlatResource());
     }
 
+    /**
+     * @return object
+     */
     protected function getCategoryModel()
     {
         return $this->objectManager->getObject(
@@ -287,6 +315,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function reindexFlatEnabledTestDataProvider()
     {
         return [
@@ -305,8 +336,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider reindexFlatEnabledTestDataProvider
      */
-    public function testReindexFlatEnabled($flatScheduled, $productScheduled, $expectedFlatReindexCalls, $expectedProductReindexCall)
-    {
+    public function testReindexFlatEnabled(
+        $flatScheduled,
+        $productScheduled,
+        $expectedFlatReindexCalls,
+        $expectedProductReindexCall
+    ) {
         $affectedProductIds = ["1", "2"];
         $this->category->setAffectedProductIds($affectedProductIds);
         $pathIds = ['path/1/2', 'path/2/3'];
@@ -317,11 +352,17 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('isFlatEnabled')
             ->will($this->returnValue(true));
 
-        $this->flatIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($flatScheduled));
-        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexRow')->with('123');
+        $this->flatIndexer->expects($this->exactly(1))
+            ->method('isScheduled')
+            ->will($this->returnValue($flatScheduled));
+        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexList')->with(['123']);
 
-        $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($productScheduled));
-        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))->method('reindexList')->with($pathIds);
+        $this->productIndexer->expects($this->exactly(1))
+            ->method('isScheduled')
+            ->will($this->returnValue($productScheduled));
+        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
+            ->method('reindexList')
+            ->with($pathIds);
 
         $this->indexerRegistry->expects($this->at(0))
             ->method('get')
@@ -336,16 +377,22 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->category->reindex();
     }
 
+    /**
+     * @return array
+     */
     public function reindexFlatDisabledTestDataProvider()
     {
         return [
-            [false, null, null, null, 0],
-            [true, null, null, null, 0],
-            [false, [], null, null, 0],
-            [false, ["1", "2"], null, null, 1],
-            [false, null, 1, null, 1],
-            [false, ["1", "2"], 0, 1, 1],
-            [false, null, 1, 1, 0],
+            [false, null, null, null, null, null, 0],
+            [true, null, null, null, null, null,  0],
+            [false, [], null, null, null, null, 0],
+            [false, ["1", "2"], null, null, null, null, 1],
+            [false, null, 1, null, null, null, 1],
+            [false, ["1", "2"], 0, 1, null, null,  1],
+            [false, null, 1, 1, null, null, 0],
+            [false, ["1", "2"], null, null, 0, 1,  1],
+            [false, ["1", "2"], null, null, 1, 0,  1],
+
         ];
     }
 
@@ -363,11 +410,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $affectedIds,
         $isAnchorOrig,
         $isAnchor,
+        $isActiveOrig,
+        $isActive,
         $expectedProductReindexCall
     ) {
         $this->category->setAffectedProductIds($affectedIds);
         $this->category->setData('is_anchor', $isAnchor);
         $this->category->setOrigData('is_anchor', $isAnchorOrig);
+        $this->category->setData('is_active', $isActive);
+        $this->category->setOrigData('is_active', $isActiveOrig);
+
         $this->category->setAffectedProductIds($affectedIds);
 
         $pathIds = ['path/1/2', 'path/2/3'];
@@ -378,7 +430,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('isFlatEnabled')
             ->will($this->returnValue(false));
 
-        $this->productIndexer->expects($this->exactly(1))
+        $this->productIndexer
             ->method('isScheduled')
             ->willReturn($productScheduled);
         $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
@@ -395,43 +447,49 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $nameAttributeCode = 'name';
-        $descriptionAttributeCode = 'description';
+        $interfaceAttributeCode = 'name';
+        $customAttributeCode = 'description';
+        $initialCustomAttributeValue = 'initial description';
+        $newCustomAttributeValue = 'new description';
+
         $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
         $interfaceAttribute->expects($this->once())
             ->method('getAttributeCode')
-            ->willReturn($nameAttributeCode);
-        $descriptionAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $descriptionAttribute->expects($this->once())
+            ->willReturn($interfaceAttributeCode);
+        $colorAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
+        $colorAttribute->expects($this->once())
             ->method('getAttributeCode')
-            ->willReturn($descriptionAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $descriptionAttribute];
+            ->willReturn($customAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
 
         $this->metadataServiceMock->expects($this->once())
             ->method('getCustomAttributesMetadata')
             ->willReturn($customAttributesMetadata);
-        $this->category->setData($nameAttributeCode, "sub");
+        $this->category->setData($interfaceAttributeCode, 10);
 
-        //The color attribute is not set, expect empty custom attribute array
+        //The description attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->category->getCustomAttributes());
 
-        //Set the color attribute;
-        $this->category->setData($descriptionAttributeCode, "description");
+        //Set the description attribute;
+        $this->category->setData($customAttributeCode, $initialCustomAttributeValue);
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
-        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
-        $this->assertEquals("description", $this->category->getCustomAttribute($descriptionAttributeCode)->getValue());
+        $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->category->setData($descriptionAttributeCode, "new description");
+        $this->category->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
-        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
+        $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
-            "new description",
-            $this->category->getCustomAttribute($descriptionAttributeCode)->getValue()
+            $newCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
         );
     }
 

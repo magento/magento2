@@ -224,6 +224,9 @@ class DisableOutputTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return [

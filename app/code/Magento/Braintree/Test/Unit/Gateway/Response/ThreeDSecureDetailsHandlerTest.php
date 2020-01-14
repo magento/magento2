@@ -8,9 +8,8 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response;
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Response\ThreeDSecureDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -29,7 +28,7 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Sales\Model\Order\Payment|MockObject
      */
-    private $payment;
+    private $paymentMock;
 
     /**
      * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
@@ -38,7 +37,7 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->payment = $this->getMockBuilder(Payment::class)
+        $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'unsAdditionalInformation',
@@ -74,10 +73,10 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->with($response)
             ->willReturn($transaction);
 
-        $this->payment->expects(static::at(1))
+        $this->paymentMock->expects(static::at(1))
             ->method('setAdditionalInformation')
             ->with('liabilityShifted', 'Yes');
-        $this->payment->expects(static::at(2))
+        $this->paymentMock->expects(static::at(2))
             ->method('setAdditionalInformation')
             ->with('liabilityShiftPossible', 'Yes');
 
@@ -97,7 +96,7 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects(static::once())
             ->method('getPayment')
-            ->willReturn($this->payment);
+            ->willReturn($this->paymentMock);
 
         return $mock;
     }

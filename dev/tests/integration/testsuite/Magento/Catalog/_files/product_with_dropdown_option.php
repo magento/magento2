@@ -43,7 +43,8 @@ $product->setTypeId(
 )->setStockData(
     [
         'qty' => 0,
-        'is_in_stock' => 0
+        'is_in_stock' => 0,
+        'manage_stock' => 1,
     ]
 );
 

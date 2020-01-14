@@ -5,8 +5,11 @@
  */
 namespace Magento\Framework\View\Model\Layout\Update;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Config\DomFactory;
+use Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Validator for custom layout update
@@ -54,17 +57,24 @@ class Validator extends \Zend_Validate_Abstract
     protected $_xsdSchemas;
 
     /**
-     * @var \Magento\Framework\Config\DomFactory
+     * @var DomFactory
      */
     protected $_domConfigFactory;
 
     /**
-     * @param \Magento\Framework\Config\DomFactory $domConfigFactory
+     * @var ValidationStateInterface
+     */
+    private $validationState;
+
+    /**
+     * @param DomFactory $domConfigFactory
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @param ValidationStateInterface $validationState
      */
     public function __construct(
-        \Magento\Framework\Config\DomFactory $domConfigFactory,
-        UrnResolver $urnResolver
+        DomFactory $domConfigFactory,
+        UrnResolver $urnResolver,
+        ValidationStateInterface $validationState = null
     ) {
         $this->_domConfigFactory = $domConfigFactory;
         $this->_initMessageTemplates();
@@ -76,6 +86,8 @@ class Validator extends \Zend_Validate_Abstract
                 'urn:magento:framework:View/Layout/etc/layout_merged.xsd'
             ),
         ];
+        $this->validationState = $validationState
+            ?: ObjectManager::getInstance()->get(ValidationStateInterface::class);
     }
 
     /**
@@ -122,7 +134,13 @@ class Validator extends \Zend_Validate_Abstract
         try {
             //wrap XML value in the "layout" and "handle" tags to make it validatable
             $value = '<layout xmlns:xsi="' . self::XML_NAMESPACE_XSI . '">' . $value . '</layout>';
-            $this->_domConfigFactory->createDom(['xml' => $value, 'schemaFile' => $this->_xsdSchemas[$schema]]);
+            $this->_domConfigFactory->createDom(
+                [
+                    'xml' => $value,
+                    'schemaFile' => $this->_xsdSchemas[$schema],
+                    'validationState' => $this->validationState,
+                ]
+            );
 
             if ($isSecurityCheck) {
                 $value = new \Magento\Framework\Simplexml\Element($value);

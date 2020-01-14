@@ -39,6 +39,11 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
     protected $parameters = [];
 
     /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public $connection;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -77,12 +82,10 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
         $dirConfig = DirectoryList::getDefaultConfig();
         $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
-        $DS = DIRECTORY_SEPARATOR;
-
         if (!empty($parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR])) {
             $tmpPath = $parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR];
         } else {
-            $tmpPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath('import');
+            $tmpPath = $dirAddon . '/' . $this->mediaDirectory->getRelativePath('import');
         }
 
         if (!$this->fileUploader->setTmpDir($tmpPath)) {
@@ -91,7 +94,7 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
         $destinationDir = "downloadable/files/" . $type;
-        $destinationPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath($destinationDir);
+        $destinationPath = $dirAddon . '/' . $this->mediaDirectory->getRelativePath($destinationDir);
 
         $this->mediaDirectory->create($destinationPath);
         if (!$this->fileUploader->setDestDir($destinationPath)) {

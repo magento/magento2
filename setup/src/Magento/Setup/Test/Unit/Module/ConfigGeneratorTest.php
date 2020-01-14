@@ -5,11 +5,22 @@
  */
 namespace Magento\Setup\Test\Unit\Module;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Setup\Model\CryptKeyGenerator;
+use PHPUnit\Framework\TestCase;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
-class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for Magento\Setup\Model\ConfigGenerator class.
+ */
+class ConfigGeneratorTest extends TestCase
 {
     /**
      * @var ConfigGenerator
@@ -18,11 +29,37 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $random = $this->createMock(\Magento\Framework\Math\Random::class);
-        $random->expects($this->any())->method('getRandomString')->willReturn('key');
-        $deployConfig= $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        /** @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject $deployConfig */
+        $deployConfig = $this->createMock(DeploymentConfig::class);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
-        $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
+
+        /** @var Random|\PHPUnit_Framework_MockObject_MockObject $randomMock */
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->expects($this->any())->method('getRandomString')->willReturn('key');
+
+        $cryptKeyGenerator = new CryptKeyGenerator($randomMock);
+
+        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\App\ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManagerMock->method('create')->willReturn(new ConfigData('app_env'));
+
+        $configDataFactoryMock = (new ObjectManager($this))
+            ->getObject(ConfigDataFactory::class, ['objectManager' => $objectManagerMock]);
+
+        $driverOptions = $this->getMockBuilder(DriverOptions::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDriverOptions'])
+            ->getMock();
+
+        $this->configGeneratorObject = new ConfigGenerator(
+            $randomMock,
+            $deployConfig,
+            $configDataFactoryMock,
+            $cryptKeyGenerator,
+            $driverOptions
+        );
     }
 
     public function testCreateCryptConfigWithInput()
@@ -37,6 +74,7 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $returnValue = $this->configGeneratorObject->createCryptConfig([]);
         $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
     }
 

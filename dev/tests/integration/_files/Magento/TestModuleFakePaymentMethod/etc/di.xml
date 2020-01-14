@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- payment method config -->
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Facade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">fake</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Config\ValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Validator\ValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Command\CommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Config\ValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Config\ConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Config\ConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Config\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Config\Config" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">fake</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Validator\ValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <!-- no validation -->
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Command\CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="sale" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="capture" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="settlement" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="vault_authorize" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="vault_sale" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="vault_capture" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="void" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="refund" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="cancel" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+                <item name="deny_payment" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\DoNothingCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Command\CommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Command\CommandPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
+        <arguments>
+            <argument name="executors" xsi:type="array">
+                <item name="fake" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Command\CommandManager</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- vault config -->
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\VaultFacade" type="Magento\Vault\Model\Method\Vault">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Config\Vault\Config</argument>
+            <argument name="valueHandlerPool" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Config\Vault\ValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Facade</argument>
+            <argument name="code" xsi:type="string">fake_vault</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Config\Vault\ValueHandlerPool" type="VaultPaymentValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\TestModuleFakePaymentMethod\Gateway\Config\Vault\ConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Config\Vault\ConfigValueHandler" type="VaultPaymentDefaultValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Magento\TestModuleFakePaymentMethod\Gateway\Config\Vault\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\TestModuleFakePaymentMethod\Gateway\Config\Vault\Config" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">fake_vault</argument>
+        </arguments>
+    </virtualType>
+</config>

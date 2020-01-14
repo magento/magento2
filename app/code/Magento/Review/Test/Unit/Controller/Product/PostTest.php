@@ -147,7 +147,11 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $ratingFactory->expects($this->once())->method('create')->willReturn($this->rating);
         $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
-        $this->store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
+        $this->store = $this->createPartialMock(
+            \Magento\Store\Model\Store::class,
+            ['getId', 'getWebsiteId']
+        );
+
         $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
 
@@ -219,7 +223,7 @@ class PostTest extends \PHPUnit\Framework\TestCase
             ->willReturn(1);
         $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId']
+            ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId', 'getWebsiteIds']
         );
         $product->expects($this->once())
             ->method('isVisibleInCatalog')
@@ -227,6 +231,15 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->once())
             ->method('isVisibleInSiteVisibility')
             ->willReturn(true);
+
+        $product->expects($this->once())
+            ->method('getWebsiteIds')
+            ->willReturn([1]);
+
+        $this->store->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn(1);
+
         $this->productRepository->expects($this->any())->method('getById')
             ->with(1)
             ->willReturn($product);
@@ -286,7 +299,7 @@ class PostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->review->expects($this->once())->method('aggregate')
             ->willReturnSelf();
-        $this->messageManager->expects($this->once())->method('addSuccess')
+        $this->messageManager->expects($this->once())->method('addSuccessMessage')
             ->with(__('You submitted your review for moderation.'))
             ->willReturnSelf();
         $this->reviewSession->expects($this->once())->method('getRedirectUrl')

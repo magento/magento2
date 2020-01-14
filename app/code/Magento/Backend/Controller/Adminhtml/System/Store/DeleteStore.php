@@ -15,13 +15,13 @@ class DeleteStore extends \Magento\Backend\Controller\Adminhtml\System\Store
     {
         $itemId = $this->getRequest()->getParam('item_id', null);
         if (!($model = $this->_objectManager->create(\Magento\Store\Model\Store::class)->load($itemId))) {
-            $this->messageManager->addError(__('Something went wrong. Please try again.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong. Please try again.'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
             $redirectResult = $this->resultRedirectFactory->create();
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
-            $this->messageManager->addError(__('This store view cannot be deleted.'));
+            $this->messageManager->addErrorMessage(__('This store view cannot be deleted.'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
             $redirectResult = $this->resultRedirectFactory->create();
             return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $itemId]);

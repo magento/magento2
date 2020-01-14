@@ -6,6 +6,10 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Build select for rule relation with product.
  */
@@ -32,49 +36,55 @@ class RuleProductsSelectBuilder
     private $metadataPool;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @var ActiveTableSwitcher
      */
     private $activeTableSwitcher;
+
+    /**
+     * @var TableSwapper
+     */
+    private $tableSwapper;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+     * @param ActiveTableSwitcher $activeTableSwitcher
+     * @param TableSwapper|null $tableSwapper
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+        ActiveTableSwitcher $activeTableSwitcher,
+        TableSwapper $tableSwapper = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->storeManager = $storeManager;
         $this->metadataPool = $metadataPool;
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
+        $this->tableSwapper = $tableSwapper ??
+            ObjectManager::getInstance()->get(TableSwapper::class);
     }
 
     /**
      * Build select for indexer according passed parameters.
      *
      * @param int $websiteId
-     * @param \Magento\Catalog\Model\Product|null $product
+     * @param int|null $productId
      * @param bool $useAdditionalTable
      * @return \Zend_Db_Statement_Interface
      */
-    public function build(
-        $websiteId,
-        \Magento\Catalog\Model\Product $product = null,
-        $useAdditionalTable = false
-    ) {
+    public function build(int $websiteId, ?int $productId = null, bool $useAdditionalTable = false)
+    {
         $connection = $this->resource->getConnection();
         $indexTable = $this->resource->getTableName('catalogrule_product');
         if ($useAdditionalTable) {
             $indexTable = $this->resource->getTableName(
-                $this->activeTableSwitcher->getAdditionalTableName('catalogrule_product')
+                $this->tableSwapper->getWorkingTableName('catalogrule_product')
             );
         }
 
@@ -94,8 +104,8 @@ class RuleProductsSelectBuilder
             ['rp.website_id', 'rp.customer_group_id', 'rp.product_id', 'rp.sort_order', 'rp.rule_id']
         );
 
-        if ($product && $product->getEntityId()) {
-            $select->where('rp.product_id=?', $product->getEntityId());
+        if ($productId) {
+            $select->where('rp.product_id=?', $productId);
         }
 
         /**
@@ -146,9 +156,11 @@ class RuleProductsSelectBuilder
             sprintf($joinCondition, $tableAlias, $storeId),
             []
         );
-        $select->columns([
-            'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
-        ]);
+        $select->columns(
+            [
+                'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
+            ]
+        );
 
         return $connection->query($select);
     }

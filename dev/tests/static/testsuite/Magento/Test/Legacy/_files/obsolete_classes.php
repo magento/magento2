@@ -4,6 +4,8 @@
  *
  * Format: array(<class_name>[, <replacement>])
  *
+ * @codingStandardsIgnoreFile
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -707,35 +709,6 @@ return [
         'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
     ],
     ['Magento\CatalogSearch\Model\Layer', 'Magento\Catalog\Model\Layer'],
-    ['Magento\Solr\Block\Catalog\Layer\View', 'Magento\LayeredNavigation\Block\Navigation'],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Attribute',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Category',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Decimal',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Price',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalogsearch\Layer\Filter\Attribute',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    ['Magento\Solr\Block\Catalogsearch\Layer', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'],
-    ['Magento\Solr\Model\Catalog\Layer', 'Magento\Catalog\Model\Layer\Category'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Attribute', 'Magento\Catalog\Model\Layer\Filter\Attribute'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Category', 'Magento\Catalog\Model\Layer\Filter\Category'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Decimal', 'Magento\Catalog\Model\Layer\Filter\Decimal'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Price', 'Magento\Catalog\Model\Layer\Filter\Price'],
-    ['Magento\Solr\Model\Search\Layer\Filter\Attribute', 'Magento\Catalog\Model\Layer\Filter\Attribute'],
-    ['Magento\Solr\Model\Search\Layer', 'Magento\Catalog\Model\Layer'],
     [
         'Magento\Catalog\Model\Product\Type\Configurable',
         'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
@@ -867,7 +840,8 @@ return [
     ['Mage_Core_Model_Resource_Setup_Query_Modifier'],
     ['Mage_Core_Model_Session_Abstract_Varien'],
     ['Mage_Core_Model_Session_Abstract_Zend'],
-    ['Magento\Core\Model\Source\Email\Variables', 'Magento\Email\Model\Source\Variables'],
+    ['Magento\Core\Model\Source\Email\Variables', 'Magento\Variable\Model\Source\Variables'],
+    ['Magento\Email\Model\Source\Variables', 'Magento\Variable\Model\Source\Variables'],
     ['Magento\Core\Model\Store\ListInterface', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Core\Model\Store\StorageInterface', 'Magento\Store\Model\StoreManagerInterface'],
     ['Mage_Core_Model_Store_Group_Limitation'],
@@ -1818,7 +1792,7 @@ return [
     ],
     ['Magento\Adminhtml\Block\Report\Shopcart\Product', 'Magento\Reports\Block\Adminhtml\Shopcart\Product'],
     ['Magento\Adminhtml\Block\Report\Wishlist\Grid', 'Magento\Reports\Block\Adminhtml\Wishlist\Grid'],
-    ['Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'],
+    ['Magento\Adminhtml\Block\Report\Wishlist'],
     ['Magento\Backend\Helper\Addresses'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
     [
@@ -3226,6 +3200,8 @@ return [
     ['Magento\Tax\Model\ResourceModel\Sales\Order\Tax\Item', 'Magento\Sales\Model\ResourceModel\Order\Tax\Item'],
     ['Magento\Tax\Model\Sales\Order\Tax\Item', 'Magento\Sales\Model\Order\Tax\Item'],
     ['Magento\Reports\Block\Adminhtml\Product\Grid'],
+    ['Magento\Reports\Block\Adminhtml\Product\Widget\Viewed\Item'],
+    ['Magento\Reports\Block\Adminhtml\Wishlist'],
     ['Magento\Reports\Model\Totals'],
     ['Magento\Log\Model\Shell'],
     ['Magento\Log\App\Shell'],
@@ -4102,7 +4078,8 @@ return [
     ['Magento\PageCache\Model\Observer\FlushAllCache', 'Magento\PageCache\Observer\*'],
     ['Magento\PageCache\Model\Observer\InvalidateCache', 'Magento\PageCache\Observer\*'],
     ['Magento\PageCache\Model\Observer\RegisterFormKeyFromCookie', 'Magento\PageCache\Observer\*'],
-    ['Magento\PageCache\Model\Observer\FlushFormKeyOnLogout', 'Magento\PageCache\Observer\*'],
+    ['Magento\PageCache\Model\Observer\FlushFormKeyOnLogout', 'Magento\PageCache\Observer\FlushFormKey'],
+    ['Magento\PageCache\Model\FlushFormKeyOnLogout', 'Magento\PageCache\Observer\FlushFormKey'],
     ['Magento\GoogleOptimizer\Model\Observer\Product\Save', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Product\Delete', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Category\Save', 'Magento\GoogleOptimizer\Observer\*'],
@@ -4239,4 +4216,31 @@ return [
     ['Magento\Framework\Acl\CacheInterface'],
     ['Magento\Framework\Acl\Test\Unit\CacheTest'],
     ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\ResetButton'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\SaveAndContinueButton'],
+    ['Magento\Fmework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat'],
+    [
+        'Magento\Framework\MessageQueue\Config\Converter',
+        'Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter'
+    ],
+    ['Magento\Framework\MessageQueue\Config\Reader', 'Magento\Framework\MessageQueue\Config\Reader\Xml'],
+    ['Magento\Framework\MessageQueue\PublisherFactory'],
+    ['Magento\Framework\MessageQueue\PublisherProxy'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton'],
+    ['Magento\Search\Block\SearchData', 'Magento\AdvancedSearch\Block\SearchData'],
+    ['Magento\Search\Block\Recommendations', 'Magento\AdvancedSearch\Block\Recommendations'],
+    ['Magento\Search\Block\SearchDataInterface', 'Magento\AdvancedSearch\Block\SearchDataInterface'],
+    ['Magento\Search\Block\Suggestions', 'Magento\AdvancedSearch\Block\Suggestions'],
+    ['Magento\Search\Model\SearchDataProvider', 'Magento\AdvancedSearch\Model\SearchDataProvider'],
+    ['Magento\Search\Model\SearchDataProviderInterface', 'Magento\AdvancedSearch\Model\SearchDataProviderInterface'],
+    [
+        'Magento\Elasticsearch\Test\Unit\Model\SearchAdapter\ConnectionManagerTest',
+        'Magento\Elasticsearch\Test\Unit\SearchAdapter\ConnectionManagerTest'
+    ],
+    ['Zend_Feed', 'Zend\Feed'],
+    ['Zend_Uri', 'Zend\Uri\Uri'],
+    ['Zend_Mime', 'Magento\Framework\HTTP\Mime'],
+    ['Magento\Framework\Encryption\Crypt', 'Magento\Framework\Encryption\EncryptionAdapterInterface'],
+    ['Magento\Wishlist\Setup\Patch\Schema\AddProductIdConstraint'],
 ];

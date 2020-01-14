@@ -124,7 +124,7 @@ define([
         },
 
         /**
-         * Returns option object assoctiated with provided value.
+         * Returns option object associated with provided value.
          *
          * @param {String} value
          * @returns {Object}

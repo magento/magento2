@@ -67,7 +67,7 @@ class AssertBundleItemsSummaryOnProductPage extends AbstractAssertForm
             }
         }
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedResult,
             $actualResult,
             'Bundle Summary Section does not contain correct bundle options data.'

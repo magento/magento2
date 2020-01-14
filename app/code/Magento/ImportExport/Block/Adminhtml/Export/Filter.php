@@ -142,7 +142,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($attribute->getFilterOptions()) {
             $options = $attribute->getFilterOptions();
         } else {
-            $options = $attribute->getSource()->getAllOptions(false);
+            $options = $attribute->getSource()->getAllOptions();
 
             foreach ($options as $key => $optionParams) {
                 if ('' === $optionParams['value']) {
@@ -151,12 +151,13 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 }
             }
         }
+
         if ($size = count($options)) {
             $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
                 'class' => 'multiselect multiselect-export-filter',
-                'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size)),
+                'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size)) . '"',
             ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->createBlock(
@@ -236,20 +237,20 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($attribute->getFilterOptions()) {
             $options = [];
 
-            foreach ($attribute->getFilterOptions() as $value => $label) {
-                $options[] = ['value' => $value, 'label' => $label];
+            foreach ($attribute->getFilterOptions() as $optionValue => $label) {
+                $options[] = ['value' => $optionValue, 'label' => $label];
             }
         } else {
             $options = $attribute->getSource()->getAllOptions(false);
         }
         if ($size = count($options)) {
-            // add empty vaue option
+            // add empty value option
             $firstOption = reset($options);
 
             if ('' === $firstOption['value']) {
                 $options[key($options)]['label'] = '';
             } else {
-                array_unshift($options, ['value' => '', 'label' => '']);
+                array_unshift($options, ['value' => '', 'label' => __('-- Not Selected --')]);
             }
             $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()),
@@ -363,6 +364,9 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         switch ($filterType) {
             case \Magento\ImportExport\Model\Export::FILTER_TYPE_SELECT:
                 $cell = $this->_getSelectHtmlWithValue($row, $value);
+                break;
+            case \Magento\ImportExport\Model\Export::FILTER_TYPE_MULTISELECT:
+                $cell = $this->_getMultiSelectHtmlWithValue($row, $value);
                 break;
             case \Magento\ImportExport\Model\Export::FILTER_TYPE_INPUT:
                 $cell = $this->_getInputHtmlWithValue($row, $value);

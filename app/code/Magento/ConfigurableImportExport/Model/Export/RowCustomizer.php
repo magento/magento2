@@ -3,14 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableImportExport\Model\Export;
 
-use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
+use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Customizes output during export
+ */
 class RowCustomizer implements RowCustomizerInterface
 {
     /**
@@ -37,6 +44,19 @@ class RowCustomizer implements RowCustomizerInterface
     ];
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     */
+    public function __construct(StoreManagerInterface $storeManager)
+    {
+        $this->storeManager = $storeManager;
+    }
+
+    /**
      * Prepare configurable data for export
      *
      * @param ProductCollection $collection
@@ -48,6 +68,9 @@ class RowCustomizer implements RowCustomizerInterface
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter('entity_id', ['in' => $productIds])
             ->addAttributeToFilter('type_id', ['eq' => ConfigurableProductType::TYPE_CODE]);
+
+        // set global scope during export
+        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
 
         while ($product = $productCollection->fetchItem()) {
             $productAttributesOptions = $product->getTypeInstance()->getConfigurableOptions($product);

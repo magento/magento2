@@ -56,8 +56,8 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->_customerSession->loginById(1);
         $translation = __('Not you?');
 
-        $this->assertStringMatchesFormat(
-            '%A<span>%A<a%Ahref="' . $this->_block->getHref() . '"%A>' . $translation . '</a>%A</span>%A',
+        $this->assertContains(
+            '<a href="' . $this->_block->getHref() . '">' . $translation . '</a>',
             $this->_block->toHtml()
         );
         $this->_customerSession->logout();

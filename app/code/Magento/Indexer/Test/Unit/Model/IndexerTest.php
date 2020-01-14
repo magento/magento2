@@ -154,17 +154,14 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
 
         if ($getViewIsEnabled && $getViewGetUpdated) {
-            if (!$getStateGetUpdated) {
-                $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-            } else {
-                if ($getViewGetUpdated == $getStateGetUpdated) {
-                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-                } else {
-                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-                }
-            }
+            $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
         } else {
-            $this->assertEquals($getStateGetUpdated, $this->model->getLatestUpdated());
+            $getLatestUpdated = $this->model->getLatestUpdated();
+            $this->assertEquals($getStateGetUpdated, $getLatestUpdated);
+
+            if ($getStateGetUpdated === null) {
+                $this->assertNotNull($getLatestUpdated);
+            }
         }
     }
 
@@ -182,7 +179,8 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
             [true, '', '06-Jan-1944'],
             [true, '06-Jan-1944', ''],
             [true, '', ''],
-            [true, '06-Jan-1944', '05-Jan-1944']
+            [true, '06-Jan-1944', '05-Jan-1944'],
+            [false, null, null],
         ];
     }
 
@@ -273,6 +271,59 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->model->reindexAll();
     }
 
+    /**
+     * @expectedException \Error
+     * @expectedExceptionMessage Test Engine Error
+     */
+    public function testReindexAllWithError()
+    {
+
+        $indexId = 'indexer_internal_name';
+        $this->loadIndexer($indexId);
+
+        $stateMock = $this->createPartialMock(
+            \Magento\Indexer\Model\Indexer\State::class,
+            ['load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save']
+        );
+        $stateMock->expects($this->once())->method('load')->with($indexId, 'indexer_id')->will($this->returnSelf());
+        $stateMock->expects($this->never())->method('setIndexerId');
+        $stateMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $stateMock->expects($this->exactly(2))->method('setStatus')->will($this->returnSelf());
+        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue('idle'));
+        $stateMock->expects($this->exactly(2))->method('save')->will($this->returnSelf());
+        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+
+        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+        $this->viewMock->expects($this->never())->method('suspend');
+        $this->viewMock->expects($this->once())->method('resume');
+
+        $actionMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\ActionInterface::class,
+            ['executeFull', 'executeList', 'executeRow']
+        );
+        $actionMock->expects($this->once())->method('executeFull')->will(
+            $this->returnCallback(
+                function () {
+                     throw new \Error('Test Engine Error');
+                }
+            )
+        );
+        $this->actionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Some\Class\Name'
+        )->will(
+            $this->returnValue($actionMock)
+        );
+
+        $this->model->reindexAll();
+    }
+
+    /**
+     * @return array
+     */
     protected function getIndexerData()
     {
         return [

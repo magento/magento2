@@ -71,8 +71,9 @@ class StartUpdaterTest extends \PHPUnit\Framework\TestCase
             ->with($this->controller)
             ->willReturn($this->mvcEvent);
         $this->mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $this->mvcEvent->expects($this->any())->method('getName')->willReturn('dispatch');
     }
-    
+
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();

@@ -6,48 +6,68 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogRule\Model\Rule;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Reindex rule relations with products.
  */
 class ReindexRuleProduct
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     private $resource;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @var ActiveTableSwitcher
      */
     private $activeTableSwitcher;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+     * @var TableSwapper
+     */
+    private $tableSwapper;
+
+    /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
+     * @param ResourceConnection $resource
+     * @param ActiveTableSwitcher $activeTableSwitcher
+     * @param TableSwapper $tableSwapper
+     * @param TimezoneInterface $localeDate
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+        ResourceConnection $resource,
+        ActiveTableSwitcher $activeTableSwitcher,
+        TableSwapper $tableSwapper,
+        TimezoneInterface $localeDate
     ) {
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
+        $this->tableSwapper = $tableSwapper;
+        $this->localeDate = $localeDate;
     }
 
     /**
      * Reindex information about rule relations with products.
      *
-     * @param \Magento\CatalogRule\Model\Rule $rule
+     * @param Rule $rule
      * @param int $batchCount
      * @param bool $useAdditionalTable
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute(
-        \Magento\CatalogRule\Model\Rule $rule,
-        $batchCount,
-        $useAdditionalTable = false
-    ) {
+    public function execute(Rule $rule, $batchCount, $useAdditionalTable = false)
+    {
         if (!$rule->getIsActive() || empty($rule->getWebsiteIds())) {
             return false;
         }
@@ -65,27 +85,34 @@ class ReindexRuleProduct
         $indexTable = $this->resource->getTableName('catalogrule_product');
         if ($useAdditionalTable) {
             $indexTable = $this->resource->getTableName(
-                $this->activeTableSwitcher->getAdditionalTableName('catalogrule_product')
+                $this->tableSwapper->getWorkingTableName('catalogrule_product')
             );
         }
 
         $ruleId = $rule->getId();
         $customerGroupIds = $rule->getCustomerGroupIds();
-        $fromTime = strtotime($rule->getFromDate());
-        $toTime = strtotime($rule->getToDate());
-        $toTime = $toTime ? $toTime + \Magento\CatalogRule\Model\Indexer\IndexBuilder::SECONDS_IN_DAY - 1 : 0;
         $sortOrder = (int)$rule->getSortOrder();
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
         $actionStop = $rule->getStopRulesProcessing();
 
         $rows = [];
+        foreach ($websiteIds as $websiteId) {
+            $scopeTz = new \DateTimeZone(
+                $this->localeDate->getConfigTimezone(ScopeInterface::SCOPE_WEBSITE, $websiteId)
+            );
+            $fromTime = $rule->getFromDate()
+                ? (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp()
+                : 0;
+            $toTime = $rule->getToDate()
+                ? (new \DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
+                : 0;
 
-        foreach ($productIds as $productId => $validationByWebsite) {
-            foreach ($websiteIds as $websiteId) {
+            foreach ($productIds as $productId => $validationByWebsite) {
                 if (empty($validationByWebsite[$websiteId])) {
                     continue;
                 }
+
                 foreach ($customerGroupIds as $customerGroupId) {
                     $rows[] = [
                         'rule_id' => $ruleId,
@@ -110,6 +137,7 @@ class ReindexRuleProduct
         if (!empty($rows)) {
             $connection->insertMultiple($indexTable, $rows);
         }
+
         return true;
     }
 }

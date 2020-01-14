@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * EAV attribute resource model (Using Forms)
  *
- * @method \Magento\Eav\Model\Attribute\Data\AbstractData|null getDataModel() Get data model linked to attribute or null.
+ * @method \Magento\Eav\Model\Attribute\Data\AbstractData|null getDataModel()
+ * Get data model linked to attribute or null.
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
@@ -62,7 +61,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      */
     public function getWebsite()
     {
-        if (is_null($this->_website)) {
+        if ($this->_website === null) {
             $this->_website = $this->_storeManager->getWebsite();
         }
 
@@ -88,7 +87,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     public function getUsedInForms()
     {
         $forms = $this->getData('used_in_forms');
-        if (is_null($forms)) {
+        if ($forms === null) {
             $forms = $this->_getResource()->getUsedInForms($this);
             $this->setData('used_in_forms', $forms);
         }

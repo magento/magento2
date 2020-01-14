@@ -74,7 +74,7 @@ class LogoutAllTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess', 'addError', 'addException'])
+            ->setMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
@@ -132,12 +132,12 @@ class LogoutAllTest extends \PHPUnit\Framework\TestCase
         $this->sessionsManager->expects($this->once())
             ->method('logoutOtherUserSessions');
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($successMessage);
         $this->messageManager->expects($this->never())
-            ->method('addError');
+            ->method('addErrorMessage');
         $this->messageManager->expects($this->never())
-            ->method('addException');
+            ->method('addExceptionMessage');
         $this->responseMock->expects($this->once())
             ->method('setRedirect');
         $this->actionFlagMock->expects($this->once())
@@ -158,7 +158,7 @@ class LogoutAllTest extends \PHPUnit\Framework\TestCase
             ->method('logoutOtherUserSessions')
             ->willThrowException(new LocalizedException($phrase));
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($phrase);
         $this->controller->execute();
     }
@@ -173,7 +173,7 @@ class LogoutAllTest extends \PHPUnit\Framework\TestCase
             ->method('logoutOtherUserSessions')
             ->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with(new \Exception(), $phrase);
         $this->controller->execute();
     }

@@ -3,21 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Security\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Security\Model\Config;
-use Magento\Newsletter\Model\Plugin\CustomerPlugin;
-use Magento\Framework\Webapi\Rest\Request as RestRequest;
-use Magento\Newsletter\Model\Subscriber;
-use Magento\Customer\Model\Data\Customer as CustomerData;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface
@@ -112,16 +109,16 @@ class AccountManagementTest extends WebapiAbstract
         $this->initSubscriber();
 
         if ($this->config->getConfigDataValue(
-            Config::XML_PATH_FRONTED_AREA .
+            Config::XML_PATH_FRONTEND_AREA .
             Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
         ) != 0) {
             $this->configValue = $this->config
                 ->getConfigDataValue(
-                    Config::XML_PATH_FRONTED_AREA .
+                    Config::XML_PATH_FRONTEND_AREA .
                     Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
                 );
             $this->config->setDataByPath(
-                Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
+                Config::XML_PATH_FRONTEND_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
                 0
             );
             $this->config->save();
@@ -150,7 +147,7 @@ class AccountManagementTest extends WebapiAbstract
             }
         }
         $this->config->setDataByPath(
-            Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
+            Config::XML_PATH_FRONTEND_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
             $this->configValue
         );
         $this->config->save();
@@ -216,6 +213,34 @@ class AccountManagementTest extends WebapiAbstract
         }
     }
 
+    public function testCreateCustomerWithoutOptionalFields()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST, ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'CreateAccount',
+            ],
+        ];
+
+        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        unset($customerDataArray['store_id']);
+        unset($customerDataArray['website_id']);
+        $requestData = ['customer' => $customerDataArray, 'password' => CustomerHelper::PASSWORD];
+        try {
+            $customerData = $this->_webApiCall($serviceInfo, $requestData, null, 'all');
+            $this->assertNotNull($customerData['id']);
+        } catch (\Exception $e) {
+            $this->fail('Customer should be created without optional fields.');
+        }
+    }
+
     /**
      * Test customer activation when it is required
      *
@@ -224,7 +249,15 @@ class AccountManagementTest extends WebapiAbstract
     public function testActivateCustomer()
     {
         $customerData = $this->_createCustomer();
-        $this->assertNotNull($customerData[Customer::CONFIRMATION], 'Customer activation is not required');
+
+        // Update the customer's confirmation key to a known value
+        $customerData = $this->customerHelper->updateSampleCustomer(
+            $customerData[Customer::ID],
+            [
+                'id' => $customerData[Customer::ID],
+                'confirmation' => CustomerHelper::CONFIRMATION
+            ]
+        );
 
         $serviceInfo = [
             'rest' => [
@@ -240,16 +273,15 @@ class AccountManagementTest extends WebapiAbstract
 
         $requestData = [
             'email' => $customerData[Customer::EMAIL],
-            'confirmationKey' => $customerData[Customer::CONFIRMATION],
+            'confirmationKey' => CustomerHelper::CONFIRMATION
         ];
 
-        $result = $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->assertEquals($customerData[Customer::ID], $result[Customer::ID], 'Wrong customer!');
-        $this->assertTrue(
-            !isset($result[Customer::CONFIRMATION]) || $result[Customer::CONFIRMATION] === null,
-            'Customer is not activated!'
-        );
+        try {
+            $result = $this->_webApiCall($serviceInfo, $requestData);
+            $this->assertEquals($customerData[Customer::ID], $result[Customer::ID], 'Wrong customer!');
+        } catch (\Exception $e) {
+            $this->fail('Customer is not activated.');
+        }
     }
 
     public function testGetCustomerActivateCustomer()
@@ -269,14 +301,15 @@ class AccountManagementTest extends WebapiAbstract
         ];
         $requestData = [
             'email' => $customerData[Customer::EMAIL],
-            'confirmationKey' => $customerData[Customer::CONFIRMATION],
+            'confirmationKey' => CustomerHelper::CONFIRMATION
         ];
 
-        $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->assertEquals($customerData[Customer::ID], $customerResponseData[Customer::ID]);
-        // Confirmation key is removed after confirmation
-        $this->assertFalse(isset($customerResponseData[Customer::CONFIRMATION]));
+        try {
+            $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
+            $this->assertEquals($customerData[Customer::ID], $customerResponseData[Customer::ID]);
+        } catch (\Exception $e) {
+            $this->fail('Customer is not activated.');
+        }
     }
 
     public function testValidateResetPasswordLinkToken()
@@ -326,7 +359,7 @@ class AccountManagementTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = 'Reset password token mismatch.';
+        $expectedMessage = 'The password token is mismatched. Reset and try again.';
 
         try {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
@@ -370,13 +403,13 @@ class AccountManagementTest extends WebapiAbstract
                 'message' => 'One or more input exceptions have occurred.',
                 'errors' => [
                     [
-                        'message' => '%fieldName is a required field.',
+                        'message' => '"%fieldName" is required. Enter and try again.',
                         'parameters' => [
                             'fieldName' => 'email',
                         ],
                     ],
                     [
-                        'message' => '%fieldName is a required field.',
+                        'message' => '"%fieldName" is required. Enter and try again.',
                         'parameters' => [
                             'fieldName' => 'template',
                         ]
@@ -579,8 +612,14 @@ class AccountManagementTest extends WebapiAbstract
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
 
-        $this->assertEquals('The value of attribute "firstname" must be set', $validationResponse['messages'][0]);
-        $this->assertEquals('The value of attribute "lastname" must be set', $validationResponse['messages'][1]);
+        $this->assertEquals(
+            'The "First Name" attribute value is empty. Set the attribute and try again.',
+            $validationResponse['messages'][0]
+        );
+        $this->assertEquals(
+            'The "Last Name" attribute value is empty. Set the attribute and try again.',
+            $validationResponse['messages'][1]
+        );
     }
 
     public function testIsReadonly()

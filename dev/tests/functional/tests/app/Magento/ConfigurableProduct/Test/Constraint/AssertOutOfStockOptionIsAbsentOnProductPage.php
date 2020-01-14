@@ -38,7 +38,7 @@ class AssertOutOfStockOptionIsAbsentOnProductPage extends AbstractConstraint
             $productOptions = $catalogProductView->getConfigurableAttributesBlock()->getSelectOptionsData($option);
         }
         $option = $this->isOptionAbsent($outOfStockOption, $productOptions);
-        \PHPUnit_Framework_Assert::assertTrue($option, 'Out of stock option is present on product page.');
+        \PHPUnit\Framework\Assert::assertTrue($option, 'Out of stock option is present on product page.');
     }
 
     /**

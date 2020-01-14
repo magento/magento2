@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Review\Block\Form $block */
+//phpcs:disable Generic.Files.LineLength
 ?>
 <div class="block review-add">
     <div class="block-title"><strong><?= $block->escapeHtml(__('Write Your Own Review')) ?></strong></div>
 <div class="block-content">
-<?php if ($block->getAllowWriteReviewFlag()): ?>
+<?php if ($block->getAllowWriteReviewFlag()):?>
 <form action="<?= $block->escapeUrl($block->getAction()) ?>" class="review-form" method="post" id="review-form" data-role="product-review-form" data-bind="scope: 'review-form'">
     <?= $block->getBlockHtml('formkey') ?>
     <?= $block->getChildHtml('form_fields_before') ?>
@@ -35,16 +34,16 @@
                                     id="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
                                     value="<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                                     class="radio"
-                                    data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}"
+                                    data-validate="{'rating-required':true}"
                                     aria-labelledby="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_rating_label <?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label" />
                                 <label
                                     class="rating-<?= $block->escapeHtmlAttr($iterator) ?>"
                                     for="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
-                                    title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?>"
+                                    title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?>"
                                     id="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
-                                    <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?></span>
+                                    <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?></span>
                                 </label>
-                            <?php $iterator++; ?>
+                                <?php $iterator++; ?>
                             <?php endforeach; ?>
                             </div>
                         </div>
@@ -85,7 +84,9 @@
         "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
     },
     "#review-form": {
-        "Magento_Review/js/error-placement": {}
+        "Magento_Review/js/error-placement": {},
+        "Magento_Review/js/validate-review": {},
+        "Magento_Review/js/submit-review": {}
     }
 }
 </script>

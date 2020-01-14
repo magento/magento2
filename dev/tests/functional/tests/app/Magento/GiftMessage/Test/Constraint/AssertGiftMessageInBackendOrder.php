@@ -74,7 +74,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
         }
 
         $errors = $this->verifyData($expectedData, $actualData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 
     /**

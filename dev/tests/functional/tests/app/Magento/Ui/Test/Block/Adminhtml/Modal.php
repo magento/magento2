@@ -150,7 +150,7 @@ class Modal extends Block
     }
 
     /**
-     * Wait until modal window will disapper.
+     * Wait until modal window will disappear.
      *
      * @return void
      */
@@ -161,6 +161,30 @@ class Modal extends Block
                 return $this->browser->find($this->modalOverlay)->isVisible() == false ? true : null;
             }
         );
+    }
+
+    /**
+     * Dismiss the modal if it appears
+     *
+     * @return void
+     */
+    public function dismissIfModalAppears()
+    {
+        $browser = $this->browser;
+        $selector = $this->dismissWarningSelector;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $item = $browser->find($selector);
+                if ($item->isVisible()) {
+                    return true;
+                }
+                $this->waitModalAnimationFinished();
+                return true;
+            }
+        );
+        if ($this->browser->find($selector)->isVisible()) {
+            $this->browser->find($selector)->click();
+        }
     }
 
     /**

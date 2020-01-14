@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="js">
-            <block class="Magento\PageCache\Block\System\Config\Form\Field\Export" template="Magento_PageCache::page_cache_validation.phtml"/>
+            <block class="Magento\PageCache\Block\System\Config\Form\Field\Export" name="js.page_cache_validation" template="Magento_PageCache::page_cache_validation.phtml"/>
         </referenceContainer>
     </body>
 </page>

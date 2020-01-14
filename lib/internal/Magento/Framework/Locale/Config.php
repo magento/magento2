@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Allowed locale and currency configuration.
+ */
 class Config implements \Magento\Framework\Locale\ConfigInterface
 {
     /**
@@ -74,10 +77,11 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'lv_LV', /*Latvian (Latvia)*/
         'mk_MK', /*Macedonian (Macedonia)*/
         'mn_Cyrl_MN', /*Mongolian (Mongolia)*/
+        'ms_MY', /*Malaysian (Malaysia)*/
         'ms_Latn_MY', /*Malaysian (Malaysia)*/
         'nl_BE', /*Dutch (Belgium)*/
         'nl_NL', /*Dutch (Netherlands)*/
-        'nb_NO', /*Norwegian BokmГ_l (Norway)*/
+        'nb_NO', /*Norwegian Bokmål (Norway)*/
         'nn_NO', /*Norwegian Nynorsk (Norway)*/
         'pl_PL', /*Polish (Poland)*/
         'pt_BR', /*Portuguese (Brazil)*/
@@ -87,8 +91,10 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'sk_SK', /*Slovak (Slovakia)*/
         'sl_SI', /*Slovenian (Slovenia)*/
         'sq_AL', /*Albanian (Albania)*/
-        'sr_Cyrl_RS', /*Serbian (Serbia)*/
+        'sr_Cyrl_RS', /*Serbian (Cyrillic, Serbia)*/
+        'sr_Latn_RS', /*Serbian (Latin, Serbia)*/
         'sv_SE', /*Swedish (Sweden)*/
+        'sv_FI', /*Swedish (Finland)*/
         'sw_KE', /*Swahili (Kenya)*/
         'th_TH', /*Thai (Thailand)*/
         'tr_TR', /*Turkish (Turkey)*/
@@ -101,6 +107,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'lo_LA', /*Laotian*/
         'es_VE', /*Spanish (Venezuela)*/
         'en_IE', /*English (Ireland)*/
+        'es_BO', /*Spanish (Bolivia)*/
     ];
 
     /**
@@ -122,7 +129,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'BHD', /*Bahraini Dinar*/
         'BDT', /*Bangladesh Taka*/
         'BBD', /*Barbados Dollar*/
-        'BYR', /*Belarussian Ruble*/
+        'BYN', /*Belarussian Ruble*/
         'BZD', /*Belize Dollar*/
         'BMD', /*Bermudan Dollar*/
         'BTN', /*Bhutan Ngultrum*/

@@ -197,20 +197,20 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProcessedTemplateSubject()
     {
-        $model = $this->getModelMock([
-            'getTemplateFilter',
-            'getDesignConfig',
-            'applyDesignConfig',
-            'setVariables',
-        ]);
+        $model = $this->getModelMock(
+            [
+                'getTemplateFilter',
+                'getDesignConfig',
+                'applyDesignConfig',
+                'setVariables',
+            ]
+        );
 
         $templateSubject = 'templateSubject';
         $model->setTemplateSubject($templateSubject);
+        $model->setTemplateId('foobar');
 
-        $filterTemplate = $this->getMockBuilder(\Magento\Framework\Filter\Template::class)
-            ->setMethods(['setVariables', 'setStoreId', 'filter'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterTemplate = $this->createMock(\Magento\Framework\Filter\Template::class);
         $model->expects($this->once())
             ->method('getTemplateFilter')
             ->will($this->returnValue($filterTemplate));
@@ -220,6 +220,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->method('filter')
             ->with($templateSubject)
             ->will($this->returnValue($expectedResult));
+
+        $filterTemplate->expects($this->exactly(2))
+            ->method('setStrictMode')
+            ->withConsecutive([$this->equalTo(false)], [$this->equalTo(true)])
+            ->willReturnOnConsecutiveCalls(true, false);
 
         $variables = ['key' => 'value'];
         $filterTemplate->expects($this->once())
@@ -245,21 +250,24 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
     {
+        class_exists(\Magento\Newsletter\Model\Template\Filter::class, true);
         $filterTemplate = $this->getMockBuilder(\Magento\Newsletter\Model\Template\Filter::class)
-            ->setMethods([
-                'setUseSessionInUrl',
-                'setPlainTemplateMode',
-                'setIsChildTemplate',
-                'setDesignParams',
-                'setVariables',
-                'setStoreId',
-                'filter',
-                'getStoreId',
-                'getInlineCssFiles',
-            ])
+            ->setMethods(
+                [
+                    'setUseSessionInUrl',
+                    'setPlainTemplateMode',
+                    'setIsChildTemplate',
+                    'setDesignParams',
+                    'setVariables',
+                    'setStoreId',
+                    'filter',
+                    'getStoreId',
+                    'getInlineCssFiles',
+                    'setStrictMode',
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
-
         $filterTemplate->expects($this->once())
             ->method('setUseSessionInUrl')
             ->with(false)
@@ -281,12 +289,15 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->method('getStoreId')
             ->will($this->returnValue($storeId));
 
+        $filterTemplate->expects($this->exactly(2))
+            ->method('setStrictMode')
+            ->withConsecutive([$this->equalTo(true)], [$this->equalTo(false)])
+            ->willReturnOnConsecutiveCalls(false, true);
+
         // The following block of code tests to ensure that the store id of the subscriber will be used, if the
         // 'subscriber' variable is set.
         $subscriber = $this->getMockBuilder(\Magento\Newsletter\Model\Subscriber::class)
-            ->setMethods([
-                'getStoreId',
-            ])
+            ->setMethods(['getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
         $subscriber->expects($this->once())
@@ -296,18 +307,20 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $variables['subscriber'] = $subscriber;
 
         $expectedVariables['store'] = $this->store;
-
-        $model = $this->getModelMock([
-            'getDesignParams',
-            'applyDesignConfig',
-            'getTemplateText',
-            'isPlain',
-        ]);
+        $model = $this->getModelMock(
+            [
+                'getDesignParams',
+                'applyDesignConfig',
+                'getTemplateText',
+                'isPlain',
+            ]
+        );
         $filterTemplate->expects($this->any())
             ->method('setVariables')
             ->with(array_merge(['this' => $model], $expectedVariables));
         $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType($templateType);
+        $model->setTemplateId('123');
 
         $designParams = [
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
@@ -401,6 +414,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
+    /**
+     * @return array
+     */
     public function isValidForSendDataProvider()
     {
         return [

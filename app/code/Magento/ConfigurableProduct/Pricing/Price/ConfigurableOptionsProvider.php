@@ -7,16 +7,15 @@
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\App\RequestSafetyInterface;
 
+/**
+ * Provide configurable child products for price calculation
+ */
 class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var Configurable
      */
     private $configurable;
 
@@ -27,24 +26,15 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
 
     /**
      * @param Configurable $configurable
-     * @param ResourceConnection $resourceConnection
-     * @param LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
-     * @param CollectionFactory $collectionFactory
-     * @param RequestSafetyInterface $requestSafety
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        Configurable $configurable,
-        ResourceConnection $resourceConnection,
-        LinkedProductSelectBuilderInterface $linkedProductSelectBuilder,
-        CollectionFactory $collectionFactory,
-        RequestSafetyInterface $requestSafety
+        Configurable $configurable
     ) {
         $this->configurable = $configurable;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProducts(ProductInterface $product)
     {

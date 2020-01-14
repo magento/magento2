@@ -5,13 +5,18 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
-use Braintree\Transaction;
-use Magento\Framework\Phrase;
-use Magento\Payment\Gateway\Validator\ResultInterface;
-use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use Braintree\Result\Error;
+use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
 use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Framework\Phrase;
+use Magento\Payment\Gateway\Validator\Result;
+use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Class GeneralResponseValidatorTest
+ */
 class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -20,14 +25,9 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
     private $responseValidator;
 
     /**
-     * @var ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterfaceFactory|MockObject
      */
-    private $resultInterfaceFactoryMock;
-
-    /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $subjectReaderMock;
+    private $resultInterfaceFactory;
 
     /**
      * Set up
@@ -36,85 +36,109 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->resultInterfaceFactoryMock = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Validator\ResultInterfaceFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->resultInterfaceFactory = $this->getMockBuilder(ResultInterfaceFactory::class)
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->responseValidator = new GeneralResponseValidator(
-            $this->resultInterfaceFactoryMock,
-            $this->subjectReaderMock
+            $this->resultInterfaceFactory,
+            new SubjectReader(),
+            new ErrorCodeProvider()
         );
     }
 
     /**
-     * Run test for validate method
+     * Checks a case when the validator processes successful and failed transactions.
      *
      * @param array $validationSubject
      * @param bool $isValid
      * @param Phrase[] $messages
+     * @param array $errorCodes
      * @return void
      *
      * @dataProvider dataProviderTestValidate
      */
-    public function testValidate(array $validationSubject, $isValid, $messages)
+    public function testValidate(array $validationSubject, bool $isValid, $messages, array $errorCodes)
     {
-        /** @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
-        $resultMock = $this->createMock(ResultInterface::class);
+        $result = new Result($isValid, $messages);
 
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readResponseObject')
-            ->with($validationSubject)
-            ->willReturn($validationSubject['response']['object']);
+        $this->resultInterfaceFactory->method('create')
+            ->with(
+                [
+                    'isValid' => $isValid,
+                    'failsDescription' => $messages,
+                    'errorCodes' => $errorCodes
+                ]
+            )
+            ->willReturn($result);
 
-        $this->resultInterfaceFactoryMock->expects(self::once())
-            ->method('create')
-            ->with([
-                'isValid' => $isValid,
-                'failsDescription' => $messages
-            ])
-            ->willReturn($resultMock);
+        $actual = $this->responseValidator->validate($validationSubject);
 
-        $actualMock = $this->responseValidator->validate($validationSubject);
-
-        self::assertEquals($resultMock, $actualMock);
+        self::assertEquals($result, $actual);
     }
 
     /**
+     * Gets variations for different type of response.
+     *
      * @return array
      */
     public function dataProviderTestValidate()
     {
-        $successTrue = new \stdClass();
-        $successTrue->success = true;
+        $successTransaction = new \stdClass();
+        $successTransaction->success = true;
+        $successTransaction->status = 'authorized';
 
-        $successFalse = new \stdClass();
-        $successFalse->success = false;
+        $failureTransaction = new \stdClass();
+        $failureTransaction->success = false;
+        $failureTransaction->status = 'declined';
+        $failureTransaction->message = 'Transaction was failed.';
+
+        $errors = [
+            'errors' => [
+                [
+                    'code' => 81804,
+                    'attribute' => 'base',
+                    'message' => 'Cannot process transaction.'
+                ],
+            ]
+        ];
+        $errorTransaction = new Error(['errors' => $errors, 'transaction' => ['status' => 'declined']]);
 
         return [
             [
                 'validationSubject' => [
                     'response' => [
-                        'object' => $successTrue
+                        'object' => $successTransaction
                     ],
                 ],
                 'isValid' => true,
-                []
+                [],
+                'errorCodes' => []
             ],
             [
                 'validationSubject' => [
                     'response' => [
-                        'object' => $successFalse
+                        'object' => $failureTransaction
+                    ]
+                ],
+                'isValid' => false,
+                [
+                    __('Transaction was failed.')
+                ],
+                'errorCodes' => []
+            ],
+            [
+                'validationSubject' => [
+                    'response' => [
+                        'object' => $errorTransaction
                     ]
                 ],
                 'isValid' => false,
                 [
                     __('Braintree error response.')
-                ]
+                ],
+                'errorCodes' => ['81804']
             ]
         ];
     }

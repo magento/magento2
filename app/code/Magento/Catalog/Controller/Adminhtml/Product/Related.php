@@ -7,7 +7,17 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Related extends \Magento\Catalog\Controller\Adminhtml\Product
+use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Class Related
+ *
+ * @package Magento\Catalog\Controller\Adminhtml\Product
+ * @deprecated Not used since related products grid moved to UI components.
+ * @see Magento_Catalog::view/adminhtml/ui_component/related_product_listing.xml
+ */
+class Related extends Product implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
@@ -29,6 +39,8 @@ class Related extends \Magento\Catalog\Controller\Adminhtml\Product
     }
 
     /**
+     * Execute
+     *
      * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()

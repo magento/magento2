@@ -37,8 +37,8 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Tax\Api\Data\TaxRateSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Tax\Api\Data\TaxClassSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Tax\Api\Data\TaxRateSearchResultsInterface" type="Magento\Tax\Model\TaxRateSearchResults" />
+    <preference for="Magento\Tax\Api\Data\TaxClassSearchResultsInterface" type="Magento\Tax\Model\TaxClassSearchResults" />
     <preference for="Magento\Tax\Api\OrderTaxManagementInterface" type="Magento\Tax\Model\Sales\Order\TaxManagement" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface" type="Magento\Tax\Model\Sales\Order\Tax" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsInterface" type="Magento\Tax\Model\Sales\Order\Details" />
@@ -47,7 +47,7 @@
     <preference for="Magento\Tax\Api\TaxClassRepositoryInterface" type="Magento\Tax\Model\TaxClass\Repository" />
     <preference for="Magento\Tax\Api\Data\TaxClassInterface" type="Magento\Tax\Model\ClassModel" />
     <preference for="Magento\Tax\Api\Data\TaxRuleInterface" type="Magento\Tax\Model\Calculation\Rule" />
-    <preference for="Magento\Tax\Api\Data\TaxRuleSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Tax\Api\Data\TaxRuleSearchResultsInterface" type="Magento\Tax\Model\TaxRuleSearchResults" />
     <preference for="Magento\Tax\Api\TaxRateManagementInterface" type="Magento\Tax\Model\TaxRateManagement" />
     <preference for="Magento\Tax\Api\TaxRateRepositoryInterface" type="Magento\Tax\Model\Calculation\RateRepository" />
     <preference for="Magento\Tax\Api\Data\TaxRateTitleInterface" type="Magento\Tax\Model\Calculation\Rate\Title" />
@@ -116,6 +116,7 @@
                 <item name="zip_is_range" xsi:type="string">main_table.zip_is_range</item>
                 <item name="zip_from" xsi:type="string">main_table.zip_from</item>
                 <item name="zip_to" xsi:type="string">main_table.zip_to</item>
+                <item name="region_name" xsi:type="string">region_table.code</item>
             </argument>
         </arguments>
     </virtualType>
@@ -142,6 +143,7 @@
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
                 <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="code" xsi:type="string">main_table.code</item>
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
@@ -153,6 +155,7 @@
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
                 <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="code" xsi:type="string">main_table.code</item>
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
@@ -179,5 +182,14 @@
     </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider">
         <plugin name="taxSettingsProvider" type="Magento\Tax\Plugin\Ui\DataProvider\TaxSettings"/>
+    </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="tax_class_id" xsi:type="string">catalog_product</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
 </config>

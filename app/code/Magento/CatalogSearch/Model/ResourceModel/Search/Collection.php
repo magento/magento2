@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogSearch\Model\ResourceModel\Search;
 
 /**
  * Search collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements \Magento\Search\Model\SearchCollectionInterface
+class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements
+    \Magento\Search\Model\SearchCollectionInterface
 {
     /**
      * Attribute collection
@@ -61,7 +61,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,7 +122,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->_searchQuery = $query;
         $this->addFieldToFilter(
             $this->getEntity()->getLinkField(),
-            ['in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($query))]);
+            ['in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($query))]
+        );
         return $this;
     }
 
@@ -269,6 +269,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $sql = $this->_getSearchInOptionSql($query);
         if ($sql) {
+            // phpcs:ignore Magento2.SQL.RawQuery
             $selects[] = "SELECT * FROM ({$sql}) AS inoptionsql"; // inherent unions may be inside
         }
 

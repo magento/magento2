@@ -19,7 +19,11 @@ $product->setTypeId(
     1
 )->setAttributeSetId(
     4
-)->setStoreId(
+)->setCustomAttribute(
+    'tax_class_id',
+    1
+)->setCustomAttribute(
+    'tax_class_id',
     1
 )->setWebsiteIds(
     [1]
@@ -42,8 +46,7 @@ $product->setTypeId(
 )->save();
 
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
-$product->setStoreId(1)
-    ->load(1)
+$product->load(1)
     ->setStoreId($store->getId())
     ->setName('StoreTitle')
     ->save();

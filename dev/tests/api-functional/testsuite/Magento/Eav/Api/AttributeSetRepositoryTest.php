@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Api;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -140,7 +141,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Default attribute set can not be deleted
+     * @expectedExceptionMessage The default attribute set can't be deleted.
      */
     public function testDeleteByIdDefaultAttributeSet()
     {

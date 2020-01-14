@@ -25,7 +25,7 @@ class AssertProductFormattingTierPrice extends AbstractConstraint
         $productPage->getProductForm()->openSection('advanced-pricing');
         $productPage->getAdvancedPrice()->getFieldsData([]);
         $productPage->getAdvancedPrice()->getTierPriceForm()->waitTierPriceFormLocks();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $productPage->getAdvancedPrice()->getTierPriceForm()->isVisible(),
             'Advanced price form still visible'
         );

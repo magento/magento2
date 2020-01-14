@@ -7,12 +7,20 @@ namespace Magento\Eav\Model;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
+ * EAV config model.
+ *
  * @api
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 class Config
@@ -24,6 +32,11 @@ class Config
     const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES';
     const ATTRIBUTES_CODES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_CODES';
     /**#@-*/
+
+    /**
+     * Xml path to caching user defined eav attributes configuration.
+     */
+    private const XML_PATH_CACHE_USER_DEFINED_ATTRIBUTES = 'dev/caching/cache_user_defined_attributes';
 
     /**#@-*/
     protected $_entityTypeData;
@@ -117,11 +130,30 @@ class Config
     private $serializer;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Cache of attributes per set
      *
      * @var array
      */
     private $attributesPerSet = [];
+
+    /**
+     * Is system attributes loaded flag.
+     *
+     * @var array
+     */
+    private $isSystemAttributesLoaded = [];
+
+    /**
+     * List of predefined system attributes for preload.
+     *
+     * @var array
+     */
+    private $attributesForPreload;
 
     /**
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -130,6 +162,8 @@ class Config
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param SerializerInterface $serializer
+     * @param ScopeConfigInterface $scopeConfig
+     * @param array $attributesForPreload
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -138,7 +172,9 @@ class Config
         \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        ScopeConfigInterface $scopeConfig = null,
+        $attributesForPreload = []
     ) {
         $this->_cache = $cache;
         $this->_entityTypeFactory = $entityTypeFactory;
@@ -146,6 +182,8 @@ class Config
         $this->_cacheState = $cacheState;
         $this->_universalFactory = $universalFactory;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->attributesForPreload = $attributesForPreload;
     }
 
     /**
@@ -487,7 +525,7 @@ class Config
      * @param   mixed $entityType
      * @param   mixed $code
      * @return  AbstractAttribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getAttribute($entityType, $code)
     {
@@ -503,11 +541,156 @@ class Config
         }
 
         if (isset($this->attributes[$entityTypeCode][$code])) {
+            \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
             return $this->attributes[$entityTypeCode][$code];
         }
 
+        if (array_key_exists($entityTypeCode, $this->attributesForPreload)
+            && array_key_exists($code, $this->attributesForPreload[$entityTypeCode])
+        ) {
+            $this->initSystemAttributes($entityType, $this->attributesForPreload[$entityTypeCode]);
+        }
+        if (isset($this->attributes[$entityTypeCode][$code])) {
+            \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
+            return $this->attributes[$entityTypeCode][$code];
+        }
+
+        if ($this->scopeConfig->getValue(self::XML_PATH_CACHE_USER_DEFINED_ATTRIBUTES)) {
+            $attribute = $this->cacheUserDefinedAttribute($entityType, $entityTypeCode, $code);
+        } else {
+            $attribute = $this->initUserDefinedAttribute($entityType, $entityTypeCode, $code);
+        }
+
+        \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
+        return $attribute;
+    }
+
+    /**
+     * Initialize predefined system attributes for preload.
+     *
+     * @param string $entityType
+     * @param array $systemAttributes
+     * @return $this|bool|void
+     * @throws LocalizedException
+     */
+    private function initSystemAttributes($entityType, $systemAttributes)
+    {
+        $entityType = $this->getEntityType($entityType);
+        $entityTypeCode = $entityType->getEntityTypeCode();
+        if (!empty($this->isSystemAttributesLoaded[$entityTypeCode])) {
+            return;
+        }
+
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityTypeCode . '-preload';
+        if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
+            $attributes = $this->serializer->unserialize($attributes);
+            if ($attributes) {
+                foreach ($attributes as $attribute) {
+                    $attributeObject = $this->_createAttribute($entityType, $attribute);
+                    $this->saveAttribute($attributeObject, $entityTypeCode, $attributeObject->getAttributeCode());
+                }
+                return true;
+            }
+        }
+
+        \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
+
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $attributes */
+        $attributes = $this->_universalFactory->create(
+            $entityType->getEntityAttributeCollection()
+        )->setEntityTypeFilter(
+            $entityType
+        )->addFieldToFilter(
+            'attribute_code',
+            ['in' => array_keys($systemAttributes)]
+        )->getData();
+
+        $attributeData = [];
+        foreach ($attributes as $attribute) {
+            if (empty($attribute['attribute_model'])) {
+                $attribute['attribute_model'] = $entityType->getAttributeModel();
+            }
+            $attributeObject = $this->_createAttribute($entityType, $attribute);
+            $this->saveAttribute($attributeObject, $entityTypeCode, $attributeObject->getAttributeCode());
+            $attributeData[$attribute['attribute_code']] = $attributeObject->toArray();
+        }
+        if ($this->isCacheEnabled()) {
+            $this->_cache->save(
+                $this->serializer->serialize($attributeData),
+                $cacheKey,
+                [
+                    \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                ]
+            );
+        }
+
+        \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
+        $this->isSystemAttributesLoaded[$entityTypeCode] = true;
+
+        return $this;
+    }
+
+    /**
+     * Initialize user defined attribute from cache or cache it.
+     *
+     * @param string $entityType
+     * @param mixed $entityTypeCode
+     * @param string $code
+     * @return AbstractAttribute
+     * @throws LocalizedException
+     */
+    private function cacheUserDefinedAttribute($entityType, $entityTypeCode, $code): AbstractAttribute
+    {
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-attribute-' . $entityTypeCode . '-' . $code;
+        $attributeData = $this->isCacheEnabled() && ($attribute = $this->_cache->load($cacheKey))
+            ? $this->serializer->unserialize($attribute)
+            : null;
+        if ($attributeData) {
+            if (isset($attributeData['attribute_id'])) {
+                $attribute = $this->_createAttribute($entityType, $attributeData);
+            } else {
+                $entityType = $this->getEntityType($entityType);
+                $attribute = $this->createAttribute($entityType->getAttributeModel());
+                $attribute->setAttributeCode($code);
+                $attribute = $this->setAttributeData($attribute, $entityType);
+            }
+        } else {
+            $attribute = $this->createAttributeByAttributeCode($entityType, $code);
+            $this->_addAttributeReference(
+                $attribute->getAttributeId(),
+                $attribute->getAttributeCode(),
+                $entityTypeCode
+            );
+            $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
+            if ($this->isCacheEnabled()) {
+                $this->_cache->save(
+                    $this->serializer->serialize($attribute->getData()),
+                    $cacheKey,
+                    [
+                        \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                        \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    ]
+                );
+            }
+        }
+
+        return $attribute;
+    }
+
+    /**
+     * Initialize user defined attribute and save it to memory cache.
+     *
+     * @param mixed $entityType
+     * @param string $entityTypeCode
+     * @param string $code
+     * @return AbstractAttribute|null
+     * @throws LocalizedException
+     */
+    private function initUserDefinedAttribute($entityType, $entityTypeCode, $code): ?AbstractAttribute
+    {
         $attributes = $this->loadAttributes($entityTypeCode);
-        $attribute = isset($attributes[$code]) ? $attributes[$code] : null;
+        $attribute = $attributes[$code] ?? null;
         if (!$attribute) {
             $attribute = $this->createAttributeByAttributeCode($entityType, $code);
             $this->_addAttributeReference(
@@ -517,7 +700,7 @@ class Config
             );
             $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
         }
-        \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
+
         return $attribute;
     }
 
@@ -638,7 +821,7 @@ class Config
             $existsFullAttribute = $attribute->hasIsRequired();
             $fullAttributeData = array_key_exists('is_required', $attributeData);
 
-            if ($existsFullAttribute || !$existsFullAttribute && !$fullAttributeData) {
+            if ($existsFullAttribute || (!$existsFullAttribute && !$fullAttributeData)) {
                 return $attribute;
             }
         }
@@ -707,6 +890,7 @@ class Config
      * @param string $entityType
      * @param string $attributeCode
      * @return AbstractAttribute
+     * @throws LocalizedException
      */
     private function createAttributeByAttributeCode($entityType, $attributeCode)
     {
@@ -722,13 +906,28 @@ class Config
             $attribute->setAttributeCode($attributeCode);
         }
 
+        $attribute = $this->setAttributeData($attribute, $entityType);
+
+        return $attribute;
+    }
+
+    /**
+     * Set entity type id, backend type, is global to attribute.
+     *
+     * @param AbstractAttribute $attribute
+     * @param AbstractModel $entityType
+     * @return AbstractAttribute
+     */
+    private function setAttributeData($attribute, $entityType): AbstractAttribute
+    {
         $entity = $entityType->getEntity();
-        if ($entity instanceof \Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface
+        if ($entity instanceof ProviderInterface
             && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes(), true)
         ) {
             $attribute->setBackendType(AbstractAttribute::TYPE_STATIC)->setIsGlobal(1);
         }
         $attribute->setEntityType($entityType)->setEntityTypeId($entityType->getId());
+
         return $attribute;
     }
 

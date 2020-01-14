@@ -3,12 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types = 1);
+
 namespace Magento\CatalogImportExport\Model\Export;
+
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,6 +35,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Filesystem
      */
     protected $fileSystem;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
 
     /**
      * Stock item attributes which must be exported
@@ -64,11 +78,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Export\Product::class
         );
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
     }
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExport()
     {
@@ -93,7 +108,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExportSpecialChars()
     {
@@ -104,11 +119,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
         $this->assertContains('simple ""1""', $exportData);
+        $this->assertContains('Category with slash\/ symbol', $exportData);
     }
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExportWithProductLinks()
     {
@@ -245,9 +261,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testExportWithFieldsEnclosure()
     {
-        $this->model->setParameters([
-            \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE => 1
-        ]);
+        $this->model->setParameters(
+            [
+                \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE => 1
+            ]
+        );
 
         $this->model->setWriter(
             $this->objectManager->create(
@@ -275,11 +293,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->model->setParameters([
-            \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
-                'category_ids' => '2,13'
+        $this->model->setParameters(
+            [
+                \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
+                    'category_ids' => '2,13'
+                ]
             ]
-        ]);
+        );
 
         $exportData = $this->model->export();
 
@@ -287,5 +307,232 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('Simple Product Three', $exportData);
         $this->assertNotContains('Simple Product Two', $exportData);
         $this->assertNotContains('Simple Product Not Visible On Storefront', $exportData);
+    }
+
+    /**
+     * Verify that export processed successfully with wrong category path
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_broken_categories_path.php
+     */
+    public function testExportWithWrongCategoryPath()
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+
+        $this->model->export();
+    }
+
+    /**
+     * Test 'hide from product page' export for non-default store.
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_images.php
+     */
+    public function testExportWithMedia()
+    {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple', 1);
+        $mediaGallery = $product->getData('media_gallery');
+        $image = array_shift($mediaGallery['images']);
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        /** @var $varDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $varDirectory = $this->objectManager->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
+        $varDirectory->writeFile('test_product_with_image.csv', $exportData);
+        /** @var \Magento\Framework\File\Csv $csv */
+        $csv = $this->objectManager->get(\Magento\Framework\File\Csv::class);
+        $data = $csv->getData($varDirectory->getAbsolutePath('test_product_with_image.csv'));
+        foreach ($data[0] as $columnNumber => $columnName) {
+            if ($columnName === 'hide_from_product_page') {
+                self::assertSame($image['file'], $data[2][$columnNumber]);
+            }
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     * @return void
+     */
+    public function testExportWithCustomOptions(): void
+    {
+        $storeCode = 'default';
+        $expectedData = [];
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+        $store->load('default', 'code');
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $productRepository->get('simple', 1, $store->getStoreId());
+        $newCustomOptions = [];
+        foreach ($product->getOptions() as $customOption) {
+            $defaultOptionTitle = $customOption->getTitle();
+            $secondStoreOptionTitle = $customOption->getTitle() . '_' . $storeCode;
+            $expectedData['admin_store'][$defaultOptionTitle] = [];
+            $expectedData[$storeCode][$secondStoreOptionTitle] = [];
+            $customOption->setTitle($secondStoreOptionTitle);
+            if ($customOption->getValues()) {
+                $newOptionValues = [];
+                foreach ($customOption->getValues() as $customOptionValue) {
+                    $valueTitle = $customOptionValue->getTitle();
+                    $expectedData['admin_store'][$defaultOptionTitle][] = $valueTitle;
+                    $expectedData[$storeCode][$secondStoreOptionTitle][] = $valueTitle . '_' . $storeCode;
+                    $newOptionValues[] = $customOptionValue->setTitle($valueTitle . '_' . $storeCode);
+                }
+                $customOption->setValues($newOptionValues);
+            }
+            $newCustomOptions[] = $customOption;
+        }
+        $product->setOptions($newCustomOptions);
+        $productRepository->save($product);
+        $this->model->setWriter(
+            $this->objectManager->create(\Magento\ImportExport\Model\Export\Adapter\Csv::class)
+        );
+        $exportData = $this->model->export();
+        /** @var $varDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $varDirectory = $this->objectManager->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
+        $varDirectory->writeFile('test_product_with_custom_options_and_second_store.csv', $exportData);
+        /** @var \Magento\Framework\File\Csv $csv */
+        $csv = $this->objectManager->get(\Magento\Framework\File\Csv::class);
+        $data = $csv->getData($varDirectory->getAbsolutePath('test_product_with_custom_options_and_second_store.csv'));
+        $customOptionData = [];
+        foreach ($data[0] as $columnNumber => $columnName) {
+            if ($columnName === 'custom_options') {
+                $customOptionData['admin_store'] = $this->parseExportedCustomOption($data[1][$columnNumber]);
+                $customOptionData[$storeCode] = $this->parseExportedCustomOption($data[2][$columnNumber]);
+            }
+        }
+
+        self::assertSame($expectedData, $customOptionData);
+    }
+
+    /**
+     * Check that no duplicate entities when multiple custom options used
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
+     */
+    public function testExportWithMultipleOptions()
+    {
+        $expectedCount = 1;
+        $resultsFilename = 'export_results.csv';
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+
+        $varDirectory = $this->objectManager->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
+        $varDirectory->writeFile($resultsFilename, $exportData);
+        /** @var \Magento\Framework\File\Csv $csv */
+        $csv = $this->objectManager->get(\Magento\Framework\File\Csv::class);
+        $data = $csv->getData($varDirectory->getAbsolutePath($resultsFilename));
+        $actualCount = count($data) - 1;
+
+        $this->assertSame($expectedCount, $actualCount);
+    }
+
+    /**
+     * @param string $exportedCustomOption
+     * @return array
+     */
+    private function parseExportedCustomOption(string $exportedCustomOption): array
+    {
+        $customOptions = explode('|', $exportedCustomOption);
+        $optionItems = [];
+        foreach ($customOptions as $customOption) {
+            $parsedOptions = array_values(
+                array_map(
+                    function ($input) {
+                        $data = explode('=', $input);
+                        return [$data[0] => $data[1]];
+                    },
+                    explode(',', $customOption)
+                )
+            );
+            $optionName = array_column($parsedOptions, 'name')[0];
+            if (!empty(array_column($parsedOptions, 'option_title'))) {
+                $optionItems[$optionName][] = array_column($parsedOptions, 'option_title')[0];
+            } else {
+                $optionItems[$optionName] = [];
+            }
+        }
+
+        return $optionItems;
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     */
+    public function testExportProductWithTwoWebsites()
+    {
+        $globalStoreCode = 'admin';
+        $secondStoreCode = 'fixture_second_store';
+
+        $expectedData = [
+            $globalStoreCode => 10.0,
+            $secondStoreCode => 9.99
+        ];
+
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+        $reinitiableConfig = $this->objectManager->get(ReinitableConfigInterface::class);
+        $observer = $this->objectManager->get(\Magento\Framework\Event\Observer::class);
+        $switchPriceScope = $this->objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class);
+        /** @var \Magento\Catalog\Model\Product\Action $productAction */
+        $productAction = $this->objectManager->create(\Magento\Catalog\Model\Product\Action::class);
+        /** @var \Magento\Framework\File\Csv $csv */
+        $csv = $this->objectManager->get(\Magento\Framework\File\Csv::class);
+        /** @var $varDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $varDirectory = $this->objectManager->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
+        $secondStore = $store->load($secondStoreCode);
+
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+
+        $reinitiableConfig->setValue('catalog/price/scope', \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE);
+        $switchPriceScope->execute($observer);
+
+        $product = $this->productRepository->get('simple');
+        $productId = $product->getId();
+        $productAction->updateWebsites([$productId], [$secondStore->getWebsiteId()], 'add');
+        $product->setStoreId($secondStore->getId());
+        $product->setPrice('9.99');
+        $product->getResource()->save($product);
+
+        $exportData = $this->model->export();
+
+        $varDirectory->writeFile('test_product_with_two_websites.csv', $exportData);
+        $data = $csv->getData($varDirectory->getAbsolutePath('test_product_with_two_websites.csv'));
+
+        $columnNumber = array_search('price', $data[0]);
+        $this->assertNotFalse($columnNumber);
+
+        $pricesData = [
+            $globalStoreCode => (float)$data[1][$columnNumber],
+            $secondStoreCode => (float)$data[2][$columnNumber],
+        ];
+
+        self::assertSame($expectedData, $pricesData);
+
+        $reinitiableConfig->setValue('catalog/price/scope', \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL);
+        $switchPriceScope->execute($observer);
     }
 }
