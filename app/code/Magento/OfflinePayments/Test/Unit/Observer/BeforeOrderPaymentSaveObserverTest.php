@@ -172,4 +172,24 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->execute($this->observer);
     }
+
+    /**
+     * @param string $methodCode
+     * @dataProvider dataProviderBeforeOrderPaymentSaveWithInstructions
+     */
+    public function testBeforeOrderPaymentSaveWithInstructionsAlreadySet($methodCode)
+    {
+        $this->payment
+            ->method('getMethod')
+            ->willReturn($methodCode);
+
+        $this->payment->expects(self::once())
+            ->method('getAdditionalInformation')
+            ->willReturn('Test');
+
+        $this->payment->expects(self::never())
+            ->method('setAdditionalInformation');
+
+        $this->_model->execute($this->observer);
+    }
 }
