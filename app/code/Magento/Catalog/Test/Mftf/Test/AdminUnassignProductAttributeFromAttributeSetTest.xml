@@ -35,7 +35,7 @@
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Assert attribute presence in storefront product additional information -->
