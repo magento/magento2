@@ -36,6 +36,8 @@
             <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
                 <requiredEntity createDataKey="createGuestCart"/>
             </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <!--END Create order via API-->
         </before>
         <after>
@@ -52,10 +54,9 @@
         </after>
         <!-- Login as admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <!--Open order by Id-->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
-            <argument name="orderId" value="$createGuestCart.return$"/>
-        </actionGroup>
+        <!--Open order page by Id-->
+        <amOnPage url="{{AdminOrderPage.url($createGuestCart.return$)}}" stepKey="navigateToOrderPage"/>
+        <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
         <!--Verify order item row-->
