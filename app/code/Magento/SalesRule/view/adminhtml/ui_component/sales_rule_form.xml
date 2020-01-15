@@ -478,7 +478,7 @@
                     <item name="default" xsi:type="number">0</item>
                     <item name="notices" xsi:type="array">
                         <item name="0" xsi:type="string" translate="true">Discount amount is applied to subtotal only</item>
-                        <item name="1" xsi:type="string" translate="true">Discount amount is applied to subtotal and shipping amount separately</item>
+                        <item name="1" xsi:type="string" translate="true">Discount amount is applied to subtotal and shipping amount</item>
                     </item>
                 </item>
             </argument>
