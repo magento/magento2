@@ -48,6 +48,8 @@ class ImageProvider
     }
 
     /**
+     * Gets Product Image Block
+     *
      * @param Product $product
      * @param string $imageId
      * @param array $attributes
