@@ -128,6 +128,18 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
                 true, // include time
                 1495170060 // expected timestamp
             ],
+            'Parse greek d/m/y date without time' => [
+                '30/10/2021', // datetime
+                'el_GR', // locale
+                false, // include time
+                1635570000 // expected timestamp
+            ],
+            'Parse greek d/m/y date with time' => [
+                '30/10/2021, 12:01 π.μ.', // datetime
+                'el_GR', // locale
+                true, // include time
+                1635570060 // expected timestamp
+            ],
         ];
     }
 
