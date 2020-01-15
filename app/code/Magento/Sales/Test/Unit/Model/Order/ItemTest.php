@@ -7,9 +7,8 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Sales\Model\ResourceModel\OrderFactory;
-use \Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\ResourceModel\OrderFactory;
 
 /**
  * Unit test for order item class.
@@ -349,7 +348,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getPrice() method should returns float
+     * Test getPrice() method returns float
      */
     public function testGetPriceReturnsFloat()
     {
@@ -359,7 +358,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getPrice() method should returns null
+     * Test getPrice() method returns null
      */
     public function testGetPriceReturnsNull()
     {
@@ -367,5 +366,4 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->model->setData(OrderItemInterface::PRICE, $nullablePrice);
         $this->assertEquals($nullablePrice, $this->model->getPrice());
     }
-
 }
