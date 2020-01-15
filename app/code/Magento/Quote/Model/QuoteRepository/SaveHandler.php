@@ -7,12 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\QuoteRepository;
 
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\CartItemPersister;
+use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
+use Magento\Quote\Model\ResourceModel\Quote;
 
 /**
  * Handler for saving quote.
@@ -20,22 +26,22 @@ use Magento\Quote\Api\Data\AddressInterfaceFactory;
 class SaveHandler
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Item\CartItemPersister
+     * @var CartItemPersister
      */
     private $cartItemPersister;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\BillingAddressPersister
+     * @var BillingAddressPersister
      */
     private $billingAddressPersister;
 
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote
+     * @var Quote
      */
     private $quoteResourceModel;
 
     /**
-     * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister
+     * @var ShippingAssignmentPersister
      */
     private $shippingAssignmentPersister;
 
@@ -50,29 +56,27 @@ class SaveHandler
     private $quoteAddressFactory;
 
     /**
-     * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
-     * @param \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister
-     * @param \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister
-     * @param \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
+     * @param Quote $quoteResource
+     * @param CartItemPersister $cartItemPersister
+     * @param BillingAddressPersister $billingAddressPersister
+     * @param ShippingAssignmentPersister $shippingAssignmentPersister
      * @param AddressRepositoryInterface $addressRepository
-     * @param AddressInterfaceFactory|null $addressFactory
+     * @param AddressInterfaceFactory $addressFactory
      */
     public function __construct(
-        \Magento\Quote\Model\ResourceModel\Quote $quoteResource,
-        \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister,
-        \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister,
-        \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister,
-        AddressRepositoryInterface $addressRepository = null,
-        AddressInterfaceFactory $addressFactory = null
+        Quote $quoteResource,
+        CartItemPersister $cartItemPersister,
+        BillingAddressPersister $billingAddressPersister,
+        ShippingAssignmentPersister $shippingAssignmentPersister,
+        AddressRepositoryInterface $addressRepository,
+        AddressInterfaceFactory $addressFactory
     ) {
         $this->quoteResourceModel = $quoteResource;
         $this->cartItemPersister = $cartItemPersister;
         $this->billingAddressPersister = $billingAddressPersister;
         $this->shippingAssignmentPersister = $shippingAssignmentPersister;
-        $this->addressRepository = $addressRepository
-            ?: ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
-        $this->quoteAddressFactory = $addressFactory ?:ObjectManager::getInstance()
-            ->get(AddressInterfaceFactory::class);
+        $this->addressRepository = $addressRepository;
+        $this->quoteAddressFactory = $addressFactory;
     }
 
     /**
@@ -81,8 +85,8 @@ class SaveHandler
      * @param CartInterface $quote
      * @return CartInterface
      * @throws InputException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws CouldNotSaveException
+     * @throws LocalizedException
      */
     public function save(CartInterface $quote)
     {
@@ -92,7 +96,7 @@ class SaveHandler
 
         if ($items) {
             foreach ($items as $item) {
-                /** @var \Magento\Quote\Model\Quote\Item $item */
+                /** @var Item $item */
                 if (!$item->isDeleted()) {
                     $quote->setLastAddedItem($this->cartItemPersister->save($quote, $item));
                 } elseif (count($items) === 1) {

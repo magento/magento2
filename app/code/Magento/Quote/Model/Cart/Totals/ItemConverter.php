@@ -3,17 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Cart\Totals;
 
+use Exception;
+use Magento\Catalog\Helper\Product\Configuration;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Api\Data\TotalsItemInterface;
+use Magento\Quote\Api\Data\TotalsItemInterfaceFactory;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use RuntimeException;
 
 /**
  * Cart item totals converter.
- *
- * @codeCoverageIgnore
  */
 class ItemConverter
 {
@@ -28,17 +36,17 @@ class ItemConverter
     private $eventManager;
 
     /**
-     * @var \Magento\Quote\Api\Data\TotalsItemInterfaceFactory
+     * @var TotalsItemInterfaceFactory
      */
     private $totalsItemFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     private $dataObjectHelper;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
@@ -47,32 +55,32 @@ class ItemConverter
      *
      * @param ConfigurationPool $configurationPool
      * @param EventManager $eventManager
-     * @param \Magento\Quote\Api\Data\TotalsItemInterfaceFactory $totalsItemFactory
+     * @param TotalsItemInterfaceFactory $totalsItemFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
+     * @param Json $serializer
+     * @throws RuntimeException
      */
     public function __construct(
         ConfigurationPool $configurationPool,
         EventManager $eventManager,
-        \Magento\Quote\Api\Data\TotalsItemInterfaceFactory $totalsItemFactory,
+        TotalsItemInterfaceFactory $totalsItemFactory,
         DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer
     ) {
         $this->configurationPool = $configurationPool;
         $this->eventManager = $eventManager;
         $this->totalsItemFactory = $totalsItemFactory;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer;
     }
 
     /**
      * Converts a specified rate model to a shipping method data object.
      *
-     * @param \Magento\Quote\Model\Quote\Item $item
-     * @return \Magento\Quote\Api\Data\TotalsItemInterface
-     * @throws \Exception
+     * @param QuoteItem $item
+     *
+     * @return TotalsItemInterface
+     * @throws Exception
      */
     public function modelToDataObject($item)
     {
@@ -85,7 +93,7 @@ class ItemConverter
         $this->dataObjectHelper->populateWithArray(
             $itemsData,
             $items,
-            \Magento\Quote\Api\Data\TotalsItemInterface::class
+            TotalsItemInterface::class
         );
         return $itemsData;
     }
@@ -93,14 +101,15 @@ class ItemConverter
     /**
      * Retrieve formatted item options view
      *
-     * @param \Magento\Quote\Api\Data\CartItemInterface $item
+     * @param CartItemInterface $item
+     *
      * @return string
      */
     private function getFormattedOptionValue($item)
     {
         $optionsData = [];
 
-        /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
+        /* @var Configuration $helper */
         $helper = $this->configurationPool->getByProductType('default');
 
         $options = $this->configurationPool->getByProductType($item->getProductType())->getOptions($item);

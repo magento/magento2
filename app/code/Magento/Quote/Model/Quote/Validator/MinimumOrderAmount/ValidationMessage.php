@@ -3,66 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote\Validator\MinimumOrderAmount;
+
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Pricing\Helper\Data;
+use Magento\Store\Model\ScopeInterface;
 
 class ValidationMessage
 {
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
+    private const XML_PATH_MINIMUM_ORDER_DESCRIPTION = 'sales/minimum_order/description';
+    private const XML_PATH_MINIMUM_ORDER_AMOUNT = 'sales/minimum_order/amount';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Locale\CurrencyInterface
-     * @deprecated since 101.0.0
-     */
-    private $currency;
-
-    /**
-     * @var \Magento\Framework\Pricing\Helper\Data
+     * @var Data
      */
     private $priceHelper;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Locale\CurrencyInterface $currency
-     * @param \Magento\Framework\Pricing\Helper\Data $priceHelper
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Data $priceHelper
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Locale\CurrencyInterface $currency,
-        \Magento\Framework\Pricing\Helper\Data $priceHelper = null
+        ScopeConfigInterface $scopeConfig,
+        Data $priceHelper
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
-        $this->currency = $currency;
-        $this->priceHelper = $priceHelper ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Pricing\Helper\Data::class);
+        $this->priceHelper = $priceHelper;
     }
 
     /**
      * Get validation message.
      *
-     * @return \Magento\Framework\Phrase
-     * @throws \Zend_Currency_Exception
+     * @return Phrase
      */
     public function getMessage()
     {
         $message = $this->scopeConfig->getValue(
-            'sales/minimum_order/description',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            static::XML_PATH_MINIMUM_ORDER_DESCRIPTION,
+            ScopeInterface::SCOPE_STORE
         );
         if (!$message) {
-            $minimumAmount =  $this->priceHelper->currency($this->scopeConfig->getValue(
-                'sales/minimum_order/amount',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            $minimumAmount = $this->priceHelper->currency($this->scopeConfig->getValue(
+                static::XML_PATH_MINIMUM_ORDER_AMOUNT,
+                ScopeInterface::SCOPE_STORE
             ), true, false);
 
             $message = __('Minimum order amount is %1', $minimumAmount);

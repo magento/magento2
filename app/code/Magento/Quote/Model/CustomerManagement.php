@@ -3,73 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
-use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\AccountManagementInterface as AccountManagement;
 use Magento\Customer\Api\AddressRepositoryInterface as CustomerAddressRepository;
+use Magento\Customer\Model\AddressFactory;
+use Magento\Framework\Validator\Exception;
+use Magento\Framework\Validator\Factory;
 use Magento\Quote\Model\Quote as QuoteEntity;
-use Magento\Framework\App\ObjectManager;
 
-/**
- * Class Customer
- */
 class CustomerManagement
 {
     /**
-     * @var CustomerRepository
-     */
-    protected $customerRepository;
-
-    /**
      * @var CustomerAddressRepository
      */
-    protected $customerAddressRepository;
+    private $customerAddressRepository;
 
     /**
      * @var AccountManagement
      */
-    protected $accountManagement;
+    private $accountManagement;
 
     /**
-     * @var \Magento\Framework\Validator\Factory
+     * @var Factory
      */
     private $validatorFactory;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory
+     * @var AddressFactory
      */
     private $addressFactory;
 
     /**
-     * CustomerManagement constructor.
-     * @param CustomerRepository $customerRepository
      * @param CustomerAddressRepository $customerAddressRepository
      * @param AccountManagement $accountManagement
-     * @param \Magento\Framework\Validator\Factory|null $validatorFactory
-     * @param \Magento\Customer\Model\AddressFactory|null $addressFactory
+     * @param Factory $validatorFactory
+     * @param AddressFactory $addressFactory
      */
     public function __construct(
-        CustomerRepository $customerRepository,
         CustomerAddressRepository $customerAddressRepository,
         AccountManagement $accountManagement,
-        \Magento\Framework\Validator\Factory $validatorFactory = null,
-        \Magento\Customer\Model\AddressFactory $addressFactory = null
+        Factory $validatorFactory,
+        AddressFactory $addressFactory
     ) {
-        $this->customerRepository = $customerRepository;
         $this->customerAddressRepository = $customerAddressRepository;
         $this->accountManagement = $accountManagement;
-        $this->validatorFactory = $validatorFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Validator\Factory::class);
-        $this->addressFactory = $addressFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Customer\Model\AddressFactory::class);
+        $this->validatorFactory = $validatorFactory;
+        $this->addressFactory = $addressFactory;
     }
 
     /**
      * Populate customer model
      *
      * @param Quote $quote
+     *
      * @return void
      */
     public function populateCustomerInfo(QuoteEntity $quote)
@@ -104,8 +93,9 @@ class CustomerManagement
      * Validate Quote Addresses
      *
      * @param Quote $quote
-     * @throws \Magento\Framework\Validator\Exception
+     *
      * @return void
+     * @throws Exception
      */
     public function validateAddresses(QuoteEntity $quote)
     {
@@ -126,7 +116,8 @@ class CustomerManagement
                 $addressModel = $this->addressFactory->create();
                 $addressModel->updateData($address);
                 if (!$validator->isValid($addressModel)) {
-                    throw new \Magento\Framework\Validator\Exception(
+                    // phpcs:ignore Magento2.Exceptions.DirectThrow
+                    throw new Exception(
                         null,
                         null,
                         $validator->getMessages()

@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\App\ResourceConnection\ConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -28,6 +29,11 @@ class QueryResolver
     private $cache;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @var string
      */
     private $cacheId;
@@ -40,26 +46,21 @@ class QueryResolver
     private $cacheTags = [];
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @param ConfigInterface $config
      * @param CacheInterface $cache
-     * @param string $cacheId
      * @param SerializerInterface $serializer
+     * @param string $cacheId
      */
     public function __construct(
         ConfigInterface $config,
         CacheInterface $cache,
-        $cacheId = 'connection_config_cache',
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer,
+        $cacheId = 'connection_config_cache'
     ) {
         $this->config = $config;
         $this->cache = $cache;
+        $this->serializer = $serializer;
         $this->cacheId = $cacheId;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -77,6 +78,7 @@ class QueryResolver
 
     /**
      * Initialise data for configuration
+     *
      * @return void
      */
     protected function initData()
@@ -96,6 +98,7 @@ class QueryResolver
      * Merge config data to the object
      *
      * @param array $config
+     *
      * @return void
      */
     public function merge(array $config)

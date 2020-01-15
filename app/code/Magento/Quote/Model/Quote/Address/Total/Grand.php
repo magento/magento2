@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Quote\Address\Total;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface as PriceRounder;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface as ShippingAssignment;
 use Magento\Quote\Model\Quote;
@@ -24,11 +23,11 @@ class Grand extends AbstractTotal
     private $priceRounder;
 
     /**
-     * @param PriceRounder|null $priceRounder
+     * @param PriceRounder $priceRounder
      */
-    public function __construct(?PriceRounder $priceRounder)
+    public function __construct(PriceRounder $priceRounder)
     {
-        $this->priceRounder = $priceRounder?: ObjectManager::getInstance()->get(PriceRounder::class);
+        $this->priceRounder = $priceRounder;
     }
 
     /**

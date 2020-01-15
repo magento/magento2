@@ -3,43 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\App\ResourceConnection\ConfigInterface;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\QueryResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QueryResolverTest extends \PHPUnit\Framework\TestCase
+class QueryResolverTest extends TestCase
 {
     /**
      * @var \Magento\Quote\Model\QueryResolver
      */
-    private $quoteResolver;
+    private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     private $cacheMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
-    private $serializer;
+    private $serializerMock;
 
     protected function setUp()
     {
-        $this->configMock = $this->createMock(\Magento\Framework\App\ResourceConnection\ConfigInterface::class);
-        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
-        $this->quoteResolver = new \Magento\Quote\Model\QueryResolver(
-            $this->configMock,
-            $this->cacheMock,
-            'connection_config_cache',
-            $this->serializer
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            QueryResolver::class,
+            [
+                'config' => $this->configMock,
+                'cache' => $this->cacheMock,
+                'serializer' => $this->serializerMock,
+                'cacheId' => 'connection_config_cache'
+            ]
         );
     }
 
@@ -52,11 +63,11 @@ class QueryResolverTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with('connection_config_cache')
             ->willReturn($serializedData);
-        $this->serializer->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with($serializedData)
             ->willReturn($data);
-        $this->assertTrue($this->quoteResolver->isSingleQuery());
+        $this->assertTrue($this->model->isSingleQuery());
     }
 
     /**
@@ -74,14 +85,14 @@ class QueryResolverTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with('connection_config_cache')
             ->willReturn(false);
-        $this->serializer->expects($this->never())
+        $this->serializerMock->expects($this->never())
             ->method('unserialize');
         $this->configMock
             ->expects($this->once())
             ->method('getConnectionName')
             ->with('checkout_setup')
             ->willReturn($connectionName);
-        $this->serializer->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->with($data)
             ->willReturn($serializedData);
@@ -89,7 +100,7 @@ class QueryResolverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('save')
             ->with($serializedData, 'connection_config_cache', []);
-        $this->assertEquals($isSingleQuery, $this->quoteResolver->isSingleQuery());
+        $this->assertEquals($isSingleQuery, $this->model->isSingleQuery());
     }
 
     /**

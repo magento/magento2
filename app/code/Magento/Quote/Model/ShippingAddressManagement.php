@@ -3,88 +3,70 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Psr\Log\LoggerInterface as Logger;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Model\Quote\Address;
+use Psr\Log\LoggerInterface;
 
 /**
  * Quote shipping address write service object.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressManagementInterface
+class ShippingAddressManagement implements ShippingAddressManagementInterface
 {
     /**
-     * Quote repository.
-     *
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
-    protected $quoteRepository;
+    private $quoteRepository;
 
     /**
-     * Logger.
-     *
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
-     * Validator.
-     *
      * @var QuoteAddressValidator
      */
-    protected $addressValidator;
+    private $addressValidator;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @var LoggerInterface
      */
-    protected $addressRepository;
+    private $logger;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var AddressRepositoryInterface
      */
-    protected $scopeConfig;
+    private $addressRepository;
 
     /**
-     * @var Quote\TotalsCollector
-     */
-    protected $totalsCollector;
-
-    /**
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
      * @param QuoteAddressValidator $addressValidator
-     * @param Logger $logger
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Quote\TotalsCollector $totalsCollector
+     * @param LoggerInterface $logger
+     * @param AddressRepositoryInterface $addressRepository
      *
      */
     public function __construct(
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        CartRepositoryInterface $quoteRepository,
         QuoteAddressValidator $addressValidator,
-        Logger $logger,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+        LoggerInterface $logger,
+        AddressRepositoryInterface $addressRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->addressValidator = $addressValidator;
         $this->logger = $logger;
         $this->addressRepository = $addressRepository;
-        $this->scopeConfig = $scopeConfig;
-        $this->totalsCollector = $totalsCollector;
     }
 
     /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
+    public function assign($cartId, AddressInterface $address)
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
+        /** @var Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
@@ -127,14 +109,14 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
      */
     public function get($cartId)
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
+        /** @var Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
                 __('The Cart includes virtual product(s) only, so a shipping address is not used.')
             );
         }
-        /** @var \Magento\Quote\Model\Quote\Address $address */
+        /** @var Address $address */
         return $quote->getShippingAddress();
     }
 }

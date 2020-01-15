@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Item;
 use Laminas\Code\Exception\InvalidArgumentException;
 
@@ -32,9 +36,7 @@ class Updater
     protected $objectFactory;
 
     /**
-     * Serializer interface instance.
-     *
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
@@ -42,19 +44,18 @@ class Updater
      * @param ProductFactory $productFactory
      * @param FormatInterface $localeFormat
      * @param ObjectFactory $objectFactory
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json $serializer
      */
     public function __construct(
         ProductFactory $productFactory,
         FormatInterface $localeFormat,
         ObjectFactory $objectFactory,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer
     ) {
         $this->productFactory = $productFactory;
         $this->localeFormat = $localeFormat;
         $this->objectFactory = $objectFactory;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer;
     }
 
     /**
@@ -65,13 +66,15 @@ class Updater
      * @param Item $item
      * @param array $info
      * @throws InvalidArgumentException
+     *
      * @return Updater
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function update(Item $item, array $info)
     {
         if (!isset($info['qty'])) {
-            throw new InvalidArgumentException(__('The qty value is required to update quote item.'));
+            throw new InvalidArgumentException((string)__('The qty value is required to update quote item.'));
         }
         $itemQty = $info['qty'];
         if ($item->getProduct()->getStockItem()) {
@@ -89,7 +92,7 @@ class Updater
         }
 
         if (empty($info['action']) || !empty($info['configured'])) {
-            $noDiscount = !isset($info['use_discount']);
+            $noDiscount = !isset($info['use_discount']) ? 1 : 0;
             $item->setQty($itemQty);
             $item->setNoDiscount($noDiscount);
             $item->getProduct()->setIsSuperMode(true);
@@ -105,12 +108,13 @@ class Updater
      *
      * @param array $info
      * @param Item $item
+     *
      * @return void
      */
     protected function setCustomPrice(array $info, Item $item)
     {
         $itemPrice = $this->parseCustomPrice($info['custom_price']);
-        /** @var \Magento\Framework\DataObject $infoBuyRequest */
+        /** @var DataObject $infoBuyRequest */
         $infoBuyRequest = $item->getBuyRequest();
         if ($infoBuyRequest) {
             $infoBuyRequest->setCustomPrice($itemPrice);
@@ -130,11 +134,12 @@ class Updater
      * Unset custom_price data for quote item
      *
      * @param Item $item
+     *
      * @return void
      */
     protected function unsetCustomPrice(Item $item)
     {
-        /** @var \Magento\Framework\DataObject $infoBuyRequest */
+        /** @var DataObject $infoBuyRequest */
         $infoBuyRequest = $item->getBuyRequest();
         if ($infoBuyRequest->hasData('custom_price')) {
             $infoBuyRequest->unsetData('custom_price');
@@ -153,6 +158,7 @@ class Updater
      * Return formatted price
      *
      * @param float|int $price
+     *
      * @return float|int
      */
     protected function parseCustomPrice($price)

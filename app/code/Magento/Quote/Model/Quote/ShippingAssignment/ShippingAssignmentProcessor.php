@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote\ShippingAssignment;
 
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
-use Magento\Framework\Exception\InputException;
-use Magento\Quote\Model\ShippingAssignmentFactory;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\CartItemPersister;
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\ShippingAssignmentFactory;
 
 class ShippingAssignmentProcessor
 {
@@ -47,27 +50,26 @@ class ShippingAssignmentProcessor
         ShippingAssignmentFactory $shippingAssignmentFactory,
         ShippingProcessor $shippingProcessor,
         CartItemPersister $cartItemPersister,
-        AddressRepositoryInterface $addressRepository = null
+        AddressRepositoryInterface $addressRepository
     ) {
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         $this->shippingProcessor = $shippingProcessor;
         $this->cartItemPersister = $cartItemPersister;
-        $this->addressRepository = $addressRepository
-            ?: ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
+        $this->addressRepository = $addressRepository;
     }
 
     /**
      * Create shipping assignment
      *
      * @param CartInterface $quote
-     * @return \Magento\Quote\Api\Data\ShippingAssignmentInterface
+     * @return ShippingAssignmentInterface
      */
     public function create(CartInterface $quote)
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
+        /** @var Quote $quote */
         $shippingAddress = $quote->getShippingAddress();
 
-        /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
+        /** @var ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignment = $this->shippingAssignmentFactory->create();
         $shippingAssignment->setItems($quote->getItems());
         $shippingAssignment->setShipping($this->shippingProcessor->create($shippingAddress));
@@ -78,16 +80,16 @@ class ShippingAssignmentProcessor
     /**
      * Save shipping assignment
      *
-     * @param ShippingAssignmentInterface $shippingAssignment
      * @param CartInterface $quote
+     * @param ShippingAssignmentInterface $shippingAssignment
      * @return void
      * @throws InputException|LocalizedException
      */
     public function save(CartInterface $quote, ShippingAssignmentInterface $shippingAssignment)
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
+        /** @var Quote $quote */
         foreach ($shippingAssignment->getItems() as $item) {
-            /** @var \Magento\Quote\Model\Quote\Item $item */
+            /** @var Item $item */
             if (!$quote->getItemById($item->getItemId()) && !$item->isDeleted()) {
                 $this->cartItemPersister->save($quote, $item);
             }
