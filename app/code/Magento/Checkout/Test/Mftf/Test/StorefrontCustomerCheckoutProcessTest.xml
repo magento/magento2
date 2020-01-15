@@ -16,7 +16,6 @@
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-30406"/>
-            <useCaseId value="MC-30405"/>
             <group value="checkout"/>
         </annotations>
         <before>
@@ -64,13 +63,10 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
-        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="addFilterToOrderGrid">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
             <argument name="orderId" value="{$orderNumber}"/>
-            <argument name="orderStatus" value="pending"/>
         </actionGroup>
 
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickFirstOrder"/>
-        <waitForPageLoad stepKey="waitForOrderToLoad"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="verifyOrderStatus"/>
         <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" stepKey="verifyAccountInformation"/>
         <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$createCustomer.email$$" stepKey="verifyCustomerEmail"/>
@@ -83,6 +79,7 @@
         </actionGroup>
 
         <click selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="navigateToOrdersTab"/>
+        <waitForPageLoad stepKey="waitForOrdersTabLoad"/>
         <see selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$createCustomer.firstname$$ $$createCustomer.lastname$$" stepKey="verifyOrder"/>
     </test>
 </tests>
