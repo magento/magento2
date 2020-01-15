@@ -142,7 +142,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setId(
             $id
         )->setTitle(
-            __($title)
+            $this->escapeHtmlAttr(__($title))
         )->setValue(
             $defValue
         )->setOptions(
