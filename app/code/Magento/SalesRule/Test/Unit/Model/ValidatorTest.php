@@ -525,7 +525,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             [Rule::BY_PERCENT_ACTION, 50, 2.5],
             [Rule::TO_FIXED_ACTION, 5, 0],
             [Rule::BY_FIXED_ACTION, 5, 5],
-            [Rule::CART_FIXED_ACTION, 5, 0],
+            [Rule::CART_FIXED_ACTION, 5, 5],
         ];
     }
 
