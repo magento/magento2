@@ -79,7 +79,7 @@
         </actionGroup>
 
         <click selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="navigateToOrdersTab"/>
-        <waitForPageLoad stepKey="waitForOrdersTabLoad"/>
+        <waitForElementVisible selector="{{AdminEditCustomerOrdersSection.orderGrid}}" stepKey="waitForOrdersGridVisible"/>
         <see selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$createCustomer.firstname$$ $$createCustomer.lastname$$" stepKey="verifyOrder"/>
     </test>
 </tests>
