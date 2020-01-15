@@ -160,7 +160,7 @@ Apply,Apply
 "Maximum Qty Discount is Applied To","Maximum Qty Discount is Applied To"
 "Discount Qty Step (Buy X)","Discount Qty Step (Buy X)"
 "Discount amount is applied to subtotal only","Discount amount is applied to subtotal only"
-"Discount amount is applied to subtotal and shipping amount separately","Discount amount is applied to subtotal and shipping amount separately"
+"Discount amount is applied to subtotal and shipping amount","Discount amount is applied to subtotal and shipping amount"
 "Apply to Shipping Amount","Apply to Shipping Amount"
 "Discard subsequent rules","Discard subsequent rules"
 "Default Rule Label for All Store Views","Default Rule Label for All Store Views"
