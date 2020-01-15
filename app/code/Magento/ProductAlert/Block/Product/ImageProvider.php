@@ -35,6 +35,7 @@ class ImageProvider
      * @param string $imageId
      * @param array $attributes
      * @return Image
+     * @throws \Exception
      */
     public function getImage(Product $product, $imageId, $attributes = [])
     {
