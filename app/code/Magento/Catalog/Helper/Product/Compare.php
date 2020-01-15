@@ -145,16 +145,9 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getListUrl()
     {
-        $itemIds = [];
-        foreach ($this->getItemCollection() as $item) {
-            $itemIds[] = $item->getId();
-        }
-
         $params = [
-            'items' => implode(',', $itemIds),
             \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
         ];
-
         return $this->_getUrl('catalog/product_compare', $params);
     }
 
