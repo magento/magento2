@@ -315,7 +315,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     }
                 }
             }
-            $result = implode($skuDelimiter, $skus);
+            $result = implode($skuDelimiter, array_filter($skus));
         } elseif ($this->_isSingleSelection()) {
             $result = $option->getValueById($optionValue);
             if ($result) {
