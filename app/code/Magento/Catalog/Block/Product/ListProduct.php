@@ -346,17 +346,16 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         $category = $this->getLayer()->getCurrentCategory();
         if ($category) {
-            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
+            $identities[] = [Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId()];
         }
 
         //Check if category page shows only static block (No products)
-        if ($category->getData('display_mode') == Category::DM_PAGE) {
-            return $identities;
+        if ($category->getData('display_mode') != Category::DM_PAGE) {
+            foreach ($this->_getProductCollection() as $item) {
+                $identities[] = $item->getIdentities();
+            }
         }
-
-        foreach ($this->_getProductCollection() as $item) {
-            $identities = array_merge($identities, $item->getIdentities());
-        }
+        $identities = array_merge(...$identities);
 
         return $identities;
     }
@@ -369,7 +368,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getAddToCartPostParams(Product $product)
     {
-        $url = $this->getAddToCartUrl($product);
+        $url = $this->getAddToCartUrl($product, ['_escape' => false]);
         return [
             'action' => $url,
             'data' => [
