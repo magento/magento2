@@ -32,11 +32,11 @@ class HeaderManager
     }
 
     /**
-     * @param \Magento\Framework\App\Response\Http $subject
+     * @param \Magento\Framework\App\Response\HttpInterface $subject
      * @return void
      * @codeCoverageIgnore
      */
-    public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
+    public function beforeSendResponse(\Magento\Framework\App\Response\HttpInterface $subject)
     {
         foreach ($this->headerProviders as $provider) {
             if ($provider->canApply()) {
