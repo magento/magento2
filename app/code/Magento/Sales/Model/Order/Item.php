@@ -385,6 +385,8 @@ class Item extends AbstractModel implements OrderItemInterface
      *
      * @param string $statusId
      * @return \Magento\Framework\Phrase
+     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getStatusName($statusId)
     {
@@ -422,6 +424,8 @@ class Item extends AbstractModel implements OrderItemInterface
      * Retrieve order item statuses array
      *
      * @return array
+     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getStatuses()
     {

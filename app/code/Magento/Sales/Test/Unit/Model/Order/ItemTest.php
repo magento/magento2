@@ -9,11 +9,10 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
 use \Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
- * Class ItemTest
- *
- * @package Magento\Sales\Model\Order
+ * Unit test for order item class.
  */
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
@@ -72,7 +71,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     public function testGetPatentItem()
     {
         $item = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, []);
-        $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::PARENT_ITEM, $item);
+        $this->model->setData(OrderItemInterface::PARENT_ITEM, $item);
         $this->assertEquals($item, $this->model->getParentItem());
     }
 
@@ -184,7 +183,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($price, $this->model->getOriginalPrice());
 
         $originalPrice = 5.55;
-        $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::ORIGINAL_PRICE, $originalPrice);
+        $this->model->setData(OrderItemInterface::ORIGINAL_PRICE, $originalPrice);
         $this->assertEquals($originalPrice, $this->model->getOriginalPrice());
     }
 
@@ -350,20 +349,23 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getPrice() method
+     * Test getPrice() method should returns float
      */
-    public function testGetPrice()
+    public function testGetPriceReturnsFloat()
     {
         $price = 9.99;
         $this->model->setPrice($price);
         $this->assertEquals($price, $this->model->getPrice());
+    }
 
-        $newPrice = 5.53;
-        $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::PRICE, $newPrice);
-        $this->assertEquals($newPrice, $this->model->getPrice());
-
+    /**
+     * Test getPrice() method should returns null
+     */
+    public function testGetPriceReturnsNull()
+    {
         $nullablePrice = null;
-        $this->model->setPrice($nullablePrice);
+        $this->model->setData(OrderItemInterface::PRICE, $nullablePrice);
         $this->assertEquals($nullablePrice, $this->model->getPrice());
     }
+
 }
