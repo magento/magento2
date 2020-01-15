@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontProductPageSelectDropDownOptionValueActionGroup">
         <annotations>
-            <description>Selects the provided Product Option Value under the provided Product Option Title on a Storefront Product page.</description>
+            <description>Selects the provided Product Option Value under the provided DropDown Product Option Title on a Storefront Product page.</description>
         </annotations>
         <arguments>
             <argument name="attributeLabel" type="string" defaultValue="{{ProductAttributeFrontendLabel.label}}"/>
