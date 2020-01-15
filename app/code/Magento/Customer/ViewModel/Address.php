@@ -11,25 +11,17 @@ use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-/**
- * Customer address view model.
- */
-
  /**
-  * Address view model
+  * Custom address view model
   */
 class Address implements ArgumentInterface
 {
     /**
-     * Data helper
-     *
      * @var DataHelper
      */
     private $helperData;
 
     /**
-     * Address helper
-     *
      * @var AddressHelper
      */
     private $helperAddress;
@@ -53,9 +45,7 @@ class Address implements ArgumentInterface
      * Get string with frontend validation classes for attribute
      *
      * @param string $attributeCode
-     *
      * @return string
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function dataGetAttributeValidationClass($attributeCode)
@@ -67,9 +57,7 @@ class Address implements ArgumentInterface
      * Get string with frontend validation classes for attribute
      *
      * @param string $attributeCode
-     *
      * @return string
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addressGetAttributeValidationClass($attributeCode)
