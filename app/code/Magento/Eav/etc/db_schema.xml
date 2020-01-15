@@ -440,6 +440,10 @@
         <index referenceId="EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
+        <index referenceId="EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID_SORT_ORDER" indexType="btree">
+            <column name="attribute_id"/>
+            <column name="sort_order"/>
+        </index>
     </table>
     <table name="eav_attribute_option_value" resource="default" engine="innodb" comment="Eav Attribute Option Value">
         <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="true"

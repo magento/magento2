@@ -266,7 +266,8 @@
             "sort_order": true
         },
         "index": {
-            "EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID": true
+            "EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID": true,
+            "EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID_SORT_ORDER": true
         },
         "constraint": {
             "PRIMARY": true,
