@@ -32,17 +32,9 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
         $this->imageBuilderMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->emulationMock = $this->getMockBuilder(\Magento\Store\Model\App\Emulation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->model = new \Magento\ProductAlert\Block\Product\ImageProvider(
-            $this->imageBuilderMock,
-            $this->storeManagerMock,
-            $this->emulationMock
+            $this->imageBuilderMock
         );
     }
 
@@ -56,44 +48,11 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
 
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $imageMock = $this->createMock(\Magento\Catalog\Block\Product\Image::class);
-        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
-
-        $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeMock);
-        $this->emulationMock->expects($this->once())->method('startEnvironmentEmulation');
         $this->imageBuilderMock->expects($this->once())
             ->method('create')
             ->with($productMock, $imageId, $attributes)
             ->willReturn($imageMock);
-        $this->emulationMock->expects($this->once())->method('stopEnvironmentEmulation');
 
         $this->assertEquals($imageMock, $this->model->getImage($productMock, $imageId, $attributes));
-    }
-
-    /**
-     * Test that app emulation stops when exception occurs.
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Image Builder Exception
-     */
-    public function testGetImageThrowsAnException()
-    {
-        $imageId = 1;
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->emulationMock->expects($this->once())->method('startEnvironmentEmulation');
-        $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeMock);
-
-        $this->imageBuilderMock->expects($this->once())
-            ->method('create')
-            ->with($productMock, $imageId)
-            ->willThrowException(new \Exception("Image Builder Exception"));
-
-        $this->emulationMock->expects($this->once())->method('stopEnvironmentEmulation');
-        $this->model->getImage($productMock, $imageId);
     }
 }
