@@ -183,7 +183,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse((bool)$model->getUseSession());
 
         $model->setUseSession(true);
-        $this->assertTrue($model->getUseSession());
+        $this->assertFalse($model->getUseSession());
     }
 
     public function testGetBaseUrlNotLinkType()
