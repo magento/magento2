@@ -3,13 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Ui\Component\Listing\Columns\Price;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Phrase;
@@ -21,8 +27,6 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
-use Magento\Catalog\Helper\Image as ImageHelper;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Related products modifier
@@ -93,6 +97,11 @@ class Related extends AbstractModifier
     protected $attributeSetRepository;
 
     /**
+     * @var Price
+     */
+    private $priceModifier;
+
+    /**
      * @var string
      * @since 101.0.0
      */
@@ -105,11 +114,6 @@ class Related extends AbstractModifier
     protected $scopePrefix;
 
     /**
-     * @var \Magento\Catalog\Ui\Component\Listing\Columns\Price
-     */
-    private $priceModifier;
-
-    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ProductLinkRepositoryInterface $productLinkRepository
@@ -119,6 +123,9 @@ class Related extends AbstractModifier
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param string $scopeName
      * @param string $scopePrefix
+     * @param Price|null $priceModifier
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         LocatorInterface $locator,
@@ -129,7 +136,8 @@ class Related extends AbstractModifier
         Status $status,
         AttributeSetRepositoryInterface $attributeSetRepository,
         $scopeName = '',
-        $scopePrefix = ''
+        $scopePrefix = '',
+        ?Price $priceModifier = null
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -140,10 +148,11 @@ class Related extends AbstractModifier
         $this->attributeSetRepository = $attributeSetRepository;
         $this->scopeName = $scopeName;
         $this->scopePrefix = $scopePrefix;
+        $this->priceModifier = $priceModifier ?? ObjectManager::getInstance()->get(Price::class);
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -164,12 +173,11 @@ class Related extends AbstractModifier
                                 'collapsible' => true,
                                 'componentType' => Fieldset::NAME,
                                 'dataScope' => static::DATA_SCOPE,
-                                'sortOrder' =>
-                                    $this->getNextGroupSortOrder(
-                                        $meta,
-                                        self::$previousGroup,
-                                        self::$sortOrder
-                                    ),
+                                'sortOrder' => $this->getNextGroupSortOrder(
+                                    $meta,
+                                    self::$previousGroup,
+                                    self::$sortOrder
+                                ),
                             ],
                         ],
 
@@ -182,12 +190,12 @@ class Related extends AbstractModifier
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = $this->locator->getProduct();
         $productId = $product->getId();
 
@@ -195,11 +203,10 @@ class Related extends AbstractModifier
             return $data;
         }
 
-        $priceModifier = $this->getPriceModifier();
         /**
          * Set field name for modifier
          */
-        $priceModifier->setData('name', 'price');
+        $this->priceModifier->setData('name', 'price');
 
         foreach ($this->getDataScopes() as $dataScope) {
             $data[$productId]['links'][$dataScope] = [];
@@ -208,7 +215,7 @@ class Related extends AbstractModifier
                     continue;
                 }
 
-                /** @var \Magento\Catalog\Model\Product $linkedProduct */
+                /** @var Product $linkedProduct */
                 $linkedProduct = $this->productRepository->get(
                     $linkItem->getLinkedProductSku(),
                     false,
@@ -217,7 +224,7 @@ class Related extends AbstractModifier
                 $data[$productId]['links'][$dataScope][] = $this->fillData($linkedProduct, $linkItem);
             }
             if (!empty($data[$productId]['links'][$dataScope])) {
-                $dataMap = $priceModifier->prepareDataSource([
+                $dataMap = $this->priceModifier->prepareDataSource([
                     'data' => [
                         'items' => $data[$productId]['links'][$dataScope]
                     ]
@@ -233,26 +240,11 @@ class Related extends AbstractModifier
     }
 
     /**
-     * Get price modifier
-     *
-     * @return \Magento\Catalog\Ui\Component\Listing\Columns\Price
-     * @deprecated 101.0.0
-     */
-    private function getPriceModifier()
-    {
-        if (!$this->priceModifier) {
-            $this->priceModifier = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Ui\Component\Listing\Columns\Price::class
-            );
-        }
-        return $this->priceModifier;
-    }
-
-    /**
      * Prepare data column
      *
      * @param ProductInterface $linkedProduct
      * @param ProductLinkInterface $linkItem
+     *
      * @return array
      * @since 101.0.0
      */
@@ -415,6 +407,7 @@ class Related extends AbstractModifier
      * @param Phrase $content
      * @param Phrase $buttonTitle
      * @param string $scope
+     *
      * @return array
      * @since 101.0.0
      */
@@ -468,6 +461,7 @@ class Related extends AbstractModifier
      *
      * @param Phrase $title
      * @param string $scope
+     *
      * @return array
      * @since 101.0.0
      */
@@ -475,7 +469,7 @@ class Related extends AbstractModifier
     {
         $listingTarget = $scope . '_product_listing';
 
-        $modal = [
+        return [
             'arguments' => [
                 'data' => [
                     'config' => [
@@ -539,14 +533,13 @@ class Related extends AbstractModifier
                 ],
             ],
         ];
-
-        return $modal;
     }
 
     /**
      * Retrieve grid
      *
      * @param string $scope
+     *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @since 101.0.0
@@ -676,12 +669,13 @@ class Related extends AbstractModifier
      * @param bool $fit
      * @param Phrase $label
      * @param int $sortOrder
+     *
      * @return array
      * @since 101.0.0
      */
     protected function getTextColumn($dataScope, $fit, Phrase $label, $sortOrder)
     {
-        $column = [
+        return [
             'arguments' => [
                 'data' => [
                     'config' => [
@@ -698,7 +692,5 @@ class Related extends AbstractModifier
                 ],
             ],
         ];
-
-        return $column;
     }
 }

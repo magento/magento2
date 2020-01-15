@@ -11,19 +11,28 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option\Type\Date;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
+use Magento\Catalog\Model\Product\Option\Type\Factory;
 use Magento\Catalog\Model\Product\Option\Type\File;
 use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Type\Text;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Catalog product option model
@@ -40,7 +49,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
     /**
-     * @var Option\Repository
+     * @var ProductCustomOptionRepositoryInterface
      * @since 101.0.0
      */
     protected $optionRepository;
@@ -92,12 +101,12 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**
      * Product option factory
      *
-     * @var \Magento\Catalog\Model\Product\Option\Type\Factory
+     * @var Factory
      */
     protected $optionTypeFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
@@ -132,39 +141,43 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private $calculateCustomOptionCatalogRule;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param Option\Value $productOptionValue
      * @param Option\Type\Factory $optionFactory
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param StringUtils $string
      * @param Option\Validator\Pool $validatorPool
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @param array $optionGroups
      * @param array $optionTypesToGroups
-     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
+     * @param ProductCustomOptionRepositoryInterface|null $optionRepository
+     * @param MetadataPool|null $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         Option\Value $productOptionValue,
-        \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
-        \Magento\Framework\Stdlib\StringUtils $string,
+        Factory $optionFactory,
+        StringUtils $string,
         Option\Validator\Pool $validatorPool,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
         ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null,
         array $optionGroups = [],
         array $optionTypesToGroups = [],
-        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null,
+        ?ProductCustomOptionRepositoryInterface $optionRepository = null,
+        ?MetadataPool $metadataPool = null
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
@@ -174,6 +187,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
             ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
         $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule ??
             ObjectManager::getInstance()->get(CalculateCustomOptionCatalogRule::class);
+        $this->optionRepository = $optionRepository ?? ObjectManager::getInstance()
+                ->get(ProductCustomOptionRepositoryInterface::class);
+        $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
         $this->optionGroups = $optionGroups ?: [
             self::OPTION_GROUP_DATE => Date::class,
             self::OPTION_GROUP_FILE => File::class,
@@ -242,6 +258,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get value by given id
      *
      * @param int $valueId
+     *
      * @return Option\Value|null
      */
     public function getValueById($valueId)
@@ -257,6 +274,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Whether or not the option type contains sub-values
      *
      * @param string $type
+     *
      * @return bool
      * @since 101.1.0
      */
@@ -289,6 +307,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Add option for save it
      *
      * @param array $option
+     *
      * @return $this
      */
     public function addOption($option)
@@ -311,6 +330,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set options for array
      *
      * @param array $options
+     *
      * @return $this
      */
     public function setOptions($options)
@@ -344,6 +364,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set product instance
      *
      * @param Product $product
+     *
      * @return $this
      */
     public function setProduct(Product $product = null)
@@ -356,6 +377,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get group name of option by given option type
      *
      * @param string $type
+     *
      * @return string
      */
     public function getGroupByType($type = null)
@@ -371,6 +393,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Group model factory
      *
      * @param string $type Option type
+     *
      * @return DefaultType
      * @throws LocalizedException
      */
@@ -470,6 +493,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Return converted percent to price
      *
      * @param bool $flag
+     *
      * @return float
      */
     public function getPrice($flag = false)
@@ -488,6 +512,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Delete prices of option
      *
      * @param int $optionId
+     *
      * @return $this
      */
     public function deletePrices($optionId)
@@ -500,6 +525,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Delete titles of option
      *
      * @param int $optionId
+     *
      * @return $this
      */
     public function deleteTitles($optionId)
@@ -512,12 +538,13 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get Product Option Collection
      *
      * @param Product $product
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      * @since 101.0.0
      */
     public function getProductOptions(Product $product)
     {
-        return $this->getOptionRepository()->getProductOptions($product, $this->getAddRequiredFilter());
+        return $this->optionRepository->getProductOptions($product, $this->getAddRequiredFilter());
     }
 
     /**
@@ -537,6 +564,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param array $optionIds
      * @param int $storeId
+     *
      * @return Collection
      */
     public function getOptionValuesByOptionId($optionIds, $storeId)
@@ -551,6 +579,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param int $oldProductId
      * @param int $newProductId
+     *
      * @return $this
      */
     public function duplicate($oldProductId, $newProductId)
@@ -565,6 +594,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param int $productId
      * @param int $storeId
+     *
      * @return array
      */
     public function getSearchableData($productId, $storeId)
@@ -737,6 +767,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set product SKU
      *
      * @param string $productSku
+     *
      * @return $this
      */
     public function setProductSku($productSku)
@@ -748,6 +779,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set option id
      *
      * @param int $optionId
+     *
      * @return $this
      */
     public function setOptionId($optionId)
@@ -759,6 +791,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set option title
      *
      * @param string $title
+     *
      * @return $this
      */
     public function setTitle($title)
@@ -770,6 +803,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set option type
      *
      * @param string $type
+     *
      * @return $this
      */
     public function setType($type)
@@ -781,6 +815,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set sort order
      *
      * @param int $sortOrder
+     *
      * @return $this
      */
     public function setSortOrder($sortOrder)
@@ -803,6 +838,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set price
      *
      * @param float $price
+     *
      * @return $this
      */
     public function setPrice($price)
@@ -814,6 +850,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set price type
      *
      * @param string $priceType
+     *
      * @return $this
      */
     public function setPriceType($priceType)
@@ -825,6 +862,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set Sku
      *
      * @param string $sku
+     *
      * @return $this
      */
     public function setSku($sku)
@@ -836,6 +874,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set File Extension
      *
      * @param string $fileExtension
+     *
      * @return $this
      */
     public function setFileExtension($fileExtension)
@@ -847,6 +886,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set Max Characters
      *
      * @param int $maxCharacters
+     *
      * @return $this
      */
     public function setMaxCharacters($maxCharacters)
@@ -858,6 +898,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set Image Size X
      *
      * @param int $imageSizeX
+     *
      * @return $this
      */
     public function setImageSizeX($imageSizeX)
@@ -869,6 +910,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set Image Size Y
      *
      * @param int $imageSizeY
+     *
      * @return $this
      */
     public function setImageSizeY($imageSizeY)
@@ -880,6 +922,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Set value
      *
      * @param ProductCustomOptionValuesInterface[] $values
+     *
      * @return $this
      */
     public function setValues(array $values = null)
@@ -918,6 +961,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get Product Option Collection
      *
      * @param Product $product
+     *
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getProductOptionCollection(Product $product)
@@ -925,7 +969,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $collection = clone $this->getCollection();
         $collection->addFieldToFilter(
             'product_id',
-            $product->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField())
+            $product->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         )->addTitleToResult(
             $product->getStoreId()
         )->addPriceToResult(
@@ -950,40 +994,13 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
+     *
      * @return $this
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * Get option repository
-     *
-     * @return Option\Repository
-     */
-    private function getOptionRepository()
-    {
-        if (null === $this->optionRepository) {
-            $this->optionRepository = ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
-        }
-        return $this->optionRepository;
-    }
-
-    /**
-     * Get metadata pool
-     *
-     * @return \Magento\Framework\EntityManager\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-        }
-        return $this->metadataPool;
     }
 
     //@codeCoverageIgnoreEnd

@@ -3,110 +3,119 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Filter\DateTime;
+use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
+use Magento\Catalog\Model\Product\Link\Resolver;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\ProductLink\Link as ProductLink;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
-use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
-use Magento\Catalog\Model\Product\LinkTypeProvider;
-use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
-use Magento\Catalog\Model\ProductLink\Link as ProductLink;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * Test class for \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class HelperTest extends \PHPUnit\Framework\TestCase
+class HelperTest extends TestCase
 {
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var Helper
      */
-    protected $helper;
+    private $helper;
 
     /**
-     * @var ProductLinkInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkInterfaceFactory|MockObject
      */
-    protected $productLinkFactoryMock;
+    private $productLinkFactoryMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
-    protected $storeManagerMock;
+    private $storeManagerMock;
 
     /**
-     * @var StockDataFilter|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockDataFilter|MockObject
      */
-    protected $stockFilterMock;
+    private $stockFilterMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
-    protected $productMock;
+    private $productMock;
 
     /**
-     * @var ProductRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepository|MockObject
      */
-    protected $productRepositoryMock;
+    private $productRepositoryMock;
 
     /**
-     * @var ProductCustomOptionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCustomOptionInterfaceFactory|MockObject
      */
-    protected $customOptionFactoryMock;
+    private $customOptionFactoryMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Link\Resolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resolver|MockObject
      */
-    protected $linkResolverMock;
+    private $linkResolverMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\LinkTypeProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinkTypeProvider|MockObject
      */
-    protected $linkTypeProviderMock;
+    private $linkTypeProviderMock;
 
     /**
-     * @var ProductLinks|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinks|MockObject
      */
-    protected $productLinksMock;
+    private $productLinksMock;
 
     /**
-     * @var AttributeFilter|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeFilter|MockObject
      */
-    protected $attributeFilterMock;
+    private $attributeFilterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $dateTimeFilterMock;
 
     /**
-     * @var FormatInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormatInterface|MockObject
      */
-    protected $localeFormatMock;
+    private $localeFormatMock;
 
     /**
      * @inheritdoc
@@ -147,6 +156,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->linkResolverMock = $this->getMockBuilder(Resolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productLinksMock = $this->getMockBuilder(ProductLinks::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -165,7 +177,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dateTimeFilterMock = $this->createMock(\Magento\Catalog\Model\Product\Filter\DateTime::class);
+        $this->dateTimeFilterMock = $this->createMock(DateTime::class);
 
         $this->helper = $this->objectManager->getObject(
             Helper::class,
@@ -174,6 +186,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                 'storeManager' => $this->storeManagerMock,
                 'stockFilter' => $this->stockFilterMock,
                 'productLinks' => $this->productLinksMock,
+                'linkResolver' => $this->linkResolverMock,
                 'customOptionFactory' => $this->customOptionFactoryMock,
                 'productLinkFactory' => $this->productLinkFactoryMock,
                 'productRepository' => $this->productRepositoryMock,
@@ -183,14 +196,6 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                 'dateTimeFilter' => $this->dateTimeFilterMock
             ]
         );
-
-        $this->linkResolverMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Link\Resolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $helperReflection = new \ReflectionClass(get_class($this->helper));
-        $resolverProperty = $helperReflection->getProperty('linkResolver');
-        $resolverProperty->setAccessible(true);
-        $resolverProperty->setValue($this->helper, $this->linkResolverMock);
     }
 
     /**
@@ -266,8 +271,8 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('isLockedAttribute')->with('media')->willReturn(true);
         $this->productMock->expects($this->once())->method('unlockAttribute')->with('media');
         $this->productMock->expects($this->once())->method('lockAttribute')->with('media');
-        $this->productMock->expects($this->any())->method('getSku')->willReturn('sku');
-        $this->productMock->expects($this->any())->method('getOptionsReadOnly')->willReturn(false);
+        $this->productMock->method('getSku')->willReturn('sku');
+        $this->productMock->method('getOptionsReadOnly')->willReturn(false);
 
         $customOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
@@ -277,8 +282,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $firstExpectedCustomOption->setData($optionsData['option2']);
         $secondExpectedCustomOption = clone $customOptionMock;
         $secondExpectedCustomOption->setData($optionsData['option3']);
-        $this->customOptionFactoryMock->expects($this->any())
-            ->method('create')
+        $this->customOptionFactoryMock->method('create')
             ->willReturnMap(
                 [
                     [
@@ -292,17 +296,16 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $website = $this->getMockBuilder(WebsiteInterface::class)->getMockForAbstractClass();
-        $website->expects($this->any())->method('getId')->willReturn(1);
+        $website->method('getId')->willReturn(1);
         $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn($isSingleStore);
-        $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($website);
-        $this->localeFormatMock->expects($this->any())
+        $this->storeManagerMock->method('getWebsite')->willReturn($website);
+        $this->localeFormatMock
             ->method('getNumber')
             ->willReturnArgument(0);
 
         $this->assembleProductRepositoryMock($links);
 
-        $this->productLinkFactoryMock->expects($this->any())
-            ->method('create')
+        $this->productLinkFactoryMock->method('create')
             ->willReturnCallback(
                 function () {
                     return $this->getMockBuilder(ProductLink::class)
@@ -318,12 +321,12 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expWebsiteIds, $this->productMock->getDataByKey('website_ids'));
 
         $productOptions = $this->productMock->getOptions();
-        $this->assertTrue(2 == count($productOptions));
-        list($option2, $option3) = $productOptions;
-        $this->assertTrue($option2->getOptionId() == $optionsData['option2']['option_id']);
-        $this->assertTrue('sku' == $option2->getData('product_sku'));
-        $this->assertTrue($option3->getOptionId() == $optionsData['option3']['option_id']);
-        $this->assertTrue('sku' == $option2->getData('product_sku'));
+        $this->assertCount(2, $productOptions);
+        [$option2, $option3] = $productOptions;
+        $this->assertEquals($option2->getOptionId(), $optionsData['option2']['option_id']);
+        $this->assertEquals('sku', $option2->getData('product_sku'));
+        $this->assertEquals($option3->getOptionId(), $optionsData['option3']['option_id']);
+        $this->assertEquals('sku', $option2->getData('product_sku'));
 
         $productLinks = $this->productMock->getProductLinks();
         $this->assertCount(count($expectedLinks), $productLinks);
@@ -350,17 +353,14 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     {
         $attributesModels = [];
         foreach ($attributes as $attribute) {
-            $attributeModel = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+            $attributeModel = $this->createMock(Attribute::class);
             $backendModel = $attribute['backend_model']
-                ?? $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class);
-            $attributeModel->expects($this->any())
-                ->method('getBackend')
+                ?? $this->createMock(DefaultBackend::class);
+            $attributeModel->method('getBackend')
                 ->willReturn($backendModel);
-            $attributeModel->expects($this->any())
-                ->method('getAttributeCode')
+            $attributeModel->method('getAttributeCode')
                 ->willReturn($attribute['code']);
-            $backendModel->expects($this->any())
-                ->method('getType')
+            $backendModel->method('getType')
                 ->willReturn($attribute['backend_type']);
             $attributesModels[$attribute['code']] = $attributeModel;
         }
@@ -736,12 +736,10 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                     ->disableOriginalConstructor()
                     ->getMock();
 
-                $mockLinkedProduct->expects($this->any())
-                    ->method('getId')
+                $mockLinkedProduct->method('getId')
                     ->willReturn($link['id']);
 
-                $mockLinkedProduct->expects($this->any())
-                    ->method('getSku')
+                $mockLinkedProduct->method('getSku')
                     ->willReturn($link['sku']);
 
                 // Even optional arguments need to be provided for returnMapValue
@@ -749,8 +747,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->productRepositoryMock->expects($this->any())
-            ->method('getById')
-            ->will($this->returnValueMap($repositoryReturnMap));
+        $this->productRepositoryMock->method('getById')
+            ->willReturnMap($repositoryReturnMap);
     }
 }
