@@ -3,9 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Plugin\Model\ResourceModel;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Eav\Model\Cache\Type;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -20,13 +25,15 @@ class Config
     const PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID = 'PRODUCT_LISTING_SORT_BY_ATTRIBUTES';
     /**#@-*/
 
-    /**#@-*/
-    protected $cache;
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
 
     /**
-     * @var bool|null
+     * @var bool
      */
-    protected $isCacheEnabled = null;
+    private $isCacheEnabled;
 
     /**
      * @var SerializerInterface
@@ -34,18 +41,18 @@ class Config
     private $serializer;
 
     /**
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @param CacheInterface $cache
+     * @param StateInterface $cacheState
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\App\Cache\StateInterface $cacheState,
-        SerializerInterface $serializer = null
+        CacheInterface $cache,
+        StateInterface $cacheState,
+        SerializerInterface $serializer
     ) {
         $this->cache = $cache;
-        $this->isCacheEnabled = $cacheState->isEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER);
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->isCacheEnabled = $cacheState->isEnabled(Type::TYPE_IDENTIFIER);
+        $this->serializer = $serializer;
     }
 
     /**
@@ -69,8 +76,8 @@ class Config
                 $this->serializer->serialize($attributes),
                 $cacheId,
                 [
-                    \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    Type::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }
@@ -99,8 +106,8 @@ class Config
                 $this->serializer->serialize($attributes),
                 $cacheId,
                 [
-                    \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    Type::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }

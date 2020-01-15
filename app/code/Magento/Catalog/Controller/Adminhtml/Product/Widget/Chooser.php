@@ -3,15 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\LayoutFactory;
 
 /**
  * Controller to build Chooser container.
  */
-class Chooser extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Chooser extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -19,42 +27,42 @@ class Chooser extends \Magento\Backend\App\Action implements HttpPostActionInter
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     protected $layoutFactory;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Context $context
+     * @param RawFactory $resultRawFactory
+     * @param LayoutFactory $layoutFactory
+     * @param Escaper $escaper
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\Escaper $escaper = null
+        Context $context,
+        RawFactory $resultRawFactory,
+        LayoutFactory $layoutFactory,
+        Escaper $escaper
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->layoutFactory = $layoutFactory;
-        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        $this->escaper = $escaper;
     }
 
     /**
      * Chooser Source action.
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return Raw
      */
     public function execute()
     {
@@ -91,13 +99,13 @@ class Chooser extends \Magento\Backend\App\Action implements HttpPostActionInter
                 ]
             );
 
-            $html = $layout->createBlock(\Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container::class)
+            $html = $layout->createBlock(Container::class)
                 ->setTreeHtml($categoriesTree->toHtml())
                 ->setGridHtml($html)
                 ->toHtml();
         }
 
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        /** @var Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
 
         return $resultRaw->setContents($html);

@@ -3,14 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Product;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Catalog\Controller\Product as ProductAction;
+use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Forward;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * View a product on storefront. Needs to be accessible by POST because of the store switching
@@ -20,12 +30,12 @@ use Magento\Catalog\Controller\Product as ProductAction;
 class View extends ProductAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
-     * @var \Magento\Catalog\Helper\Product\View
+     * @var ProductHelper\View
      */
     protected $viewHelper;
 
     /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 
@@ -35,47 +45,47 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
     protected $resultPageFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var Json
      */
-    private $jsonHelper;
+    private $serializer;
 
     /**
      * Constructor
      *
      * @param Context $context
-     * @param \Magento\Catalog\Helper\Product\View $viewHelper
-     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @param ProductHelper $productHelper
+     * @param ProductHelper\View $viewHelper
+     * @param ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param LoggerInterface $logger
+     * @param Json $serializer
      */
     public function __construct(
         Context $context,
-        \Magento\Catalog\Helper\Product\View $viewHelper,
-        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
+        ProductHelper $productHelper,
+        ProductHelper\View $viewHelper,
+        ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
-        \Psr\Log\LoggerInterface $logger = null,
-        \Magento\Framework\Json\Helper\Data $jsonHelper = null
+        LoggerInterface $logger,
+        Json $serializer
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $productHelper);
         $this->viewHelper = $viewHelper;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
-        $this->logger = $logger ?: ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class);
-        $this->jsonHelper = $jsonHelper ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Json\Helper\Data::class);
+        $this->logger = $logger;
+        $this->serializer = $serializer;
     }
 
     /**
      * Redirect if product failed to load
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\Result\Forward
+     * @return Redirect|Forward
      */
     protected function noProductRedirect()
     {
@@ -83,17 +93,21 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
         if (isset($store) && !$this->getResponse()->isRedirect()) {
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('');
-        } elseif (!$this->getResponse()->isRedirect()) {
+        }
+
+        if (!$this->getResponse()->isRedirect()) {
             $resultForward = $this->resultForwardFactory->create();
             $resultForward->forward('noroute');
             return $resultForward;
         }
+
+        return null;
     }
 
     /**
      * Product view action
      *
-     * @return \Magento\Framework\Controller\Result\Forward|\Magento\Framework\Controller\Result\Redirect
+     * @return Forward|Redirect|Page
      */
     public function execute()
     {
@@ -116,13 +130,13 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
 
             if ($this->getRequest()->isAjax()) {
                 $this->getResponse()->representJson(
-                    $this->jsonHelper->jsonEncode(
+                    $this->serializer->jsonEncode(
                         [
                             'backUrl' => $this->_redirect->getRedirectUrl()
                         ]
                     )
                 );
-                return;
+                return null;
             }
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setRefererOrBaseUrl();
@@ -130,7 +144,7 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
         }
 
         // Prepare helper and params
-        $params = new \Magento\Framework\DataObject();
+        $params = new DataObject();
         $params->setCategoryId($categoryId);
         $params->setSpecifyOptions($specifyOptions);
 
@@ -139,13 +153,14 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
             $page = $this->resultPageFactory->create();
             $this->viewHelper->prepareAndRender($page, $productId, $this, $params);
             return $page;
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) {
             return $this->noProductRedirect();
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            $resultForward = $this->resultForwardFactory->create();
-            $resultForward->forward('noroute');
-            return $resultForward;
         }
+
+        $resultForward = $this->resultForwardFactory->create();
+        $resultForward->forward('noroute');
+        return $resultForward;
     }
 }

@@ -4,18 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Simple product data view
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Framework\Config\View;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\App\ObjectManager;
@@ -31,7 +26,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
 class Gallery extends AbstractView
 {
     /**
-     * @var \Magento\Framework\Config\View
+     * @var View
      */
     protected $configView;
 
@@ -217,7 +212,7 @@ class Gallery extends AbstractView
     /**
      * Retrieve config view
      *
-     * @return \Magento\Framework\Config\View
+     * @return View
      */
     private function getConfigView()
     {

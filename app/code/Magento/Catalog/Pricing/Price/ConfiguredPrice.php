@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Configured price model
@@ -22,39 +23,38 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     const PRICE_CODE = self::CONFIGURED_PRICE_CODE;
 
     /**
-     * @var null|ItemInterface
-     */
-    protected $item;
-
-    /**
      * @var ConfiguredOptions
      */
     private $configuredOptions;
 
     /**
+     * @var null|ItemInterface
+     */
+    protected $item;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param ConfiguredOptions $configuredOptions
      * @param ItemInterface|null $item
-     * @param ConfiguredOptions|null $configuredOptions
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        ItemInterface $item = null,
-        ConfiguredOptions $configuredOptions = null
+        PriceCurrencyInterface $priceCurrency,
+        ConfiguredOptions $configuredOptions,
+        ItemInterface $item = null
     ) {
+        $this->configuredOptions = $configuredOptions;
         $this->item = $item;
-        $this->configuredOptions = $configuredOptions ?: ObjectManager::getInstance()->get(ConfiguredOptions::class);
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
     }
 
     /**
-     * @param ItemInterface $item
-     * @return $this
+     * @inheritDoc
      */
     public function setItem(ItemInterface $item)
     {

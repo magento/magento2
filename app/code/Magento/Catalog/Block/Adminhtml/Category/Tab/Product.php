@@ -3,32 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Grid;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Extended;
+use Magento\Backend\Helper\Data;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Directory\Model\Currency;
+use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Product in category grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
-
-use Magento\Backend\Block\Widget\Grid;
-use Magento\Backend\Block\Widget\Grid\Column;
-use Magento\Backend\Block\Widget\Grid\Extended;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Catalog\Model\Product\Visibility;
-use Magento\Framework\App\ObjectManager;
-
-class Product extends \Magento\Backend\Block\Widget\Grid\Extended
+class Product extends Extended
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $_productFactory;
 
@@ -43,32 +49,32 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     private $visibility;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Data $backendHelper
+     * @param ProductFactory $productFactory
+     * @param Registry $coreRegistry
+     * @param Visibility $visibility
+     * @param Status $status
      * @param array $data
-     * @param Visibility|null $visibility
-     * @param Status|null $status
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        array $data = [],
-        Visibility $visibility = null,
-        Status $status = null
+        Context $context,
+        Data $backendHelper,
+        ProductFactory $productFactory,
+        Registry $coreRegistry,
+        Visibility $visibility,
+        Status $status,
+        array $data = []
     ) {
         $this->_productFactory = $productFactory;
         $this->_coreRegistry = $coreRegistry;
-        $this->visibility = $visibility ?: ObjectManager::getInstance()->get(Visibility::class);
-        $this->status = $status ?: ObjectManager::getInstance()->get(Status::class);
+        $this->visibility = $visibility;
+        $this->status = $status;
         parent::__construct($context, $backendHelper, $data);
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function _construct()
     {
@@ -79,6 +85,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get current category
+     *
      * @return array|null
      */
     public function getCategory()
@@ -87,8 +95,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param Column $column
-     * @return $this
+     * @inheritDoc
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -110,7 +117,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return Grid
+     * @inheritDoc
      */
     protected function _prepareCollection()
     {
@@ -153,7 +160,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return Extended
+     * @inheritDoc
      */
     protected function _prepareColumns()
     {
@@ -210,8 +217,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Price'),
                 'type' => 'currency',
                 'currency_code' => (string)$this->_scopeConfig->getValue(
-                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    Currency::XML_PATH_CURRENCY_BASE,
+                    ScopeInterface::SCOPE_STORE
                 ),
                 'index' => 'price'
             ]
@@ -230,7 +237,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getGridUrl()
     {
@@ -238,6 +245,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get currently selected products
+     *
      * @return array
      */
     protected function _getSelectedProducts()

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View\Options;
 
-use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 use Magento\Framework\App\ObjectManager;

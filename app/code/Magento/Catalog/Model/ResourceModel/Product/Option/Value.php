@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel\Product\Option;
 
+use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\Product\Option\Value as OptionValue;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
@@ -17,7 +19,6 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Helper\Data;
 
 /**
  * Catalog product custom option resource model
@@ -64,22 +65,24 @@ class Value extends AbstractDb
      * @param CurrencyFactory $currencyFactory
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $config
-     * @param string $connectionName
+     * @param FormatInterface $localeFormat
      * @param Data $dataHelper
+     * @param string $connectionName
      */
     public function __construct(
         Context $context,
         CurrencyFactory $currencyFactory,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $config,
-        $connectionName = null,
-        Data $dataHelper = null
+        FormatInterface $localeFormat,
+        Data $dataHelper,
+        $connectionName = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
-        $this->dataHelper = $dataHelper ?: ObjectManager::getInstance()
-            ->get(Data::class);
+        $this->localeFormat = $localeFormat;
+        $this->dataHelper = $dataHelper;
         parent::__construct($context, $connectionName);
     }
 
@@ -121,7 +124,7 @@ class Value extends AbstractDb
     {
         $objectPrice = $object->getPrice();
         $priceTable = $this->getTable('catalog_product_option_type_price');
-        $formattedPrice = $this->getLocaleFormatter()->getNumber($objectPrice);
+        $formattedPrice = $this->localeFormat->getNumber($objectPrice);
 
         $price = (double)sprintf('%F', $formattedPrice);
         $priceType = $object->getPriceType();
@@ -449,20 +452,5 @@ class Value extends AbstractDb
         }
 
         return $object;
-    }
-
-    /**
-     * Get FormatInterface to convert price from string to number format
-     *
-     * @return FormatInterface
-     * @deprecated 101.0.8
-     */
-    private function getLocaleFormatter()
-    {
-        if ($this->localeFormat === null) {
-            $this->localeFormat = ObjectManager::getInstance()
-                ->get(FormatInterface::class);
-        }
-        return $this->localeFormat;
     }
 }

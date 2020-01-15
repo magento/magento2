@@ -3,21 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
-use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
-use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
+use Magento\Catalog\Pricing\Price\ConfiguredPriceSelection;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Catalog\Pricing\Price\ConfiguredPriceSelection;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class for configured_price rendering.
@@ -34,32 +34,30 @@ class ConfiguredPriceBox extends FinalPriceBox
      * @param SaleableInterface $saleableItem
      * @param PriceInterface $price
      * @param RendererPool $rendererPool
+     * @param SalableResolverInterface $salableResolver
+     * @param MinimalPriceCalculatorInterface $minimalPriceCalculator
+     * @param ConfiguredPriceSelection $configuredPriceSelection
      * @param array $data
-     * @param SalableResolverInterface|null $salableResolver
-     * @param MinimalPriceCalculatorInterface|null $minimalPriceCalculator
-     * @param ConfiguredPriceSelection|null $configuredPriceSelection
      */
     public function __construct(
         Context $context,
         SaleableInterface $saleableItem,
         PriceInterface $price,
         RendererPool $rendererPool,
-        array $data = [],
-        SalableResolverInterface $salableResolver = null,
-        MinimalPriceCalculatorInterface $minimalPriceCalculator = null,
-        ConfiguredPriceSelection $configuredPriceSelection = null
+        SalableResolverInterface $salableResolver,
+        MinimalPriceCalculatorInterface $minimalPriceCalculator,
+        ConfiguredPriceSelection $configuredPriceSelection,
+        array $data = []
     ) {
-        $this->configuredPriceSelection = $configuredPriceSelection
-            ?: ObjectManager::getInstance()
-            ->get(ConfiguredPriceSelection::class);
+        $this->configuredPriceSelection = $configuredPriceSelection;
         parent::__construct(
             $context,
             $saleableItem,
             $price,
             $rendererPool,
-            $data,
             $salableResolver,
-            $minimalPriceCalculator
+            $minimalPriceCalculator,
+            $data
         );
     }
 
@@ -86,7 +84,7 @@ class ConfiguredPriceBox extends FinalPriceBox
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPriceType($priceCode)
     {
@@ -102,6 +100,8 @@ class ConfiguredPriceBox extends FinalPriceBox
     }
 
     /**
+     * Gets configured price value
+     *
      * @return PriceInterface
      */
     public function getConfiguredPrice(): PriceInterface
@@ -117,6 +117,8 @@ class ConfiguredPriceBox extends FinalPriceBox
     }
 
     /**
+     * Gets configured regular price value
+     *
      * @return PriceInterface
      */
     public function getConfiguredRegularPrice(): PriceInterface

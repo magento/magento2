@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price as ProductOptionsPrice;
@@ -149,6 +150,7 @@ class CustomOptions extends AbstractModifier
      * @param ProductOptionsPrice $productOptionsPrice
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
+     * @param CurrencyInterface|null $localeCurrency
      */
     public function __construct(
         LocatorInterface $locator,
@@ -156,7 +158,8 @@ class CustomOptions extends AbstractModifier
         ConfigInterface $productOptionsConfig,
         ProductOptionsPrice $productOptionsPrice,
         UrlInterface $urlBuilder,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        ?CurrencyInterface $localeCurrency = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -164,6 +167,7 @@ class CustomOptions extends AbstractModifier
         $this->productOptionsPrice = $productOptionsPrice;
         $this->urlBuilder = $urlBuilder;
         $this->arrayManager = $arrayManager;
+        $this->localeCurrency = $localeCurrency ?? ObjectManager::getInstance()->get(CurrencyInterface::class);
     }
 
     /**
@@ -1172,21 +1176,6 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
      * Format price according to the locale of the currency
      *
      * @param mixed $value
@@ -1200,7 +1189,7 @@ class CustomOptions extends AbstractModifier
         }
 
         $store = $this->storeManager->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
         return $value;

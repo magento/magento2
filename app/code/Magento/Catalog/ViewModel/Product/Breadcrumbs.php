@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\ViewModel\Product;
 
 use Magento\Catalog\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Escaper;
@@ -45,24 +44,20 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     /**
      * @param Data $catalogData
      * @param ScopeConfigInterface $scopeConfig
-     * @param Json|null $json
-     * @param Escaper|null $escaper
-     * @param JsonHexTag|null $jsonSerializer
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param Escaper $escaper
+     * @param JsonHexTag $jsonSerializer
      */
     public function __construct(
         Data $catalogData,
         ScopeConfigInterface $scopeConfig,
-        Json $json = null,
-        Escaper $escaper = null,
-        JsonHexTag $jsonSerializer = null
+        Escaper $escaper,
+        JsonHexTag $jsonSerializer
     ) {
         parent::__construct();
-
         $this->catalogData = $catalogData;
         $this->scopeConfig = $scopeConfig;
-        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
-        $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(JsonHexTag::class);
+        $this->escaper = $escaper;
+        $this->jsonSerializer = $jsonSerializer;
     }
 
     /**

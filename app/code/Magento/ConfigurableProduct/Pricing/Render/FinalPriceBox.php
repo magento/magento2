@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
@@ -50,9 +52,9 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
             $saleableItem,
             $price,
             $rendererPool,
-            $data,
             $salableResolver,
-            $minimalPriceCalculator
+            $minimalPriceCalculator,
+            $data
         );
 
         $this->configurableOptionsProvider = $configurableOptionsProvider;

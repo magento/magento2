@@ -3,19 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Render;
 
-use Magento\Catalog\Pricing\Price;
-use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
-use Magento\Msrp\Pricing\Price\MsrpPrice;
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Framework\Pricing\Price\PriceInterface;
-use Magento\Framework\Pricing\Render\RendererPool;
-use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Pricing\Price;
 use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
+use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Msrp\Pricing\Price\MsrpPrice;
 
 /**
  * Class for final_price rendering
@@ -40,23 +40,22 @@ class FinalPriceBox extends BasePriceBox
      * @param SaleableInterface $saleableItem
      * @param PriceInterface $price
      * @param RendererPool $rendererPool
-     * @param array $data
      * @param SalableResolverInterface $salableResolver
      * @param MinimalPriceCalculatorInterface $minimalPriceCalculator
+     * @param array $data
      */
     public function __construct(
         Context $context,
         SaleableInterface $saleableItem,
         PriceInterface $price,
         RendererPool $rendererPool,
-        array $data = [],
-        SalableResolverInterface $salableResolver = null,
-        MinimalPriceCalculatorInterface $minimalPriceCalculator = null
+        SalableResolverInterface $salableResolver,
+        MinimalPriceCalculatorInterface $minimalPriceCalculator,
+        array $data = []
     ) {
         parent::__construct($context, $saleableItem, $price, $rendererPool, $data);
-        $this->salableResolver = $salableResolver ?: ObjectManager::getInstance()->get(SalableResolverInterface::class);
-        $this->minimalPriceCalculator = $minimalPriceCalculator
-            ?: ObjectManager::getInstance()->get(MinimalPriceCalculatorInterface::class);
+        $this->salableResolver = $salableResolver;
+        $this->minimalPriceCalculator = $minimalPriceCalculator;
     }
 
     /**

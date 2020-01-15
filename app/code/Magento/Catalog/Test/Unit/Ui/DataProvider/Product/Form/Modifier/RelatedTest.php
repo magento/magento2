@@ -3,23 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Related;
 
 /**
- * Class RelatedTest
+ * Test class for \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Related
  */
 class RelatedTest extends AbstractModifierTest
 {
     /**
-     * @return \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Related
+     * @return Related
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(\Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Related::class, [
-            'locator' => $this->locatorMock,
-        ]);
+        return $this->objectManager->getObject(
+            Related::class,
+            [
+                'locator' => $this->locatorMock,
+            ]
+        );
     }
 
     /**

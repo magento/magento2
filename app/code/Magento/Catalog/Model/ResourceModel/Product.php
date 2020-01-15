@@ -3,17 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Model\Factory;
+use Magento\Catalog\Model\Product\Attribute\DefaultAttributes;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Eav\Api\AttributeManagementInterface;
+use Magento\Eav\Model\Entity\Attribute\SetFactory;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
+use Magento\Eav\Model\Entity\Context;
+use Magento\Eav\Model\Entity\TypeFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Product entity resource model
@@ -54,17 +66,17 @@ class Product extends AbstractResource
     protected $_categoryCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     * @var SetFactory
      */
     protected $setFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\TypeFactory
+     * @var TypeFactory
      */
     protected $typeFactory;
 
@@ -75,9 +87,14 @@ class Product extends AbstractResource
     protected $entityManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
+     * @var DefaultAttributes
      */
     protected $defaultAttributes;
+
+    /**
+     * @var ProductWebsiteLink
+     */
+    private $productWebsiteLink;
 
     /**
      * @var array
@@ -101,35 +118,41 @@ class Product extends AbstractResource
     private $eavAttributeManagement;
 
     /**
-     * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Factory $modelFactory
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param Factory $modelFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param Category $catalogCategory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
-     * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
-     * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
+     * @param ManagerInterface $eventManager
+     * @param SetFactory $setFactory
+     * @param TypeFactory $typeFactory
+     * @param DefaultAttributes $defaultAttributes
      * @param array $data
      * @param TableMaintainer|null $tableMaintainer
      * @param UniqueValidationInterface|null $uniqueValidator
      * @param AttributeManagementInterface|null $eavAttributeManagement
+     * @param EntityManager|null $entityManager
+     * @param ProductWebsiteLink|null $productWebsiteLink
+     * @param Product\CategoryLink|null $productCategoryLink
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Eav\Model\Entity\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Factory $modelFactory,
+        Context $context,
+        StoreManagerInterface $storeManager,
+        Factory $modelFactory,
         Category\CollectionFactory $categoryCollectionFactory,
         Category $catalogCategory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
-        \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
-        \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
+        ManagerInterface $eventManager,
+        SetFactory $setFactory,
+        TypeFactory $typeFactory,
+        DefaultAttributes $defaultAttributes,
         $data = [],
         TableMaintainer $tableMaintainer = null,
         UniqueValidationInterface $uniqueValidator = null,
-        AttributeManagementInterface $eavAttributeManagement = null
+        AttributeManagementInterface $eavAttributeManagement = null,
+        ?EntityManager $entityManager = null,
+        ?ProductWebsiteLink $productWebsiteLink = null,
+        ?Product\CategoryLink $productCategoryLink = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -148,6 +171,10 @@ class Product extends AbstractResource
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
         $this->eavAttributeManagement = $eavAttributeManagement
             ?? ObjectManager::getInstance()->get(AttributeManagementInterface::class);
+        $this->entityManager = $entityManager ?? ObjectManager::getInstance()->get(EntityManager::class);
+        $this->productWebsiteLink = $productWebsiteLink ?? ObjectManager::getInstance()->get(ProductWebsiteLink::class);
+        $this->productCategoryLink = $productCategoryLink ?? ObjectManager::getInstance()
+                ->get(Product\CategoryLink::class);
     }
 
     /**
@@ -159,7 +186,7 @@ class Product extends AbstractResource
     public function getEntityType()
     {
         if (empty($this->_type)) {
-            $this->setType(\Magento\Catalog\Model\Product::ENTITY);
+            $this->setType(ProductEntity::ENTITY);
         }
         return parent::getEntityType();
     }
@@ -204,19 +231,19 @@ class Product extends AbstractResource
     /**
      * Retrieve product website identifiers
      *
-     * @deprecated 101.1.0
-     * @param \Magento\Catalog\Model\Product|int $product
+     * @param ProductEntity|int $product
      * @return array
+     * @deprecated 101.1.0
      */
     public function getWebsiteIds($product)
     {
-        if ($product instanceof \Magento\Catalog\Model\Product) {
+        if ($product instanceof ProductEntity) {
             $productId = $product->getEntityId();
         } else {
             $productId = $product;
         }
 
-        return $this->getProductWebsiteLink()->getWebsiteIdsByProductId($productId);
+        return $this->productWebsiteLink->getWebsiteIdsByProductId($productId);
     }
 
     /**
@@ -249,12 +276,12 @@ class Product extends AbstractResource
     /**
      * Retrieve product category identifiers
      *
-     * @param  \Magento\Catalog\Model\Product $product
+     * @param ProductEntity $product
      * @return array
      */
     public function getCategoryIds($product)
     {
-        $result = $this->getProductCategoryLink()->getCategoryLinks($product);
+        $result = $this->productCategoryLink->getCategoryLinks($product);
         return array_column($result, 'category_id');
     }
 
@@ -340,6 +367,7 @@ class Product extends AbstractResource
      *
      * @param DataObject $product
      * @param array $attributeCodes
+     *
      * @return void
      */
     private function deleteSelectedEntityAttributeRows(DataObject $product, array $attributeCodes): void
@@ -368,7 +396,7 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        $this->getEntityManager()->delete($object);
+        $this->entityManager->delete($object);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
@@ -379,9 +407,10 @@ class Product extends AbstractResource
     /**
      * Save product website relations
      *
-     * @deprecated 101.1.0
-     * @param \Magento\Catalog\Model\Product $product
+     * @param ProductEntity $product
+     *
      * @return $this
+     * @deprecated 101.1.0
      */
     protected function _saveWebsiteIds($product)
     {
@@ -392,7 +421,7 @@ class Product extends AbstractResource
             }
             $websiteIds = $product->getWebsiteIds();
             $product->setIsChangedWebsites(false);
-            $changed = $this->getProductWebsiteLink()->saveWebsiteIds($product, $websiteIds);
+            $changed = $this->productWebsiteLink->saveWebsiteIds($product, $websiteIds);
 
             if ($changed) {
                 $product->setIsChangedWebsites(true);
@@ -406,6 +435,7 @@ class Product extends AbstractResource
      * Save product category relations
      *
      * @param DataObject $object
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated 101.1.0
@@ -418,7 +448,8 @@ class Product extends AbstractResource
     /**
      * Get collection of product categories
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param ProductEntity $product
+     *
      * @return Category\Collection
      */
     public function getCategoryCollection($product)
@@ -441,7 +472,8 @@ class Product extends AbstractResource
     /**
      * Retrieve category ids where product is available
      *
-     * @param \Magento\Catalog\Model\Product $object
+     * @param ProductEntity $object
+     *
      * @return array
      */
     public function getAvailableInCategories($object)
@@ -458,7 +490,7 @@ class Product extends AbstractResource
             }
             $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
                 $unionTables,
-                \Magento\Framework\DB\Select::SQL_UNION_ALL
+                Select::SQL_UNION_ALL
             );
             $this->availableCategoryIdsCache[$entityId] = array_unique($this->getConnection()->fetchCol($unionSelect));
         }
@@ -470,7 +502,8 @@ class Product extends AbstractResource
      *
      * @param int $entityId
      * @param string $tableName
-     * @return \Magento\Framework\DB\Select
+     *
+     * @return Select
      */
     private function getAvailableInCategoriesSelect($entityId, $tableName)
     {
@@ -482,7 +515,7 @@ class Product extends AbstractResource
             $entityId
         )->where(
             'visibility != ?',
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
+            Visibility::VISIBILITY_NOT_VISIBLE
         );
     }
 
@@ -493,19 +526,20 @@ class Product extends AbstractResource
      */
     public function getDefaultAttributeSourceModel()
     {
-        return \Magento\Eav\Model\Entity\Attribute\Source\Table::class;
+        return Table::class;
     }
 
     /**
      * Check availability display product in category
      *
-     * @param \Magento\Catalog\Model\Product|int $product
+     * @param ProductEntity|int $product
      * @param int $categoryId
+     *
      * @return string
      */
     public function canBeShowInCategory($product, $categoryId)
     {
-        if ($product instanceof \Magento\Catalog\Model\Product) {
+        if ($product instanceof ProductEntity) {
             $productId = $product->getEntityId();
             $storeId = $product->getStoreId();
         } else {
@@ -532,6 +566,7 @@ class Product extends AbstractResource
      *
      * @param int $oldId
      * @param int $newId
+     *
      * @return $this
      */
     public function duplicate($oldId, $newId)
@@ -585,6 +620,7 @@ class Product extends AbstractResource
      * Get SKU through product identifiers
      *
      * @param  array $productIds
+     *
      * @return array
      */
     public function getProductsSku(array $productIds)
@@ -603,6 +639,7 @@ class Product extends AbstractResource
      * Get product ids by their sku
      *
      * @param  array $productSkuList
+     *
      * @return array
      */
     public function getProductsIdsBySkus(array $productSkuList)
@@ -629,6 +666,7 @@ class Product extends AbstractResource
      *
      * @param string $sku
      * @param array $productSkuList
+     *
      * @return string
      */
     private function getResultKey(string $sku, array $productSkuList): string
@@ -644,6 +682,7 @@ class Product extends AbstractResource
      * Retrieve product entities info
      *
      * @param  array|string|null $columns
+     *
      * @return array
      */
     public function getProductEntitiesInfo($columns = null)
@@ -683,7 +722,7 @@ class Product extends AbstractResource
     public function validate($object)
     {
         //validate attribute set entity type
-        $entityType = $this->typeFactory->create()->loadByCode(\Magento\Catalog\Model\Product::ENTITY);
+        $entityType = $this->typeFactory->create()->loadByCode(ProductEntity::ENTITY);
         $attributeSet = $this->setFactory->create()->load($object->getAttributeSetId());
         if ($attributeSet->getEntityTypeId() != $entityType->getId()) {
             return ['attribute_set' => 'Invalid attribute set entity type'];
@@ -698,6 +737,7 @@ class Product extends AbstractResource
      * @param AbstractModel $object
      * @param integer $entityId
      * @param array|null $attributes
+     *
      * @return $this
      * @since 101.0.0
      */
@@ -713,7 +753,7 @@ class Product extends AbstractResource
         }
 
         $this->loadAttributesForObject($attributes, $object);
-        $this->getEntityManager()->load($object, $entityId);
+        $this->entityManager->load($object, $entityId);
         return $this;
     }
 
@@ -749,54 +789,15 @@ class Product extends AbstractResource
      * Save entity's attributes into the object's resource
      *
      * @param AbstractModel $object
+     *
      * @return $this
      * @throws \Exception
      * @since 101.0.0
      */
     public function save(AbstractModel $object)
     {
-        $this->getEntityManager()->save($object);
+        $this->entityManager->save($object);
         return $this;
-    }
-
-    /**
-     * Retrieve entity manager.
-     *
-     * @return EntityManager
-     */
-    private function getEntityManager()
-    {
-        if (null === $this->entityManager) {
-            $this->entityManager = ObjectManager::getInstance()
-                ->get(EntityManager::class);
-        }
-        return $this->entityManager;
-    }
-
-    /**
-     * Retrieve ProductWebsiteLink instance.
-     *
-     * @deprecated 101.1.0
-     * @return ProductWebsiteLink
-     */
-    private function getProductWebsiteLink()
-    {
-        return ObjectManager::getInstance()->get(ProductWebsiteLink::class);
-    }
-
-    /**
-     * Retrieve CategoryLink instance.
-     *
-     * @deprecated 101.1.0
-     * @return Product\CategoryLink
-     */
-    private function getProductCategoryLink()
-    {
-        if (null === $this->productCategoryLink) {
-            $this->productCategoryLink = ObjectManager::getInstance()
-                ->get(Product\CategoryLink::class);
-        }
-        return $this->productCategoryLink;
     }
 
     /**

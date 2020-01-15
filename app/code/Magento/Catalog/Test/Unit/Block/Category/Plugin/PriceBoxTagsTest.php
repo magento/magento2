@@ -3,65 +3,84 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Category\Plugin;
+
+use Magento\Catalog\Block\Category\Plugin\PriceBoxTags;
+use Magento\Customer\Model\Session;
+use Magento\Directory\Model\Currency;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\Render\PriceBox;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\Calculation as TaxCalculation;
+use Magento\Tax\Model\ResourceModel\Calculation as TaxCalculationResource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
+class PriceBoxTagsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var PriceBoxTags
      */
-    private $priceCurrencyInterface;
+    private $model;
 
     /**
-     * @var \Magento\Directory\Model\Currency | \PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
-    private $currency;
+    private $priceCurrencyMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
-    private $timezoneInterface;
+    private $dateTimeMock;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|MockObject
      */
-    private $scopeResolverInterface;
+    private $scopeResolverMock;
 
     /**
-     * @var \Magento\Customer\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
-    private $session;
+    private $customerSessionMock;
 
     /**
-     * @var \Magento\Tax\Model\Calculation | \PHPUnit_Framework_MockObject_MockObject
+     * @var TaxCalculation|MockObject
      */
-    private $taxCalculation;
+    private $taxCalculationMock;
 
     /**
-     * @var \Magento\Catalog\Block\Category\Plugin\PriceBoxTags
+     * @var TaxCalculationResource|MockObject
      */
-    private $priceBoxTags;
+    private $taxCalculationResourceMock;
 
+    /**
+     * @var Currency|MockObject
+     */
+    private $currencyMock;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
-        $this->priceCurrencyInterface = $this->getMockBuilder(
-            \Magento\Framework\Pricing\PriceCurrencyInterface::class
-        )->getMock();
-        $this->currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
-            ->disableOriginalConstructor()
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMock();
-        $this->timezoneInterface = $this->getMockBuilder(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
-        )->getMock();
-        $this->scopeResolverInterface = $this->getMockBuilder(
-            \Magento\Framework\App\ScopeResolverInterface::class
-        )
+        $this->dateTimeMock = $this->getMockBuilder(TimezoneInterface::class)
+            ->getMock();
+        $this->scopeResolverMock = $this->getMockBuilder(ScopeResolverInterface::class)
             ->getMockForAbstractClass();
-        $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)->disableOriginalConstructor()
+        $this->customerSessionMock = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
             ->setMethods(
                 [
                     'getCustomerGroupId',
@@ -72,21 +91,34 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $this->taxCalculation = $this->getMockBuilder(\Magento\Tax\Model\Calculation::class)
-            ->disableOriginalConstructor()->getMock();
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->priceBoxTags = $objectManager->getObject(
-            \Magento\Catalog\Block\Category\Plugin\PriceBoxTags::class,
+        $this->taxCalculationMock = $this->getMockBuilder(TaxCalculation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->taxCalculationResourceMock = $this->getMockBuilder(TaxCalculationResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->currencyMock = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            PriceBoxTags::class,
             [
-                'priceCurrency' => $this->priceCurrencyInterface,
-                'dateTime' => $this->timezoneInterface,
-                'scopeResolver' => $this->scopeResolverInterface,
-                'customerSession' => $this->session,
-                'taxCalculation' => $this->taxCalculation
+                'priceCurrency' => $this->priceCurrencyMock,
+                'dateTime' => $this->dateTimeMock,
+                'scopeResolver' => $this->scopeResolverMock,
+                'customerSession' => $this->customerSessionMock,
+                'taxCalculation' => $this->taxCalculationMock,
+                'taxCalculationResource' => $this->taxCalculationResourceMock
             ]
         );
     }
 
+    /**
+     * Test for afterGetCacheKey() method
+     */
     public function testAfterGetCacheKey()
     {
         $date = date('Ymd');
@@ -110,41 +142,66 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
                 implode('_', $rateIds)
             ]
         );
-        $priceBox = $this->getMockBuilder(\Magento\Framework\Pricing\Render\PriceBox::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->priceCurrencyInterface->expects($this->once())->method('getCurrency')->willReturn($this->currency);
-        $this->currency->expects($this->once())->method('getCode')->willReturn($currencyCode);
-        $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMock();
-        $this->scopeResolverInterface->expects($this->any())->method('getScope')->willReturn($scope);
-        $scope->expects($this->any())->method('getId')->willReturn($scopeId);
+        $priceBoxMock = $this->getMockBuilder(PriceBox::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('getCurrency')
+            ->willReturn($this->currencyMock);
+        $this->currencyMock->expects($this->once())
+            ->method('getCode')
+            ->willReturn($currencyCode);
+
+        $scopeMock = $this->getMockBuilder(ScopeInterface::class)->getMock();
+        $this->scopeResolverMock->method('getScope')->willReturn($scopeMock);
+        $scopeMock->method('getId')->willReturn($scopeId);
+
         $dateTime = $this->getMockBuilder(\DateTime::class)->getMock();
-        $this->timezoneInterface->expects($this->any())->method('scopeDate')->with($scopeId)->willReturn($dateTime);
-        $dateTime->expects($this->any())->method('format')->with('Ymd')->willReturn($date);
-        $this->session->expects($this->once())->method('getCustomerGroupId')->willReturn($customerGroupId);
-        $this->session->expects($this->once())->method('getDefaultTaxBillingAddress')->willReturn($billingAddress);
-        $this->session->expects($this->once())->method('getDefaultTaxShippingAddress')->willReturn($shippingAddress);
-        $this->session->expects($this->once())->method('getCustomerTaxClassId')
+        $this->dateTimeMock->method('scopeDate')->with($scopeId)->willReturn($dateTime);
+        $dateTime->method('format')->with('Ymd')->willReturn($date);
+
+        $this->customerSessionMock->expects($this->once())
+            ->method('getCustomerGroupId')
+            ->willReturn($customerGroupId);
+        $this->customerSessionMock->expects($this->once())
+            ->method('getDefaultTaxBillingAddress')
+            ->willReturn($billingAddress);
+        $this->customerSessionMock->expects($this->once())
+            ->method('getDefaultTaxShippingAddress')
+            ->willReturn($shippingAddress);
+        $this->customerSessionMock->expects($this->once())
+            ->method('getCustomerTaxClassId')
             ->willReturn($customerTaxClassId);
-        $this->session->expects($this->once())->method('getCustomerId')->willReturn($customerId);
-        $rateRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)->getMock();
-        $this->taxCalculation->expects($this->once())->method('getRateRequest')->with(
-            new \Magento\Framework\DataObject($shippingAddress),
-            new \Magento\Framework\DataObject($billingAddress),
-            $customerTaxClassId,
-            $scopeId,
-            $customerId
-        )->willReturn($rateRequest);
-        $salableInterface = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
+        $this->customerSessionMock->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $rateRequest = $this->getMockBuilder(DataObject::class)->getMock();
+        $this->taxCalculationMock->expects($this->once())
+            ->method('getRateRequest')
+            ->with(
+                new DataObject($shippingAddress),
+                new DataObject($billingAddress),
+                $customerTaxClassId,
+                $scopeId,
+                $customerId
+            )
+            ->willReturn($rateRequest);
+
+        $salableInterface = $this->getMockBuilder(SaleableInterface::class)
             ->setMethods(['getTaxClassId'])
             ->getMockForAbstractClass();
-        $priceBox->expects($this->once())->method('getSaleableItem')->willReturn($salableInterface);
-        $salableInterface->expects($this->once())->method('getTaxClassId')->willReturn($customerTaxClassId);
-        $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
-            ->setMethods(['getRateIds'])
-            ->getMockForAbstractClass();
-        $this->taxCalculation->expects($this->once())->method('getResource')->willReturn($resource);
-        $resource->expects($this->once())->method('getRateIds')->with($rateRequest)->willReturn($rateIds);
+        $priceBoxMock->expects($this->once())
+            ->method('getSaleableItem')
+            ->willReturn($salableInterface);
+        $salableInterface->expects($this->once())
+            ->method('getTaxClassId')
+            ->willReturn($customerTaxClassId);
+        $this->taxCalculationResourceMock->expects($this->once())
+            ->method('getRateIds')
+            ->with($rateRequest)
+            ->willReturn($rateIds);
 
-        $this->assertEquals($expected, $this->priceBoxTags->afterGetCacheKey($priceBox, $result));
+        $this->assertEquals($expected, $this->model->afterGetCacheKey($priceBoxMock, $result));
     }
 }

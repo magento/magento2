@@ -1,16 +1,25 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Model\Product\Validator;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Eav\Model\Entity\Attribute\Exception;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Catalog\Controller\Adminhtml\Product;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\View\LayoutFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -21,29 +30,29 @@ use Magento\Store\Model\StoreManagerInterface;
 class Validate extends Product implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @var Date
      *
      * @deprecated 101.0.0
      */
     protected $_dateFilter;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Validator
+     * @var Validator
      */
     protected $productValidator;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     protected $layoutFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $productFactory;
 
@@ -58,22 +67,26 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
     private $storeManager;
 
     /**
-     * @param Action\Context $context
+     * @param Context $context
      * @param Builder $productBuilder
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Magento\Catalog\Model\Product\Validator $productValidator
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param Date $dateFilter
+     * @param Validator $productValidator
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $layoutFactory
+     * @param ProductFactory $productFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Initialization\Helper $initializationHelper
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
+        Context $context,
         Product\Builder $productBuilder,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Catalog\Model\Product\Validator $productValidator,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory
+        Date $dateFilter,
+        Validator $productValidator,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $layoutFactory,
+        ProductFactory $productFactory,
+        StoreManagerInterface $storeManager,
+        Initialization\Helper $initializationHelper
     ) {
         $this->_dateFilter = $dateFilter;
         $this->productValidator = $productValidator;
@@ -81,18 +94,20 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->productFactory = $productFactory;
+        $this->storeManager = $storeManager;
+        $this->initializationHelper = $initializationHelper;
     }
 
     /**
      * Validate product
      *
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
-        $response = new \Magento\Framework\DataObject();
+        $response = new DataObject();
         $response->setError(false);
 
         try {
@@ -102,8 +117,8 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
                 $productData['stock_data']['use_config_manage_stock'] = 0;
             }
             $storeId = $this->getRequest()->getParam('store', 0);
-            $store = $this->getStoreManager()->getStore($storeId);
-            $this->getStoreManager()->setCurrentStore($store->getCode());
+            $store = $this->storeManager->getStore($storeId);
+            $this->storeManager->setCurrentStore($store->getCode());
             /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productFactory->create();
             $product->setData('_edit_mode', true);
@@ -122,7 +137,7 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
             if ($productId) {
                 $product->load($productId);
             }
-            $product = $this->getInitializationHelper()->initializeFromData($product, $productData);
+            $product = $this->initializationHelper->initializeFromData($product, $productData);
 
             /* set restrictions for date ranges */
             $resource = $product->getResource();
@@ -131,11 +146,11 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
             $resource->getAttribute('custom_design_from')->setMaxValue($product->getCustomDesignTo());
 
             $this->productValidator->validate($product, $this->getRequest(), $response);
-        } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
+        } catch (Exception $e) {
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessages([$e->getMessage()]);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $response->setError(true);
             $response->setMessages([$e->getMessage()]);
         } catch (\Exception $e) {
@@ -147,30 +162,5 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         }
 
         return $this->resultJsonFactory->create()->setData($response);
-    }
-
-    /**
-     * @return StoreManagerInterface
-     * @deprecated 101.0.0
-     */
-    private function getStoreManager()
-    {
-        if (null === $this->storeManager) {
-            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Store\Model\StoreManagerInterface::class);
-        }
-        return $this->storeManager;
-    }
-
-    /**
-     * @return Initialization\Helper
-     * @deprecated 101.0.0
-     */
-    protected function getInitializationHelper()
-    {
-        if (null === $this->initializationHelper) {
-            $this->initializationHelper = ObjectManager::getInstance()->get(Initialization\Helper::class);
-        }
-        return $this->initializationHelper;
     }
 }

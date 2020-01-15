@@ -3,32 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Catalog product form gallery content
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
- * @method \Magento\Framework\Data\Form\Element\AbstractElement getElement()
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
 use Magento\Backend\Block\Media\Uploader;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget;
+use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Storage\FileNotFoundException;
 use Magento\Framework\Storage\StorageProvider;
+use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
- * Block for gallery content.
+ * Catalog product form gallery content
  *
+ * @method \Magento\Framework\Data\Form\Element\AbstractElement getElement()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Content extends \Magento\Backend\Block\Widget
+class Content extends Widget
 {
     /**
      * @var string
@@ -36,19 +34,14 @@ class Content extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Catalog::catalog/product/helper/gallery.phtml';
 
     /**
-     * @var \Magento\Catalog\Model\Product\Media\Config
+     * @var Config
      */
     protected $_mediaConfig;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
-
-    /**
-     * @var \Magento\Catalog\Helper\Image
-     */
-    private $imageHelper;
 
     /**
      * @var ImageUploadConfigDataProvider
@@ -59,43 +52,41 @@ class Content extends \Magento\Backend\Block\Widget
      * @var Database
      */
     private $fileStorageDatabase;
+
     /**
      * @var StorageProvider
      */
     private $storageProvider;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     private $mediaDirectory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+     * @param Context $context
+     * @param EncoderInterface $jsonEncoder
+     * @param Config $mediaConfig
      * @param StorageProvider $storageProvider
-     * @param array $data
      * @param ImageUploadConfigDataProvider $imageUploadConfigDataProvider
      * @param Database $fileStorageDatabase
+     * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
+        Context $context,
+        EncoderInterface $jsonEncoder,
+        Config $mediaConfig,
         StorageProvider $storageProvider,
-        array $data = [],
-        ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null,
-        Database $fileStorageDatabase = null
+        ImageUploadConfigDataProvider $imageUploadConfigDataProvider,
+        Database $fileStorageDatabase,
+        array $data = []
     ) {
+        parent::__construct($context, $data);
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
-        parent::__construct($context, $data);
-        $this->mediaDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider
-            ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);
-        $this->fileStorageDatabase = $fileStorageDatabase
-            ?: ObjectManager::getInstance()->get(Database::class);
         $this->storageProvider = $storageProvider;
+        $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider;
+        $this->fileStorageDatabase = $fileStorageDatabase;
     }
 
     /**
@@ -107,7 +98,7 @@ class Content extends \Magento\Backend\Block\Widget
     {
         $this->addChild(
             'uploader',
-            \Magento\Backend\Block\Media\Uploader::class,
+            Uploader::class,
             ['image_upload_config_data' => $this->imageUploadConfigDataProvider]
         );
 
@@ -334,20 +325,5 @@ class Content extends \Magento\Backend\Block\Widget
     public function getImageTypesJson()
     {
         return $this->_jsonEncoder->encode($this->getImageTypes());
-    }
-
-    /**
-     * Returns image helper object.
-     *
-     * @return \Magento\Catalog\Helper\Image
-     * @deprecated 101.0.3
-     */
-    private function getImageHelper()
-    {
-        if ($this->imageHelper === null) {
-            $this->imageHelper = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Helper\Image::class);
-        }
-        return $this->imageHelper;
     }
 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
@@ -132,6 +133,7 @@ class Helper
      * @param FormatInterface|null $localeFormat
      * @param ProductAuthorization|null $productAuthorization
      * @param DateTimeFilter|null $dateTimeFilter
+     * @param LinkResolver|null $linkResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -148,7 +150,8 @@ class Helper
         AttributeFilter $attributeFilter = null,
         FormatInterface $localeFormat = null,
         ?ProductAuthorization $productAuthorization = null,
-        ?DateTimeFilter $dateTimeFilter = null
+        ?DateTimeFilter $dateTimeFilter = null,
+        ?LinkResolver $linkResolver = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -157,15 +160,18 @@ class Helper
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
 
-        $objectManager = ObjectManager::getInstance();
-        $this->customOptionFactory = $customOptionFactory ?: $objectManager->get(CustomOptionFactory::class);
-        $this->productLinkFactory = $productLinkFactory ?: $objectManager->get(ProductLinkFactory::class);
-        $this->productRepository = $productRepository ?: $objectManager->get(ProductRepositoryInterface::class);
-        $this->linkTypeProvider = $linkTypeProvider ?: $objectManager->get(LinkTypeProvider::class);
-        $this->attributeFilter = $attributeFilter ?: $objectManager->get(AttributeFilter::class);
-        $this->localeFormat = $localeFormat ?: $objectManager->get(FormatInterface::class);
-        $this->productAuthorization = $productAuthorization ?? $objectManager->get(ProductAuthorization::class);
-        $this->dateTimeFilter = $dateTimeFilter ?? $objectManager->get(DateTimeFilter::class);
+        $this->customOptionFactory = $customOptionFactory ?:
+            ObjectManager::getInstance()->get(CustomOptionFactory::class);
+        $this->productLinkFactory = $productLinkFactory ?: ObjectManager::getInstance()->get(ProductLinkFactory::class);
+        $this->productRepository = $productRepository ?:
+            ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->linkTypeProvider = $linkTypeProvider ?: ObjectManager::getInstance()->get(LinkTypeProvider::class);
+        $this->attributeFilter = $attributeFilter ?: ObjectManager::getInstance()->get(AttributeFilter::class);
+        $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(FormatInterface::class);
+        $this->productAuthorization = $productAuthorization ??
+            ObjectManager::getInstance()->get(ProductAuthorization::class);
+        $this->dateTimeFilter = $dateTimeFilter ?? ObjectManager::getInstance()->get(DateTimeFilter::class);
+        $this->linkResolver = $linkResolver ?? ObjectManager::getInstance()->get(LinkResolver::class);
     }
 
     /**
@@ -271,7 +277,7 @@ class Helper
      */
     protected function setProductLinks(Product $product)
     {
-        $links = $this->getLinkResolver()->getLinks();
+        $links = $this->linkResolver->getLinks();
 
         $product->setProductLinks([]);
 
@@ -394,21 +400,6 @@ class Helper
         }
 
         return $option;
-    }
-
-    /**
-     * Get link resolver instance
-     *
-     * @return LinkResolver
-     * @deprecated 101.0.0
-     */
-    private function getLinkResolver()
-    {
-        if (!is_object($this->linkResolver)) {
-            $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
-        }
-
-        return $this->linkResolver;
     }
 
     /**

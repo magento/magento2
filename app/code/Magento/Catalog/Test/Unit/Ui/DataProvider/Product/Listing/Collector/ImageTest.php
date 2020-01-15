@@ -3,47 +3,69 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
-use Magento\Catalog\Api\Data\ProductRenderInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
+use Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductRenderInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Helper\ImageFactory;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image;
+use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Helper\ImageFactory;
-use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
-use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Framework\View\DesignLoader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImageTest extends \PHPUnit\Framework\TestCase
+class ImageTest extends TestCase
 {
-    /** @var ImageFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ImageFactory|MockObject
+     */
     private $imageFactory;
 
-    /** @var  \Magento\Framework\App\State | \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var State|MockObject
+     */
     private $state;
 
-    /** @var  StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
     private $storeManager;
 
-    /** @var  DesignInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var DesignInterface|MockObject
+     */
     private $design;
 
-    /** @var DesignLoader | \PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var DesignLoader|MockObject
+     */
     private $designLoader;
 
-    /** @var  Image */
+    /**
+     * @var Image
+     */
     private $model;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $imageCodes = ['widget_recently_viewed'];
 
-    /** @var \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ImageInterfaceFactory|MockObject
+     */
     private $imageInterfaceFactory;
 
     public function setUp()
@@ -53,26 +75,30 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->imageInterfaceFactory = $this->getMockBuilder(
-            \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory::class
+            ImageInterfaceFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->state = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->design = $this->createMock(DesignInterface::class);
         $this->designLoader = $this->createMock(DesignLoader::class);
-        $this->model = new Image(
-            $this->imageFactory,
-            $this->state,
-            $this->storeManager,
-            $this->design,
-            $this->imageInterfaceFactory,
-            $this->imageCodes,
-            $this->designLoader
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            Image::class,
+            [
+                'imageFactory' => $this->imageFactory,
+                'state' => $this->state,
+                'storeManager' => $this->storeManager,
+                'design' => $this->design,
+                'imageRenderInfoFactory' => $this->imageInterfaceFactory,
+                'designLoader' => $this->designLoader,
+                'imageCodes' => $this->imageCodes
+            ]
         );
     }
 
@@ -154,7 +180,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $imageMock = $this->getMockBuilder(ImageInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $imageHelperMock = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
+        $imageHelperMock = $this->getMockBuilder(ImageHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->imageFactory->expects($this->once())

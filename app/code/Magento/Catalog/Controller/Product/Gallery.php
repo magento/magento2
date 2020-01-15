@@ -1,16 +1,23 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Product;
 
+use Magento\Catalog\Controller\Product;
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\PageFactory;
 
-class Gallery extends \Magento\Catalog\Controller\Product
+/**
+ * Product gallery controller.
+ */
+class Gallery extends Product implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var Result\ForwardFactory
@@ -18,31 +25,31 @@ class Gallery extends \Magento\Catalog\Controller\Product
     protected $resultForwardFactory;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * Constructor
-     *
      * @param Context $context
+     * @param ProductHelper $productHelper
      * @param Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
+        ProductHelper $productHelper,
         Result\ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory
     ) {
+        parent::__construct($context, $productHelper);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
     }
 
     /**
      * View product gallery action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {

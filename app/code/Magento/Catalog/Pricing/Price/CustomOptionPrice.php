@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Pricing\Price;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Value;
-use Magento\Catalog\Pricing\Price;
 use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
-use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
- * Class OptionPrice
- *
+ * Custom option price model.
  */
 class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterface
 {
@@ -33,7 +35,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      *
      * @var string
      */
-    protected $excludeAdjustment = null;
+    protected $excludeAdjustment;
 
     /**
      * @var CustomOptionPriceCalculator
@@ -44,22 +46,21 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * @param SaleableInterface $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param CustomOptionPriceCalculator $customOptionPriceCalculator
      * @param array|null $excludeAdjustment
-     * @param CustomOptionPriceCalculator|null $customOptionPriceCalculator
      */
     public function __construct(
         SaleableInterface $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        $excludeAdjustment = null,
-        CustomOptionPriceCalculator $customOptionPriceCalculator = null
+        PriceCurrencyInterface $priceCurrency,
+        CustomOptionPriceCalculator $customOptionPriceCalculator,
+        $excludeAdjustment = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
+        $this->customOptionPriceCalculator = $customOptionPriceCalculator;
         $this->excludeAdjustment = $excludeAdjustment;
-        $this->customOptionPriceCalculator = $customOptionPriceCalculator
-            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
     }
 
     /**
@@ -70,12 +71,12 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getValue($priceCode = \Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
+    public function getValue($priceCode = BasePrice::PRICE_CODE)
     {
         $optionValues = [];
         $options = $this->product->getOptions();
         if ($options) {
-            /** @var $optionItem \Magento\Catalog\Model\Product\Option */
+            /** @var $optionItem Option */
             foreach ($options as $optionItem) {
                 $min = null;
                 if (!$optionItem->getIsRequire()) {
@@ -93,7 +94,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                         $max = $price;
                     }
                 } else {
-                    /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
+                    /** @var $optionValue Value */
                     foreach ($optionItem->getValues() as $optionValue) {
                         $price =
                             $this->customOptionPriceCalculator->getOptionPriceByPriceCode($optionValue, $priceCode);
@@ -103,8 +104,8 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                             $min = $price;
                         }
                         $type = $optionItem->getType();
-                        if ($type == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX ||
-                            $type == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE
+                        if ($type == ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX ||
+                            $type == ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE
                         ) {
                             $max += $price;
                         } elseif ($price > $max) {
@@ -124,10 +125,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     }
 
     /**
-     * @param float $amount
-     * @param null|bool|string|array $exclude
-     * @param null|array $context
-     * @return AmountInterface|bool|float
+     * @inheritDoc
      */
     public function getCustomAmount($amount = null, $exclude = null, $context = [])
     {
@@ -147,7 +145,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * @param string $priceCode
      * @return float
      */
-    public function getCustomOptionRange($getMin, $priceCode = \Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
+    public function getCustomOptionRange($getMin, $priceCode = BasePrice::PRICE_CODE)
     {
         $optionValue = 0.;
         $options = $this->getValue($priceCode);
@@ -225,9 +223,9 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
         $this->priceOptions = [];
         $options = $this->product->getOptions();
         if ($options) {
-            /** @var $optionItem \Magento\Catalog\Model\Product\Option */
+            /** @var $optionItem Option */
             foreach ($options as $optionItem) {
-                /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
+                /** @var $optionValue Value */
                 foreach ($optionItem->getValues() as $optionValue) {
                     $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
                     $this->priceOptions[$optionValue->getId()][$price] = [

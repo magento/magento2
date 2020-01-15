@@ -3,38 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Category\Plugin;
 
-use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\PriceBox;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Tax\Model\Calculation as TaxCalculation;
+use Magento\Tax\Model\ResourceModel\Calculation as TaxCalculationResource;
 
+/**
+ * Plugin for catalog price box renderer
+ */
 class PriceBoxTags
 {
-    /**
-     * @var TimezoneInterface
-     */
-    protected $dateTime;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
     /**
      * @var PriceCurrencyInterface
      */
     private $priceCurrency;
-    
+
+    /**
+     * @var TimezoneInterface
+     */
+    private $dateTime;
+
     /**
      * @var ScopeResolverInterface
      */
     private $scopeResolver;
+
+    /**
+     * @var Session
+     */
+    private $customerSession;
 
     /**
      * @var TaxCalculation
@@ -42,27 +47,41 @@ class PriceBoxTags
     private $taxCalculation;
 
     /**
+     * @var TaxCalculationResource
+     */
+    private $taxCalculationResource;
+
+    /**
      * PriceBoxTags constructor.
      * @param PriceCurrencyInterface $priceCurrency
      * @param TimezoneInterface $dateTime
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
+     * @param TaxCalculation $taxCalculation
+     * @param TaxCalculationResource $taxCalculationResource
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
         TimezoneInterface $dateTime,
         ScopeResolverInterface $scopeResolver,
-        Session $customerSession
+        Session $customerSession,
+        TaxCalculation $taxCalculation,
+        TaxCalculationResource $taxCalculationResource
     ) {
         $this->dateTime = $dateTime;
         $this->customerSession = $customerSession;
         $this->priceCurrency = $priceCurrency;
         $this->scopeResolver = $scopeResolver;
+        $this->taxCalculation = $taxCalculation;
+        $this->taxCalculationResource = $taxCalculationResource;
     }
 
     /**
+     * Add additional parts to price box cache key
+     *
      * @param PriceBox $subject
      * @param string $result
+     *
      * @return string
      */
     public function afterGetCacheKey(PriceBox $subject, $result)
@@ -81,7 +100,10 @@ class PriceBoxTags
     }
 
     /**
+     * Get current tax rate ids as string
+     *
      * @param PriceBox $subject
+     *
      * @return string
      */
     private function getTaxRateIds(PriceBox $subject)
@@ -94,14 +116,14 @@ class PriceBoxTags
         $customerTaxClassId = $customerSession->getCustomerTaxClassId();
 
         if (!empty($billingAddress)) {
-            $billingAddress = new \Magento\Framework\DataObject($billingAddress);
+            $billingAddress = new DataObject($billingAddress);
         }
         if (!empty($shippingAddress)) {
-            $shippingAddress = new \Magento\Framework\DataObject($shippingAddress);
+            $shippingAddress = new DataObject($shippingAddress);
         }
 
         if (!empty($billingAddress) || !empty($shippingAddress)) {
-            $rateRequest = $this->getTaxCalculation()->getRateRequest(
+            $rateRequest = $this->taxCalculation->getRateRequest(
                 $shippingAddress,
                 $billingAddress,
                 $customerTaxClassId,
@@ -110,24 +132,9 @@ class PriceBoxTags
             );
 
             $rateRequest->setProductClassId($subject->getSaleableItem()->getTaxClassId());
-            $rateIds = $this->getTaxCalculation()->getResource()->getRateIds($rateRequest);
+            $rateIds = $this->taxCalculationResource->getRateIds($rateRequest);
         }
 
         return implode('_', $rateIds);
-    }
-
-    /**
-     * Get the TaxCalculation model
-     *
-     * @return \Magento\Tax\Model\Calculation
-     *
-     * @deprecated 101.0.0
-     */
-    private function getTaxCalculation()
-    {
-        if ($this->taxCalculation === null) {
-            $this->taxCalculation = \Magento\Framework\App\ObjectManager::getInstance()->get(TaxCalculation::class);
-        }
-        return $this->taxCalculation;
     }
 }

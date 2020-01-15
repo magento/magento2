@@ -3,25 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
+
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Registry;
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Context;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog product gallery attribute
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
-
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Framework\Registry;
-use Magento\Catalog\Model\Product;
-use Magento\Eav\Model\Entity\Attribute;
-use Magento\Catalog\Api\Data\ProductInterface;
-
-/**
- * Adminhtml gallery block
- */
-class Gallery extends \Magento\Framework\View\Element\AbstractBlock
+class Gallery extends AbstractBlock
 {
     /**
      * Gallery field name suffix
@@ -57,12 +59,12 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     protected $formName = 'product_form';
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Data\Form
+     * @var Form
      */
     protected $form;
 
@@ -77,25 +79,25 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     private $dataPersistor;
 
     /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
      * @param Registry $registry
-     * @param \Magento\Framework\Data\Form $form
+     * @param Form $form
+     * @param DataPersistorInterface $dataPersistor
      * @param array $data
-     * @param DataPersistorInterface|null $dataPersistor
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Context $context,
+        StoreManagerInterface $storeManager,
         Registry $registry,
-        \Magento\Framework\Data\Form $form,
-        $data = [],
-        DataPersistorInterface $dataPersistor = null
+        Form $form,
+        DataPersistorInterface $dataPersistor,
+        $data = []
     ) {
         $this->storeManager = $storeManager;
         $this->registry = $registry;
         $this->form = $form;
-        $this->dataPersistor = $dataPersistor ?: ObjectManager::getInstance()->get(DataPersistorInterface::class);
+        $this->dataPersistor = $dataPersistor;
         parent::__construct($context, $data);
     }
 
@@ -106,8 +108,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getElementHtml()
     {
-        $html = $this->getContentHtml();
-        return $html;
+        return $this->getContentHtml();
     }
 
     /**
@@ -201,11 +202,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function canDisplayUseDefault($attribute)
     {
-        if (!$attribute->isScopeGlobal() && $this->getDataObject()->getStoreId()) {
-            return true;
-        }
-
-        return false;
+        return (!$attribute->isScopeGlobal() && $this->getDataObject()->getStoreId());
     }
 
     /**
@@ -221,14 +218,17 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 
         if (!$this->getDataObject()->getExistsStoreValueFlag($attributeCode)) {
             return true;
-        } elseif ($this->getValue() == $defaultValue &&
-            $this->getDataObject()->getStoreId() != $this->_getDefaultStoreId()
-        ) {
+        }
+
+        if ($this->getValue() == $defaultValue &&
+            $this->getDataObject()->getStoreId() != $this->_getDefaultStoreId()) {
             return false;
         }
+
         if ($defaultValue === false && !$attribute->getIsRequired() && $this->getValue()) {
             return false;
         }
+
         return $defaultValue === false;
     }
 
@@ -299,6 +299,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _getDefaultStoreId()
     {
-        return \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        return Store::DEFAULT_STORE_ID;
     }
 }

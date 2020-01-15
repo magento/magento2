@@ -3,12 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Block\Product\Widget;
+
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Block\Product\NewProduct;
+use Magento\Catalog\Block\Product\Widget\Html\Pager;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Data\Collection as DataCollection;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Widget\Block\BlockInterface;
 
 /**
  * New products widget
  */
-class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Magento\Widget\Block\BlockInterface
+class NewWidget extends NewProduct implements BlockInterface
 {
     /**
      * Display products type - all products
@@ -31,41 +48,34 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     const DEFAULT_PRODUCTS_PER_PAGE = 5;
 
     /**
-     * Name of request parameter for page number value
-     *
-     * @deprecated
-     */
-    const PAGE_VAR_NAME = 'np';
-
-    /**
      * Instance of pager block
      *
-     * @var \Magento\Catalog\Block\Product\Widget\Html\Pager
+     * @var Pager
      */
     protected $_pager;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
     /**
      * NewWidget constructor.
      *
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param Context $context
+     * @param CollectionFactory $productCollectionFactory
+     * @param Visibility $catalogProductVisibility
+     * @param HttpContext $httpContext
+     * @param Json $serializer
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Framework\App\Http\Context $httpContext,
-        array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Context $context,
+        CollectionFactory $productCollectionFactory,
+        Visibility $catalogProductVisibility,
+        HttpContext $httpContext,
+        Json $serializer,
+        array $data = []
     ) {
         parent::__construct(
             $context,
@@ -74,14 +84,13 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             $httpContext,
             $data
         );
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer;
     }
 
     /**
      * Product collection initialize process
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
+     * @return Collection|Object|DataCollection
      */
     protected function _getProductCollection()
     {
@@ -101,11 +110,11 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     /**
      * Prepare collection for recent product list
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
+     * @return Collection|Object|DataCollection
      */
     protected function _getRecentlyAddedProductsCollection()
     {
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var $collection Collection */
         $collection = $this->_productCollectionFactory->create();
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 
@@ -217,7 +226,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         if ($this->showPager()) {
             if (!$this->_pager) {
                 $this->_pager = $this->getLayout()->createBlock(
-                    \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
+                    Pager::class,
                     'widget.new.product.list.pager'
                 );
 
@@ -229,7 +238,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
                     ->setTotalLimit($this->getProductsCount())
                     ->setCollection($this->getProductCollection());
             }
-            if ($this->_pager instanceof \Magento\Framework\View\Element\AbstractBlock) {
+            if ($this->_pager instanceof AbstractBlock) {
                 return $this->_pager->toHtml();
             }
         }
@@ -239,7 +248,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     /**
      * Return HTML block with price
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param string $priceType
      * @param string $renderZone
      * @param array $arguments
@@ -247,34 +256,26 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getProductPriceHtml(
-        \Magento\Catalog\Model\Product $product,
+        Product $product,
         $priceType = null,
-        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+        $renderZone = Render::ZONE_ITEM_LIST,
         array $arguments = []
     ) {
         if (!isset($arguments['zone'])) {
             $arguments['zone'] = $renderZone;
         }
-        $arguments['zone'] = isset($arguments['zone'])
-            ? $arguments['zone']
-            : $renderZone;
-        $arguments['price_id'] = isset($arguments['price_id'])
-            ? $arguments['price_id']
-            : 'old-price-' . $product->getId() . '-' . $priceType;
-        $arguments['include_container'] = isset($arguments['include_container'])
-            ? $arguments['include_container']
-            : true;
-        $arguments['display_minimal_price'] = isset($arguments['display_minimal_price'])
-            ? $arguments['display_minimal_price']
-            : true;
+        $arguments['zone'] = $arguments['zone'] ?? $renderZone;
+        $arguments['price_id'] = $arguments['price_id'] ?? 'old-price-' . $product->getId() . '-' . $priceType;
+        $arguments['include_container'] = $arguments['include_container'] ?? true;
+        $arguments['display_minimal_price'] = $arguments['display_minimal_price'] ?? true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
 
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                FinalPrice::PRICE_CODE,
                 $product,
                 $arguments
             );

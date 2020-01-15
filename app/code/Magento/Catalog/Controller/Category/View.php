@@ -1,15 +1,15 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Helper\Category as CategoryHelper;
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
@@ -20,7 +20,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
@@ -44,7 +43,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      *
      * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog session
@@ -98,11 +97,6 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     private $toolbarMemorizer;
 
     /**
-     * @var LayoutUpdateManager
-     */
-    private $customLayoutManager;
-
-    /**
      * @var CategoryHelper
      */
     private $categoryHelper;
@@ -113,8 +107,6 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     private $logger;
 
     /**
-     * Constructor
-     *
      * @param Context $context
      * @param Design $catalogDesign
      * @param Session $catalogSession
@@ -125,8 +117,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param ForwardFactory $resultForwardFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param ToolbarMemorizer|null $toolbarMemorizer
-     * @param LayoutUpdateManager|null $layoutUpdateManager
+     * @param ToolbarMemorizer $toolbarMemorizer
      * @param CategoryHelper $categoryHelper
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -142,10 +133,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         ForwardFactory $resultForwardFactory,
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
-        ToolbarMemorizer $toolbarMemorizer = null,
-        ?LayoutUpdateManager $layoutUpdateManager = null,
-        CategoryHelper $categoryHelper = null,
-        LoggerInterface $logger = null
+        ToolbarMemorizer $toolbarMemorizer,
+        CategoryHelper $categoryHelper,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
@@ -157,13 +147,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->resultForwardFactory = $resultForwardFactory;
         $this->layerResolver = $layerResolver;
         $this->categoryRepository = $categoryRepository;
-        $this->toolbarMemorizer = $toolbarMemorizer ?: ObjectManager::getInstance()->get(ToolbarMemorizer::class);
-        $this->customLayoutManager = $layoutUpdateManager
-            ?? ObjectManager::getInstance()->get(LayoutUpdateManager::class);
-        $this->categoryHelper = $categoryHelper ?: ObjectManager::getInstance()
-            ->get(CategoryHelper::class);
-        $this->logger = $logger ?: ObjectManager::getInstance()
-            ->get(LoggerInterface::class);
+        $this->toolbarMemorizer = $toolbarMemorizer;
+        $this->categoryHelper = $categoryHelper;
+        $this->logger = $logger;
     }
 
     /**

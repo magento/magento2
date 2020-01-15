@@ -9,21 +9,46 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Flat\State;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\Product\OptionFactory;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Catalog\Model\ResourceModel\Helper;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Catalog\Model\ResourceModel\Url;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Customer\Model\Session;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\EntityFactory as EavEntityFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Validator\UniversalFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Product collection
@@ -37,7 +62,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
-class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Alias for index table
@@ -111,7 +136,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_addTaxPercents = false;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation
+     * @var ProductLimitation
      */
     protected $_productLimitationFilters;
 
@@ -186,64 +211,64 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Catalog product flat
      *
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State
+     * @var State
      */
     protected $_catalogProductFlatState = null;
 
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var Manager
      */
     protected $moduleManager = null;
 
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
      * Customer session
      *
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $_localeDate;
 
     /**
      * Catalog url
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Url
+     * @var Url
      */
     protected $_catalogUrl;
 
     /**
      * Product option factory
      *
-     * @var \Magento\Catalog\Model\Product\OptionFactory
+     * @var OptionFactory
      */
     protected $_productOptionFactory;
 
     /**
      * Catalog resource helper
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Helper
+     * @var Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Customer\Api\GroupManagementInterface
+     * @var GroupManagementInterface
      */
     protected $_groupManagement;
 
@@ -275,7 +300,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $linkField;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @var AbstractBackend
      */
     private $backend;
 
@@ -312,62 +337,68 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Collection constructor
      *
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param Config $eavConfig
+     * @param ResourceConnection $resource
+     * @param EavEntityFactory $eavEntityFactory
+     * @param Helper $resourceHelper
+     * @param UniversalFactory $universalFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Manager $moduleManager
+     * @param State $catalogProductFlatState
+     * @param ScopeConfigInterface $scopeConfig
+     * @param OptionFactory $productOptionFactory
+     * @param Url $catalogUrl
+     * @param TimezoneInterface $localeDate
+     * @param Session $customerSession
+     * @param DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param AdapterInterface|null $connection
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
      * @param Category|null $categoryResourceModel
+     * @param DbStorage|null $urlFinder
+     * @param GalleryReadHandler|null $productGalleryReadHandler
+     * @param Gallery|null $mediaGalleryResource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
-        \Magento\Catalog\Model\ResourceModel\Url $catalogUrl,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Config $eavConfig,
+        ResourceConnection $resource,
+        EavEntityFactory $eavEntityFactory,
+        Helper $resourceHelper,
+        UniversalFactory $universalFactory,
+        StoreManagerInterface $storeManager,
+        Manager $moduleManager,
+        State $catalogProductFlatState,
+        ScopeConfigInterface $scopeConfig,
+        OptionFactory $productOptionFactory,
+        Url $catalogUrl,
+        TimezoneInterface $localeDate,
+        Session $customerSession,
+        DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
         DimensionFactory $dimensionFactory = null,
-        Category $categoryResourceModel = null
+        Category $categoryResourceModel = null,
+        ?DbStorage $urlFinder = null,
+        ?GalleryReadHandler $productGalleryReadHandler = null,
+        ?Gallery $mediaGalleryResource = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -379,9 +410,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
-        $productLimitationFactory = $productLimitationFactory ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory::class
-        );
+        $productLimitationFactory = $productLimitationFactory ?:
+            ObjectManager::getInstance()->get(ProductLimitationFactory::class);
         $this->_productLimitationFilters = $productLimitationFactory->create();
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         parent::__construct(
@@ -399,23 +429,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
-        $this->dimensionFactory = $dimensionFactory
-            ?: ObjectManager::getInstance()->get(DimensionFactory::class);
-        $this->categoryResourceModel = $categoryResourceModel ?: ObjectManager::getInstance()
-            ->get(Category::class);
-    }
-
-    /**
-     * Retrieve urlFinder
-     *
-     * @return GalleryReadHandler
-     */
-    private function getUrlFinder()
-    {
-        if ($this->urlFinder === null) {
-            $this->urlFinder = ObjectManager::getInstance()->get(DbStorage::class);
-        }
-        return $this->urlFinder;
+        $this->dimensionFactory = $dimensionFactory ?: ObjectManager::getInstance()->get(DimensionFactory::class);
+        $this->categoryResourceModel = $categoryResourceModel ?: ObjectManager::getInstance()->get(Category::class);
+        $this->urlFinder = $urlFinder ?? ObjectManager::getInstance()->get(DbStorage::class);
+        $this->productGalleryReadHandler = $productGalleryReadHandler ?? ObjectManager::getInstance()
+                ->get(GalleryReadHandler::class);
+        $this->mediaGalleryResource = $mediaGalleryResource ?? ObjectManager::getInstance()->get(Gallery::class);
     }
 
     /**
@@ -533,11 +552,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     {
         if ($this->isEnabledFlat()) {
             $this->_init(
-                \Magento\Catalog\Model\Product::class,
-                \Magento\Catalog\Model\ResourceModel\Product\Flat::class
+                Product::class,
+                Flat::class
             );
         } else {
-            $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product::class);
+            $this->_init(Product::class, ProductResource::class);
         }
         $this->_initTables();
     }
@@ -552,7 +571,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _init($model, $entityModel)
     {
         if ($this->isEnabledFlat()) {
-            $entityModel = \Magento\Catalog\Model\ResourceModel\Product\Flat::class;
+            $entityModel = Flat::class;
         }
         return parent::_init($model, $entityModel);
     }
@@ -606,7 +625,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function setEntity($entity)
     {
-        if ($this->isEnabledFlat() && $entity instanceof \Magento\Framework\Model\ResourceModel\Db\AbstractDb) {
+        if ($this->isEnabledFlat() && $entity instanceof AbstractDb) {
             $this->_entity = $entity;
             return $this;
         }
@@ -735,7 +754,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function prepareStoreId()
     {
         if ($this->getStoreId() !== null) {
-            /** @var $item \Magento\Catalog\Model\Product */
+            /** @var $item Product */
             foreach ($this->_items as $item) {
                 $item->setStoreId($this->getStoreId());
             }
@@ -752,7 +771,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _prepareUrlDataObject()
     {
         $objects = [];
-        /** @var $item \Magento\Catalog\Model\Product */
+        /** @var $item Product */
         foreach ($this->_items as $item) {
             if ($this->getFlag('do_not_use_category_id')) {
                 $item->setDoNotUseCategoryId(true);
@@ -1458,7 +1477,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $filter['metadata']['category_id'] = $this->_urlRewriteCategory;
         }
 
-        $rewrites = $this->getUrlFinder()->findAllByData($filter);
+        $rewrites = $this->urlFinder->findAllByData($filter);
         foreach ($rewrites as $rewrite) {
             if ($item = $this->getItemById($rewrite->getEntityId())) {
                 $item->setData('request_path', $rewrite->getRequestPath());
@@ -2294,7 +2313,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Retrieve backend model and cache it.
      *
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return AbstractBackend
      */
     private function getBackend()
     {
@@ -2350,17 +2369,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if (!$this->isLoaded()) {
             $this->load();
         }
-        $records = $this->getMediaGalleryResource()->getMediaRecords(
+        $records = $this->mediaGalleryResource->getMediaRecords(
             $this->getStoreId(),
             $this->getLoadedIds()
         );
+
         $mediaGalleries = [];
         foreach ($records as $record) {
             $mediaGalleries[$record['entity_id']][] = $record;
         }
 
         foreach ($this->getItems() as $item) {
-            $this->getGalleryReadHandler()
+            $this->productGalleryReadHandler
                 ->addMediaDataToProduct(
                     $item,
                     $mediaGalleries[$item->getId()] ?? []
@@ -2379,35 +2399,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function getProductEntityMetadata()
     {
         return $this->metadataPool->getMetadata(ProductInterface::class);
-    }
-
-    /**
-     * Retrieve GalleryReadHandler
-     *
-     * @return GalleryReadHandler
-     * @deprecated 101.0.1
-     */
-    private function getGalleryReadHandler()
-    {
-        if ($this->productGalleryReadHandler === null) {
-            $this->productGalleryReadHandler = ObjectManager::getInstance()->get(GalleryReadHandler::class);
-        }
-        return $this->productGalleryReadHandler;
-    }
-
-    /**
-     * Retrieve Media gallery resource.
-     *
-     * @deprecated 101.0.1
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
-     */
-    private function getMediaGalleryResource()
-    {
-        if (null === $this->mediaGalleryResource) {
-            $this->mediaGalleryResource = ObjectManager::getInstance()->get(Gallery::class);
-        }
-        return $this->mediaGalleryResource;
     }
 
     /**

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Listing\Collector;
 
@@ -11,14 +12,13 @@ use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
 use Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Helper\ImageFactory;
-use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\DesignLoader;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\View\DesignLoader;
 
 /**
  * Collect enough information about image rendering on front
@@ -75,8 +75,8 @@ class Image implements ProductRenderCollectorInterface
      * @param StoreManager|StoreManagerInterface $storeManager
      * @param DesignInterface $design
      * @param ImageInterfaceFactory $imageRenderInfoFactory
-     * @param array $imageCodes
      * @param DesignLoader $designLoader
+     * @param array $imageCodes
      */
     public function __construct(
         ImageFactory $imageFactory,
@@ -84,17 +84,16 @@ class Image implements ProductRenderCollectorInterface
         StoreManagerInterface $storeManager,
         DesignInterface $design,
         ImageInterfaceFactory $imageRenderInfoFactory,
-        array $imageCodes = [],
-        DesignLoader $designLoader = null
+        DesignLoader $designLoader,
+        array $imageCodes = []
     ) {
         $this->imageFactory = $imageFactory;
-        $this->imageCodes = $imageCodes;
         $this->state = $state;
         $this->storeManager = $storeManager;
         $this->design = $design;
         $this->imageRenderInfoFactory = $imageRenderInfoFactory;
-        $this->designLoader = $designLoader ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(DesignLoader::class);
+        $this->designLoader = $designLoader;
+        $this->imageCodes = $imageCodes;
     }
 
     /**
@@ -114,7 +113,7 @@ class Image implements ProductRenderCollectorInterface
             $helper = $this->state
                 ->emulateAreaCode(
                     'frontend',
-                    [$this, "emulateImageCreating"],
+                    [$this, 'emulateImageCreating'],
                     [$product, $imageCode, (int) $productRender->getStoreId(), $image]
                 );
 

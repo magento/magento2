@@ -9,6 +9,8 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Form;
 
@@ -33,7 +35,7 @@ class General extends AbstractModifier
     protected $arrayManager;
 
     /**
-     * @var \Magento\Framework\Locale\CurrencyInterface
+     * @var CurrencyInterface
      */
     private $localeCurrency;
 
@@ -43,19 +45,22 @@ class General extends AbstractModifier
     private $attributeRepository;
 
     /**
-     * @param LocatorInterface                  $locator
-     * @param ArrayManager                      $arrayManager
+     * @param LocatorInterface $locator
+     * @param ArrayManager $arrayManager
      * @param AttributeRepositoryInterface|null $attributeRepository
+     * @param CurrencyInterface|null $localeCurrency
      */
     public function __construct(
         LocatorInterface $locator,
         ArrayManager $arrayManager,
-        AttributeRepositoryInterface $attributeRepository = null
+        AttributeRepositoryInterface $attributeRepository = null,
+        ?CurrencyInterface $localeCurrency = null
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
         $this->attributeRepository = $attributeRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
+            ?: ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
+        $this->localeCurrency = $localeCurrency ?? ObjectManager::getInstance()->get(CurrencyInterface::class);
     }
 
     /**
@@ -399,22 +404,6 @@ class General extends AbstractModifier
     }
 
     /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Locale\CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
      * Format price according to the locale of the currency
      *
      * @param  mixed $value
@@ -428,7 +417,7 @@ class General extends AbstractModifier
         }
 
         $store = $this->locator->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
         return $value;
@@ -450,7 +439,7 @@ class General extends AbstractModifier
         $value = (float)$value;
         $precision = strlen(substr(strrchr($value, "."), 1));
         $store = $this->locator->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency(
             $value,
             [

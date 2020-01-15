@@ -3,11 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Helper\Product;
 
-use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
-use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Controller\Product\View\ViewInterface;
+use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Design;
+use Magento\Catalog\Model\Session;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
@@ -16,7 +30,7 @@ use Magento\Framework\View\Result\Page as ResultPage;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class View extends \Magento\Framework\App\Helper\AbstractHelper
+class View extends AbstractHelper
 {
     /**
      * List of catalog product session message groups
@@ -28,77 +42,69 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog product
      *
-     * @var \Magento\Catalog\Helper\Product
+     * @var Product
      */
-    protected $_catalogProduct = null;
+    protected $_catalogProduct;
 
     /**
      * Catalog design
      *
-     * @var \Magento\Catalog\Model\Design
+     * @var Design
      */
     protected $_catalogDesign;
 
     /**
      * Catalog session
      *
-     * @var \Magento\Catalog\Model\Session
+     * @var Session
      */
     protected $_catalogSession;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     * @var CategoryUrlPathGenerator
      */
     protected $categoryUrlPathGenerator;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     private $string;
 
     /**
-     * @var LayoutUpdateManager
-     */
-    private $layoutUpdateManager;
-
-    /**
      * Constructor
      *
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Catalog\Model\Design $catalogDesign
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
+     * @param Context $context
+     * @param Session $catalogSession
+     * @param Design $catalogDesign
+     * @param Product $catalogProduct
+     * @param Registry $coreRegistry
+     * @param ManagerInterface $messageManager
+     * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
+     * @param StringUtils $string
      * @param array $messageGroups
-     * @param \Magento\Framework\Stdlib\StringUtils|null $string
-     * @param LayoutUpdateManager|null $layoutUpdateManager
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Catalog\Model\Design $catalogDesign,
-        \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        array $messageGroups = [],
-        \Magento\Framework\Stdlib\StringUtils $string = null,
-        ?LayoutUpdateManager $layoutUpdateManager = null
+        Context $context,
+        Session $catalogSession,
+        Design $catalogDesign,
+        Product $catalogProduct,
+        Registry $coreRegistry,
+        ManagerInterface $messageManager,
+        CategoryUrlPathGenerator $categoryUrlPathGenerator,
+        StringUtils $string,
+        array $messageGroups = []
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
@@ -107,17 +113,16 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->messageGroups = $messageGroups;
         $this->messageManager = $messageManager;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
-        $this->string = $string ?: ObjectManager::getInstance()->get(\Magento\Framework\Stdlib\StringUtils::class);
-        $this->layoutUpdateManager = $layoutUpdateManager
-            ?? ObjectManager::getInstance()->get(LayoutUpdateManager::class);
+        $this->string = $string;
         parent::__construct($context);
     }
 
     /**
      * Add meta information from product to layout
      *
-     * @param \Magento\Framework\View\Result\Page $resultPage
+     * @param ResultPage $resultPage
      * @param \Magento\Catalog\Model\Product $product
+     *
      * @return $this
      */
     private function preparePageMetadata(ResultPage $resultPage, $product)
@@ -163,10 +168,12 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Init layout for viewing product page
      *
-     * @param \Magento\Framework\View\Result\Page $resultPage
+     * @param ResultPage $resultPage
      * @param \Magento\Catalog\Model\Product $product
-     * @param null|\Magento\Framework\DataObject $params
-     * @return \Magento\Catalog\Helper\Product\View
+     * @param null|DataObject $params
+     *
+     * @return View
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -193,7 +200,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                 $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
-    
+
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
         $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
 
@@ -224,8 +231,10 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $pageConfig->addBodyClass('catalog-product-view');
         }
         $pageConfig->addBodyClass('product-' . $product->getUrlKey());
-        if ($currentCategory instanceof \Magento\Catalog\Model\Category) {
-            $pageConfig->addBodyClass('categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($currentCategory))
+        if ($currentCategory instanceof Category) {
+            $pageConfig->addBodyClass(
+                'categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($currentCategory)
+            )
                 ->addBodyClass('category-' . $currentCategory->getUrlKey());
         }
 
@@ -241,13 +250,15 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      *   - 'specify_options' - boolean, whether to show 'Specify options' message
      *   - 'configure_mode' - boolean, whether we're in Configure-mode to edit product configuration
      *
-     * @param \Magento\Framework\View\Result\Page $resultPage
+     * @param ResultPage $resultPage
      * @param int $productId
-     * @param \Magento\Framework\App\Action\Action $controller
-     * @param null|\Magento\Framework\DataObject $params
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Magento\Catalog\Helper\Product\View
+     * @param Action $controller
+     * @param null|DataObject $params
+     *
+     * @return View
+     *
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function prepareAndRender(ResultPage $resultPage, $productId, $controller, $params = null)
     {
@@ -262,21 +273,21 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $resultPage->getLayout()->getUpdate()->removeHandle($resultPage->getDefaultLayoutHandle());
         }
 
-        if (!$controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+        if (!$controller instanceof ViewInterface) {
+            throw new LocalizedException(
                 __('Bad controller interface for showing product')
             );
         }
         // Prepare data
         $productHelper = $this->_catalogProduct;
         if (!$params) {
-            $params = new \Magento\Framework\DataObject();
+            $params = new DataObject();
         }
 
         // Standard algorithm to prepare and render product view page
         $product = $productHelper->initProduct($productId, $controller, $params);
         if (!$product) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Product is not loaded'));
+            throw new NoSuchEntityException(__('Product is not loaded'));
         }
 
         $buyRequest = $params->getBuyRequest();

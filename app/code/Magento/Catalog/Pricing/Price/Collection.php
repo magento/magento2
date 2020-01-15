@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Pricing\Price\Factory;
 use Magento\Framework\Pricing\Price\Pool;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Price models collection class.
@@ -35,10 +34,10 @@ class Collection extends \Magento\Framework\Pricing\Price\Collection
         Factory $priceFactory,
         Pool $pool,
         $quantity,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($saleableItem, $priceFactory, $pool, $quantity);
-        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->storeManager = $storeManager;
     }
 
     /**
