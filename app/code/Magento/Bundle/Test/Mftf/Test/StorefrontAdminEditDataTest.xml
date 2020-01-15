@@ -32,11 +32,11 @@
         <!-- Create a bundle product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle"/>
         <waitForPageLoad stepKey="waitForProductPageLoadBundle"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillBundleProductNameAndSku">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillBundleProductNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
@@ -50,11 +50,11 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
         <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions2">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
@@ -79,7 +79,7 @@
         <waitForPageLoad stepKey="waitForElementAdded"/>
 
         <!-- Go to the shopping cart page and grab the value of the option title -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalBefore"/>
 
@@ -87,7 +87,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
@@ -100,13 +100,13 @@
         <see stepKey="assertSuccess2" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
 
         <!-- Go to the shopping cart page and make sure the title has changed -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart1"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart1"/>
         <waitForPageLoad stepKey="waitForCartPageLoad1"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalAfter"/>
         <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string"  stepKey="assertNotEquals"/>
 
         <!-- Delete the bundled product -->
-        <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+        <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>

@@ -38,11 +38,4 @@
         <waitForPageLoad stepKey="waitForSaving"/>
         <see userInput="You saved the role." selector="{{AdminMessagesSection.success}}" stepKey="seeMessage"/>
     </actionGroup>
-
-    <actionGroup name="AdminAddNewUserRoleWithCustomRoleScopes" extends="AdminAddNewUserRoleActionGroup">
-        <arguments>
-            <argument name="customWebsiteName" type="string"/>
-        </arguments>
-        <checkOption selector="{{AdminCreateRoleSection.selectWebsite(customWebsiteName)}}" stepKey="checkWebsite" after="selectRoleResources"/>
-    </actionGroup>
 </actionGroups>

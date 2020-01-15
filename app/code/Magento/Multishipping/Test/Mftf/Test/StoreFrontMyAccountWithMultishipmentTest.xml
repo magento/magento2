@@ -52,11 +52,11 @@
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllFilters"/>
             <actionGroup ref="logout" stepKey="logoutAdmin"/>
         </after>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimpleProduct1ToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct1ToCart">
             <argument name="product" value="$$product1$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimpleProduct2ToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct2ToCart">
             <argument name="product" value="$$product2$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
@@ -96,7 +96,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
         <!--Assert order in orders grid -->
         <!-- Go to order page -->
-        <actionGroup ref="OpenOrderById" stepKey="openFirstOrderPage">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
             <argument name="orderId" value="{$getFirstOrderIdPlaceOrder}"/>
         </actionGroup>
         <!-- Check status -->
@@ -106,7 +106,7 @@
         <waitForPageLoad stepKey="waitForOrderPageLoad4"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters2"/>
         <!-- Go to order page -->
-        <actionGroup ref="OpenOrderById" stepKey="openSecondOrderPage">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openSecondOrderPage">
             <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
         </actionGroup>
         <!-- Check status -->
