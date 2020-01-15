@@ -20,6 +20,8 @@ use Magento\Indexer\Model\Indexer\StateFactory;
 use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 
 /**
+ * Indexer recurring setup
+ *
  * @codeCoverageIgnore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -84,7 +86,7 @@ class Recurring implements InstallSchemaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
