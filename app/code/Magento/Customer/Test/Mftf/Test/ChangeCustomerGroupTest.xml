@@ -21,7 +21,7 @@
 
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -40,8 +40,8 @@
             <argument name="taxClass" value="{{CustomerGroupChange.tax_class_name}}"/>
         </actionGroup>
         <actionGroup ref="NavigateToAllCustomerPage" stepKey="navToCustomers"/>
-        <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomer">
-            <argument name="customerName" value="{{Simple_US_Customer.fullname}}"/>
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomer">
+            <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
         <actionGroup ref="AdminSelectCustomerByEmail" stepKey="selectCustomer">
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
