@@ -55,6 +55,7 @@
         <seeElement selector="{{StorefrontCMSPageSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontCMSPageSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
         <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYGFirst"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
