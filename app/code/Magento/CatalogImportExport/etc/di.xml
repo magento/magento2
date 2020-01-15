@@ -16,6 +16,13 @@
         <plugin name="invalidateProductCategoryIndexerOnImport" type="Magento\CatalogImportExport\Model\Indexer\Product\Category\Plugin\Import" />
         <plugin name="invalidateCategoryProductIndexerOnImport" type="Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin\Import" />
     </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product\StockProcessor">
+        <arguments>
+            <argument name="indexers" xsi:type="array">
+                <item name="cataloginventory_stock" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogImportExport\Model\Import\Product\Validator">
         <arguments>
             <argument name="validators" xsi:type="array">
