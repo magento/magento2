@@ -35,33 +35,33 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
-//    /**
-//     * Query for an existing active customer cart
-//     *
-//     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-//     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-//     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-//     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-//     */
-//    public function testGetActiveCustomerCart()
-//    {
-//        $quantity = 2;
-//        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-//        $customerCartQuery = $this->getCustomerCartQuery();
-//        $response = $this->graphQlQuery($customerCartQuery, [], '', $this->getHeaderMap());
-//        $this->assertArrayHasKey('customerCart', $response);
-//        $this->assertArrayHasKey('items', $response['customerCart']);
-//        $this->assertNotEmpty($response['customerCart']['items']);
-//        $this->assertEquals(2, $response['customerCart']['total_quantity']);
-//        $this->assertArrayHasKey('id', $response['customerCart']);
-//        $this->assertNotEmpty($response['customerCart']['id']);
-//        $this->assertEquals($maskedQuoteId, $response['customerCart']['id']);
-//        $this->assertEquals(
-//            $quantity,
-//            $response['customerCart']['items'][0]['quantity'],
-//            'Incorrect quantity of products in cart'
-//        );
-//    }
+    /**
+     * Query for an existing active customer cart
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testGetActiveCustomerCart()
+    {
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $customerCartQuery = $this->getCustomerCartQuery();
+        $response = $this->graphQlQuery($customerCartQuery, [], '', $this->getHeaderMap());
+        $this->assertArrayHasKey('customerCart', $response);
+        $this->assertArrayHasKey('items', $response['customerCart']);
+        $this->assertNotEmpty($response['customerCart']['items']);
+        $this->assertEquals(2, $response['customerCart']['total_quantity']);
+        $this->assertArrayHasKey('id', $response['customerCart']);
+        $this->assertNotEmpty($response['customerCart']['id']);
+        $this->assertEquals($maskedQuoteId, $response['customerCart']['id']);
+        $this->assertEquals(
+            $quantity,
+            $response['customerCart']['items'][0]['quantity'],
+            'Incorrect quantity of products in cart'
+        );
+    }
 
     /**
      * Query for an existing customer cart with no masked quote id
@@ -87,6 +87,7 @@ class GetCustomerCartTest extends GraphQlAbstract
      * Query for customer cart for a user with no existing active cart
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/rollback_quote.php
      */
     public function testGetNewCustomerCart()
     {
@@ -137,6 +138,7 @@ class GetCustomerCartTest extends GraphQlAbstract
      * Querying for the customer cart twice->should return the same cart
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/rollback_quote.php
      */
     public function testRequestCustomerCartTwice()
     {
@@ -159,6 +161,7 @@ class GetCustomerCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
+     * @magentoApiDataFixture Magento/Checkout/_files/rollback_quote.php
      */
     public function testGetInactiveCustomerCart()
     {
@@ -173,13 +176,13 @@ class GetCustomerCartTest extends GraphQlAbstract
     /**
      * Querying for an existing customer cart for second store
      *
+     * @magentoApiDataFixture Magento/Checkout/_files/rollback_quote.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
      */
     public function testGetCustomerCartSecondStore()
     {
-        $maskedQuoteIdSecondStore = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store');
         $customerCartQuery = $this->getCustomerCartQuery();
-
+        $maskedQuoteIdSecondStore = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store');
         $headerMap = $this->getHeaderMap();
         $headerMap['Store'] = 'fixture_second_store';
         $responseSecondStore = $this->graphQlQuery($customerCartQuery, [], '', $headerMap);
