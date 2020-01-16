@@ -14,8 +14,8 @@
             <title value="User should be able to use Quick Search to a configurable product's child products"/>
             <description value="Use Quick Search to find a configurable product with enabled/disable children"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-14798"/>
-            <group value="CatalogSearch"/>
+            <testCaseId value="MC-28374"/>
+            <group value="catalogSearch"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -75,20 +75,19 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
             <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createConfigurableProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="seeProductInGrid">
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="seeProductInGrid">
             <argument name="productName" value="$createConfigurableProduct.name$"/>
-            <argument name="index" value="1"/>
         </actionGroup>
 
         <!-- Disable Child Product -->
