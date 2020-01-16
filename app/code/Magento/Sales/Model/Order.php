@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model;
 
 use Magento\Config\Model\Config\Source\Nooptreq;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -51,7 +52,6 @@ use Magento\Store\Model\ScopeInterface;
  * @method bool hasCustomerNoteNotify()
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
- * @method \Magento\Customer\Model\Customer getCustomer()
  * @method \Magento\Sales\Model\Order setSendEmail(bool $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -308,6 +308,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $scopeConfig;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    private $_customerRepositoryInterface;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -340,6 +345,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param OrderItemRepositoryInterface $itemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ScopeConfigInterface $scopeConfig
+     * @param CustomerRepositoryInterface $customerRepositoryInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -366,6 +372,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
+        CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -403,6 +410,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
             ->get(SearchCriteriaBuilder::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->_customerRepositoryInterface = $customerRepositoryInterface;
 
         parent::__construct(
             $context,
@@ -560,6 +568,19 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return $this->_storeManager->getStore($storeId);
         }
         return $this->_storeManager->getStore();
+    }
+
+    /**
+     * Returns Customer
+     *
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getCustomer()
+    {
+        $customerId = $this->getData(OrderInterface::CUSTOMER_ID);
+        return $this->_customerRepositoryInterface->getById($customerId);
     }
 
     /**

@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Api\Data;
 
+use Magento\Customer\Model\Customer;
+
 /**
  * Order interface.
  *
@@ -910,6 +912,12 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      */
     public function setCreatedAt($createdAt);
 
+    /**
+     * Gets the customer from Order
+     * @return Customer
+     */
+    public function getCustomer();
+    
     /**
      * Gets the customer date-of-birth (DOB) for the order.
      *
