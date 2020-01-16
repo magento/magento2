@@ -41,14 +41,14 @@
         <!-- TEST BODY -->
 
         <!-- Create Order -->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <!-- Select Free shipping -->
-        <actionGroup ref="orderSelectFreeShipping" stepKey="selectFreeShippingOption"/>
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
         <!--Click *Submit Order* button-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
         <!-- Create Shipment -->

@@ -23,7 +23,7 @@
             <actionGroup ref = "LoginAsAdmin" stepKey="LoginToAdminPanel"/>
         </before>
         <after>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="_defaultCategory" />
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout" />
