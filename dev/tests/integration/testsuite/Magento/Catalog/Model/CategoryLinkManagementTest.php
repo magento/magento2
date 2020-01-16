@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
-use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -21,8 +20,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test cases related to assign/unassign product to/from category.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryLinkManagementTest extends TestCase
 {
@@ -73,6 +70,7 @@ class CategoryLinkManagementTest extends TestCase
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->categoryResourceModel = $this->objectManager->get(CategoryResourceModel::class);
         $this->categoryLinkManagement = $this->objectManager->create(CategoryLinkManagementInterface::class);
+        $this->productRepository->cleanCache();
         parent::setUp();
     }
 
@@ -229,7 +227,6 @@ class CategoryLinkManagementTest extends TestCase
             ]
         );
         $select->where('product_id = ?', $productId);
-        $select->where('visibility != ?', Visibility::VISIBILITY_NOT_VISIBLE);
         $select->where('category_id IN (?)', $categoryIds);
 
         return (int)$this->productResource->getConnection()->fetchOne($select);
