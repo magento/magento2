@@ -54,7 +54,6 @@ class Csv extends AbstractAdapter
     {
         if (is_object($this->_fileHandler)) {
             $this->_fileHandler->close();
-            $this->_fileHandler = null;
             $this->_directoryHandle->delete($this->_destination);
         }
     }
