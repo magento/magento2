@@ -11,7 +11,6 @@ use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -32,11 +31,6 @@ class CategoryLinkManagementTest extends TestCase
      * @var TableMaintainer
      */
     private $tableMaintainer;
-
-    /**
-     * @var ProductResource
-     */
-    private $productResource;
 
     /**
      * @var StoreRepositoryInterface
@@ -65,7 +59,6 @@ class CategoryLinkManagementTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->tableMaintainer = $this->objectManager->get(TableMaintainer::class);
-        $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->categoryResourceModel = $this->objectManager->get(CategoryResourceModel::class);
@@ -97,11 +90,11 @@ class CategoryLinkManagementTest extends TestCase
     public function testAssignProductToCategory(): void
     {
         $product = $this->productRepository->get('simple2');
-        $this->assertEquals(0, $this->countOfAssignedProductsToCategories((int)$product->getId(), [333]));
-        $this->assertEquals(0, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [333]));
+        $this->assertEquals(0, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [333]));
+        $this->assertEquals(0, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [333]));
         $this->categoryLinkManagement->assignProductToCategories('simple2', [333]);
-        $this->assertEquals(1, $this->countOfAssignedProductsToCategories((int)$product->getId(), [333]));
-        $this->assertEquals(1, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [333]));
+        $this->assertEquals(1, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [333]));
+        $this->assertEquals(1, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [333]));
     }
 
     /**
@@ -116,11 +109,11 @@ class CategoryLinkManagementTest extends TestCase
     public function testUnassignProductFromCategory(): void
     {
         $product = $this->productRepository->get('in-stock-product');
-        $this->assertEquals(1, $this->countOfAssignedProductsToCategories((int)$product->getId(), [333]));
-        $this->assertEquals(1, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [333]));
+        $this->assertEquals(1, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [333]));
+        $this->assertEquals(1, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [333]));
         $this->categoryLinkManagement->assignProductToCategories('in-stock-product', []);
-        $this->assertEquals(0, $this->countOfAssignedProductsToCategories((int)$product->getId(), [333]));
-        $this->assertEquals(0, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [333]));
+        $this->assertEquals(0, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [333]));
+        $this->assertEquals(0, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [333]));
     }
 
     /**
@@ -136,11 +129,11 @@ class CategoryLinkManagementTest extends TestCase
     public function testAssignProductToCategoryWhichHasParentCategories(): void
     {
         $product = $this->productRepository->get('simple2');
-        $this->assertEquals(0, $this->countOfAssignedProductsToCategories((int)$product->getId(), [5]));
-        $this->assertEquals(0, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [3, 4, 5]));
+        $this->assertEquals(0, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [5]));
+        $this->assertEquals(0, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [3, 4, 5]));
         $this->categoryLinkManagement->assignProductToCategories('simple2', [5]);
-        $this->assertEquals(1, $this->countOfAssignedProductsToCategories((int)$product->getId(), [5]));
-        $this->assertEquals(3, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [3, 4, 5]));
+        $this->assertEquals(1, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [5]));
+        $this->assertEquals(3, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [3, 4, 5]));
     }
 
     /**
@@ -155,11 +148,11 @@ class CategoryLinkManagementTest extends TestCase
     public function testUnassignProductFromCategoryWhichHasParentCategories(): void
     {
         $product = $this->productRepository->get('simple_with_child_category');
-        $this->assertEquals(1, $this->countOfAssignedProductsToCategories((int)$product->getId(), [5]));
-        $this->assertEquals(3, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [3, 4, 5]));
+        $this->assertEquals(1, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [5]));
+        $this->assertEquals(3, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [3, 4, 5]));
         $this->categoryLinkManagement->assignProductToCategories('simple_with_child_category', []);
-        $this->assertEquals(0, $this->countOfAssignedProductsToCategories((int)$product->getId(), [5]));
-        $this->assertEquals(0, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [3, 4, 5]));
+        $this->assertEquals(0, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [5]));
+        $this->assertEquals(0, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [3, 4, 5]));
     }
 
     /**
@@ -174,13 +167,13 @@ class CategoryLinkManagementTest extends TestCase
     public function testReassignProductToOtherCategory(): void
     {
         $product = $this->productRepository->get('simple_with_child_category');
-        $this->assertEquals(1, $this->countOfAssignedProductsToCategories((int)$product->getId(), [5]));
-        $this->assertEquals(3, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [3, 4, 5]));
+        $this->assertEquals(1, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [5]));
+        $this->assertEquals(3, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [3, 4, 5]));
         $this->categoryLinkManagement->assignProductToCategories('simple_with_child_category', [6]);
-        $this->assertEquals(1, $this->countOfAssignedProductsToCategories((int)$product->getId(), [6]));
-        $this->assertEquals(1, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [6]));
-        $this->assertEquals(0, $this->countOfAssignedProductsToCategories((int)$product->getId(), [5]));
-        $this->assertEquals(0, $this->countOfAddedProductsToCategoriesIndex((int)$product->getId(), [3, 4, 5]));
+        $this->assertEquals(1, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [6]));
+        $this->assertEquals(1, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [6]));
+        $this->assertEquals(0, $this->getCategoryProductRelationRecordsCount((int)$product->getId(), [5]));
+        $this->assertEquals(0, $this->getCategoryProductIndexRecordsCount((int)$product->getId(), [3, 4, 5]));
     }
 
     /**
@@ -190,7 +183,7 @@ class CategoryLinkManagementTest extends TestCase
      * @param int[] $categoryIds
      * @return int
      */
-    private function countOfAssignedProductsToCategories(int $productId, array $categoryIds): int
+    private function getCategoryProductRelationRecordsCount(int $productId, array $categoryIds): int
     {
         $select = $this->categoryResourceModel->getConnection()->select();
         $select->from(
@@ -213,13 +206,13 @@ class CategoryLinkManagementTest extends TestCase
      * @param string $storeCode
      * @return int
      */
-    private function countOfAddedProductsToCategoriesIndex(
+    private function getCategoryProductIndexRecordsCount(
         int $productId,
         array $categoryIds,
         string $storeCode = 'default'
     ): int {
         $storeId = (int)$this->storeRepository->get($storeCode)->getId();
-        $select = $this->productResource->getConnection()->select();
+        $select = $this->categoryResourceModel->getConnection()->select();
         $select->from(
             $this->tableMaintainer->getMainTable($storeId),
             [
@@ -229,6 +222,6 @@ class CategoryLinkManagementTest extends TestCase
         $select->where('product_id = ?', $productId);
         $select->where('category_id IN (?)', $categoryIds);
 
-        return (int)$this->productResource->getConnection()->fetchOne($select);
+        return (int)$this->categoryResourceModel->getConnection()->fetchOne($select);
     }
 }
