@@ -83,31 +83,6 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      * @expectedException Exception
      * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
-    public function testAddSimpleProductToCartIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_items: []
-    }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
-     */
     public function testAddSimpleProductToCartIfCartIdIsEmpty()
     {
         $query = <<<QUERY
@@ -116,31 +91,6 @@ mutation {
     input: {
       cart_id: "",
       cart_items: []
-    }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
-     */
-    public function testAddSimpleProductToCartIfCartItemsAreMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_id: "cart_id"
     }
   ) {
     cart {
