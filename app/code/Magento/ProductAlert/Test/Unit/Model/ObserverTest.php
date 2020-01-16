@@ -11,6 +11,9 @@ use Magento\ProductAlert\Model\ProductSalability;
 
 /**
  * Class ObserverTest
+ *
+ * Is used to test Product Alert Observer
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
