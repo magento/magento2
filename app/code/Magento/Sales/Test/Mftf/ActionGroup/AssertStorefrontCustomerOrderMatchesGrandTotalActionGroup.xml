@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <actionGroup name="AssertStorefrontCustomerOrderMatchesGrandTotalActionGroup">
+        <annotations>
+            <description>Check that order grand total equals sum of all totals.</description>
+        </annotations>
+
         <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('subtotal')}}" stepKey="grabValueForSubtotal"/>
         <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('shipping')}}" stepKey="grabValueForShippingHandling"/>
         <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('grand_total')}}" stepKey="grabValueForGrandTotal"/>

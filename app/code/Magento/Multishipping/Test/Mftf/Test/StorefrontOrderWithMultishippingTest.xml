@@ -16,6 +16,7 @@
             <description value="Verify that shipping price on My account matches with shipping method prices after multiple addresses checkout (Order view page)"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-28900"/>
+            <useCaseId value="MC-19303"/>
             <group value="catalog"/>
             <group value="sales"/>
             <group value="multishipping"/>
