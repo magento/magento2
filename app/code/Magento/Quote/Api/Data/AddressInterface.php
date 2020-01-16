@@ -139,7 +139,7 @@ interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     /**
      * Get street
      *
-     * @return string[]
+     * @return string|string[]
      */
     public function getStreet();
 

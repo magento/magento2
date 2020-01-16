@@ -211,7 +211,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Retrieve street field of an address
      *
-     * @return string[]
+     * @return string|string[]
      */
     public function getStreet()
     {
