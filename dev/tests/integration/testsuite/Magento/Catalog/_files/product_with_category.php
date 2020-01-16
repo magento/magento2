@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/category.php';
@@ -18,13 +19,14 @@ require __DIR__ . '/category.php';
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductFactory $productFactory */
 $productFactory = $objectManager->get(ProductFactory::class);
-/** @var CategoryLinkManagementInterface $categoryLinkManagement */
-$categoryLinkManagement = $objectManager->get(CategoryLinkManagementInterface::class);
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
+$defaultWebsiteId = $websiteRepository->get('base')->getId();
 $product = $productFactory->create();
 $product->isObjectNew(true);
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
-    ->setWebsiteIds([1])
+    ->setWebsiteIds([$defaultWebsiteId])
     ->setName('Simple Product In Of Stock')
     ->setSku('in-stock-product')
     ->setPrice(10)
@@ -38,7 +40,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
     ->setCategoryIds([333])
-    ->setStockData(['use_config_manage_stock'   => 0])
+    ->setStockData(['use_config_manage_stock' => 0])
     ->setCanSaveCustomOptions(true)
     ->setHasOptions(true);
 /** @var ProductRepositoryInterface $productRepositoryFactory */
