@@ -136,7 +136,7 @@ class CartFixed extends AbstractDiscount
      */
     protected function setCartFixedRuleUsedForAddress($ruleId, $itemId)
     {
-        $this->_cartFixedRuleUsedForAddress[$ruleId] = $itemId;
+        self::$_cartFixedRuleUsedForAddress[$ruleId] = $itemId;
     }
 
     /**
@@ -147,8 +147,8 @@ class CartFixed extends AbstractDiscount
      */
     protected function getCartFixedRuleUsedForAddress($ruleId)
     {
-        if (isset($this->_cartFixedRuleUsedForAddress[$ruleId])) {
-            return $this->_cartFixedRuleUsedForAddress[$ruleId];
+        if (isset(self::$_cartFixedRuleUsedForAddress[$ruleId])) {
+            return self::$_cartFixedRuleUsedForAddress[$ruleId];
         }
         return null;
     }
