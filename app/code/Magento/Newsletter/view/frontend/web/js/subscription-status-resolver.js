@@ -10,7 +10,7 @@ define([
 ], function ($, storage, urlBuilder) {
     'use strict';
 
-    return function(email, deferred) {
+    return function (email, deferred) {
         return $.getJSON(
             urlBuilder.build('newsletter/ajax/status'),
             {
@@ -21,5 +21,5 @@ define([
         }).fail(function () {
             deferred.reject();
         });
-    }
+    };
 });

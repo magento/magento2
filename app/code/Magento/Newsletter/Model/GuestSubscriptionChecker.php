@@ -35,6 +35,8 @@ class GuestSubscriptionChecker
     }
 
     /**
+     * Check is subscribed by email
+     *
      * @param string $subscriberEmail
      * @return bool
      */

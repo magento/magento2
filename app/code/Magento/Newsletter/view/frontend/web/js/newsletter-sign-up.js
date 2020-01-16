@@ -32,7 +32,7 @@ define([
         /**
          * Send status request and update subscription element according to result.
          */
-        updateSignUpStatus: function() {
+        updateSignUpStatus: function () {
             let element = $(this.element),
                 email = element.val(),
                 self = this,
