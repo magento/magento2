@@ -90,8 +90,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePrice(): void
     {
-        $priceBlockHtml = $this->processPriceView('configurable');
-        $this->assertPrice(preg_replace('/[\n\r]/', '', $priceBlockHtml), 10.00);
+        $this->assertPrice($this->processPriceView('configurable'), 10.00);
     }
 
     /**
@@ -101,8 +100,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithDisabledFirstChild(): void
     {
-        $priceBlockHtml = $this->processPriceView('configurable');
-        $this->assertPrice(preg_replace('/[\n\r]/', '', $priceBlockHtml), 20.00);
+        $this->assertPrice($this->processPriceView('configurable'), 20.00);
     }
 
     /**
@@ -112,8 +110,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithOutOfStockFirstChild(): void
     {
-        $priceBlockHtml = $this->processPriceView('configurable');
-        $this->assertPrice(preg_replace('/[\n\r]/', '', $priceBlockHtml), 20.00);
+        $this->assertPrice($this->processPriceView('configurable'), 20.00);
     }
 
     /**
@@ -125,8 +122,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithCatalogRule(): void
     {
-        $priceBlockHtml = $this->processPriceView('configurable');
-        $this->assertPrice(preg_replace('/[\n\r]/', '', $priceBlockHtml), 9.00);
+        $this->assertPrice($this->processPriceView('configurable'), 9.00);
     }
 
     /**
@@ -312,7 +308,10 @@ class ConfigurableProductPriceTest extends TestCase
     {
         $regexp = '/<span class="price-label">As low as<\/span>.*';
         $regexp .= '<span.*data-price-amount="%s".*<span class="price">\$%.2f<\/span><\/span>/';
-        $this->assertRegExp(sprintf($regexp, round($expectedPrice, 2), $expectedPrice), $priceBlockHtml);
+        $this->assertRegExp(
+            sprintf($regexp, round($expectedPrice, 2), $expectedPrice),
+            preg_replace('/[\n\r]/', '', $priceBlockHtml)
+        );
     }
 
     /**
