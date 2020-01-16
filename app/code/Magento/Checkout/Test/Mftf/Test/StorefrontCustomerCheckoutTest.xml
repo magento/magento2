@@ -10,88 +10,77 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCustomerCheckoutTest">
         <annotations>
-            <features value="Checkout"/>
-            <stories value="Checkout via the Admin"/>
-            <title value="Customer Checkout via the Admin"/>
+            <features value="Customer Checkout"/>
+            <stories value="Checkout via Storefront"/>
+            <title value="Customer Checkout via Storefront"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-5922"/>
+            <testCaseId value="MC-30274"/>
             <group value="checkout"/>
-            <skip>
-                <issueId value="MC-30111"/>
-            </skip>
         </annotations>
         <before>
-            <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
-            <createData entity="SimpleProduct" stepKey="simpleproduct1">
-                <requiredEntity createDataKey="simplecategory"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
-            <!--Clear filters-->
-            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingCustomerFilters"/>
-
-            <actionGroup ref="logout" stepKey="logout"/>
-            <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
-            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteUsCustomer"/>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="resetCustomerFilters"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
         </after>
 
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
-            <argument name="Customer" value="$$simpleuscustomer$$" />
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
         <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
-        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
-        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
-        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
 
-        <click stepKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
-        <waitForElement stepKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
-        <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
-        <!-- Checkout select Check/Money Order payment -->
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
-        <waitForPageLoad stepKey="s39"/>
-        <waitForElement stepKey="s41" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
-        <see stepKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-        <click stepKey="s49" selector="{{CheckoutPaymentSection.placeOrder}}" />
-        <waitForPageLoad stepKey="s51"/>
-        <grabTextFrom stepKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}"/>
-        <see stepKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
+        <actionGroup ref="StorefrontAddCategoryProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="CONST.one"/>
+        </actionGroup>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
 
-        <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
-        <waitForPageLoad stepKey="s75"/>
-        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFiltersIfPresent"/>
-        <fillField stepKey="s77" selector="{{AdminOrdersGridSection.search}}" userInput="{$s53}" />
-        <waitForPageLoad stepKey="s78"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
 
-        <click stepKey="s81" selector="{{AdminOrdersGridSection.submitSearch22}}" />
-        <waitForPageLoad stepKey="s831"/>
-        <click stepKey="s84" selector="{{AdminOrdersGridSection.firstRow}}" />
-        <waitForPageLoad stepKey="waitForOrderToLoad"/>
-        <see stepKey="s85" selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
-        <see stepKey="s87" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
-        <see stepKey="s89" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
-        <see stepKey="s91" selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-        <see stepKey="s93" selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-        <see stepKey="s95" selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
-        <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
-        <waitForPageLoad stepKey="s97"/>
-        <waitForElementVisible selector="{{AdminCustomerFiltersSection.filtersButton}}" time="30" stepKey="waitFiltersButton"/>
-        <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
-        <fillField stepKey="s99" selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$simpleuscustomer.email$$"/>
-        <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
-        <click stepKey="s101" selector="{{AdminCustomerGridSection.firstRowEditLink}}"/>
-        <click stepKey="s102" selector="{{AdminEditCustomerInformationSection.orders}}"/>
-        <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$" />
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="verifyOrderStatus"/>
+        <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" stepKey="verifyAccountInformation"/>
+        <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$createCustomer.email$$" stepKey="verifyCustomerEmail"/>
+        <see selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="verifyBillingAddress"/>
+        <see selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="verifyShippingAddress"/>
+        <see selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$createSimpleProduct.name$$" stepKey="verifyProductName"/>
+
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="navigateToOrdersTab"/>
+        <waitForElementVisible selector="{{AdminEditCustomerOrdersSection.orderGrid}}" stepKey="waitForOrdersGridVisible"/>
+        <see selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$createCustomer.firstname$$ $$createCustomer.lastname$$" stepKey="verifyOrder"/>
     </test>
     <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRates">
         <annotations>
