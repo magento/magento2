@@ -47,7 +47,8 @@ use Throwable;
 use Zend_Http_Client;
 
 /**
- * UPS shipping implementation
+ * UPS shipping implementation.
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -155,7 +156,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @inheritdoc
      */
     protected $_debugReplacePrivateDataKeys = [
-        'UserId', 'Password', 'AccessLicenseNumber'
+        'UserId',
+        'Password',
+        'AccessLicenseNumber',
     ];
 
     /**
@@ -372,9 +375,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $destCountry = self::USA_COUNTRY_ID;
         }
 
-        //for UPS, puero rico state for US will assume as puerto rico country
-        if ($destCountry == self::USA_COUNTRY_ID && ($request->getDestPostcode() == '00912' ||
-            $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
+        //for UPS, puerto rico state for US will assume as puerto rico country
+        if ($destCountry == self::USA_COUNTRY_ID
+            && ($request->getDestPostcode() == '00912'
+                || $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
         ) {
             $destCountry = self::PUERTORICO_COUNTRY_ID;
         }
@@ -1322,20 +1326,28 @@ XMLAuth;
     }
 
     /**
-     * Get allowed shipping methods
+     * Get allowed shipping methods.
      *
      * @return array
      */
     public function getAllowedMethods()
     {
-        $allowed = explode(',', $this->getConfigData('allowed_methods'));
-        $arr = [];
-        $isByCode = $this->getConfigData('type') == 'UPS_XML';
-        foreach ($allowed as $code) {
-            $arr[$code] = $isByCode ? $this->getShipmentByCode($code) : $this->configHelper->getCode('method', $code);
+        $allowedMethods = explode(',', (string)$this->getConfigData('allowed_methods'));
+        $isUpsXml = $this->getConfigData('type') === 'UPS_XML';
+        $origin = $this->getConfigData('origin_shipment');
+
+        $availableByTypeMethods = $isUpsXml
+            ? $this->configHelper->getCode('originShipment', $origin)
+            : $this->configHelper->getCode('method');
+
+        $methods = [];
+        foreach ($availableByTypeMethods as $methodCode => $methodData) {
+            if (in_array($methodCode, $allowedMethods)) {
+                $methods[$methodCode] = $methodData->getText();
+            }
         }
 
-        return $arr;
+        return $methods;
     }
 
     /**
@@ -1896,20 +1908,18 @@ XMLAuth;
                     ];
                 }
                 $containerTypes = $containerTypes + [
-                    '03' => __('UPS Tube'),
-                    '04' => __('PAK'),
-                    '2a' => __('Small Express Box'),
-                    '2b' => __('Medium Express Box'),
-                    '2c' => __('Large Express Box'),
-                ];
+                        '03' => __('UPS Tube'),
+                        '04' => __('PAK'),
+                        '2a' => __('Small Express Box'),
+                        '2b' => __('Medium Express Box'),
+                        '2c' => __('Large Express Box'),
+                    ];
             }
 
             return ['00' => __('Customer Packaging')] + $containerTypes;
-        } elseif ($countryShipper == self::USA_COUNTRY_ID &&
-            $countryRecipient == self::PUERTORICO_COUNTRY_ID &&
-            ($method == '03' ||
-            $method == '02' ||
-            $method == '01')
+        } elseif ($countryShipper == self::USA_COUNTRY_ID
+            && $countryRecipient == self::PUERTORICO_COUNTRY_ID
+            && in_array($method, ['01', '02', '03'])
         ) {
             // Container types should be the same as for domestic
             $params->setCountryRecipient(self::USA_COUNTRY_ID);
