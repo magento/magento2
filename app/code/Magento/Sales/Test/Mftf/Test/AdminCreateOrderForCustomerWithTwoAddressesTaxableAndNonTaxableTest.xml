@@ -45,6 +45,10 @@
         </actionGroup>
         <!--Step 2: Select taxable address as billing address-->
         <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_CA.state}}" stepKey="selectTaxableAddress" />
+        <waitForPageLoad stepKey="waitForChangeBillingAddress"/>
+        <!--Step 3: Set shipping address same as billing -->
+        <checkOption selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="checkSameAsBillingAddressCheckbox"/>
+        <waitForPageLoad stepKey="waitForChangeShippingAddress"/>
         <!--Step 3: Select FlatRate shipping method-->
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShippingMethod"/>
         <!--Step 4: Verify that tax is applied to the order-->
