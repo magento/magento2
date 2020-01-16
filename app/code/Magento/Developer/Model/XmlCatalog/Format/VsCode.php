@@ -123,7 +123,7 @@ class VsCode implements FormatInterface
  * See COPYING.txt for license details.
  */
 ');
-        $dom->appendChild($copyrigthComment);
+        $dom->appendChild($copyrightComment);
 
         $catalogNode = $dom->createElement('catalog');
         $catalogNode->setAttribute('xmlns', self::XMLNS);
