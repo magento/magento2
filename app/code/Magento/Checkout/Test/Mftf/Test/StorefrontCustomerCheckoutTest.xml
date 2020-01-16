@@ -12,7 +12,7 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via the Admin"/>
-            <title value="Customer Checkout via the Admin"/>
+            <title value="DEPRECATED Customer Checkout via the Admin"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
             <skip>
