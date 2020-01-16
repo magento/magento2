@@ -13,16 +13,6 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
     private $imageBuilderMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeManagerMock;
-
-    /**
-     * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $emulationMock;
-
-    /**
      * @var \Magento\ProductAlert\Block\Product\ImageProvider
      */
     private $model;
