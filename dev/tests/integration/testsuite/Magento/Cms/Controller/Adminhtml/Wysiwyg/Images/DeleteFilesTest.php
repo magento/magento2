@@ -105,6 +105,10 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     public function executeDataProvider(): array
     {
         return [
+            ['name with spaces.jpg'],
+            ['name with, comma.jpg'],
+            ['name with* asterisk.jpg'],
+            ['name with[ bracket.jpg'],
             ['magento_small_image.jpg'],
             ['_.jpg'],
             [' - .jpg'],
