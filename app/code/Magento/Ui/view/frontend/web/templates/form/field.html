@@ -6,11 +6,7 @@
 -->
 <div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: additionalClasses">
 
-    <label class="label" data-bind="attr: { for: element.uid }">
-        <!-- ko if: element.label -->
-        <span translate="element.label"></span>
-        <!-- /ko -->
-    </label>
+    <label class="label" data-bind="attr: { for: element.uid }"><!-- ko if: element.label --><span translate="element.label"></span><!-- /ko --></label>
 
     <div class="control" data-bind="css: {'_with-tooltip': element.tooltip}">
         <!-- ko ifnot: element.hasAddons() -->
