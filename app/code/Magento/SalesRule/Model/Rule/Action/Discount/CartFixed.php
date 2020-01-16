@@ -19,7 +19,7 @@ class CartFixed extends AbstractDiscount
      *
      * @var int[]
      */
-    protected $_cartFixedRuleUsedForAddress = [];
+    protected static $_cartFixedRuleUsedForAddress = [];
 
     /**
      * @var DeltaPriceRound
