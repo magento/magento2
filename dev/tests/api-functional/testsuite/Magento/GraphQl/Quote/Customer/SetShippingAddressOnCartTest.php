@@ -511,19 +511,6 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'missed_shipping_addresses' => [
-                'cart_id: "cart_id_value"',
-                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! ' .
-                'was not provided.',
-            ],
-            'missed_city' => [
-                'shipping_addresses: [ { address: { save_in_address_book: false } } ]',
-                'Field CartAddressInput.city of required type String! was not provided'
-            ],
-            'missed_cart_id' => [
-                'shipping_addresses: {}',
-                'Field SetShippingAddressesOnCartInput.cart_id of required type String! was not provided.'
-            ],
             'missed_region' => [
                 'cart_id: "cart_id_value"
                  shipping_addresses: [{
