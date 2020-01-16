@@ -10,7 +10,9 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\ConfigInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Wishlist item collection
@@ -157,6 +159,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @var ConfigInterface
      */
     private $salesConfig;
+
+    /**
+     * @var Store
+     */
+    protected $_store;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -373,7 +380,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         }
 
         if ($this->_productVisible) {
-            $rootCategoryId = $this->_storeManager->getStore()->getRootCategoryId();
+            $store = $this->getStore();
+            $rootCategoryId = $store->getRootCategoryId();
             $visibleInSiteIds = $this->_productVisibility->getVisibleInSiteIds();
             $visibilityConditions = [
                 "cat_index.product_id = {$mainTableName}.product_id",
@@ -381,7 +389,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $connection->quoteInto('cat_index.visibility IN (?)', $visibleInSiteIds)
             ];
             $this->getSelect()->join(
-                ['cat_index' => $this->tableMaintainer->getMainTable($this->_storeManager->getStore()->getId())],
+                ['cat_index' => $this->tableMaintainer->getMainTable($store->getId())],
                 join(' AND ', $visibilityConditions),
                 []
             );
@@ -658,6 +666,32 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * Retrieve store object
+     *
+     * @return \Magento\Store\Model\Store
+     * @throws NoSuchEntityException
+     */
+    public function getStore()
+    {
+        if ($this->_store === null) {
+            $this->setStore($this->_storeManager->getStore());
+        }
+        return $this->_store;
+    }
+
+    /**
+     * Set store
+     *
+     * @param Store $store
+     * @return $this
+     */
+    public function setStore($store)
+    {
+        $this->_store = $store;
         return $this;
     }
 }
