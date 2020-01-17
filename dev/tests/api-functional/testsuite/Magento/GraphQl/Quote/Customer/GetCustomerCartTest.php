@@ -28,11 +28,38 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        /** @var $order \Magento\Quote\Model\Quote */
+        $quoteCollection = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\ResourceModel\Quote\Collection::class);
+        foreach ($quoteCollection as $quote) {
+            $quote->delete();
+        }
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+
+        parent::tearDown();
     }
 
     /**
@@ -87,7 +114,6 @@ class GetCustomerCartTest extends GraphQlAbstract
      * Query for customer cart for a user with no existing active cart
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/rollback_quote.php
      */
     public function testGetNewCustomerCart()
     {
@@ -138,7 +164,6 @@ class GetCustomerCartTest extends GraphQlAbstract
      * Querying for the customer cart twice->should return the same cart
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/rollback_quote.php
      */
     public function testRequestCustomerCartTwice()
     {
@@ -161,7 +186,6 @@ class GetCustomerCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
-     * @magentoApiDataFixture Magento/Checkout/_files/rollback_quote.php
      */
     public function testGetInactiveCustomerCart()
     {
@@ -176,7 +200,6 @@ class GetCustomerCartTest extends GraphQlAbstract
     /**
      * Querying for an existing customer cart for second store
      *
-     * @magentoApiDataFixture Magento/Checkout/_files/rollback_quote.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
      */
     public function testGetCustomerCartSecondStore()
