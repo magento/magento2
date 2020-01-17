@@ -91,7 +91,10 @@
             <group value="Downloadable"/>
         </annotations>
         <before>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="product"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin" before="product"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts" after="loginAsAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin" after="deleteAllProducts"/>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" after="logoutFromAdmin"/>
             <createData entity="ApiDownloadableProduct" stepKey="product"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="product"/>
