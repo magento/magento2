@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminNewsletterConfigFieldGuestNotAllowedActionGroup">
+        <amOnPage url="{{AdminNewsletterConfigPage.url}}" stepKey="amOnNewsletterConfigPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminNewsletterConfigPageSubscriptionOptionsSection.allowGuestSubscription}}" stepKey="allowEdit"/>
+        <selectOption selector="{{AdminNewsletterConfigPageSubscriptionOptionsSection.guestSubscription}}" userInput="No" stepKey="noGuestSubscription"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveNewsletterConfig"/>
+    </actionGroup>
+</actionGroups>
