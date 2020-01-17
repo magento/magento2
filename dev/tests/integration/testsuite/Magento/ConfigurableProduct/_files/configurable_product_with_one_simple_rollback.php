@@ -9,22 +9,24 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 
-/** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-/** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
-try {
-    $product = $productRepository->get('simple-product-tax-none', false, null, true);
-    $productRepository->delete($product);
-} catch (NoSuchEntityException $e) {
-    // isolation on
+
+foreach (['simple_1', 'configurable'] as $sku) {
+    try {
+        $product = $productRepository->get($sku);
+        $productRepository->delete($product);
+    } catch (NoSuchEntityException $e) {
+        //Product already removed
+    }
 }
-$productRepository->cleanCache();
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+require __DIR__ . '/configurable_attribute_rollback.php';
