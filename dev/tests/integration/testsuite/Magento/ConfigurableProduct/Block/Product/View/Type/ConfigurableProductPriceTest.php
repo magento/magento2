@@ -10,11 +10,9 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Block\Product\View\Options;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Result\Page;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -57,6 +55,7 @@ class ConfigurableProductPriceTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->page = $this->objectManager->get(Page::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->productCustomOption = $this->objectManager->get(ProductCustomOptionInterface::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
     }
@@ -124,7 +123,8 @@ class ConfigurableProductPriceTest extends TestCase
         $product = $this->productRepository->get('configurable');
         $this->registerProduct($product);
         $this->preparePageLayout();
-        $customOptionsBlock = $this->getProductOptionsBlock();
+        $customOptionsBlock = $this->page->getLayout()
+            ->getChildBlock('product.info.options.wrapper', 'product_options');
         $option = $product->getOptions()[0] ?? null;
         $this->assertNotNull($option);
         $this->assertJsonConfig($customOptionsBlock->getJsonConfig(), '15', (int)$option->getId());
@@ -175,20 +175,6 @@ class ConfigurableProductPriceTest extends TestCase
         $this->preparePageLayout();
 
         return $this->page->getLayout()->getBlock('product.price.final')->toHtml();
-    }
-
-    /**
-     * Get product options block.
-     *
-     * @return Options
-     */
-    private function getProductOptionsBlock(): Options
-    {
-        /** @var Template $productOptionsWrapperBlock */
-        $productOptionsWrapperBlock = $this->page->getLayout()
-            ->getChildBlock('product.info.form.options', 'product_options_wrapper');
-
-        return $productOptionsWrapperBlock->getChildBlock('product_options');
     }
 
     /**

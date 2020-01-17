@@ -14,9 +14,7 @@ use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Result\Page;
-use Magento\Store\Model\Store;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -56,6 +54,7 @@ class PriceTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->page = $this->objectManager->get(Page::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->json = $this->objectManager->get(SerializerInterface::class);
     }
 
@@ -151,7 +150,7 @@ class PriceTest extends TestCase
     private function updateProducts(array $data): void
     {
         foreach ($data as $sku => $updateData) {
-            $product = $this->productRepository->get($sku, false, Store::DEFAULT_STORE_ID);
+            $product = $this->productRepository->get($sku);
             $product->addData($updateData);
             $this->productRepository->save($product);
         }
@@ -182,10 +181,7 @@ class PriceTest extends TestCase
             'catalog_product_view_type_configurable',
         ]);
         $this->page->getLayout()->generateXml();
-        /** @var Template $productOptionsWrapperBlock */
-        $productOptionsWrapperBlock = $this->page->getLayout()
-            ->getChildBlock('product.info.form.options', 'product_options_wrapper');
 
-        return $productOptionsWrapperBlock->getChildBlock('swatch_options');
+        return $this->page->getLayout()->getChildBlock('product.info.options.wrapper', 'swatch_options');
     }
 }
