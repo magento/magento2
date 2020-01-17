@@ -31,6 +31,8 @@ class PriorityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify before save in chainable
+     *
      * @param string $value
      * @dataProvider dataProviderTestBeforeSaveValueCorrect
      */
@@ -44,6 +46,8 @@ class PriorityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify before save value out of range
+     *
      * @param string $value
      * @dataProvider dataProviderTestBeforeSaveValueOutOfRange
      */
@@ -60,6 +64,8 @@ class PriorityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider
+     *
      * @return array
      */
     public function dataProviderTestBeforeSaveValueCorrect()
@@ -70,6 +76,8 @@ class PriorityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider
+     *
      * @return array
      */
     public function dataProviderTestBeforeSaveValueOutOfRange()
