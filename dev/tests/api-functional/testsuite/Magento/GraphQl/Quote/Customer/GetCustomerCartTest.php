@@ -11,6 +11,8 @@ use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Quote\Model\ResourceModel\Quote\Collection;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -29,15 +31,15 @@ class GetCustomerCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     protected function setUp()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
     }
 
     /**
@@ -45,8 +47,8 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     protected function tearDown()
     {
-        /** @var $order \Magento\Quote\Model\Quote */
-        $quoteCollection = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\ResourceModel\Quote\Collection::class);
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quoteCollection = $this->objectManager->create(Collection::class);
         foreach ($quoteCollection as $quote) {
             $quote->delete();
         }
