@@ -9,17 +9,13 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Customer\Model\Group;
+use Magento\Catalog\Block\Product\View\Options;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Result\Page;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -29,12 +25,9 @@ use PHPUnit\Framework\TestCase;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  * @magentoAppArea frontend
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableProductPriceTest extends TestCase
 {
-    private const FINAL_PRICE_BLOCK_NAME = 'product.price.final';
-
     /** @var ObjectManagerInterface */
     private $objectManager;
 
@@ -46,9 +39,6 @@ class ConfigurableProductPriceTest extends TestCase
 
     /** @var Page */
     private $page;
-
-    /** @var StoreManagerInterface */
-    private $storeManager;
 
     /** @var ProductCustomOptionInterface */
     private $productCustomOption;
@@ -67,7 +57,6 @@ class ConfigurableProductPriceTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->page = $this->objectManager->get(Page::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->productCustomOption = $this->objectManager->get(ProductCustomOptionInterface::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
     }
@@ -135,107 +124,13 @@ class ConfigurableProductPriceTest extends TestCase
         $product = $this->productRepository->get('configurable');
         $this->registerProduct($product);
         $this->preparePageLayout();
-        $customOptionsBlock = $this->getProductOptionsBlock('product_options');
+        $customOptionsBlock = $this->getProductOptionsBlock();
         $option = $product->getOptions()[0] ?? null;
         $this->assertNotNull($option);
         $this->assertJsonConfig($customOptionsBlock->getJsonConfig(), '15', (int)$option->getId());
         $optionBlock = $customOptionsBlock->getChildBlock($this->productCustomOption->getGroupByType('area'));
         $optionPrice = $optionBlock->setProduct($product)->setOption($option)->getFormattedPrice();
         $this->assertEquals('+$15.00', preg_replace('/[\n\s]/', '', strip_tags($optionPrice)));
-    }
-
-    /**
-     * @dataProvider childProductsDataProvider
-     * @magentoDataFixture Magento/Swatches/_files/configurable_product_visual_swatch_attribute.php
-     * @magentoCache config disabled
-     *
-     * @param array $updateData
-     * @param array $expectedData
-     * @return void
-     */
-    public function testConfigurableOptionPrices(array $updateData, array $expectedData): void
-    {
-        $this->updateProducts($updateData);
-        $product = $this->productRepository->get('configurable');
-        $this->registerProduct($product);
-        $this->preparePageLayout();
-        $configurableOptions = $this->getProductOptionsBlock('swatch_options')->getJsonConfig();
-        $optionPrices = $this->json->unserialize($configurableOptions)['optionPrices'];
-        $this->assertEquals($expectedData, array_values($optionPrices));
-    }
-
-    /**
-     * @return array
-     */
-    public function childProductsDataProvider(): array
-    {
-        return [
-            [
-                'update_data' => [
-                    'simple_option_1' => [
-                        'special_price' => 50,
-                    ],
-                    'simple_option_2' => [
-                        'special_price' => 58.55,
-                    ],
-                    'simple_option_3' => [
-                        'tier_price' => [
-                            [
-                                'website_id' => 0,
-                                'cust_group' => Group::CUST_GROUP_ALL,
-                                'price_qty' => 1,
-                                'value_type' => TierPriceInterface::PRICE_TYPE_FIXED,
-                                'price' => 75,
-                            ],
-                        ],
-                    ],
-                ],
-                'expected_data' => [
-                    [
-                        'oldPrice' => ['amount' => 150],
-                        'basePrice' => ['amount' => 50],
-                        'finalPrice' => ['amount' => 50],
-                        'tierPrices' => [],
-                        'msrpPrice' => ['amount' => null],
-                    ],
-                    [
-                        'oldPrice' => ['amount' => 150],
-                        'basePrice' => ['amount' => 58.55],
-                        'finalPrice' => ['amount' => 58.55],
-                        'tierPrices' => [],
-                        'msrpPrice' => ['amount' => null],
-                    ],
-                    [
-                        'oldPrice' => ['amount' => 150],
-                        'basePrice' => ['amount' => 75],
-                        'finalPrice' => ['amount' => 75],
-                        'tierPrices' => [],
-                        'msrpPrice' => ['amount' => null],
-                    ],
-                ]
-            ],
-        ];
-    }
-
-    /**
-     * Update products.
-     *
-     * @param array $data
-     * @return void
-     */
-    private function updateProducts(array $data): void
-    {
-        $currentStore = $this->storeManager->getStore();
-        try {
-            $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-            foreach ($data as $sku => $updateData) {
-                $product = $this->productRepository->get($sku);
-                $product->addData($updateData);
-                $this->productRepository->save($product);
-            }
-        } finally {
-            $this->storeManager->setCurrentStore($currentStore);
-        }
     }
 
     /**
@@ -279,22 +174,21 @@ class ConfigurableProductPriceTest extends TestCase
         $this->registerProduct($product);
         $this->preparePageLayout();
 
-        return $this->page->getLayout()->getBlock(self::FINAL_PRICE_BLOCK_NAME)->toHtml();
+        return $this->page->getLayout()->getBlock('product.price.final')->toHtml();
     }
 
     /**
      * Get product options block.
      *
-     * @param string
-     * @return AbstractBlock
+     * @return Options
      */
-    private function getProductOptionsBlock(string $nameOptionBlock): AbstractBlock
+    private function getProductOptionsBlock(): Options
     {
-        /** @var Template $productInfoFormOptionsBlock */
-        $productInfoFormOptionsBlock = $this->page->getLayout()->getBlock('product.info.form.options');
-        $productOptionsWrapperBlock = $productInfoFormOptionsBlock->getChildBlock('product_options_wrapper');
+        /** @var Template $productOptionsWrapperBlock */
+        $productOptionsWrapperBlock = $this->page->getLayout()
+            ->getChildBlock('product.info.form.options', 'product_options_wrapper');
 
-        return $productOptionsWrapperBlock->getChildBlock($nameOptionBlock);
+        return $productOptionsWrapperBlock->getChildBlock('product_options');
     }
 
     /**
