@@ -66,7 +66,7 @@ abstract class AbstractCurrencyTest extends TestCase
      * @param bool $isTierPrice
      * @return string
      */
-    protected function processPriceView(string $productSku, $isTierPrice = false): string
+    protected function processPriceView(string $productSku, bool $isTierPrice = false): string
     {
         $this->registerProduct($productSku);
 
