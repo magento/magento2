@@ -21,14 +21,13 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
             closeModal: jasmine.createSpy()
         },
         country = {
-            /** Stub */
-            on: function () {},
-
-            /** Stub */
-            get: function () {},
-
-            /** Stub */
-            set: function () {}
+            indexedOptions: {
+                'AD': {
+                    label: 'Andorra',
+                    labeltitle: 'Andorra',
+                    value: 'AD'
+                }
+            }
         },
         mocks = {
             'Magento_Customer/js/model/customer': {
@@ -38,7 +37,17 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
             'Magento_Checkout/js/model/address-converter': jasmine.createSpy(),
             'Magento_Checkout/js/model/quote': {
                 isVirtual: jasmine.createSpy(),
-                shippingMethod: ko.observable()
+                shippingMethod: ko.observable(),
+
+                /**
+                 * Stub
+                 */
+                shippingAddress: function () {
+
+                    return {
+                        'countryId': 'AD'
+                    };
+                }
             },
             'Magento_Checkout/js/action/create-shipping-address': jasmine.createSpy().and.returnValue(
                 jasmine.createSpyObj('newShippingAddress', ['getKey'])
@@ -85,6 +94,7 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
                 provider: 'provName',
                 name: '',
                 index: '',
+                parentName: 'test',
                 popUpForm: {
                     options: {
                         buttons: {
