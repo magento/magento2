@@ -45,7 +45,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
             ->method('saveAuthJson')
             ->willReturn(true);
         $jsonModel = $this->controller->saveAuthJsonAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
@@ -59,7 +59,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception));
         $this->packagesAuth->expects($this->never())->method('saveAuthJson');
         $jsonModel = $this->controller->saveAuthJsonAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('message', $variables);
@@ -77,7 +77,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
             ->method('checkCredentials')
             ->will($this->returnValue(json_encode(['success' => true])));
         $jsonModel = $this->controller->checkAuthAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
@@ -90,7 +90,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
             ->method('getAuthJsonData')
             ->will($this->throwException(new \Exception));
         $jsonModel = $this->controller->checkAuthAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('message', $variables);
@@ -105,7 +105,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
 
         $jsonModel = $this->controller->removeCredentialsAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
@@ -118,7 +118,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
             ->method('removeCredentials')
             ->will($this->throwException(new \Exception));
         $jsonModel = $this->controller->removeCredentialsAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('message', $variables);
@@ -128,13 +128,13 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
     public function testPopupAuthAction()
     {
         $viewModel = $this->controller->popupAuthAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
     public function testIndexAction()
     {
         $model = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $model);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $model);
     }
 }

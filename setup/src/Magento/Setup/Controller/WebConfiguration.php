@@ -7,8 +7,8 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\SetupInfo;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
 class WebConfiguration extends AbstractActionController
 {

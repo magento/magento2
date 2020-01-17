@@ -5,8 +5,8 @@
  */
 
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-use Zend\Mvc\Service\DiAbstractServiceFactoryFactory;
-use Zend\ServiceManager\Di\DiAbstractServiceFactory;
+use Laminas\Mvc\Service\DiAbstractServiceFactoryFactory;
+use Laminas\ServiceManager\Di\DiAbstractServiceFactory;
 
 return [
     'modules' => [

@@ -36,7 +36,7 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
         $this->interceptedResponse->sendResponse();
 
         $header = $this->interceptedResponse->getHeader($name);
-        $this->assertTrue(is_subclass_of($header, \Zend\Http\Header\HeaderInterface::class, false));
+        $this->assertTrue(is_subclass_of($header, \Laminas\Http\Header\HeaderInterface::class, false));
         $this->assertSame(
             $value,
             $header->getFieldValue()

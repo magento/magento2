@@ -24,7 +24,7 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
         $controller = new Success($moduleList, $objectManagerProvider);
         $sampleDataState->expects($this->once())->method('hasError');
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 }

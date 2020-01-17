@@ -6,7 +6,7 @@
 namespace Magento\Framework\Oauth\Helper;
 
 use Magento\Framework\App\RequestInterface;
-use Zend\Uri\UriFactory;
+use Laminas\Uri\UriFactory;
 
 class Request
 {

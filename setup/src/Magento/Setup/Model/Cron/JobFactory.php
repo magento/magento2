@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Magento\Setup\Console\Command\UpgradeCommand;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Console\Command\MaintenanceDisableCommand;
 use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 

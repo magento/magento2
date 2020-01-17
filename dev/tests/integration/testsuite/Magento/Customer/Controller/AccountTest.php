@@ -29,7 +29,7 @@ use Magento\TestFramework\Request;
 use Magento\TestFramework\Response;
 use Magento\Theme\Controller\Result\MessagePlugin;
 use PHPUnit\Framework\Constraint\StringContains;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -832,14 +832,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        /** @var \Zend\Mime\Part $messageBodyPart */
+        /** @var \Laminas\Mime\Part $messageBodyPart */
         $messageBodyParts = $message->getBody()->getParts();
         $messageBodyPart = reset($messageBodyParts);
         $messageEncoding = $messageBodyPart->getCharset();
         $name = 'John Smith';
 
         if (strtoupper($messageEncoding) !== 'ASCII') {
-            $name = \Zend\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
+            $name = \Laminas\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
         }
 
         $nameEmail = sprintf('%s <%s>', $name, $email);

@@ -7,7 +7,7 @@ namespace Magento\Setup\Module;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Module\Setup\ResourceConfig;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class ResourceFactory
 {

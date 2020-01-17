@@ -29,7 +29,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $serviceManager =
-            $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, [], '', false);
+            $this->getMockForAbstractClass(\Laminas\ServiceManager\ServiceLocatorInterface::class, [], '', false);
         $status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
         $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');
         $status->expects($this->once())->method('getLogFilePath')->willReturn('path_b');

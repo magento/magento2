@@ -167,7 +167,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
      * Retrieve list of classes and interfaces declared in the file
      *
      * @param string $file
-     * @return \Zend\Code\Scanner\ClassScanner[]
+     * @return \Laminas\Code\Scanner\ClassScanner[]
      */
     private function getDeclaredClassesAndInterfaces($file)
     {

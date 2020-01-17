@@ -501,7 +501,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
             }
 
             // Remove usage of classes that have been declared as "use" or "include"
-            // Also deals with case like: "use \Zend\Code\Scanner\FileScanner, Magento\Tools\Di\Compiler\Log\Log;"
+            // Also deals with case like: "use \Laminas\Code\Scanner\FileScanner, Magento\Tools\Di\Compiler\Log\Log;"
             // (continued) where there is a comma separating two different classes.
             if (preg_match('/use\s.*[\\n]?.*' . str_replace('\\', '\\\\', $badClass) . '[\,\;]/', $contents)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);

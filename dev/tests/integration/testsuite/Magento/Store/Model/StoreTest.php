@@ -11,7 +11,7 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

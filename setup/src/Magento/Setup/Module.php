@@ -8,11 +8,11 @@ namespace Magento\Setup;
 
 use Magento\Framework\App\Response\HeaderProvider\XssProtection;
 use Magento\Setup\Mvc\View\Http\InjectTemplateListener;
-use Zend\EventManager\EventInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
+use Laminas\EventManager\EventInterface;
+use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
+use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+use Laminas\Mvc\ModuleRouteListener;
+use Laminas\Mvc\MvcEvent;
 
 class Module implements
     BootstrapListenerInterface,
@@ -23,28 +23,28 @@ class Module implements
      */
     public function onBootstrap(EventInterface $e)
     {
-        /** @var \Zend\Mvc\MvcEvent $e */
-        /** @var \Zend\Mvc\Application $application */
+        /** @var \Laminas\Mvc\MvcEvent $e */
+        /** @var \Laminas\Mvc\Application $application */
         $application = $e->getApplication();
-        /** @var \Zend\EventManager\EventManager $events */
+        /** @var \Laminas\EventManager\EventManager $events */
         $events = $application->getEventManager();
-        /** @var \Zend\EventManager\SharedEventManager $sharedEvents */
+        /** @var \Laminas\EventManager\SharedEventManager $sharedEvents */
         $sharedEvents = $events->getSharedManager();
 
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($events);
 
-        // Override Zend\Mvc\View\Http\InjectTemplateListener
+        // Override Laminas\Mvc\View\Http\InjectTemplateListener
         // to process templates by Vendor/Module
         $injectTemplateListener = new InjectTemplateListener();
         $sharedEvents->attach(
-            \Zend\Stdlib\DispatchableInterface::class,
+            \Laminas\Stdlib\DispatchableInterface::class,
             MvcEvent::EVENT_DISPATCH,
             [$injectTemplateListener, 'injectTemplate'],
             -89
         );
         $response = $e->getResponse();
-        if ($response instanceof \Zend\Http\Response) {
+        if ($response instanceof \Laminas\Http\Response) {
             $headers = $response->getHeaders();
             if ($headers) {
                 $headers->addHeaderLine('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -52,7 +52,7 @@ class Module implements
                 $headers->addHeaderLine('Expires', '1970-01-01');
                 $headers->addHeaderLine('X-Frame-Options: SAMEORIGIN');
                 $headers->addHeaderLine('X-Content-Type-Options: nosniff');
-                /** @var \Zend\Http\Header\UserAgent $userAgentHeader */
+                /** @var \Laminas\Http\Header\UserAgent $userAgentHeader */
                 $userAgentHeader = $e->getRequest()->getHeader('User-Agent');
                 $xssHeaderValue = $userAgentHeader && $userAgentHeader->getFieldValue()
                     && strpos($userAgentHeader->getFieldValue(), XssProtection::IE_8_USER_AGENT) === false

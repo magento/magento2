@@ -33,7 +33,7 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $zendServiceLocator = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $zendServiceLocator = $this->createMock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $zendServiceLocator
             ->expects($this->any())
             ->method('get')

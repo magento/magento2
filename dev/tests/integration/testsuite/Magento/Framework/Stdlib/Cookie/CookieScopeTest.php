@@ -9,7 +9,7 @@ namespace Magento\Framework\Stdlib\Cookie;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Test CookieScope

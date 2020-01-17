@@ -13,12 +13,12 @@ use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeInterface;
-use Zend\Mail\Message;
-use Zend\Mail\Transport\Sendmail;
+use Laminas\Mail\Message;
+use Laminas\Mail\Transport\Sendmail;
 
 /**
  * Class that responsible for filling some message data before transporting it.
- * @see \Zend\Mail\Transport\Sendmail is used for transport
+ * @see \Laminas\Mail\Transport\Sendmail is used for transport
  */
 class Transport implements TransportInterface
 {

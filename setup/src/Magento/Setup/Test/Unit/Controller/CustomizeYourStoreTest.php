@@ -71,7 +71,7 @@ class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
 
         $viewModel = $this->controller->indexAction();
 
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
 
         $variables = $viewModel->getVariables();
@@ -109,7 +109,7 @@ class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
     public function testDefaultTimeZoneAction()
     {
         $jsonModel = $this->controller->defaultTimeZoneAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $this->assertArrayHasKey('defaultTimeZone', $jsonModel->getVariables());
     }
 }

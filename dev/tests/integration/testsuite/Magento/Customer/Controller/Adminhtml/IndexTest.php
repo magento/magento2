@@ -398,7 +398,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('id', 1);
         $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
 
-        $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_POST);
+        $this->getRequest()->setMethod(\Laminas\Http\Request::METHOD_POST);
 
         $this->dispatch('backend/customer/index/delete');
         $this->assertRedirect($this->stringContains('customer/index'));
@@ -416,7 +416,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('id', 2);
         $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
 
-        $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_POST);
+        $this->getRequest()->setMethod(\Laminas\Http\Request::METHOD_POST);
 
         $this->dispatch('backend/customer/index/delete');
         $this->assertRedirect($this->stringContains('customer/index'));

@@ -12,8 +12,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Controller\Index\Render;
 use Magento\Ui\Model\UiComponentTypeResolver;
-use Zend\Http\AbstractMessage;
-use Zend\Http\Response;
+use Laminas\Http\AbstractMessage;
+use Laminas\Http\Response;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

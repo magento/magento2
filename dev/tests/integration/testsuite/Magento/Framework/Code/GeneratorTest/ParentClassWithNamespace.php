@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\GeneratorTest;
 
-use Zend\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
 
 /**
  * phpcs:ignoreFile
@@ -15,7 +15,7 @@ class ParentClassWithNamespace
     /**
      * Public parent method
      *
-     * @param \Zend\Code\Generator\DocBlockGenerator $docBlockGenerator
+     * @param \Laminas\Code\Generator\DocBlockGenerator $docBlockGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -35,7 +35,7 @@ class ParentClassWithNamespace
     /**
      * Protected parent method
      *
-     * @param \Zend\Code\Generator\DocBlockGenerator $docBlockGenerator
+     * @param \Laminas\Code\Generator\DocBlockGenerator $docBlockGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -55,7 +55,7 @@ class ParentClassWithNamespace
     /**
      * Private parent method
      *
-     * @param \Zend\Code\Generator\DocBlockGenerator $docBlockGenerator
+     * @param \Laminas\Code\Generator\DocBlockGenerator $docBlockGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3

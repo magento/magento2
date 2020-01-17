@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Controller of homepage of setup
@@ -15,7 +15,7 @@ use Zend\View\Model\ViewModel;
 class Home extends AbstractActionController
 {
     /**
-     * @return ViewModel|\Zend\Http\Response
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {

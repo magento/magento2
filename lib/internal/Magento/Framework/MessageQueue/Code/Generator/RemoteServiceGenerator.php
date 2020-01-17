@@ -11,7 +11,7 @@ use Magento\Framework\Communication\Config\ReflectionGenerator;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
-use Zend\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\MethodReflection;
 
 /**
  * Code generator for remote services.
@@ -131,7 +131,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
             $sourceMethodParameters = $methodReflection->getParameters();
             $methodParameters = [];
             $topicParameters = [];
-            /** @var \Zend\Code\Reflection\ParameterReflection $methodParameter */
+            /** @var \Laminas\Code\Reflection\ParameterReflection $methodParameter */
             foreach ($sourceMethodParameters as $methodParameter) {
                 $parameterName = $methodParameter->getName();
                 $parameter = [

@@ -11,7 +11,7 @@ use Magento\Setup\Model\Grid;
 /**
  * Controller for module grid tasks
  */
-class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
+class ModuleGrid extends \Laminas\Mvc\Controller\AbstractActionController
 {
     /**
      * Module grid
@@ -32,11 +32,11 @@ class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
     /**
      * Index page action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel();
+        $view = new \Laminas\View\Model\ViewModel();
         $view->setTerminal(true);
         return $view;
     }
@@ -44,14 +44,14 @@ class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
     /**
      * Get Components info action
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      * @throws \RuntimeException
      */
     public function modulesAction()
     {
         $moduleList = $this->gridModule->getList();
 
-        return new \Zend\View\Model\JsonModel(
+        return new \Laminas\View\Model\JsonModel(
             [
                 'success' => true,
                 'modules' => $moduleList,

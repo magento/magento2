@@ -5,7 +5,7 @@
  */
 namespace Magento\Webapi\Model\Config;
 
-use Zend\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\MethodReflection;
 
 /**
  * Class reflector.
@@ -64,8 +64,8 @@ class ClassReflector
     public function reflectClassMethods($className, $methods)
     {
         $data = [];
-        $classReflection = new \Zend\Code\Reflection\ClassReflection($className);
-        /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
+        $classReflection = new \Laminas\Code\Reflection\ClassReflection($className);
+        /** @var \Laminas\Code\Reflection\MethodReflection $methodReflection */
         foreach ($classReflection->getMethods() as $methodReflection) {
             $methodName = $methodReflection->getName();
             if (in_array($methodName, $methods) || array_key_exists($methodName, $methods)) {
@@ -78,14 +78,14 @@ class ClassReflector
     /**
      * Retrieve method interface and documentation description.
      *
-     * @param \Zend\Code\Reflection\MethodReflection $method
+     * @param \Laminas\Code\Reflection\MethodReflection $method
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function extractMethodData(\Zend\Code\Reflection\MethodReflection $method)
+    public function extractMethodData(\Laminas\Code\Reflection\MethodReflection $method)
     {
         $methodData = ['documentation' => $this->extractMethodDescription($method), 'interface' => []];
-        /** @var \Zend\Code\Reflection\ParameterReflection $parameter */
+        /** @var \Laminas\Code\Reflection\ParameterReflection $parameter */
         foreach ($method->getParameters() as $parameter) {
             $parameterData = [
                 'type' => $this->_typeProcessor->register($this->_typeProcessor->getParamType($parameter)),
@@ -116,10 +116,10 @@ class ClassReflector
     /**
      * Retrieve method full documentation description.
      *
-     * @param \Zend\Code\Reflection\MethodReflection $method
+     * @param \Laminas\Code\Reflection\MethodReflection $method
      * @return string
      */
-    protected function extractMethodDescription(\Zend\Code\Reflection\MethodReflection $method)
+    protected function extractMethodDescription(\Laminas\Code\Reflection\MethodReflection $method)
     {
         $methodReflection = new MethodReflection(
             $method->getDeclaringClass()->getName(),
@@ -144,7 +144,7 @@ class ClassReflector
      */
     public function extractClassDescription($className)
     {
-        $classReflection = new \Zend\Code\Reflection\ClassReflection($className);
+        $classReflection = new \Laminas\Code\Reflection\ClassReflection($className);
         $docBlock = $classReflection->getDocBlock();
         if (!$docBlock) {
             return '';

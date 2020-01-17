@@ -1870,13 +1870,13 @@
                 "symfony/console": "~4.1.0",
                 "symfony/process": "~4.1.0",
                 "tedivm/jshrink": "~1.3.0",
-                "zendframework/zend-code": "~3.3.0",
-                "zendframework/zend-crypt": "^2.6.0",
-                "zendframework/zend-http": "^2.6.0",
-                "zendframework/zend-mvc": "~2.7.0",
-                "zendframework/zend-stdlib": "^2.7.7",
-                "zendframework/zend-uri": "^2.5.1",
-                "zendframework/zend-validator": "^2.6.0"
+                "laminas/laminas-code": "~3.3.0",
+                "laminas/laminas-crypt": "^2.6.0",
+                "laminas/laminas-http": "^2.6.0",
+                "laminas/laminas-mvc": "~2.7.0",
+                "laminas/laminas-stdlib": "^2.7.7",
+                "laminas/laminas-uri": "^2.5.1",
+                "laminas/laminas-validator": "^2.6.0"
             },
             "suggest": {
                 "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
@@ -2335,28 +2335,28 @@
                 "symfony/event-dispatcher": "~4.1.0",
                 "tedivm/jshrink": "~1.3.0",
                 "tubalmartin/cssmin": "4.1.1",
-                "zendframework/zend-code": "~3.3.0",
-                "zendframework/zend-config": "^2.6.0",
-                "zendframework/zend-console": "^2.6.0",
-                "zendframework/zend-crypt": "^2.6.0",
-                "zendframework/zend-di": "^2.6.1",
-                "zendframework/zend-eventmanager": "^2.6.3",
-                "zendframework/zend-form": "^2.10.0",
-                "zendframework/zend-http": "^2.6.0",
-                "zendframework/zend-i18n": "^2.7.3",
-                "zendframework/zend-json": "^2.6.1",
-                "zendframework/zend-log": "^2.9.1",
-                "zendframework/zend-modulemanager": "^2.7",
-                "zendframework/zend-mvc": "~2.7.0",
-                "zendframework/zend-serializer": "^2.7.2",
-                "zendframework/zend-server": "^2.6.1",
-                "zendframework/zend-servicemanager": "^2.7.8",
-                "zendframework/zend-soap": "^2.7.0",
-                "zendframework/zend-stdlib": "^2.7.7",
-                "zendframework/zend-text": "^2.6.0",
-                "zendframework/zend-uri": "^2.5.1",
-                "zendframework/zend-validator": "^2.6.0",
-                "zendframework/zend-view": "~2.10.0"
+                "laminas/laminas-code": "~3.3.0",
+                "laminas/laminas-config": "^2.6.0",
+                "laminas/laminas-console": "^2.6.0",
+                "laminas/laminas-crypt": "^2.6.0",
+                "laminas/laminas-di": "^2.6.1",
+                "laminas/laminas-eventmanager": "^2.6.3",
+                "laminas/laminas-form": "^2.10.0",
+                "laminas/laminas-http": "^2.6.0",
+                "laminas/laminas-i18n": "^2.7.3",
+                "laminas/laminas-json": "^2.6.1",
+                "laminas/laminas-log": "^2.9.1",
+                "laminas/laminas-modulemanager": "^2.7",
+                "laminas/laminas-mvc": "~2.7.0",
+                "laminas/laminas-serializer": "^2.7.2",
+                "laminas/laminas-server": "^2.6.1",
+                "laminas/laminas-servicemanager": "^2.7.8",
+                "laminas/laminas-soap": "^2.7.0",
+                "laminas/laminas-stdlib": "^2.7.7",
+                "laminas/laminas-text": "^2.6.0",
+                "laminas/laminas-uri": "^2.5.1",
+                "laminas/laminas-validator": "^2.6.0",
+                "laminas/laminas-view": "~2.10.0"
             },
             "conflict": {
                 "gene/bluefoot": "*"
@@ -3485,9 +3485,9 @@
                 "magento/module-customer": "102.0.*",
                 "magento/module-store": "101.0.*",
                 "php": "~7.1.3||~7.2.0",
-                "zendframework/zend-captcha": "^2.7.1",
-                "zendframework/zend-db": "^2.8.2",
-                "zendframework/zend-session": "^2.7.3"
+                "laminas/laminas-captcha": "^2.7.1",
+                "laminas/laminas-db": "^2.8.2",
+                "laminas/laminas-session": "^2.7.3"
             },
             "type": "magento2-module",
             "autoload": {
@@ -9878,33 +9878,33 @@
                 "tubalmartin/cssmin": "4.1.1",
                 "vertex/product-magento-module": "3.1.0",
                 "webonyx/graphql-php": "^0.12.6",
-                "zendframework/zend-captcha": "^2.7.1",
-                "zendframework/zend-code": "~3.3.0",
-                "zendframework/zend-config": "^2.6.0",
-                "zendframework/zend-console": "^2.6.0",
-                "zendframework/zend-crypt": "^2.6.0",
-                "zendframework/zend-db": "^2.8.2",
-                "zendframework/zend-di": "^2.6.1",
-                "zendframework/zend-eventmanager": "^2.6.3",
-                "zendframework/zend-feed": "^2.9.0",
-                "zendframework/zend-form": "^2.10.0",
-                "zendframework/zend-http": "^2.6.0",
-                "zendframework/zend-i18n": "^2.7.3",
-                "zendframework/zend-json": "^2.6.1",
-                "zendframework/zend-log": "^2.9.1",
-                "zendframework/zend-mail": "^2.9.0",
-                "zendframework/zend-modulemanager": "^2.7",
-                "zendframework/zend-mvc": "~2.7.0",
-                "zendframework/zend-serializer": "^2.7.2",
-                "zendframework/zend-server": "^2.6.1",
-                "zendframework/zend-servicemanager": "^2.7.8",
-                "zendframework/zend-session": "^2.7.3",
-                "zendframework/zend-soap": "^2.7.0",
-                "zendframework/zend-stdlib": "^2.7.7",
-                "zendframework/zend-text": "^2.6.0",
-                "zendframework/zend-uri": "^2.5.1",
-                "zendframework/zend-validator": "^2.6.0",
-                "zendframework/zend-view": "~2.10.0"
+                "laminas/laminas-captcha": "^2.7.1",
+                "laminas/laminas-code": "~3.3.0",
+                "laminas/laminas-config": "^2.6.0",
+                "laminas/laminas-console": "^2.6.0",
+                "laminas/laminas-crypt": "^2.6.0",
+                "laminas/laminas-db": "^2.8.2",
+                "laminas/laminas-di": "^2.6.1",
+                "laminas/laminas-eventmanager": "^2.6.3",
+                "laminas/laminas-feed": "^2.9.0",
+                "laminas/laminas-form": "^2.10.0",
+                "laminas/laminas-http": "^2.6.0",
+                "laminas/laminas-i18n": "^2.7.3",
+                "laminas/laminas-json": "^2.6.1",
+                "laminas/laminas-log": "^2.9.1",
+                "laminas/laminas-mail": "^2.9.0",
+                "laminas/laminas-modulemanager": "^2.7",
+                "laminas/laminas-mvc": "~2.7.0",
+                "laminas/laminas-serializer": "^2.7.2",
+                "laminas/laminas-server": "^2.6.1",
+                "laminas/laminas-servicemanager": "^2.7.8",
+                "laminas/laminas-session": "^2.7.3",
+                "laminas/laminas-soap": "^2.7.0",
+                "laminas/laminas-stdlib": "^2.7.7",
+                "laminas/laminas-text": "^2.6.0",
+                "laminas/laminas-uri": "^2.5.1",
+                "laminas/laminas-validator": "^2.6.0",
+                "laminas/laminas-view": "~2.10.0"
             },
             "type": "metapackage",
             "license": [
@@ -12065,8 +12065,8 @@
                 "monolog/monolog": "^1.17.0",
                 "php": "~7.1.3||~7.2.0",
                 "psr/log": "~1.0",
-                "zendframework/zend-barcode": "^2.7.0",
-                "zendframework/zend-http": "^2.6.0"
+                "laminas/laminas-barcode": "^2.7.0",
+                "laminas/laminas-http": "^2.6.0"
             },
             "suggest": {
                 "magento/module-rma": "^101.1.0",
@@ -12399,29 +12399,29 @@
             "time": "2018-09-07T08:16:44+00:00"
         },
         {
-            "name": "zendframework/zend-barcode",
+            "name": "laminas/laminas-barcode",
             "version": "2.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-barcode.git",
+                "url": "https://github.com/laminas/laminas-barcode.git",
                 "reference": "50f24f604ef2172a0127efe91e786bc2caf2e8cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-barcode/zipball/50f24f604ef2172a0127efe91e786bc2caf2e8cf",
+                "url": "https://api.github.com/repos/laminas/laminas-barcode/zipball/50f24f604ef2172a0127efe91e786bc2caf2e8cf",
                 "reference": "50f24f604ef2172a0127efe91e786bc2caf2e8cf",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-servicemanager": "^2.7.8 || ^3.3",
-                "zendframework/zend-stdlib": "^2.7.7 || ^3.1",
-                "zendframework/zend-validator": "^2.10.1"
+                "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
+                "laminas/laminas-stdlib": "^2.7.7 || ^3.1",
+                "laminas/laminas-validator": "^2.10.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.23 || ^6.4.3",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-config": "^2.6 || ^3.1",
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-config": "^2.6 || ^3.1",
                 "zendframework/zendpdf": "^2.0.2"
             },
             "suggest": {
@@ -12436,7 +12436,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Barcode\\": "src/"
+                    "Laminas\\Barcode\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -12452,38 +12452,38 @@
             "time": "2017-12-11T15:30:02+00:00"
         },
         {
-            "name": "zendframework/zend-captcha",
+            "name": "laminas/laminas-captcha",
             "version": "2.8.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-captcha.git",
+                "url": "https://github.com/laminas/laminas-captcha.git",
                 "reference": "37e9b6a4f632a9399eecbf2e5e325ad89083f87b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-captcha/zipball/37e9b6a4f632a9399eecbf2e5e325ad89083f87b",
+                "url": "https://api.github.com/repos/laminas/laminas-captcha/zipball/37e9b6a4f632a9399eecbf2e5e325ad89083f87b",
                 "reference": "37e9b6a4f632a9399eecbf2e5e325ad89083f87b",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-math": "^2.7 || ^3.0",
-                "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
+                "laminas/laminas-math": "^2.7 || ^3.0",
+                "laminas/laminas-stdlib": "^2.7.7 || ^3.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-session": "^2.8",
-                "zendframework/zend-text": "^2.6",
-                "zendframework/zend-validator": "^2.10.1",
-                "zendframework/zendservice-recaptcha": "^3.0"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-session": "^2.8",
+                "laminas/laminas-text": "^2.6",
+                "laminas/laminas-validator": "^2.10.1",
+                "laminas/laminas-recaptcha": "^3.0"
             },
             "suggest": {
-                "zendframework/zend-i18n-resources": "Translations of captcha messages",
-                "zendframework/zend-session": "Zend\\Session component",
-                "zendframework/zend-text": "Zend\\Text component",
-                "zendframework/zend-validator": "Zend\\Validator component",
-                "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha component"
+                "laminas/laminas-i18n-resources": "Translations of captcha messages",
+                "laminas/laminas-session": "Laminas\\Session component",
+                "laminas/laminas-text": "Laminas\\Text component",
+                "laminas/laminas-validator": "Laminas\\Validator component",
+                "laminas/laminas-recaptcha": "Laminas\\ReCaptcha component"
             },
             "type": "library",
             "extra": {
@@ -12494,7 +12494,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Captcha\\": "src/"
+                    "Laminas\\Captcha\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -12510,33 +12510,33 @@
             "time": "2018-04-24T17:24:10+00:00"
         },
         {
-            "name": "zendframework/zend-code",
+            "name": "laminas/laminas-code",
             "version": "3.3.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-code.git",
+                "url": "https://github.com/laminas/laminas-code.git",
                 "reference": "c21db169075c6ec4b342149f446e7b7b724f95eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/c21db169075c6ec4b342149f446e7b7b724f95eb",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/c21db169075c6ec4b342149f446e7b7b724f95eb",
                 "reference": "c21db169075c6ec4b342149f446e7b7b724f95eb",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1",
-                "zendframework/zend-eventmanager": "^2.6 || ^3.0"
+                "laminas/laminas-eventmanager": "^2.6 || ^3.0"
             },
             "require-dev": {
                 "doctrine/annotations": "~1.0",
                 "ext-phar": "*",
                 "phpunit/phpunit": "^6.2.3",
-                "zendframework/zend-coding-standard": "^1.0.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-coding-standard": "^1.0.0",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "suggest": {
                 "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
-                "zendframework/zend-stdlib": "Zend\\Stdlib component"
+                "laminas/laminas-stdlib": "Laminas\\Stdlib component"
             },
             "type": "library",
             "extra": {
@@ -12547,7 +12547,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Code\\": "src/"
+                    "Laminas\\Code\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -12555,7 +12555,7 @@
                 "BSD-3-Clause"
             ],
             "description": "provides facilities to generate arbitrary code using an object oriented interface",
-            "homepage": "https://github.com/zendframework/zend-code",
+            "homepage": "https://github.com/laminas/laminas-code",
             "keywords": [
                 "code",
                 "zf2"
@@ -12563,36 +12563,36 @@
             "time": "2018-08-13T20:36:59+00:00"
         },
         {
-            "name": "zendframework/zend-config",
+            "name": "laminas/laminas-config",
             "version": "2.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-config.git",
+                "url": "https://github.com/laminas/laminas-config.git",
                 "reference": "2920e877a9f6dca9fa8f6bd3b1ffc2e19bb1e30d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-config/zipball/2920e877a9f6dca9fa8f6bd3b1ffc2e19bb1e30d",
+                "url": "https://api.github.com/repos/laminas/laminas-config/zipball/2920e877a9f6dca9fa8f6bd3b1ffc2e19bb1e30d",
                 "reference": "2920e877a9f6dca9fa8f6bd3b1ffc2e19bb1e30d",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.5 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0",
-                "zendframework/zend-filter": "^2.6",
-                "zendframework/zend-i18n": "^2.5",
-                "zendframework/zend-json": "^2.6.1",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
+                "laminas/laminas-filter": "^2.6",
+                "laminas/laminas-i18n": "^2.5",
+                "laminas/laminas-json": "^2.6.1",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3"
             },
             "suggest": {
-                "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-i18n": "Zend\\I18n component",
-                "zendframework/zend-json": "Zend\\Json to use the Json reader or writer classes",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager for use with the Config Factory to retrieve reader and writer instances"
+                "laminas/laminas-filter": "Laminas\\Filter component",
+                "laminas/laminas-i18n": "Laminas\\I18n component",
+                "laminas/laminas-json": "Laminas\\Json to use the Json reader or writer classes",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager for use with the Config Factory to retrieve reader and writer instances"
             },
             "type": "library",
             "extra": {
@@ -12603,7 +12603,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Config\\": "src/"
+                    "Laminas\\Config\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -12611,7 +12611,7 @@
                 "BSD-3-Clause"
             ],
             "description": "provides a nested object property based user interface for accessing this configuration data within application code",
-            "homepage": "https://github.com/zendframework/zend-config",
+            "homepage": "https://github.com/laminas/laminas-config",
             "keywords": [
                 "config",
                 "zf2"
@@ -12619,33 +12619,33 @@
             "time": "2016-02-04T23:01:10+00:00"
         },
         {
-            "name": "zendframework/zend-console",
+            "name": "laminas/laminas-console",
             "version": "2.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-console.git",
+                "url": "https://github.com/laminas/laminas-console.git",
                 "reference": "e8aa08da83de3d265256c40ba45cd649115f0e18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-console/zipball/e8aa08da83de3d265256c40ba45cd649115f0e18",
+                "url": "https://api.github.com/repos/laminas/laminas-console/zipball/e8aa08da83de3d265256c40ba45cd649115f0e18",
                 "reference": "e8aa08da83de3d265256c40ba45cd649115f0e18",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
+                "laminas/laminas-stdlib": "^2.7.7 || ^3.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.23 || ^6.4.3",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-filter": "^2.7.2",
-                "zendframework/zend-json": "^2.6 || ^3.0",
-                "zendframework/zend-validator": "^2.10.1"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-filter": "^2.7.2",
+                "laminas/laminas-json": "^2.6 || ^3.0",
+                "laminas/laminas-validator": "^2.10.1"
             },
             "suggest": {
-                "zendframework/zend-filter": "To support DefaultRouteMatcher usage",
-                "zendframework/zend-validator": "To support DefaultRouteMatcher usage"
+                "laminas/laminas-filter": "To support DefaultRouteMatcher usage",
+                "laminas/laminas-validator": "To support DefaultRouteMatcher usage"
             },
             "type": "library",
             "extra": {
@@ -12656,7 +12656,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Console\\": "src/"
+                    "Laminas\\Console\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -12672,31 +12672,31 @@
             "time": "2018-01-25T19:08:04+00:00"
         },
         {
-            "name": "zendframework/zend-crypt",
+            "name": "laminas/laminas-crypt",
             "version": "2.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-crypt.git",
+                "url": "https://github.com/laminas/laminas-crypt.git",
                 "reference": "1b2f5600bf6262904167116fa67b58ab1457036d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-crypt/zipball/1b2f5600bf6262904167116fa67b58ab1457036d",
+                "url": "https://api.github.com/repos/laminas/laminas-crypt/zipball/1b2f5600bf6262904167116fa67b58ab1457036d",
                 "reference": "1b2f5600bf6262904167116fa67b58ab1457036d",
                 "shasum": ""
             },
             "require": {
                 "container-interop/container-interop": "~1.0",
                 "php": "^5.5 || ^7.0",
-                "zendframework/zend-math": "^2.6",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-math": "^2.6",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0"
             },
             "suggest": {
-                "ext-mcrypt": "Required for most features of Zend\\Crypt"
+                "ext-mcrypt": "Required for most features of Laminas\\Crypt"
             },
             "type": "library",
             "extra": {
@@ -12707,14 +12707,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Crypt\\": "src/"
+                    "Laminas\\Crypt\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-crypt",
+            "homepage": "https://github.com/laminas/laminas-crypt",
             "keywords": [
                 "crypt",
                 "zf2"
@@ -12722,34 +12722,34 @@
             "time": "2016-02-03T23:46:30+00:00"
         },
         {
-            "name": "zendframework/zend-db",
+            "name": "laminas/laminas-db",
             "version": "2.10.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-db.git",
+                "url": "https://github.com/laminas/laminas-db.git",
                 "reference": "77022f06f6ffd384fa86d22ab8d8bbdb925a1e8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-db/zipball/77022f06f6ffd384fa86d22ab8d8bbdb925a1e8e",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/77022f06f6ffd384fa86d22ab8d8bbdb925a1e8e",
                 "reference": "77022f06f6ffd384fa86d22ab8d8bbdb925a1e8e",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.25 || ^6.4.4",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-hydrator": "^1.1 || ^2.1 || ^3.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-hydrator": "^1.1 || ^2.1 || ^3.0",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3"
             },
             "suggest": {
-                "zendframework/zend-eventmanager": "Zend\\EventManager component",
-                "zendframework/zend-hydrator": "Zend\\Hydrator component for using HydratingResultSets",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component"
+                "laminas/laminas-eventmanager": "Laminas\\EventManager component",
+                "laminas/laminas-hydrator": "Laminas\\Hydrator component for using HydratingResultSets",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
             },
             "type": "library",
             "extra": {
@@ -12758,13 +12758,13 @@
                     "dev-develop": "2.10-dev"
                 },
                 "zf": {
-                    "component": "Zend\\Db",
-                    "config-provider": "Zend\\Db\\ConfigProvider"
+                    "component": "Laminas\\Db",
+                    "config-provider": "Laminas\\Db\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Db\\": "src/"
+                    "Laminas\\Db\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -12780,24 +12780,24 @@
             "time": "2019-02-25T11:37:45+00:00"
         },
         {
-            "name": "zendframework/zend-di",
+            "name": "laminas/laminas-di",
             "version": "2.6.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-di.git",
+                "url": "https://github.com/laminas/laminas-di.git",
                 "reference": "1fd1ba85660b5a2718741b38639dc7c4c3194b37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-di/zipball/1fd1ba85660b5a2718741b38639dc7c4c3194b37",
+                "url": "https://api.github.com/repos/laminas/laminas-di/zipball/1fd1ba85660b5a2718741b38639dc7c4c3194b37",
                 "reference": "1fd1ba85660b5a2718741b38639dc7c4c3194b37",
                 "shasum": ""
             },
             "require": {
                 "container-interop/container-interop": "^1.1",
                 "php": "^5.5 || ^7.0",
-                "zendframework/zend-code": "^2.6 || ^3.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-code": "^2.6 || ^3.0",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "fabpot/php-cs-fixer": "1.7.*",
@@ -12812,14 +12812,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Di\\": "src/"
+                    "Laminas\\Di\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-di",
+            "homepage": "https://github.com/laminas/laminas-di",
             "keywords": [
                 "di",
                 "zf2"
@@ -12827,16 +12827,16 @@
             "time": "2016-04-25T20:58:11+00:00"
         },
         {
-            "name": "zendframework/zend-diactoros",
+            "name": "laminas/laminas-diactoros",
             "version": "1.8.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-diactoros.git",
+                "url": "https://github.com/laminas/laminas-diactoros.git",
                 "reference": "20da13beba0dde8fb648be3cc19765732790f46e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/20da13beba0dde8fb648be3cc19765732790f46e",
+                "url": "https://api.github.com/repos/laminas/laminas-diactoros/zipball/20da13beba0dde8fb648be3cc19765732790f46e",
                 "reference": "20da13beba0dde8fb648be3cc19765732790f46e",
                 "shasum": ""
             },
@@ -12852,7 +12852,7 @@
                 "ext-libxml": "*",
                 "php-http/psr7-integration-tests": "dev-master",
                 "phpunit/phpunit": "^5.7.16 || ^6.0.8 || ^7.2.7",
-                "zendframework/zend-coding-standard": "~1.0"
+                "laminas/laminas-coding-standard": "~1.0"
             },
             "type": "library",
             "extra": {
@@ -12874,7 +12874,7 @@
                     "src/functions/parse_cookie_header.php"
                 ],
                 "psr-4": {
-                    "Zend\\Diactoros\\": "src/"
+                    "Laminas\\Diactoros\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -12882,7 +12882,7 @@
                 "BSD-2-Clause"
             ],
             "description": "PSR HTTP Message implementations",
-            "homepage": "https://github.com/zendframework/zend-diactoros",
+            "homepage": "https://github.com/laminas/laminas-diactoros",
             "keywords": [
                 "http",
                 "psr",
@@ -12891,16 +12891,16 @@
             "time": "2018-09-05T19:29:37+00:00"
         },
         {
-            "name": "zendframework/zend-escaper",
+            "name": "laminas/laminas-escaper",
             "version": "2.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-escaper.git",
+                "url": "https://github.com/laminas/laminas-escaper.git",
                 "reference": "31d8aafae982f9568287cb4dce987e6aff8fd074"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-escaper/zipball/31d8aafae982f9568287cb4dce987e6aff8fd074",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/31d8aafae982f9568287cb4dce987e6aff8fd074",
                 "reference": "31d8aafae982f9568287cb4dce987e6aff8fd074",
                 "shasum": ""
             },
@@ -12909,7 +12909,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
-                "zendframework/zend-coding-standard": "~1.0.0"
+                "laminas/laminas-coding-standard": "~1.0.0"
             },
             "type": "library",
             "extra": {
@@ -12920,7 +12920,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Escaper\\": "src/"
+                    "Laminas\\Escaper\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -12936,22 +12936,22 @@
             "time": "2018-04-25T15:48:53+00:00"
         },
         {
-            "name": "zendframework/zend-eventmanager",
+            "name": "laminas/laminas-eventmanager",
             "version": "2.6.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-eventmanager.git",
+                "url": "https://github.com/laminas/laminas-eventmanager.git",
                 "reference": "d238c443220dce4b6396579c8ab2200ec25f9108"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/d238c443220dce4b6396579c8ab2200ec25f9108",
+                "url": "https://api.github.com/repos/laminas/laminas-eventmanager/zipball/d238c443220dce4b6396579c8ab2200ec25f9108",
                 "reference": "d238c443220dce4b6396579c8ab2200ec25f9108",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.5 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7"
+                "laminas/laminas-stdlib": "^2.7"
             },
             "require-dev": {
                 "athletic/athletic": "dev-master",
@@ -12968,14 +12968,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\EventManager\\": "src/"
+                    "Laminas\\EventManager\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-eventmanager",
+            "homepage": "https://github.com/laminas/laminas-eventmanager",
             "keywords": [
                 "eventmanager",
                 "zf2"
@@ -12983,41 +12983,41 @@
             "time": "2017-12-12T17:48:56+00:00"
         },
         {
-            "name": "zendframework/zend-feed",
+            "name": "laminas/laminas-feed",
             "version": "2.10.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-feed.git",
+                "url": "https://github.com/laminas/laminas-feed.git",
                 "reference": "6641f4cf3f4586c63f83fd70b6d19966025c8888"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-feed/zipball/6641f4cf3f4586c63f83fd70b6d19966025c8888",
+                "url": "https://api.github.com/repos/laminas/laminas-feed/zipball/6641f4cf3f4586c63f83fd70b6d19966025c8888",
                 "reference": "6641f4cf3f4586c63f83fd70b6d19966025c8888",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-escaper": "^2.5.2",
-                "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
+                "laminas/laminas-escaper": "^2.5.2",
+                "laminas/laminas-stdlib": "^2.7.7 || ^3.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.23 || ^6.4.3",
                 "psr/http-message": "^1.0.1",
-                "zendframework/zend-cache": "^2.7.2",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-db": "^2.8.2",
-                "zendframework/zend-http": "^2.7",
-                "zendframework/zend-servicemanager": "^2.7.8 || ^3.3",
-                "zendframework/zend-validator": "^2.10.1"
+                "laminas/laminas-cache": "^2.7.2",
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-db": "^2.8.2",
+                "laminas/laminas-http": "^2.7",
+                "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
+                "laminas/laminas-validator": "^2.10.1"
             },
             "suggest": {
-                "psr/http-message": "PSR-7 ^1.0.1, if you wish to use Zend\\Feed\\Reader\\Http\\Psr7ResponseDecorator",
-                "zendframework/zend-cache": "Zend\\Cache component, for optionally caching feeds between requests",
-                "zendframework/zend-db": "Zend\\Db component, for use with PubSubHubbub",
-                "zendframework/zend-http": "Zend\\Http for PubSubHubbub, and optionally for use with Zend\\Feed\\Reader",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component, for easily extending ExtensionManager implementations",
-                "zendframework/zend-validator": "Zend\\Validator component, for validating email addresses used in Atom feeds and entries when using the Writer subcomponent"
+                "psr/http-message": "PSR-7 ^1.0.1, if you wish to use Laminas\\Feed\\Reader\\Http\\Psr7ResponseDecorator",
+                "laminas/laminas-cache": "Laminas\\Cache component, for optionally caching feeds between requests",
+                "laminas/laminas-db": "Laminas\\Db component, for use with PubSubHubbub",
+                "laminas/laminas-http": "Laminas\\Http for PubSubHubbub, and optionally for use with Laminas\\Feed\\Reader",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component, for easily extending ExtensionManager implementations",
+                "laminas/laminas-validator": "Laminas\\Validator component, for validating email addresses used in Atom feeds and entries when using the Writer subcomponent"
             },
             "type": "library",
             "extra": {
@@ -13028,7 +13028,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Feed\\": "src/"
+                    "Laminas\\Feed\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13044,41 +13044,41 @@
             "time": "2018-08-01T13:53:20+00:00"
         },
         {
-            "name": "zendframework/zend-filter",
+            "name": "laminas/laminas-filter",
             "version": "2.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-filter.git",
+                "url": "https://github.com/laminas/laminas-filter.git",
                 "reference": "1c3e6d02f9cd5f6c929c9859498f5efbe216e86f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-filter/zipball/1c3e6d02f9cd5f6c929c9859498f5efbe216e86f",
+                "url": "https://api.github.com/repos/laminas/laminas-filter/zipball/1c3e6d02f9cd5f6c929c9859498f5efbe216e86f",
                 "reference": "1c3e6d02f9cd5f6c929c9859498f5efbe216e86f",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
+                "laminas/laminas-stdlib": "^2.7.7 || ^3.1"
             },
             "conflict": {
-                "zendframework/zend-validator": "<2.10.1"
+                "laminas/laminas-validator": "<2.10.1"
             },
             "require-dev": {
                 "pear/archive_tar": "^1.4.3",
                 "phpunit/phpunit": "^5.7.23 || ^6.4.3",
                 "psr/http-factory": "^1.0",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-crypt": "^3.2.1",
-                "zendframework/zend-servicemanager": "^2.7.8 || ^3.3",
-                "zendframework/zend-uri": "^2.6"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-crypt": "^3.2.1",
+                "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
+                "laminas/laminas-uri": "^2.6"
             },
             "suggest": {
                 "psr/http-factory-implementation": "psr/http-factory-implementation, for creating file upload instances when consuming PSR-7 in file upload filters",
-                "zendframework/zend-crypt": "Zend\\Crypt component, for encryption filters",
-                "zendframework/zend-i18n": "Zend\\I18n component for filters depending on i18n functionality",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component, for using the filter chain functionality",
-                "zendframework/zend-uri": "Zend\\Uri component, for the UriNormalize filter"
+                "laminas/laminas-crypt": "Laminas\\Crypt component, for encryption filters",
+                "laminas/laminas-i18n": "Laminas\\I18n component for filters depending on i18n functionality",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component, for using the filter chain functionality",
+                "laminas/laminas-uri": "Laminas\\Uri component, for the UriNormalize filter"
             },
             "type": "library",
             "extra": {
@@ -13087,13 +13087,13 @@
                     "dev-develop": "2.10.x-dev"
                 },
                 "zf": {
-                    "component": "Zend\\Filter",
-                    "config-provider": "Zend\\Filter\\ConfigProvider"
+                    "component": "Laminas\\Filter",
+                    "config-provider": "Laminas\\Filter\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Filter\\": "src/"
+                    "Laminas\\Filter\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13109,51 +13109,51 @@
             "time": "2018-12-17T16:00:04+00:00"
         },
         {
-            "name": "zendframework/zend-form",
+            "name": "laminas/laminas-form",
             "version": "2.13.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-form.git",
+                "url": "https://github.com/laminas/laminas-form.git",
                 "reference": "c713a12ccbd43148b71c9339e171ca11e3f8a1da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-form/zipball/c713a12ccbd43148b71c9339e171ca11e3f8a1da",
+                "url": "https://api.github.com/repos/laminas/laminas-form/zipball/c713a12ccbd43148b71c9339e171ca11e3f8a1da",
                 "reference": "c713a12ccbd43148b71c9339e171ca11e3f8a1da",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-hydrator": "^1.1 || ^2.1 || ^3.0",
-                "zendframework/zend-inputfilter": "^2.8",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-hydrator": "^1.1 || ^2.1 || ^3.0",
+                "laminas/laminas-inputfilter": "^2.8",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "doctrine/annotations": "~1.0",
                 "phpunit/phpunit": "^5.7.23 || ^6.5.3",
-                "zendframework/zend-cache": "^2.6.1",
-                "zendframework/zend-captcha": "^2.7.1",
-                "zendframework/zend-code": "^2.6 || ^3.0",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-escaper": "^2.5",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-filter": "^2.6",
-                "zendframework/zend-i18n": "^2.6",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-session": "^2.8.1",
-                "zendframework/zend-text": "^2.6",
-                "zendframework/zend-validator": "^2.6",
-                "zendframework/zend-view": "^2.6.2",
-                "zendframework/zendservice-recaptcha": "^3.0.0"
+                "laminas/laminas-cache": "^2.6.1",
+                "laminas/laminas-captcha": "^2.7.1",
+                "laminas/laminas-code": "^2.6 || ^3.0",
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-escaper": "^2.5",
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-filter": "^2.6",
+                "laminas/laminas-i18n": "^2.6",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-session": "^2.8.1",
+                "laminas/laminas-text": "^2.6",
+                "laminas/laminas-validator": "^2.6",
+                "laminas/laminas-view": "^2.6.2",
+                "laminas/laminas-recaptcha": "^3.0.0"
             },
             "suggest": {
-                "zendframework/zend-captcha": "^2.7.1, required for using CAPTCHA form elements",
-                "zendframework/zend-code": "^2.6 || ^3.0, required to use zend-form annotations support",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0, reuired for zend-form annotations support",
-                "zendframework/zend-i18n": "^2.6, required when using zend-form view helpers",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3, required to use the form factories or provide services",
-                "zendframework/zend-view": "^2.6.2, required for using the zend-form view helpers",
-                "zendframework/zendservice-recaptcha": "in order to use the ReCaptcha form element"
+                "laminas/laminas-captcha": "^2.7.1, required for using CAPTCHA form elements",
+                "laminas/laminas-code": "^2.6 || ^3.0, required to use zend-form annotations support",
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0, reuired for zend-form annotations support",
+                "laminas/laminas-i18n": "^2.6, required when using zend-form view helpers",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3, required to use the form factories or provide services",
+                "laminas/laminas-view": "^2.6.2, required for using the zend-form view helpers",
+                "laminas/laminas-recaptcha": "in order to use the ReCaptcha form element"
             },
             "type": "library",
             "extra": {
@@ -13162,13 +13162,13 @@
                     "dev-develop": "2.14.x-dev"
                 },
                 "zf": {
-                    "component": "Zend\\Form",
-                    "config-provider": "Zend\\Form\\ConfigProvider"
+                    "component": "Laminas\\Form",
+                    "config-provider": "Laminas\\Form\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Form\\": "src/"
+                    "Laminas\\Form\\": "src/"
                 },
                 "files": [
                     "autoload/formElementManagerPolyfill.php"
@@ -13187,30 +13187,30 @@
             "time": "2018-12-11T22:51:29+00:00"
         },
         {
-            "name": "zendframework/zend-http",
+            "name": "laminas/laminas-http",
             "version": "2.8.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-http.git",
+                "url": "https://github.com/laminas/laminas-http.git",
                 "reference": "d160aedc096be230af0fe9c31151b2b33ad4e807"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-http/zipball/d160aedc096be230af0fe9c31151b2b33ad4e807",
+                "url": "https://api.github.com/repos/laminas/laminas-http/zipball/d160aedc096be230af0fe9c31151b2b33ad4e807",
                 "reference": "d160aedc096be230af0fe9c31151b2b33ad4e807",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-loader": "^2.5.1",
-                "zendframework/zend-stdlib": "^3.1 || ^2.7.7",
-                "zendframework/zend-uri": "^2.5.2",
-                "zendframework/zend-validator": "^2.10.1"
+                "laminas/laminas-loader": "^2.5.1",
+                "laminas/laminas-stdlib": "^3.1 || ^2.7.7",
+                "laminas/laminas-uri": "^2.5.2",
+                "laminas/laminas-validator": "^2.10.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.3",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-config": "^3.1 || ^2.6"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-config": "^3.1 || ^2.6"
             },
             "suggest": {
                 "paragonie/certainty": "For automated management of cacert.pem"
@@ -13224,7 +13224,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Http\\": "src/"
+                    "Laminas\\Http\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13242,37 +13242,37 @@
             "time": "2019-02-07T17:47:08+00:00"
         },
         {
-            "name": "zendframework/zend-hydrator",
+            "name": "laminas/laminas-hydrator",
             "version": "1.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-hydrator.git",
+                "url": "https://github.com/laminas/laminas-hydrator.git",
                 "reference": "22652e1661a5a10b3f564cf7824a2206cf5a4a65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-hydrator/zipball/22652e1661a5a10b3f564cf7824a2206cf5a4a65",
+                "url": "https://api.github.com/repos/laminas/laminas-hydrator/zipball/22652e1661a5a10b3f564cf7824a2206cf5a4a65",
                 "reference": "22652e1661a5a10b3f564cf7824a2206cf5a4a65",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.5 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0",
                 "squizlabs/php_codesniffer": "^2.0@dev",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-filter": "^2.6",
-                "zendframework/zend-inputfilter": "^2.6",
-                "zendframework/zend-serializer": "^2.6.1",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-filter": "^2.6",
+                "laminas/laminas-inputfilter": "^2.6",
+                "laminas/laminas-serializer": "^2.6.1",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3"
             },
             "suggest": {
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0, to support aggregate hydrator usage",
-                "zendframework/zend-filter": "^2.6, to support naming strategy hydrator usage",
-                "zendframework/zend-serializer": "^2.6.1, to use the SerializableStrategy",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3, to support hydrator plugin manager usage"
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0, to support aggregate hydrator usage",
+                "laminas/laminas-filter": "^2.6, to support naming strategy hydrator usage",
+                "laminas/laminas-serializer": "^2.6.1, to use the SerializableStrategy",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3, to support hydrator plugin manager usage"
             },
             "type": "library",
             "extra": {
@@ -13285,14 +13285,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Hydrator\\": "src/"
+                    "Laminas\\Hydrator\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-hydrator",
+            "homepage": "https://github.com/laminas/laminas-hydrator",
             "keywords": [
                 "hydrator",
                 "zf2"
@@ -13300,44 +13300,44 @@
             "time": "2016-02-18T22:38:26+00:00"
         },
         {
-            "name": "zendframework/zend-i18n",
+            "name": "laminas/laminas-i18n",
             "version": "2.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-i18n.git",
+                "url": "https://github.com/laminas/laminas-i18n.git",
                 "reference": "6d69af5a04e1a4de7250043cb1322f077a0cdb7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
+                "url": "https://api.github.com/repos/laminas/laminas-i18n/zipball/6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
                 "reference": "6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
-                "zendframework/zend-cache": "^2.6.1",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-config": "^2.6",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-filter": "^2.6.1",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-validator": "^2.6",
-                "zendframework/zend-view": "^2.6.3"
+                "laminas/laminas-cache": "^2.6.1",
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-config": "^2.6",
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-filter": "^2.6.1",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-validator": "^2.6",
+                "laminas/laminas-view": "^2.6.3"
             },
             "suggest": {
-                "ext-intl": "Required for most features of Zend\\I18n; included in default builds of PHP",
-                "zendframework/zend-cache": "Zend\\Cache component",
-                "zendframework/zend-config": "Zend\\Config component",
-                "zendframework/zend-eventmanager": "You should install this package to use the events in the translator",
-                "zendframework/zend-filter": "You should install this package to use the provided filters",
-                "zendframework/zend-i18n-resources": "Translation resources",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
-                "zendframework/zend-validator": "You should install this package to use the provided validators",
-                "zendframework/zend-view": "You should install this package to use the provided view helpers"
+                "ext-intl": "Required for most features of Laminas\\I18n; included in default builds of PHP",
+                "laminas/laminas-cache": "Laminas\\Cache component",
+                "laminas/laminas-config": "Laminas\\Config component",
+                "laminas/laminas-eventmanager": "You should install this package to use the events in the translator",
+                "laminas/laminas-filter": "You should install this package to use the provided filters",
+                "laminas/laminas-i18n-resources": "Translation resources",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component",
+                "laminas/laminas-validator": "You should install this package to use the provided validators",
+                "laminas/laminas-view": "You should install this package to use the provided view helpers"
             },
             "type": "library",
             "extra": {
@@ -13346,13 +13346,13 @@
                     "dev-develop": "2.10.x-dev"
                 },
                 "zf": {
-                    "component": "Zend\\I18n",
-                    "config-provider": "Zend\\I18n\\ConfigProvider"
+                    "component": "Laminas\\I18n",
+                    "config-provider": "Laminas\\I18n\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\I18n\\": "src/"
+                    "Laminas\\I18n\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13368,30 +13368,30 @@
             "time": "2018-05-16T16:39:13+00:00"
         },
         {
-            "name": "zendframework/zend-inputfilter",
+            "name": "laminas/laminas-inputfilter",
             "version": "2.10.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-inputfilter.git",
+                "url": "https://github.com/laminas/laminas-inputfilter.git",
                 "reference": "4f52b71ec9cef3a06e3bba8f5c2124e94055ec0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-inputfilter/zipball/4f52b71ec9cef3a06e3bba8f5c2124e94055ec0c",
+                "url": "https://api.github.com/repos/laminas/laminas-inputfilter/zipball/4f52b71ec9cef3a06e3bba8f5c2124e94055ec0c",
                 "reference": "4f52b71ec9cef3a06e3bba8f5c2124e94055ec0c",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-filter": "^2.9.1",
-                "zendframework/zend-servicemanager": "^2.7.10 || ^3.3.1",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0",
-                "zendframework/zend-validator": "^2.11"
+                "laminas/laminas-filter": "^2.9.1",
+                "laminas/laminas-servicemanager": "^2.7.10 || ^3.3.1",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-validator": "^2.11"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.23 || ^6.4.3",
                 "psr/http-message": "^1.0",
-                "zendframework/zend-coding-standard": "~1.0.0"
+                "laminas/laminas-coding-standard": "~1.0.0"
             },
             "suggest": {
                 "psr/http-message-implementation": "PSR-7 is required if you wish to validate PSR-7 UploadedFileInterface payloads"
@@ -13403,13 +13403,13 @@
                     "dev-develop": "2.11.x-dev"
                 },
                 "zf": {
-                    "component": "Zend\\InputFilter",
-                    "config-provider": "Zend\\InputFilter\\ConfigProvider"
+                    "component": "Laminas\\InputFilter",
+                    "config-provider": "Laminas\\InputFilter\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\InputFilter\\": "src/"
+                    "Laminas\\InputFilter\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13425,16 +13425,16 @@
             "time": "2019-01-30T16:58:51+00:00"
         },
         {
-            "name": "zendframework/zend-json",
+            "name": "laminas/laminas-json",
             "version": "2.6.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-json.git",
+                "url": "https://github.com/laminas/laminas-json.git",
                 "reference": "4c8705dbe4ad7d7e51b2876c5b9eea0ef916ba28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-json/zipball/4c8705dbe4ad7d7e51b2876c5b9eea0ef916ba28",
+                "url": "https://api.github.com/repos/laminas/laminas-json/zipball/4c8705dbe4ad7d7e51b2876c5b9eea0ef916ba28",
                 "reference": "4c8705dbe4ad7d7e51b2876c5b9eea0ef916ba28",
                 "shasum": ""
             },
@@ -13444,16 +13444,16 @@
             "require-dev": {
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0",
-                "zendframework/zend-http": "^2.5.4",
-                "zendframework/zend-server": "^2.6.1",
-                "zendframework/zend-stdlib": "^2.5 || ^3.0",
+                "laminas/laminas-http": "^2.5.4",
+                "laminas/laminas-server": "^2.6.1",
+                "laminas/laminas-stdlib": "^2.5 || ^3.0",
                 "zendframework/zendxml": "^1.0.2"
             },
             "suggest": {
-                "zendframework/zend-http": "Zend\\Http component, required to use Zend\\Json\\Server",
-                "zendframework/zend-server": "Zend\\Server component, required to use Zend\\Json\\Server",
-                "zendframework/zend-stdlib": "Zend\\Stdlib component, for use with caching Zend\\Json\\Server responses",
-                "zendframework/zendxml": "To support Zend\\Json\\Json::fromXml() usage"
+                "laminas/laminas-http": "Laminas\\Http component, required to use Laminas\\Json\\Server",
+                "laminas/laminas-server": "Laminas\\Server component, required to use Laminas\\Json\\Server",
+                "laminas/laminas-stdlib": "Laminas\\Stdlib component, for use with caching Laminas\\Json\\Server responses",
+                "zendframework/zendxml": "To support Laminas\\Json\\Json::fromXml() usage"
             },
             "type": "library",
             "extra": {
@@ -13464,7 +13464,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Json\\": "src/"
+                    "Laminas\\Json\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13472,7 +13472,7 @@
                 "BSD-3-Clause"
             ],
             "description": "provides convenience methods for serializing native PHP to JSON and decoding JSON to native PHP",
-            "homepage": "https://github.com/zendframework/zend-json",
+            "homepage": "https://github.com/laminas/laminas-json",
             "keywords": [
                 "json",
                 "zf2"
@@ -13480,16 +13480,16 @@
             "time": "2016-02-04T21:20:26+00:00"
         },
         {
-            "name": "zendframework/zend-loader",
+            "name": "laminas/laminas-loader",
             "version": "2.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-loader.git",
+                "url": "https://github.com/laminas/laminas-loader.git",
                 "reference": "78f11749ea340f6ca316bca5958eef80b38f9b6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-loader/zipball/78f11749ea340f6ca316bca5958eef80b38f9b6c",
+                "url": "https://api.github.com/repos/laminas/laminas-loader/zipball/78f11749ea340f6ca316bca5958eef80b38f9b6c",
                 "reference": "78f11749ea340f6ca316bca5958eef80b38f9b6c",
                 "shasum": ""
             },
@@ -13498,7 +13498,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.4",
-                "zendframework/zend-coding-standard": "~1.0.0"
+                "laminas/laminas-coding-standard": "~1.0.0"
             },
             "type": "library",
             "extra": {
@@ -13509,7 +13509,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Loader\\": "src/"
+                    "Laminas\\Loader\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13525,24 +13525,24 @@
             "time": "2018-04-30T15:20:54+00:00"
         },
         {
-            "name": "zendframework/zend-log",
+            "name": "laminas/laminas-log",
             "version": "2.10.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-log.git",
+                "url": "https://github.com/laminas/laminas-log.git",
                 "reference": "9cec3b092acb39963659c2f32441cccc56b3f430"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-log/zipball/9cec3b092acb39963659c2f32441cccc56b3f430",
+                "url": "https://api.github.com/repos/laminas/laminas-log/zipball/9cec3b092acb39963659c2f32441cccc56b3f430",
                 "reference": "9cec3b092acb39963659c2f32441cccc56b3f430",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
                 "psr/log": "^1.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "provide": {
                 "psr/log-implementation": "1.0.0"
@@ -13550,21 +13550,21 @@
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
                 "phpunit/phpunit": "^5.7.15 || ^6.0.8",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-db": "^2.6",
-                "zendframework/zend-escaper": "^2.5",
-                "zendframework/zend-filter": "^2.5",
-                "zendframework/zend-mail": "^2.6.1",
-                "zendframework/zend-validator": "^2.10.1"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-db": "^2.6",
+                "laminas/laminas-escaper": "^2.5",
+                "laminas/laminas-filter": "^2.5",
+                "laminas/laminas-mail": "^2.6.1",
+                "laminas/laminas-validator": "^2.10.1"
             },
             "suggest": {
                 "ext-mongo": "mongo extension to use Mongo writer",
                 "ext-mongodb": "mongodb extension to use MongoDB writer",
-                "zendframework/zend-console": "Zend\\Console component to use the RequestID log processor",
-                "zendframework/zend-db": "Zend\\Db component to use the database log writer",
-                "zendframework/zend-escaper": "Zend\\Escaper component, for use in the XML log formatter",
-                "zendframework/zend-mail": "Zend\\Mail component to use the email log writer",
-                "zendframework/zend-validator": "Zend\\Validator component to block invalid log messages"
+                "laminas/laminas-console": "Laminas\\Console component to use the RequestID log processor",
+                "laminas/laminas-db": "Laminas\\Db component to use the database log writer",
+                "laminas/laminas-escaper": "Laminas\\Escaper component, for use in the XML log formatter",
+                "laminas/laminas-mail": "Laminas\\Mail component to use the email log writer",
+                "laminas/laminas-validator": "Laminas\\Validator component to block invalid log messages"
             },
             "type": "library",
             "extra": {
@@ -13573,13 +13573,13 @@
                     "dev-develop": "2.11.x-dev"
                 },
                 "zf": {
-                    "component": "Zend\\Log",
-                    "config-provider": "Zend\\Log\\ConfigProvider"
+                    "component": "Laminas\\Log",
+                    "config-provider": "Laminas\\Log\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Log\\": "src/"
+                    "Laminas\\Log\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13587,7 +13587,7 @@
                 "BSD-3-Clause"
             ],
             "description": "component for general purpose logging",
-            "homepage": "https://github.com/zendframework/zend-log",
+            "homepage": "https://github.com/laminas/laminas-log",
             "keywords": [
                 "log",
                 "logging",
@@ -13596,16 +13596,16 @@
             "time": "2018-04-09T21:59:51+00:00"
         },
         {
-            "name": "zendframework/zend-mail",
+            "name": "laminas/laminas-mail",
             "version": "2.10.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-mail.git",
+                "url": "https://github.com/laminas/laminas-mail.git",
                 "reference": "d7beb63d5f7144a21ac100072c453e63860cdab8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-mail/zipball/d7beb63d5f7144a21ac100072c453e63860cdab8",
+                "url": "https://api.github.com/repos/laminas/laminas-mail/zipball/d7beb63d5f7144a21ac100072c453e63860cdab8",
                 "reference": "d7beb63d5f7144a21ac100072c453e63860cdab8",
                 "shasum": ""
             },
@@ -13613,21 +13613,21 @@
                 "ext-iconv": "*",
                 "php": "^5.6 || ^7.0",
                 "true/punycode": "^2.1",
-                "zendframework/zend-loader": "^2.5",
-                "zendframework/zend-mime": "^2.5",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0",
-                "zendframework/zend-validator": "^2.10.2"
+                "laminas/laminas-loader": "^2.5",
+                "laminas/laminas-mime": "^2.5",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-validator": "^2.10.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.25 || ^6.4.4 || ^7.1.4",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-config": "^2.6",
-                "zendframework/zend-crypt": "^2.6 || ^3.0",
-                "zendframework/zend-servicemanager": "^2.7.10 || ^3.3.1"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-config": "^2.6",
+                "laminas/laminas-crypt": "^2.6 || ^3.0",
+                "laminas/laminas-servicemanager": "^2.7.10 || ^3.3.1"
             },
             "suggest": {
-                "zendframework/zend-crypt": "Crammd5 support in SMTP Auth",
-                "zendframework/zend-servicemanager": "^2.7.10 || ^3.3.1 when using SMTP to deliver messages"
+                "laminas/laminas-crypt": "Crammd5 support in SMTP Auth",
+                "laminas/laminas-servicemanager": "^2.7.10 || ^3.3.1 when using SMTP to deliver messages"
             },
             "type": "library",
             "extra": {
@@ -13636,13 +13636,13 @@
                     "dev-develop": "2.11.x-dev"
                 },
                 "zf": {
-                    "component": "Zend\\Mail",
-                    "config-provider": "Zend\\Mail\\ConfigProvider"
+                    "component": "Laminas\\Mail",
+                    "config-provider": "Laminas\\Mail\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Mail\\": "src/"
+                    "Laminas\\Mail\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13658,16 +13658,16 @@
             "time": "2018-06-07T13:37:07+00:00"
         },
         {
-            "name": "zendframework/zend-math",
+            "name": "laminas/laminas-math",
             "version": "2.7.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-math.git",
+                "url": "https://github.com/laminas/laminas-math.git",
                 "reference": "1abce074004dacac1a32cd54de94ad47ef960d38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-math/zipball/1abce074004dacac1a32cd54de94ad47ef960d38",
+                "url": "https://api.github.com/repos/laminas/laminas-math/zipball/1abce074004dacac1a32cd54de94ad47ef960d38",
                 "reference": "1abce074004dacac1a32cd54de94ad47ef960d38",
                 "shasum": ""
             },
@@ -13682,7 +13682,7 @@
             "suggest": {
                 "ext-bcmath": "If using the bcmath functionality",
                 "ext-gmp": "If using the gmp functionality",
-                "ircmaxell/random-lib": "Fallback random byte generator for Zend\\Math\\Rand if Mcrypt extensions is unavailable"
+                "ircmaxell/random-lib": "Fallback random byte generator for Laminas\\Math\\Rand if Mcrypt extensions is unavailable"
             },
             "type": "library",
             "extra": {
@@ -13693,14 +13693,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Math\\": "src/"
+                    "Laminas\\Math\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-math",
+            "homepage": "https://github.com/laminas/laminas-math",
             "keywords": [
                 "math",
                 "zf2"
@@ -13708,30 +13708,30 @@
             "time": "2018-12-04T15:34:17+00:00"
         },
         {
-            "name": "zendframework/zend-mime",
+            "name": "laminas/laminas-mime",
             "version": "2.7.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-mime.git",
+                "url": "https://github.com/laminas/laminas-mime.git",
                 "reference": "52ae5fa9f12845cae749271034a2d594f0e4c6f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-mime/zipball/52ae5fa9f12845cae749271034a2d594f0e4c6f2",
+                "url": "https://api.github.com/repos/laminas/laminas-mime/zipball/52ae5fa9f12845cae749271034a2d594f0e4c6f2",
                 "reference": "52ae5fa9f12845cae749271034a2d594f0e4c6f2",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.21 || ^6.3",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-mail": "^2.6"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-mail": "^2.6"
             },
             "suggest": {
-                "zendframework/zend-mail": "Zend\\Mail component"
+                "laminas/laminas-mail": "Laminas\\Mail component"
             },
             "type": "library",
             "extra": {
@@ -13742,7 +13742,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Mime\\": "src/"
+                    "Laminas\\Mime\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13750,7 +13750,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Create and parse MIME messages and parts",
-            "homepage": "https://github.com/zendframework/zend-mime",
+            "homepage": "https://github.com/laminas/laminas-mime",
             "keywords": [
                 "ZendFramework",
                 "mime",
@@ -13759,39 +13759,39 @@
             "time": "2018-05-14T19:02:50+00:00"
         },
         {
-            "name": "zendframework/zend-modulemanager",
+            "name": "laminas/laminas-modulemanager",
             "version": "2.8.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-modulemanager.git",
+                "url": "https://github.com/laminas/laminas-modulemanager.git",
                 "reference": "394df6e12248ac430a312d4693f793ee7120baa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-modulemanager/zipball/394df6e12248ac430a312d4693f793ee7120baa6",
+                "url": "https://api.github.com/repos/laminas/laminas-modulemanager/zipball/394df6e12248ac430a312d4693f793ee7120baa6",
                 "reference": "394df6e12248ac430a312d4693f793ee7120baa6",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-config": "^3.1 || ^2.6",
-                "zendframework/zend-eventmanager": "^3.2 || ^2.6.3",
-                "zendframework/zend-stdlib": "^3.1 || ^2.7"
+                "laminas/laminas-config": "^3.1 || ^2.6",
+                "laminas/laminas-eventmanager": "^3.2 || ^2.6.3",
+                "laminas/laminas-stdlib": "^3.1 || ^2.7"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.0.8 || ^5.7.15",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-console": "^2.6",
-                "zendframework/zend-di": "^2.6",
-                "zendframework/zend-loader": "^2.5",
-                "zendframework/zend-mvc": "^3.0 || ^2.7",
-                "zendframework/zend-servicemanager": "^3.0.3 || ^2.7.5"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-console": "^2.6",
+                "laminas/laminas-di": "^2.6",
+                "laminas/laminas-loader": "^2.5",
+                "laminas/laminas-mvc": "^3.0 || ^2.7",
+                "laminas/laminas-servicemanager": "^3.0.3 || ^2.7.5"
             },
             "suggest": {
-                "zendframework/zend-console": "Zend\\Console component",
-                "zendframework/zend-loader": "Zend\\Loader component if you are not using Composer autoloading for your modules",
-                "zendframework/zend-mvc": "Zend\\Mvc component",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component"
+                "laminas/laminas-console": "Laminas\\Console component",
+                "laminas/laminas-loader": "Laminas\\Loader component if you are not using Composer autoloading for your modules",
+                "laminas/laminas-mvc": "Laminas\\Mvc component",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
             },
             "type": "library",
             "extra": {
@@ -13802,7 +13802,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\ModuleManager\\": "src/"
+                    "Laminas\\ModuleManager\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13810,7 +13810,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Modular application system for zend-mvc applications",
-            "homepage": "https://github.com/zendframework/zend-modulemanager",
+            "homepage": "https://github.com/laminas/laminas-modulemanager",
             "keywords": [
                 "ZendFramework",
                 "modulemanager",
@@ -13819,73 +13819,73 @@
             "time": "2017-12-02T06:11:18+00:00"
         },
         {
-            "name": "zendframework/zend-mvc",
+            "name": "laminas/laminas-mvc",
             "version": "2.7.15",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-mvc.git",
+                "url": "https://github.com/laminas/laminas-mvc.git",
                 "reference": "a8d45689d37a9e4ff4b75ea0b7478fa3d4f9c089"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-mvc/zipball/a8d45689d37a9e4ff4b75ea0b7478fa3d4f9c089",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/a8d45689d37a9e4ff4b75ea0b7478fa3d4f9c089",
                 "reference": "a8d45689d37a9e4ff4b75ea0b7478fa3d4f9c089",
                 "shasum": ""
             },
             "require": {
                 "container-interop/container-interop": "^1.1",
                 "php": "^5.5 || ^7.0",
-                "zendframework/zend-console": "^2.7",
-                "zendframework/zend-eventmanager": "^2.6.4 || ^3.0",
-                "zendframework/zend-form": "^2.11",
-                "zendframework/zend-hydrator": "^1.1 || ^2.4",
-                "zendframework/zend-psr7bridge": "^0.2",
-                "zendframework/zend-servicemanager": "^2.7.10 || ^3.0.3",
-                "zendframework/zend-stdlib": "^2.7.5 || ^3.0"
+                "laminas/laminas-console": "^2.7",
+                "laminas/laminas-eventmanager": "^2.6.4 || ^3.0",
+                "laminas/laminas-form": "^2.11",
+                "laminas/laminas-hydrator": "^1.1 || ^2.4",
+                "laminas/laminas-psr7bridge": "^0.2",
+                "laminas/laminas-servicemanager": "^2.7.10 || ^3.0.3",
+                "laminas/laminas-stdlib": "^2.7.5 || ^3.0"
             },
             "replace": {
-                "zendframework/zend-router": "^2.0"
+                "laminas/laminas-router": "^2.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "^4.8.36",
                 "sebastian/comparator": "^1.2.4",
                 "sebastian/version": "^1.0.4",
-                "zendframework/zend-authentication": "^2.6",
-                "zendframework/zend-cache": "^2.8",
-                "zendframework/zend-di": "^2.6",
-                "zendframework/zend-filter": "^2.8",
-                "zendframework/zend-http": "^2.8",
-                "zendframework/zend-i18n": "^2.8",
-                "zendframework/zend-inputfilter": "^2.8",
-                "zendframework/zend-json": "^2.6.1",
-                "zendframework/zend-log": "^2.9.3",
-                "zendframework/zend-modulemanager": "^2.8",
-                "zendframework/zend-serializer": "^2.8",
-                "zendframework/zend-session": "^2.8.1",
-                "zendframework/zend-text": "^2.7",
-                "zendframework/zend-uri": "^2.6",
-                "zendframework/zend-validator": "^2.10",
-                "zendframework/zend-view": "^2.9"
+                "laminas/laminas-authentication": "^2.6",
+                "laminas/laminas-cache": "^2.8",
+                "laminas/laminas-di": "^2.6",
+                "laminas/laminas-filter": "^2.8",
+                "laminas/laminas-http": "^2.8",
+                "laminas/laminas-i18n": "^2.8",
+                "laminas/laminas-inputfilter": "^2.8",
+                "laminas/laminas-json": "^2.6.1",
+                "laminas/laminas-log": "^2.9.3",
+                "laminas/laminas-modulemanager": "^2.8",
+                "laminas/laminas-serializer": "^2.8",
+                "laminas/laminas-session": "^2.8.1",
+                "laminas/laminas-text": "^2.7",
+                "laminas/laminas-uri": "^2.6",
+                "laminas/laminas-validator": "^2.10",
+                "laminas/laminas-view": "^2.9"
             },
             "suggest": {
-                "zendframework/zend-authentication": "Zend\\Authentication component for Identity plugin",
-                "zendframework/zend-config": "Zend\\Config component",
-                "zendframework/zend-di": "Zend\\Di component",
-                "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-http": "Zend\\Http component",
-                "zendframework/zend-i18n": "Zend\\I18n component for translatable segments",
-                "zendframework/zend-inputfilter": "Zend\\Inputfilter component",
-                "zendframework/zend-json": "Zend\\Json component",
-                "zendframework/zend-log": "Zend\\Log component",
-                "zendframework/zend-modulemanager": "Zend\\ModuleManager component",
-                "zendframework/zend-serializer": "Zend\\Serializer component",
-                "zendframework/zend-servicemanager-di": "^1.0.1, if using zend-servicemanager v3 and requiring the zend-di integration",
-                "zendframework/zend-session": "Zend\\Session component for FlashMessenger, PRG, and FPRG plugins",
-                "zendframework/zend-text": "Zend\\Text component",
-                "zendframework/zend-uri": "Zend\\Uri component",
-                "zendframework/zend-validator": "Zend\\Validator component",
-                "zendframework/zend-view": "Zend\\View component"
+                "laminas/laminas-authentication": "Laminas\\Authentication component for Identity plugin",
+                "laminas/laminas-config": "Laminas\\Config component",
+                "laminas/laminas-di": "Laminas\\Di component",
+                "laminas/laminas-filter": "Laminas\\Filter component",
+                "laminas/laminas-http": "Laminas\\Http component",
+                "laminas/laminas-i18n": "Laminas\\I18n component for translatable segments",
+                "laminas/laminas-inputfilter": "Zend\\Inputfilter component",
+                "laminas/laminas-json": "Laminas\\Json component",
+                "laminas/laminas-log": "Laminas\\Log component",
+                "laminas/laminas-modulemanager": "Laminas\\ModuleManager component",
+                "laminas/laminas-serializer": "Laminas\\Serializer component",
+                "laminas/laminas-servicemanager-di": "^1.0.1, if using zend-servicemanager v3 and requiring the zend-di integration",
+                "laminas/laminas-session": "Laminas\\Session component for FlashMessenger, PRG, and FPRG plugins",
+                "laminas/laminas-text": "Laminas\\Text component",
+                "laminas/laminas-uri": "Laminas\\Uri component",
+                "laminas/laminas-validator": "Laminas\\Validator component",
+                "laminas/laminas-view": "Laminas\\View component"
             },
             "type": "library",
             "extra": {
@@ -13899,14 +13899,14 @@
                     "src/autoload.php"
                 ],
                 "psr-4": {
-                    "Zend\\Mvc\\": "src/"
+                    "Laminas\\Mvc\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-mvc",
+            "homepage": "https://github.com/laminas/laminas-mvc",
             "keywords": [
                 "mvc",
                 "zf2"
@@ -13914,24 +13914,24 @@
             "time": "2018-05-03T13:13:41+00:00"
         },
         {
-            "name": "zendframework/zend-psr7bridge",
+            "name": "laminas/laminas-psr7bridge",
             "version": "0.2.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-psr7bridge.git",
+                "url": "https://github.com/laminas/laminas-psr7bridge.git",
                 "reference": "86c0b53b0c6381391c4add4a93a56e51d5c74605"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-psr7bridge/zipball/86c0b53b0c6381391c4add4a93a56e51d5c74605",
+                "url": "https://api.github.com/repos/laminas/laminas-psr7bridge/zipball/86c0b53b0c6381391c4add4a93a56e51d5c74605",
                 "reference": "86c0b53b0c6381391c4add4a93a56e51d5c74605",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5",
                 "psr/http-message": "^1.0",
-                "zendframework/zend-diactoros": "^1.1",
-                "zendframework/zend-http": "^2.5"
+                "laminas/laminas-diactoros": "^1.1",
+                "laminas/laminas-http": "^2.5"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.7",
@@ -13946,15 +13946,15 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Psr7Bridge\\": "src/"
+                    "Laminas\\Psr7Bridge\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "PSR-7 <-> Zend\\Http bridge",
-            "homepage": "https://github.com/zendframework/zend-psr7bridge",
+            "description": "PSR-7 <-> Laminas\\Http bridge",
+            "homepage": "https://github.com/laminas/laminas-psr7bridge",
             "keywords": [
                 "http",
                 "psr",
@@ -13963,33 +13963,33 @@
             "time": "2016-05-10T21:44:39+00:00"
         },
         {
-            "name": "zendframework/zend-serializer",
+            "name": "laminas/laminas-serializer",
             "version": "2.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-serializer.git",
+                "url": "https://github.com/laminas/laminas-serializer.git",
                 "reference": "0172690db48d8935edaf625c4cba38b79719892c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-serializer/zipball/0172690db48d8935edaf625c4cba38b79719892c",
+                "url": "https://api.github.com/repos/laminas/laminas-serializer/zipball/0172690db48d8935edaf625c4cba38b79719892c",
                 "reference": "0172690db48d8935edaf625c4cba38b79719892c",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-json": "^2.5 || ^3.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-json": "^2.5 || ^3.0",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.25 || ^6.4.4",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-math": "^2.6 || ^3.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-math": "^2.6 || ^3.0",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3"
             },
             "suggest": {
-                "zendframework/zend-math": "(^2.6 || ^3.0) To support Python Pickle serialization",
-                "zendframework/zend-servicemanager": "(^2.7.5 || ^3.0.3) To support plugin manager support"
+                "laminas/laminas-math": "(^2.6 || ^3.0) To support Python Pickle serialization",
+                "laminas/laminas-servicemanager": "(^2.7.5 || ^3.0.3) To support plugin manager support"
             },
             "type": "library",
             "extra": {
@@ -13998,13 +13998,13 @@
                     "dev-develop": "2.10.x-dev"
                 },
                 "zf": {
-                    "component": "Zend\\Serializer",
-                    "config-provider": "Zend\\Serializer\\ConfigProvider"
+                    "component": "Laminas\\Serializer",
+                    "config-provider": "Laminas\\Serializer\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Serializer\\": "src/"
+                    "Laminas\\Serializer\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -14020,27 +14020,27 @@
             "time": "2018-05-14T18:45:18+00:00"
         },
         {
-            "name": "zendframework/zend-server",
+            "name": "laminas/laminas-server",
             "version": "2.8.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-server.git",
+                "url": "https://github.com/laminas/laminas-server.git",
                 "reference": "23a2e9a5599c83c05da831cb7c649e8a7809595e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-server/zipball/23a2e9a5599c83c05da831cb7c649e8a7809595e",
+                "url": "https://api.github.com/repos/laminas/laminas-server/zipball/23a2e9a5599c83c05da831cb7c649e8a7809595e",
                 "reference": "23a2e9a5599c83c05da831cb7c649e8a7809595e",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-code": "^2.5 || ^3.0",
-                "zendframework/zend-stdlib": "^2.5 || ^3.0"
+                "laminas/laminas-code": "^2.5 || ^3.0",
+                "laminas/laminas-stdlib": "^2.5 || ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.4",
-                "zendframework/zend-coding-standard": "~1.0.0"
+                "laminas/laminas-coding-standard": "~1.0.0"
             },
             "type": "library",
             "extra": {
@@ -14051,7 +14051,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Server\\": "src/"
+                    "Laminas\\Server\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -14067,16 +14067,16 @@
             "time": "2018-04-30T22:21:28+00:00"
         },
         {
-            "name": "zendframework/zend-servicemanager",
+            "name": "laminas/laminas-servicemanager",
             "version": "2.7.11",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-servicemanager.git",
+                "url": "https://github.com/laminas/laminas-servicemanager.git",
                 "reference": "99ec9ed5d0f15aed9876433c74c2709eb933d4c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-servicemanager/zipball/99ec9ed5d0f15aed9876433c74c2709eb933d4c7",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/99ec9ed5d0f15aed9876433c74c2709eb933d4c7",
                 "reference": "99ec9ed5d0f15aed9876433c74c2709eb933d4c7",
                 "shasum": ""
             },
@@ -14088,12 +14088,12 @@
                 "athletic/athletic": "dev-master",
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0",
-                "zendframework/zend-di": "~2.5",
-                "zendframework/zend-mvc": "~2.5"
+                "laminas/laminas-di": "~2.5",
+                "laminas/laminas-mvc": "~2.5"
             },
             "suggest": {
                 "ocramius/proxy-manager": "ProxyManager 0.5.* to handle lazy initialization of services",
-                "zendframework/zend-di": "Zend\\Di component"
+                "laminas/laminas-di": "Laminas\\Di component"
             },
             "type": "library",
             "extra": {
@@ -14104,14 +14104,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\ServiceManager\\": "src/"
+                    "Laminas\\ServiceManager\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-servicemanager",
+            "homepage": "https://github.com/laminas/laminas-servicemanager",
             "keywords": [
                 "servicemanager",
                 "zf2"
@@ -14119,43 +14119,43 @@
             "time": "2018-06-22T14:49:54+00:00"
         },
         {
-            "name": "zendframework/zend-session",
+            "name": "laminas/laminas-session",
             "version": "2.8.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-session.git",
+                "url": "https://github.com/laminas/laminas-session.git",
                 "reference": "2cfd90e1a2f6b066b9f908599251d8f64f07021b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-session/zipball/2cfd90e1a2f6b066b9f908599251d8f64f07021b",
+                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/2cfd90e1a2f6b066b9f908599251d8f64f07021b",
                 "reference": "2cfd90e1a2f6b066b9f908599251d8f64f07021b",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "container-interop/container-interop": "^1.1",
                 "mongodb/mongodb": "^1.0.1",
                 "php-mock/php-mock-phpunit": "^1.1.2 || ^2.0",
                 "phpunit/phpunit": "^5.7.5 || >=6.0.13 <6.5.0",
-                "zendframework/zend-cache": "^2.6.1",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-db": "^2.7",
-                "zendframework/zend-http": "^2.5.4",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-validator": "^2.6"
+                "laminas/laminas-cache": "^2.6.1",
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-db": "^2.7",
+                "laminas/laminas-http": "^2.5.4",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-validator": "^2.6"
             },
             "suggest": {
                 "mongodb/mongodb": "If you want to use the MongoDB session save handler",
-                "zendframework/zend-cache": "Zend\\Cache component",
-                "zendframework/zend-db": "Zend\\Db component",
-                "zendframework/zend-http": "Zend\\Http component",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
-                "zendframework/zend-validator": "Zend\\Validator component"
+                "laminas/laminas-cache": "Laminas\\Cache component",
+                "laminas/laminas-db": "Laminas\\Db component",
+                "laminas/laminas-http": "Laminas\\Http component",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component",
+                "laminas/laminas-validator": "Laminas\\Validator component"
             },
             "type": "library",
             "extra": {
@@ -14164,13 +14164,13 @@
                     "dev-develop": "2.9-dev"
                 },
                 "zf": {
-                    "component": "Zend\\Session",
-                    "config-provider": "Zend\\Session\\ConfigProvider"
+                    "component": "Laminas\\Session",
+                    "config-provider": "Laminas\\Session\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Session\\": "src/"
+                    "Laminas\\Session\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -14186,34 +14186,34 @@
             "time": "2018-02-22T16:33:54+00:00"
         },
         {
-            "name": "zendframework/zend-soap",
+            "name": "laminas/laminas-soap",
             "version": "2.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-soap.git",
+                "url": "https://github.com/laminas/laminas-soap.git",
                 "reference": "af03c32f0db2b899b3df8cfe29aeb2b49857d284"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-soap/zipball/af03c32f0db2b899b3df8cfe29aeb2b49857d284",
+                "url": "https://api.github.com/repos/laminas/laminas-soap/zipball/af03c32f0db2b899b3df8cfe29aeb2b49857d284",
                 "reference": "af03c32f0db2b899b3df8cfe29aeb2b49857d284",
                 "shasum": ""
             },
             "require": {
                 "ext-soap": "*",
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-server": "^2.6.1",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0",
-                "zendframework/zend-uri": "^2.5.2"
+                "laminas/laminas-server": "^2.6.1",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-uri": "^2.5.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.21 || ^6.3",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-config": "^2.6",
-                "zendframework/zend-http": "^2.5.4"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-config": "^2.6",
+                "laminas/laminas-http": "^2.5.4"
             },
             "suggest": {
-                "zendframework/zend-http": "Zend\\Http component"
+                "laminas/laminas-http": "Laminas\\Http component"
             },
             "type": "library",
             "extra": {
@@ -14224,14 +14224,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Soap\\": "src/"
+                    "Laminas\\Soap\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-soap",
+            "homepage": "https://github.com/laminas/laminas-soap",
             "keywords": [
                 "soap",
                 "zf2"
@@ -14239,39 +14239,39 @@
             "time": "2018-01-29T17:51:26+00:00"
         },
         {
-            "name": "zendframework/zend-stdlib",
+            "name": "laminas/laminas-stdlib",
             "version": "2.7.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-stdlib.git",
+                "url": "https://github.com/laminas/laminas-stdlib.git",
                 "reference": "0e44eb46788f65e09e077eb7f44d2659143bcc1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/0e44eb46788f65e09e077eb7f44d2659143bcc1f",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/0e44eb46788f65e09e077eb7f44d2659143bcc1f",
                 "reference": "0e44eb46788f65e09e077eb7f44d2659143bcc1f",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.5 || ^7.0",
-                "zendframework/zend-hydrator": "~1.1"
+                "laminas/laminas-hydrator": "~1.1"
             },
             "require-dev": {
                 "athletic/athletic": "~0.1",
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0",
-                "zendframework/zend-config": "~2.5",
-                "zendframework/zend-eventmanager": "~2.5",
-                "zendframework/zend-filter": "~2.5",
-                "zendframework/zend-inputfilter": "~2.5",
-                "zendframework/zend-serializer": "~2.5",
-                "zendframework/zend-servicemanager": "~2.5"
+                "laminas/laminas-config": "~2.5",
+                "laminas/laminas-eventmanager": "~2.5",
+                "laminas/laminas-filter": "~2.5",
+                "laminas/laminas-inputfilter": "~2.5",
+                "laminas/laminas-serializer": "~2.5",
+                "laminas/laminas-servicemanager": "~2.5"
             },
             "suggest": {
-                "zendframework/zend-eventmanager": "To support aggregate hydrator usage",
-                "zendframework/zend-filter": "To support naming strategy hydrator usage",
-                "zendframework/zend-serializer": "Zend\\Serializer component",
-                "zendframework/zend-servicemanager": "To support hydrator plugin manager usage"
+                "laminas/laminas-eventmanager": "To support aggregate hydrator usage",
+                "laminas/laminas-filter": "To support naming strategy hydrator usage",
+                "laminas/laminas-serializer": "Laminas\\Serializer component",
+                "laminas/laminas-servicemanager": "To support hydrator plugin manager usage"
             },
             "type": "library",
             "extra": {
@@ -14283,14 +14283,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Stdlib\\": "src/"
+                    "Laminas\\Stdlib\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-stdlib",
+            "homepage": "https://github.com/laminas/laminas-stdlib",
             "keywords": [
                 "stdlib",
                 "zf2"
@@ -14298,28 +14298,28 @@
             "time": "2016-04-12T21:17:31+00:00"
         },
         {
-            "name": "zendframework/zend-text",
+            "name": "laminas/laminas-text",
             "version": "2.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-text.git",
+                "url": "https://github.com/laminas/laminas-text.git",
                 "reference": "ca987dd4594f5f9508771fccd82c89bc7fbb39ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-text/zipball/ca987dd4594f5f9508771fccd82c89bc7fbb39ac",
+                "url": "https://api.github.com/repos/laminas/laminas-text/zipball/ca987dd4594f5f9508771fccd82c89bc7fbb39ac",
                 "reference": "ca987dd4594f5f9508771fccd82c89bc7fbb39ac",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.4",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-config": "^2.6"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-config": "^2.6"
             },
             "type": "library",
             "extra": {
@@ -14330,7 +14330,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Text\\": "src/"
+                    "Laminas\\Text\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -14346,27 +14346,27 @@
             "time": "2018-04-30T14:55:10+00:00"
         },
         {
-            "name": "zendframework/zend-uri",
+            "name": "laminas/laminas-uri",
             "version": "2.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-uri.git",
+                "url": "https://github.com/laminas/laminas-uri.git",
                 "reference": "b2785cd38fe379a784645449db86f21b7739b1ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-uri/zipball/b2785cd38fe379a784645449db86f21b7739b1ee",
+                "url": "https://api.github.com/repos/laminas/laminas-uri/zipball/b2785cd38fe379a784645449db86f21b7739b1ee",
                 "reference": "b2785cd38fe379a784645449db86f21b7739b1ee",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-escaper": "^2.5",
-                "zendframework/zend-validator": "^2.10"
+                "laminas/laminas-escaper": "^2.5",
+                "laminas/laminas-validator": "^2.10"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.4",
-                "zendframework/zend-coding-standard": "~1.0.0"
+                "laminas/laminas-coding-standard": "~1.0.0"
             },
             "type": "library",
             "extra": {
@@ -14377,7 +14377,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Uri\\": "src/"
+                    "Laminas\\Uri\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -14393,49 +14393,49 @@
             "time": "2019-02-27T21:39:04+00:00"
         },
         {
-            "name": "zendframework/zend-validator",
+            "name": "laminas/laminas-validator",
             "version": "2.11.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-validator.git",
+                "url": "https://github.com/laminas/laminas-validator.git",
                 "reference": "3c28dfe4e5951ba38059cea895244d9d206190b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/3c28dfe4e5951ba38059cea895244d9d206190b3",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/3c28dfe4e5951ba38059cea895244d9d206190b3",
                 "reference": "3c28dfe4e5951ba38059cea895244d9d206190b3",
                 "shasum": ""
             },
             "require": {
                 "container-interop/container-interop": "^1.1",
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7.6 || ^3.1"
+                "laminas/laminas-stdlib": "^2.7.6 || ^3.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.0.8 || ^5.7.15",
                 "psr/http-message": "^1.0",
-                "zendframework/zend-cache": "^2.6.1",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-config": "^2.6",
-                "zendframework/zend-db": "^2.7",
-                "zendframework/zend-filter": "^2.6",
-                "zendframework/zend-http": "^2.5.4",
-                "zendframework/zend-i18n": "^2.6",
-                "zendframework/zend-math": "^2.6",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-session": "^2.8",
-                "zendframework/zend-uri": "^2.5"
+                "laminas/laminas-cache": "^2.6.1",
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-config": "^2.6",
+                "laminas/laminas-db": "^2.7",
+                "laminas/laminas-filter": "^2.6",
+                "laminas/laminas-http": "^2.5.4",
+                "laminas/laminas-i18n": "^2.6",
+                "laminas/laminas-math": "^2.6",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-session": "^2.8",
+                "laminas/laminas-uri": "^2.5"
             },
             "suggest": {
                 "psr/http-message": "psr/http-message, required when validating PSR-7 UploadedFileInterface instances via the Upload and UploadFile validators",
-                "zendframework/zend-db": "Zend\\Db component, required by the (No)RecordExists validator",
-                "zendframework/zend-filter": "Zend\\Filter component, required by the Digits validator",
-                "zendframework/zend-i18n": "Zend\\I18n component to allow translation of validation error messages",
-                "zendframework/zend-i18n-resources": "Translations of validator messages",
-                "zendframework/zend-math": "Zend\\Math component, required by the Csrf validator",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component to allow using the ValidatorPluginManager and validator chains",
-                "zendframework/zend-session": "Zend\\Session component, ^2.8; required by the Csrf validator",
-                "zendframework/zend-uri": "Zend\\Uri component, required by the Uri and Sitemap\\Loc validators"
+                "laminas/laminas-db": "Laminas\\Db component, required by the (No)RecordExists validator",
+                "laminas/laminas-filter": "Laminas\\Filter component, required by the Digits validator",
+                "laminas/laminas-i18n": "Laminas\\I18n component to allow translation of validation error messages",
+                "laminas/laminas-i18n-resources": "Translations of validator messages",
+                "laminas/laminas-math": "Laminas\\Math component, required by the Csrf validator",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component to allow using the ValidatorPluginManager and validator chains",
+                "laminas/laminas-session": "Laminas\\Session component, ^2.8; required by the Csrf validator",
+                "laminas/laminas-uri": "Laminas\\Uri component, required by the Uri and Sitemap\\Loc validators"
             },
             "type": "library",
             "extra": {
@@ -14444,13 +14444,13 @@
                     "dev-develop": "2.12.x-dev"
                 },
                 "zf": {
-                    "component": "Zend\\Validator",
-                    "config-provider": "Zend\\Validator\\ConfigProvider"
+                    "component": "Laminas\\Validator",
+                    "config-provider": "Laminas\\Validator\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\Validator\\": "src/"
+                    "Laminas\\Validator\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -14458,7 +14458,7 @@
                 "BSD-3-Clause"
             ],
             "description": "provides a set of commonly needed validators",
-            "homepage": "https://github.com/zendframework/zend-validator",
+            "homepage": "https://github.com/laminas/laminas-validator",
             "keywords": [
                 "validator",
                 "zf2"
@@ -14466,64 +14466,64 @@
             "time": "2019-01-29T22:26:39+00:00"
         },
         {
-            "name": "zendframework/zend-view",
+            "name": "laminas/laminas-view",
             "version": "2.10.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-view.git",
+                "url": "https://github.com/laminas/laminas-view.git",
                 "reference": "c1a3f2043fb75b5983ab9adfc369ae396601be7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-view/zipball/c1a3f2043fb75b5983ab9adfc369ae396601be7e",
+                "url": "https://api.github.com/repos/laminas/laminas-view/zipball/c1a3f2043fb75b5983ab9adfc369ae396601be7e",
                 "reference": "c1a3f2043fb75b5983ab9adfc369ae396601be7e",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-json": "^2.6.1",
-                "zendframework/zend-loader": "^2.5",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-json": "^2.6.1",
+                "laminas/laminas-loader": "^2.5",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7.15 || ^6.0.8",
-                "zendframework/zend-authentication": "^2.5",
-                "zendframework/zend-cache": "^2.6.1",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-config": "^2.6",
-                "zendframework/zend-console": "^2.6",
-                "zendframework/zend-escaper": "^2.5",
-                "zendframework/zend-feed": "^2.7",
-                "zendframework/zend-filter": "^2.6.1",
-                "zendframework/zend-http": "^2.5.4",
-                "zendframework/zend-i18n": "^2.6",
-                "zendframework/zend-log": "^2.7",
-                "zendframework/zend-modulemanager": "^2.7.1",
-                "zendframework/zend-mvc": "^2.7.14 || ^3.0",
-                "zendframework/zend-navigation": "^2.5",
-                "zendframework/zend-paginator": "^2.5",
-                "zendframework/zend-permissions-acl": "^2.6",
-                "zendframework/zend-router": "^3.0.1",
-                "zendframework/zend-serializer": "^2.6.1",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-session": "^2.8.1",
-                "zendframework/zend-uri": "^2.5"
+                "laminas/laminas-authentication": "^2.5",
+                "laminas/laminas-cache": "^2.6.1",
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-config": "^2.6",
+                "laminas/laminas-console": "^2.6",
+                "laminas/laminas-escaper": "^2.5",
+                "laminas/laminas-feed": "^2.7",
+                "laminas/laminas-filter": "^2.6.1",
+                "laminas/laminas-http": "^2.5.4",
+                "laminas/laminas-i18n": "^2.6",
+                "laminas/laminas-log": "^2.7",
+                "laminas/laminas-modulemanager": "^2.7.1",
+                "laminas/laminas-mvc": "^2.7.14 || ^3.0",
+                "laminas/laminas-navigation": "^2.5",
+                "laminas/laminas-paginator": "^2.5",
+                "laminas/laminas-permissions-acl": "^2.6",
+                "laminas/laminas-router": "^3.0.1",
+                "laminas/laminas-serializer": "^2.6.1",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-session": "^2.8.1",
+                "laminas/laminas-uri": "^2.5"
             },
             "suggest": {
-                "zendframework/zend-authentication": "Zend\\Authentication component",
-                "zendframework/zend-escaper": "Zend\\Escaper component",
-                "zendframework/zend-feed": "Zend\\Feed component",
-                "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-http": "Zend\\Http component",
-                "zendframework/zend-i18n": "Zend\\I18n component",
-                "zendframework/zend-mvc": "Zend\\Mvc component",
-                "zendframework/zend-mvc-plugin-flashmessenger": "zend-mvc-plugin-flashmessenger component, if you want to use the FlashMessenger view helper with zend-mvc versions 3 and up",
-                "zendframework/zend-navigation": "Zend\\Navigation component",
-                "zendframework/zend-paginator": "Zend\\Paginator component",
-                "zendframework/zend-permissions-acl": "Zend\\Permissions\\Acl component",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
-                "zendframework/zend-uri": "Zend\\Uri component"
+                "laminas/laminas-authentication": "Laminas\\Authentication component",
+                "laminas/laminas-escaper": "Laminas\\Escaper component",
+                "laminas/laminas-feed": "Laminas\\Feed component",
+                "laminas/laminas-filter": "Laminas\\Filter component",
+                "laminas/laminas-http": "Laminas\\Http component",
+                "laminas/laminas-i18n": "Laminas\\I18n component",
+                "laminas/laminas-mvc": "Laminas\\Mvc component",
+                "laminas/laminas-mvc-plugin-flashmessenger": "zend-mvc-plugin-flashmessenger component, if you want to use the FlashMessenger view helper with zend-mvc versions 3 and up",
+                "laminas/laminas-navigation": "Laminas\\Navigation component",
+                "laminas/laminas-paginator": "Laminas\\Paginator component",
+                "laminas/laminas-permissions-acl": "Laminas\\Permissions\\Acl component",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component",
+                "laminas/laminas-uri": "Laminas\\Uri component"
             },
             "bin": [
                 "bin/templatemap_generator.php"
@@ -14537,7 +14537,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Zend\\View\\": "src/"
+                    "Laminas\\View\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -14545,7 +14545,7 @@
                 "BSD-3-Clause"
             ],
             "description": "provides a system of helpers, output filters, and variable escaping",
-            "homepage": "https://github.com/zendframework/zend-view",
+            "homepage": "https://github.com/laminas/laminas-view",
             "keywords": [
                 "view",
                 "zf2"

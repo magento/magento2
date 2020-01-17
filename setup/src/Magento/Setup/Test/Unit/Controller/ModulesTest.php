@@ -56,7 +56,7 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
         $this->modules->expects($this->once())->method('getAllModules')->willReturn($expected['modules']);
         $this->status->expects($this->once())->method('checkConstraints')->willReturn([]);
         $jsonModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
@@ -74,7 +74,7 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
             ->method('checkConstraints')
             ->willReturn(['ModuleA', 'ModuleB']);
         $jsonModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('error', $variables);

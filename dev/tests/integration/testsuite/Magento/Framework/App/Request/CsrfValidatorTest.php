@@ -19,7 +19,7 @@ use Magento\Framework\Phrase;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\Response\HttpFactory as HttpResponseFactory;
 

@@ -30,7 +30,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
     {
         $this->licenseModel->expects($this->once())->method('getContents')->willReturn('some license string');
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertArrayHasKey('license', $viewModel->getVariables());
     }
 
@@ -38,7 +38,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
     {
         $this->licenseModel->expects($this->once())->method('getContents')->willReturn(false);
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertArrayHasKey('message', $viewModel->getVariables());
         $this->assertEquals('error/404', $viewModel->getTemplate());
     }

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Mail;
 
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
-use Zend\Mime\Part as ZendMimePart;
+use Laminas\Mime\Part as ZendMimePart;
 
 /**
  * @inheritDoc

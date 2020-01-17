@@ -46,14 +46,14 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
         $this->navigationModel->expects($this->once())->method('getData')->willReturn('some data');
         $viewModel = $this->controller->indexAction();
 
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $viewModel);
         $this->assertArrayHasKey('nav', $viewModel->getVariables());
     }
 
     public function testMenuActionUpdater()
     {
         $viewModel = $this->controller->menuAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -64,7 +64,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     public function testMenuActionInstaller()
     {
         $viewModel = $this->controller->menuAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -76,7 +76,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     {
         $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_INSTALLER);
         $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -88,7 +88,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     {
         $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_UPDATER);
         $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);

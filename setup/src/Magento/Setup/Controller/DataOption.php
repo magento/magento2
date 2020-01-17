@@ -7,10 +7,10 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\UninstallCollector;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Controller of data option selection
@@ -35,7 +35,7 @@ class DataOption extends AbstractActionController
     /**
      * Shows data option page
      *
-     * @return ViewModel|\Zend\Http\Response
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {

@@ -7,9 +7,9 @@ namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Magento\Setup\Model\Grid;
 
 /**
@@ -50,7 +50,7 @@ class ExtensionGrid extends AbstractActionController
     /**
      * Index page action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

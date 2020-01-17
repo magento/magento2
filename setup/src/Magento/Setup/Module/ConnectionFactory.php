@@ -6,7 +6,7 @@
 namespace Magento\Setup\Module;
 
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Connection adapter factory

@@ -10,7 +10,7 @@ use Magento\Setup\Controller\ReadinessCheckInstaller;
 use Magento\Setup\Controller\ReadinessCheckUpdater;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -58,9 +58,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testFilePermissionsInstaller()
     {
-        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -72,9 +72,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpVersionActionInstaller()
     {
-        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -87,9 +87,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpVersionActionUpdater()
     {
-        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -108,9 +108,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpSettingsActionInstaller()
     {
-        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -123,9 +123,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpSettingsActionUpdater()
     {
-        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -144,9 +144,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpExtensionsActionInstaller()
     {
-        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -159,9 +159,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpExtensionsActionUpdater()
     {
-        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -291,7 +291,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $model = $this->environment->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $model);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $model);
     }
 
     /**
@@ -306,7 +306,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         MockObject $response,
         MockObject $routeMatch
     ) {
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
+        $mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);

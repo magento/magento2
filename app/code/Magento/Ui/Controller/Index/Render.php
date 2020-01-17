@@ -109,8 +109,8 @@ class Render extends \Magento\Framework\App\Action\Action
                 /** @var \Magento\Framework\Controller\Result\Json $resultJson */
                 $resultJson = $this->resultJsonFactory->create();
                 $resultJson->setStatusHeader(
-                    \Zend\Http\Response::STATUS_CODE_403,
-                    \Zend\Http\AbstractMessage::VERSION_11,
+                    \Laminas\Http\Response::STATUS_CODE_403,
+                    \Laminas\Http\AbstractMessage::VERSION_11,
                     'Forbidden'
                 );
                 return $resultJson->setData(
@@ -129,8 +129,8 @@ class Render extends \Magento\Framework\App\Action\Action
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setStatusHeader(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
+                \Laminas\Http\Response::STATUS_CODE_400,
+                \Laminas\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
 
@@ -144,8 +144,8 @@ class Render extends \Magento\Framework\App\Action\Action
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setStatusHeader(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
+                \Laminas\Http\Response::STATUS_CODE_400,
+                \Laminas\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
 

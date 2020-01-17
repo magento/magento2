@@ -32,7 +32,7 @@ class LandingInstallerTest extends \PHPUnit\Framework\TestCase
         $controller = new LandingInstaller($productMetadataMock);
         $_SERVER['DOCUMENT_ROOT'] = 'some/doc/root/value';
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $this->assertEquals('/magento/setup/landing.phtml', $viewModel->getTemplate());
         $variables = $viewModel->getVariables();

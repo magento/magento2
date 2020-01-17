@@ -5,8 +5,8 @@
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
-use Zend\Soap\Wsdl;
-use Zend\Soap\Wsdl\ComplexTypeStrategy\AbstractComplexTypeStrategy;
+use Laminas\Soap\Wsdl;
+use Laminas\Soap\Wsdl\ComplexTypeStrategy\AbstractComplexTypeStrategy;
 
 /**
  * Magento-specific Complex type strategy for WSDL auto discovery.

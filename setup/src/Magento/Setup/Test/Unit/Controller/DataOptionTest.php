@@ -16,17 +16,17 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
     private $uninstallCollector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\PhpEnvironment\Request
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\Http\PhpEnvironment\Request
      */
     private $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\PhpEnvironment\Response
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\Http\PhpEnvironment\Response
      */
     private $response;
 
     /**
-     * @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mvcEvent;
 
@@ -37,14 +37,14 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $this->response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $this->request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $this->response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
         $this->uninstallCollector = $this->createMock(\Magento\Setup\Model\UninstallCollector::class);
         $this->controller = new DataOption($this->uninstallCollector);
 
-        $this->mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
+        $this->mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
         $this->mvcEvent->expects($this->any())
             ->method('setRequest')
             ->with($this->request)
@@ -64,7 +64,7 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 

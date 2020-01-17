@@ -22,7 +22,7 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
     private static $serverPid;
 
     /**
-     * @var \Zend\Http\Client
+     * @var \Laminas\Http\Client
      */
     private $httpClient;
 
@@ -53,7 +53,7 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->httpClient = new \Zend\Http\Client(null, ['timeout' => 10]);
+        $this->httpClient = new \Laminas\Http\Client(null, ['timeout' => 10]);
     }
 
     public function testServerHasPid()

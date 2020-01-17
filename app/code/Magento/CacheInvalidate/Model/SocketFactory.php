@@ -8,10 +8,10 @@ namespace Magento\CacheInvalidate\Model;
 class SocketFactory
 {
     /**
-     * @return \Zend\Http\Client\Adapter\Socket
+     * @return \Laminas\Http\Client\Adapter\Socket
      */
     public function create()
     {
-        return new \Zend\Http\Client\Adapter\Socket();
+        return new \Laminas\Http\Client\Adapter\Socket();
     }
 }

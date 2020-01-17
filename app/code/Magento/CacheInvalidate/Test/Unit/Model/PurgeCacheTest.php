@@ -5,14 +5,14 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-use Zend\Uri\UriFactory;
+use Laminas\Uri\UriFactory;
 
 class PurgeCacheTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CacheInvalidate\Model\PurgeCache */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Zend\Http\Client\Adapter\Socket */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Laminas\Http\Client\Adapter\Socket */
     protected $socketAdapterMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Cache\InvalidateLogger */
@@ -24,7 +24,7 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $socketFactoryMock = $this->createMock(\Magento\CacheInvalidate\Model\SocketFactory::class);
-        $this->socketAdapterMock = $this->createMock(\Zend\Http\Client\Adapter\Socket::class);
+        $this->socketAdapterMock = $this->createMock(\Laminas\Http\Client\Adapter\Socket::class);
         $this->socketAdapterMock->expects($this->once())
             ->method('setOptions')
             ->with(['timeout' => 10]);
@@ -113,7 +113,7 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
             ->method('getUris')
             ->willReturn($uris);
         $this->socketAdapterMock->method('connect')
-            ->willThrowException(new \Zend\Http\Client\Adapter\Exception\RuntimeException());
+            ->willThrowException(new \Laminas\Http\Client\Adapter\Exception\RuntimeException());
         $this->loggerMock->expects($this->never())
             ->method('execute');
         $this->loggerMock->expects($this->once())

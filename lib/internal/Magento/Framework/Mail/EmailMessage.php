@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Framework\Mail;
 
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
-use Zend\Mail\Address as ZendAddress;
-use Zend\Mail\AddressList;
-use Zend\Mime\Message as ZendMimeMessage;
+use Laminas\Mail\Address as ZendAddress;
+use Laminas\Mail\AddressList;
+use Laminas\Mime\Message as ZendMimeMessage;
 
 /**
  * Email message

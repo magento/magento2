@@ -52,7 +52,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $headersMock = $this->createMock(\Zend\Http\Headers::class);
+        $headersMock = $this->createMock(\Laminas\Http\Headers::class);
         $this->cacheMock = $this->createMock(\Magento\Framework\App\PageCache\Cache::class);
         $this->fullPageCacheMock = $this->createMock(\Magento\PageCache\Model\Cache\Type::class);
         $this->contextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
@@ -204,7 +204,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $cacheControlHeader = \Zend\Http\Header\CacheControl::fromString(
+        $cacheControlHeader = \Laminas\Http\Header\CacheControl::fromString(
             'Cache-Control: public, max-age=100, s-maxage=100'
         );
 
@@ -261,7 +261,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessNotSaveCache($cacheControlHeader, $httpCode, $isGet, $overrideHeaders)
     {
-        $header = \Zend\Http\Header\CacheControl::fromString("Cache-Control: $cacheControlHeader");
+        $header = \Laminas\Http\Header\CacheControl::fromString("Cache-Control: $cacheControlHeader");
         $this->responseMock->expects(
             $this->once()
         )->method(

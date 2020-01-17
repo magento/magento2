@@ -14,10 +14,10 @@ use Magento\Setup\Model\Installer\ProgressFactory;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\RequestDataConverter;
 use Magento\Setup\Model\WebLogger;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Install controller

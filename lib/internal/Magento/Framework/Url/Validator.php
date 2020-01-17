@@ -20,14 +20,14 @@ class Validator extends \Zend_Validate_Abstract
     /**#@-*/
 
     /**
-     * @var \Zend\Validator\Uri
+     * @var \Laminas\Validator\Uri
      */
     private $validator;
 
     /**
      * Object constructor
      */
-    public function __construct(\Zend\Validator\Uri $validator)
+    public function __construct(\Laminas\Validator\Uri $validator)
     {
         // set translated message template
         $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), self::INVALID_URL);

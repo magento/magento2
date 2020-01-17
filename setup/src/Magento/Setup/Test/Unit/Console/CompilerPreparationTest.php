@@ -11,7 +11,7 @@ use Magento\Setup\Console\Command\DiCompileCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Framework\Filesystem\Driver\File;
 use Symfony\Component\Console\Input\ArgvInput;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 use Magento\Setup\Console\CompilerPreparation;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 

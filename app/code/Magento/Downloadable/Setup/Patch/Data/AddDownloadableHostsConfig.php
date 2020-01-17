@@ -14,7 +14,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Zend\Uri\Uri as UriHandler;
+use Laminas\Uri\Uri as UriHandler;
 use Magento\Framework\Url\ScopeResolverInterface;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 use Magento\Framework\Setup\ModuleDataSetupInterface;

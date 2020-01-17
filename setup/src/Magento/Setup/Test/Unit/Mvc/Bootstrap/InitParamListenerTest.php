@@ -9,7 +9,7 @@ use \Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,11 +46,11 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testOnBootstrap()
     {
-        /** @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
-        $mvcApplication = $this->getMockBuilder(\Zend\Mvc\Application::class)->disableOriginalConstructor()->getMock();
+        /** @var \Laminas\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
+        $mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
+        $mvcApplication = $this->getMockBuilder(\Laminas\Mvc\Application::class)->disableOriginalConstructor()->getMock();
         $mvcEvent->expects($this->once())->method('getApplication')->willReturn($mvcApplication);
-        $serviceManager = $this->createMock(\Zend\ServiceManager\ServiceManager::class);
+        $serviceManager = $this->createMock(\Laminas\ServiceManager\ServiceManager::class);
         $initParams[AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::ROOT] = ['path' => '/test'];
         $serviceManager->expects($this->once())->method('get')
             ->willReturn($initParams);
@@ -67,7 +67,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
             );
         $mvcApplication->expects($this->any())->method('getServiceManager')->willReturn($serviceManager);
 
-        $eventManager = $this->getMockForAbstractClass(\Zend\EventManager\EventManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(\Laminas\EventManager\EventManagerInterface::class);
         $mvcApplication->expects($this->any())->method('getEventManager')->willReturn($eventManager);
         $eventManager->expects($this->any())->method('attach');
 
@@ -95,11 +95,11 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     public function testCreateServiceNotConsole()
     {
         /**
-         * @var \Zend\ServiceManager\ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
+         * @var \Laminas\ServiceManager\ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
          */
-        $serviceLocator = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
-        $mvcApplication = $this->getMockBuilder(\Zend\Mvc\Application::class)->disableOriginalConstructor()->getMock();
-        $request = $this->createMock(\Zend\Stdlib\RequestInterface::class);
+        $serviceLocator = $this->createMock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
+        $mvcApplication = $this->getMockBuilder(\Laminas\Mvc\Application::class)->disableOriginalConstructor()->getMock();
+        $request = $this->createMock(\Laminas\Stdlib\RequestInterface::class);
         $mvcApplication->expects($this->any())->method('getRequest')->willReturn($request);
         $serviceLocator->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
@@ -121,11 +121,11 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         }
         $listener = new InitParamListener();
         /**
-         * @var \Zend\ServiceManager\ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
+         * @var \Laminas\ServiceManager\ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
          */
-        $serviceLocator = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
-        $mvcApplication = $this->getMockBuilder(\Zend\Mvc\Application::class)->disableOriginalConstructor()->getMock();
-        $request = $this->getMockBuilder(\Zend\Console\Request::class)->disableOriginalConstructor()->getMock();
+        $serviceLocator = $this->createMock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
+        $mvcApplication = $this->getMockBuilder(\Laminas\Mvc\Application::class)->disableOriginalConstructor()->getMock();
+        $request = $this->getMockBuilder(\Laminas\Console\Request::class)->disableOriginalConstructor()->getMock();
         $request->expects($this->any())
             ->method('getContent')
             ->willReturn(
@@ -230,12 +230,12 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     {
         $this->callbacks[] =  [$this->listener, 'onBootstrap'];
 
-        /** @var \Zend\EventManager\EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject $events */
-        $eventManager = $this->createMock(\Zend\EventManager\EventManagerInterface::class);
+        /** @var \Laminas\EventManager\EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject $events */
+        $eventManager = $this->createMock(\Laminas\EventManager\EventManagerInterface::class);
 
-        $sharedManager = $this->createMock(\Zend\EventManager\SharedEventManager::class);
+        $sharedManager = $this->createMock(\Laminas\EventManager\SharedEventManager::class);
         $sharedManager->expects($this->once())->method('attach')->with(
-            \Zend\Mvc\Application::class,
+            \Laminas\Mvc\Application::class,
             MvcEvent::EVENT_BOOTSTRAP,
             [$this->listener, 'onBootstrap']
         );
@@ -252,16 +252,16 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     public function testAuthPreDispatch()
     {
         $cookiePath = 'test';
-        $eventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $eventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $routeMatchMock = $this->getMockBuilder(\Zend\Mvc\Router\Http\RouteMatch::class)
+        $routeMatchMock = $this->getMockBuilder(\Laminas\Mvc\Router\Http\RouteMatch::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $applicationMock = $this->getMockBuilder(\Zend\Mvc\Application::class)
+        $applicationMock = $this->getMockBuilder(\Laminas\Mvc\Application::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $serviceManagerMock = $this->getMockBuilder(\Zend\ServiceManager\ServiceManager::class)
+        $serviceManagerMock = $this->getMockBuilder(\Laminas\ServiceManager\ServiceManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
@@ -295,10 +295,10 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         $adminSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $responseMock = $this->getMockBuilder(\Zend\Http\Response::class)
+        $responseMock = $this->getMockBuilder(\Laminas\Http\Response::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $headersMock = $this->getMockBuilder(\Zend\Http\Headers::class)
+        $headersMock = $this->getMockBuilder(\Laminas\Http\Headers::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -433,10 +433,10 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthPreDispatchSkip()
     {
-        $eventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+        $eventMock = $this->getMockBuilder(\Laminas\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $routeMatchMock = $this->getMockBuilder(\Zend\Mvc\Router\Http\RouteMatch::class)
+        $routeMatchMock = $this->getMockBuilder(\Laminas\Mvc\Router\Http\RouteMatch::class)
             ->disableOriginalConstructor()
             ->getMock();
         $deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)

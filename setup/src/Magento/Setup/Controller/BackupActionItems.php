@@ -9,9 +9,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Setup\BackupRollback;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
 
 class BackupActionItems extends AbstractActionController
 {
@@ -63,20 +63,20 @@ class BackupActionItems extends AbstractActionController
     /**
      * No index action, return 404 error page
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel;
+        $view = new \Laminas\View\Model\ViewModel;
         $view->setTemplate('/error/404.phtml');
-        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        $this->getResponse()->setStatusCode(\Laminas\Http\Response::STATUS_CODE_404);
         return $view;
     }
 
     /**
      * Checks disk space availability
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function checkAction()
     {
@@ -114,7 +114,7 @@ class BackupActionItems extends AbstractActionController
     /**
      * Takes backup for code, media or DB
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function createAction()
     {

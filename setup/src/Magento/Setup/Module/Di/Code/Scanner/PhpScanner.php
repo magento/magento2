@@ -145,7 +145,7 @@ class PhpScanner implements ScannerInterface
         $entityType = ucfirst(\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::ENTITY_TYPE);
         if ($reflectionClass->hasMethod($methodName) && $reflectionClass->isInterface()) {
             $returnType = $this->typeProcessor->getGetterReturnType(
-                (new \Zend\Code\Reflection\ClassReflection($reflectionClass->getName()))->getMethod($methodName)
+                (new \Laminas\Code\Reflection\ClassReflection($reflectionClass->getName()))->getMethod($methodName)
             );
             $missingClassName = $returnType['type'];
             if ($this->shouldGenerateClass($missingClassName, $entityType, $file)) {

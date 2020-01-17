@@ -16,13 +16,13 @@ class CommandListTest extends \PHPUnit\Framework\TestCase
     private $commandList;
 
      /**
-      * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager
+      * @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\ServiceManager\ServiceManager
       */
     private $serviceManager;
 
     public function setUp()
     {
-        $this->serviceManager = $this->createMock(\Zend\ServiceManager\ServiceManager::class);
+        $this->serviceManager = $this->createMock(\Laminas\ServiceManager\ServiceManager::class);
         $this->commandList = new CommandList($this->serviceManager);
     }
 

@@ -10,7 +10,7 @@ namespace Magento\TestFramework\Authentication;
 use Magento\TestFramework\Authentication\Rest\OauthClient;
 use Magento\TestFramework\Helper\Bootstrap;
 use OAuth\Common\Consumer\Credentials;
-use Zend\Stdlib\Exception\LogicException;
+use Laminas\Stdlib\Exception\LogicException;
 use Magento\Integration\Model\Integration;
 
 class OauthHelper
@@ -170,7 +170,7 @@ class OauthHelper
      *
      * @param array $resources
      * @return \Magento\Integration\Model\Integration
-     * @throws \Zend\Stdlib\Exception\LogicException
+     * @throws \Laminas\Stdlib\Exception\LogicException
      */
     protected static function _createIntegration($resources)
     {

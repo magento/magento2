@@ -34,7 +34,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -50,7 +50,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -62,7 +62,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
             ->method('getPackageVersions')
             ->will($this->throwException(new \Exception("Test error message")));
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
@@ -80,7 +80,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
         $jsonModel = $this->controller->installedSystemPackageAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);

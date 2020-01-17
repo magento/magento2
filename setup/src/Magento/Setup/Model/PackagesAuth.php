@@ -7,7 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Class PackagesAuth, checks, saves and removes auth details related to packages.
@@ -30,7 +30,7 @@ class PackagesAuth
     /**#@-*/
 
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var \Laminas\ServiceManager\ServiceLocatorInterface
      */
     protected $serviceLocator;
 
@@ -55,14 +55,14 @@ class PackagesAuth
     private $serializer;
 
     /**
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param \Laminas\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @param \Magento\Framework\HTTP\Client\Curl $curl
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
      */
     public function __construct(
-        \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator,
+        \Laminas\ServiceManager\ServiceLocatorInterface $serviceLocator,
         \Magento\Framework\HTTP\Client\Curl $curl,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
@@ -198,7 +198,7 @@ class PackagesAuth
                 ]
             ]
         ];
-        $json = new \Zend\View\Model\JsonModel($authContent);
+        $json = new \Laminas\View\Model\JsonModel($authContent);
         $json->setOption('prettyPrint', true);
         $jsonContent = $json->serialize();
 

@@ -5,7 +5,7 @@
  */
 namespace Magento\Developer\Helper;
 
-use \Zend\Stdlib\Parameters;
+use \Laminas\Stdlib\Parameters;
 
 class DataTest extends \PHPUnit\Framework\TestCase
 {

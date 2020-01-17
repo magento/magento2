@@ -43,7 +43,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
     <link>http://magento.com/rss/link</link>
     <description><![CDATA[Feed Description]]></description>
     <pubDate>Sat, 22 Apr 2017 13:21:12 +0200</pubDate>
-    <generator>Zend\Feed</generator>
+    <generator>Laminas\Feed</generator>
     <docs>http://blogs.law.harvard.edu/tech/rss</docs>
     <item>
       <title><![CDATA[Feed 1 Title]]></title>

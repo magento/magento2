@@ -9,7 +9,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Vault\Model\CustomerTokenManagement;
-use Zend\Http\Request;
+use Laminas\Http\Request;
 
 /**
  * Class DeleteActionTest

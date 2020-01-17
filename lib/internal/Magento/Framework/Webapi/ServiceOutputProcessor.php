@@ -11,7 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
-use Zend\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\ClassReflection;
 
 /**
  * Data object converter

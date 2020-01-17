@@ -7,8 +7,8 @@ namespace Magento\Framework\Mail;
 
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Phrase;
-use Zend\Mail\Message as ZendMessage;
-use Zend\Mail\Transport\Sendmail;
+use Laminas\Mail\Message as ZendMessage;
+use Laminas\Mail\Transport\Sendmail;
 
 class Transport implements \Magento\Framework\Mail\TransportInterface
 {

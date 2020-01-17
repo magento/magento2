@@ -19,7 +19,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     /**
      * SOAP client initialized with different WSDLs.
      *
-     * @var \Zend\Soap\Client[]
+     * @var \Laminas\Soap\Client[]
      */
     protected $_soapClients = ['custom' => [], 'default' => []];
 
@@ -67,7 +67,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      *
      * @param string $serviceInfo PHP service interface name, should include version if present
      * @param string|null $storeCode
-     * @return \Zend\Soap\Client
+     * @return \Laminas\Soap\Client
      */
     protected function _getSoapClient($serviceInfo, $storeCode = null)
     {
@@ -75,7 +75,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             [$this->_getSoapServiceName($serviceInfo) . $this->_getSoapServiceVersion($serviceInfo)],
             $storeCode
         );
-        /** @var \Zend\Soap\Client $soapClient */
+        /** @var \Laminas\Soap\Client $soapClient */
         $soapClient = null;
         if (isset($serviceInfo['soap']['token'])) {
             $token = $serviceInfo['soap']['token'];
@@ -104,7 +104,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      *
      * @param string $wsdlUrl
      * @param string $token Authentication token
-     * @return \Zend\Soap\Client
+     * @return \Laminas\Soap\Client
      */
     public function instantiateSoapClient($wsdlUrl, $token = null)
     {
@@ -113,7 +113,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             : \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials()['key'];
         $opts = ['http' => ['header' => "Authorization: Bearer " . $accessCredentials]];
         $context = stream_context_create($opts);
-        $soapClient = new \Zend\Soap\Client($wsdlUrl);
+        $soapClient = new \Laminas\Soap\Client($wsdlUrl);
         $soapClient->setSoapVersion(SOAP_1_2);
         $soapClient->setStreamContext($context);
         if (TESTS_XDEBUG_ENABLED) {

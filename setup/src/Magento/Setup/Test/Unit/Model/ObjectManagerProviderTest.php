@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\Bootstrap;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\ObjectManagerInterface;

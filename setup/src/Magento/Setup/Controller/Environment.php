@@ -8,7 +8,7 @@ namespace Magento\Setup\Controller;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Setup\Model\Cron\ReadinessCheck;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 /**
  * Class Environment
@@ -66,20 +66,20 @@ class Environment extends AbstractActionController
     /**
      * No index action, return 404 error page
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\JsonModel([]);
+        $view = new \Laminas\View\Model\JsonModel([]);
         $view->setTemplate('/error/404.phtml');
-        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        $this->getResponse()->setStatusCode(\Laminas\Http\Response::STATUS_CODE_404);
         return $view;
     }
 
     /**
      * Verifies php version
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function phpVersionAction()
     {
@@ -91,13 +91,13 @@ class Environment extends AbstractActionController
         } elseif ($type == ReadinessCheckUpdater::UPDATER) {
             $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_VERSION_VERIFIED);
         }
-        return new \Zend\View\Model\JsonModel($data);
+        return new \Laminas\View\Model\JsonModel($data);
     }
 
     /**
      * Checks PHP settings
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function phpSettingsAction()
     {
@@ -109,13 +109,13 @@ class Environment extends AbstractActionController
         } elseif ($type == ReadinessCheckUpdater::UPDATER) {
             $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED);
         }
-        return new \Zend\View\Model\JsonModel($data);
+        return new \Laminas\View\Model\JsonModel($data);
     }
 
     /**
      * Verifies php verifications
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function phpExtensionsAction()
     {
@@ -127,7 +127,7 @@ class Environment extends AbstractActionController
         } elseif ($type == ReadinessCheckUpdater::UPDATER) {
             $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED);
         }
-        return new \Zend\View\Model\JsonModel($data);
+        return new \Laminas\View\Model\JsonModel($data);
     }
 
     /**
@@ -155,7 +155,7 @@ class Environment extends AbstractActionController
     /**
      * Verifies file permissions
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function filePermissionsAction()
     {
@@ -183,13 +183,13 @@ class Environment extends AbstractActionController
             ],
         ];
 
-        return new \Zend\View\Model\JsonModel($data);
+        return new \Laminas\View\Model\JsonModel($data);
     }
 
     /**
      * Verifies updater application exists
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function updaterApplicationAction()
     {
@@ -201,13 +201,13 @@ class Environment extends AbstractActionController
         $data = [
             'responseType' => $responseType
         ];
-        return new \Zend\View\Model\JsonModel($data);
+        return new \Laminas\View\Model\JsonModel($data);
     }
 
     /**
      * Verifies Setup and Updater Cron status
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function cronScriptAction()
     {
@@ -232,6 +232,6 @@ class Environment extends AbstractActionController
                 $updaterCheck['notice'];
         }
         $data['responseType'] = $responseType;
-        return new \Zend\View\Model\JsonModel($data);
+        return new \Laminas\View\Model\JsonModel($data);
     }
 }

@@ -18,7 +18,7 @@ class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $serviceLocatorMock = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $serviceLocatorMock = $this->createMock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $objectManagerProviderMock = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $serviceLocatorMock->expects($this->once())
             ->method('get')

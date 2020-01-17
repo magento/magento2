@@ -1957,7 +1957,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $field = $this->quoteIdentifier($k);
                 if ($v instanceof \Zend_Db_Expr) {
                     $value = $v->__toString();
-                } elseif ($v instanceof \Zend\Db\Sql\Expression) {
+                } elseif ($v instanceof \Laminas\Db\Sql\Expression) {
                     $value = $v->getExpression();
                 } elseif (is_string($v)) {
                     $value = sprintf('VALUES(%s)', $this->quoteIdentifier($v));

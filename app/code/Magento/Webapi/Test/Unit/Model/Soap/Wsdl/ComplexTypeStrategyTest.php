@@ -7,7 +7,7 @@ namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
 
 use \Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 
-use Zend\Soap\Wsdl;
+use Laminas\Soap\Wsdl;
 
 /**
  * Complex type strategy tests.

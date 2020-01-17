@@ -9,7 +9,7 @@ namespace Magento\Setup\Module\Di\Code\Reader;
 /**
  * @SuppressWarnings(PHPMD)
  */
-class FileScanner extends \Zend\Code\Scanner\FileScanner
+class FileScanner extends \Laminas\Code\Scanner\FileScanner
 {
     /**
      * @var int
@@ -26,7 +26,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
         }
 
         if (!$this->tokens) {
-            throw new \Zend\Code\Exception\RuntimeException('No tokens were provided');
+            throw new \Laminas\Code\Exception\RuntimeException('No tokens were provided');
         }
 
         /**
