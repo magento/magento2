@@ -33,7 +33,7 @@ class GetCustomerCartTest extends GraphQlAbstract
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     protected function setUp()
     {
