@@ -48,7 +48,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var string
      */
-    private static $magentoFrameworkLibaryName = 'magento/framework';
+    private static $magentoFrameworkLibraryName = 'magento/framework';
 
     public static function setUpBeforeClass()
     {
@@ -317,9 +317,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertDependsOnFramework(\StdClass $json)
     {
         $this->assertObjectHasAttribute(
-            self::$magentoFrameworkLibaryName,
+            self::$magentoFrameworkLibraryName,
             $json,
-            'This component is expected to depend on ' . self::$magentoFrameworkLibaryName
+            'This component is expected to depend on ' . self::$magentoFrameworkLibraryName
         );
     }
 
@@ -516,11 +516,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         }
 
         $componentRegistrar = new ComponentRegistrar();
-        $magentoFrameworkLibaryDir =
-            $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, self::$magentoFrameworkLibaryName);
+        $magentoFrameworkLibraryDir =
+            $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, self::$magentoFrameworkLibraryName);
         $magentoFrameworkComposerFile =
             json_decode(
-                file_get_contents($magentoFrameworkLibaryDir . DIRECTORY_SEPARATOR . 'composer.json'),
+                file_get_contents($magentoFrameworkLibraryDir . DIRECTORY_SEPARATOR . 'composer.json'),
                 true
             );
 
@@ -536,7 +536,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty(
             $inconsistentDependencies,
             'There is a discrepancy between the declared versions of the following modules in "'
-            . self::$magentoFrameworkLibaryName . '" and the root composer.json: '
+            . self::$magentoFrameworkLibraryName . '" and the root composer.json: '
             . implode(', ', $inconsistentDependencies)
         );
     }
