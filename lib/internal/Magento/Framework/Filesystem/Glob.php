@@ -6,7 +6,7 @@
 namespace Magento\Framework\Filesystem;
 
 use Laminas\Stdlib\Glob as LaminasGlob;
-use Laminas\Stdlib\Exception\RuntimeException as ZendRuntimeException;
+use Laminas\Stdlib\Exception\RuntimeException as LaminasRuntimeException;
 
 /**
  * Wrapper for Laminas\Stdlib\Glob
@@ -25,7 +25,7 @@ class Glob extends LaminasGlob
     {
         try {
             $result = LaminasGlob::glob($pattern, $flags, $forceFallback);
-        } catch (ZendRuntimeException $e) {
+        } catch (LaminasRuntimeException $e) {
             $result = [];
         }
         return $result;

@@ -13,7 +13,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /** @var \Laminas\Validator\Uri */
-    protected $zendValidator;
+    protected $laminasValidator;
 
     /** @var string[] */
     protected $expectedValidationMessages = ['invalidUrl' => "Invalid URL '%value%'."];
@@ -22,10 +22,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->zendValidator = $this->createMock(\Laminas\Validator\Uri::class);
+        $this->laminasValidator = $this->createMock(\Laminas\Validator\Uri::class);
         $this->object = $objectManager->getObject(
             \Magento\Framework\Url\Validator::class,
-            ['validator' => $this->zendValidator]
+            ['validator' => $this->laminasValidator]
         );
     }
 
@@ -36,7 +36,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testIsValidWhenValid()
     {
-        $this->zendValidator
+        $this->laminasValidator
             ->method('isValid')
             ->with('http://example.com')
             ->willReturn(true);
@@ -47,7 +47,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testIsValidWhenInvalid()
     {
-        $this->zendValidator
+        $this->laminasValidator
             ->method('isValid')
             ->with('%value%')
             ->willReturn(false);

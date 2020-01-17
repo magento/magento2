@@ -53,7 +53,7 @@ class Transport implements TransportInterface
     /**
      * @var Sendmail
      */
-    private $zendTransport;
+    private $laminasTransport;
 
     /**
      * @var MessageInterface
@@ -79,7 +79,7 @@ class Transport implements TransportInterface
             ScopeInterface::SCOPE_STORE
         );
 
-        $this->zendTransport = new Sendmail($parameters);
+        $this->laminasTransport = new Sendmail($parameters);
         $this->message = $message;
     }
 
@@ -89,16 +89,16 @@ class Transport implements TransportInterface
     public function sendMessage()
     {
         try {
-            $zendMessage = Message::fromString($this->message->getRawMessage())->setEncoding('utf-8');
+            $laminasMessage = Message::fromString($this->message->getRawMessage())->setEncoding('utf-8');
             if (2 === $this->isSetReturnPath && $this->returnPathValue) {
-                $zendMessage->setSender($this->returnPathValue);
-            } elseif (1 === $this->isSetReturnPath && $zendMessage->getFrom()->count()) {
-                $fromAddressList = $zendMessage->getFrom();
+                $laminasMessage->setSender($this->returnPathValue);
+            } elseif (1 === $this->isSetReturnPath && $laminasMessage->getFrom()->count()) {
+                $fromAddressList = $laminasMessage->getFrom();
                 $fromAddressList->rewind();
-                $zendMessage->setSender($fromAddressList->current()->getEmail());
+                $laminasMessage->setSender($fromAddressList->current()->getEmail());
             }
 
-            $this->zendTransport->send($zendMessage);
+            $this->laminasTransport->send($laminasMessage);
         } catch (\Exception $e) {
             throw new MailException(new Phrase($e->getMessage()), $e);
         }

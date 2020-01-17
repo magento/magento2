@@ -54,8 +54,8 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     /**
      * @inheritdoc
      *
-     * The $priority argument is added to support latest versions of Zend Event Manager.
-     * Starting from Zend Event Manager 3.0.0 release the ListenerAggregateInterface::attach()
+     * The $priority argument is added to support latest versions of Laminas Event Manager.
+     * Starting from Laminas Event Manager 3.0.0 release the ListenerAggregateInterface::attach()
      * supports the `priority` argument.
      *
      * @param EventManagerInterface $events

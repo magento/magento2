@@ -33,8 +33,8 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $zendServiceLocator = $this->createMock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
-        $zendServiceLocator
+        $laminasServiceLocator = $this->createMock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
+        $laminasServiceLocator
             ->expects($this->any())
             ->method('get')
             ->with('config')
@@ -55,7 +55,7 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
                 }
             );
         $this->packagesAuth = new PackagesAuth(
-            $zendServiceLocator,
+            $laminasServiceLocator,
             $this->curl,
             $this->filesystem,
             $this->serializerMock

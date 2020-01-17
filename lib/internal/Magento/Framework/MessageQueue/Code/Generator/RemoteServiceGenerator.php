@@ -126,7 +126,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
         $methods = [$this->_getDefaultConstructorDefinition()];
         $interfaceMethodsMap = $this->serviceMethodsMap->getMethodsMap($this->getSourceClassName());
         foreach (array_keys($interfaceMethodsMap) as $methodName) {
-            // Uses Zend Reflection instead MethodsMap service, because second does not support features of PHP 7.x
+            // Uses Laminas Reflection instead MethodsMap service, because second does not support features of PHP 7.x
             $methodReflection = new MethodReflection($this->getSourceClassName(), $methodName);
             $sourceMethodParameters = $methodReflection->getParameters();
             $methodParameters = [];

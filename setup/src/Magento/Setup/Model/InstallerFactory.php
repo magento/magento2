@@ -17,7 +17,7 @@ use Magento\Framework\Setup\LoggerInterface;
 class InstallerFactory
 {
     /**
-     * Zend Framework's service locator
+     * Laminas Framework's service locator
      *
      * @var ServiceLocatorInterface
      */

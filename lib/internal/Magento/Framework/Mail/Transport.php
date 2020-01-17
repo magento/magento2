@@ -7,7 +7,7 @@ namespace Magento\Framework\Mail;
 
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Phrase;
-use Laminas\Mail\Message as ZendMessage;
+use Laminas\Mail\Message as LaminasMessage;
 use Laminas\Mail\Transport\Sendmail;
 
 class Transport implements \Magento\Framework\Mail\TransportInterface
@@ -15,7 +15,7 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
     /**
      * @var Sendmail
      */
-    private $zendTransport;
+    private $laminasTransport;
 
     /**
      * @var MessageInterface
@@ -28,7 +28,7 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
      */
     public function __construct(MessageInterface $message, $parameters = null)
     {
-        $this->zendTransport = new Sendmail($parameters);
+        $this->laminasTransport = new Sendmail($parameters);
         $this->message = $message;
     }
 
@@ -38,8 +38,8 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
     public function sendMessage()
     {
         try {
-            $this->zendTransport->send(
-                ZendMessage::fromString($this->message->getRawMessage())
+            $this->laminasTransport->send(
+                LaminasMessage::fromString($this->message->getRawMessage())
             );
         } catch (\Exception $e) {
             throw new MailException(new Phrase($e->getMessage()), $e);

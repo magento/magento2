@@ -12,7 +12,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 class ResourceFactory
 {
     /**
-     * Zend Framework's service locator
+     * Laminas Framework's service locator
      *
      * @var ServiceLocatorInterface
      */

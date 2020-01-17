@@ -107,7 +107,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $zfAppConfig Data that comes from Zend Framework Application config
+     * @param array $zfAppConfig Data that comes from Laminas Framework Application config
      * @param array $env Config that comes from SetEnv
      * @param string $cliParam Parameter string
      * @param array $expectedArray Expected result array

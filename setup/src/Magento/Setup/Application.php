@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup;
 
-use Laminas\Mvc\Application as ZendApplication;
+use Laminas\Mvc\Application as LaminasApplication;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
 
@@ -21,7 +21,7 @@ class Application
      * Magento specific services.
      *
      * @param array $configuration
-     * @return ZendApplication
+     * @return LaminasApplication
      */
     public function bootstrap(array $configuration)
     {
@@ -40,7 +40,7 @@ class Application
         }
 
         $listeners = $this->getListeners($serviceManager, $configuration);
-        $application = new ZendApplication(
+        $application = new LaminasApplication(
             $configuration,
             $serviceManager,
             $serviceManager->get('EventManager'),

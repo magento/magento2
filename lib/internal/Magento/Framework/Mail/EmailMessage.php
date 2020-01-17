@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Framework\Mail;
 
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
-use Laminas\Mail\Address as ZendAddress;
+use Laminas\Mail\Address as LaminasAddress;
 use Laminas\Mail\AddressList;
-use Laminas\Mime\Message as ZendMimeMessage;
+use Laminas\Mime\Message as LaminasMimeMessage;
 
 /**
  * Email message
@@ -61,7 +61,7 @@ class EmailMessage extends Message implements EmailMessageInterface
         ?string $encoding = 'utf-8'
     ) {
         parent::__construct($encoding);
-        $mimeMessage = new ZendMimeMessage();
+        $mimeMessage = new LaminasMimeMessage();
         $mimeMessage->setParts($body->getParts());
         $this->zendMessage->setBody($mimeMessage);
         if ($subject) {
@@ -153,15 +153,15 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     public function getSender(): ?Address
     {
-        /** @var ZendAddress $zendSender */
-        if (!$zendSender = $this->zendMessage->getSender()) {
+        /** @var LaminasAddress $laminasSender */
+        if (!$laminasSender = $this->zendMessage->getSender()) {
             return null;
         }
 
         return $this->addressFactory->create(
             [
-                'email' => $zendSender->getEmail(),
-                'name' => $zendSender->getName()
+                'email' => $laminasSender->getEmail(),
+                'name' => $laminasSender->getName()
             ]
         );
     }
@@ -222,11 +222,11 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private function convertAddressArrayToAddressList(array $arrayList): AddressList
     {
-        $zendAddressList = new AddressList();
+        $laminasAddressList = new AddressList();
         foreach ($arrayList as $address) {
-            $zendAddressList->add($address->getEmail(), $address->getName());
+            $laminasAddressList->add($address->getEmail(), $address->getName());
         }
 
-        return $zendAddressList;
+        return $laminasAddressList;
     }
 }

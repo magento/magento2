@@ -6,7 +6,7 @@
 namespace Magento\Integration\Test\Unit\Model\Oauth;
 
 use Magento\Framework\Url\Validator as UrlValidator;
-use Laminas\Validator\Uri as ZendUriValidator;
+use Laminas\Validator\Uri as LaminasUriValidator;
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
 
 /**
@@ -85,7 +85,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
 
         $this->keyLengthValidator = new KeyLength();
 
-        $this->urlValidator = new UrlValidator(new ZendUriValidator());
+        $this->urlValidator = new UrlValidator(new LaminasUriValidator());
 
         $this->oauthDataMock = $this->createPartialMock(
             \Magento\Integration\Helper\Oauth\Data::class,

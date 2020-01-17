@@ -7,9 +7,9 @@
 namespace Magento\Setup\Mvc\View\Http;
 
 use Laminas\Mvc\MvcEvent;
-use Laminas\Mvc\View\Http\InjectTemplateListener as ZendInjectTemplateListener;
+use Laminas\Mvc\View\Http\InjectTemplateListener as LaminasInjectTemplateListener;
 
-class InjectTemplateListener extends ZendInjectTemplateListener
+class InjectTemplateListener extends LaminasInjectTemplateListener
 {
     /**
      * Determine the top-level namespace of the controller
