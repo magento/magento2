@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="AssertAdminIntegrationTokensAfterReauthoriseActionGroup">
+        <arguments>
+            <argument name="consumerKey" type="string"/>
+            <argument name="consumerSecret" type="string"/>
+            <argument name="accessToken" type="string"/>
+            <argument name="accessTokenSecret" type="string"/>
+        </arguments>
+        <seeInField stepKey="seeConsumerKey" selector="{{AdminIntegrationDetailsSection.consumerKey}}" userInput="{{consumerKey}}"/>
+        <seeInField stepKey="seeConsumerSecret" selector="{{AdminIntegrationDetailsSection.consumerSecret}}" userInput="{{consumerSecret}}"/>
+        <seeInField stepKey="seeAccessToken" selector="{{AdminIntegrationDetailsSection.accessToken}}" userInput="{{accessToken}}"/>
+        <seeInField stepKey="seeAccessTokenSecret" selector="{{AdminIntegrationDetailsSection.accessTokenSecret}}" userInput="{{accessTokenSecret}}"/>
+    </actionGroup>
+</actionGroups>
