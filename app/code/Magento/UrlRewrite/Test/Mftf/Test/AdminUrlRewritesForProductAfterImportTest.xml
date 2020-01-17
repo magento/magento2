@@ -16,9 +16,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-20229"/>
             <group value="urlRewrite"/>
-            <skip>
-                <issueId value="MC-30409"/>
-            </skip>
         </annotations>
         <before>
             <comment userInput="Set the configuration for Generate category/product URL Rewrites" stepKey="commentSetURLRewriteConfiguration" />
@@ -45,7 +42,7 @@
             <deleteData createDataKey="simpleSubCategory2" stepKey="deleteSimpleSubCategory2"/>
             <deleteData createDataKey="simpleSubCategory1" stepKey="deleteSimpleSubCategory1"/>
             <comment userInput="Disable config to generate category/product URL Rewrites " stepKey="commentDisableConfig" />
-            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="disableGenerateUrlRewrite"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
