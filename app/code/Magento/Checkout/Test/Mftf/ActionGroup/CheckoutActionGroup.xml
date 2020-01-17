@@ -35,7 +35,7 @@
         <annotations>
             <description>Clicks on the 'View and Edit Cart' link in the Storefront Mini Shopping Cart. Validates that the Storefront Shopping Cart URL is present and correct. Clicks on 'Proceed to Checkout'.</description>
         </annotations>
-        
+
         <waitForElementNotVisible selector="{{StorefrontMinicartSection.emptyCart}}" stepKey="waitUpdateQuantity"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
@@ -413,7 +413,7 @@
         <annotations>
             <description>Clicks on the Customer Account link. Clicks on 'Sign Out'. Validates that the Signed Out message is present and correct.</description>
         </annotations>
-        
+
         <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
         <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
