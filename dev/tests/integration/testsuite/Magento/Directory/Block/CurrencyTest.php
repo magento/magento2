@@ -31,9 +31,6 @@ class CurrencyTest extends TestCase
     /** @var LayoutInterface */
     private $layout;
 
-    /** @var CurrencyModel */
-    private $block;
-
     /** @var StoreManagerInterface */
     private $storeManager;
 
@@ -46,58 +43,69 @@ class CurrencyTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
-        $this->block = $this->layout->createBlock(Currency::class);
-        $this->block->setTemplate(self::CURRENCY_SWITCHER_TEMPLATE);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
-     * @magentoConfigFixture default/currency/options/allow EUR,USD
+     * @magentoConfigFixture current_store currency/options/allow EUR,USD
      */
     public function testCurrencySwitcher(): void
     {
-        $html = trim(preg_replace('/\s+/', ' ', strip_tags($this->getBlock()->toHtml())));
-        $this->assertEquals('Currency USD - US Dollar EUR - Euro', $html);
+        $this->assertCurrencySwitcherPerStore('Currency USD - US Dollar EUR - Euro');
     }
 
     /**
-     * @magentoConfigFixture default/currency/options/allow EUR,USD
+     * @magentoConfigFixture current_store currency/options/allow USD,CNY
      * @magentoConfigFixture fixturestore_store currency/options/allow USD,UAH
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Directory/_files/usd_euro_rate.php
+     * @magentoDataFixture Magento/Directory/_files/usd_cny_rate.php
      * @magentoDataFixture Magento/Directory/_files/usd_uah_rate.php
      *
      * @return void
      */
     public function testMultiStoreCurrencySwitcher(): void
     {
-        $currentStore = $this->storeManager->getStore();
-        $htmlFirstStore = trim(preg_replace('/\s+/', ' ', strip_tags($this->getBlock()->toHtml())));
-        $this->assertEquals('Currency USD - US Dollar EUR - Euro', $htmlFirstStore);
+        $this->assertCurrencySwitcherPerStore('Currency USD - US Dollar CNY - Chinese Yuan');
+        $this->assertCurrencySwitcherPerStore('Currency USD - US Dollar UAH - Ukrainian Hryvnia', 'fixturestore');
+    }
 
+    /**
+     * Check currency switcher diplaying per stores
+     *
+     * @param string $expectedData
+     * @param string $storeCode
+     * @return void
+     */
+    private function assertCurrencySwitcherPerStore(
+        string $expectedData,
+        string $storeCode = 'default'
+    ): void {
+        $currentStore = $this->storeManager->getStore();
         try {
-            $this->storeManager->setCurrentStore('fixturestore');
-            $htmlSecondStore = trim(preg_replace('/\s+/', ' ', strip_tags($this->getBlock(true)->toHtml())));
-            $this->assertEquals('Currency USD - US Dollar UAH - Ukrainian Hryvnia', $htmlSecondStore);
+            if ($currentStore->getCode() !== $storeCode) {
+                $this->storeManager->setCurrentStore($storeCode);
+            }
+
+            $actualData = trim(preg_replace('/\s+/', ' ', strip_tags($this->getBlock()->toHtml())));
+            $this->assertEquals($expectedData, $actualData);
         } finally {
-            $this->storeManager->setCurrentStore($currentStore);
+            if ($currentStore->getCode() !== $storeCode) {
+                $this->storeManager->setCurrentStore($currentStore);
+            }
         }
     }
 
     /**
      * Get currency block
      *
-     * @param bool $refreshBlock
      * @return Currency
      */
-    private function getBlock(bool $refreshBlock = false): Currency
+    private function getBlock(): Currency
     {
-        if ($refreshBlock) {
-            $this->block = $this->layout->createBlock(Currency::class);
-            $this->block->setTemplate(self::CURRENCY_SWITCHER_TEMPLATE);
-        }
+        $block = $this->layout->createBlock(Currency::class);
+        $block->setTemplate(self::CURRENCY_SWITCHER_TEMPLATE);
 
-        return $this->block;
+        return $block;
     }
 }

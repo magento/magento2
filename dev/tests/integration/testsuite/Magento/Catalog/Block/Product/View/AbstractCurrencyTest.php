@@ -20,8 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractCurrencyTest extends TestCase
 {
-    private const FINAL_PRICE_BLOCK_NAME = 'product.price.final';
-    private const TIER_PRICE_BLOCK_NAME = 'product.price.tier';
+    protected const TIER_PRICE_BLOCK_NAME = 'product.price.tier';
+    protected const FINAL_PRICE_BLOCK_NAME = 'product.price.final';
 
     /** @var ObjectManagerInterface */
     protected $objectManager;
@@ -62,39 +62,28 @@ abstract class AbstractCurrencyTest extends TestCase
     /**
      * Process price view on product page
      *
-     * @param string $productSku
-     * @param bool $isTierPrice
+     * @param string|ProductInterface $product
+     * @param string $blockName
      * @return string
      */
-    protected function processPriceView(string $productSku, bool $isTierPrice = false): string
+    protected function processPriceView($product, string $blockName = self::FINAL_PRICE_BLOCK_NAME): string
     {
-        $this->registerProduct($productSku);
+        $product = is_string($product) ? $this->productRepository->get($product) : $product;
+        $this->registerProduct($product);
 
-        return $this->preparePriceHtml($isTierPrice);
-    }
-
-    /**
-     * Remove tags and spaces from html
-     *
-     * @param bool $isTierPrice
-     * @return string
-     */
-    protected function preparePriceHtml(bool $isTierPrice): string
-    {
         return trim(
-            preg_replace('/(?:\s|&nbsp;)+/', ' ', strip_tags($this->getProductPriceBlockHtml($isTierPrice)))
+            preg_replace('/(?:\s|&nbsp;)+/', ' ', strip_tags($this->getProductPriceBlockHtml($blockName)))
         );
     }
 
     /**
      * Get product price block content
      *
-     * @param bool $isTierPrice
+     * @param string $blockName
      * @return string
      */
-    private function getProductPriceBlockHtml(bool $isTierPrice): string
+    private function getProductPriceBlockHtml(string $blockName): string
     {
-        $blockName = $isTierPrice ? self::TIER_PRICE_BLOCK_NAME : self::FINAL_PRICE_BLOCK_NAME;
         $page = $this->pageFactory->create();
         $page->addHandle([
             'default',
@@ -111,12 +100,11 @@ abstract class AbstractCurrencyTest extends TestCase
     /**
      * Register the product
      *
-     * @param string|ProductInterface $product
+     * @param ProductInterface $product
      * @return void
      */
-    protected function registerProduct($product): void
+    private function registerProduct(ProductInterface $product): void
     {
-        $product = is_string($product) ? $this->productRepository->get($product) : $product;
         $this->registry->unregister('product');
         $this->registry->register('product', $product);
     }

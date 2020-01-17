@@ -35,8 +35,6 @@ class RemoveCurrencyRateByCode
     {
         $connection = $this->currencyResource->getConnection();
         $rateTable = $this->currencyResource->getTable('directory_currency_rate');
-        $select = $connection->select()->from([ 'rate_table' => $rateTable])
-            ->where('rate_table.currency_to = ?', $currencyCode);
-        $connection->query($connection->deleteFromSelect($select, 'rate_table'));
+        $connection->delete($rateTable, $connection->quoteInto('currency_to = ? OR currency_from = ?', $currencyCode));
     }
 }

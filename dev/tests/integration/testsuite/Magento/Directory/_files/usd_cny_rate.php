@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 
-$rates = ['USD' => ['EUR' => '0.7000']];
+$rates = ['USD' => ['CNY' => '7.0000']];
 /** @var Currency $currencyModel */
 $currencyModel = $objectManager->create(Currency::class);
 $currencyModel->saveRates($rates);

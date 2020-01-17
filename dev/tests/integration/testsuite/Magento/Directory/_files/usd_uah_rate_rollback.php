@@ -9,5 +9,6 @@ use Magento\TestFramework\Directory\Model\RemoveCurrencyRateByCode;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var RemoveCurrencyRateByCode $deleteRateByCode */
 $deleteRateByCode = $objectManager->get(RemoveCurrencyRateByCode::class);
 $deleteRateByCode->execute('UAH');
