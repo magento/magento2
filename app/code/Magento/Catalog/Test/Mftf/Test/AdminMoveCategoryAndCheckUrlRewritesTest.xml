@@ -20,6 +20,7 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runIndexerCron"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
