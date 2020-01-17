@@ -34,7 +34,7 @@ class PriorityTest extends \PHPUnit\Framework\TestCase
      * @param string $value
      * @dataProvider dataProviderTestBeforeSaveValueCorrect
      */
-    public function testBeforeSave($value)
+    public function testBeforeSaveIsChainable($value)
     {
         $this->priorityMock->expects($this->once())
             ->method('getValue')
