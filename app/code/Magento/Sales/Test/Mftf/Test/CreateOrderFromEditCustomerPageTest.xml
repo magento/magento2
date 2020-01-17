@@ -88,7 +88,7 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerIndexPage"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCustomerGridFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -103,19 +103,19 @@
         <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
 
         <!--Add configurable product to order-->
-        <actionGroup ref="addConfigurableProductToOrderFromAdmin" stepKey="addConfigurableProductToOrder">
+        <actionGroup ref="AddConfigurableProductToOrderFromAdminActionGroup" stepKey="addConfigurableProductToOrder">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="attribute" value="$$createConfigProductAttribute$$"/>
             <argument name="option" value="$$getConfigAttributeOption1$$"/>
         </actionGroup>
 
         <!--Add Simple product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
         <!--Add Second Simple product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondSimpleProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondSimpleProductToOrder">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
 
@@ -185,7 +185,7 @@
         <waitForPageLoad stepKey="waitForAdminOrderFormLoad"/>
 
         <!-- Verify order information -->
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
         <!-- Filter and Open the customer edit page -->
