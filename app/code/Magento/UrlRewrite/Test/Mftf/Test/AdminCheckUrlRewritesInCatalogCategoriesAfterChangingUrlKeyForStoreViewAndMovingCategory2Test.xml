@@ -71,7 +71,7 @@
         </actionGroup>
 
         <!-- Open first category storefront page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($createFirstCategory.custom_attributes[url_path]$)}}" stepKey="openFirstCategoryStorefrontPage"/>
+        <amOnPage url="$createSecondCategory.custom_attributes[url_key]$/$createFirstCategory.custom_attributes[url_key]$.html" stepKey="openFirstCategoryStorefrontPage"/>
         <waitForPageLoad stepKey="waitForFirstCategoryStorefrontPageLoad"/>
         <see userInput="$createFirstSimpleProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeFirstProductInCategory"/>
 
