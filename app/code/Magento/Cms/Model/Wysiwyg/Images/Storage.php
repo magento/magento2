@@ -570,7 +570,11 @@ class Storage extends \Magento\Framework\DataObject
         $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
 
         if (strpos($filePath, (string) $mediaRootDir) === 0) {
-            $thumbPath = $this->getThumbnailRoot() . substr($filePath, strlen($mediaRootDir));
+            $relativeFilePath = substr($filePath, strlen($mediaRootDir));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $thumbPath = $relativeFilePath === basename($filePath)
+                ? $this->getThumbnailRoot() . DIRECTORY_SEPARATOR . $relativeFilePath
+                : $this->getThumbnailRoot() . $relativeFilePath;
 
             if (!$checkFile || $this->_directory->isExist($this->_directory->getRelativePath($thumbPath))) {
                 return $thumbPath;
@@ -589,21 +593,12 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function getThumbnailUrl($filePath, $checkFile = false)
     {
-        $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
-
-        if (strpos($filePath, (string) $mediaRootDir) === 0) {
-            $thumbSuffix = self::THUMBS_DIRECTORY_NAME . substr($filePath, strlen($mediaRootDir));
-            if (!$checkFile || $this->_directory->isExist(
-                $this->_directory->getRelativePath($mediaRootDir . '/' . $thumbSuffix)
-            )
-            ) {
-                $thumbSuffix = substr(
-                    $mediaRootDir,
-                    strlen($this->_directory->getAbsolutePath())
-                ) . '/' . $thumbSuffix;
-                $randomIndex = '?rand=' . time();
-                return str_replace('\\', '/', $this->_cmsWysiwygImages->getBaseUrl() . $thumbSuffix) . $randomIndex;
-            }
+        $thumbPath = $this->getThumbnailPath($filePath, $checkFile);
+        if ($thumbPath) {
+            $thumbRelativePath = ltrim($this->_directory->getRelativePath($thumbPath), '/\\');
+            $baseUrl = rtrim($this->_cmsWysiwygImages->getBaseUrl(), '/');
+            $randomIndex = '?rand=' . time();
+            return str_replace('\\', '/', $baseUrl . '/' . $thumbRelativePath) . $randomIndex;
         }
 
         return false;
@@ -666,11 +661,13 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function getThumbsPath($filePath = false)
     {
-        $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
         $thumbnailDir = $this->getThumbnailRoot();
 
-        if ($filePath && strpos($filePath, (string) $mediaRootDir) === 0) {
-            $thumbnailDir .= $this->file->getParentDirectory(substr($filePath, strlen($mediaRootDir)));
+        if ($filePath) {
+            $thumbPath = $this->getThumbnailPath($filePath, false);
+            if ($thumbPath) {
+                $thumbnailDir = $this->file->getParentDirectory($thumbPath);
+            }
         }
 
         return $thumbnailDir;
