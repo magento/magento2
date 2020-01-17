@@ -358,7 +358,7 @@
             <argument name="value" type="string"/>
         </arguments>
 
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection"/>
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.sectionBody}}" visible="false" stepKey="openSeoSection"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
@@ -372,7 +372,7 @@
             <argument name="value" type="string"/>
         </arguments>
 
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection"/>
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.sectionBody}}" visible="false" stepKey="openSeoSection"/>
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}" stepKey="uncheckDefaultValue"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
@@ -422,7 +422,7 @@
 
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryName}}" stepKey="enterCategoryName"/>
         <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSearchEngineOptimization"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.sectionBody}}" visible="false" stepKey="openSEO"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{categoryUrlKey}}" stepKey="enterURLKey"/>
         <scrollToTopOfPage stepKey="scrollToTheTopOfPage"/>
