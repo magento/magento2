@@ -9,7 +9,7 @@ define([
     'mage/storage',
     'mage/url',
     'subscriptionStatusResolver',
-    'mage/validation',
+    'mage/validation'
 ], function ($, Component, storage, urlBuilder, subscriptionStatusResolver) {
     'use strict';
 

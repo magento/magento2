@@ -6,7 +6,7 @@
 define([
     'jquery',
     'mage/storage',
-    'mage/url',
+    'mage/url'
 ], function ($, storage, urlBuilder) {
     'use strict';
 
