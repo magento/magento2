@@ -14,6 +14,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -177,7 +178,21 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testChangePassword()
     {
+        /** @var SessionManagerInterface $session */
+        $session = $this->objectManager->get(SessionManagerInterface::class);
+        $oldSessionId = $session->getSessionId();
+        $session->setTestData('test');
         $this->accountManagement->changePassword('customer@example.com', 'password', 'new_Password123');
+
+        $this->assertTrue(
+            $oldSessionId !== $session->getSessionId(),
+            'Customer session id wasn\'t regenerated after change password'
+        );
+
+        $session->destroy();
+        $session->setSessionId($oldSessionId);
+
+        $this->assertNull($session->getTestData(), 'Customer session data wasn\'t cleaned');
 
         $this->accountManagement->authenticate('customer@example.com', 'new_Password123');
     }
