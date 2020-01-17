@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25651"/>
             <group value="configurable_product"/>
+            <group value="catalog"/>
         </annotations>
         <before>
             <!-- Create the category -->
@@ -123,7 +124,7 @@
         <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="dontSeeParentProduct">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCategoryPageOpenProductActionGroup" stepKey="openConfigChildProductFromCategoryPage">
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openConfigChildProductFromCategoryPage">
             <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontProductDetailPageNameAndUrlActionGroup" stepKey="checkStorefrontConfigChildProductPage">

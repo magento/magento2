@@ -7,7 +7,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontCategoryPageOpenProductActionGroup">
+    <actionGroup name="StorefrontOpenProductFromCategoryPageActionGroup">
         <annotations>
             <description>Click on the provided product on category page.</description>
         </annotations>
