@@ -14,6 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
 
 /**
  * @inheritdoc
@@ -48,6 +49,20 @@ class StockStatusProvider implements ResolverInterface
         $stockStatus = $this->stockStatusRepository->get($product->getId());
         $productStockStatus = (int)$stockStatus->getStockStatus();
 
-        return $productStockStatus === StockStatusInterface::STATUS_IN_STOCK ? 'IN_STOCK' : 'OUT_OF_STOCK';
+        if ($product->getTypeId() == DownloadableProductType::TYPE_DOWNLOADABLE) {
+            /** @var DownloadableProductType $downloadableTypeInstance */
+            $downloadableTypeInstance = $product->getTypeInstance();
+            if (!$downloadableTypeInstance->hasLinks($product)) {
+                $stockStatusByProductType = StockStatusInterface::STATUS_OUT_OF_STOCK;
+            } else {
+                $stockStatusByProductType = StockStatusInterface::STATUS_IN_STOCK;
+            }
+        }
+
+        return
+            $productStockStatus === StockStatusInterface::STATUS_IN_STOCK
+            && $stockStatusByProductType === StockStatusInterface::STATUS_IN_STOCK
+                ? 'IN_STOCK'
+                : 'OUT_OF_STOCK';
     }
 }
