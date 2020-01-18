@@ -16,7 +16,7 @@ use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote;
 
 /**
- * Class DisableMultishippingModeTest
+ * Set of Unit Tets to cover DisableMultishippingMode
  */
 class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
 {
