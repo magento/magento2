@@ -175,14 +175,10 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'p.entity_id IN (?)',
             $parentId
         );
-
-        $childrenIds = [
-            0 => array_column(
-                $this->getConnection()->fetchAll($select),
-                'product_id',
-                'product_id'
-            )
-        ];
+        $childrenIds = [];
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            $childrenIds[$row['parent_id']][] = $row['product_id'];
+        }
 
         return $childrenIds;
     }
