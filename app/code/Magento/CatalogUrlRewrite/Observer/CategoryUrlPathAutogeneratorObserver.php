@@ -92,6 +92,11 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         $useDefaultAttribute = !empty($category->getData('use_default')['url_key']);
         if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
+            if(empty($resultUrlKey)) {
+                //NOTE: If resultUrlKey not found due to entering category name in other language then use category name
+                $resultUrlKey = $category->getName();
+            }
+            
             $this->updateUrlKey($category, $resultUrlKey);
         } elseif ($useDefaultAttribute) {
             if (!$category->isObjectNew() && $category->getStoreId() === Store::DEFAULT_STORE_ID) {
