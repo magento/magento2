@@ -9,8 +9,6 @@ namespace Magento\Security\Test\Unit\Observer;
 
 /**
  * Test for \Magento\Security\Observer\AdminUserAuthenticateBefore
- *
- * @package Magento\Security\Test\Unit\Observer
  */
 class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
 {

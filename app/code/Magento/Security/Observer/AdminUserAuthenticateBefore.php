@@ -14,8 +14,6 @@ use Magento\Security\Model\UserExpirationManager;
 
 /**
  * Check for expired users.
- *
- * @package Magento\Security\Observer
  */
 class AdminUserAuthenticateBefore implements ObserverInterface
 {

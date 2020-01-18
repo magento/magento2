@@ -9,8 +9,6 @@ namespace Magento\Security\Model\Plugin;
 
 /**
  * Add the `expires_at` form field to the User main form.
- *
- * @package Magento\Security\Model\Plugin
  */
 class AdminUserForm
 {

@@ -9,8 +9,6 @@ namespace Magento\Security\Model\Plugin;
 
 /**
  * \Magento\User\Model\UserValidationRules decorator
- *
- * @package Magento\Security\Model\Plugin
  */
 class UserValidationRules
 {

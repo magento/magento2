@@ -9,8 +9,6 @@ namespace Magento\Security\Test\Unit\Observer;
 
 /**
  * Test class for \Magento\Security\Observer\AfterAdminUserSave
- *
- * @package Magento\Security\Test\Unit\Observer
  */
 class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
 {

@@ -10,9 +10,7 @@ namespace Magento\Security\Test\Unit\Model\UserExpiration;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class ExpiresAtValidatorTest
- *
- * @package Magento\User\Test\Unit\Model
+ * Test class for \Magento\Security\Model\UserExpiration\Validator.
  */
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {

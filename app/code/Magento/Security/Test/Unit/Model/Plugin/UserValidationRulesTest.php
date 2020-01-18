@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\Security\Test\Unit\Model\Plugin;
 
 /**
- * Class UserValidationRulesTest
- *
- * @package Magento\Security\Test\Unit\Model\Plugin
+ * Test class for expiration date user validation rule.
  */
 class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
 {

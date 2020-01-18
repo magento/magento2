@@ -10,9 +10,7 @@ namespace Magento\Security\Model\UserExpiration;
 use Magento\Framework\Validator\AbstractValidator;
 
 /**
- * Class Validator
- *
- * @package Magento\Security\Model\Validator
+ * Validates that the expires_at field is later than the current date/time.
  */
 class Validator extends AbstractValidator
 {
