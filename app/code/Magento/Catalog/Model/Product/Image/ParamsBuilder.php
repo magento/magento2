@@ -136,7 +136,7 @@ class ParamsBuilder
                     $scopeId
                 );
             $size = [];
-            if(!$watermarkSize){
+            if($watermarkSize != ''){
                 $size = explode(
                             'x',
                             (string) $this->scopeConfig->getValue(
