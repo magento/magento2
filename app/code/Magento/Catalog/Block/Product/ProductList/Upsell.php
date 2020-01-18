@@ -269,7 +269,7 @@ class Upsell extends AbstractProduct implements IdentityInterface
     {
         $identities = array_map(function (DataObject $item) {
             return $item->getIdentities();
-        }, $this->getItems());
+        }, $this->getItems()) ?: [[]];
 
         return array_merge(...$identities);
     }
