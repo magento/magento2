@@ -17,8 +17,8 @@ use Magento\Store\Model\StoreIsInactiveException;
 interface StoreConfigManagerInterface
 {
     /**
-     * @param string[] $storeCodes
+     * @param string $storeCodes
      * @return \Magento\Store\Api\Data\StoreConfigInterface[]
      */
-    public function getStoreConfigs(array $storeCodes = null);
+    public function getStoreConfigs($storeCodes = null);
 }

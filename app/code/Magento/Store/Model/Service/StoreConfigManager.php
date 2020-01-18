@@ -53,11 +53,12 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     }
 
     /**
-     * @param string[] $storeCodes list of stores by store codes, will return all if storeCodes is not set
+     * @param string $storeCodes list of stores by store codes, will return all if storeCodes is not set
      * @return \Magento\Store\Api\Data\StoreConfigInterface[]
      */
-    public function getStoreConfigs(array $storeCodes = null)
+    public function getStoreConfigs($storeCodes = null)
     {
+        $storeCodes = array_filter(explode(',', $storeCodes));
         $storeConfigs = [];
         $storeCollection = $this->storeCollectionFactory->create();
         if ($storeCodes != null) {
