@@ -10,8 +10,6 @@ namespace Magento\Security\Model\ResourceModel\UserExpiration;
 
 /**
  * Class CollectionTest
- *
- * @package Magento\Security\Model\ResourceModel\UserExpiration
  */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
