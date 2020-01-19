@@ -60,8 +60,9 @@
         </arguments>
     </type>
     <type name="Magento\Backend\App\AbstractAction">
-        <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100" />
-        <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11" />
+        <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100"/>
+        <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11"/>
+        <plugin name="adminLoadDesign" type="Magento\Backend\App\Action\Plugin\LoadDesignPlugin"/>
     </type>
     <type name="Magento\Store\App\Response\Redirect">
         <arguments>

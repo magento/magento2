@@ -6,16 +6,24 @@
 
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Visitor as VisitorModel;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class VisitorTest
- * @package Magento\Customer\Model
+ * Unit Tests to cover Visitor Model
  */
-class VisitorTest extends \PHPUnit\Framework\TestCase
+class VisitorTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Visitor
+     * @var VisitorModel
      */
     protected $visitor;
 
@@ -25,37 +33,37 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
-    protected $registry;
+    protected $registryMock;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var VisitorResourceModel|MockObject
      */
-    protected $resource;
+    protected $visitorResourceModelMock;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManagerInterface|MockObject
      */
-    protected $session;
+    protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
-    private $request;
+    private $httpRequestMock;
 
     protected function setUp()
     {
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
-        $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSessionId', 'getVisitorData', 'setVisitorData'])
             ->getMock();
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->httpRequestMock = $this->createMock(HttpRequest::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->resource = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Visitor::class)
+        $this->visitorResourceModelMock = $this->getMockBuilder(VisitorResourceModel::class)
             ->setMethods([
                 'beginTransaction',
                 '__sleep',
@@ -66,28 +74,28 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'commit',
                 'clean',
             ])->disableOriginalConstructor()->getMock();
-        $this->resource->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');
-        $this->resource->expects($this->any())->method('addCommitCallback')->willReturnSelf();
+        $this->visitorResourceModelMock->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');
+        $this->visitorResourceModelMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();
 
         $arguments = $this->objectManagerHelper->getConstructArguments(
-            \Magento\Customer\Model\Visitor::class,
+            VisitorModel::class,
             [
-                'registry' => $this->registry,
-                'session' => $this->session,
-                'resource' => $this->resource,
-                'request' => $this->request,
+                'registry' => $this->registryMock,
+                'session' => $this->sessionMock,
+                'resource' => $this->visitorResourceModelMock,
+                'request' => $this->httpRequestMock,
             ]
         );
 
-        $this->visitor = $this->objectManagerHelper->getObject(\Magento\Customer\Model\Visitor::class, $arguments);
+        $this->visitor = $this->objectManagerHelper->getObject(VisitorModel::class, $arguments);
     }
 
     public function testInitByRequest()
     {
         $oldSessionId = 'asdfhasdfjhkj2198sadf8sdf897';
         $newSessionId = 'bsdfhasdfjhkj2198sadf8sdf897';
-        $this->session->expects($this->any())->method('getSessionId')->willReturn($newSessionId);
-        $this->session->expects($this->atLeastOnce())->method('getVisitorData')
+        $this->sessionMock->expects($this->any())->method('getSessionId')->willReturn($newSessionId);
+        $this->sessionMock->expects($this->atLeastOnce())->method('getVisitorData')
             ->willReturn(['session_id' => $oldSessionId]);
         $this->visitor->initByRequest(null);
         $this->assertEquals($newSessionId, $this->visitor->getSessionId());
@@ -95,32 +103,32 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveByRequest()
     {
-        $this->session->expects($this->once())->method('setVisitorData')->will($this->returnSelf());
+        $this->sessionMock->expects($this->once())->method('setVisitorData')->will($this->returnSelf());
         $this->assertSame($this->visitor, $this->visitor->saveByRequest(null));
     }
 
     public function testIsModuleIgnored()
     {
         $this->visitor = $this->objectManagerHelper->getObject(
-            \Magento\Customer\Model\Visitor::class,
+            VisitorModel::class,
             [
-                'registry' => $this->registry,
-                'session' => $this->session,
-                'resource' => $this->resource,
+                'registry' => $this->registryMock,
+                'session' => $this->sessionMock,
+                'resource' => $this->visitorResourceModelMock,
                 'ignores' => ['test_route_name' => true],
-                'requestSafety' => $this->request,
+                'requestSafety' => $this->httpRequestMock,
             ]
         );
-        $this->request->method('getRouteName')->willReturn('test_route_name');
-        $observer = new \Magento\Framework\DataObject();
+        $this->httpRequestMock->method('getRouteName')->willReturn('test_route_name');
+        $observer = new DataObject();
         $this->assertTrue($this->visitor->isModuleIgnored($observer));
     }
 
     public function testBindCustomerLogin()
     {
-        $customer = new \Magento\Framework\DataObject(['id' => '1']);
-        $observer = new \Magento\Framework\DataObject([
-            'event' => new \Magento\Framework\DataObject(['customer' => $customer]),
+        $customer = new DataObject(['id' => '1']);
+        $observer = new DataObject([
+            'event' => new DataObject(['customer' => $customer]),
         ]);
 
         $this->visitor->bindCustomerLogin($observer);
@@ -136,7 +144,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testBindCustomerLogout()
     {
-        $observer = new \Magento\Framework\DataObject();
+        $observer = new DataObject();
 
         $this->visitor->setCustomerId('1');
         $this->visitor->bindCustomerLogout($observer);
@@ -149,9 +157,9 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testBindQuoteCreate()
     {
-        $quote = new \Magento\Framework\DataObject(['id' => '1', 'is_checkout_cart' => true]);
-        $observer = new \Magento\Framework\DataObject([
-            'event' => new \Magento\Framework\DataObject(['quote' => $quote]),
+        $quote = new DataObject(['id' => '1', 'is_checkout_cart' => true]);
+        $observer = new DataObject([
+            'event' => new DataObject(['quote' => $quote]),
         ]);
         $this->visitor->bindQuoteCreate($observer);
         $this->assertTrue($this->visitor->getDoQuoteCreate());
@@ -159,9 +167,9 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testBindQuoteDestroy()
     {
-        $quote = new \Magento\Framework\DataObject(['id' => '1']);
-        $observer = new \Magento\Framework\DataObject([
-            'event' => new \Magento\Framework\DataObject(['quote' => $quote]),
+        $quote = new DataObject(['id' => '1']);
+        $observer = new DataObject([
+            'event' => new DataObject(['quote' => $quote]),
         ]);
         $this->visitor->bindQuoteDestroy($observer);
         $this->assertTrue($this->visitor->getDoQuoteDestroy());
@@ -169,7 +177,10 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testClean()
     {
-        $this->resource->expects($this->once())->method('clean')->with($this->visitor)->willReturnSelf();
+        $this->visitorResourceModelMock->expects($this->once())
+            ->method('clean')
+            ->with($this->visitor)
+            ->willReturnSelf();
         $this->visitor->clean();
     }
 }

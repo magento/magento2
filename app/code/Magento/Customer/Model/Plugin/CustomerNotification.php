@@ -11,12 +11,16 @@ use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Refresh the Customer session if `UpdateSession` notification registered
+ */
 class CustomerNotification
 {
     /**
@@ -72,7 +76,7 @@ class CustomerNotification
         $this->state = $state;
         $this->customerRepository = $customerRepository;
         $this->logger = $logger;
-        $this->request = $request;
+        $this->request = $request ?? ObjectManager::getInstance()->get(RequestInterface::class);
     }
 
     /**
@@ -101,30 +105,13 @@ class CustomerNotification
     }
 
     /**
-     * Return the shared request.
-     * If the request wasn't injected because of the backward compatible optional constructor dependency,
-     * create a new request instance.
-     *
-     * @return RequestInterface
-     */
-    private function getRequest(): RequestInterface
-    {
-        if (null === $this->request) {
-            $this->request = ObjectManager::getInstance()->get(RequestInterface::class);
-        }
-        return $this->request;
-    }
-
-    /**
      * Because RequestInterface has no isPost method the check is requied before calling it.
      *
      * @return bool
      */
     private function isPostRequest(): bool
     {
-        $request = $this->getRequest();
-
-        return method_exists($request, 'isPost') && $request->isPost();
+        return $this->request instanceof HttpRequestInterface && $this->request->isPost();
     }
 
     /**
@@ -135,7 +122,7 @@ class CustomerNotification
      */
     private function isFrontendRequest(): bool
     {
-        return $this->state->getAreaCode() == Area::AREA_FRONTEND;
+        return $this->state->getAreaCode() === Area::AREA_FRONTEND;
     }
 
     /**

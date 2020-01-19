@@ -6,27 +6,35 @@
 
 namespace Magento\Framework\App\Action\Plugin;
 
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Config\Dom\ValidationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\View\DesignLoader;
 
+/**
+ * Handling Exceptions on Design Loading
+ */
 class Design
 {
     /**
-     * @var \Magento\Framework\View\DesignLoader
+     * @var DesignLoader
      */
     protected $_designLoader;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var MessageManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @param \Magento\Framework\View\DesignLoader $designLoader
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param DesignLoader $designLoader
+     * @param MessageManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Framework\View\DesignLoader $designLoader,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        DesignLoader $designLoader,
+        MessageManagerInterface $messageManager
     ) {
         $this->_designLoader = $designLoader;
         $this->messageManager = $messageManager;
@@ -35,17 +43,16 @@ class Design
     /**
      * Initialize design
      *
-     * @param \Magento\Framework\App\ActionInterface $subject
-     *
+     * @param ActionInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(\Magento\Framework\App\ActionInterface $subject)
+    public function beforeExecute(ActionInterface $subject)
     {
         try {
             $this->_designLoader->load();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            if ($e->getPrevious() instanceof \Magento\Framework\Config\Dom\ValidationException) {
+        } catch (LocalizedException $e) {
+            if ($e->getPrevious() instanceof ValidationException) {
                 /** @var MessageInterface $message */
                 $message = $this->messageManager
                     ->createMessage(MessageInterface::TYPE_ERROR)

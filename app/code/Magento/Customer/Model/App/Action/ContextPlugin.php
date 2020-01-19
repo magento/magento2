@@ -8,12 +8,12 @@ namespace Magento\Customer\Model\App\Action;
 
 use Magento\Customer\Model\Context;
 use Magento\Customer\Model\GroupManagement;
-use Magento\Framework\App\ActionInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 
 /**
- * Class ContextPlugin
+ * Introduces Context information for ActionInterface of Customer Action
  */
 class ContextPlugin
 {

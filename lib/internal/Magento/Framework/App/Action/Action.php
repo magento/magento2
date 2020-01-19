@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Action;
 
+use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Profiler;
+use Magento\Framework\UrlInterface;
 
 /**
  * Extend from this class to create actions controllers in frontend area of your application.
@@ -17,6 +25,7 @@ use Magento\Framework\Exception\NotFoundException;
  *
  * TODO: Remove this class. Allow implementation of Action Controllers by just implementing Action Interface.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -24,7 +33,7 @@ use Magento\Framework\Exception\NotFoundException;
 abstract class Action extends AbstractAction
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -37,32 +46,32 @@ abstract class Action extends AbstractAction
     protected $_sessionNamespace;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var EventManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag
+     * @var ActionFlag
      */
     protected $_actionFlag;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
+     * @var RedirectInterface
      */
     protected $_redirect;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface
+     * @var ViewInterface
      */
     protected $_view;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_url;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var MessageManagerInterface
      */
     protected $messageManager;
 
@@ -92,15 +101,15 @@ abstract class Action extends AbstractAction
     {
         $this->_request = $request;
         $profilerKey = 'CONTROLLER_ACTION:' . $request->getFullActionName();
-        \Magento\Framework\Profiler::start($profilerKey);
+        Profiler::start($profilerKey);
 
         $result = null;
         if ($request->isDispatched() && !$this->_actionFlag->get('', self::FLAG_NO_DISPATCH)) {
-            \Magento\Framework\Profiler::start('action_body');
+            Profiler::start('action_body');
             $result = $this->execute();
-            \Magento\Framework\Profiler::stop('action_body');
+            Profiler::stop('action_body');
         }
-        \Magento\Framework\Profiler::stop($profilerKey);
+        Profiler::stop($profilerKey);
         return $result ?: $this->_response;
     }
 
@@ -139,9 +148,9 @@ abstract class Action extends AbstractAction
     /**
      * Set redirect into response
      *
-     * @param   string $path
-     * @param   array $arguments
-     * @return  ResponseInterface
+     * @param string $path
+     * @param array $arguments
+     * @return ResponseInterface
      */
     protected function _redirect($path, $arguments = [])
     {
@@ -150,6 +159,8 @@ abstract class Action extends AbstractAction
     }
 
     /**
+     * Returns ActionFlag value
+     *
      * @return \Magento\Framework\App\ActionFlag
      */
     public function getActionFlag()

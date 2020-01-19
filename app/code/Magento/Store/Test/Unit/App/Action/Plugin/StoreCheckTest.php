@@ -5,32 +5,38 @@
  */
 namespace Magento\Store\Test\Unit\App\Action\Plugin;
 
+use Magento\Framework\App\Action\AbstractAction;
+use Magento\Store\App\Action\Plugin\StoreCheck;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+
 class StoreCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\App\Action\Plugin\StoreCheck
+     * @var StoreCheck
      */
     protected $_plugin;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     protected $_storeMock;
 
     /**
-     * @var \Magento\Framework\App\Action\AbstractAction|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAction|MockObject
      */
     protected $subjectMock;
-    
+
     protected function setUp()
     {
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->_storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->_storeMock = $this->createMock(Store::class);
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
@@ -38,11 +44,11 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($this->_storeMock)
         );
-        $this->subjectMock = $this->getMockBuilder(\Magento\Framework\App\Action\AbstractAction::class)
+        $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->_plugin = new \Magento\Store\App\Action\Plugin\StoreCheck($this->_storeManagerMock);
+        $this->_plugin = new StoreCheck($this->_storeManagerMock);
     }
 
     /**

@@ -1,4 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Action\Plugin;
 
@@ -21,6 +27,10 @@ class ActionFlagNoDispatchPlugin
      */
     private $response;
 
+    /**
+     * @param ActionFlag $actionFlag
+     * @param ResponseInterface $response
+     */
     public function __construct(ActionFlag $actionFlag, ResponseInterface $response)
     {
         $this->actionFlag = $actionFlag;

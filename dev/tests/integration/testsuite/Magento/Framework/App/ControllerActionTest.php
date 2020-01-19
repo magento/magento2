@@ -1,4 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
 
 namespace Magento\Framework\App;
 
@@ -28,8 +34,7 @@ class ControllerActionTest extends TestCase
         $objectManager = ObjectManager::getInstance();
 
         $originalEventManager = $objectManager->create(Event\ManagerInterface::class);
-        $eventManagerSpy = new class($originalEventManager) implements Event\ManagerInterface
-        {
+        $eventManagerSpy = new class($originalEventManager) implements Event\ManagerInterface {
             /**
              * @var Event\ManagerInterface
              */
@@ -57,7 +62,7 @@ class ControllerActionTest extends TestCase
             }
         };
 
-        $objectManager->addSharedInstance($eventManagerSpy, Event\Manager\Proxy::class);
+        $objectManager->addSharedInstance($eventManagerSpy, get_class($originalEventManager));
     }
 
     private function assertEventDispatchCount($eventName, $expectedCount)
@@ -86,7 +91,7 @@ class ControllerActionTest extends TestCase
     private function configureRequestForAction(string $route, string $actionPath, string $actionName)
     {
         $request = $this->getRequest();
-        
+
         $request->setRouteName($route);
         $request->setControllerName($actionPath);
         $request->setActionName($actionName);
@@ -114,11 +119,11 @@ class ControllerActionTest extends TestCase
     public function testInheritanceBasedFrontendActionDispatchesEvents()
     {
         $this->setupEventManagerSpy();
-        
+
         /** @var InheritanceBasedFrontendAction $action */
         $action = ObjectManager::getInstance()->create(InheritanceBasedFrontendAction::class);
         $this->configureRequestForAction('testroute', 'actionpath', 'actionname');
-        
+
         $action->dispatch($this->getRequest());
 
         $this->assertPreAndPostDispatchEventsAreDispatched();
@@ -130,7 +135,7 @@ class ControllerActionTest extends TestCase
     public function testInterfaceOnlyFrontendActionDispatchesEvents()
     {
         $this->setupEventManagerSpy();
-        
+
         /** @var InterfaceOnlyFrontendAction $action */
         $action = ObjectManager::getInstance()->create(InterfaceOnlyFrontendAction::class);
         $this->configureRequestForAction('testroute', 'actionpath', 'actionname');
@@ -146,7 +151,7 @@ class ControllerActionTest extends TestCase
     public function testInheritanceBasedAdminhtmlActionDispatchesEvents()
     {
         $this->fakeAuthenticatedBackendRequest();
-        
+
         $this->setupEventManagerSpy();
 
         /** @var InheritanceBasedBackendAction $action */
@@ -184,13 +189,13 @@ class ControllerActionTest extends TestCase
         /** @var InterfaceOnlyFrontendAction $action */
         $action = ObjectManager::getInstance()->create(InterfaceOnlyFrontendAction::class);
         $this->configureRequestForAction('testroute', 'actionpath', 'actionname');
-        
+
         /** @var ActionFlag $actionFlag */
         $actionFlag = ObjectManager::getInstance()->get(ActionFlag::class);
         $actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
-        
+
         $action->execute();
-        
+
         $this->assertFalse($action->isExecuted(), 'The controller execute() method was not expected to be called.');
         $this->assertEventDispatchCount('controller_action_predispatch', 1);
         $this->assertEventDispatchCount('controller_action_predispatch_testroute', 1);

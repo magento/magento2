@@ -5,81 +5,105 @@
  */
 namespace Magento\Tax\Test\Unit\App\Action;
 
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\Test\Unit\Action\Stub\ActionStub;
+use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\PageCache\Model\Config as PageCacheConfig;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Model\App\Action\ContextPlugin as TaxContextPlugin;
+use Magento\Tax\Model\Calculation;
+use Magento\Weee\Helper\Data as WeeeHelper;
+use Magento\Weee\Model\Tax;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Context plugin test
+ * Unit Tests to cover ContextPlugin
  */
-class ContextPluginTest extends \PHPUnit\Framework\TestCase
+class ContextPluginTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var ObjectManagerHelper
+     */
+    private $objectManager;
+
+    /**
+     * @var TaxHelper|MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var WeeeHelper|MockObject
      */
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Weee\Model\Tax
+     * @var Tax|MockObject
      */
     protected $weeeTaxMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var HttpContext|MockObject
      */
     protected $httpContextMock;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Proxy
+     * @var Calculation|MockObject
      */
     protected $taxCalculationMock;
 
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var ModuleManager|MockObject
      */
     private $moduleManagerMock;
 
     /**
      * Cache config
      *
-     * @var \Magento\PageCache\Model\Config
+     * @var PageCacheConfig|MockObject
      */
     private $cacheConfigMock;
 
     /**
-     * @var \Magento\Tax\Model\App\Action\ContextPlugin
+     * @var Session|MockObject
+     */
+    private $customerSessionMock;
+
+    /**
+     * @var TaxContextPlugin
      */
     protected $contextPlugin;
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManagerHelper($this);
 
-        $this->taxHelperMock = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)
+        $this->taxHelperMock = $this->getMockBuilder(TaxHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
+        $this->weeeHelperMock = $this->getMockBuilder(WeeeHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->weeeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\Tax::class)
+        $this->weeeTaxMock = $this->getMockBuilder(Tax::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
+        $this->httpContextMock = $this->getMockBuilder(HttpContext::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->taxCalculationMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Proxy::class)
+        $this->taxCalculationMock = $this->getMockBuilder(Calculation::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTaxRates'])
             ->getMock();
 
-        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -89,16 +113,16 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $this->moduleManagerMock = $this->getMockBuilder(ModuleManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cacheConfigMock = $this->getMockBuilder(\Magento\PageCache\Model\Config::class)
+        $this->cacheConfigMock = $this->getMockBuilder(PageCacheConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->contextPlugin = $this->objectManager->getObject(
-            \Magento\Tax\Model\App\Action\ContextPlugin::class,
+            TaxContextPlugin::class,
             [
                 'customerSession' => $this->customerSessionMock,
                 'httpContext' => $this->httpContextMock,
@@ -163,7 +187,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
                     ->with('tax_rates', [], 0);
             }
 
-            $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
+            $action = $this->objectManager->getObject(ActionStub::class);
             $result = $this->contextPlugin->beforeExecute($action);
             $this->assertNull($result);
         } else {

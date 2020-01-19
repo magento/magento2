@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,33 +7,40 @@
 namespace Magento\Store\App\Action\Plugin;
 
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Exception\State\InitException;
+use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Plugin verify Store on before Execute on ActionInterface
+ */
 class StoreCheck
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager
     ) {
         $this->_storeManager = $storeManager;
     }
 
     /**
+     * Verify before execute
+     *
      * @param ActionInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws \Magento\Framework\Exception\State\InitException
+     * @throws \Magento\Framework\Exception\State\InitExceptionn
      */
     public function beforeExecute(ActionInterface $subject)
     {
-        if (! $this->_storeManager->getStore()->isActive()) {
-            throw new \Magento\Framework\Exception\State\InitException(
+        if (!$this->_storeManager->getStore()->isActive()) {
+            throw new InitException(
                 __('Current store is not active.')
             );
         }

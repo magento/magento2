@@ -1,4 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Action\Plugin;
 
@@ -31,6 +37,11 @@ class EventDispatchPlugin
      */
     private $actionFlag;
 
+    /**
+     * @param RequestInterface $request
+     * @param ManagerInterface $eventManager
+     * @param ActionFlag $actionFlag
+     */
     public function __construct(RequestInterface $request, ManagerInterface $eventManager, ActionFlag $actionFlag)
     {
         $this->request = $request;
@@ -68,10 +79,10 @@ class EventDispatchPlugin
      */
     public function afterExecute(ActionInterface $subject, $result)
     {
-        if (! $this->isSetActionNoPostDispatchFlag()) {
+        if (!$this->isSetActionNoPostDispatchFlag()) {
             $this->dispatchPostDispatchEvents($subject);
         }
-        
+
         return $result;
     }
 
@@ -80,12 +91,11 @@ class EventDispatchPlugin
      *
      * @param ActionInterface $subject
      * @return bool
-     *
      */
     private function isSetActionNoPostDispatchFlag(): bool
     {
         return $this->actionFlag->get('', Action::FLAG_NO_DISPATCH) ||
-               $this->actionFlag->get('', Action::FLAG_NO_POST_DISPATCH);
+            $this->actionFlag->get('', Action::FLAG_NO_POST_DISPATCH);
     }
 
     /**
