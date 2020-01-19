@@ -5,6 +5,7 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
@@ -17,7 +18,7 @@ use Magento\Security\Model\SecurityCookie;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Integration\Controller\Adminhtml\Integration
+class Save extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpPostActionInterface
 {
     /**
      * @var SecurityCookie

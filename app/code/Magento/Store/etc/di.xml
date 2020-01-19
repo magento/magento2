@@ -25,6 +25,14 @@
     <preference for="Magento\Framework\App\ScopeFallbackResolverInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
     <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
     <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
+    <preference for="Magento\Store\Model\StoreSwitcherInterface" type="Magento\Store\Model\StoreSwitcher" />
+    <type name="Magento\Framework\App\Http\Context">
+        <arguments>
+            <argument name="default" xsi:type="array">
+                <item name="website" xsi:type="string">0</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="genericHeaderPlugin" type="Magento\Framework\App\Response\HeaderManager"/>
     </type>
@@ -96,9 +104,13 @@
     </type>
     <type name="Magento\Store\Model\StoreResolver">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
             <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
             <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoresData">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
     <type name="Magento\Store\App\FrontController\Plugin\DefaultStore">
@@ -226,6 +238,7 @@
     <type name="Magento\Framework\App\ScopeResolverPool">
         <arguments>
             <argument name="scopeResolvers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Framework\App\ScopeResolver</item>
                 <item name="store" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
                 <item name="stores" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
                 <item name="group" xsi:type="object">Magento\Store\Model\Resolver\Group</item>
@@ -416,6 +429,16 @@
         <arguments>
             <argument name="interpreters" xsi:type="array">
                 <item name="serviceUrl" xsi:type="object">Magento\Store\Model\Argument\Interpreter\ServiceUrl</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreSwitcher">
+        <arguments>
+            <argument name="storeSwitchers" xsi:type="array">
+                <item name="cleanTargetUrl" xsi:type="object">Magento\Store\Model\StoreSwitcher\CleanTargetUrl</item>
+                <item name="manageStoreCookie" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManageStoreCookie</item>
+                <item name="managePrivateContent" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManagePrivateContent</item>
+                <item name="hashProcessor" xsi:type="object" sortOrder="1000">Magento\Store\Model\StoreSwitcher\HashProcessor</item>
             </argument>
         </arguments>
     </type>

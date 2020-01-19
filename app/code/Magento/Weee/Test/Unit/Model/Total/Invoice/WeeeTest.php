@@ -78,6 +78,9 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $this->invoice->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
     }
 
+    /**
+     * @param $orderData
+     */
     private function setupOrder($orderData)
     {
         //Set up order mock

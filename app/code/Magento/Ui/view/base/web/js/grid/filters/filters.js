@@ -83,6 +83,10 @@ define([
                         component: 'Magento_Ui/js/grid/filters/range',
                         rangeType: 'date'
                     },
+                    datetimeRange: {
+                        component: 'Magento_Ui/js/grid/filters/range',
+                        rangeType: 'datetime'
+                    },
                     textRange: {
                         component: 'Magento_Ui/js/grid/filters/range',
                         rangeType: 'text'
@@ -257,7 +261,7 @@ define([
         /**
          * Creates filter component configuration associated with the provided column.
          *
-         * @param {Column} column - Column component whith a basic filter declaration.
+         * @param {Column} column - Column component with a basic filter declaration.
          * @returns {Object} Filters' configuration.
          */
         buildFilter: function (column) {
@@ -272,11 +276,22 @@ define([
             }
 
             filter = utils.extend({}, filters.base, filter);
+            //Accepting labels as is.
+            filter.__disableTmpl = {
+                label: 1,
+                options: 1
+            };
 
-            return utils.template(filter, {
+            filter = utils.template(filter, {
                 filters: this,
                 column: column
             }, true, true);
+
+            filter.__disableTmpl = {
+                label: true
+            };
+
+            return filter;
         },
 
         /**
@@ -331,7 +346,7 @@ define([
         },
 
         /**
-         * Finds filters whith a not empty data
+         * Finds filters with a not empty data
          * and sets them to the 'active' filters array.
          *
          * @returns {Filters} Chainable.

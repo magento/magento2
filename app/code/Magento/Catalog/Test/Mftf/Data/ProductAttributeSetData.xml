@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AddToDefaultSet" type="ProductAttributeSet">
+        <var key="attributeCode" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="attributeSetId">4</data>
+        <data key="attributeGroupId">7</data>
+        <data key="sortOrder">0</data>
+    </entity>
+    <entity name="AddToDefaultSetSortOrder1" type="ProductAttributeSet">
+        <var key="attributeCode" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="attributeSetId">4</data>
+        <data key="attributeGroupId">7</data>
+        <data key="sortOrder">1</data>
+    </entity>
+    <entity name="AddToSetBlank" type="ProductAttributeSet">
+        <var key="attributeCode" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="attributeSetId">0</data>
+        <data key="attributeGroupId">0</data>
+        <data key="sortOrder">0</data>
+    </entity>
+</entities>

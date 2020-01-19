@@ -82,7 +82,7 @@ define([
     return function (config, element) {
         config = config || {};
         jQuery(element).on('click', function () {
-            categorySubmit(config.url, config.ajax);
+            categorySubmit();
         });
     };
 });

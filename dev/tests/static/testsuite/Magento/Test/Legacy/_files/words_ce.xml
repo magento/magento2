@@ -53,7 +53,7 @@
             <word>overriden</word>
         </item>
         <item>
-            <path>composer.lock</path>
+            <path>dev/composer.lock</path>
         </item>
         <item>
             <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
@@ -68,6 +68,10 @@
         </item>
         <item>
             <path>dev/build/publication/sanity/ce.xml</path>
+        </item>
+        <item>
+            <path>app/design/adminhtml/Magento/backend/Magento_Rma/web/css/source/_module.less</path>
+            <word>rma</word>
         </item>
     </whitelist>
 </config>

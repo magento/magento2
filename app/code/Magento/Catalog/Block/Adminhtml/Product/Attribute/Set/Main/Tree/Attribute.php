@@ -14,5 +14,5 @@ class Attribute extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/set/main/tree/attribute.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/set/main/tree/attribute.phtml';
 }

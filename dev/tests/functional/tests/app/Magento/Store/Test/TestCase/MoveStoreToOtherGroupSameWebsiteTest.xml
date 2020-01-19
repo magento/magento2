@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\MoveStoreToOtherGroupSameWebsiteTest" summary="Move Store View" ticketId="MAGETWO-58361">
         <variation name="MoveStoreTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="storeInitialA/dataset" xsi:type="string">custom_group_custom_store</data>
             <data name="storeInitialB/dataset" xsi:type="string">custom_group_custom_store</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />

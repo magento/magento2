@@ -66,7 +66,7 @@ class ProductCategoryFilterTest extends \PHPUnit\Framework\TestCase
 
         $collectionMock->expects($this->once())
             ->method('addCategoriesFilter')
-            ->with(['eq' => ['value']]);
+            ->with(['in' => ['value']]);
 
         $this->assertTrue($this->model->apply($filterMock, $collectionMock));
     }

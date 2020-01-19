@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMultipleWebsitesUseDefaultValuesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create websites"/>
+            <title value="Use Default Value checkboxes should be checked for new website scope"/>
+            <description value="Use Default Value checkboxes for product attribute should be checked for new website scope"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-92454"/>
+            <group value="Catalog"/>
+        </annotations>
+        <after>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+        <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+            <argument name="newWebsiteName" value="Second Website"/>
+            <argument name="websiteCode" value="second_website"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+            <argument name="website" value="Second Website"/>
+            <argument name="storeGroupName" value="Second Store"/>
+            <argument name="storeGroupCode" value="second_store"/>
+        </actionGroup>
+
+        <!--Create Store view -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForSystemStorePage"/>
+        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
+        <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
+        <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+        <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+        <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickStoreViewSaveButton"/>
+        <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationModal" />
+        <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="AcceptNewStoreViewCreation"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
+        <see userInput="You saved the store view." stepKey="seeSaveMessage"/>
+
+        <!--Create a Simple Product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSKU"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
+        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillProductQuantity"/>
+
+        <!-- Add product to second website and save the product -->
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsites"/>
+        <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+
+        <!-- switch to the second store view -->
+        <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
+
+        <!-- Check if Use Default Value checkboxes are checked -->
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="seeProductStatusCheckboxChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="seeProductNameCheckboxChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productTaxClassUseDefault}}" stepKey="seeTaxClassCheckboxChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.visibilityUseDefault}}" stepKey="seeVisibilityCheckboxChecked"/>
+    </test>
+</tests>

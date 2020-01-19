@@ -1,20 +1,17 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var Magento\Ui\Block\Wysiwyg\ActiveEditor $block */
-
 ?>
-
 <script>
     require.config({
-        paths: {
-            wysiwygAdapter: '<?php /* @noEscape */ echo $block->getWysiwygAdapterPath(); ?>'
+        map: {
+            '*': {
+                wysiwygAdapter: '<?= /* @noEscape */ $block->getWysiwygAdapterPath() ?>'
+            }
         }
     });
 </script>

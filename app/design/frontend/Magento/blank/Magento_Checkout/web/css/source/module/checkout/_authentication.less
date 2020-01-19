@@ -25,6 +25,7 @@
             padding: @block-auth__dropdown__padding;
         }
     }
+
     .authentication-wrapper {
         float: right;
         margin-top: -1.5*@indent__xl;
@@ -94,7 +95,7 @@
                 padding-top: @indent__xl;
                 position: relative;
 
-                &::before {
+                &:before {
                     .lib-css(height, @block-auth__or-label__size);
                     .lib-css(line-height, @block-auth__or-label__size - 2px);
                     .lib-css(margin, -(@block-auth__or-label__size/2 + 1px) 0 0 -(@block-auth__or-label__size / 2));
@@ -212,7 +213,7 @@
                 margin: 0;
                 padding: @indent__s 0 0 @indent__xl;
 
-                &::before {
+                &:before {
                     left: 0;
                     top: 50%;
                 }

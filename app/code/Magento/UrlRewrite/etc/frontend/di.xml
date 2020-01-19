@@ -17,7 +17,5 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Block\Switcher">
-        <plugin name="setStoreSpecificRedirectUrl" type="Magento\UrlRewrite\Block\Plugin\Store\Switcher\SetRedirectUrl"/>
-    </type>
+    <preference for="Magento\UrlRewrite\Model\UrlFinderInterface" type="Magento\UrlRewrite\Model\CompositeUrlFinder"/>
 </config>

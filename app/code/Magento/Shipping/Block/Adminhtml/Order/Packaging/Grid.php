@@ -10,7 +10,7 @@ class Grid extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'order/packaging/grid.phtml';
+    protected $_template = 'Magento_Shipping::order/packaging/grid.phtml';
 
     /**
      * Core registry

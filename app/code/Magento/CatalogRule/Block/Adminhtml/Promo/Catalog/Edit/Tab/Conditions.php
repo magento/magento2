@@ -66,7 +66,7 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Returns status flag about this tab can be shown or not
      *
      * @return bool
      * @codeCoverageIgnore

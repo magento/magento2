@@ -109,6 +109,9 @@ class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
         $this->manager->setDefaultAddressAfterSave($address);
     }
 
+    /**
+     * @return array
+     */
     public function setAddressCustomerSessionAddressSaveDataProvider()
     {
         return [
@@ -151,6 +154,9 @@ class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
         $this->manager->setDefaultAddressAfterLogIn([$address]);
     }
 
+    /**
+     * @return array
+     */
     public function setAddressCustomerSessionLogInDataProvider()
     {
         return [

@@ -79,7 +79,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
         /**
          * @var Reference $foreignKey
          */
-        $foreignKey = $testTable->getConstraintByName('some_foreign_key');
+        $foreignKey = $testTable->getConstraintByName('TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF');
         self::assertEquals('NO ACTION', $foreignKey->getOnDelete());
         self::assertEquals('tinyint_ref', $foreignKey->getReferenceColumn()->getName());
     }

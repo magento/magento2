@@ -142,7 +142,7 @@ class SkuProcessor
     {
         if ($sku !== null) {
             $sku = strtolower($sku);
-            return isset($this->newSkus[$sku]) ? $this->newSkus[$sku] : null;
+            return $this->newSkus[$sku] ?? null;
         }
         return $this->newSkus;
     }

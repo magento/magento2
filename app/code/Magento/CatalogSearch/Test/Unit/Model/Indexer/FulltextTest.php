@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
 use \Magento\Framework\Indexer\Dimension;
-use Magento\Framework\Indexer\Dimension\DimensionProviderInterface;
+use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -44,6 +44,11 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      */
     private $dimensionProviderMock;
 
+    /**
+     * @var \Magento\Indexer\Model\ProcessManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $processManager;
+
     protected function setUp()
     {
         $this->fullAction = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class);
@@ -70,6 +75,11 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $stateMock = $this->getMockBuilder(\Magento\CatalogSearch\Model\Indexer\Scope\State::class)
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->processManager = new \Magento\Indexer\Model\ProcessManager(
+            $this->getClassMock(\Magento\Framework\App\ResourceConnection::class)
+        );
+
         $this->model = $objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Indexer\Fulltext::class,
             [
@@ -80,6 +90,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
                 'indexSwitcher' => $this->indexSwitcher,
                 'dimensionProvider' => $this->dimensionProviderMock,
                 'indexScopeState' => $stateMock,
+                'processManager' => $this->processManager,
             ]
         );
     }
@@ -105,6 +116,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->willReturn($ids);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $consecutiveStoreRebuildArguments = array_map(
             function ($store) use ($ids) {
                 return [$store, $ids];
@@ -119,6 +131,9 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $this->model->execute($ids);
     }
 
+    /**
+     * @param $stores
+     */
     private function setupDataProvider($stores)
     {
         $this->dimensionProviderMock->expects($this->once())->method('getIterator')->willReturn(
@@ -172,6 +187,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->willReturn($ids);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
             ->willReturn(new \ArrayObject([$indexData, $indexData]));
@@ -190,6 +206,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$id]);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
             ->willReturn(new \ArrayObject([$indexData, $indexData]));

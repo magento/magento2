@@ -14,7 +14,8 @@ define([
     'text!ui/template/modal/modal-slide.html',
     'text!ui/template/modal/modal-custom.html',
     'Magento_Ui/js/lib/key-codes',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'mage/translate'
 ], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
@@ -104,11 +105,12 @@ define([
                 /**
                  * Escape key press handler,
                  * close modal window
+                 * @param {Object} event - event
                  */
-                escapeKey: function () {
+                escapeKey: function (event) {
                     if (this.options.isOpen && this.modal.find(document.activeElement).length ||
                         this.options.isOpen && this.modal[0] === document.activeElement) {
-                        this.closeModal();
+                        this.closeModal(event);
                     }
                 }
             }
@@ -130,7 +132,10 @@ define([
             this._createWrapper();
             this._renderModal();
             this._createButtons();
-            $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
+
+            if (this.options.trigger) {
+                $(document).on('click', this.options.trigger, _.bind(this.toggleModal, this));
+            }
             this._on(this.modal.find(this.options.modalCloseBtn), {
                 'click': this.options.modalCloseBtnHandler ? this.options.modalCloseBtnHandler : this.closeModal
             });
@@ -339,6 +344,12 @@ define([
             var zIndex = this.modal.zIndex(),
                 baseIndex = zIndex + this._getVisibleCount();
 
+            if (this.modal.data('active')) {
+                return;
+            }
+
+            this.modal.data('active', true);
+
             this.overlay.zIndex(++baseIndex);
             this.prevOverlayIndex = this.overlay.zIndex();
             this.modal.zIndex(this.overlay.zIndex() + 1);
@@ -353,16 +364,10 @@ define([
          */
         _unsetActive: function () {
             this.modal.removeAttr('style');
+            this.modal.data('active', false);
 
             if (this.overlay) {
-                // In cases when one modal is closed but there is another modal open (e.g. admin notifications)
-                // to avoid collisions between overlay and modal zIndexes
-                // overlay zIndex is set to be less than modal one
-                if (this._getVisibleCount() === 1) {
-                    this.overlay.zIndex(this.prevOverlayIndex - 1);
-                } else {
-                    this.overlay.zIndex(this.prevOverlayIndex);
-                }
+                this.overlay.zIndex(this.prevOverlayIndex - 1);
             }
         },
 

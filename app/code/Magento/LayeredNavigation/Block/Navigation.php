@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\LayeredNavigation\Block;
+
+use Magento\Framework\View\Element\Template;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Block\Product\ProductList\Toolbar;
 
 /**
  * Catalog layered navigation view block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\LayeredNavigation\Block;
-
-use Magento\Framework\View\Element\Template;
-
-/**
  * @api
  * @since 100.0.2
  */
 class Navigation extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * Product listing toolbar block name
+     */
+    private const PRODUCT_LISTING_TOOLBAR_BLOCK = 'product_list_toolbar';
+
     /**
      * Catalog layer
      *
@@ -67,7 +70,18 @@ class Navigation extends \Magento\Framework\View\Element\Template
             $filter->apply($this->getRequest());
         }
         $this->getLayer()->apply();
+
         return parent::_prepareLayout();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _beforeToHtml()
+    {
+        $this->configureToolbarBlock();
+
+        return parent::_beforeToHtml();
     }
 
     /**
@@ -107,7 +121,8 @@ class Navigation extends \Magento\Framework\View\Element\Template
      */
     public function canShowBlock()
     {
-        return $this->visibilityFlag->isEnabled($this->getLayer(), $this->getFilters());
+        return $this->getLayer()->getCurrentCategory()->getDisplayMode() !== \Magento\Catalog\Model\Category::DM_PAGE
+            && $this->visibilityFlag->isEnabled($this->getLayer(), $this->getFilters());
     }
 
     /**
@@ -118,5 +133,21 @@ class Navigation extends \Magento\Framework\View\Element\Template
     public function getClearUrl()
     {
         return $this->getChildBlock('state')->getClearUrl();
+    }
+
+    /**
+     * Configures the Toolbar block
+     *
+     * @return void
+     */
+    private function configureToolbarBlock(): void
+    {
+        /** @var Toolbar $toolbarBlock */
+        $toolbarBlock = $this->getLayout()->getBlock(self::PRODUCT_LISTING_TOOLBAR_BLOCK);
+        if ($toolbarBlock) {
+            /** @var Collection $collection */
+            $collection = $this->getLayer()->getProductCollection();
+            $toolbarBlock->setCollection($collection);
+        }
     }
 }

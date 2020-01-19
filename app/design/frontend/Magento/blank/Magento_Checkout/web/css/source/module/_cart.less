@@ -305,7 +305,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;
@@ -346,6 +346,10 @@
 
         .widget {
             float: left;
+            
+            &.block {
+                margin-bottom: @indent__base;
+            }
         }
     }
 

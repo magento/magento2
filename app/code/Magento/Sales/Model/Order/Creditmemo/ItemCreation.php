@@ -28,7 +28,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
     private $extensionAttributes;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOrderItemId()
     {
@@ -36,7 +36,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderItemId($orderItemId)
     {
@@ -45,7 +45,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQty()
     {
@@ -53,7 +53,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQty($qty)
     {

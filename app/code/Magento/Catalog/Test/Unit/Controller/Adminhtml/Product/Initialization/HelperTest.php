@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
@@ -11,6 +12,8 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Locale\Format;
+use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -95,6 +98,19 @@ class HelperTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeFilterMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFilterMock;
+
+    /**
+     * @var FormatInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeFormatMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -144,6 +160,12 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['prepareProductAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->localeFormatMock = $this->getMockBuilder(Format::class)
+            ->setMethods(['getNumber'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->dateTimeFilterMock = $this->createMock(\Magento\Catalog\Model\Product\Filter\DateTime::class);
 
         $this->helper = $this->objectManager->getObject(
             Helper::class,
@@ -156,7 +178,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                 'productLinkFactory' => $this->productLinkFactoryMock,
                 'productRepository' => $this->productRepositoryMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock,
-                'attributeFilter' => $this->attributeFilterMock
+                'attributeFilter' => $this->attributeFilterMock,
+                'localeFormat' => $this->localeFormatMock,
+                'dateTimeFilter' => $this->dateTimeFilterMock
             ]
         );
 
@@ -194,44 +218,46 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->assembleLinkTypes($linkTypes));
 
         $optionsData = [
-            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1', 'option_id' => ''],
-            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
-            'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14']
+            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => '1', 'option_id' => ''],
+            'option2' => ['is_delete' => false, 'name' => 'name2', 'price' => '2', 'option_id' => '13'],
+            'option3' => ['is_delete' => false, 'name' => 'name3', 'price' => '3', 'option_id' => '14'],
         ];
+        $specialFromDate = '2018-03-03 19:30:00';
         $productData = [
+            'name' => 'Simple Product',
             'stock_data' => ['stock_data'],
             'options' => $optionsData,
-            'website_ids' => $websiteIds
+            'website_ids' => $websiteIds,
+            'special_from_date' => $specialFromDate,
         ];
         if (!empty($tierPrice)) {
             $productData = array_merge($productData, ['tier_price' => $tierPrice]);
         }
-        $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $attributeNonDateBackEnd =
-            $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $attributeDateBackEnd = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\Datetime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dateTimeFilterMock
+            ->expects($this->once())
+            ->method('filter')
+            ->willReturnArgument(0);
 
-        $attributeNonDate->expects($this->any())->method('getBackend')->willReturn($attributeNonDateBackEnd);
-        $attributeDate->expects($this->any())->method('getBackend')->willReturn($attributeDateBackEnd);
-        $attributeNonDateBackEnd->expects($this->any())->method('getType')->willReturn('non-datetime');
-        $attributeDateBackEnd->expects($this->any())->method('getType')->willReturn('datetime');
+        $this->setProductAttributes(
+            [
+                [
+                    'code' => 'name',
+                    'backend_type' => 'varchar',
+                ],
+                [
+                    'code' => 'special_from_date',
+                    'backend_type' => 'datetime',
+                ]
+            ]
+        );
 
         $useDefaults = ['attributeCode1', 'attributeCode2'];
 
         $this->requestMock->expects($this->any())->method('getPost')->willReturnMap(
             [
                 ['product', [], $productData],
-                ['use_default', null, $useDefaults]
+                ['use_default', null, $useDefaults],
             ]
         );
         $this->linkResolverMock->expects($this->once())->method('getLinks')->willReturn($links);
@@ -240,8 +266,6 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('isLockedAttribute')->with('media')->willReturn(true);
         $this->productMock->expects($this->once())->method('unlockAttribute')->with('media');
         $this->productMock->expects($this->once())->method('lockAttribute')->with('media');
-        $this->productMock->expects($this->once())->method('getAttributes')
-            ->willReturn([$attributeNonDate, $attributeDate]);
         $this->productMock->expects($this->any())->method('getSku')->willReturn('sku');
         $this->productMock->expects($this->any())->method('getOptionsReadOnly')->willReturn(false);
 
@@ -255,30 +279,38 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $secondExpectedCustomOption->setData($optionsData['option3']);
         $this->customOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturnMap([
+            ->willReturnMap(
                 [
-                    ['data' => $optionsData['option2']],
-                    $firstExpectedCustomOption
-                ], [
-                    ['data' => $optionsData['option3']],
-                    $secondExpectedCustomOption
+                    [
+                        ['data' => $optionsData['option2']],
+                        $firstExpectedCustomOption,
+                    ],
+                    [
+                        ['data' => $optionsData['option3']],
+                        $secondExpectedCustomOption,
+                    ],
                 ]
-            ]);
+            );
         $website = $this->getMockBuilder(WebsiteInterface::class)->getMockForAbstractClass();
         $website->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn($isSingleStore);
         $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($website);
+        $this->localeFormatMock->expects($this->any())
+            ->method('getNumber')
+            ->willReturnArgument(0);
 
         $this->assembleProductRepositoryMock($links);
 
         $this->productLinkFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturnCallback(function () {
-                return $this->getMockBuilder(ProductLink::class)
-                    ->setMethods(null)
-                    ->disableOriginalConstructor()
-                    ->getMock();
-            });
+            ->willReturnCallback(
+                function () {
+                    return $this->getMockBuilder(ProductLink::class)
+                        ->setMethods(null)
+                        ->disableOriginalConstructor()
+                        ->getMock();
+                }
+            );
 
         $this->attributeFilterMock->expects($this->any())->method('prepareProductAttributes')->willReturnArgument(1);
 
@@ -306,6 +338,35 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertEquals($expectedLinks, $resultLinks);
+        $this->assertEquals($specialFromDate, $this->productMock->getSpecialFromDate());
+    }
+
+    /**
+     * Mock product attributes
+     *
+     * @param array $attributes
+     */
+    private function setProductAttributes(array $attributes): void
+    {
+        $attributesModels = [];
+        foreach ($attributes as $attribute) {
+            $attributeModel = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+            $backendModel = $attribute['backend_model']
+                ?? $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class);
+            $attributeModel->expects($this->any())
+                ->method('getBackend')
+                ->willReturn($backendModel);
+            $attributeModel->expects($this->any())
+                ->method('getAttributeCode')
+                ->willReturn($attribute['code']);
+            $backendModel->expects($this->any())
+                ->method('getType')
+                ->willReturn($attribute['backend_type']);
+            $attributesModels[$attribute['code']] = $attributeModel;
+        }
+        $this->productMock->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn($attributesModels);
     }
 
     /**
@@ -366,8 +427,8 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                             'price' => 1.00,
                             'position' => 1,
                             'record_id' => 1,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [
@@ -511,16 +572,16 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                             [
                                 'option_type_id' => '2',
                                 'key1' => 'val1',
-                                'default_key1' => 'val2'
-                            ]
-                        ]
-                    ]
+                                'default_key1' => 'val2',
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     4 => [
                         'key1' => '1',
-                        'values' => [3 => ['key1' => 1]]
-                    ]
+                        'values' => [3 => ['key1' => 1]],
+                    ],
                 ],
                 [
                     [
@@ -531,11 +592,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                             [
                                 'option_type_id' => '2',
                                 'key1' => 'val1',
-                                'default_key1' => 'val2'
-                            ]
-                        ]
-                    ]
-                ]
+                                'default_key1' => 'val2',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'key2 is replaced, key1 is not (checkbox is not checked)' => [
                 [
@@ -551,17 +612,17 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'key1' => 'val1',
                                 'key2' => 'val2',
                                 'default_key1' => 'val11',
-                                'default_key2' => 'val22'
-                            ]
-                        ]
-                    ]
+                                'default_key2' => 'val22',
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     5 => [
                         'key1' => '0',
                         'title' => '1',
-                        'values' => [2 => ['key1' => 1]]
-                    ]
+                        'values' => [2 => ['key1' => 1]],
+                    ],
                 ],
                 [
                     [
@@ -577,11 +638,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'key1' => 'val11',
                                 'key2' => 'val2',
                                 'default_key1' => 'val11',
-                                'default_key2' => 'val22'
-                            ]
-                        ]
-                    ]
-                ]
+                                'default_key2' => 'val22',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'key1 is replaced, key2 has no default value' => [
                 [
@@ -596,17 +657,17 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'key1' => 'val1',
                                 'title' => 'val2',
                                 'default_key1' => 'val11',
-                                'default_title' => 'val22'
-                            ]
-                        ]
-                    ]
+                                'default_title' => 'val22',
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     7 => [
                         'key1' => '1',
                         'key2' => '1',
-                        'values' => [2 => ['key1' => 0, 'title' => 1]]
-                    ]
+                        'values' => [2 => ['key1' => 0, 'title' => 1]],
+                    ],
                 ],
                 [
                     [
@@ -621,10 +682,10 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                                 'title' => 'val22',
                                 'default_key1' => 'val11',
                                 'default_title' => 'val22',
-                                'is_delete_store_title' => 1
-                            ]
-                        ]
-                    ]
+                                'is_delete_store_title' => 1,
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];

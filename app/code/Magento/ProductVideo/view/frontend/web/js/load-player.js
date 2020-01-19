@@ -7,7 +7,10 @@
  @version 0.0.1
  @requires jQuery & jQuery UI
  */
-define(['jquery', 'jquery/ui'], function ($) {
+define([
+    'jquery',
+    'jquery-ui-modules/widget'
+], function ($) {
     'use strict';
 
     var videoRegister = {
@@ -88,6 +91,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             this._playing = this._autoplay || false;
             this._loop = this.element.data('loop');
             this._rel = this.element.data('related');
+            this.useYoutubeNocookie = this.element.data('youtubenocookie') || false;
 
             this._responsive = this.element.data('responsive') !== false;
 
@@ -164,6 +168,12 @@ define(['jquery', 'jquery/ui'], function ($) {
                  * Handle event
                  */
                 'youtubeapiready': function () {
+                    var host = 'https://www.youtube.com';
+
+                    if (self.useYoutubeNocookie) {
+                        host = 'https://www.youtube-nocookie.com';
+                    }
+
                     if (self._player !== undefined) {
                         return;
                     }
@@ -182,6 +192,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                         width: self._width,
                         videoId: self._code,
                         playerVars: self._params,
+                        host: host,
                         events: {
 
                             /**
@@ -333,6 +344,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                     .attr('mozallowfullscreen', '')
                     .attr('allowfullscreen', '')
                     .attr('referrerPolicy', 'origin')
+                    .attr('allow', 'autoplay')
             );
             this._player = window.$f(this.element.children(':first')[0]);
 

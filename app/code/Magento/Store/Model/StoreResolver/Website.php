@@ -5,6 +5,9 @@
  */
 namespace Magento\Store\Model\StoreResolver;
 
+/**
+ * Reader implementation for website.
+ */
 class Website implements ReaderInterface
 {
     /**
@@ -38,22 +41,25 @@ class Website implements ReaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllowedStoreIds($scopeCode)
     {
         $stores = [];
         $website = $scopeCode ? $this->websiteRepository->get($scopeCode) : $this->websiteRepository->getDefault();
         foreach ($this->storeRepository->getList() as $store) {
-            if ($store->isActive() && $store->getWebsiteId() == $website->getId()) {
-                $stores[] = $store->getId();
+            if ($store->getIsActive()) {
+                if (($scopeCode && $store->getWebsiteId() == $website->getId()) || (!$scopeCode)) {
+                    $stores[$store->getId()] = $store->getId();
+                }
             }
         }
+        sort($stores);
         return $stores;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultStoreId($scopeCode)
     {

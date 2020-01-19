@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ConfigurableProduct\Test\TestCase\VerifyConfigurableProductEntityPriceTest" summary="Verify price for configurable product">
         <variation name="VerifyConfigurableProductEntityPriceTestVariation1" summary="Disable child product" ticketId="MAGETWO-60196">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
             <data name="productUpdate/childProductUpdate" xsi:type="array">
                 <item name="data" xsi:type="array">
@@ -19,6 +20,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="VerifyConfigurableProductEntityPriceTestVariation2" summary="Set child product Out of stock" ticketId="MAGETWO-60206">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
             <data name="productUpdate/childProductUpdate" xsi:type="array">
                 <item name="data" xsi:type="array">

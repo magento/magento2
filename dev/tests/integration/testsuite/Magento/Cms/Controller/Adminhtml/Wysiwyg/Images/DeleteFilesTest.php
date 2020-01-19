@@ -66,6 +66,10 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
         copy($fixtureDir . '/' . $this->fileName, $filePath);
+        $path = $this->fullDirectoryPath . '/.htaccess';
+        if (!$this->mediaDirectory->isFile($path)) {
+            $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
+        }
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::class);
     }
 
@@ -73,18 +77,63 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      * Execute method with correct directory path and file name to check that files under WYSIWYG media directory
      * can be removed.
      *
+     * @param string $filename
      * @return void
+     * @dataProvider executeDataProvider
      */
-    public function testExecute()
+    public function testExecute(string $filename)
     {
+        $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $filename;
+        $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
+        copy($fixtureDir . '/' . $this->fileName, $filePath);
+
         $this->model->getRequest()->setMethod('POST')
-            ->setPostValue('files', [$this->imagesHelper->idEncode($this->fileName)]);
+            ->setPostValue('files', [$this->imagesHelper->idEncode($filename)]);
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
         $this->assertFalse(
             $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . $this->fileName)
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . $filename)
+            )
+        );
+    }
+
+    /**
+     * DataProvider for testExecute
+     *
+     * @return array
+     */
+    public function executeDataProvider(): array
+    {
+        return [
+            ['name with spaces.jpg'],
+            ['name with, comma.jpg'],
+            ['name with* asterisk.jpg'],
+            ['name with[ bracket.jpg'],
+            ['magento_small_image.jpg'],
+            ['_.jpg'],
+            [' - .jpg'],
+            ['-.jpg'],
+        ];
+    }
+
+    /**
+     * Check that htaccess file couldn't be removed via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @return void
+     */
+    public function testDeleteHtaccess()
+    {
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode('.htaccess')]);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . '.htaccess')
             )
         );
     }
@@ -103,11 +152,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
-        $this->assertTrue(
-            $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $fileName)
-            )
-        );
+        $this->assertFileExists($this->fullDirectoryPath . $fileName);
     }
 
     /**

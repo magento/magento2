@@ -14,33 +14,38 @@ use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class for testing fulltext index rebuild
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
-     */
-    protected $actionFull;
-
-    protected function setUp()
-    {
-        $this->actionFull = Bootstrap::getObjectManager()->create(
-            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class
-        );
-    }
-
-    /**
+     * Testing fulltext index rebuild
+     *
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_index.php
      * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_not_available.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testGetIndexData()
     {
+        $engineProvider = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\ResourceModel\EngineProvider::class
+        );
+        $dataProvider = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::class,
+            ['engineProvider' => $engineProvider]
+        );
+        $actionFull = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class,
+            ['dataProvider' => $dataProvider]
+        );
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $allowedStatuses = Bootstrap::getObjectManager()->get(Status::class)->getVisibleStatusIds();
         $allowedVisibility = Bootstrap::getObjectManager()->get(Engine::class)->getAllowedVisibility();
-
-        $result = iterator_to_array($this->actionFull->rebuildStoreIndex(Store::DISTRO_STORE_ID));
+        $result = iterator_to_array($actionFull->rebuildStoreIndex(Store::DISTRO_STORE_ID));
         $this->assertNotEmpty($result);
 
         $productsIds = array_keys($result);
@@ -58,7 +63,10 @@ class FullTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Prepare and return expected index data
+     *
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getExpectedIndexData()
     {
@@ -68,36 +76,63 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $nameId = $attributeRepository->get(ProductInterface::NAME)->getAttributeId();
         /** @see dev/tests/integration/testsuite/Magento/Framework/Search/_files/configurable_attribute.php */
         $configurableId = $attributeRepository->get('test_configurable')->getAttributeId();
+        $statusId = $attributeRepository->get(ProductInterface::STATUS)->getAttributeId();
+        $taxClassId = $attributeRepository
+            ->get(\Magento\Customer\Api\Data\GroupInterface::TAX_CLASS_ID)
+            ->getAttributeId();
+        $urlKeyId = $attributeRepository
+            ->get(\Magento\Catalog\Api\Data\ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY)
+            ->getAttributeId();
         return [
             'configurable' => [
                 $skuId => 'configurable',
-                $configurableId => 'Option 1 | Option 2',
-                $nameId => 'Configurable Product | Configurable OptionOption 1 | Configurable OptionOption 2',
+                $configurableId => 'Option 2',
+                $nameId => 'Configurable Product | Configurable OptionOption 2',
+                $taxClassId => 'Taxable Goods | Taxable Goods',
+                $statusId => 'Enabled | Enabled',
+                $urlKeyId => 'configurable-product | configurable-optionoption-2'
             ],
             'index_enabled' => [
                 $skuId => 'index_enabled',
                 $nameId => 'index enabled',
+                $taxClassId => 'Taxable Goods',
+                $statusId => 'Enabled',
+                $urlKeyId => 'index-enabled'
             ],
             'index_visible_search' => [
                 $skuId => 'index_visible_search',
                 $nameId => 'index visible search',
+                $taxClassId => 'Taxable Goods',
+                $statusId => 'Enabled',
+                $urlKeyId => 'index-visible-search'
             ],
             'index_visible_category' => [
                 $skuId => 'index_visible_category',
                 $nameId => 'index visible category',
+                $taxClassId => 'Taxable Goods',
+                $statusId => 'Enabled',
+                $urlKeyId => 'index-visible-category'
             ],
             'index_visible_both' => [
                 $skuId => 'index_visible_both',
                 $nameId => 'index visible both',
+                $taxClassId => 'Taxable Goods',
+                $statusId => 'Enabled',
+                $urlKeyId => 'index-visible-both'
             ]
         ];
     }
 
     /**
+     * Testing fulltext index rebuild with configurations
+     *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testRebuildStoreIndexConfigurable()
     {
+        $actionFull = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class
+        );
         $storeId = 1;
 
         $simpleProductId = $this->getIdBySku('simple_10');
@@ -107,13 +142,15 @@ class FullTest extends \PHPUnit\Framework\TestCase
             $simpleProductId,
             $configProductId
         ];
-        $storeIndexDataSimple = $this->actionFull->rebuildStoreIndex($storeId, [$simpleProductId]);
-        $storeIndexDataExpected = $this->actionFull->rebuildStoreIndex($storeId, $expected);
+        $storeIndexDataSimple = $actionFull->rebuildStoreIndex($storeId, [$simpleProductId]);
+        $storeIndexDataExpected = $actionFull->rebuildStoreIndex($storeId, $expected);
 
         $this->assertEquals($storeIndexDataSimple, $storeIndexDataExpected);
     }
 
     /**
+     * Get product Id by its SKU
+     *
      * @param string $sku
      * @return int
      */

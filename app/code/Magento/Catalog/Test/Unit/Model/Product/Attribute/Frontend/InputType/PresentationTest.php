@@ -40,6 +40,9 @@ class PresentationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->presentation->getPresentationInputType($this->attributeMock));
     }
 
+    /**
+     * @return array
+     */
     public function getPresentationInputTypeDataProvider()
     {
         return [
@@ -59,6 +62,9 @@ class PresentationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->presentation->convertPresentationDataToInputType($data));
     }
 
+    /**
+     * @return array
+     */
     public function convertPresentationDataToInputTypeDataProvider()
     {
         return [

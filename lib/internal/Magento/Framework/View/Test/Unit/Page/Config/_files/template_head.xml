@@ -11,7 +11,9 @@
         <meta name="meta_name" content="meta_content"/>
         <meta property="og:video:secure_url" content="https://secure.example.com/movie.swf" />
         <meta property="og:locale:alternate" content="uk_UA" />
-        <css src="path/file.css" media="all" />
+        <css src="path/file-1.css" order="10" media="all" />
+        <css src="path/file-2.css" order="30" media="all" />
+        <css src="path/file-3.css" media="all" />
         <script src="path/file.js" defer="defer"/>
         <link src="http://url.com" src_type="url"/>
         <remove src="path/remove/file.css"/>

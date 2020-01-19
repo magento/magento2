@@ -34,6 +34,7 @@ class DbTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test db backup includes triggers.
      *
+     * @magentoConfigFixture default/system/backup/functionality_enabled 1
      * @magentoDataFixture Magento/Framework/Backup/_files/trigger.php
      * @magentoDbIsolation disabled
      */

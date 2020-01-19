@@ -4,17 +4,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Version\Controller\Index;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Magento Version controller
  */
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
+    const DEV_PREFIX = 'dev-';
+
     /**
      * @var ProductMetadataInterface
      */
@@ -31,25 +36,22 @@ class Index extends Action
     }
 
     /**
-     * Sets the response body to ProductName/Major.MinorVersion (Edition). E.g.: Magento/0.42 (Community). Omits patch
-     * version from response
+     * Sets the response body to ProductName/Major.MinorVersion (Edition).
      *
      * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $version = $this->productMetadata->getVersion();
         $versionParts = explode('.', $version);
-        if ((!isset($versionParts[0]) || !isset($versionParts[1]))
-            || $this->isGitBasedInstallation($version)
-        ) {
+        if ($this->isGitBasedInstallation($version) || !$this->isCorrectVersion($versionParts)) {
             return;
         }
-        $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
+
         $this->getResponse()->setBody(
             $this->productMetadata->getName() . '/' .
-            $majorMinorVersion . ' (' .
-            $this->productMetadata->getEdition() . ')'
+            $this->getMajorMinorVersion($versionParts) .
+            ' (' . $this->productMetadata->getEdition() . ')'
         );
     }
 
@@ -59,9 +61,30 @@ class Index extends Action
      * @param string $fullVersion
      * @return bool
      */
-    private function isGitBasedInstallation($fullVersion)
+    private function isGitBasedInstallation($fullVersion): bool
     {
-        $versionParts = explode('-', $fullVersion);
-        return (isset($versionParts[0]) && $versionParts[0] == 'dev');
+        return 0 === strpos($fullVersion, self::DEV_PREFIX);
+    }
+
+    /**
+     * Verifies if the Magento version is correct
+     *
+     * @param array $versionParts
+     * @return bool
+     */
+    private function isCorrectVersion(array $versionParts): bool
+    {
+        return isset($versionParts[0]) && isset($versionParts[1]);
+    }
+
+    /**
+     * Returns string only with Major and Minor version number
+     *
+     * @param array $versionParts
+     * @return string
+     */
+    private function getMajorMinorVersion(array $versionParts): string
+    {
+        return $versionParts[0] . '.' . $versionParts[1];
     }
 }

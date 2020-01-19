@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -15,21 +14,21 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 class Elasticsearch implements ClientInterface
 {
     /**
-     * Elasticsearch Client instance
+     * Elasticsearch Client instances
      *
-     * @var \Elasticsearch\Client
+     * @var \Elasticsearch\Client[]
      */
-    protected $client;
+    private $client;
 
     /**
      * @var array
      */
-    protected $clientOptions;
+    private $clientOptions;
 
     /**
      * @var bool
      */
-    protected $pingResult;
+    private $pingResult;
 
     /**
      * @var string
@@ -48,7 +47,7 @@ class Elasticsearch implements ClientInterface
         $elasticsearchClient = null
     ) {
         if (empty($options['hostname']) || ((!empty($options['enableAuth']) &&
-            ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
+                    ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
             throw new LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')
             );
@@ -58,8 +57,23 @@ class Elasticsearch implements ClientInterface
             $config = $this->buildConfig($options);
             $elasticsearchClient = \Elasticsearch\ClientBuilder::fromConfig($config, true);
         }
-        $this->client = $elasticsearchClient;
+        $this->client[getmypid()] = $elasticsearchClient;
         $this->clientOptions = $options;
+    }
+
+    /**
+     * Get Elasticsearch Client
+     *
+     * @return \Elasticsearch\Client
+     */
+    private function getClient()
+    {
+        $pid = getmypid();
+        if (!isset($this->client[$pid])) {
+            $config = $this->buildConfig($this->clientOptions);
+            $this->client[$pid] = \Elasticsearch\ClientBuilder::fromConfig($config, true);
+        }
+        return $this->client[$pid];
     }
 
     /**
@@ -70,14 +84,14 @@ class Elasticsearch implements ClientInterface
     public function ping()
     {
         if ($this->pingResult === null) {
-            $this->pingResult = $this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]]);
+            $this->pingResult = $this->getClient()->ping(['client' => ['timeout' => $this->clientOptions['timeout']]]);
         }
 
         return $this->pingResult;
     }
 
     /**
-     * Validate connection params
+     * Validate connection params.
      *
      * @return bool
      */
@@ -87,24 +101,35 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
+     * Build config.
+     *
      * @param array $options
      * @return array
      */
     private function buildConfig($options = [])
     {
-        $host = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
+        $hostname = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
+        // @codingStandardsIgnoreStart
         $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
+        // @codingStandardsIgnoreEnd
         if (!$protocol) {
             $protocol = 'http';
         }
-        if (!empty($options['port'])) {
-            $host .= ':' . $options['port'];
-        }
-        if (!empty($options['enableAuth']) && ($options['enableAuth'] == 1)) {
-            $host = sprintf('%s://%s:%s@%s', $protocol, $options['username'], $options['password'], $host);
+
+        $authString = '';
+        if (!empty($options['enableAuth']) && (int)$options['enableAuth'] === 1) {
+            $authString = "{$options['username']}:{$options['password']}@";
         }
 
+        $portString = '';
+        if (!empty($options['port'])) {
+            $portString = ':' . $options['port'];
+        }
+
+        $host = $protocol . '://' . $authString . $hostname . $portString;
+
         $options['hosts'] = [$host];
+
         return $options;
     }
 
@@ -116,7 +141,7 @@ class Elasticsearch implements ClientInterface
      */
     public function bulkQuery($query)
     {
-        $this->client->bulk($query);
+        $this->getClient()->bulk($query);
     }
 
     /**
@@ -128,10 +153,12 @@ class Elasticsearch implements ClientInterface
      */
     public function createIndex($index, $settings)
     {
-        $this->client->indices()->create([
-            'index' => $index,
-            'body' => $settings,
-        ]);
+        $this->getClient()->indices()->create(
+            [
+                'index' => $index,
+                'body' => $settings,
+            ]
+        );
     }
 
     /**
@@ -142,7 +169,7 @@ class Elasticsearch implements ClientInterface
      */
     public function deleteIndex($index)
     {
-        $this->client->indices()->delete(['index' => $index]);
+        $this->getClient()->indices()->delete(['index' => $index]);
     }
 
     /**
@@ -153,7 +180,7 @@ class Elasticsearch implements ClientInterface
      */
     public function isEmptyIndex($index)
     {
-        $stats = $this->client->indices()->stats(['index' => $index, 'metric' => 'docs']);
+        $stats = $this->getClient()->indices()->stats(['index' => $index, 'metric' => 'docs']);
         if ($stats['indices'][$index]['primaries']['docs']['count'] == 0) {
             return true;
         }
@@ -178,7 +205,7 @@ class Elasticsearch implements ClientInterface
             $params['body']['actions'][] = ['add' => ['alias' => $alias, 'index' => $newIndex]];
         }
 
-        $this->client->indices()->updateAliases($params);
+        $this->getClient()->indices()->updateAliases($params);
     }
 
     /**
@@ -189,13 +216,14 @@ class Elasticsearch implements ClientInterface
      */
     public function indexExists($index)
     {
-         return $this->client->indices()->exists(['index' => $index]);
+        return $this->getClient()->indices()->exists(['index' => $index]);
     }
 
     /**
+     * Exists alias.
+     *
      * @param string $alias
      * @param string $index
-     *
      * @return bool
      */
     public function existsAlias($alias, $index = '')
@@ -204,17 +232,18 @@ class Elasticsearch implements ClientInterface
         if ($index) {
             $params['index'] = $index;
         }
-        return $this->client->indices()->existsAlias($params);
+        return $this->getClient()->indices()->existsAlias($params);
     }
 
     /**
-     * @param string $alias
+     * Get alias.
      *
+     * @param string $alias
      * @return array
      */
     public function getAlias($alias)
     {
-        return $this->client->indices()->getAlias(['name' => $alias]);
+        return $this->getClient()->indices()->getAlias(['name' => $alias]);
     }
 
     /**
@@ -232,10 +261,12 @@ class Elasticsearch implements ClientInterface
             'type' => $entityType,
             'body' => [
                 $entityType => [
-                    '_all' => $this->prepareFieldInfo([
-                        'enabled' => true,
-                        'type' => 'text',
-                    ]),
+                    '_all' => $this->prepareFieldInfo(
+                        [
+                            'enabled' => true,
+                            'type' => 'text',
+                        ]
+                    ),
                     'properties' => [],
                     'dynamic_templates' => [
                         [
@@ -244,17 +275,8 @@ class Elasticsearch implements ClientInterface
                                 'match_mapping_type' => 'string',
                                 'mapping' => [
                                     'type' => 'float',
+                                    'store' => true,
                                 ],
-                            ],
-                        ],
-                        [
-                            'string_mapping' => [
-                                'match' => '*',
-                                'match_mapping_type' => 'string',
-                                'mapping' => $this->prepareFieldInfo([
-                                    'type' => 'text',
-                                    'index' => 'no',
-                                ]),
                             ],
                         ],
                         [
@@ -262,10 +284,23 @@ class Elasticsearch implements ClientInterface
                                 'match' => 'position_*',
                                 'match_mapping_type' => 'string',
                                 'mapping' => [
-                                    'type' => 'int',
+                                    'type' => 'integer',
+                                    'index' => false,
                                 ],
                             ],
                         ],
+                        [
+                            'string_mapping' => [
+                                'match' => '*',
+                                'match_mapping_type' => 'string',
+                                'mapping' => $this->prepareFieldInfo(
+                                    [
+                                        'type' => 'text',
+                                        'index' => false,
+                                    ]
+                                ),
+                            ],
+                        ]
                     ],
                 ],
             ],
@@ -274,12 +309,11 @@ class Elasticsearch implements ClientInterface
             $params['body'][$entityType]['properties'][$field] = $this->prepareFieldInfo($fieldInfo);
         }
 
-        $this->client->indices()->putMapping($params);
+        $this->getClient()->indices()->putMapping($params);
     }
 
     /**
-     * Fix backward compatibility of field definition.
-     * Allow to run both 2.x and 5.x servers.
+     * Fix backward compatibility of field definition. Allow to run both 2.x and 5.x servers.
      *
      * @param array $fieldInfo
      *
@@ -311,10 +345,9 @@ class Elasticsearch implements ClientInterface
      */
     public function deleteMapping($index, $entityType)
     {
-        $this->client->indices()->deleteMapping([
-            'index' => $index,
-            'type' => $entityType,
-        ]);
+        $this->getClient()->indices()->deleteMapping(
+            ['index' => $index, 'type' => $entityType]
+        );
     }
 
     /**
@@ -327,12 +360,11 @@ class Elasticsearch implements ClientInterface
     {
         $query = $this->prepareSearchQuery($query);
 
-        return $this->client->search($query);
+        return $this->getClient()->search($query);
     }
 
     /**
-     * Fix backward compatibility of the search queries.
-     * Allow to run both 2.x and 5.x servers.
+     * Fix backward compatibility of the search queries. Allow to run both 2.x and 5.x servers.
      *
      * @param array $query
      *
@@ -358,7 +390,7 @@ class Elasticsearch implements ClientInterface
      */
     public function suggest($query)
     {
-        return $this->client->suggest($query);
+        return $this->getClient()->suggest($query);
     }
 
     /**
@@ -369,7 +401,7 @@ class Elasticsearch implements ClientInterface
     private function getServerVersion()
     {
         if ($this->serverVersion === null) {
-            $info = $this->client->info();
+            $info = $this->getClient()->info();
             $this->serverVersion = $info['version']['number'];
         }
 

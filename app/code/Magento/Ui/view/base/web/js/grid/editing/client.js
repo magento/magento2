@@ -54,7 +54,7 @@ define([
 
         /**
          * Proxy save method which might invoke
-         * data valiation prior to its' saving.
+         * data validation prior to its' saving.
          *
          * @param {Object} data - Data to be processed.
          * @returns {jQueryPromise}
@@ -128,7 +128,7 @@ define([
         /**
          * Handles ajax success callback.
          *
-         * @param {jQueryPromise} promise - Promise to be resoloved.
+         * @param {jQueryPromise} promise - Promise to be resolved.
          * @param {*} data - See 'jquery' ajax success callback.
          */
         onSuccess: function (promise, data) {

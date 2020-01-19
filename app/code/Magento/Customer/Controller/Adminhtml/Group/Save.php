@@ -1,16 +1,19 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
-class Save extends \Magento\Customer\Controller\Adminhtml\Group
+/**
+ * Controller class Save. Performs save action of customers group
+ */
+class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
@@ -78,6 +81,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
                 $customerGroupCode = (string)$this->getRequest()->getParam('code');
+
                 if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
                     $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
@@ -89,10 +93,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
 
                 $this->groupRepository->save($customerGroup);
 
-                $this->messageManager->addSuccess(__('You saved the customer group.'));
+                $this->messageManager->addSuccessMessage(__('You saved the customer group.'));
                 $resultRedirect->setPath('customer/group');
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 if ($customerGroup != null) {
                     $this->storeCustomerGroupDataToSession(
                         $this->dataObjectProcessor->buildOutputDataArray(

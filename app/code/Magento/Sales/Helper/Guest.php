@@ -165,7 +165,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             $this->coreRegistry->register('current_order', $order);
             return true;
         } catch (InputException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
         }
     }

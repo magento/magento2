@@ -6,6 +6,8 @@
 
 namespace Magento\Customer\Test\Unit\Model\Address\Validator;
 
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Magento\Customer\Model\Address\Validator\Country tests.
  */
@@ -20,14 +22,30 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
 
+    /**
+     * @var \Magento\Directory\Model\AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $allowedCountriesReaderMock;
+
     protected function setUp()
     {
         $this->directoryDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->allowedCountriesReaderMock = $this->createPartialMock(
+            \Magento\Directory\Model\AllowedCountries::class,
+            ['getAllowedCountries']
+        );
+
+        $escaper = $this->objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
+
         $this->model = $this->objectManager->getObject(
             \Magento\Customer\Model\Address\Validator\Country::class,
             [
                 'directoryData' => $this->directoryDataMock,
+                'allowedCountriesReader' => $this->allowedCountriesReaderMock,
+                'escaper' => $escaper
             ]
         );
     }
@@ -59,16 +77,10 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             ->method('isRegionRequired')
             ->willReturn($data['regionRequired']);
 
-        $countryCollectionMock = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAllIds'])
-            ->getMock();
-
-        $this->directoryDataMock->expects($this->any())
-            ->method('getCountryCollection')
-            ->willReturn($countryCollectionMock);
-
-        $countryCollectionMock->expects($this->any())->method('getAllIds')->willReturn($countryIds);
+        $this->allowedCountriesReaderMock
+            ->method('getAllowedCountries')
+            ->with(ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($countryIds);
 
         $addressMock->method('getCountryId')->willReturn($data['country_id']);
 
@@ -144,7 +156,13 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             'region_id2' => [
                 array_merge($data, ['country_id' => $countryId, 'region_id' => 2]),
                 [$countryId++],
-                [1],
+                [],
+                [],
+            ],
+            'region_id3' => [
+                array_merge($data, ['country_id' => $countryId, 'region_id' => 2]),
+                [$countryId++],
+                [1, 3],
                 ['Invalid value of "2" provided for the regionId field.'],
             ],
             'validated' => [

@@ -8,7 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
     <indexer id="catalogsearch_fulltext">
         <dependencies>
+            <indexer id="catalog_category_product" />
             <indexer id="cataloginventory_stock" />
+            <indexer id="catalog_product_price" />
         </dependencies>
     </indexer>
 </config>

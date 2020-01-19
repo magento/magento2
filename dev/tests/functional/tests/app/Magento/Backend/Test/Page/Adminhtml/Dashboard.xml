@@ -17,5 +17,6 @@
         <block name="accessDeniedBlock" class="Magento\Backend\Test\Block\Denied" locator="#anchor-content" strategy="css selector" />
         <block name="systemMessageDialog" class="Magento\AdminNotification\Test\Block\System\Messages" locator='.ui-popup-message .modal-inner-wrap' strategy="css selector" />
         <block name="applicationVersion" class="Magento\Backend\Test\Block\Version" locator="body" strategy="css selector" />
+        <block name="modalMessage" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator=".modal-popup>.modal-inner-wrap" strategy="css selector" />
     </page>
 </config>

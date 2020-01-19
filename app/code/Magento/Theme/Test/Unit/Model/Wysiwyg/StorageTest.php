@@ -9,6 +9,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Wysiwyg;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -59,6 +62,19 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->_filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+
+        $file = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
+
+        $file->expects($this->any())
+            ->method('getPathInfo')
+            ->will(
+                $this->returnCallback(
+                    function ($path) {
+                        return pathinfo($path);
+                    }
+                )
+            );
+
         $this->_helperStorage = $this->createPartialMock(
             \Magento\Theme\Helper\Storage::class,
             [
@@ -72,6 +88,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 'getRequestParams'
             ]
         );
+
+        $reflection = new \ReflectionClass(\Magento\Theme\Helper\Storage::class);
+        $reflection_property = $reflection->getProperty('file');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($this->_helperStorage, $file);
+
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_imageFactory = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
         $this->directoryWrite = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
@@ -152,8 +174,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_helperStorage->expects($this->any())->method('getSession')->will($this->returnValue($session));
 
         $expectedResult = [
-            'not_empty',
-            'cookie' => ['name' => null, 'value' => null, 'lifetime' => null, 'path' => null, 'domain' => null],
+            'not_empty'
         ];
 
         $this->assertEquals($expectedResult, $this->_storageModel->uploadFile($this->_storageRoot));
@@ -172,6 +193,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_storageModel->uploadFile($this->_storageRoot);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function _prepareUploader()
     {
         $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
@@ -538,6 +562,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_storageModel->deleteDirectory($directoryPath);
     }
 
+    /**
+     * @return array
+     */
     public function booleanCasesDataProvider()
     {
         return [[true], [false]];

@@ -64,6 +64,9 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($select, $result);
     }
 
+    /**
+     * @return array
+     */
     public function matchProvider()
     {
         return [[true], [false]];

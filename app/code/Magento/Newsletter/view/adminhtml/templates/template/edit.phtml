@@ -6,8 +6,6 @@
 
 use Magento\Framework\App\TemplateTypesInterface;
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Template\Edit */
 
 ?>
@@ -20,12 +18,12 @@ use Magento\Framework\App\TemplateTypesInterface;
     <?= /* @noEscape */ $block->getForm() ?>
 </form>
 <form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_template_preview_form" target="_blank">
-    <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />
+        <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" >
     </div>
 </form>
 <script>

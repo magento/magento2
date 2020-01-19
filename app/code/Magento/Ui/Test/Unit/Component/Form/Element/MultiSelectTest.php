@@ -15,13 +15,16 @@ use Magento\Ui\Component\Form\Element\MultiSelect;
 class MultiSelectTest extends AbstractElementTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModelName()
     {
         return MultiSelect::class;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function testGetComponentName()
     {
         $this->contextMock->expects($this->never())->method('getProcessor');

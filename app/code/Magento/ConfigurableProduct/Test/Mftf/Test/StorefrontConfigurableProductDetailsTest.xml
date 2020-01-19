@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductBasicInfoTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should see basic Configurable Product details"/>
+            <description value="Guest customer should see basic Configurable Product details"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-77"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify configurable product details in storefront product view -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="seeProductSku"/>
+        <see userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="seeProductPriceLabel"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="seeProductStockStatus"/>
+        <see userInput="1.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice"/>
+        <see userInput="{{colorProductAttribute.default_label}}" selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" stepKey="seeProductAttributeTitle"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="{{colorProductAttribute.default_label}}" stepKey="seeColorAttributeName1"/>
+        <see userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown1"/>
+        <see userInput="{{colorProductAttribute2.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown2"/>
+        <see userInput="{{colorProductAttribute3.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown3"/>
+    </test>
+
+    <test name="StorefrontConfigurableProductOptionsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should be able to see product configuration options"/>
+            <description value="Guest customer should be able to see product configuration options"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-92"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify configurable product options in storefront product view -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel1"/>
+        <see userInput="1.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice1"/>
+        <selectOption userInput="{{colorProductAttribute2.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption2"/>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel2"/>
+        <see userInput="2.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice2"/>
+        <selectOption userInput="{{colorProductAttribute3.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption3"/>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel3"/>
+        <see userInput="3.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice3"/>
+    </test>
+
+    <test name="StorefrontConfigurableProductCanAddToCartTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should be able to successfully add the product to the cart"/>
+            <description value="Guest customer should be able to successfully add the product to the cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-97"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify adding configurable product to cart after an option is selected in storefront product view -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+    </test>
+
+    <test name="StorefrontConfigurableProductCantAddToCartTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should not be able to add the product to the cart if options are not selected"/>
+            <description value="Guest customer should not be able to add the product to the cart if options are not selected"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-81"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify not able to add configurable product to cart when no option is selected in storefront product view -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
+        <see userInput="This is a required field" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsError}}" stepKey="seeError"/>
+    </test>
+
+    <test name="StorefrontConfigurableProductVariationsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Configurable Product"/>
+            <title value="Customer should get the right options list"/>
+            <description value="Customer should get the right options list for each variation of configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-23027"/>
+            <useCaseId value="MC-22732"/>
+            <group value="configurable_product"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Add first attribute with options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createFirstAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createFirstAttributeFirstOption">
+                <requiredEntity createDataKey="createFirstAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createFirstAttributeSecondOption">
+                <requiredEntity createDataKey="createFirstAttribute"/>
+            </createData>
+            <!-- Add second attribute with options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createSecondAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createSecondAttributeFirstOption">
+                <requiredEntity createDataKey="createSecondAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createSecondAttributeSecondOption">
+                <requiredEntity createDataKey="createSecondAttribute"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createFirstAttribute" stepKey="deleteFirstAttribute"/>
+            <deleteData createDataKey="createSecondAttribute" stepKey="deleteSecondAttribute"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="navigateToCreateProductPage">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToProduct">
+            <argument name="categoryName" value="$createCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="SetProductUrlKeyByStringActionGroup" stepKey="fillUrlKey">
+            <argument name="urlKey" value="{{BaseConfigurableProduct.urlKey}}"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkFirstAttribute">
+            <argument name="attributeCode" value="$createFirstAttribute.attribute_code$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkSecondAttribute">
+            <argument name="attributeCode" value="$createSecondAttribute.attribute_code$"/>
+        </actionGroup>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <waitForPageLoad stepKey="waitForStepLoad"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createFirstAttribute.default_frontend_label$)}}" stepKey="clickFirstAttributeSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createSecondAttribute.default_frontend_label$)}}" stepKey="clickSecondAttributeSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickSecondNextStep"/>
+        <waitForElement selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitThirdNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickThirdStep"/>
+        <waitForElement selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitGenerateConfigurationsButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickToGenerateConfigurations"/>
+
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.variationsGrid}}" stepKey="waitForVariationsGrid"/>
+        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setFirstVariationQuantity">
+            <argument name="rowIndex" value="0"/>
+            <argument name="quantity" value="0"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setSecondVariationQuantity">
+            <argument name="rowIndex" value="1"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setThirdVariationQuantity">
+            <argument name="rowIndex" value="2"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setFourthVariationQuantity">
+            <argument name="rowIndex" value="3"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfigurableProductActionGroup" stepKey="saveConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSectionHeader"/>
+        <grabValueFrom selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="grabUrlKey"/>
+        <amOnPage url="{$grabUrlKey}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productOptionSelect($createFirstAttribute.default_frontend_label$)}}" stepKey="waitForFirstSelect"/>
+        <selectOption userInput="$createFirstAttributeFirstOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.productOptionSelect($createFirstAttribute.default_frontend_label$)}}" stepKey="selectFirstAttributeFirstOption"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productOptionSelect($createSecondAttribute.default_frontend_label$)}}" stepKey="waitForSecondSelect"/>
+        <selectOption userInput="$createSecondAttributeSecondOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.productOptionSelect($createSecondAttribute.default_frontend_label$)}}" stepKey="selectSecondAttributeSecondOption"/>
+    </test>
+</tests>

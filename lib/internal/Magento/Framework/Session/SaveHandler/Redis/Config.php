@@ -143,7 +143,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     /**
      * Deployment config
      *
-     * @var DeploymentConfig $deploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -173,7 +173,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLogLevel()
     {
@@ -181,7 +181,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHost()
     {
@@ -189,7 +189,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPort()
     {
@@ -197,7 +197,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDatabase()
     {
@@ -205,7 +205,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPassword()
     {
@@ -213,7 +213,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTimeout()
     {
@@ -221,7 +221,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPersistentIdentifier()
     {
@@ -229,7 +229,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCompressionThreshold()
     {
@@ -237,7 +237,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCompressionLibrary()
     {
@@ -245,7 +245,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMaxConcurrency()
     {
@@ -253,7 +253,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMaxLifetime()
     {
@@ -261,7 +261,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMinLifetime()
     {
@@ -269,7 +269,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDisableLocking()
     {
@@ -277,7 +277,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBotLifetime()
     {
@@ -285,7 +285,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBotFirstLifetime()
     {
@@ -293,7 +293,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFirstLifetime()
     {
@@ -301,7 +301,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBreakAfter()
     {
@@ -309,7 +309,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLifetime()
     {
@@ -320,7 +320,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSentinelServers()
     {
@@ -328,7 +328,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSentinelMaster()
     {
@@ -336,7 +336,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSentinelVerifyMaster()
     {
@@ -344,7 +344,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSentinelConnectRetries()
     {
@@ -352,7 +352,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFailAfter()
     {

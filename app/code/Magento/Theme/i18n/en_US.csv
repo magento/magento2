@@ -96,6 +96,7 @@ Phrase,Phrase
 testMessage,testMessage
 Edit,Edit
 "We found no files.","We found no files."
+"thumbnail","thumbnail"
 "Browse Files","Browse Files"
 Scope:,Scope:
 Remove,Remove
@@ -147,6 +148,7 @@ Configuration,Configuration
 "Rebuild design config grid index","Rebuild design config grid index"
 "Admin empty","Admin empty"
 "Admin 1column","Admin 1column"
+"Admin 2 columns with left bar","Admin 2 columns with left bar"
 "Theme Information","Theme Information"
 "Other Settings","Other Settings"
 "HTML Head","HTML Head"
@@ -185,3 +187,7 @@ Settings,Settings
 "2 columns with left bar","2 columns with left bar"
 "2 columns with right bar","2 columns with right bar"
 "3 columns","3 columns"
+ID,ID
+View,View
+Action,Action
+"Display Report Bugs Link","Display Report Bugs Link"

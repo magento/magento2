@@ -25,6 +25,12 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Error codes.
      */
+    const ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST = 'attrCodeDoesNotExist';
+
+    const ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE = 'attrCodeNotGlobalScope';
+
+    const ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT = 'attrCodeNotTypeSelect';
+
     const ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER = 'attrCodeIsNotSuper';
 
     const ERROR_INVALID_OPTION_VALUE = 'invalidOptionValue';
@@ -39,10 +45,19 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Validation failure message template definitions
      *
      * @var array
+     *
+     * Note: Some of these messages exceed maximum limit of 120 characters per line. Split up accordingly.
      */
     protected $_messageTemplates = [
-        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with code "%s" is not super',
-        self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value for attribute "%s"',
+        self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST => 'Column configurable_variations: Attribute with code ' .
+            '"%s" does not exist or is missing from product attribute set',
+        self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE => 'Column configurable_variations: Attribute with code ' .
+            '"%s" is not super - it needs to have Global Scope',
+        self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT => 'Column configurable_variations: Attribute with code ' .
+            '"%s" is not super - it needs to be Input Type of Dropdown, Visual Swatch or Text Swatch',
+        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Column configurable_variations: Attribute with code ' .
+            '"%s" is not super',
+        self::ERROR_INVALID_OPTION_VALUE => 'Column configurable_variations: Invalid option value for attribute "%s"',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
         self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
         self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
@@ -233,7 +248,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _addAttributeParams($attrSetName, array $attrParams, $attribute)
     {
-        // save super attributes for simplier and quicker search in future
+        // save super attributes for simpler and quicker search in future
         if ('select' == $attrParams['type'] && 1 == $attrParams['is_global']) {
             $this->_superAttributes[$attrParams['code']] = $attrParams;
         }
@@ -289,10 +304,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         if (!empty($rowData['_super_attribute_code'])) {
             $superAttrCode = $rowData['_super_attribute_code'];
-
             if (!$this->_isAttributeSuper($superAttrCode)) {
-                // check attribute superity
-                $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER, $rowNum, $superAttrCode);
+                // Identify reason why attribute is not super:
+                if (!$this->identifySuperAttributeError($superAttrCode, $rowNum)) {
+                    $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER, $rowNum, $superAttrCode);
+                }
                 return false;
             } elseif (isset($rowData['_super_attribute_option']) && strlen($rowData['_super_attribute_option'])) {
                 $optionKey = strtolower($rowData['_super_attribute_option']);
@@ -303,6 +319,66 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
         }
         return true;
+    }
+
+    /**
+     * Identify exactly why a super attribute code is not super.
+     *
+     * @param string $superAttrCode
+     * @param int $rowNum
+     * @return bool
+     */
+    private function identifySuperAttributeError($superAttrCode, $rowNum)
+    {
+        // This attribute code is not a super attribute. Need to give a clearer message why?
+        $reasonFound = false;
+        $codeExists = false;
+
+        // Does this attribute code exist?
+        $sourceAttribute = $this->doesSuperAttributeExist($superAttrCode);
+        if (is_array($sourceAttribute)) {
+            $codeExists = true;
+            // Does attribute have the correct settings?
+            if (isset($sourceAttribute['is_global']) && $sourceAttribute['is_global'] !== '1') {
+                $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE, $rowNum, $superAttrCode);
+                $reasonFound = true;
+            } elseif (isset($sourceAttribute['type']) && $sourceAttribute['type'] !== 'select') {
+                $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_NOT_TYPE_SELECT, $rowNum, $superAttrCode);
+                $reasonFound = true;
+            }
+        }
+
+        if ($codeExists === false) {
+            $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST, $rowNum, $superAttrCode);
+            $reasonFound = true;
+        }
+
+        return $reasonFound;
+    }
+
+    /**
+     * Does the super attribute exist in the current attribute set?
+     *
+     * @param string $superAttrCode
+     * @return array
+     */
+    private function doesSuperAttributeExist($superAttrCode)
+    {
+        $returnAttributeArray = null;
+        if (is_array(self::$commonAttributesCache)) {
+            $filteredAttribute = array_filter(
+                self::$commonAttributesCache,
+                function ($element) use ($superAttrCode) {
+                    return $element['code'] == $superAttrCode;
+                }
+            );
+
+            // Return the first element of the filtered array (if found).
+            if (count($filteredAttribute)) {
+                $returnAttributeArray = array_shift($filteredAttribute);
+            }
+        }
+        return $returnAttributeArray;
     }
 
     /**
@@ -497,7 +573,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
             $fieldAndValuePairs = [];
             foreach ($fieldAndValuePairsText as $nameAndValue) {
-                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
+                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
                 if (!empty($nameAndValue)) {
                     $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
                     // Ignoring field names' case.
@@ -520,7 +596,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $additionalRow['_super_attribute_position'] = $position;
                     $additionalRows[] = $additionalRow;
                     $additionalRow = [];
-                    $position += 1;
+                    $position ++;
                 }
             } else {
                 throw new LocalizedException(
@@ -861,7 +937,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         foreach ($dataWithExtraVirtualRows as $option) {
             if (isset($option['_super_products_sku'])) {
-                if (in_array($option['_super_products_sku'], $skus)) {
+                if (in_array($option['_super_products_sku'], $skus, true)) {
                     $error = true;
                     $this->_entityModel->addRowError(
                         sprintf(

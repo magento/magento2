@@ -68,7 +68,7 @@ class SequenceManager
 
         if (!isset($sequenceInfo['sequenceTable'])) {
             throw new \Exception(
-                'TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists'
+                'TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesn\'t exists'
             );
         }
 
@@ -101,7 +101,7 @@ class SequenceManager
         $metadata = $this->metadataPool->getMetadata($entityType);
         $sequenceInfo = $this->sequenceRegistry->retrieve($entityType);
         if (!isset($sequenceInfo['sequenceTable'])) {
-            throw new \Exception('TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists');
+            throw new \Exception('TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesn\'t exists');
         }
         try {
             $connection = $this->appResource->getConnectionByName($metadata->getEntityConnectionName());

@@ -25,7 +25,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $response;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Category|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryHelper;
 
@@ -124,7 +124,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
 
-        $this->page = $this->getMockBuilder(\Magento\Framework\View\Page::class)
+        $this->page = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout', 'addUpdate'])
             ->disableOriginalConstructor()->getMock();
         $this->page->expects($this->any())->method('getConfig')->will($this->returnValue($this->pageConfig));
@@ -165,43 +165,110 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->page));
 
-        $this->action = (new ObjectManager($this))->getObject(\Magento\Catalog\Controller\Category\View::class, [
-            'context' => $this->context,
-            'catalogDesign' => $this->catalogDesign,
-            'categoryRepository' => $this->categoryRepository,
-            'storeManager' => $this->storeManager,
-            'resultPageFactory' => $resultPageFactory
-        ]);
+        $this->action = (new ObjectManager($this))->getObject(
+            \Magento\Catalog\Controller\Category\View::class,
+            [
+                'context' => $this->context,
+                'catalogDesign' => $this->catalogDesign,
+                'categoryRepository' => $this->categoryRepository,
+                'storeManager' => $this->storeManager,
+                'resultPageFactory' => $resultPageFactory,
+                'categoryHelper' => $this->categoryHelper
+            ]
+        );
     }
 
-    public function testApplyCustomLayoutUpdate()
+    /**
+     * Apply custom layout update is correct
+     *
+     * @dataProvider getInvocationData
+     * @return void
+     */
+    public function testApplyCustomLayoutUpdate(array $expectedData): void
     {
         $categoryId = 123;
         $pageLayout = 'page_layout';
 
-        $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
-            [\Magento\Catalog\Helper\Category::class, $this->categoryHelper],
-        ]));
-
-        $this->request->expects($this->any())->method('getParam')->will($this->returnValueMap([
-            [Action::PARAM_NAME_URL_ENCODED],
-            ['id', false, $categoryId],
-        ]));
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                [Action::PARAM_NAME_URL_ENCODED],
+                ['id', false, $categoryId]
+            ]
+        );
 
         $this->categoryRepository->expects($this->any())->method('get')->with($categoryId)
             ->will($this->returnValue($this->category));
 
-        $this->categoryHelper->expects($this->any())->method('canShow')->will($this->returnValue(true));
+        $this->categoryHelper->expects($this->once())->method('canShow')->with($this->category)->willReturn(true);
 
         $settings = $this->createPartialMock(
             \Magento\Framework\DataObject::class,
             ['getPageLayout', 'getLayoutUpdates']
         );
+        $this->category->expects($this->at(1))
+            ->method('hasChildren')
+            ->willReturn(true);
+        $this->category->expects($this->at(2))
+            ->method('hasChildren')
+            ->willReturn($expectedData[1][0]['type'] === 'default' ? true : false);
+        $this->category->expects($this->once())
+            ->method('getDisplayMode')
+            ->willReturn($expectedData[2][0]['displaymode']);
+        $this->expectationForPageLayoutHandles($expectedData);
         $settings->expects($this->atLeastOnce())->method('getPageLayout')->will($this->returnValue($pageLayout));
         $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
-
         $this->catalogDesign->expects($this->any())->method('getDesignSettings')->will($this->returnValue($settings));
 
         $this->action->execute();
+    }
+
+    /**
+     * Expected invocation for Layout Handles
+     *
+     * @param array $data
+     * @return void
+     */
+    private function expectationForPageLayoutHandles($data): void
+    {
+        $index = 1;
+
+        foreach ($data as $expectedData) {
+            $this->page->expects($this->at($index))
+            ->method('addPageLayoutHandles')
+            ->with($expectedData[0], $expectedData[1], $expectedData[2]);
+            $index++;
+        }
+    }
+
+    /**
+     * Data provider for execute method.
+     *
+     * @return array
+     */
+    public function getInvocationData(): array
+    {
+        return [
+            [
+                'layoutHandles' => [
+                    [['type' => 'default'], null, false],
+                    [['type' => 'default_without_children'], null, false],
+                    [['displaymode' => 'products'], null, false]
+                ]
+            ],
+            [
+                'layoutHandles' => [
+                    [['type' => 'default'], null, false],
+                    [['type' => 'default_without_children'], null, false],
+                    [['displaymode' => 'page'], null, false]
+                ]
+            ],
+            [
+                'layoutHandles' => [
+                    [['type' => 'default'], null, false],
+                    [['type' => 'default'], null, false],
+                    [['displaymode' => 'poducts_and_page'], null, false]
+                ]
+            ]
+        ];
     }
 }

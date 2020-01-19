@@ -7,27 +7,25 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/model/messageList',
     'Magento_Braintree/js/view/payment/3d-secure'
-], function ($, globalMessageList, verify3DSecure) {
+], function ($, verify3DSecure) {
     'use strict';
 
     return {
+        initialized: false,
         validators: [],
 
         /**
-         * Get payment config
-         * @returns {Object}
-         */
-        getConfig: function () {
-            return window.checkoutConfig.payment;
-        },
-
-        /**
-         * Init list of validators
+         * Inits list of validators
          */
         initialize: function () {
             var config = this.getConfig();
+
+            if (this.initialized) {
+                return;
+            }
+
+            this.initialized = true;
 
             if (config[verify3DSecure.getCode()].enabled) {
                 verify3DSecure.setConfig(config[verify3DSecure.getCode()]);
@@ -36,7 +34,17 @@ define([
         },
 
         /**
-         * Add new validator
+         * Gets payment config
+         *
+         * @returns {Object}
+         */
+        getConfig: function () {
+            return window.checkoutConfig.payment;
+        },
+
+        /**
+         * Adds new validator
+         *
          * @param {Object} validator
          */
         add: function (validator) {
@@ -44,17 +52,21 @@ define([
         },
 
         /**
-         * Run pull of validators
+         * Runs pull of validators
+         *
          * @param {Object} context
-         * @param {Function} callback
+         * @param {Function} successCallback
+         * @param {Function} errorCallback
          */
-        validate: function (context, callback) {
+        validate: function (context, successCallback, errorCallback) {
             var self = this,
                 deferred;
 
+            self.initialize();
+
             // no available validators
             if (!self.validators.length) {
-                callback();
+                successCallback();
 
                 return;
             }
@@ -66,20 +78,10 @@ define([
 
             $.when.apply($, deferred)
                 .done(function () {
-                    callback();
+                    successCallback();
                 }).fail(function (error) {
-                    self.showError(error);
+                    errorCallback(error);
                 });
-        },
-
-        /**
-         * Show error message
-         * @param {String} errorMessage
-         */
-        showError: function (errorMessage) {
-            globalMessageList.addErrorMessage({
-                message: errorMessage
-            });
         }
     };
 });

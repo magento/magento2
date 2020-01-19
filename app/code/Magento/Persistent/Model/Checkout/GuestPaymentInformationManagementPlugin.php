@@ -108,8 +108,8 @@ class GuestPaymentInformationManagementPlugin
             $this->customerSession->setCustomerId(null);
             $this->customerSession->setCustomerGroupId(null);
             $this->quoteManager->convertCustomerCartToGuest();
-            /** @var \Magento\Quote\Api\Data\CartInterface $quote */
-            $quote = $this->cartRepository->get($this->checkoutSession->getQuote()->getId());
+            $quoteId = $this->checkoutSession->getQuoteId();
+            $quote = $this->cartRepository->get($quoteId);
             $quote->setCustomerEmail($email);
             $quote->getAddressesCollection()->walk('setEmail', ['email' => $email]);
             $this->cartRepository->save($quote);

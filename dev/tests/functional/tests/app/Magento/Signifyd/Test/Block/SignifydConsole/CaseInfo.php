@@ -73,7 +73,7 @@ class CaseInfo extends Block
      *
      * @var string
      */
-    private $orderAmount = '[ng-bind*="currentCase.orderAmount"]';
+    private $orderAmount = '[ng-bind*="currentCase.orderTotalAmount"]';
 
     /**
      * Locator value for order amount currency.
@@ -108,7 +108,7 @@ class CaseInfo extends Block
      *
      * @var string
      */
-    private $shippingPrice = '[ng-if$="caseOrderSummary.shipments[0].shippingPrice"]';
+    private $shippingPrice = '[ng-if="shipment.shippingPrice"]';
 
     /**
      * Check if device data are present.

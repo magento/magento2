@@ -59,18 +59,6 @@
         margin-top: -(@data-grid-spinner__size / 2);
         position: absolute;
         top: 50%;
-
-        .ie9 & {
-            background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
-            bottom: 0;
-            height: 149px;
-            left: 0;
-            margin: auto;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 218px;
-        }
     }
 }
 
@@ -404,6 +392,7 @@ body._in-resize {
         overflow: hidden;
         padding: 0;
         vertical-align: top;
+        vertical-align: middle;
         width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
 
         &:hover {
@@ -999,10 +988,6 @@ body._in-resize {
                 transform: rotate(45deg);
                 width: 1.6rem;
                 z-index: 3;
-
-                .ie9 & {
-                    display: none;
-                }
             }
         }
     }
@@ -1090,8 +1075,9 @@ body._in-resize {
     }
 
     .data-grid-checkbox-cell-inner {
-        margin: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+        margin: 0 @data-grid-checkbox-cell-inner__padding-horizontal 0;
         padding: 0;
+        text-align: center;
     }
 
     //  Content Hierarchy specific

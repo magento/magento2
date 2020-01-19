@@ -91,6 +91,8 @@ class ContextPlugin
     }
 
     /**
+     * Before dispatch.
+     *
      * @param \Magento\Framework\App\ActionInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -156,6 +158,8 @@ class ContextPlugin
     }
 
     /**
+     * Get wee tax region.
+     *
      * @param string $basedOn
      * @return array
      */

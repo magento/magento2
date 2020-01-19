@@ -1,16 +1,22 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Newsletter\Controller\Subscriber;
 
-class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+/**
+ * Controller for unsubscribing customers.
+ */
+class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
 {
     /**
-     * Unsubscribe newsletter
-     * @return void
+     * Unsubscribe newsletter.
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -20,13 +26,16 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
         if ($id && $code) {
             try {
                 $this->_subscriberFactory->create()->load($id)->setCheckCode($code)->unsubscribe();
-                $this->messageManager->addSuccess(__('You unsubscribed.'));
+                $this->messageManager->addSuccessMessage(__('You unsubscribed.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addException($e, $e->getMessage());
+                $this->messageManager->addErrorMessage($e, $e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while unsubscribing you.'));
+                $this->messageManager->addErrorMessage($e, __('Something went wrong while unsubscribing you.'));
             }
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
+        $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+        $redirectUrl = $this->_redirect->getRedirectUrl();
+        return $redirect->setUrl($redirectUrl);
     }
 }

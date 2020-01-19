@@ -3,133 +3,150 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 /** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */
+$parentItem = $block->getItem();
+$items = array_merge([$parentItem], $parentItem->getChildrenItems());
+$index = 0;
+$prevOptionId = '';
 ?>
-<?php $parentItem = $block->getItem() ?>
-<?php $items = array_merge([$parentItem], $parentItem->getChildrenItems()); ?>
-<?php $_index = 0 ?>
 
-<?php $_prevOptionId = '' ?>
+<?php foreach ($items as $item) : ?>
 
-<?php foreach ($items as $_item): ?>
-
-    <?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
-        <?php $_showlastRow = true ?>
-    <?php else: ?>
-        <?php $_showlastRow = false ?>
+    <?php if ($block->getItemOptions()
+        || $parentItem->getDescription()
+        || $this->helper(Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $parentItem)
+        && $parentItem->getGiftMessageId()) : ?>
+        <?php $showLastRow = true; ?>
+    <?php else : ?>
+        <?php $showLastRow = false; ?>
     <?php endif; ?>
 
-    <?php if ($_item->getParentItem()): ?>
-        <?php $attributes = $block->getSelectionAttributes($_item) ?>
-        <?php if ($_prevOptionId != $attributes['option_id']): ?>
+    <?php if ($item->getParentItem()) : ?>
+        <?php $attributes = $block->getSelectionAttributes($item) ?>
+        <?php if ($prevOptionId != $attributes['option_id']) : ?>
             <tr class="options-label">
-                <td class="col label" colspan="5"><?= /* @escapeNotVerified */ $attributes['option_label'] ?></td>
+                <td class="col label" colspan="5"><?= $block->escapeHtml($attributes['option_label']); ?></td>
             </tr>
-            <?php $_prevOptionId = $attributes['option_id'] ?>
+            <?php $prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-<tr id="order-item-row-<?= /* @escapeNotVerified */ $_item->getId() ?>" class="<?php if ($_item->getParentItem()): ?>item-options-container<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()): ?> data-th="<?= /* @escapeNotVerified */ $attributes['option_label'] ?>"<?php endif; ?>>
-    <?php if (!$_item->getParentItem()): ?>
-        <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
-            <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
+<tr id="order-item-row-<?= /* @noEscape */ $item->getId() ?>"
+    class="<?php if ($item->getParentItem()) : ?>
+        item-options-container
+    <?php else : ?>
+        item-parent
+    <?php endif; ?>"
+    <?php if ($item->getParentItem()) : ?>
+        data-th="<?= $block->escapeHtmlAttr($attributes['option_label']); ?>"
+    <?php endif; ?>>
+    <?php if (!$item->getParentItem()) : ?>
+        <td class="col name" data-th="<?= $block->escapeHtmlAttr(__('Product Name')); ?>">
+            <strong class="product name product-item-name"><?= $block->escapeHtml($item->getName()); ?></strong>
         </td>
-    <?php else: ?>
-        <td class="col value" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getValueHtml($_item) ?></td>
+    <?php else : ?>
+        <td class="col value" data-th="<?= $block->escapeHtmlAttr(__('Product Name')); ?>">
+            <?= $block->getValueHtml($item); ?>
+        </td>
     <?php endif; ?>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @escapeNotVerified */ $block->prepareSku($_item->getSku()) ?></td>
-    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
-        <?php if (!$_item->getParentItem()): ?>
-            <?= $block->getItemPriceHtml() ?>
-        <?php else: ?>
+    <td class="col sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')); ?>">
+        <?= /* @noEscape */ $block->prepareSku($item->getSku()); ?>
+    </td>
+    <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Price')); ?>">
+        <?php if (!$item->getParentItem()) : ?>
+            <?= /* @noEscape */ $block->getItemPriceHtml(); ?>
+        <?php else : ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Quantity')) ?>">
-        <?php if (
-        ($_item->getParentItem() && $block->isChildCalculated()) ||
-        (!$_item->getParentItem() && !$block->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately())):?>
+    <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Quantity')); ?>">
+        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
+        (!$item->getParentItem() && !$block->isChildCalculated()) ||
+        ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately())) : ?>
             <ul class="items-qty">
         <?php endif; ?>
-        <?php if (($_item->getParentItem() && $block->isChildCalculated()) ||
-            (!$_item->getParentItem() && !$block->isChildCalculated())): ?>
-            <?php if ($_item->getQtyOrdered() > 0): ?>
+        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
+            (!$item->getParentItem() && !$block->isChildCalculated())) : ?>
+            <?php if ($item->getQtyOrdered() > 0) : ?>
                 <li class="item">
-                    <span class="title"><?= /* @escapeNotVerified */ __('Ordered') ?></span>
-                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></span>
+                    <span class="title"><?= $block->escapeHtml(__('Ordered')); ?></span>
+                    <span class="content"><?= /* @noEscape */ $item->getQtyOrdered() * 1; ?></span>
                 </li>
             <?php endif; ?>
-            <?php if ($_item->getQtyShipped() > 0 && !$block->isShipmentSeparately()): ?>
+            <?php if ($item->getQtyShipped() > 0 && !$block->isShipmentSeparately()) : ?>
                 <li class="item">
-                    <span class="title"><?= /* @escapeNotVerified */ __('Shipped') ?></span>
-                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></span>
+                    <span class="title"><?= $block->escapeHtml(__('Shipped')); ?></span>
+                    <span class="content"><?= /* @noEscape */ $item->getQtyShipped() * 1; ?></span>
                 </li>
             <?php endif; ?>
-            <?php if ($_item->getQtyCanceled() > 0): ?>
+            <?php if ($item->getQtyCanceled() > 0) : ?>
                 <li class="item">
-                    <span class="title"><?= /* @escapeNotVerified */ __('Canceled') ?></span>
-                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyCanceled()*1 ?></span>
+                    <span class="title"><?= $block->escapeHtml(__('Canceled')); ?></span>
+                    <span class="content"><?= /* @noEscape */ $item->getQtyCanceled() * 1; ?></span>
                 </li>
             <?php endif; ?>
-            <?php if ($_item->getQtyRefunded() > 0): ?>
+            <?php if ($item->getQtyRefunded() > 0) : ?>
                 <li class="item">
-                    <span class="title"><?= /* @escapeNotVerified */ __('Refunded') ?></span>
-                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyRefunded()*1 ?></span>
+                    <span class="title"><?= $block->escapeHtml(__('Refunded')); ?></span>
+                    <span class="content"><?= /* @noEscape */ $item->getQtyRefunded() * 1; ?></span>
                 </li>
             <?php endif; ?>
-        <?php elseif ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately()): ?>
+        <?php elseif ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately()) : ?>
             <li class="item">
-                <span class="title"><?= /* @escapeNotVerified */ __('Shipped') ?></span>
-                <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></span>
+                <span class="title"><?= $block->escapeHtml(__('Shipped')); ?></span>
+                <span class="content"><?= /* @noEscape */ $item->getQtyShipped() * 1; ?></span>
             </li>
-        <?php else: ?>
-            &nbsp;
+        <?php else : ?>
+            <span class="content"><?= /* @noEscape */ $parentItem->getQtyOrdered() * 1; ?></span>
         <?php endif; ?>
-        <?php if (
-        ($_item->getParentItem() && $block->isChildCalculated()) ||
-        (!$_item->getParentItem() && !$block->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately())):?>
+        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
+        (!$item->getParentItem() && !$block->isChildCalculated()) ||
+        ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately())) :?>
             </ul>
         <?php endif; ?>
     </td>
-    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
-        <?php if (!$_item->getParentItem()): ?>
-            <?= $block->getItemRowTotalHtml() ?>
-        <?php else: ?>
+    <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
+        <?php if (!$item->getParentItem()) : ?>
+            <?= /* @noEscape */ $block->getItemRowTotalHtml(); ?>
+        <?php else : ?>
             &nbsp;
         <?php endif; ?>
     </td>
 </tr>
 <?php endforeach; ?>
 
-<?php if ($_showlastRow && (($_options = $block->getItemOptions()) || $block->escapeHtml($_item->getDescription()))): ?>
+<?php if ($showLastRow && (($options = $block->getItemOptions()) || $block->escapeHtml($item->getDescription()))) : ?>
 <tr>
     <td class="col options" colspan="5">
-        <?php if ($_options = $block->getItemOptions()): ?>
+        <?php if ($options = $block->getItemOptions()) : ?>
             <dl class="item-options">
-                <?php foreach ($_options as $_option) : ?>
-                    <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                    <?php if (!$block->getPrintStatus()): ?>
-                        <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-                        <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                            <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
-                            <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                <?php foreach ($options as $option) : ?>
+                    <dt><?= $block->escapeHtml($option['label']) ?></dt>
+                    <?php if (!$block->getPrintStatus()) : ?>
+                        <?php $formattedOptionValue = $block->getFormatedOptionValue($option) ?>
+                        <dd<?php if (isset($formattedOptionValue['full_view'])) : ?>
+                            class="tooltip wrapper"
+                        <?php endif; ?>>
+                            <?= /* @noEscape */ $formattedOptionValue['value'] ?>
+                            <?php if (isset($formattedOptionValue['full_view'])) : ?>
                                 <div class="tooltip content">
                                     <dl class="item options">
-                                        <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                                        <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
+                                        <dt><?= $block->escapeHtml($option['label']); ?></dt>
+                                        <dd><?= /* @noEscape */ $formattedOptionValue['full_view']; ?></dd>
                                     </dl>
                                 </div>
                             <?php endif; ?>
                         </dd>
-                    <?php else: ?>
-                        <dd><?= $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
+                    <?php else : ?>
+                        <dd><?= $block->escapeHtml((isset($option['print_value']) ?
+                                $option['print_value'] :
+                                $option['value'])); ?>
+                        </dd>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </dl>
         <?php endif; ?>
-        <?= $block->escapeHtml($_item->getDescription()) ?>
+        <?= $block->escapeHtml($item->getDescription()); ?>
     </td>
 </tr>
 <?php endif; ?>

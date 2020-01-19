@@ -1,4 +1,4 @@
- # Magento_ReleaseNotification Module
+# Magento_ReleaseNotification module
 
 The **Release Notification Module** serves to provide a notification delivery platform for displaying new features of a Magento installation or upgrade as well as any other required release notifications.
 
@@ -46,8 +46,8 @@ Each modal page can have the following optional content:
 
 The Sub Heading section is ideally used on the first modal page as a way to describe one to three highlighted features that will be presented in greater detail on the following modal pages. It is recommended to use the Main Content -> Text Body and Bullet Point lists as the paragraph and list content displayed on a highlighted feature's detail modal page.
 
-A clickable link to internal or external content in any text field will be created by using the following format and opened in a new browser tab. Providing the URL for the link followed by the the text to be displayed for that link in brackets will cause a clickable link to be created. The text between the brackets [text] will be the text that the clickable link shows.
+A clickable link to internal or external content in any text field will be created by using the following format and opened in a new browser tab. Providing the URL for the link followed by the text to be displayed for that link in brackets will cause a clickable link to be created. The text between the brackets [text] will be the text that the clickable link shows.
 
 ### Link Format Example:
 
-The text: `http://devdocs.magento.com/ [Magento DevDocs].` will appear as [Magento DevDocs](http://devdocs.magento.com/).
+The text: `https://devdocs.magento.com/ [Magento DevDocs].` will appear as [Magento DevDocs](https://devdocs.magento.com/).

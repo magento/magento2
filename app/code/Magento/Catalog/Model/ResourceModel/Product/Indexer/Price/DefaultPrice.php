@@ -6,9 +6,11 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
 
 /**
  * Default Product Type Price Indexer Resource model
+ *
  * For correctly work need define product type id
  *
  * @api
@@ -16,6 +18,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @deprecated Not used anymore for price indexation. Class left for backward compatibility
+ * @see DimensionalIndexerInterface
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
 {
@@ -71,7 +75,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string|null $connectionName
-     * @param null|IndexTableStructureFactory $indexTableStructureFactory
+     * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param PriceModifierInterface[] $priceModifiers
      */
     public function __construct(
@@ -205,6 +209,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
+     * Reindex prices.
+     *
      * @param null|int|array $entityIds
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
      */
@@ -253,7 +259,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $tableName = $this->_getDefaultFinalPriceTable();
         $this->getConnection()->delete($tableName);
 
-        $finalPriceTable = $this->indexTableStructureFactory->create([
+        $finalPriceTable = $this->indexTableStructureFactory->create(
+            [
             'tableName' => $tableName,
             'entityField' => 'entity_id',
             'customerGroupField' => 'customer_group_id',
@@ -264,7 +271,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'minPriceField' => 'min_price',
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
-        ]);
+            ]
+        );
 
         return $finalPriceTable;
     }
@@ -307,7 +315,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $query = $select->insertFromSelect($finalPriceTable->getTableName(), [], false);
         $this->getConnection()->query($query);
 
-        $this->applyDiscountPrices($finalPriceTable);
+        $this->modifyPriceIndex($finalPriceTable);
 
         return $this;
     }
@@ -327,6 +335,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected function getSelect($entityIds = null, $type = null)
     {
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $linkField = $metadata->getLinkField();
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -356,9 +365,38 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'pw.product_id = e.entity_id AND pw.website_id = cw.website_id',
             []
         )->joinLeft(
-            ['tp' => $this->_getTierPriceIndexTable()],
-            'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id' .
-            ' AND tp.customer_group_id = cg.customer_group_id',
+            // we need this only for BCC in case someone expects table `tp` to be present in query
+            ['tp' => $this->getTable('catalog_product_index_tier_price')],
+            'tp.entity_id = e.entity_id AND tp.customer_group_id = cg.customer_group_id' .
+            ' AND tp.website_id = pw.website_id',
+            []
+        )->joinLeft(
+            // calculate tier price specified as Website = `All Websites` and Customer Group = `Specific Customer Group`
+            ['tier_price_1' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_1.' . $linkField . ' = e.' . $linkField . ' AND tier_price_1.all_groups = 0' .
+            ' AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1' .
+            ' AND tier_price_1.website_id = 0',
+            []
+        )->joinLeft(
+            // calculate tier price specified as Website = `Specific Website`
+            //and Customer Group = `Specific Customer Group`
+            ['tier_price_2' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_2.' . $linkField . ' = e.' . $linkField . ' AND tier_price_2.all_groups = 0' .
+            ' AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1' .
+            ' AND tier_price_2.website_id = cw.website_id',
+            []
+        )->joinLeft(
+            // calculate tier price specified as Website = `All Websites` and Customer Group = `ALL GROUPS`
+            ['tier_price_3' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_3.' . $linkField . ' = e.' . $linkField . ' AND tier_price_3.all_groups = 1' .
+            ' AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
+            []
+        )->joinLeft(
+            // calculate tier price specified as Website = `Specific Website` and Customer Group = `ALL GROUPS`
+            ['tier_price_4' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_4.' . $linkField . ' = e.' . $linkField . ' AND tier_price_4.all_groups = 1' .
+            ' AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1' .
+            ' AND tier_price_4.website_id = cw.website_id',
             []
         );
 
@@ -374,7 +412,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $this->_addAttributeToSelect(
             $select,
             'status',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id',
             $statusCond,
             true
@@ -383,7 +421,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             $taxClassId = $this->_addAttributeToSelect(
                 $select,
                 'tax_class_id',
-                'e.' . $metadata->getLinkField(),
+                'e.' . $linkField,
                 'cs.store_id'
             );
         } else {
@@ -394,25 +432,25 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $price = $this->_addAttributeToSelect(
             $select,
             'price',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id'
         );
         $specialPrice = $this->_addAttributeToSelect(
             $select,
             'special_price',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id'
         );
         $specialFrom = $this->_addAttributeToSelect(
             $select,
             'special_from_date',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id'
         );
         $specialTo = $this->_addAttributeToSelect(
             $select,
             'special_to_date',
-            'e.' . $metadata->getLinkField(),
+            'e.' . $linkField,
             'cs.store_id'
         );
         $currentDate = 'cwd.website_date';
@@ -423,20 +461,19 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $specialFromExpr = "{$specialFrom} IS NULL OR {$specialFromDate} <= {$currentDate}";
         $specialToExpr = "{$specialTo} IS NULL OR {$specialToDate} >= {$currentDate}";
         $specialPriceExpr = $connection->getCheckSql(
-            "{$specialPrice} IS NOT NULL AND {$specialFromExpr} AND {$specialToExpr}",
+            "{$specialPrice} IS NOT NULL AND ({$specialFromExpr}) AND ({$specialToExpr})",
             $specialPrice,
             $maxUnsignedBigint
         );
-        $tierPrice = new \Zend_Db_Expr('tp.min_price');
-        $tierPriceExpr = $connection->getIfNullSql(
-            $tierPrice,
-            $maxUnsignedBigint
-        );
-        $finalPrice = $connection->getLeastSql([
+        $tierPrice = $this->getTotalTierPriceExpression($price);
+        $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
+        $finalPrice = $connection->getLeastSql(
+            [
             $price,
             $specialPriceExpr,
             $tierPriceExpr,
-        ]);
+            ]
+        );
 
         $select->columns(
             [
@@ -512,12 +549,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
-     * Apply discount prices to final price index table.
+     * Modify data in price index table.
      *
      * @param IndexTableStructure $finalPriceTable
      * @return void
      */
-    private function applyDiscountPrices(IndexTableStructure $finalPriceTable) : void
+    private function modifyPriceIndex(IndexTableStructure $finalPriceTable) : void
     {
         foreach ($this->priceModifiers as $priceModifier) {
             $priceModifier->modifyPrice($finalPriceTable);
@@ -574,7 +611,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             []
         )->joinLeft(
             ['otps' => $this->getTable('catalog_product_option_type_price')],
-            'otps.option_type_id = otpd.option_type_id AND otpd.store_id = cs.store_id',
+            'otps.option_type_id = otpd.option_type_id AND otps.store_id = cs.store_id',
             []
         )->group(
             ['i.entity_id', 'i.customer_group_id', 'i.website_id', 'o.option_id']
@@ -772,6 +809,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
+     * Check if product exists.
+     *
      * @return bool
      */
     protected function hasEntity()
@@ -790,5 +829,69 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         }
 
         return $this->hasEntity;
+    }
+
+    /**
+     * Get total tier price expression.
+     *
+     * @param \Zend_Db_Expr $priceExpression
+     * @return \Zend_Db_Expr
+     */
+    private function getTotalTierPriceExpression(\Zend_Db_Expr $priceExpression)
+    {
+        $maxUnsignedBigint = '~0';
+
+        return $this->getConnection()->getCheckSql(
+            implode(
+                ' AND ',
+                [
+                    'tier_price_1.value_id is NULL',
+                    'tier_price_2.value_id is NULL',
+                    'tier_price_3.value_id is NULL',
+                    'tier_price_4.value_id is NULL'
+                ]
+            ),
+            'NULL',
+            $this->getConnection()->getLeastSql(
+                [
+                $this->getConnection()->getIfNullSql(
+                    $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
+                    $maxUnsignedBigint
+                ),
+                $this->getConnection()->getIfNullSql(
+                    $this->getTierPriceExpressionForTable('tier_price_2', $priceExpression),
+                    $maxUnsignedBigint
+                ),
+                $this->getConnection()->getIfNullSql(
+                    $this->getTierPriceExpressionForTable('tier_price_3', $priceExpression),
+                    $maxUnsignedBigint
+                ),
+                $this->getConnection()->getIfNullSql(
+                    $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
+                    $maxUnsignedBigint
+                ),
+                ]
+            )
+        );
+    }
+
+    /**
+     * Get tier price expression for table.
+     *
+     * @param string $tableAlias
+     * @param \Zend_Db_Expr $priceExpression
+     * @return \Zend_Db_Expr
+     */
+    private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression)
+    {
+        return $this->getConnection()->getCheckSql(
+            sprintf('%s.value = 0', $tableAlias),
+            sprintf(
+                'ROUND(%s * (1 - ROUND(%s.percentage_value * cwd.rate, 4) / 100), 4)',
+                $priceExpression,
+                $tableAlias
+            ),
+            sprintf('ROUND(%s.value * cwd.rate, 4)', $tableAlias)
+        );
     }
 }

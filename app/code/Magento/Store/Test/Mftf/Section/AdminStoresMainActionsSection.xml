@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminStoresMainActionsSection">
+        <element name="createStoreViewButton" type="button" selector="#add_store" timeout="30"/>
+        <element name="createStoreButton" type="button" selector="#add_group" timeout="30"/>
+        <element name="createWebsiteButton" type="button" selector="#add" timeout="30"/>
+        <element name="saveButton" type="button" selector="#save" timeout="90"/>
+        <element name="backButton" type="button" selector="#back" timeout="30"/>
+        <element name="deleteButton" type="button" selector="#delete" timeout="30"/>
+        <element name="errorMessage" type="text" selector="//div[@class='message message-error error']/div"/>
+    </section>
+</sections>

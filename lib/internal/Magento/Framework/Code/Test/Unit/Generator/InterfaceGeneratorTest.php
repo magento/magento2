@@ -114,6 +114,9 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedContent, $generatedContent, "Generated content is invalid.");
     }
 
+    /**
+     * @return array
+     */
     public function generateDataProvider()
     {
         return [

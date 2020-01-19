@@ -81,6 +81,7 @@ define([
         maxItemsToDisplay: window.checkout.maxItemsToDisplay,
         cart: {},
 
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         /**
          * @override
          */
@@ -94,10 +95,6 @@ define([
                 this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
                 this.update(updatedCart);
-
-                if (cartData()['website_id'] !== window.checkout.websiteId) {
-                    customerData.reload(['cart'], false);
-                }
                 initSidebar();
             }, this);
             $('[data-block="minicart"]').on('contentLoading', function () {
@@ -105,8 +102,17 @@ define([
                 self.isLoading(true);
             });
 
+            if (
+                cartData().website_id !== window.checkout.websiteId && cartData().website_id !== undefined ||
+                cartData().storeId !== window.checkout.storeId && cartData().storeId !== undefined
+            ) {
+                customerData.reload(['cart'], false);
+            }
+
             return this._super();
         },
+        //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+
         isLoading: ko.observable(false),
         initSidebar: initSidebar,
 
@@ -156,10 +162,11 @@ define([
 
         /**
          * Get cart param by name.
+         *
          * @param {String} name
          * @returns {*}
          */
-        getCartParam: function (name) {
+        getCartParamUnsanitizedHtml: function (name) {
             if (!_.isUndefined(name)) {
                 if (!this.cart.hasOwnProperty(name)) {
                     this.cart[name] = ko.observable();
@@ -170,11 +177,20 @@ define([
         },
 
         /**
+         * @deprecated please use getCartParamUnsanitizedHtml.
+         * @param {String} name
+         * @returns {*}
+         */
+        getCartParam: function (name) {
+            return this.getCartParamUnsanitizedHtml(name);
+        },
+
+        /**
          * Returns array of cart items, limited by 'maxItemsToDisplay' setting
          * @returns []
          */
         getCartItems: function () {
-            var items = this.getCartParam('items') || [];
+            var items = this.getCartParamUnsanitizedHtml('items') || [];
 
             items = items.slice(parseInt(-this.maxItemsToDisplay, 10));
 
@@ -186,7 +202,7 @@ define([
          * @returns {Number}
          */
         getCartLineItemsCount: function () {
-            var items = this.getCartParam('items') || [];
+            var items = this.getCartParamUnsanitizedHtml('items') || [];
 
             return parseInt(items.length, 10);
         }

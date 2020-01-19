@@ -42,6 +42,9 @@ class SelectTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueDataProvider()
     {
         return [
@@ -74,6 +77,9 @@ class SelectTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateValueRequiredDataProvider()
     {
         return [
@@ -145,6 +151,9 @@ class SelectTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function outputValueDataProvider()
     {
         return [

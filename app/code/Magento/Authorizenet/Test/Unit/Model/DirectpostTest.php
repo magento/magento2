@@ -3,8 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Test\Unit\Model;
 
+use Magento\Authorizenet\Helper\Backend\Data;
+use Magento\Authorizenet\Helper\Data as HelperData;
+use Magento\Authorizenet\Model\Directpost\Response;
+use Magento\Authorizenet\Model\Directpost\Response\Factory as ResponseFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Simplexml\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -13,118 +24,118 @@ use Magento\Authorizenet\Model\TransactionService;
 use Magento\Authorizenet\Model\Request;
 use Magento\Authorizenet\Model\Directpost\Request\Factory;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
+use PHPUnit\Framework\MockObject_MockBuilder;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionClass;
 
 /**
  * Class DirectpostTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DirectpostTest extends \PHPUnit\Framework\TestCase
+class DirectpostTest extends TestCase
 {
     const TOTAL_AMOUNT = 100.02;
     const INVOICE_NUM = '00000001';
     const TRANSACTION_ID = '41a23x34fd124';
 
     /**
-     * @var \Magento\Authorizenet\Model\Directpost
+     * @var Directpost
      */
     protected $directpost;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Payment\Model\InfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InfoInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $paymentMock;
 
     /**
-     * @var \Magento\Authorizenet\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataHelperMock;
 
     /**
-     * @var \Magento\Authorizenet\Model\Directpost\Response\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $responseFactoryMock;
 
     /**
-     * @var TransactionRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionRepository|PHPUnit_Framework_MockObject_MockObject
      */
     protected $transactionRepositoryMock;
 
     /**
-     * @var \Magento\Authorizenet\Model\Directpost\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var Response|PHPUnit_Framework_MockObject_MockObject
      */
     protected $responseMock;
 
     /**
-     * @var TransactionService|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionService|PHPUnit_Framework_MockObject_MockObject
      */
     protected $transactionServiceMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClient|PHPUnit_Framework_MockObject_MockObject
      */
     protected $httpClientMock;
 
     /**
-     * @var \Magento\Authorizenet\Model\Directpost\Request\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestFactory;
 
     /**
-     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentFailuresInterface|PHPUnit_Framework_MockObject_MockObject
      */
     private $paymentFailures;
+
+    /**
+     * @var ZendClientFactory|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $httpClientFactoryMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->getMock();
-        $this->paymentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getOrder', 'getId', 'setAdditionalInformation', 'getAdditionalInformation',
-                'setIsTransactionDenied', 'setIsTransactionClosed', 'decrypt', 'getCcLast4',
-                'getParentTransactionId', 'getPoNumber'
-            ])
-            ->getMock();
-        $this->dataHelperMock = $this->getMockBuilder(\Magento\Authorizenet\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->initPaymentMock();
         $this->initResponseFactoryMock();
+        $this->initHttpClientMock();
 
-        $this->transactionRepositoryMock = $this->getMockBuilder(
-            \Magento\Sales\Model\Order\Payment\Transaction\Repository::class
-        )
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
+        $this->dataHelperMock = $this->getMockBuilder(HelperData::class)->disableOriginalConstructor()->getMock();
+        $this->transactionRepositoryMock = $this->getMockBuilder(TransactionRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['getByTransactionId'])
             ->getMock();
-
-        $this->transactionServiceMock = $this->getMockBuilder(\Magento\Authorizenet\Model\TransactionService::class)
+        $this->transactionServiceMock = $this->getMockBuilder(TransactionService::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTransactionDetails'])
             ->getMock();
-
-        $this->paymentFailures = $this->getMockBuilder(
-            PaymentFailuresInterface::class
-        )
+        $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->requestFactory = $this->getRequestFactoryMock();
-        $httpClientFactoryMock = $this->getHttpClientFactoryMock();
+        $this->requestFactory = $this->getMockBuilder(Factory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->httpClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $helper = new ObjectManagerHelper($this);
         $this->directpost = $helper->getObject(
-            \Magento\Authorizenet\Model\Directpost::class,
+            Directpost::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'dataHelper' => $this->dataHelperMock,
@@ -132,18 +143,97 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
                 'responseFactory' => $this->responseFactoryMock,
                 'transactionRepository' => $this->transactionRepositoryMock,
                 'transactionService' => $this->transactionServiceMock,
-                'httpClientFactory' => $httpClientFactoryMock,
+                'httpClientFactory' => $this->httpClientFactoryMock,
                 'paymentFailures' => $this->paymentFailures,
             ]
         );
     }
 
+    /**
+     * Create mock for response factory
+     *
+     * @return void
+     */
+    private function initResponseFactoryMock()
+    {
+        $this->responseFactoryMock = $this->getMockBuilder(ResponseFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->responseMock = $this->getMockBuilder(Response::class)
+            ->setMethods(
+                [
+                    'isValidHash',
+                    'getXTransId',
+                    'getXResponseCode',
+                    'getXResponseReasonCode',
+                    'getXResponseReasonText',
+                    'getXAmount',
+                    'setXResponseCode',
+                    'setXResponseReasonCode',
+                    'setXAvsCode',
+                    'setXResponseReasonText',
+                    'setXTransId',
+                    'setXInvoiceNum',
+                    'setXAmount',
+                    'setXMethod',
+                    'setXType',
+                    'setData',
+                    'getData',
+                    'setXAccountNumber',
+                    '__wakeup'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->responseFactoryMock->expects($this->any())->method('create')->willReturn($this->responseMock);
+    }
+
+    /**
+     * Create mock for payment
+     *
+     * @return void
+     */
+    private function initPaymentMock()
+    {
+        $this->paymentMock = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getOrder',
+                    'setAmount',
+                    'setAnetTransType',
+                    'setXTransId',
+                    'getId',
+                    'setAdditionalInformation',
+                    'getAdditionalInformation',
+                    'setIsTransactionDenied',
+                    'setIsTransactionClosed',
+                    'decrypt',
+                    'getCcLast4',
+                    'getParentTransactionId',
+                    'getPoNumber'
+                ]
+            )
+            ->getMock();
+    }
+
+    /**
+     * Create a mock for http client
+     *
+     * @return void
+     */
+    private function initHttpClientMock()
+    {
+        $this->httpClientMock = $this->getMockBuilder(ZendClient::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['request', 'getBody', '__wakeup'])
+            ->getMock();
+    }
+
     public function testGetConfigInterface()
     {
-        $this->assertInstanceOf(
-            \Magento\Payment\Model\Method\ConfigInterface::class,
-            $this->directpost->getConfigInterface()
-        );
+        $this->assertInstanceOf(ConfigInterface::class, $this->directpost->getConfigInterface());
     }
 
     public function testGetConfigValue()
@@ -162,7 +252,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         $storeId = 'store-id';
         $expectedResult = 'relay-url';
 
-        $helperDataMock = $this->getMockBuilder(\Magento\Authorizenet\Helper\Backend\Data::class)
+        $helperDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -179,7 +269,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     {
         $paymentAction = 'some_action';
 
-        $this->scopeConfigMock->expects($this->any())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with('payment/authorizenet_directpost/payment_action', 'store', null)
             ->willReturn($paymentAction);
@@ -190,11 +280,143 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         $this->directpost->authorize($this->paymentMock, 10);
     }
 
+    /**
+     * @dataProvider dataProviderCaptureWithInvalidAmount
+     * @expectedExceptionMessage Invalid amount for capture.
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
+     * @param int $invalidAmount
+     */
+    public function testCaptureWithInvalidAmount($invalidAmount)
+    {
+        $this->directpost->capture($this->paymentMock, $invalidAmount);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderCaptureWithInvalidAmount()
+    {
+        return [
+            [0],
+            [0.000],
+            [-1.000],
+            [-1],
+            [null],
+        ];
+    }
+
+    /**
+     * Test capture has parent transaction id.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCaptureHasParentTransactionId()
+    {
+        $amount = 10;
+
+        $this->paymentMock->expects($this->once())->method('setAmount')->with($amount);
+        $this->paymentMock->expects($this->exactly(2))->method('getParentTransactionId')->willReturn(1);
+        $this->paymentMock->expects($this->once())->method('setAnetTransType')->willReturn('PRIOR_AUTH_CAPTURE');
+
+        $this->paymentMock->expects($this->once())->method('getId')->willReturn(1);
+        $orderMock = $this->getOrderMock();
+        $orderMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->paymentMock->expects($this->once())->method('getOrder')->willReturn($orderMock);
+
+        $transactionMock = $this->getMockBuilder(Transaction::class)->disableOriginalConstructor()->getMock();
+        $this->transactionRepositoryMock->expects($this->once())
+            ->method('getByTransactionId')
+            ->with(1, 1, 1)
+            ->willReturn($transactionMock);
+
+        $this->paymentMock->expects($this->once())->method('setXTransId');
+        $this->responseMock->expects($this->once())->method('getData')->willReturn([1]);
+
+        $this->directpost->capture($this->paymentMock, 10);
+    }
+
+    /**
+     * @@expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCaptureWithoutParentTransactionId()
+    {
+        $amount = 10;
+
+        $this->paymentMock->expects($this->once())->method('setAmount')->with($amount);
+        $this->paymentMock->expects($this->once())->method('getParentTransactionId')->willReturn(null);
+        $this->responseMock->expects($this->once())->method('getData')->willReturn([1]);
+
+        $this->directpost->capture($this->paymentMock, 10);
+    }
+
+    public function testCaptureWithoutParentTransactionIdWithoutData()
+    {
+        $amount = 10;
+
+        $this->paymentMock->expects($this->once())->method('setAmount')->with($amount);
+        $this->paymentMock->expects($this->exactly(2))->method('getParentTransactionId')->willReturn(null);
+        $this->responseMock->expects($this->once())->method('getData')->willReturn([]);
+
+        $this->paymentMock->expects($this->once())
+            ->method('setIsTransactionClosed')
+            ->with(0)
+            ->willReturnSelf();
+
+        $this->httpClientFactoryMock->expects($this->once())->method('create')->willReturn($this->httpClientMock);
+        $this->httpClientMock->expects($this->once())->method('request')->willReturnSelf();
+
+        $this->buildRequestTest();
+        $this->postRequestTest();
+
+        $this->directpost->capture($this->paymentMock, 10);
+    }
+
+    private function buildRequestTest()
+    {
+        $orderMock = $this->getOrderMock();
+        $orderMock->expects($this->once())->method('getStoreId')->willReturn(1);
+        $orderMock->expects($this->exactly(2))->method('getIncrementId')->willReturn(self::INVOICE_NUM);
+        $this->paymentMock->expects($this->once())->method('getOrder')->willReturn($orderMock);
+
+        $this->addRequestMockToRequestFactoryMock();
+    }
+
+    private function postRequestTest()
+    {
+        $this->httpClientFactoryMock->expects($this->once())->method('create')->willReturn($this->httpClientMock);
+        $this->httpClientMock->expects($this->once())->method('request')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXResponseCode')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXResponseReasonCode')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXResponseReasonText')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXAvsCode')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXTransId')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXInvoiceNum')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXAmount')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXMethod')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setXType')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setData')->willReturnSelf();
+
+        $response = $this->getRefundResponseBody(
+            Directpost::RESPONSE_CODE_APPROVED,
+            Directpost::RESPONSE_REASON_CODE_APPROVED,
+            'Successful'
+        );
+        $this->httpClientMock->expects($this->once())->method('getBody')->willReturn($response);
+        $this->responseMock->expects($this->once())
+            ->method('getXResponseCode')
+            ->willReturn(Directpost::RESPONSE_CODE_APPROVED);
+        $this->responseMock->expects($this->once())
+            ->method('getXResponseReasonCode')
+            ->willReturn(Directpost::RESPONSE_REASON_CODE_APPROVED);
+        $this->dataHelperMock->expects($this->never())->method('wrapGatewayError');
+    }
+
     public function testGetCgiUrl()
     {
         $url = 'cgi/url';
 
-        $this->scopeConfigMock->expects($this->any())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with('payment/authorizenet_directpost/cgi_url', 'store', null)
             ->willReturn($url);
@@ -204,7 +426,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCgiUrlWithEmptyConfigValue()
     {
-        $this->scopeConfigMock->expects($this->any())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with('payment/authorizenet_directpost/cgi_url', 'store', null)
             ->willReturn(null);
@@ -218,7 +440,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         $url = 'relay/url';
         $this->directpost->setData('store', $storeId);
 
-        $this->dataHelperMock->expects($this->any())
+        $this->dataHelperMock->expects($this->exactly(2))
             ->method('getRelayUrl')
             ->with($storeId)
             ->willReturn($url);
@@ -268,7 +490,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
      */
     protected function prepareTestValidateResponse($transMd5, $login, $isValidHash)
     {
-        $this->scopeConfigMock->expects($this->any())
+        $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->willReturnMap(
                 [
@@ -276,7 +498,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
                     ['payment/authorizenet_directpost/login', 'store', null, $login]
                 ]
             );
-        $this->responseMock->expects($this->any())
+        $this->responseMock->expects($this->exactly(1))
             ->method('isValidHash')
             ->with($transMd5, $login)
             ->willReturn($isValidHash);
@@ -331,6 +553,20 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks response failures behaviour.
      *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCheckResponseCodeFailureDefault()
+    {
+        $responseCode = 999999;
+        $this->responseMock->expects($this->once())->method('getXResponseCode')->willReturn($responseCode);
+
+        $this->directpost->checkResponseCode();
+    }
+
+    /**
+     * Checks response failures behaviour.
+     *
      * @param int $responseCode
      * @param int $failuresHandlerCalls
      * @return void
@@ -338,34 +574,24 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider checkResponseCodeFailureDataProvider
      */
-    public function testCheckResponseCodeFailure(int $responseCode, int $failuresHandlerCalls): void
+    public function testCheckResponseCodeFailureDeclinedOrError(int $responseCode, int $failuresHandlerCalls): void
     {
         $reasonText = 'reason text';
 
         $this->responseMock->expects($this->once())
             ->method('getXResponseCode')
             ->willReturn($responseCode);
-        $this->responseMock->expects($this->any())
-            ->method('getXResponseReasonText')
-            ->willReturn($reasonText);
-        $this->dataHelperMock->expects($this->any())
+        $this->responseMock->expects($this->once())->method('getXResponseReasonText')->willReturn($reasonText);
+        $this->dataHelperMock->expects($this->once())
             ->method('wrapGatewayError')
             ->with($reasonText)
             ->willReturn(__('Gateway error: %1', $reasonText));
 
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentFailures->expects($this->exactly($failuresHandlerCalls))->method('handle')->with(1);
+        $orderMock = $this->getOrderMock($failuresHandlerCalls);
 
-        $orderMock->expects($this->exactly($failuresHandlerCalls))
-            ->method('getQuoteId')
-            ->willReturn(1);
-
-        $this->paymentFailures->expects($this->exactly($failuresHandlerCalls))
-            ->method('handle')
-            ->with(1);
-
-        $reflection = new \ReflectionClass($this->directpost);
+        $orderMock->expects($this->exactly($failuresHandlerCalls))->method('getQuoteId')->willReturn(1);
+        $reflection = new ReflectionClass($this->directpost);
         $order = $reflection->getProperty('order');
         $order->setAccessible(true);
         $order->setValue($this->directpost, $orderMock);
@@ -381,7 +607,6 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         return [
             ['responseCode' => Directpost::RESPONSE_CODE_DECLINED, 1],
             ['responseCode' => Directpost::RESPONSE_CODE_ERROR, 1],
-            ['responseCode' => 999999, 0],
         ];
     }
 
@@ -417,7 +642,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     {
         $this->directpost->setData('info_instance', $this->paymentMock);
 
-        $this->paymentMock->expects($this->any())
+        $this->paymentMock->expects($this->once())
             ->method('getAdditionalInformation')
             ->with(Directpost::GATEWAY_ACTIONS_LOCKED_STATE_KEY)
             ->willReturn($isGatewayActionsLocked);
@@ -452,30 +677,16 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         $paymentId = 36;
         $orderId = 36;
 
-        $this->paymentMock->expects(static::once())
-            ->method('getId')
-            ->willReturn($paymentId);
+        $this->paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
 
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
-            ->getMock();
-        $orderMock->expects(static::once())
-            ->method('getId')
-            ->willReturn($orderId);
-
-        $this->paymentMock->expects(static::once())
-            ->method('getOrder')
-            ->willReturn($orderMock);
-
-        $transactionMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment\Transaction::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->transactionRepositoryMock->expects(static::once())
+        $orderMock = $this->getOrderMock();
+        $orderMock->expects($this->once())->method('getId')->willReturn($orderId);
+        $this->paymentMock->expects($this->once())->method('getOrder')->willReturn($orderMock);
+        $transactionMock = $this->getMockBuilder(Transaction::class)->disableOriginalConstructor()->getMock();
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTransactionId')
             ->with($transactionId, $paymentId, $orderId)
             ->willReturn($transactionMock);
-
         $document = $this->getTransactionXmlDocument(
             $transactionId,
             TransactionService::PAYMENT_UPDATE_STATUS_CODE_SUCCESS,
@@ -483,20 +694,15 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             $responseStatus,
             $responseCode
         );
-        $this->transactionServiceMock->expects(static::once())
+        $this->transactionServiceMock->expects($this->once())
             ->method('getTransactionDetails')
             ->with($this->directpost, $transactionId)
             ->willReturn($document);
 
         // transaction should be closed
-        $this->paymentMock->expects(static::once())
-            ->method('setIsTransactionDenied')
-            ->with(true);
-        $this->paymentMock->expects(static::once())
-            ->method('setIsTransactionClosed')
-            ->with(true);
-        $transactionMock->expects(static::once())
-            ->method('close');
+        $this->paymentMock->expects($this->once())->method('setIsTransactionDenied')->with(true);
+        $this->paymentMock->expects($this->once())->method('setIsTransactionClosed')->with(true);
+        $transactionMock->expects($this->once())->method('close');
 
         $this->directpost->fetchTransactionInfo($this->paymentMock, $transactionId);
     }
@@ -509,60 +715,41 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     {
         $card = 1111;
 
-        $this->paymentMock->expects(static::exactly(2))
-            ->method('getCcLast4')
-            ->willReturn($card);
-        $this->paymentMock->expects(static::once())
-            ->method('decrypt')
-            ->willReturn($card);
-        $this->paymentMock->expects(static::exactly(3))
+        $this->paymentMock->expects($this->exactly(1))->method('getCcLast4')->willReturn($card);
+        $this->paymentMock->expects($this->once())->method('decrypt')->willReturn($card);
+        $this->paymentMock->expects($this->exactly(3))
             ->method('getParentTransactionId')
             ->willReturn(self::TRANSACTION_ID . '-capture');
-        $this->paymentMock->expects(static::once())
-            ->method('getPoNumber')
-            ->willReturn(self::INVOICE_NUM);
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())->method('getPoNumber')->willReturn(self::INVOICE_NUM);
+        $this->paymentMock->expects($this->once())
             ->method('setIsTransactionClosed')
             ->with(true)
             ->willReturnSelf();
 
+        $this->addRequestMockToRequestFactoryMock();
+
         $orderMock = $this->getOrderMock();
 
-        $this->paymentMock->expects(static::exactly(2))
-            ->method('getOrder')
-            ->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('getId')->willReturn(1);
+        $orderMock->expects($this->exactly(2))->method('getIncrementId')->willReturn(self::INVOICE_NUM);
+        $orderMock->expects($this->once())->method('getStoreId')->willReturn(1);
 
-        $transactionMock = $this->getMockBuilder(Order\Payment\Transaction::class)
+        $this->paymentMock->expects($this->exactly(2))->method('getOrder')->willReturn($orderMock);
+
+        $transactionMock = $this->getMockBuilder(Transaction::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAdditionalInformation'])
             ->getMock();
-        $transactionMock->expects(static::once())
+        $transactionMock->expects($this->once())
             ->method('getAdditionalInformation')
             ->with(Directpost::REAL_TRANSACTION_ID_KEY)
             ->willReturn(self::TRANSACTION_ID);
 
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTransactionId')
             ->willReturn($transactionMock);
 
-        $response = $this->getRefundResponseBody(
-            Directpost::RESPONSE_CODE_APPROVED,
-            Directpost::RESPONSE_REASON_CODE_APPROVED,
-            'Successful'
-        );
-        $this->httpClientMock->expects(static::once())
-            ->method('getBody')
-            ->willReturn($response);
-
-        $this->responseMock->expects(static::once())
-            ->method('getXResponseCode')
-            ->willReturn(Directpost::RESPONSE_CODE_APPROVED);
-        $this->responseMock->expects(static::once())
-            ->method('getXResponseReasonCode')
-            ->willReturn(Directpost::RESPONSE_REASON_CODE_APPROVED);
-
-        $this->dataHelperMock->expects(static::never())
-            ->method('wrapGatewayError');
+        $this->postRequestTest();
 
         $this->directpost->refund($this->paymentMock, self::TOTAL_AMOUNT);
     }
@@ -581,65 +768,6 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
                 'responseCode' => 1
             ]
         ];
-    }
-
-    /**
-     * Create mock for response factory
-     * @return void
-     */
-    private function initResponseFactoryMock()
-    {
-        $this->responseFactoryMock = $this->getMockBuilder(
-            \Magento\Authorizenet\Model\Directpost\Response\Factory::class
-        )->disableOriginalConstructor()->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Response::class)
-            ->setMethods(
-                [
-                    'isValidHash',
-                    'getXTransId', 'getXResponseCode', 'getXResponseReasonCode', 'getXResponseReasonText', 'getXAmount',
-                    'setXResponseCode', 'setXResponseReasonCode', 'setXAvsCode', 'setXResponseReasonText',
-                    'setXTransId', 'setXInvoiceNum', 'setXAmount', 'setXMethod', 'setXType', 'setData',
-                    'setXAccountNumber',
-                    '__wakeup'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->responseMock->expects(static::any())
-            ->method('setXResponseCode')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setXResponseReasonCode')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setXResponseReasonText')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setXAvsCode')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setXTransId')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setXInvoiceNum')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setXAmount')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setXMethod')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setXType')
-            ->willReturnSelf();
-        $this->responseMock->expects(static::any())
-            ->method('setData')
-            ->willReturnSelf();
-
-        $this->responseFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->responseMock);
     }
 
     /**
@@ -694,80 +822,40 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Get mock for authorize.net request factory
-     * @return \PHPUnit\Framework\MockObject_MockBuilder
      */
-    private function getRequestFactoryMock()
+    private function addRequestMockToRequestFactoryMock()
     {
-        $requestFactory = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
         $request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();
-        $requestFactory->expects(static::any())
+        $this->requestFactory->expects($this->once())
             ->method('create')
             ->willReturn($request);
-        return $requestFactory;
     }
 
     /**
      * Get mock for order
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return PHPUnit_Framework_MockObject_MockObject
      */
     private function getOrderMock()
     {
-        $orderMock = $this->getMockBuilder(Order::class)
+        return $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getId', 'getIncrementId', 'getStoreId', 'getBillingAddress', 'getShippingAddress',
-                'getBaseCurrencyCode', 'getBaseTaxAmount', '__wakeup'
-            ])
+            ->setMethods(
+                [
+                    'getId',
+                    'getQuoteId',
+                    'getIncrementId',
+                    'getStoreId',
+                    'getBillingAddress',
+                    'getShippingAddress',
+                    'getBaseCurrencyCode',
+                    'getBaseTaxAmount',
+                    '__wakeup'
+                ]
+            )
             ->getMock();
-
-        $orderMock->expects(static::once())
-            ->method('getId')
-            ->willReturn(1);
-
-        $orderMock->expects(static::exactly(2))
-            ->method('getIncrementId')
-            ->willReturn(self::INVOICE_NUM);
-
-        $orderMock->expects(static::once())
-            ->method('getStoreId')
-            ->willReturn(1);
-
-        $orderMock->expects(static::once())
-            ->method('getBaseCurrencyCode')
-            ->willReturn('USD');
-        return $orderMock;
-    }
-
-    /**
-     * Create and return mock for http client factory
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getHttpClientFactoryMock()
-    {
-        $this->httpClientMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClient::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['request', 'getBody', '__wakeup'])
-            ->getMock();
-
-        $this->httpClientMock->expects(static::any())
-            ->method('request')
-            ->willReturnSelf();
-
-        $httpClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $httpClientFactoryMock->expects(static::any())
-            ->method('create')
-            ->willReturn($this->httpClientMock);
-        return $httpClientFactoryMock;
     }
 
     /**
@@ -788,7 +876,9 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         $result[9] = self::TOTAL_AMOUNT; // XAmount
         $result[10] = Directpost::REQUEST_METHOD_CC; // XMethod
         $result[11] = Directpost::REQUEST_TYPE_CREDIT; // XType
+        // @codingStandardsIgnoreStart
         $result[37] = md5(self::TRANSACTION_ID); // x_MD5_Hash
+        // @codingStandardsIgnoreEnd
         $result[50] = '48329483921'; // setXAccountNumber
         return implode(Directpost::RESPONSE_DELIM_CHAR, $result);
     }

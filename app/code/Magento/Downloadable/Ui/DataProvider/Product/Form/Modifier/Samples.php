@@ -3,21 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Source\TypeUpload;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Ui\Component\DynamicRows;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Container;
+use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Form;
 
 /**
- * Class adds a grid with samples
+ * Class adds a grid with samples.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Samples extends AbstractModifier
@@ -77,7 +79,7 @@ class Samples extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -90,7 +92,7 @@ class Samples extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
@@ -135,6 +137,8 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * Returns configuration for dynamic rows
+     *
      * @return array
      */
     protected function getDynamicRows()
@@ -155,6 +159,8 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * Returns Record column configuration
+     *
      * @return array
      */
     protected function getRecord()
@@ -192,6 +198,8 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * Returns Title column configuration
+     *
      * @return array
      */
     protected function getTitleColumn()
@@ -200,14 +208,17 @@ class Samples extends AbstractModifier
             'componentType' => Container::NAME,
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
+            'showLabel' => false,
             'label' => __('Title'),
             'dataScope' => '',
+            'sortOrder' => 10,
         ];
         $titleField['arguments']['data']['config'] = [
             'formElement' => Form\Element\Input::NAME,
             'componentType' => Form\Field::NAME,
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'title',
+            'labelVisible' => false,
             'validation' => [
                 'required-entry' => true,
             ],
@@ -217,6 +228,8 @@ class Samples extends AbstractModifier
     }
 
     /**
+     * Returns Sample column configuration
+     *
      * @return array
      */
     protected function getSampleColumn()
@@ -226,7 +239,9 @@ class Samples extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('File'),
+            'showLabel' => false,
             'dataScope' => '',
+            'sortOrder' => 20,
         ];
         $sampleType['arguments']['data']['config'] = [
             'formElement' => Form\Element\Select::NAME,
@@ -234,6 +249,7 @@ class Samples extends AbstractModifier
             'component' => 'Magento_Downloadable/js/components/upload-type-handler',
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'type',
+            'labelVisible' => false,
             'options' => $this->typeUpload->toOptionArray(),
             'typeFile' => 'sample_file',
             'typeUrl' => 'sample_url',
@@ -244,6 +260,7 @@ class Samples extends AbstractModifier
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => 'sample_url',
             'placeholder' => 'URL',
+            'labelVisible' => false,
             'validation' => [
                 'required-entry' => true,
                 'validate-url' => true,

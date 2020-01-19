@@ -89,7 +89,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $productDescription = '.product.attribute.description';
+    protected $productDescription = '.product.attribute.description .value';
 
     /**
      * Product short-description element.
@@ -219,6 +219,13 @@ class View extends AbstractConfigureBlock
      * @var string
      */
     private $thresholdMessage = '.availability.only';
+
+    /**
+     * Qty field error message selector.
+     *
+     * @var string
+     */
+    private $qtyErrorMessage = '#qty-error';
 
     /**
      * Checks if threshold message is displayed.
@@ -676,5 +683,17 @@ class View extends AbstractConfigureBlock
     {
         $dataVideoSelector = $this->productVideo . '[data-code="' . $videoData. '"]';
         return $this->_rootElement->find($dataVideoSelector)->isPresent();
+    }
+
+    /**
+     * Resolve qty field error message.
+     *
+     * @return string
+     */
+    public function getQtyErrorMessage()
+    {
+        $this->waitForElementVisible($this->qtyErrorMessage);
+
+        return $this->_rootElement->find($this->qtyErrorMessage)->getText();
     }
 }

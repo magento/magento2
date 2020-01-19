@@ -9,11 +9,13 @@ define([
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
-    'jquery/ui',
+    'underscore',
+    'jquery-ui-modules/widget',
     'mage/decorate',
     'mage/collapsible',
-    'mage/cookies'
-], function ($, authenticationPopup, customerData, alert, confirm) {
+    'mage/cookies',
+    'jquery-ui-modules/effect-fade'
+], function ($, authenticationPopup, customerData, alert, confirm, _) {
     'use strict';
 
     $.widget('mage.sidebar', {
@@ -24,6 +26,7 @@ define([
             }
         },
         scrollHeight: 0,
+        shoppingCartUrl: window.checkout.shoppingCartUrl,
 
         /**
          * Create sidebar.
@@ -60,13 +63,15 @@ define([
             };
             events['click ' + this.options.button.checkout] = $.proxy(function () {
                 var cart = customerData.get('cart'),
-                    customer = customerData.get('customer');
+                    customer = customerData.get('customer'),
+                    element = $(this.options.button.checkout);
 
                 if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     // set URL for redirect on successful login/registration. It's postprocessed on backend.
                     $.cookie('login_redirect', this.options.url.checkout);
 
                     if (this.options.url.isRedirectRequired) {
+                        element.prop('disabled', true);
                         location.href = this.options.url.loginUrl;
                     } else {
                         authenticationPopup.showModal();
@@ -74,6 +79,7 @@ define([
 
                     return false;
                 }
+                element.prop('disabled', true);
                 location.href = this.options.url.checkout;
             }, this);
 
@@ -219,8 +225,16 @@ define([
          * @param {HTMLElement} elem
          */
         _updateItemQtyAfter: function (elem) {
+            var productData = this._getProductById(Number(elem.data('cart-item')));
+
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:updateCartItemQty');
+
+                if (window.location.href === this.shoppingCartUrl) {
+                    window.location.reload(false);
+                }
+            }
             this._hideItemButton(elem);
-            $(document).trigger('ajax:updateItemQty');
         },
 
         /**
@@ -242,11 +256,30 @@ define([
          * @private
          */
         _removeItemAfter: function (elem) {
-            var productData = customerData.get('cart')().items.find(function (item) {
-                return Number(elem.data('cart-item')) === Number(item['item_id']);
-            });
+            var productData = this._getProductById(Number(elem.data('cart-item')));
 
-            $(document).trigger('ajax:removeFromCart', productData['product_sku']);
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:removeFromCart', {
+                    productIds: [productData['product_id']]
+                });
+
+                if (window.location.href.indexOf(this.shoppingCartUrl) === 0) {
+                    window.location.reload();
+                }
+            }
+        },
+
+        /**
+         * Retrieves product data by Id.
+         *
+         * @param {Number} productId - product Id
+         * @returns {Object|undefined}
+         * @private
+         */
+        _getProductById: function (productId) {
+            return _.find(customerData.get('cart')().items, function (item) {
+                return productId === Number(item['item_id']);
+            });
         },
 
         /**
@@ -315,7 +348,7 @@ define([
                 if ($(this).find('.options').length > 0) {
                     $(this).collapsible();
                 }
-                outerHeight = $(this).outerHeight();
+                outerHeight = $(this).outerHeight(true);
 
                 if (counter-- > 0) {
                     height += outerHeight;

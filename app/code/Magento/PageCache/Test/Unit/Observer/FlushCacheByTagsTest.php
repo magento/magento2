@@ -81,6 +81,9 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($result);
     }
 
+    /**
+     * @return array
+     */
     public function flushCacheByTagsDataProvider()
     {
         return [

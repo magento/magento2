@@ -15,9 +15,9 @@
 
 @menu__background-color: @color-very-dark-grayish-orange;
 
-@menu-logo__padding-bottom: 2.2rem;
+@menu-logo__padding-bottom: 1.7rem;
 @menu-logo__outer-size: @menu-logo__padding-top + @menu-logo-img__height + @menu-logo__padding-bottom;
-@menu-logo__padding-top: 1.2rem;
+@menu-logo__padding-top: 1.7rem;
 @menu-logo-img__height: 4.1rem;
 @menu-logo-img__width: 3.5rem;
 
@@ -37,6 +37,7 @@
 @submenu__padding-horizontal: 1.5rem;
 @submenu__padding-vertical: 2rem;
 @submenu__z-index: @menu__z-index - 2;
+@submenu__height: 720px;
 @submenu-column__width: 23.8rem;
 @submenu-column__width__l: 19.8rem;
 @submenu-title__color: @color-white;
@@ -187,12 +188,12 @@
         display: block;
     }
 
-    // External link marker
+    //  External link marker
     [target='_blank'] {
         &:after {
             &:extend(.abs-icon all);
             content: @icon-external-link__content;
-            font-size: 0.5rem;
+            font-size: .5rem;
             margin-left: @indent__xs;
             vertical-align: super;
         }
@@ -252,7 +253,6 @@
             background-color: @submenu__background-color;
             box-shadow: 0 0 3px @color-black;
             left: 100%; // align all submenus with one Y axis line
-            min-height: ~'calc(@{menu-logo__outer-size} + 2rem + 100%)';
             padding: @submenu__padding-vertical 0 0;
             position: absolute;
             top: 0;
@@ -263,9 +263,15 @@
             visibility: hidden;
             z-index: @submenu__z-index - 1;
 
-            .ie10 &,
             .ie11 & {
                 height: 100%;
+            }
+
+            > ul[role='menu'] {
+                max-width: ~'calc(100vw - @{menu__width})';
+                min-height: @submenu__height;
+                overflow-x: auto;
+                overflow-y: hidden;
             }
         }
 

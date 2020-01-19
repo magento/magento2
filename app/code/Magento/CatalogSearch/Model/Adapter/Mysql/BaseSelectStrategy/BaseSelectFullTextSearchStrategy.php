@@ -17,6 +17,9 @@ use Magento\Framework\App\ResourceConnection;
  *
  * The main idea of this strategy is using fulltext search index table as main table for query
  * in case when search request does not requires any search by attributes
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class BaseSelectFullTextSearchStrategy implements BaseSelectStrategyInterface
 {

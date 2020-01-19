@@ -113,10 +113,8 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath . $dirPath);
         $this->model->execute();
 
-        $this->assertFalse(
-            $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $dirPath . $this->dirName)
-            )
+        $this->assertFileNotExists(
+            $this->fullDirectoryPath . $dirPath . $this->dirName
         );
     }
 

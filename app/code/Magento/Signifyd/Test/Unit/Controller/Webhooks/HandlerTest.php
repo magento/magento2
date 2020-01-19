@@ -140,7 +140,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Successfull case
+     * Successful case
      */
     public function testExecuteSuccessfully()
     {

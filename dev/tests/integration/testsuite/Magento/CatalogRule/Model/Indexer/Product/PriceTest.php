@@ -3,24 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\CatalogRule\Model\Indexer\Product;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\CatalogRule\Model\ResourceModel\Rule;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\TestFramework\Helper\Bootstrap;
 
-/**
- * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/attribute.php
- * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/product_with_attribute.php
- * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
- * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
- */
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -28,18 +20,18 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     private $resourceRule;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->resourceRule = Bootstrap::getObjectManager()->get(Rule::class);
     }
 
     /**
-     * @return void
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/configurable_product.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
-    public function testPriceApplying() : void
+    public function testPriceApplying()
     {
         $customerGroupId = 1;
         $websiteId = 1;
@@ -52,7 +44,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\Product $simpleProduct */
         $simpleProduct = $collection->getFirstItem();
         $simpleProduct->setPriceCalculation(false);
-
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, $customerGroupId, $simpleProductId);
         $this->assertEquals($rulePrice, $simpleProduct->getFinalPrice());
 
@@ -63,16 +54,57 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $collection->load();
         /** @var \Magento\Catalog\Model\Product $confProduct */
         $confProduct = $collection->getFirstItem();
-
-        $this->assertEquals($simpleProduct->getMinimalPrice(), $confProduct->getMinimalPrice());
+        $this->assertEquals($simpleProduct->getFinalPrice(), $confProduct->getMinimalPrice());
     }
 
     /**
-     * @magentoAppArea frontend
-     *
-     * @return void
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/simple_products.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/catalog_rule_50_percent_off.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
-    public function testSortByPrice() : void
+    public function testPriceForSecondStore()
+    {
+        $customerGroupId = 1;
+        $websiteId = 2;
+        /** @var ProductRepository $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->create(
+            ProductRepository::class
+        );
+        $simpleProduct = $productRepository->get('simple3');
+        $simpleProduct->setPriceCalculation(true);
+        $this->assertEquals('simple3', $simpleProduct->getSku());
+        $this->assertFalse(
+            $this->resourceRule->getRulePrice(
+                new \DateTime(),
+                $websiteId,
+                $customerGroupId,
+                $simpleProduct->getId()
+            )
+        );
+        $indexerBuilder = Bootstrap::getObjectManager()->get(
+            \Magento\CatalogRule\Model\Indexer\IndexBuilder::class
+        );
+        $indexerBuilder->reindexById($simpleProduct->getId());
+        $this->assertEquals(
+            $this->resourceRule->getRulePrice(
+                new \DateTime(),
+                $websiteId,
+                $customerGroupId,
+                $simpleProduct->getId()
+            ),
+            25
+        );
+    }
+
+    /**
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/simple_products.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoAppArea frontend
+     */
+    public function testSortByPrice()
     {
         $searchCriteria = Bootstrap::getObjectManager()->create(SearchCriteriaInterface::class);
         $sortOrder = Bootstrap::getObjectManager()->create(SortOrder::class);
@@ -80,10 +112,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $searchCriteria->setSortOrders([$sortOrder]);
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $searchResults = $productRepository->getList($searchCriteria);
-        $products = $searchResults->getItems();
+        /** @var \Magento\Catalog\Model\Product[] $products */
+        $products = array_values($searchResults->getItems());
 
-        /** @var \Magento\Catalog\Model\Product $product1 */
-        $product1 = array_values($products)[0];
+        $product1 = $products[0];
         $product1->setPriceCalculation(false);
         $this->assertEquals('simple1', $product1->getSku());
         $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product1->getId());

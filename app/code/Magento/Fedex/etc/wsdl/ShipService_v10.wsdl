@@ -498,7 +498,7 @@
         <xs:annotation>
           <xs:documentation>
             For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
-            If this shipment cotains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
+            If this shipment contains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
           </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -1515,12 +1515,12 @@
       </xs:simpleType>
       <xs:complexType name="DestinationControlDetail">
         <xs:annotation>
-          <xs:documentation>Data required to complete the Destionation Control Statement for US exports.</xs:documentation>
+          <xs:documentation>Data required to complete the Destination Control Statement for US exports.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
           <xs:element name="StatementTypes" type="ns:DestinationControlStatementType" minOccurs="1" maxOccurs="unbounded">
             <xs:annotation>
-              <xs:documentation>List of applicable Statment types.</xs:documentation>
+              <xs:documentation>List of applicable Statement types.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="DestinationCountries" type="xs:string" minOccurs="0">
@@ -2524,7 +2524,7 @@
           </xs:element>
           <xs:element name="LabelStockType" type="ns:LabelStockType" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>For thermal printer lables this indicates the size of the label and the location of the doc tab if present.</xs:documentation>
+              <xs:documentation>For thermal printer labels this indicates the size of the label and the location of the doc tab if present.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="LabelPrintingOrientation" type="ns:LabelPrintingOrientationType" minOccurs="0">
@@ -5225,7 +5225,7 @@
           </xs:element>
           <xs:element name="TotalCustomerCharge" type="ns:Money" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>The calculated varibale handling charge plus the net charge.</xs:documentation>
+              <xs:documentation>The calculated variable handling charge plus the net charge.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>

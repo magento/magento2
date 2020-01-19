@@ -205,10 +205,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
-        if (!$this->_processUrlKeys()) {
-            return parent::dispatch($request);
-        }
-
         if ($request->isDispatched() && $request->getActionName() !== 'denied' && !$this->_isAllowed()) {
             $this->_response->setStatusHeader(403, '1.1', 'Forbidden');
             if (!$this->_auth->isLoggedIn()) {
@@ -252,6 +248,9 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Check url keys. If non valid - redirect
      *
      * @return bool
+     *
+     * @see \Magento\Backend\App\Request\BackendValidator for default
+     * request validation.
      */
     public function _processUrlKeys()
     {

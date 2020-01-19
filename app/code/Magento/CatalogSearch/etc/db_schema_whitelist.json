@@ -1,7 +1,7 @@
 {
-  "catalog_eav_attribute": {
-    "column": {
-      "search_weight": true
+    "catalog_eav_attribute": {
+        "column": {
+            "search_weight": true
+        }
     }
-  }
 }

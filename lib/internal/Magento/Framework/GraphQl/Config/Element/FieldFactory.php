@@ -37,15 +37,17 @@ class FieldFactory
      * @param array $fieldData
      * @param array $arguments
      * @return Field
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function createFromConfigData(
         array $fieldData,
         array $arguments = []
     ) : Field {
-        $arraySign = '/^.*(\[\])$/';
+        $fieldType = $fieldData['type'];
         $isList = false;
 
-        if (preg_match($arraySign, $fieldData['type'])) {
+        //check if type ends with []
+        if ($fieldType[strlen($fieldType) - 2] == '[' && $fieldType[strlen($fieldType) - 1] == ']') {
             $isList = true;
             $fieldData['type'] = str_replace('[]', '', $fieldData['type']);
             $fieldData['itemType'] = str_replace('[]', '', $fieldData['type']);
@@ -61,7 +63,9 @@ class FieldFactory
                 'itemType' => isset($fieldData['itemType']) ? $fieldData['itemType'] : '',
                 'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : '',
                 'description' => isset($fieldData['description']) ? $fieldData['description'] : '',
-                'arguments' => $arguments
+                'arguments' => $arguments,
+                'cache' => isset($fieldData['cache']) ? $fieldData['cache'] : [],
+                'deprecated' => isset($fieldData['deprecated']) ? $fieldData['deprecated'] : [],
             ]
         );
     }

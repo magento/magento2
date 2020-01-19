@@ -9,8 +9,8 @@ namespace Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type;
 use Magento\ConfigurableImportExport;
 
 /**
- * Class ConfigurableTest
- * @package Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type
+ * Configurable import export tests
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
@@ -78,6 +78,8 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     protected $productEntityLinkField = 'entity_id';
 
     /**
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -270,10 +272,12 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     }
 
     /**
+     * Bunches data provider
+     *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _getBunch()
+    protected function _getBunch(): array
     {
         return [[
             'sku' => 'configurableskuI22',
@@ -392,7 +396,12 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         ];
     }
 
-    protected function _getSuperAttributes()
+    /**
+     * Super attributes data provider
+     *
+     * @return array
+     */
+    protected function _getSuperAttributes(): array
     {
         return [
             'testattr2' => [
@@ -401,7 +410,6 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'attribute_code' => 'testattr2',
                 'is_global' => '1',
                 'is_visible' => '1',
-                'is_static' => '0',
                 'is_required' => '0',
                 'is_unique' => '0',
                 'frontend_label' => 'testattr2',
@@ -423,7 +431,6 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'attribute_code' => 'testattr3',
                 'is_global' => '1',
                 'is_visible' => '1',
-                'is_static' => '0',
                 'is_required' => '0',
                 'is_unique' => '0',
                 'frontend_label' => 'testattr3',
@@ -442,6 +449,8 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     }
 
     /**
+     * Verify save mtethod
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSaveData()
@@ -524,6 +533,8 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     }
 
     /**
+     * Callback for is row allowed to import
+     *
      * @param $rowData
      * @param $rowNum
      * @return bool
@@ -537,80 +548,186 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         return true;
     }
 
-    public function testIsRowValid()
+    /**
+     * Verify is row valid method
+     *
+     * @dataProvider getProductDataIsValidRow
+     * @param array $productData
+     * @return void
+     */
+    public function testIsRowValid(array $productData): void
     {
         $bunch = $this->_getBunch();
-        $badProduct = [
-            'sku' => 'configurableskuI22BadPrice',
-            'store_view_code' => null,
-            'attribute_set_code' => 'Default',
-            'product_type' => 'configurable',
-            'name' => 'Configurable Product 21 BadPrice',
-            'product_websites' => 'website_1',
-            'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-            'configurable_variations' => 'sku=testconf2-attr2val1-testattr3v1,'
-                 . 'testattr2=attr2val1_DOESNT_EXIST,'
-                 . 'testattr3=testattr3v1,'
-                 . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
-                 . 'testattr2=attr2val1,'
-                 . 'testattr3=testattr3v2,'
-                 . 'display=0',
-            '_store' => null,
-            '_attribute_set' => 'Default',
-            '_type' => 'configurable',
-            '_product_websites' => 'website_1',
-        ];
         // Checking that variations' field names are case-insensitive with this
         // product.
         $caseInsensitiveSKU = 'configurableskuI22CaseInsensitive';
-        $caseInsensitiveProduct = [
-            'sku' => $caseInsensitiveSKU,
-            'store_view_code' => null,
-            'attribute_set_code' => 'Default',
-            'product_type' => 'configurable',
-            'name' => 'Configurable Product 21',
-            'product_websites' => 'website_1',
-            'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-            'configurable_variations' => 'SKU=testconf2-attr2val1-testattr3v1,'
-                . 'testattr2=attr2val1,'
-                . 'testattr3=testattr3v1,'
-                . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
-                . 'testattr2=attr2val1,'
-                . 'testattr3=testattr3v2,'
-                . 'display=0',
-            '_store' => null,
-            '_attribute_set' => 'Default',
-            '_type' => 'configurable',
-            '_product_websites' => 'website_1',
-        ];
-        $bunch[] = $badProduct;
-        $bunch[] = $caseInsensitiveProduct;
+        $productData['caseInsencitiveProduct']['sku'] = $caseInsensitiveSKU;
+        $bunch[] = $productData['bad_product'];
+        $bunch[] = $productData['caseInsencitiveProduct'];
         // Set _attributes to avoid error in Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType.
         $this->setPropertyValue($this->configurable, '_attributes', [
-            $badProduct[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [],
+            $productData['bad_product'][\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [],
+        ]);
+        // Avoiding errors about attributes not being super
+        $this->setPropertyValue($this->configurable, '_superAttributes', $productData['super_attributes']);
+
+        foreach ($bunch as $rowData) {
+            $result = $this->configurable->isRowValid($rowData, 0, false);
+            $this->assertNotNull($result);
+            if ($rowData['sku'] === $caseInsensitiveSKU) {
+                $this->assertTrue($result);
+            }
+        }
+    }
+
+    /**
+     *
+     * Data provider for isValidRows test.
+     *
+     * @return array
+     */
+    public function getProductDataIsValidRow(): array
+    {
+        return [
+            [
+                [
+                    'bad_product' => [
+                        'sku' => 'configurableskuI22BadPrice',
+                        'store_view_code' => null,
+                        'attribute_set_code' => 'Default',
+                        'product_type' => 'configurable',
+                        'name' => 'Configurable Product 21 BadPrice',
+                        'product_websites' => 'website_1',
+                        'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
+                        'configurable_variations' => 'sku=testconf2-attr2val1-testattr3v1,'
+                        . 'testattr2=attr2val1_DOESNT_EXIST,'
+                        . 'testattr3=testattr3v1,'
+                        . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
+                        . 'testattr2=attr2val1,'
+                        . 'testattr3=testattr3v2,'
+                        . 'display=0',
+                        '_store' => null,
+                        '_attribute_set' => 'Default',
+                        '_type' => 'configurable',
+                        '_product_websites' => 'website_1',
+                    ],
+                    'caseInsencitiveProduct' => [
+                        'sku' => '',
+                        'store_view_code' => null,
+                        'attribute_set_code' => 'Default',
+                        'product_type' => 'configurable',
+                        'name' => 'Configurable Product 21',
+                        'product_websites' => 'website_1',
+                        'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
+                        'configurable_variations' => 'SKU=testconf2-attr2val1-testattr3v1,'
+                        . 'testattr2=attr2val1,'
+                        . 'testattr3=testattr3v1=sx=sl,'
+                        . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
+                        . 'testattr2=attr2val1,'
+                        . 'testattr3=testattr3v2,'
+                        . 'display=0',
+                        '_store' => null,
+                        '_attribute_set' => 'Default',
+                        '_type' => 'configurable',
+                        '_product_websites' => 'website_1',
+                    ],
+                    'super_attributes' =>
+                    [
+                        'testattr2' => ['options' => ['attr2val1' => 1]],
+                        'testattr3' => [
+                            'options' => [
+                                'testattr3v2' => 1,
+                                'testattr3v1=sx=sl' => 1,
+                            ],
+                        ],
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Verify row validation with numeric skus
+     *
+     * @return void
+     */
+    public function testRowValidationForNumericalSkus(): void
+    {
+        // Set _attributes to avoid error in Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType.
+        $this->setPropertyValue($this->configurable, '_attributes', [
+            'Default' => [],
         ]);
         // Avoiding errors about attributes not being super
         $this->setPropertyValue(
             $this->configurable,
             '_superAttributes',
             [
-                'testattr2' => ['options' => ['attr2val1' => 1]],
-                'testattr3' => [
+                'testattr2' => [
                     'options' => [
-                        'testattr3v2' => 1,
-                        'testattr3v1' => 1,
-                    ],
+                        'attr2val1' => 1,
+                        'attr2val2' => 2,
+                    ]
                 ],
             ]
         );
 
-        foreach ($bunch as $rowData) {
-            $result = $this->configurable->isRowValid($rowData, 0, !isset($this->_oldSku[$rowData['sku']]));
-            $this->assertNotNull($result);
-            if ($rowData['sku'] === $caseInsensitiveSKU) {
-                $this->assertTrue($result);
-            }
-        }
+        $rowValidationDataProvider = $this->rowValidationDataProvider();
+
+        // Checking that variations with duplicate sku are invalid
+        $result = $this->configurable->isRowValid($rowValidationDataProvider['duplicateProduct'], 0);
+        $this->assertFalse($result);
+
+        // Checking that variations with SKUs that are the same when interpreted as number,
+        // but different when interpreted as string are valid
+        $result = $this->configurable->isRowValid($rowValidationDataProvider['nonDuplicateProduct'], 0);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Row validation Data Provider
+     *
+     * @return array
+     */
+    public function rowValidationDataProvider(): array
+    {
+        return [
+            'duplicateProduct' => [
+                'sku' => 'configurableNumericalSkuDuplicateVariation',
+                'store_view_code' => null,
+                'attribute_set_code' => 'Default',
+                'product_type' => 'configurable',
+                'name' => 'Configurable Product with duplicate numerical SKUs in variations',
+                'product_websites' => 'website_1',
+                'configurable_variation_labels' => 'testattr2=Select Configuration',
+                'configurable_variations' => 'sku=1234.1,'
+                    . 'testattr2=attr2val1,'
+                    . 'display=1|sku=1234.1,'
+                    . 'testattr2=attr2val1,'
+                    . 'display=0',
+                '_store' => null,
+                '_attribute_set' => 'Default',
+                '_type' => 'configurable',
+                '_product_websites' => 'website_1',
+            ],
+            'nonDuplicateProduct' => [
+                'sku' => 'configurableNumericalSkuNonDuplicateVariation',
+                'store_view_code' => null,
+                'attribute_set_code' => 'Default',
+                'product_type' => 'configurable',
+                'name' => 'Configurable Product with different numerical SKUs in variations',
+                'product_websites' => 'website_1',
+                'configurable_variation_labels' => 'testattr2=Select Configuration',
+                'configurable_variations' => 'sku=1234.10,'
+                    . 'testattr2=attr2val1,'
+                    . 'display=1|sku=1234.1,'
+                    . 'testattr2=attr2val2,'
+                    . 'display=0',
+                '_store' => null,
+                '_attribute_set' => 'Default',
+                '_type' => 'configurable',
+                '_product_websites' => 'website_1',
+            ]
+        ];
     }
 
     /**

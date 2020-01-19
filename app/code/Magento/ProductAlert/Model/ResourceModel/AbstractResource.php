@@ -5,6 +5,8 @@
  */
 namespace Magento\ProductAlert\Model\ResourceModel;
 
+use Magento\Framework\Model\AbstractModel;
+
 /**
  * Product alert for back in abstract resource model
  *
@@ -15,13 +17,13 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     /**
      * Retrieve alert row by object parameters
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return array|false
      */
-    protected function _getAlertRow(\Magento\Framework\Model\AbstractModel $object)
+    protected function _getAlertRow(AbstractModel $object)
     {
         $connection = $this->getConnection();
-        if ($object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()) {
+        if ($this->isExistAllBindIds($object)) {
             $select = $connection->select()->from(
                 $this->getMainTable()
             )->where(
@@ -30,11 +32,14 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
                 'product_id  = :product_id'
             )->where(
                 'website_id  = :website_id'
+            )->where(
+                'store_id = :store_id'
             );
             $bind = [
                 ':customer_id' => $object->getCustomerId(),
                 ':product_id' => $object->getProductId(),
                 ':website_id' => $object->getWebsiteId(),
+                ':store_id' => $object->getStoreId()
             ];
             return $connection->fetchRow($select, $bind);
         }
@@ -42,12 +47,26 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     }
 
     /**
+     * Is exists all bind ids.
+     *
+     * @param AbstractModel $object
+     * @return bool
+     */
+    private function isExistAllBindIds(AbstractModel $object): bool
+    {
+        return ($object->getCustomerId()
+            && $object->getProductId()
+            && $object->getWebsiteId()
+            && $object->getStoreId());
+    }
+
+    /**
      * Load object data by parameters
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
-    public function loadByParam(\Magento\Framework\Model\AbstractModel $object)
+    public function loadByParam(AbstractModel $object)
     {
         $row = $this->_getAlertRow($object);
         if ($row) {
@@ -59,13 +78,13 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     /**
      * Delete all customer alerts on website
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @param int $customerId
      * @param int $websiteId
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function deleteCustomer(\Magento\Framework\Model\AbstractModel $object, $customerId, $websiteId = null)
+    public function deleteCustomer(AbstractModel $object, $customerId, $websiteId = null)
     {
         $connection = $this->getConnection();
         $where = [];

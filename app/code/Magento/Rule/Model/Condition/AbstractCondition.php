@@ -17,6 +17,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * @method setFormName()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -62,7 +63,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     protected $_layout;
 
     /**
-     * Base name for hidden elements
+     * Base name for hidden elements.
+     *
      * @var string
      */
     protected $elementName = 'rule';
@@ -105,8 +107,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'string' => ['==', '!=', '>=', '>', '<=', '<', '{}', '!{}', '()', '!()'],
                 'numeric' => ['==', '!=', '>=', '>', '<=', '<', '()', '!()'],
                 'date' => ['==', '>=', '<='],
-                'select' => ['==', '!='],
-                'boolean' => ['==', '!='],
+                'select' => ['==', '!=', '<=>'],
+                'boolean' => ['==', '!=', '<=>'],
                 'multiselect' => ['{}', '!{}', '()', '!()'],
                 'grid' => ['()', '!()'],
             ];
@@ -116,8 +118,9 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
-     * Default operator options getter
-     * Provides all possible operator options
+     * Default operator options getter.
+     *
+     * Provides all possible operator options.
      *
      * @return array
      */
@@ -135,12 +138,15 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 '!{}' => __('does not contain'),
                 '()' => __('is one of'),
                 '!()' => __('is not one of'),
+                '<=>' => __('is undefined'),
             ];
         }
         return $this->_defaultOperatorOptions;
     }
 
     /**
+     * Get rule form.
+     *
      * @return Form
      */
     public function getForm()
@@ -149,6 +155,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get condition as array.
+     *
      * @param array $arrAttributes
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -195,6 +203,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get condition as xml.
+     *
      * @return string
      */
     public function asXml()
@@ -214,6 +224,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Load condition from array.
+     *
      * @param array $arr
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -229,6 +241,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Load condition from xml.
+     *
      * @param string|array $xml
      * @return $this
      */
@@ -242,6 +256,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Load attribute options.
+     *
      * @return $this
      */
     public function loadAttributeOptions()
@@ -250,6 +266,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get attribute options.
+     *
      * @return array
      */
     public function getAttributeOptions()
@@ -258,6 +276,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get attribute select options.
+     *
      * @return array
      */
     public function getAttributeSelectOptions()
@@ -270,6 +290,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get attribute name.
+     *
      * @return string
      */
     public function getAttributeName()
@@ -278,6 +300,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Load operator options.
+     *
      * @return $this
      */
     public function loadOperatorOptions()
@@ -300,6 +324,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get operator select options.
+     *
      * @return array
      */
     public function getOperatorSelectOptions()
@@ -316,6 +342,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get operator name.
+     *
      * @return array
      */
     public function getOperatorName()
@@ -324,6 +352,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Load value options.
+     *
      * @return $this
      */
     public function loadValueOptions()
@@ -333,6 +363,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get value select options.
+     *
      * @return array
      */
     public function getValueSelectOptions()
@@ -354,12 +386,12 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     public function getValueParsed()
     {
         if (!$this->hasValueParsed()) {
-            $value = $this->getData('value');
-            if (is_array($value) && isset($value[0]) && is_string($value[0])) {
-                $value = $value[0];
+            $value = $this->getValue();
+            if (is_array($value) && count($value) === 1) {
+                $value = reset($value);
             }
-            if ($this->isArrayOperatorType() && $value) {
-                $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
+            if (!is_array($value) && $this->isArrayOperatorType() && $value) {
+                $value = preg_split('#\s*[,;]\s*#', (string) $value, -1, PREG_SPLIT_NO_EMPTY);
             }
             $this->setValueParsed($value);
         }
@@ -380,14 +412,19 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
-     * @return array
+     * Get value.
+     *
+     * @return mixed
      */
     public function getValue()
     {
         if ($this->getInputType() == 'date' && !$this->getIsValueParsed()) {
             // date format intentionally hard-coded
+            $date = $this->getData('value');
+            $date = (\is_numeric($date) ? '@' : '') . $date;
             $this->setValue(
-                (new \DateTime($this->getData('value')))->format('Y-m-d H:i:s')
+                (new \DateTime($date, new \DateTimeZone((string) $this->_localeDate->getConfigTimezone())))
+                    ->format('Y-m-d H:i:s')
             );
             $this->setIsValueParsed(true);
         }
@@ -395,8 +432,11 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get value name.
+     *
      * @return array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function getValueName()
     {
@@ -434,6 +474,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         }
         return $value;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Get inherited conditions selectors
@@ -446,6 +487,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get new child name.
+     *
      * @return string
      */
     public function getNewChildName()
@@ -454,6 +497,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get this condition as html.
+     *
      * @return string
      */
     public function asHtml()
@@ -467,6 +512,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get this condition with subconditions as html.
+     *
      * @return string
      */
     public function asHtmlRecursive()
@@ -475,6 +522,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get type element.
+     *
      * @return AbstractElement
      */
     public function getTypeElement()
@@ -493,6 +542,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get type element html.
+     *
      * @return string
      */
     public function getTypeElementHtml()
@@ -501,6 +552,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get attribute element.
+     *
      * @return $this
      */
     public function getAttributeElement()
@@ -528,6 +581,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get attribute element html.
+     *
      * @return string
      */
     public function getAttributeElementHtml()
@@ -536,8 +591,9 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
-     * Retrieve Condition Operator element Instance
-     * If the operator value is empty - define first available operator value as default
+     * Retrieve Condition Operator element Instance.
+     *
+     * If the operator value is empty - define first available operator value as default.
      *
      * @return \Magento\Framework\Data\Form\Element\Select
      */
@@ -568,6 +624,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get operator element html.
+     *
      * @return string
      */
     public function getOperatorElementHtml()
@@ -587,6 +645,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get value element renderer.
+     *
      * @return \Magento\Rule\Block\Editable
      */
     public function getValueElementRenderer()
@@ -598,6 +658,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get value element.
+     *
      * @return $this
      */
     public function getValueElement()
@@ -615,6 +677,12 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             // date format intentionally hard-coded
             $elementParams['input_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
             $elementParams['date_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+            $elementParams['placeholder'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+            $elementParams['autocomplete'] = 'off';
+            $elementParams['readonly'] = 'true';
+            $elementParams['value_name'] =
+                (new \DateTime($elementParams['value'], new \DateTimeZone($this->_localeDate->getConfigTimezone())))
+                    ->format('Y-m-d');
         }
         return $this->getForm()->addField(
             $this->getPrefix() . '__' . $this->getId() . '__value',
@@ -626,6 +694,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get value element html.
+     *
      * @return string
      */
     public function getValueElementHtml()
@@ -634,6 +704,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get add link html.
+     *
      * @return string
      */
     public function getAddLinkHtml()
@@ -643,6 +715,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get remove link html.
+     *
      * @return string
      */
     public function getRemoveLinkHtml()
@@ -655,6 +729,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get chooser container html.
+     *
      * @return string
      */
     public function getChooserContainerHtml()
@@ -664,6 +740,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get this condition as string.
+     *
      * @param string $format
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -674,6 +752,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Get this condition with subconditions as string.
+     *
      * @param int $level
      * @return string
      */
@@ -685,7 +765,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     /**
      * Validate product attribute value for condition
      *
-     * @param   object|array|int|string|float|bool $validatedValue product attribute value
+     * @param   object|array|int|string|float|bool|null $validatedValue product attribute value
      * @return  bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -750,6 +830,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             case '{}':
             case '!{}':
                 if (is_scalar($validatedValue) && is_array($value)) {
+                    $validatedValue = (string)$validatedValue;
                     foreach ($value as $item) {
                         if (stripos($validatedValue, (string)$item) !== false) {
                             $result = true;
@@ -797,18 +878,19 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     /**
      * Case and type insensitive comparison of values
      *
-     * @param string|int|float $validatedValue
-     * @param string|int|float $value
+     * @param string|int|float|null $validatedValue
+     * @param string|int|float|null $value
      * @param bool $strict
      * @return bool
      */
     protected function _compareValues($validatedValue, $value, $strict = true)
     {
-        if ($strict && is_numeric($validatedValue) && is_numeric($value)) {
+        if (null === $value || null === $validatedValue ||
+            $strict && is_numeric($validatedValue) && is_numeric($value)) {
             return $validatedValue == $value;
         }
 
-        $validatePattern = preg_quote($validatedValue, '~');
+        $validatePattern = preg_quote((string) $validatedValue, '~');
         if ($strict) {
             $validatePattern = '^' . $validatePattern . '$';
         }
@@ -816,6 +898,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
+     * Validate model.
+     *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */

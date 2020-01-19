@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminDataGridTableSection">
+        <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)" timeout="60"/>
+        <element name="columnHeader" type="button" selector="//div[@data-role='grid-wrapper']//table[contains(@class, 'data-grid')]/thead/tr/th[contains(@class, 'data-grid-th')]/span[text() = '{{label}}']" parameterized="true" timeout="30"/>
+        <element name="column" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{col}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
+        <element name="rowCheckbox" type="checkbox" selector="table.data-grid tbody > tr:nth-of-type({{row}}) td.data-grid-checkbox-cell input" parameterized="true"/>
+        <element name="row" type="text" selector="table.data-grid tbody > tr:nth-of-type({{row}})" parameterized="true"/>
+        <element name="rows" type="text" selector="table.data-grid tbody > tr.data-row"/>
+        <!--Specific cell e.g. {{Section.gridCell('1', 'Name')}}-->
+        <element name="gridCell" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
+        <element name="rowViewAction" type="button" selector=".data-grid tbody > tr:nth-of-type({{row}}) .action-menu-item" parameterized="true" timeout="30"/>
+        <element name="dataGridEmpty" type="block" selector=".data-grid-tr-no-data td"/>
+        <element name="rowTemplateStrict" type="block" selector="//tbody/tr[td[*[text()[normalize-space()='{{text}}']]]]" parameterized="true" />
+        <element name="rowTemplate" type="block" selector="//tbody/tr[td[*[contains(.,normalize-space('{{text}}'))]]]" parameterized="true" timeout="30" />
+    </section>
+</sections>

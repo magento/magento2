@@ -5,15 +5,34 @@
  */
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterface;
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Model\OperationStatusValidator;
 use Magento\Framework\DataObject;
-use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Class Operation
+ * Class Operation encapsulates methods for Operation Model Object
  */
-class Operation extends DataObject implements DetailedOperationStatusInterface, ExtensibleDataInterface
+class Operation extends DataObject implements OperationInterface
 {
+    /**
+     * @var OperationStatusValidator
+     */
+    private $operationStatusValidator;
+
+    /**
+     * Operation constructor.
+     *
+     * @param OperationStatusValidator $operationStatusValidator
+     * @param array $data
+     */
+    public function __construct(
+        OperationStatusValidator $operationStatusValidator,
+        array $data = []
+    ) {
+        $this->operationStatusValidator = $operationStatusValidator;
+        parent::__construct($data);
+    }
+
     /**
      * @inheritDoc
      */
@@ -107,6 +126,7 @@ class Operation extends DataObject implements DetailedOperationStatusInterface, 
      */
     public function setStatus($status)
     {
+        $this->operationStatusValidator->validate($status);
         return $this->setData(self::STATUS, $status);
     }
 

@@ -23,7 +23,7 @@ class Instructions extends \Magento\Payment\Block\Info
     /**
      * @var string
      */
-    protected $_template = 'info/instructions.phtml';
+    protected $_template = 'Magento_Payment::info/instructions.phtml';
 
     /**
      * Get instructions text from order payment

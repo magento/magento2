@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
+ * Catalog config model.
+ *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -133,6 +135,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param SerializerInterface $serializer
+     * @param array $attributesForPreload
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -149,7 +152,8 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        $attributesForPreload = []
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_configFactory = $configFactory;
@@ -165,7 +169,9 @@ class Config extends \Magento\Eav\Model\Config
             $entityTypeCollectionFactory,
             $cacheState,
             $universalFactory,
-            $serializer
+            $serializer,
+            $scopeConfig,
+            $attributesForPreload
         );
     }
 
@@ -381,7 +387,7 @@ class Config extends \Magento\Eav\Model\Config
 
         $this->loadProductTypes();
 
-        return isset($this->_productTypesById[$id]) ? $this->_productTypesById[$id] : false;
+        return $this->_productTypesById[$id] ?? false;
     }
 
     /**

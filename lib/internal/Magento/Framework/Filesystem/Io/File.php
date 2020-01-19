@@ -233,7 +233,7 @@ class File extends AbstractIo
         }
         $stat = @fstat($this->_streamHandler);
         if ($part !== null) {
-            return isset($stat[$part]) ? $stat[$part] : $default;
+            return $stat[$part] ?? $default;
         }
         return $stat;
     }

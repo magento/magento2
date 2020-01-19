@@ -18,5 +18,5 @@ class Container extends Template
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/widget/chooser/container.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/widget/chooser/container.phtml';
 }

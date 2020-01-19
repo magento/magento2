@@ -6,8 +6,10 @@
 define([
     'jquery',
     'mage/translate',
-    'jquery/ui'
-], function ($, $t) {
+    'underscore',
+    'Magento_Catalog/js/product/view/product-ids-resolver',
+    'jquery-ui-modules/widget'
+], function ($, $t, _, idsResolver) {
     'use strict';
 
     $.widget('mage.catalogAddToCart', {
@@ -50,6 +52,23 @@ define([
         },
 
         /**
+         * @private
+         */
+        _redirect: function (url) {
+            var urlParts, locationParts, forceReload;
+
+            urlParts = url.split('#');
+            locationParts = window.location.href.split('#');
+            forceReload = urlParts[0] === locationParts[0];
+
+            window.location.assign(url);
+
+            if (forceReload) {
+                window.location.reload();
+            }
+        },
+
+        /**
          * @return {Boolean}
          */
         isLoaderEnabled: function () {
@@ -59,37 +78,32 @@ define([
         /**
          * Handler for the form 'submit' event
          *
-         * @param {Object} form
+         * @param {jQuery} form
          */
         submitForm: function (form) {
-            var addToCartButton, self = this;
-
-            if (form.has('input[type="file"]').length && form.find('input[type="file"]').val() !== '') {
-                self.element.off('submit');
-                // disable 'Add to Cart' button
-                addToCartButton = $(form).find(this.options.addToCartButtonSelector);
-                addToCartButton.prop('disabled', true);
-                addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
-                form.submit();
-            } else {
-                self.ajaxSubmit(form);
-            }
+            this.ajaxSubmit(form);
         },
 
         /**
-         * @param {String} form
+         * @param {jQuery} form
          */
         ajaxSubmit: function (form) {
-            var self = this;
+            var self = this,
+                productIds = idsResolver(form),
+                formData;
 
             $(self.options.minicartSelector).trigger('contentLoading');
             self.disableAddToCartButton(form);
+            formData = new FormData(form[0]);
 
             $.ajax({
                 url: form.attr('action'),
-                data: form.serialize(),
+                data: formData,
                 type: 'post',
                 dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
 
                 /** @inheritdoc */
                 beforeSend: function () {
@@ -104,6 +118,7 @@ define([
 
                     $(document).trigger('ajax:addToCart', {
                         'sku': form.data().productSku,
+                        'productIds': productIds,
                         'form': form,
                         'response': res
                     });
@@ -120,12 +135,15 @@ define([
                         // trigger global event, so other modules will be able add parameters to redirect url
                         $('body').trigger('catalogCategoryAddToCartRedirect', eventData);
 
-                        if (eventData.redirectParameters.length > 0) {
+                        if (eventData.redirectParameters.length > 0 &&
+                            window.location.href.split(/[?#]/)[0] === res.backUrl
+                        ) {
                             parameters = res.backUrl.split('#');
                             parameters.push(eventData.redirectParameters.join('&'));
                             res.backUrl = parameters.join('#');
                         }
-                        window.location = res.backUrl;
+
+                        self._redirect(res.backUrl);
 
                         return;
                     }
@@ -147,6 +165,23 @@ define([
                             .html(res.product.statusText);
                     }
                     self.enableAddToCartButton(form);
+                },
+
+                /** @inheritdoc */
+                error: function (res) {
+                    $(document).trigger('ajax:addToCart:error', {
+                        'sku': form.data().productSku,
+                        'productIds': productIds,
+                        'form': form,
+                        'response': res
+                    });
+                },
+
+                /** @inheritdoc */
+                complete: function (res) {
+                    if (res.state() === 'rejected') {
+                        location.reload();
+                    }
                 }
             });
         },

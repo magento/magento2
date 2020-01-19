@@ -6,6 +6,7 @@
 
 return [
     'region' => 'CA',
+    'region_id' => '12',
     'postcode' => '11111',
     'lastname' => 'lastname',
     'firstname' => 'firstname',

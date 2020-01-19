@@ -6,9 +6,16 @@
  */
 namespace Magento\Customer\Controller\Address;
 
-class Delete extends \Magento\Customer\Controller\Address
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Delete customer address controller action.
+ */
+class Delete extends \Magento\Customer\Controller\Address implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
+     * @inheritdoc
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
@@ -20,9 +27,9 @@ class Delete extends \Magento\Customer\Controller\Address
                 $address = $this->_addressRepository->getById($addressId);
                 if ($address->getCustomerId() === $this->_getSession()->getCustomerId()) {
                     $this->_addressRepository->deleteById($addressId);
-                    $this->messageManager->addSuccess(__('You deleted the address.'));
+                    $this->messageManager->addSuccessMessage(__('You deleted the address.'));
                 } else {
-                    $this->messageManager->addError(__('We can\'t delete the address right now.'));
+                    $this->messageManager->addErrorMessage(__('We can\'t delete the address right now.'));
                 }
             } catch (\Exception $other) {
                 $this->messageManager->addException($other, __('We can\'t delete the address right now.'));

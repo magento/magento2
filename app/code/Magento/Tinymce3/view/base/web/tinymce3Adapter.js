@@ -37,7 +37,15 @@ define([
             this.config = config;
             this.schema = config.schema || html5Schema;
 
-            _.bindAll(this, 'beforeSetContent', 'saveContent', 'onChangeContent', 'openFileBrowser', 'updateTextArea');
+            _.bindAll(
+                this,
+                'beforeSetContent',
+                'saveContent',
+                'onChangeContent',
+                'openFileBrowser',
+                'updateTextArea',
+                'removeEvents'
+            );
 
             varienGlobalEvents.attachEventHandler('tinymceChange', this.onChangeContent);
             varienGlobalEvents.attachEventHandler('tinymceBeforeSetContent', this.beforeSetContent);
@@ -70,6 +78,19 @@ define([
             }
 
             tinyMCE3.init(this.getSettings(mode));
+            varienGlobalEvents.clearEventHandlers('open_browser_callback');
+            varienGlobalEvents.attachEventHandler('open_browser_callback', tinyMceEditors.get(this.id).openFileBrowser);
+        },
+
+        /**
+         * Remove events from instance.
+         *
+         * @param {String} wysiwygId
+         */
+        removeEvents: function (wysiwygId) {
+            var editor = tinyMceEditors.get(wysiwygId);
+
+            varienGlobalEvents.removeEventHandler('tinymceChange', editor.onChangeContent);
         },
 
         /**
@@ -495,7 +516,7 @@ define([
          */
         encodeDirectives: function (content) {
             // collect all HTML tags with attributes that contain directives
-            return content.gsub(/<([a-z0-9\-\_]+[^>]+?)([a-z0-9\-\_]+=".*?\{\{.+?\}\}.*?".*?)>/i, function (match) {
+            return content.gsub(/<([a-z0-9\-\_]+[^>]+?)([a-z0-9\-\_]+="[^"]*?\{\{.+?\}\}.*?".*?)>/i, function (match) {
                 var attributesString = match[2],
                     decodedDirectiveString;
 

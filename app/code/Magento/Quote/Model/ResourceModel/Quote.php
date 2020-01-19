@@ -23,8 +23,8 @@ class Quote extends AbstractDb
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param Snapshot $entitySnapshot,
-     * @param RelationComposite $entityRelationComposite,
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param string $connectionName
      */
@@ -102,6 +102,7 @@ class Quote extends AbstractDb
 
         if ($data) {
             $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);
@@ -124,6 +125,7 @@ class Quote extends AbstractDb
         $data = $connection->fetchRow($select);
         if ($data) {
             $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);
@@ -148,6 +150,7 @@ class Quote extends AbstractDb
 
             if ($data) {
                 $quote->setData($data);
+                $quote->setOrigData();
             }
         }
 
@@ -296,12 +299,14 @@ class Quote extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->isPreventSaving()) {
             return parent::save($object);
         }
+
+        return $this;
     }
 }

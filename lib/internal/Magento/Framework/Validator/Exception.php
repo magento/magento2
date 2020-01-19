@@ -84,6 +84,6 @@ class Exception extends InputException
             }
             return $allMessages;
         }
-        return isset($this->messages[$type]) ? $this->messages[$type] : [];
+        return $this->messages[$type] ?? [];
     }
 }

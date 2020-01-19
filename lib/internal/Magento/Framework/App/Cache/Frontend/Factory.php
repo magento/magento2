@@ -10,9 +10,7 @@
 namespace Magento\Framework\App\Cache\Frontend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -147,15 +145,17 @@ class Factory
         $result = $this->_objectManager->create(
             \Magento\Framework\Cache\Frontend\Adapter\Zend::class,
             [
-                'frontend' => \Zend_Cache::factory(
-                    $frontend['type'],
-                    $backend['type'],
-                    $frontend,
-                    $backend['options'],
-                    true,
-                    true,
-                    true
-                )
+                'frontendFactory' => function () use ($frontend, $backend) {
+                    return \Zend_Cache::factory(
+                        $frontend['type'],
+                        $backend['type'],
+                        $frontend,
+                        $backend['options'],
+                        true,
+                        true,
+                        true
+                    );
+                }
             ]
         );
         $result = $this->_applyDecorators($result);

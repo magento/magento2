@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="LoginFormSection">
+        <element name="username" type="input" selector="#username"/>
+        <element name="password" type="input" selector="#login"/>
+        <element name="signIn" type="button" selector=".actions .action-primary" timeout="30"/>
+    </section>
+
+    <section name="SignOutSection">
+        <element name="admin" type="button" selector=".admin__action-dropdown-text"/>
+        <element name="logout" type="button" selector="//*[contains(text(), 'Sign Out')]"/>
+    </section>
+</sections>

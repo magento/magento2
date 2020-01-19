@@ -7,7 +7,6 @@
 -->
 <mapping strict="0">
     <fields>
-        <qty />
         <checkbox>
             <selector>div[contains(@class,"field choice") and label[contains(.,"%product_name%")]]//input</selector>
             <strategy>xpath</strategy>

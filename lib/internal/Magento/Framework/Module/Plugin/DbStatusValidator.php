@@ -121,7 +121,7 @@ class DbStatusValidator
             (array)$allDbVersionErrors,
             function ($carry, $item) {
                 if ($item[DbVersionInfo::KEY_CURRENT] === 'none'
-                    || $item[DbVersionInfo::KEY_CURRENT] < $item[DbVersionInfo::KEY_REQUIRED]
+                    || version_compare($item[DbVersionInfo::KEY_CURRENT], $item[DbVersionInfo::KEY_REQUIRED], '<')
                 ) {
                     $carry['version_too_low'][] = $item;
                 } else {

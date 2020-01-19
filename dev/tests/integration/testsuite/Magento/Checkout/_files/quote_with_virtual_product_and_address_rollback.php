@@ -13,3 +13,7 @@ $quote->load('test_order_with_virtual_product', 'reserved_order_id')->delete();
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = $objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
 $quoteIdMask->delete($quote->getId());
+
+require __DIR__ . '/../../Customer/_files/customer_rollback.php';
+require __DIR__ . '/../../Customer/_files/customer_address_rollback.php';
+require __DIR__ . '/../../Catalog/_files/product_virtual_rollback.php';

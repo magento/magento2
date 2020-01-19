@@ -6,16 +6,18 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
+ * Updates status for a batch of products.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
+class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
@@ -35,22 +37,31 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $collectionFactory;
 
     /**
-     * @param Action\Context $context
+     * @var \Magento\Catalog\Model\Product\Action
+     */
+    private $productAction;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\Product\Action $productAction
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         Filter $filter,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\Product\Action $productAction = null
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
+        $this->productAction = $productAction ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\Product\Action::class);
         parent::__construct($context, $productBuilder);
     }
 
@@ -86,14 +97,13 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $filterRequest = $this->getRequest()->getParam('filters', null);
         $status = (int) $this->getRequest()->getParam('status');
 
-        if (null !== $storeId && null !== $filterRequest) {
+        if (null === $storeId && null !== $filterRequest) {
             $storeId = (isset($filterRequest['store_id'])) ? (int) $filterRequest['store_id'] : 0;
         }
 
         try {
             $this->_validateMassStatus($productIds, $status);
-            $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class)
-                ->updateAttributes($productIds, ['status' => $status], (int) $storeId);
+            $this->productAction->updateAttributes($productIds, ['status' => $status], (int) $storeId);
             $this->messageManager->addSuccessMessage(
                 __('A total of %1 record(s) have been updated.', count($productIds))
             );
