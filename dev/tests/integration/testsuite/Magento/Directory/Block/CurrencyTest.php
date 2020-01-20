@@ -47,7 +47,19 @@ class CurrencyTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture current_store currency/options/allow USD
+     *
+     * @return void
+     */
+    public function testDefaultCurrencySwitcher(): void
+    {
+        $this->assertCurrencySwitcherPerStore('');
+    }
+
+    /**
      * @magentoConfigFixture current_store currency/options/allow EUR,USD
+     *
+     * @return void
      */
     public function testCurrencySwitcher(): void
     {
