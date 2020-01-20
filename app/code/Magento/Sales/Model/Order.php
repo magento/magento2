@@ -1816,6 +1816,32 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
+    
+    /**
+     * Retrieve order total due or cancel label
+     *
+     * @return float|null
+     */
+    
+    public function getTotalDueCancelLabel()
+    {
+        $itemCancel = true;
+        foreach ($this->getAllItems() as $item) {
+            if ($item->getQtyCanceled() > 0) {
+                $itemCancel = false;
+                break;
+            }
+        }
+        if($this->isCanceled() || $itemCancel == false) {
+               
+            $label = __('Total Cancel'); 
+        } else {
+
+            $label = __('Total Due');
+        }
+       return $label;
+
+    }
 
     /**
      * Retrieve order total due value
