@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Backend\TierPrice;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Unit tests for \Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler
@@ -95,20 +95,27 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testExecute(): void
-    {
-        $newTierPrices = [
-            ['website_id' => 0, 'price_qty' => 2, 'cust_group' => 0, 'price' => 15],
-            ['website_id' => 0, 'price_qty' => 3, 'cust_group' => 3200, 'price' => null, 'percentage_value' => 20]
-        ];
-        $priceIdToDelete = 2;
-        $originalTierPrices = [
-            ['price_id' => 1, 'website_id' => 0, 'price_qty' => 2, 'cust_group' => 0, 'price' => 10],
-            ['price_id' => $priceIdToDelete, 'website_id' => 0, 'price_qty' => 4, 'cust_group' => 0, 'price' => 20],
-        ];
-        $linkField = 'entity_id';
-        $productId = 10;
-        $originalProductId = 11;
+    /**
+     * Verify update handle.
+     *
+     * @param array $newTierPrices
+     * @param array $originalTierPrices
+     * @param int $priceIdToDelete
+     * @param string $linkField
+     * @param int $productId
+     * @param int $originalProductId
+     * @throws \Magento\Framework\Exception\InputException
+     *
+     * @dataProvider configDataProvider
+     */
+    public function testExecute(
+        $newTierPrices,
+        $originalTierPrices,
+        $priceIdToDelete,
+        $linkField,
+        $productId,
+        $originalProductId
+    ): void {
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
@@ -128,18 +135,12 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
                     ['entity_id', $originalProductId]
                 ]
             );
-        $this->assertEquals(
-            $this->assertNotNull($newTierPrices[0]['price']),
-                                 $this->tierPriceResource->expects($this->atLeastOnce())
-                ->method('updateValues')->with($newTierPrices, $originalTierPrices)->willReturn(true)
-        );
-        $this->assertEquals(
-            $this->assertNull($newTierPrices[0]['price']),
-                              $this->tierPriceResource->expects($this->atLeastOnce())
-                ->method('updateValues')->with($newTierPrices, $originalTierPrices)->willReturn(false)
-        );
+
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn(0);
-        $product->expects($this->atLeastOnce())->method('setData')->with('tier_price_changed', 1);
+
+        $product->expects($this->atLeastOnce())
+            ->method('setData')
+            ->with('tier_price_changed', 1);
         $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId'])
@@ -177,6 +178,8 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify update handle with exception.
+     *
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Tier prices data should be array, but actually other type is received
      */
@@ -198,5 +201,89 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->atLeastOnce())->method('getData')->with('tier_price')->willReturn(1);
 
         $this->updateHandler->execute($product);
+    }
+
+    /**
+     * Returns test parameters.
+     *
+     * @return array
+     */
+    public function configDataProvider()
+    {
+        return [
+            [
+                [
+                    [
+                        'website_id' => 0,
+                        'price_qty' => 2,
+                        'cust_group' => 0,
+                        'price' => 15
+                    ],
+                    [
+                        'website_id' => 0,
+                        'price_qty' => 3,
+                        'cust_group' => 3200,
+                        'price' => null,
+                        'percentage_value' => 20
+                    ]
+                ],
+                [
+                    [
+                        'price_id' => 1,
+                        'website_id' => 0,
+                        'price_qty' => 2,
+                        'cust_group' => 0,
+                        'price' => 10],
+                    [
+                        'price_id' => 2,
+                        'website_id' => 0,
+                        'price_qty' => 4,
+                        'cust_group' => 0,
+                        'price' => 20
+                    ],
+                ],
+                2,
+                'entity_id',
+                10,
+                11
+            ],
+            [
+                [
+                    [
+                        'website_id' => 0,
+                        'price_qty' => 2,
+                        'cust_group' => 0,
+                        'price' => 0
+                    ],
+                    [
+                        'website_id' => 0,
+                        'price_qty' => 3,
+                        'cust_group' => 3200,
+                        'price' => null,
+                        'percentage_value' => 20
+                    ]
+                ],
+                [
+                    [
+                        'price_id' => 1,
+                        'website_id' => 0,
+                        'price_qty' => 2,
+                        'cust_group' => 0,
+                        'price' => 10
+                    ],
+                    [
+                        'price_id' => 2,
+                        'website_id' => 0,
+                        'price_qty' => 4,
+                        'cust_group' => 0,
+                        'price' => 20
+                    ],
+                ],
+                2,
+                'entity_id',
+                10,
+                11
+            ]
+        ];
     }
 }
