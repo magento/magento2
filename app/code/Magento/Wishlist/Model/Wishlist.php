@@ -377,11 +377,15 @@ class Wishlist extends AbstractModel implements IdentityInterface
         if ($this->_itemCollection === null) {
             $this->_itemCollection = $this->_wishlistCollectionFactory->create()->addWishlistFilter(
                 $this
-            )->setStore(
-                $this->getStore()
-            )->addStoreFilter(
-                $this->getSharedStoreIds()
             )->setVisibilityFilter();
+
+            if ($this->getStore()) {
+                $this->_itemCollection
+                    ->addStoreFilter($this->getStore()->getId())
+                    ->setStore($this->getStore());
+            } else {
+                 $this->_itemCollection->addStoreFilter($this->getSharedStoreIds());
+            }
         }
 
         return $this->_itemCollection;
