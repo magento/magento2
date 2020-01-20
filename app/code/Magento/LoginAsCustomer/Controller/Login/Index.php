@@ -13,7 +13,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @var \Magento\LoginAsCustomer\Model\Login
      */
-    protected $loginModel = null;
+    private $loginModel = null;
 
     /**
      * Index constructor.
@@ -57,7 +57,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * Init login info
      * @return false || \Magento\LoginAsCustomer\Model\Login
      */
-    protected function _initLogin()
+    private function _initLogin()
     {
         $secret = $this->getRequest()->getParam('secret');
         if (!$secret) {

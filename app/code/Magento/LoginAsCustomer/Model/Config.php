@@ -25,11 +25,12 @@ class Config
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+
+    private $scopeConfig;
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
      */
-    protected $metadata;
+    private $metadata;
 
     /**
      * Config constructor.

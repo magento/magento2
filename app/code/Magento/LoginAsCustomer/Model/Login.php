@@ -37,42 +37,42 @@ class Login extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Customer\Model\CustomerFactory
      */
-    protected $_customerFactory;
+    private $_customerFactory;
 
     /**
      * @var \Magento\Customer\Model\Customer
      */
-    protected $_customer;
+    private $_customer;
 
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    private $_customerSession;
 
     /**
      * @var \Magento\Checkout\Model\Session
      */
-    protected $_checkoutSession;
+    private $_checkoutSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    protected $_dateTime;
+    private $_dateTime;
 
     /**
      * @var \Magento\Framework\Math\Random
      */
-    protected $_random;
+    private $_random;
 
     /**
      * @var \Magento\Checkout\Model\Cart
      */
-    protected $cart;
+    private $cart;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * Initialize dependencies.
@@ -167,7 +167,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * Retrieve login datetime point
      * @return [type] [description]
      */
-    protected function getDateTimePoint()
+    private function getDateTimePoint()
     {
         return date('Y-m-d H:i:s', $this->_dateTime->gmtTimestamp() - self::TIME_FRAME);
     }

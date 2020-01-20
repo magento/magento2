@@ -20,23 +20,23 @@ class Login extends \Magento\Backend\App\Action
     /**
      * @var \Magento\LoginAsCustomer\Model\Login
      */
-    protected $loginModel;
+    private $loginModel;
     /**
      * @var \Magento\Backend\Model\Auth\Session
      */
-    protected $authSession  = null;
+    private $authSession  = null;
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager  = null;
+    private $storeManager  = null;
     /**
      * @var \Magento\Framework\Url
      */
-    protected $url = null;
+    private $url = null;
     /**
      * @var \Magento\LoginAsCustomer\Model\Config
      */
-    protected $config = null;
+    private $config = null;
 
     /**
      * Login constructor.

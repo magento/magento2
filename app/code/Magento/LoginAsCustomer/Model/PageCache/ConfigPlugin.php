@@ -16,12 +16,12 @@ class ConfigPlugin
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $_scopeConfig;
 
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    private $_customerSession;
 
     /**
      * Initialize dependencies.

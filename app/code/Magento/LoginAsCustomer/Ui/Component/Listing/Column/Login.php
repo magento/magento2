@@ -12,20 +12,18 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\AuthorizationInterface;
 
-abstract class AbstractColumn extends \Magento\Ui\Component\Listing\Columns\Column
+class Login extends \Magento\Ui\Component\Listing\Columns\Column
 {
 
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
      */
-    protected $_authorization;
-
-    protected $sourceColumnName;
+    private $_authorization;
 
     /**
      * @param ContextInterface $context
@@ -59,11 +57,14 @@ abstract class AbstractColumn extends \Magento\Ui\Component\Listing\Columns\Colu
         if (isset($dataSource['data']['items'])) {
             $hidden = !$this->_authorization->isAllowed('Magento_LoginAsCustomer::login_button');
             foreach ($dataSource['data']['items'] as &$item) {
-                if (!empty($item[$this->sourceColumnName])) {
+
+                $sourceColumnName = !empty($item['customer_id']) ? 'customer_id' : 'entity_id';
+
+                if (!empty($item[$sourceColumnName])) {
                     $item[$this->getData('name')]['edit'] = [
                         'href' => $this->urlBuilder->getUrl(
                             'loginascustomer/login/login',
-                            ['customer_id' => $item[$this->sourceColumnName]]
+                            ['customer_id' => $item[$sourceColumnName]]
                         ),
                         'label' => __('Login As Customer'),
                         'hidden' => $hidden,

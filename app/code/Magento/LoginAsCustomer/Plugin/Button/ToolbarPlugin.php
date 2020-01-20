@@ -20,12 +20,12 @@ class ToolbarPlugin
     /**
      * @var \Magento\Framework\AuthorizationInterface
      */
-    protected $authorization;
+    private $authorization;
 
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected $urlInterface;
+    private $urlInterface;
 
     /**
      * ToolbarPlugin constructor.
@@ -83,7 +83,7 @@ class ToolbarPlugin
      *
      * @return bool
      */
-    protected function isAllowed()
+    private function isAllowed()
     {
         return $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
     }

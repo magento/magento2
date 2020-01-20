@@ -10,8 +10,6 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 
 class StoreDataProvider extends AbstractDataProvider
 {
-
-    protected $loadedData;
     /**
      * @param string $name
      * @param string $primaryFieldName

@@ -19,7 +19,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * @var \Magento\LoginAsCustomer\Model\Login
      */
-    protected $loginModel = null;
+    private $loginModel = null;
 
     /**
      * Index constructor.

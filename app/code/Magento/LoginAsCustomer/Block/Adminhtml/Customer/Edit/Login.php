@@ -17,7 +17,7 @@ class Login extends GenericButton implements ButtonProviderInterface
     /**
      * @var \Magento\Framework\AuthorizationInterface
      */
-    protected $_authorization;
+    private $_authorization;
 
     /**
      * Constructor
