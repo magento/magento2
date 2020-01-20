@@ -32,12 +32,12 @@ define([
             expect($(modal).length).toEqual(1);
         });
 
-        it('Verify stTitle() method set title', function () {
+        it('Verify setTitle() method set title', function () {
             var newTitle = 'New modal title';
 
             modal.setTitle(newTitle);
-            expect($(modal.options.modalTitle).text()).toBe(newTitle);
-            expect($(modal.options.modalTitle).find(modal.options.modalSubTitle).length).toBe(1);
+            expect($(modal.options.modalTitle).text()).toContain(newTitle);
+            expect($(modal.options.modalTitle).find(modal.options.modalSubTitle).length).toBe(2);
         });
     });
 });
