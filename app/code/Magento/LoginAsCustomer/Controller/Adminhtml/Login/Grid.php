@@ -12,6 +12,11 @@ namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 class Grid extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_log';
+
+    /**
      * Login as customer log grid
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -20,15 +25,5 @@ class Grid extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();
-    }
-
-    /**
-     * Check is allowed access
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_LoginAsCustomer::login_log');
     }
 }
