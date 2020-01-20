@@ -77,7 +77,6 @@ class Login extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Initialize dependencies.
-     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
@@ -85,11 +84,11 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\Math\Random $random
      * @param \Magento\Checkout\Model\Cart $cart
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param null|\Magento\Checkout\Model\Session $checkoutSession
-     * @param null|\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -99,11 +98,11 @@ class Login extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Math\Random $random,
         \Magento\Checkout\Model\Cart $cart,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        $checkoutSession = null,
-        $scopeConfig = null
+        array $data = []
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_customerSession = $customerSession;
@@ -111,14 +110,8 @@ class Login extends \Magento\Framework\Model\AbstractModel
         $this->_dateTime = $dateTime;
         $this->_random = $random;
         $this->cart = $cart;
-
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_checkoutSession = $checkoutSession ?: $objectManager->get(
-            \Magento\Checkout\Model\Session::class
-        );
-        $this->scopeConfig = $scopeConfig ?: $objectManager->get(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
-        );
+        $this->_checkoutSession = $checkoutSession;
+        $this->scopeConfig = $scopeConfig;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }

@@ -22,46 +22,50 @@ class Login extends \Magento\Backend\App\Action
      * @var \Magento\LoginAsCustomer\Model\Login
      */
     private $loginModel;
+
     /**
      * @var \Magento\Backend\Model\Auth\Session
      */
-    private $authSession  = null;
+    private $authSession;
+
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $storeManager  = null;
+    private $storeManager;
+
     /**
      * @var \Magento\Framework\Url
      */
-    private $url = null;
+    private $url;
+
     /**
      * @var \Magento\LoginAsCustomer\Model\Config
      */
-    private $config = null;
+    private $config;
 
     /**
      * Login constructor.
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\LoginAsCustomer\Model\Login|null $loginModel
-     * @param \Magento\Backend\Model\Auth\Session|null $authSession
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
-     * @param \Magento\Framework\Url|null $url
-     * @param \Magento\LoginAsCustomer\Model\Config|null $config
+     * @param \Magento\LoginAsCustomer\Model\Login $loginModel
+     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Url $url
+     * @param \Magento\LoginAsCustomer\Model\Config $config
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\LoginAsCustomer\Model\Login $loginModel = null,
-        \Magento\Backend\Model\Auth\Session $authSession = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
-        \Magento\Framework\Url $url = null,
-        \Magento\LoginAsCustomer\Model\Config $config = null
+        \Magento\LoginAsCustomer\Model\Login $loginModel,
+        \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Url $url,
+        \Magento\LoginAsCustomer\Model\Config $config
     ) {
         parent::__construct($context);
-        $this->loginModel = $loginModel ?: $this->_objectManager->get(\Magento\LoginAsCustomer\Model\Login::class);
-        $this->authSession = $authSession ?: $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class);
-        $this->storeManager = $storeManager ?: $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->url = $url ?: $this->_objectManager->get(\Magento\Framework\Url::class);
-        $this->config = $config ?: $this->_objectManager->get(\Magento\LoginAsCustomer\Model\Config::class);
+        $this->loginModel = $loginModel;
+        $this->authSession = $authSession;
+        $this->storeManager = $storeManager;
+        $this->url = $url;
+        $this->config = $config;
     }
     /**
      * Login as customer action

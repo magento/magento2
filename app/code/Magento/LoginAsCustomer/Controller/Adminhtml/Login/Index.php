@@ -20,19 +20,19 @@ class Index extends \Magento\Backend\App\Action
     /**
      * @var \Magento\LoginAsCustomer\Model\Login
      */
-    private $loginModel = null;
+    private $loginModel;
 
     /**
      * Index constructor.
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\LoginAsCustomer\Model\Login|null $login
+     * @param \Magento\LoginAsCustomer\Model\Login $loginModel
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\LoginAsCustomer\Model\Login $loginModel = null
+        \Magento\LoginAsCustomer\Model\Login $loginModel
     ) {
         parent::__construct($context);
-        $this->loginModel = $loginModel ?: $this->_objectManager->get(\Magento\LoginAsCustomer\Model\Login::class);
+        $this->loginModel = $loginModel;
     }
     /**
      * Login as customer log
