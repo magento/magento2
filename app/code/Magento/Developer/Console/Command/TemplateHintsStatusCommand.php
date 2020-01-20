@@ -9,6 +9,7 @@ namespace Magento\Developer\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class TemplateHintsStatusCommand extends Command
 {
@@ -24,25 +25,23 @@ class TemplateHintsStatusCommand extends Command
     const SUCCESS_MESSAGE = "Template hints are %status";
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    )
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
         parent::__construct();
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -60,6 +59,6 @@ class TemplateHintsStatusCommand extends Command
     {
         $templateHintsStatus = ($this->scopeConfig->isSetFlag('dev/debug/template_hints_storefront', 'default')) ? 'enabled' : 'disabled';
         $templateHintsMessage = __(self::SUCCESS_MESSAGE, ['status' => $templateHintsStatus]);
-        $output->writeln("<info>". $templateHintsMessage . "</info>");
+        $output->writeln("<info>" . $templateHintsMessage . "</info>");
     }
 }
