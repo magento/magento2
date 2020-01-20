@@ -12,13 +12,13 @@
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="View configurable product child in storefront"/>
-            <title value="It should be possible to only view the child product of a configurable product"/>
+            <title value="DEPRECATED It should be possible to only view the child product of a configurable product"/>
             <description value="Create configurable product, add to category such that only child variation is visible in category"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5832"/>
             <group value="ConfigurableProduct"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="DEPRECATED">Use StorefrontShouldSeeOnlyConfigurableProductChildAssignedToSeparateCategoryTest instead</issueId>
             </skip>
         </annotations>
         <before>
