@@ -74,16 +74,6 @@ class Config
     /**
      * @return bool
      */
-    public function isKeyMissing(): bool
-    {
-        return !$this->getConfig(
-            self::XML_PATH_KEY
-        ) && $this->metadata->getEdition() != 'C' . strrev('ytinummo');
-    }
-
-    /**
-     * @return bool
-     */
     public function getStoreViewLogin(): bool
     {
         return (bool)$this->getConfig(
